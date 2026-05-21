@@ -21,6 +21,21 @@
     --red: #ff6b6b;
     --radius: 8px;
   }
+  :root.light {
+    --bg: #f5f6fa;
+    --bg2: #ffffff;
+    --bg3: #eef0f7;
+    --border: #d8dce8;
+    --accent: #5a52e0;
+    --accent2: #00a885;
+    --accent3: #e05555;
+    --text: #1a1d2e;
+    --text2: #4a5270;
+    --text3: #8890aa;
+    --green: #00a885;
+    --yellow: #c48a00;
+    --red: #e05555;
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -233,11 +248,23 @@
     <div class="logo">⚔ SejfZone</div>
     <div class="report-badge">R04 · Ranking Produktów · GA4</div>
   </div>
-  <div class="header-meta">
-    Zakres: <span>2026-01-01 → 2026-05-21</span> &nbsp;|&nbsp; 
-    Platforma: <span>IdoSell</span> &nbsp;|&nbsp;
-    Property: <span>474493865</span> &nbsp;|&nbsp;
-    Wygenerowano: <span>2026-05-21</span>
+  <div class="header-right" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+    <div class="header-meta">
+      Zakres: <span>2026-01-01 → 2026-05-21</span> &nbsp;|&nbsp; 
+      Platforma: <span>IdoSell</span> &nbsp;|&nbsp;
+      Property: <span>474493865</span> &nbsp;|&nbsp;
+      Dane pobrane: <span id="data-date">2026-05-21 (od początku roku)</span>
+    </div>
+    <button id="theme-toggle" onclick="toggleTheme()" style="
+      background:var(--bg3);border:1px solid var(--border);border-radius:6px;
+      padding:6px 12px;font-size:12px;color:var(--text2);cursor:pointer;
+      font-weight:600;transition:all 0.15s;white-space:nowrap;
+    ">☀️ Jasny</button>
+    <button id="refresh-btn" onclick="refreshData()" style="
+      background:var(--accent);border:1px solid var(--accent);border-radius:6px;
+      padding:6px 14px;font-size:12px;color:white;cursor:pointer;
+      font-weight:700;transition:all 0.15s;white-space:nowrap;
+    ">⟳ Odśwież dane</button>
   </div>
 </header>
 
@@ -401,6 +428,55 @@ document.getElementById('search').addEventListener('input', e => {
 });
 
 renderTable();
+
+// Zapisz datę pierwszego załadowania jeśli nie ma w localStorage
+(function() {
+  const stored = localStorage.getItem('sejfzone_data_date');
+  if (stored) {
+    document.getElementById('data-date').textContent = stored;
+  } else {
+    const now = new Date().toLocaleString('pl-PL', {timeZone:'Europe/Warsaw', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'});
+    const dateStr = now + ' (od 2026-01-01)';
+    localStorage.setItem('sejfzone_data_date', dateStr);
+    document.getElementById('data-date').textContent = dateStr;
+  }
+})();
+
+function refreshData() {
+  const btn = document.getElementById('refresh-btn');
+  btn.textContent = '⏳ Odświeżanie...';
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+
+  // Wyślij request do Composio webhook który regeneruje raport
+  // Na razie: otwórz instrukcję jak odświeżyć + zaznacz kiedy dane były pobrane
+  setTimeout(() => {
+    const msg = 'Ten raport jest statyczny.\n\nAby odświeżyć dane — powiedz Claude:\n"odśwież raport sejfzone-r04-produkty"\n\nDane zostaną pobrane z GA4 i raport zostanie zaktualizowany na GitHub Pages.';
+    alert(msg);
+    btn.textContent = '⟳ Odśwież dane';
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }, 300);
+}
+
+function toggleTheme() {
+  const root = document.documentElement;
+  const btn = document.getElementById('theme-toggle');
+  if (root.classList.contains('light')) {
+    root.classList.remove('light');
+    btn.textContent = '☀️ Jasny';
+    localStorage.setItem('theme', 'dark');
+  } else {
+    root.classList.add('light');
+    btn.textContent = '🌙 Ciemny';
+    localStorage.setItem('theme', 'light');
+  }
+}
+// Przywróć zapisany tryb
+if (localStorage.getItem('theme') === 'light') {
+  document.documentElement.classList.add('light');
+  document.getElementById('theme-toggle').textContent = '🌙 Ciemny';
+}
 </script>
 </body>
 </html>
