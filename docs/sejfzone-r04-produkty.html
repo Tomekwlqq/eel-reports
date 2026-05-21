@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SejfZone — Ranking Produktów GA4 | 2026-05-21</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #1a1d27;
+    --bg3: #22263a;
+    --border: #2e3248;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --text: #e8eaf6;
+    --text2: #9098b8;
+    --text3: #5a6080;
+    --green: #00d4aa;
+    --yellow: #ffd166;
+    --red: #ff6b6b;
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .logo {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--accent);
+  }
+  .report-badge {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--text2);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .header-meta {
+    font-size: 12px;
+    color: var(--text3);
+  }
+  .header-meta span { color: var(--accent2); font-weight: 600; }
+
+  .kpi-bar {
+    display: flex;
+    gap: 12px;
+    padding: 20px 32px;
+    flex-wrap: wrap;
+  }
+  .kpi {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 20px;
+    flex: 1;
+    min-width: 140px;
+  }
+  .kpi-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .kpi-value { font-size: 24px; font-weight: 800; color: var(--text); }
+  .kpi-value.green { color: var(--green); }
+  .kpi-value.yellow { color: var(--yellow); }
+  .kpi-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+  .controls {
+    padding: 0 32px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .search-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 8px 14px;
+    color: var(--text);
+    font-size: 13px;
+    width: 280px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-box:focus { border-color: var(--accent); }
+  .search-box::placeholder { color: var(--text3); }
+
+  .sort-label { font-size: 12px; color: var(--text3); }
+  .sort-btn {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 600;
+  }
+  .sort-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .sort-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+  .count-badge {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text3);
+  }
+
+  .table-wrap {
+    padding: 0 32px 40px;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead th {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text2);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  thead th:hover { color: var(--accent); }
+  thead th.sorted { color: var(--accent); }
+  thead th .sort-arrow { margin-left: 4px; opacity: 0.5; }
+  thead th.sorted .sort-arrow { opacity: 1; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+  tbody tr:hover { background: var(--bg2); }
+  tbody td {
+    padding: 10px 14px;
+    vertical-align: middle;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  td.rank { text-align: center; color: var(--text3); font-size: 12px; }
+  td.product-name {
+    max-width: 320px;
+    min-width: 220px;
+  }
+  .prod-link {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1.4;
+    display: block;
+  }
+  .prod-link:hover { color: var(--accent2); }
+  .prod-path {
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 3px;
+    word-break: break-all;
+  }
+
+  .bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .bar {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--accent);
+    opacity: 0.7;
+    min-width: 2px;
+    flex-shrink: 0;
+  }
+  .bar.green { background: var(--green); }
+  .bar.yellow { background: var(--yellow); }
+  .bar.red { background: var(--red); }
+
+  .cr-badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .cr-high { background: rgba(0,212,170,0.15); color: var(--green); }
+  .cr-mid { background: rgba(255,209,102,0.15); color: var(--yellow); }
+  .cr-low { background: rgba(255,107,107,0.1); color: var(--text3); }
+
+  .purch-yes { color: var(--green); font-weight: 700; }
+  .purch-no { color: var(--text3); }
+
+  .footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 11px;
+    color: var(--text3);
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 768px) {
+    header, .kpi-bar, .controls, .table-wrap { padding-left: 16px; padding-right: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="logo">⚔ SejfZone</div>
+    <div class="report-badge">R04 · Ranking Produktów · GA4</div>
+  </div>
+  <div class="header-meta">
+    Zakres: <span>2026-01-01 → 2026-05-21</span> &nbsp;|&nbsp; 
+    Platforma: <span>IdoSell</span> &nbsp;|&nbsp;
+    Property: <span>474493865</span> &nbsp;|&nbsp;
+    Wygenerowano: <span>2026-05-21</span>
+  </div>
+</header>
+
+<div class="kpi-bar" id="kpi-bar">
+  <!-- wypełni JS -->
+</div>
+
+<div class="controls">
+  <input class="search-box" type="text" id="search" placeholder="🔍 Szukaj produktu...">
+  <span class="sort-label">Sortuj:</span>
+  <button class="sort-btn active" onclick="setSort('sessions')">Sesje</button>
+  <button class="sort-btn" onclick="setSort('avg_time_sec')">Czas na stronie</button>
+  <button class="sort-btn" onclick="setSort('atc')">ATC</button>
+  <button class="sort-btn" onclick="setSort('purchases')">Zakupy</button>
+  <button class="sort-btn" onclick="setSort('revenue')">Przychód</button>
+  <button class="sort-btn" onclick="setSort('cr_views_atc')">CR view→ATC</button>
+  <button class="sort-btn" onclick="setSort('cr_sessions_purch')">CR sess→purch</button>
+  <span class="count-badge" id="count-badge"></span>
+</div>
+
+<div class="table-wrap">
+  <table id="main-table">
+    <thead>
+      <tr>
+        <th style="width:40px">#</th>
+        <th>Produkt</th>
+        <th class="sorted" data-col="sessions" onclick="setSort('sessions')">Sesje <span class="sort-arrow">▼</span></th>
+        <th data-col="views" onclick="setSort('views')">Widoki <span class="sort-arrow">↕</span></th>
+        <th data-col="avg_time_sec" onclick="setSort('avg_time_sec')">Czas na str. <span class="sort-arrow">↕</span></th>
+        <th data-col="atc" onclick="setSort('atc')">ATC <span class="sort-arrow">↕</span></th>
+        <th data-col="cr_views_atc" onclick="setSort('cr_views_atc')">CR view→ATC <span class="sort-arrow">↕</span></th>
+        <th data-col="purchases" onclick="setSort('purchases')">Zakupy <span class="sort-arrow">↕</span></th>
+        <th data-col="cr_sessions_purch" onclick="setSort('cr_sessions_purch')">CR sess→purch <span class="sort-arrow">↕</span></th>
+        <th data-col="revenue" onclick="setSort('revenue')">Przychód PLN <span class="sort-arrow">↕</span></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<div class="footer">
+  SejfZone R04 · Dane: GA4 property/474493865 · Zakres: 2026-01-01–2026-05-21 · EEL Analytics
+</div>
+
+<script>
+const RAW = [{"path": "/pl/products/szafa-na-bron-dluga-s1-siegen-max-kombi-12-szt-125-cm-szara-zamek-kluczowy-29.html", "name": "Szafa na broń długą S1 Siegen Max Kombi 12 szt. 125 cm szara – zamek kluczowy", "sessions": 196, "views": 222, "avg_time_sec": 11, "avg_time": "0:11", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 0.5, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Szafa na broń długą S1 Siegen Max Kombi 12 szt. 125 cm szara – zamek kluczowy"}, {"path": "/pl/products/szafa-na-bron-dluga-s1-siegen-max-kombi-18-szt-125-cm-grafitowa-zamek-kluczowy-26.html", "name": "Szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek kluczowy", "sessions": 193, "views": 246, "avg_time_sec": 17, "avg_time": "0:17", "atc": 2, "purchases": 0, "revenue": 0.0, "cr_views_atc": 0.8, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Szafa na broń długą S1 Siegen Max Kombi 12 szt. 125 cm grafitowa – zamek kluczowy"}, {"path": "/pl/products/szafa-na-bron-dluga-s1-siegen-max-kombi-12-szt-125-cm-grafitowa-zamek-kluczowy-30.html", "name": "Szafa na broń długą S1 Siegen Max Kombi 12 szt. 125 cm grafitowa – zamek kluczowy", "sessions": 180, "views": 235, "avg_time_sec": 17, "avg_time": "0:17", "atc": 2, "purchases": 0, "revenue": 0.0, "cr_views_atc": 0.9, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Szafa na broń długą S1 Siegen Max Kombi 12 szt. 125 cm grafitowa – zamek kluczowy"}, {"path": "/pl/products/szafa-na-bron-dluga-s1-siegen-max-kombi-18-szt-125-cm-grafitowa-zamek-elektroniczny-28.html", "name": "Szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczny", "sessions": 179, "views": 198, "avg_time_sec": 8, "avg_time": "0:08", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 0.5, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/szafa-na-bron-dluga-s1-siegen-max-kombi-18-szt-125-cm-szara-zamek-kluczowy-25.html", "name": "Szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm szara – zamek kluczowy", "sessions": 163, "views": 187, "avg_time_sec": 9, "avg_time": "0:09", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 0.5, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Szafa na broń długą S1 Siegen Max Kombi 12 szt. 125 cm szara – zamek kluczowy"}, {"path": "/pl/products/szafa-na-bron-siegen-max-kombi-s1-imp-500080-54-32.html", "name": "szafa na broń Siegen MAX KOMBI S1 IMP / 500080.54 szary grafit / RAL 7024 \\ Elektroniczny", "sessions": 144, "views": 176, "avg_time_sec": 27, "avg_time": "0:27", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 0.6, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/sejf-szufladowy-na-bron-siegen-d-s1-imp-500150-11-111.html", "name": "sejf szufladowy na broń Siegen D S1 IMP / 500150.11 Kluczowy", "sessions": 120, "views": 138, "avg_time_sec": 21, "avg_time": "0:21", "atc": 2, "purchases": 0, "revenue": 0.0, "cr_views_atc": 1.4, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "sejf szufladowy na broń Siegen D S1 IMP / 500150.11"}, {"path": "/pl/products/szafa-na-bron-siegen-max-kombi-s1-imp-500081-53-26.html", "name": "szafa na broń Siegen MAX KOMBI S1 IMP / 500081.53 szary grafit / RAL 7024 \\ Kluczowy", "sessions": 116, "views": 138, "avg_time_sec": 24, "avg_time": "0:24", "atc": 6, "purchases": 1, "revenue": 1994.05, "cr_views_atc": 4.3, "cr_atc_purch": 16.7, "cr_sessions_purch": 0.86, "ecom_match": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 klucz klasa S1"}, {"path": "/pl/products/sejf-szafa-na-bron-siegen-s1-imp-500093-51-249.html", "name": "sejf / szafa na broń Siegen S1 IMP / 500093.51", "sessions": 110, "views": 117, "avg_time_sec": 3, "avg_time": "0:03", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 0.9, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/szafa-na-bron-i-amunicje-siegen-max-kombi-18-125-klucz-klasa-s1-26.html", "name": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 klucz klasa S1 szary grafit / RAL 7024...", "sessions": 109, "views": 120, "avg_time_sec": 15, "avg_time": "0:15", "atc": 6, "purchases": 1, "revenue": 1994.05, "cr_views_atc": 5.0, "cr_atc_purch": 16.7, "cr_sessions_purch": 0.92, "ecom_match": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 klucz klasa S1"}, {"path": "/pl/products/uchwyt-na-bron-pianka-4-szt-na-szynie-z-magnesami-257.html", "name": "uchwyt na broń (pianka) 4 szt. na szynie z magnesami szary grafit / RAL 7024", "sessions": 101, "views": 130, "avg_time_sec": 17, "avg_time": "0:17", "atc": 9, "purchases": 2, "revenue": 258.0, "cr_views_atc": 6.9, "cr_atc_purch": 22.2, "cr_sessions_purch": 1.98, "ecom_match": "uchwyt na broń (pianka) 4 szt. na szynie z magnesami"}, {"path": "/pl/products/polka-przestawna-do-szafy-na-bron-siegen-275.html", "name": "Półka do szafy na broń Siegen 50088-50083 – stalowa regulowana", "sessions": 94, "views": 138, "avg_time_sec": 26, "avg_time": "0:26", "atc": 23, "purchases": 7, "revenue": 1105.0, "cr_views_atc": 16.7, "cr_atc_purch": 30.4, "cr_sessions_purch": 7.45, "ecom_match": "Półka przestawna do szafy na broń Siegen"}, {"path": "/pl/products/sejf-szufladowy-siegen-d-331150-11-101.html", "name": "Sejf szufladowy Siegen D / 331150.11 Kluczowy", "sessions": 94, "views": 130, "avg_time_sec": 29, "avg_time": "0:29", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 0.8, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf szufladowy Siegen D / 331150.11"}, {"path": "/pl/products/sejf-wolnostojacy-save4ever-i-402000-12-58.html", "name": "Sejf wolnostojący save4ever I / 402000.12 szary grafit / RAL 7024 \\ Elektroniczny", "sessions": 92, "views": 121, "avg_time_sec": 35, "avg_time": "0:35", "atc": 2, "purchases": 1, "revenue": 2599.0, "cr_views_atc": 1.7, "cr_atc_purch": 50.0, "cr_sessions_purch": 1.09, "ecom_match": "Sejf wolnostojący save4ever I / 402000.12"}, {"path": "/pl/products/szafa-na-bron-siegen-max-kombi-s1-imp-500080-53-30.html", "name": "szafa na broń Siegen MAX KOMBI S1 IMP / 500080.53 szary grafit / RAL 7024 \\ Kluczowy", "sessions": 91, "views": 118, "avg_time_sec": 25, "avg_time": "0:25", "atc": 6, "purchases": 1, "revenue": 1994.05, "cr_views_atc": 5.1, "cr_atc_purch": 16.7, "cr_sessions_purch": 1.1, "ecom_match": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 klucz klasa S1"}, {"path": "/pl/products/sejf-szafa-na-bron-siegen-s1-imp-500089-01-47.html", "name": "sejf / szafa na broń Siegen S1 IMP / 500089.01 szary / RAL 7035 \\ Kluczowy", "sessions": 87, "views": 91, "avg_time_sec": 41, "avg_time": "0:41", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 1.1, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/polka-przestawna-do-szafy-na-bron-siegen-253.html", "name": "Półka do szafy na broń Siegen 50088-50083 – stalowa regulowana", "sessions": 85, "views": 105, "avg_time_sec": 25, "avg_time": "0:25", "atc": 23, "purchases": 7, "revenue": 1105.0, "cr_views_atc": 21.9, "cr_atc_purch": 30.4, "cr_sessions_purch": 8.24, "ecom_match": "Półka przestawna do szafy na broń Siegen"}, {"path": "/pl/products/szafa-na-bron-i-amunicje-siegen-max-kombi-18-125-kod-klasa-s1-28.html", "name": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 kod klasa S1 szary grafit / RAL 7024 \\...", "sessions": 85, "views": 98, "avg_time_sec": 21, "avg_time": "0:21", "atc": 6, "purchases": 1, "revenue": 1994.05, "cr_views_atc": 6.1, "cr_atc_purch": 16.7, "cr_sessions_purch": 1.18, "ecom_match": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 klucz klasa S1"}, {"path": "/pl/products/sejf-szafa-na-bron-siegen-super-kombi-530003-51-01-276.html", "name": "sejf / szafa na broń Siegen Super KOMBI / 530003.51.01 szary / RAL 7035 \\ Kluczowy", "sessions": 85, "views": 88, "avg_time_sec": 11, "avg_time": "0:11", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 1.1, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/kotwa-montazowa-133.html", "name": "Kotwa montażowa", "sessions": 80, "views": 84, "avg_time_sec": 30, "avg_time": "0:30", "atc": 0, "purchases": 0, "revenue": 0.0, "cr_views_atc": 0.0, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": ""}, {"path": "/pl/products/sejf-domowy-adorf-klasa-s1-25x34x29-cm-szary-zamek-kluczowy-17.html", "name": "Sejf domowy Adorf klasa S1 25×34×29 cm szary – zamek kluczowy", "sessions": 78, "views": 96, "avg_time_sec": 16, "avg_time": "0:16", "atc": 6, "purchases": 0, "revenue": 0.0, "cr_views_atc": 6.2, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf domowy Adorf klasa S1 25×34×29 cm szary – zamek kluczowy"}, {"path": "/pl/products/szafa-na-bron-i-amunicje-siegen-max-kombi-18-125-klucz-klasa-s1-25.html", "name": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 klucz klasa S1 szary / RAL 7035 \\ Kluc...", "sessions": 75, "views": 115, "avg_time_sec": 33, "avg_time": "0:33", "atc": 6, "purchases": 1, "revenue": 1994.05, "cr_views_atc": 5.2, "cr_atc_purch": 16.7, "cr_sessions_purch": 1.33, "ecom_match": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 klucz klasa S1"}, {"path": "/pl/products/sejf-meblowy-adorf-331001-12-20.html", "name": "Sejf meblowy Adorf / 331001.12 szary grafit / RAL 7024 \\ Elektroniczny", "sessions": 75, "views": 84, "avg_time_sec": 25, "avg_time": "0:25", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 1.2, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf meblowy Adorf / 331001.12"}, {"path": "/pl/products/sejf-wolnostojacy-save4ever-i-402000-01-55.html", "name": "Sejf wolnostojący save4ever I / 402000.01 szary / RAL 7035 \\ Kluczowy", "sessions": 70, "views": 105, "avg_time_sec": 53, "avg_time": "0:53", "atc": 2, "purchases": 1, "revenue": 2049.0, "cr_views_atc": 1.9, "cr_atc_purch": 50.0, "cr_sessions_purch": 1.43, "ecom_match": "Sejf wolnostojący save4ever I / 402000.01"}, {"path": "/pl/products/sejf-szafa-na-bron-siegen-s1-imp-500088-11-44.html", "name": "sejf / szafa na broń Siegen S1 IMP / 500088.11", "sessions": 68, "views": 79, "avg_time_sec": 19, "avg_time": "0:19", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 1.3, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/sejf-domowy-antywlamaniowy-klasa-s1-adorf-na-klucz-szary-17.html", "name": "Sejf domowy antywłamaniowy klasa S1 Adorf na klucz szary szary / RAL 7035 \\ Kluczowy", "sessions": 68, "views": 90, "avg_time_sec": 45, "avg_time": "0:45", "atc": 2, "purchases": 1, "revenue": 749.0, "cr_views_atc": 2.2, "cr_atc_purch": 50.0, "cr_sessions_purch": 1.47, "ecom_match": "Sejf domowy antywłamaniowy klasa S1 Adorf na klucz szary"}, {"path": "/pl/products/szafa-na-bron-siegen-max-kombi-s1-imp-500081-52-27.html", "name": "szafa na broń Siegen MAX KOMBI S1 IMP / 500081.52 szary / RAL 7035 \\ Elektroniczny", "sessions": 68, "views": 85, "avg_time_sec": 18, "avg_time": "0:18", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 1.2, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/sejf-meblowy-baden-baden-34100-12-36.html", "name": "Sejf meblowy Baden Baden / 34100.12 szary grafit / RAL 7024 \\ Elektroniczny", "sessions": 66, "views": 105, "avg_time_sec": 42, "avg_time": "0:42", "atc": 7, "purchases": 1, "revenue": 1749.0, "cr_views_atc": 6.7, "cr_atc_purch": 14.3, "cr_sessions_purch": 1.52, "ecom_match": "Sejf meblowy Baden Baden / 34100.12"}, {"path": "/pl/products/sejf-szufladowy-siegen-d-331150-12-102.html", "name": "Sejf szufladowy Siegen D / 331150.12 Elektroniczny", "sessions": 64, "views": 92, "avg_time_sec": 45, "avg_time": "0:45", "atc": 2, "purchases": 1, "revenue": 2249.0, "cr_views_atc": 2.2, "cr_atc_purch": 50.0, "cr_sessions_purch": 1.56, "ecom_match": "Sejf szufladowy Siegen D / 331150.12"}, {"path": "/pl/products/sejf-szafa-na-bron-siegen-s1-imp-500090-11-52.html", "name": "sejf / szafa na broń Siegen S1 IMP / 500090.11 szary grafit / RAL 7024 \\ Kluczowy", "sessions": 61, "views": 74, "avg_time_sec": 21, "avg_time": "0:21", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 1.4, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/sejf-meblowy-adorf-331001-11-18.html", "name": "Sejf meblowy Adorf / 331001.11 szary grafit / RAL 7024 \\ Kluczowy", "sessions": 58, "views": 63, "avg_time_sec": 17, "avg_time": "0:17", "atc": 6, "purchases": 0, "revenue": 0.0, "cr_views_atc": 9.5, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf domowy Adorf klasa S1 25×34×29 cm szary – zamek kluczowy"}, {"path": "/pl/products/sejf-szufladowy-na-bron-siegen-d-s1-imp-500151-12-114.html", "name": "sejf szufladowy na broń Siegen D S1 IMP / 500151.12 Elektroniczny", "sessions": 57, "views": 73, "avg_time_sec": 13, "avg_time": "0:13", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 1.4, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/szafa-na-bron-i-amunicje-siegen-max-kombi-12-125-klucz-klasa-s1-29.html", "name": "szafa na broń i amunicję Siegen MAX KOMBI 12/125 klucz klasa S1 szary / RAL 7035 \\ Kluc...", "sessions": 57, "views": 67, "avg_time_sec": 24, "avg_time": "0:24", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 1.5, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "szafa na broń i amunicję Siegen MAX KOMBI 12/125 klucz klasa S1"}, {"path": "/pl/products/sejf-szafa-na-bron-siegen-super-kombi-530006-54-01-128.html", "name": "sejf / szafa na broń Siegen Super KOMBI / 530006.54.01 szary grafit / RAL 7024 \\ Elektr...", "sessions": 56, "views": 68, "avg_time_sec": 18, "avg_time": "0:18", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 1.5, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "sejf / szafa na broń Siegen Super KOMBI / 530006.54.01"}, {"path": "/pl/products/sejf-szufladowy-na-bron-siegen-d-s1-imp-500151-11-113.html", "name": "sejf szufladowy na broń Siegen D S1 IMP / 500151.11", "sessions": 53, "views": 64, "avg_time_sec": 17, "avg_time": "0:17", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 1.6, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "sejf szufladowy na broń Siegen D S1 IMP / 500151.11"}, {"path": "/pl/products/sejf-szufladowy-na-bron-siegen-d-s1-imp-500154-12-120.html", "name": "sejf szufladowy na broń Siegen D S1 IMP / 500154.12 Elektroniczny", "sessions": 51, "views": 64, "avg_time_sec": 23, "avg_time": "0:23", "atc": 2, "purchases": 0, "revenue": 0.0, "cr_views_atc": 3.1, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "sejf szufladowy na broń Siegen D S1 IMP / 500154.12"}, {"path": "/pl/products/szafa-na-bron-dluga-s1-siegen-max-kombi-12-szt-125-cm-grafitowa-zamek-elektroniczny-32.html", "name": "Szafa na broń długą S1 Siegen Max Kombi 12 szt. 125 cm grafitowa – zamek elektroniczny", "sessions": 51, "views": 58, "avg_time_sec": 14, "avg_time": "0:14", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 1.7, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/szafa-na-bron-siegen-max-kombi-s1-imp-500080-52-31.html", "name": "szafa na broń Siegen MAX KOMBI S1 IMP / 500080.51 szary / RAL 7035 \\ Kluczowy", "sessions": 50, "views": 57, "avg_time_sec": 29, "avg_time": "0:29", "atc": 6, "purchases": 1, "revenue": 1994.05, "cr_views_atc": 10.5, "cr_atc_purch": 16.7, "cr_sessions_purch": 2.0, "ecom_match": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 klucz klasa S1"}, {"path": "/pl/products/polka-przestawna-do-szafy-na-bron-siegen-50088-50083", "name": "Półka do szafy na broń Siegen 50088-50083 – stalowa regulowana", "sessions": 49, "views": 57, "avg_time_sec": 21, "avg_time": "0:21", "atc": 23, "purchases": 7, "revenue": 1105.0, "cr_views_atc": 40.4, "cr_atc_purch": 30.4, "cr_sessions_purch": 14.29, "ecom_match": "Półka przestawna do szafy na broń Siegen"}, {"path": "/pl/products/szafa-na-bron-i-amunicje-siegen-max-kombi-12-125-klucz-klasa-s1-30.html", "name": "szafa na broń i amunicję Siegen MAX KOMBI 12/125 klucz klasa S1 szary grafit / RAL 7024...", "sessions": 48, "views": 60, "avg_time_sec": 10, "avg_time": "0:10", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 1.7, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "szafa na broń i amunicję Siegen MAX KOMBI 12/125 klucz klasa S1"}, {"path": "/pl/products/sejf-szufladowy-na-bron-siegen-d-s1-imp-500154-11-119.html", "name": "sejf szufladowy na broń Siegen D S1 IMP / 500154.11 Kluczowy", "sessions": 48, "views": 54, "avg_time_sec": 19, "avg_time": "0:19", "atc": 2, "purchases": 0, "revenue": 0.0, "cr_views_atc": 3.7, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "sejf szufladowy na broń Siegen D S1 IMP / 500150.11"}, {"path": "/pl/products/sejf-domowy-baden-baden-klasa-s2-szary-zamek-elektroniczny-34100-02-35.html", "name": "Sejf domowy BADEN BADEN klasa S2 szary – zamek elektroniczny 34100.02", "sessions": 46, "views": 77, "avg_time_sec": 3, "avg_time": "0:03", "atc": 1, "purchases": 1, "revenue": 2849.0, "cr_views_atc": 1.3, "cr_atc_purch": 100.0, "cr_sessions_purch": 2.17, "ecom_match": "Sejf domowy BADEN BADEN klasa S2 szary – zamek elektroniczny 34104.02"}, {"path": "/pl/products/sejf-meblowy-baden-baden-34100-02-35.html", "name": "Sejf meblowy Baden Baden / 34100.02 szary / RAL 7035 \\ Elektroniczny", "sessions": 46, "views": 62, "avg_time_sec": 17, "avg_time": "0:17", "atc": 1, "purchases": 1, "revenue": 2849.0, "cr_views_atc": 1.6, "cr_atc_purch": 100.0, "cr_sessions_purch": 2.17, "ecom_match": "Sejf domowy BADEN BADEN klasa S2 szary – zamek elektroniczny 34104.02"}, {"path": "/pl/products/sejf-meblowy-adorf-331004-12-149.html", "name": "Sejf meblowy Adorf / 331004.12 szary grafit / RAL 7024 \\ Elektroniczny", "sessions": 46, "views": 49, "avg_time_sec": 23, "avg_time": "0:23", "atc": 1, "purchases": 1, "revenue": 1299.0, "cr_views_atc": 2.0, "cr_atc_purch": 100.0, "cr_sessions_purch": 2.17, "ecom_match": "Sejf meblowy Adorf / 331004.12"}, {"path": "/pl/products/sejf-domowy-adorf-klasa-s1-25x34x29-cm-grafitowy-zamek-elektroniczny-20.html", "name": "Sejf domowy Adorf klasa S1 25×34×29 cm grafitowy – zamek elektroniczny", "sessions": 45, "views": 49, "avg_time_sec": 11, "avg_time": "0:11", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 2.0, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf domowy Adorf klasa S1 25×34×29 cm grafitowy – zamek elektroniczny"}, {"path": "/pl/products/szafa-na-bron-siegen-max-kombi-s1-imp-500080-51-29.html", "name": "szafa na broń Siegen MAX KOMBI S1 IMP / 500080.51 szary / RAL 7035 \\ Kluczowy", "sessions": 44, "views": 54, "avg_time_sec": 20, "avg_time": "0:20", "atc": 6, "purchases": 1, "revenue": 1994.05, "cr_views_atc": 11.1, "cr_atc_purch": 16.7, "cr_sessions_purch": 2.27, "ecom_match": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 klucz klasa S1"}, {"path": "/pl/products/sejf-szafa-na-bron-siegen-super-kombi-530006-51-05-222.html", "name": "sejf / szafa na broń Siegen Super KOMBI / 530006.51.05 szary / RAL 7035 \\ Kluczowy", "sessions": 44, "views": 44, "avg_time_sec": 8, "avg_time": "0:08", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 2.3, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/szafa-na-bron-siegen-max-kombi-s1-imp-500081-51-25.html", "name": "szafa na broń Siegen MAX KOMBI S1 IMP / 500081.51 szary / RAL 7035 \\ Kluczowy", "sessions": 43, "views": 55, "avg_time_sec": 18, "avg_time": "0:18", "atc": 6, "purchases": 1, "revenue": 1994.05, "cr_views_atc": 10.9, "cr_atc_purch": 16.7, "cr_sessions_purch": 2.33, "ecom_match": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 klucz klasa S1"}, {"path": "/pl/products/sejf-domowy-antywlamaniowy-adorf-331000-01-21.html", "name": "Sejf domowy antywłamaniowy Adorf / 331000.01 szary / RAL 7035 \\ Kluczowy", "sessions": 43, "views": 65, "avg_time_sec": 43, "avg_time": "0:43", "atc": 2, "purchases": 1, "revenue": 749.0, "cr_views_atc": 3.1, "cr_atc_purch": 50.0, "cr_sessions_purch": 2.33, "ecom_match": "Sejf domowy antywłamaniowy klasa S1 Adorf na klucz szary"}, {"path": "/pl/products/sejf-szufladowy-na-bron-siegen-d-s1-imp-500152-12-116.html", "name": "sejf szufladowy na broń Siegen D S1 IMP / 500152.12 Elektroniczny", "sessions": 43, "views": 51, "avg_time_sec": 12, "avg_time": "0:12", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 2.0, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/sejf-szufladowy-na-bron-siegen-d-s1-imp-500152-11-115.html", "name": "sejf szufladowy na broń Siegen D S1 IMP / 500152.11 Kluczowy", "sessions": 43, "views": 56, "avg_time_sec": 25, "avg_time": "0:25", "atc": 2, "purchases": 0, "revenue": 0.0, "cr_views_atc": 3.6, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "sejf szufladowy na broń Siegen D S1 IMP / 500150.11"}, {"path": "/pl/products/szafa-na-bron-siegen-max-s1-imp-500082-01-214.html", "name": "szafa na broń Siegen MAX S1 IMP / 500082.01 szary / RAL 7035 \\ Kluczowy", "sessions": 43, "views": 51, "avg_time_sec": 17, "avg_time": "0:17", "atc": 6, "purchases": 1, "revenue": 1994.05, "cr_views_atc": 11.8, "cr_atc_purch": 16.7, "cr_sessions_purch": 2.33, "ecom_match": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 klucz klasa S1"}, {"path": "/pl/products/szafa-na-bron-siegen-max-s1-imp-500087-12-263.html", "name": "szafa na broń Siegen MAX S1 IMP / 500087.12 szary grafit / RAL 7024 \\ Elektroniczny", "sessions": 42, "views": 39, "avg_time_sec": 1, "avg_time": "0:01", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 2.6, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/sejf-szafa-na-bron-siegen-s1-imp-500088-12-46.html", "name": "sejf / szafa na broń Siegen S1 IMP / 500088.12 szary grafit / RAL 7024 \\ Elektroniczny", "sessions": 42, "views": 49, "avg_time_sec": 38, "avg_time": "0:38", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 2.0, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/szafa-na-bron-siegen-max-kombi-s1-imp-500081-54-28.html", "name": "szafa na broń Siegen MAX KOMBI S1 IMP / 500081.53 szary grafit / RAL 7024 \\ Kluczowy", "sessions": 41, "views": 43, "avg_time_sec": 44, "avg_time": "0:44", "atc": 6, "purchases": 1, "revenue": 1994.05, "cr_views_atc": 14.0, "cr_atc_purch": 16.7, "cr_sessions_purch": 2.44, "ecom_match": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 klucz klasa S1"}, {"path": "/pl/products/sejf-meblowy-adorf-331002-12-42.html", "name": "Sejf meblowy Adorf / 331002.12 szary grafit / RAL 7024 \\ Elektroniczny", "sessions": 41, "views": 58, "avg_time_sec": 36, "avg_time": "0:36", "atc": 3, "purchases": 3, "revenue": 4127.05, "cr_views_atc": 5.2, "cr_atc_purch": 100.0, "cr_sessions_purch": 7.32, "ecom_match": "Sejf meblowy Adorf / 331002.12"}, {"path": "/pl/products/sejf-szufladowy-siegen-d-331151-12-104.html", "name": "Sejf szufladowy Siegen D / 331151.12 Elektroniczny", "sessions": 40, "views": 59, "avg_time_sec": 16, "avg_time": "0:16", "atc": 2, "purchases": 1, "revenue": 2249.0, "cr_views_atc": 3.4, "cr_atc_purch": 50.0, "cr_sessions_purch": 2.5, "ecom_match": "Sejf szufladowy Siegen D / 331150.12"}, {"path": "/pl/products/sejf-szafa-na-bron-siegen-super-kombi-530006-54-06-274.html", "name": "sejf / szafa na broń Siegen Super KOMBI / 530006.54.06 szary grafit / RAL 7024 \\ Elektr...", "sessions": 40, "views": 46, "avg_time_sec": 16, "avg_time": "0:16", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 2.2, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/sejf-meblowy-baden-baden-34100-01-33.html", "name": "Sejf meblowy Baden Baden / 34100.01 szary / RAL 7035 \\ Kluczowy", "sessions": 39, "views": 50, "avg_time_sec": 33, "avg_time": "0:33", "atc": 7, "purchases": 1, "revenue": 1749.0, "cr_views_atc": 14.0, "cr_atc_purch": 14.3, "cr_sessions_purch": 2.56, "ecom_match": "Sejf meblowy Baden Baden / 34100.12"}, {"path": "/pl/products/sejf-domowy-na-klucz-klasa-s1-adorf-250-18.html", "name": "Sejf domowy na klucz klasa S1 Adorf 250 szary grafit / RAL 7024 \\ Kluczowy", "sessions": 39, "views": 74, "avg_time_sec": 22, "avg_time": "0:22", "atc": 6, "purchases": 0, "revenue": 0.0, "cr_views_atc": 8.1, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf domowy Adorf klasa S1 25×34×29 cm szary – zamek kluczowy"}, {"path": "/pl/products/szafa-na-bron-siegen-max-kombi-s1-imp-500086-51-202.html", "name": "szafa na broń Siegen MAX KOMBI S1 IMP / 500086.51 szary / RAL 7035 \\ Kluczowy", "sessions": 38, "views": 40, "avg_time_sec": 16, "avg_time": "0:16", "atc": 6, "purchases": 1, "revenue": 1994.05, "cr_views_atc": 15.0, "cr_atc_purch": 16.7, "cr_sessions_purch": 2.63, "ecom_match": "szafa na broń i amunicję Siegen MAX KOMBI 18/125 klucz klasa S1"}, {"path": "/pl/products/sejf-na-bron-krotka-siegen-sg1-58900-12-79.html", "name": "Sejf na broń krótką Siegen SG1 / 58900.12", "sessions": 37, "views": 50, "avg_time_sec": 14, "avg_time": "0:14", "atc": 2, "purchases": 1, "revenue": 2510.07, "cr_views_atc": 4.0, "cr_atc_purch": 50.0, "cr_sessions_purch": 2.7, "ecom_match": "Sejf na broń krótką Siegen SG1 / 58900.12"}, {"path": "/pl/products/sejf-domowy-na-klucz-klasa-s1-adorf-250-17.html", "name": "Sejf domowy na klucz klasa S1 Adorf 250 szary / RAL 7035 \\ Kluczowy", "sessions": 37, "views": 41, "avg_time_sec": 14, "avg_time": "0:14", "atc": 6, "purchases": 0, "revenue": 0.0, "cr_views_atc": 14.6, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf domowy Adorf klasa S1 25×34×29 cm szary – zamek kluczowy"}, {"path": "/pl/products/sejf-domowy-antywlamaniowy-adorf-331000-12-24.html", "name": "Sejf domowy antywłamaniowy Adorf / 331000.12 szary grafit / RAL 7024 \\ Elektroniczny", "sessions": 36, "views": 44, "avg_time_sec": 45, "avg_time": "0:45", "atc": 2, "purchases": 1, "revenue": 749.0, "cr_views_atc": 4.5, "cr_atc_purch": 50.0, "cr_sessions_purch": 2.78, "ecom_match": "Sejf domowy antywłamaniowy klasa S1 Adorf na klucz szary"}, {"path": "/pl/products/sejf-szafa-na-bron-siegen-s1-imp-500088-01-43.html", "name": "sejf / szafa na broń Siegen S1 IMP / 500088.01 szary / RAL 7035 \\ Kluczowy", "sessions": 35, "views": 53, "avg_time_sec": 15, "avg_time": "0:15", "atc": 3, "purchases": 0, "revenue": 0.0, "cr_views_atc": 5.7, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "sejf / szafa na broń Siegen S1 IMP / 500088.01"}, {"path": "/pl/products/sejf-szufladowy-na-bron-siegen-d-s1-imp-500153-12-118.html", "name": "sejf szufladowy na broń Siegen D S1 IMP / 500153.12 Elektroniczny", "sessions": 34, "views": 42, "avg_time_sec": 16, "avg_time": "0:16", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 2.4, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/sejf-meblowy-adorf-331007-01-158.html", "name": "Sejf meblowy Adorf / 331007.01 szary / RAL 7035 \\ Kluczowy", "sessions": 34, "views": 37, "avg_time_sec": 18, "avg_time": "0:18", "atc": 6, "purchases": 0, "revenue": 0.0, "cr_views_atc": 16.2, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf domowy Adorf klasa S1 25×34×29 cm szary – zamek kluczowy"}, {"path": "/pl/products/szafa-na-bron-siegen-max-kombi-s1-imp-500084-54-197.html", "name": "szafa na broń Siegen MAX KOMBI S1 IMP / 500084.54 szary grafit / RAL 7024 \\ Elektroniczny", "sessions": 34, "views": 37, "avg_time_sec": 23, "avg_time": "0:23", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 2.7, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/sejf-meblowy-adorf-331004-01-146.html", "name": "Sejf meblowy Adorf / 331004.01 szary / RAL 7035 \\ Kluczowy", "sessions": 34, "views": 35, "avg_time_sec": 26, "avg_time": "0:26", "atc": 6, "purchases": 0, "revenue": 0.0, "cr_views_atc": 17.1, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf domowy Adorf klasa S1 25×34×29 cm szary – zamek kluczowy"}, {"path": "/pl/products/szafa-na-bron-siegen-max-kombi-s1-imp-500083-54-193.html", "name": "szafa na broń Siegen MAX KOMBI S1 IMP / 500083.54 szary grafit / RAL 7024 \\ Elektroniczny", "sessions": 34, "views": 34, "avg_time_sec": 16, "avg_time": "0:16", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 2.9, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf na broń – szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm grafitowa – zamek elektroniczn"}, {"path": "/pl/products/polka-przestawna-do-sejfu-siegen-500084-500087", "name": "Półka przestawna do sejfu Siegen 500084-500087 – regulowana", "sessions": 33, "views": 45, "avg_time_sec": 17, "avg_time": "0:17", "atc": 23, "purchases": 7, "revenue": 1105.0, "cr_views_atc": 51.1, "cr_atc_purch": 30.4, "cr_sessions_purch": 21.21, "ecom_match": "Półka przestawna do szafy na broń Siegen"}, {"path": "/pl/products/polka-przestawna-do-szafy-na-bron-siegen-288.html", "name": "Półka do szafy na broń Siegen 50088-50083 – stalowa regulowana", "sessions": 33, "views": 40, "avg_time_sec": 32, "avg_time": "0:32", "atc": 23, "purchases": 7, "revenue": 1105.0, "cr_views_atc": 57.5, "cr_atc_purch": 30.4, "cr_sessions_purch": 21.21, "ecom_match": "Półka przestawna do szafy na broń Siegen"}, {"path": "/pl/products/sejf-domowy-adorf-klasa-s1-20x32x20-cm-grafitowy-zamek-kluczowy-22.html", "name": "Sejf domowy Adorf klasa S1 20x32x20 cm grafitowy – zamek kluczowy", "sessions": 33, "views": 33, "avg_time_sec": 28, "avg_time": "0:28", "atc": 1, "purchases": 0, "revenue": 0.0, "cr_views_atc": 3.0, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Sejf domowy Adorf klasa S1 20x32x20 cm grafitowy – zamek kluczowy"}, {"path": "/pl/products/sejf-szufladowy-na-bron-siegen-d-s1-imp-500150-12-112.html", "name": "sejf szufladowy na broń Siegen D S1 IMP / 500150.12", "sessions": 32, "views": 36, "avg_time_sec": 16, "avg_time": "0:16", "atc": 2, "purchases": 0, "revenue": 0.0, "cr_views_atc": 5.6, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "sejf szufladowy na broń Siegen D S1 IMP / 500150.11"}, {"path": "/pl/products/sejf-domowy-baden-baden-klasa-s2-grafitowy-zamek-kluczowy-34100-11-34.html", "name": "Sejf domowy BADEN BADEN klasa S2 grafitowy – zamek kluczowy 34100.11", "sessions": 32, "views": 40, "avg_time_sec": 28, "avg_time": "0:28", "atc": 2, "purchases": 1, "revenue": 1199.0, "cr_views_atc": 5.0, "cr_atc_purch": 50.0, "cr_sessions_purch": 3.12, "ecom_match": "Sejf domowy BADEN BADEN klasa S2 grafitowy – zamek kluczowy 34100.11"}, {"path": "/pl/products/szafa-na-bron-dluga-s1-siegen-max-kombi-18-szt-125-cm-szara-zamek-elektroniczny-27.html", "name": "Szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm szara – zamek elektroniczny", "sessions": 32, "views": 38, "avg_time_sec": 17, "avg_time": "0:17", "atc": 2, "purchases": 0, "revenue": 0.0, "cr_views_atc": 5.3, "cr_atc_purch": 0.0, "cr_sessions_purch": 0.0, "ecom_match": "Szafa na broń długą S1 Siegen Max Kombi 18 szt. 125 cm szara – zamek elektroniczny"}];
+
+let currentSort = 'sessions';
+let sortDesc = true;
+let searchQ = '';
+
+const MAX_BAR = {};
+['sessions','views','avg_time_sec','atc','purchases','revenue'].forEach(k => {
+  MAX_BAR[k] = Math.max(...RAW.map(r => r[k] || 0));
+});
+
+function fmt(n, decimals=0) {
+  if (n === 0) return '—';
+  return n.toLocaleString('pl-PL', {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+}
+
+function crClass(val) {
+  if (val >= 5) return 'cr-high';
+  if (val >= 1) return 'cr-mid';
+  return 'cr-low';
+}
+
+function barHtml(val, max, cls='') {
+  const pct = max > 0 ? Math.min(val / max * 80, 80) : 0;
+  return `<div class="bar-wrap"><div class="bar ${cls}" style="width:${pct.toFixed(1)}px"></div><span>${fmt(val)}</span></div>`;
+}
+
+function renderKPIs(data) {
+  const totalSess = data.reduce((a,r) => a + r.sessions, 0);
+  const totalATC = data.reduce((a,r) => a + r.atc, 0);
+  const totalPurch = data.reduce((a,r) => a + r.purchases, 0);
+  const totalRev = data.reduce((a,r) => a + r.revenue, 0);
+  const avgTime = Math.round(data.reduce((a,r) => a + r.avg_time_sec * r.sessions, 0) / Math.max(totalSess, 1));
+  const mins = Math.floor(avgTime/60), secs = avgTime%60;
+  const crOverall = totalSess > 0 ? (totalPurch/totalSess*100).toFixed(2) : '0.00';
+
+  document.getElementById('kpi-bar').innerHTML = `
+    <div class="kpi"><div class="kpi-label">Produkty (PDP)</div><div class="kpi-value">${data.length}</div><div class="kpi-sub">unikalnych URL</div></div>
+    <div class="kpi"><div class="kpi-label">Sesje łącznie</div><div class="kpi-value">${fmt(totalSess)}</div><div class="kpi-sub">na stronach produktów</div></div>
+    <div class="kpi"><div class="kpi-label">Śr. czas na stronie</div><div class="kpi-value yellow">${mins}:${String(secs).padStart(2,'0')}</div><div class="kpi-sub">ważony sesjami</div></div>
+    <div class="kpi"><div class="kpi-label">Add to Cart</div><div class="kpi-value">${fmt(totalATC)}</div><div class="kpi-sub">zdarzenia</div></div>
+    <div class="kpi"><div class="kpi-label">Zakupy</div><div class="kpi-value green">${fmt(totalPurch)}</div><div class="kpi-sub">transakcje</div></div>
+    <div class="kpi"><div class="kpi-label">Przychód</div><div class="kpi-value green">${fmt(totalRev, 0)} PLN</div><div class="kpi-sub">z PDP</div></div>
+    <div class="kpi"><div class="kpi-label">CR sesje→zakup</div><div class="kpi-value ${crOverall >= 1 ? 'green' : 'yellow'}">${crOverall}%</div><div class="kpi-sub">overall PDP</div></div>
+  `;
+}
+
+function renderTable() {
+  let data = RAW.filter(r => searchQ === '' || r.name.toLowerCase().includes(searchQ) || r.path.toLowerCase().includes(searchQ));
+  data = data.sort((a,b) => sortDesc ? (b[currentSort]||0) - (a[currentSort]||0) : (a[currentSort]||0) - (b[currentSort]||0));
+
+  renderKPIs(data);
+  document.getElementById('count-badge').textContent = `${data.length} produktów`;
+
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = data.map((r, i) => {
+    const purchClass = r.purchases > 0 ? 'purch-yes' : 'purch-no';
+    const crATC = r.cr_views_atc > 0 ? `<span class="cr-badge ${crClass(r.cr_views_atc)}">${r.cr_views_atc}%</span>` : '<span class="cr-badge cr-low">—</span>';
+    const crPurch = r.cr_sessions_purch > 0 ? `<span class="cr-badge ${crClass(r.cr_sessions_purch)}">${r.cr_sessions_purch}%</span>` : '<span class="cr-badge cr-low">—</span>';
+    const revFmt = r.revenue > 0 ? `<span class="purch-yes">${fmt(r.revenue, 0)} zł</span>` : '<span class="purch-no">—</span>';
+
+    return `<tr>
+      <td class="rank">${i+1}</td>
+      <td class="product-name">
+        <a class="prod-link" href="https://sejfzone.pl${r.path}" target="_blank" rel="noopener">${r.name}</a>
+        <div class="prod-path">${r.path}</div>
+      </td>
+      <td class="num">${barHtml(r.sessions, MAX_BAR.sessions)}</td>
+      <td class="num">${barHtml(r.views, MAX_BAR.views)}</td>
+      <td class="num">
+        <div class="bar-wrap">
+          <div class="bar yellow" style="width:${(r.avg_time_sec/Math.max(MAX_BAR.avg_time_sec,1)*80).toFixed(1)}px"></div>
+          <span>${r.avg_time}</span>
+        </div>
+      </td>
+      <td class="num">${barHtml(r.atc, MAX_BAR.atc, 'green')}</td>
+      <td class="num">${crATC}</td>
+      <td class="num ${purchClass}">${r.purchases > 0 ? r.purchases : '—'}</td>
+      <td class="num">${crPurch}</td>
+      <td class="num">${revFmt}</td>
+    </tr>`;
+  }).join('');
+
+  // Zaktualizuj nagłówki
+  document.querySelectorAll('thead th[data-col]').forEach(th => {
+    const col = th.dataset.col;
+    const arrow = th.querySelector('.sort-arrow');
+    if (col === currentSort) {
+      th.classList.add('sorted');
+      arrow.textContent = sortDesc ? '▼' : '▲';
+    } else {
+      th.classList.remove('sorted');
+      arrow.textContent = '↕';
+    }
+  });
+}
+
+function setSort(col) {
+  if (currentSort === col) {
+    sortDesc = !sortDesc;
+  } else {
+    currentSort = col;
+    sortDesc = true;
+  }
+  document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+  const labels = {'sessions':'Sesje','avg_time_sec':'Czas na stronie','atc':'ATC','purchases':'Zakupy','revenue':'Przychód','cr_views_atc':'CR view→ATC','cr_sessions_purch':'CR sess→purch','views':'Widoki'};
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    if (btn.textContent.trim() === (labels[col] || col)) btn.classList.add('active');
+  });
+  renderTable();
+}
+
+document.getElementById('search').addEventListener('input', e => {
+  searchQ = e.target.value.toLowerCase();
+  renderTable();
+});
+
+renderTable();
+</script>
+</body>
+</html>
