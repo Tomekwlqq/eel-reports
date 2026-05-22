@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GEO Rekomendacje — Fera.pl | EEL 2026-05-22</title>
+<style>
+:root{--bg:#0f1117;--surface:#1a1d26;--surface2:#22253a;--surface3:#2a2d3e;--border:#2e3148;--text:#e8eaf6;--muted:#8b90a7;--accent:#7c6af7;--green:#4caf7d;--yellow:#f5a623;--red:#e05252;--teal:#26c6da;--blue:#4f9cf9;font-size:14px}
+[data-theme="light"]{--bg:#f5f6fa;--surface:#ffffff;--surface2:#eef0f8;--surface3:#e0e3f0;--border:#cdd1e6;--text:#1a1d2e;--muted:#5a6080;--accent:#5a47e8;--green:#2e7d52;--yellow:#c67c00;--red:#c0392b;--teal:#0097a7;--blue:#1565c0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.topbar-badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px}
+.theme-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:12px}
+.container{max-width:960px;margin:0 auto;padding:32px 20px}
+h1{font-size:26px;font-weight:900;margin-bottom:6px}
+.meta{font-size:13px;color:var(--muted);margin-bottom:24px}
+/* score header */
+.score-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:28px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+.stat-card-val{font-size:28px;font-weight:900;line-height:1;margin-bottom:4px}
+.stat-card-val.bad{color:var(--red)}
+.stat-card-val.target{color:var(--green)}
+.stat-card-val.warn{color:var(--yellow)}
+.stat-card-val.info{color:var(--accent)}
+.stat-card-label{font-size:11px;color:var(--muted)}
+/* section titles */
+.section-title{font-size:16px;font-weight:800;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
+.section-title .badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+/* priority tables */
+.data-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+.data-table th{background:var(--surface2);color:var(--muted);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:8px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.data-table td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.4}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--surface2)}
+.tag-qw{background:#1a2e1a;color:var(--green);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
+.tag-mid{background:#2e2a1a;color:var(--yellow);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
+.tag-hard{background:#2e1a1a;color:var(--red);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
+/* DQ recommendation cards */
+.dq-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:16px;overflow:hidden}
+.dq-card-header{padding:14px 16px;display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid var(--border)}
+.dq-id-badge{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:800;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.dq-question{font-size:14px;font-weight:700;flex:1}
+.dq-score-now{font-size:20px;font-weight:900;color:var(--red);white-space:nowrap}
+.dq-score-pot{font-size:13px;color:var(--green);font-weight:700;margin-top:1px;white-space:nowrap;text-align:right}
+.dq-card-body{padding:16px}
+.dq-section{margin-bottom:14px}
+.dq-section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px}
+.dq-gap{background:var(--surface2);border-left:3px solid var(--red);border-radius:0 6px 6px 0;padding:10px 12px;font-size:13px;line-height:1.5;margin-bottom:8px}
+.dq-content-template{background:var(--surface2);border-left:3px solid var(--green);border-radius:0 6px 6px 0;padding:10px 12px;font-size:12px;line-height:1.6;color:var(--text);font-family:'Courier New',monospace}
+.dq-content-template strong{color:var(--green);font-family:-apple-system,sans-serif;font-size:11px;display:block;margin-bottom:4px}
+.tag-cep{display:inline-block;background:var(--surface3);border:1px solid var(--border);border-radius:99px;padding:2px 8px;font-size:10px;color:var(--muted);margin-right:4px;margin-bottom:6px}
+.tag-intent{display:inline-block;background:var(--surface3);border:1px solid var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;color:var(--accent);margin-right:4px}
+.score-0{color:var(--red);font-weight:800}
+.score-3{color:var(--green);font-weight:800}
+/* where to place */
+.where-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px}
+.where-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.where-chip{background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:11px}
+.where-chip.primary{border-color:var(--accent);color:var(--accent)}
+/* insight box */
+.insight-box{border-radius:10px;padding:16px 18px;margin-bottom:20px}
+.insight-box.green{background:rgba(76,175,125,.08);border:1px solid rgba(76,175,125,.25)}
+.insight-box.yellow{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.25)}
+.insight-box.red{background:rgba(224,82,82,.08);border:1px solid rgba(224,82,82,.25)}
+.insight-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;opacity:.7}
+/* benchmarks */
+.bench-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px}
+.bench-table th{background:var(--surface2);color:var(--muted);font-size:10px;text-transform:uppercase;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.bench-table td{padding:8px 10px;border-bottom:1px solid var(--border)}
+.bench-table tr:last-child td{border-bottom:none}
+.score-fill-inline{display:inline-block;height:6px;border-radius:3px;vertical-align:middle;margin-left:6px}
+/* footer */
+footer{text-align:center;padding:32px 20px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);margin-top:40px}
+@media(max-width:640px){.score-row{grid-template-columns:1fr 1fr}.dq-card-header{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">EEL GEO Rekomendacje — Fera.pl</div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span class="topbar-badge">13 → 65+ / 100</span>
+    <button class="theme-btn" onclick="document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'">☀ / ☾</button>
+  </div>
+</div>
+
+<div class="container">
+
+<h1>GEO Rekomendacje — Fera.pl</h1>
+<p class="meta">Kategoria: <strong>Karma sucha dla psa</strong> · AI Citability Score: 13/100 · Cel po wdrożeniu: 65–75/100 · 2026-05-22</p>
+
+<!-- stat cards -->
+<div class="score-row">
+  <div class="stat-card">
+    <div class="stat-card-val bad">13/100</div>
+    <div class="stat-card-label">Aktualny GEO Score</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-val target">65–75/100</div>
+    <div class="stat-card-label">Cel po wdrożeniu (3–8 tyg.)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-val warn">5</div>
+    <div class="stat-card-label">Quick Wins (0–2 tyg.)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-val info">8</div>
+    <div class="stat-card-label">Discovery Questions do obsłużenia</div>
+  </div>
+</div>
+
+<div class="insight-box red">
+  <div class="insight-title">Główny problem</div>
+  <p>Fera.pl nie istnieje dla AI Search w kategorii "karma sucha dla psa". 5 z 8 Discovery Questions = 0/3 — żaden AI (ChatGPT, Perplexity, Google AIO) nie zacytuje tej strony. Brakuje FAQPage schema, treści edukacyjnych i specyficznych instrukcji (np. plan przejścia na nową karmę z konkretnymi % i datami). Sklep ma produkty, ale nie ma treści, które AI może cytować jako odpowiedź na pytanie klienta.</p>
+</div>
+
+<!-- Quick Wins table -->
+<div class="section-title">⚡ Priorytety — Quick Wins <span class="badge">0–2 tygodnie</span></div>
+
+<table class="data-table">
+  <thead>
+    <tr><th>#</th><th>Akcja</th><th>DQ</th><th>Oczekiwany efekt GEO</th><th>Typ</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><strong>FAQPage schema JSON-LD na stronie kategorii</strong> — 8 pytań z DQ1–DQ8 jako FAQ. Bez tego AI nie strukturyzuje odpowiedzi z tej strony.</td>
+      <td>DQ1–DQ8</td>
+      <td>Score: 13 → 35–45/100. Najszybszy pojedynczy wzrost.</td>
+      <td><span class="tag-qw">QUICK WIN</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>Plan przejścia na nową karmę</strong> — konkretny tekst 7-dniowy (25%→50%→75%→100%) na PDP lub sekcji kategorii. Cytowalna = ma liczby i timeline.</td>
+      <td>DQ7</td>
+      <td>DQ7: 0 → 3/3. Jedyne pytanie gdzie konkretny tekst = pełny wynik.</td>
+      <td><span class="tag-qw">QUICK WIN</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>Bullets rewrite na PDP</strong> — cecha → korzyść → kontekst. Dodaj: % protein, % fat, informację o składniku głównym (mięso vs mączka), wiek/rasa target.</td>
+      <td>DQ4, DQ8</td>
+      <td>DQ4: 0 → 2/3. Poprawia też content score (z 0/25 na ~15/25).</td>
+      <td><span class="tag-qw">QUICK WIN</span></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>Krótki opis na PDP</strong> — dodaj 2–3 zdania adresujące CEP (np. "Dla psów z wrażliwym żołądkiem / dla szczeniaka dużej rasy"). Teraz = 0 sklepów ma krótki opis.</td>
+      <td>DQ1, DQ3, DQ6</td>
+      <td>Każdy PDP z opisem: +5–8 pkt content score. GEO: DQ3 → 1/3.</td>
+      <td><span class="tag-qw">QUICK WIN</span></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>Product schema uzupełnienie</strong> — dodaj aggregateRating (jeśli są recenzje), offers z ceną i availability. Teraz brak schema = AI nie widzi ceny i dostępności.</td>
+      <td>Wszystkie</td>
+      <td>Podstawa cytowalności. Bez tego nawet dobry kontent jest słabiej rankowany.</td>
+      <td><span class="tag-qw">QUICK WIN</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Medium term table -->
+<div class="section-title">📋 Priorytety — Średni Termin <span class="badge">2–8 tygodni</span></div>
+
+<table class="data-table">
+  <thead>
+    <tr><th>#</th><th>Akcja</th><th>DQ</th><th>Oczekiwany efekt GEO</th><th>Typ</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>6</td>
+      <td><strong>Strona poradnikowa: "Jak wybrać karmę dla psa alergika"</strong> — tłumaczy: single protein, limited ingredients, hydrolyzed protein. Wymienia białka (jagnięcina, kaczka, łosoś). Linkuje do produktów.</td>
+      <td>DQ1, DQ5</td>
+      <td>DQ1: 0 → 3/3. Najwyższa wartość — "alergik" = najczęstszy trigger zakupu.</td>
+      <td><span class="tag-mid">ŚREDNI</span></td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><strong>Strona/sekcja: "Karma dla psa z wrażliwym żołądkiem"</strong> — składniki do unikania (E320, E321, sztuczne barwniki), rola probiotyków/prebiotyków (FOS, MOS, Lactobacillus). Tabela składu z kluczowymi parametrami.</td>
+      <td>DQ3</td>
+      <td>DQ3: 0 → 3/3. Bardzo specyficzne — AI lubi konkretne nazwy składników.</td>
+      <td><span class="tag-mid">ŚREDNI</span></td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><strong>Strona/filtr: "Karma dla psa seniora (7+ lat)"</strong> — wyjaśnia: mniej kalorii, glucosamina+chondroityna, delikatniejsze białko. Benchmarki: protein 22–26%, fat 8–14%. Lista produktów z filtracji.</td>
+      <td>DQ6</td>
+      <td>DQ6: 0 → 2–3/3. Senior = rosnący rynek (starzejące się psy = starzejące się pokolenie właścicieli).</td>
+      <td><span class="tag-mid">ŚREDNI</span></td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><strong>Strona kategorii: "Karma dla dużych ras / małych ras"</strong> — różnice w granulkach (rozmiar, twardość), składzie (protein%, glukozamina, ilość energii na kg masy), porcjowaniu.</td>
+      <td>DQ2, DQ8</td>
+      <td>DQ2: 0 → 2/3. DQ8: 0 → 2/3. Dwie DQs jedną stroną.</td>
+      <td><span class="tag-mid">ŚREDNI</span></td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><strong>Grain-free: poradnik pro/kontra</strong> — kiedy ma sens (potwierdzona nietolerancja zbóż), kiedy nie ma sensu (ryzyko DCM — FDA advisory 2019). Kontra-narracja = AI bardzo chętnie cytuje balansowane źródła.</td>
+      <td>DQ5</td>
+      <td>DQ5: 0 → 3/3. Unikalna treść — większość sklepów tylko reklamuje grain-free, nikt nie tłumaczy ryzyka.</td>
+      <td><span class="tag-mid">ŚREDNI</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- key insight -->
+<div class="insight-box green">
+  <div class="insight-title">Najważniejszy wniosek</div>
+  <p>Fera.pl ma produkty — brakuje treści poradnikowych, które AI może cytować jako odpowiedź na pytanie kupującego. Priorytet absolutny: <strong>FAQPage schema</strong> (pojedynczy wysiłek → wzrost o ~20–30 pkt) + <strong>plan przejścia na karmę</strong> (DQ7 = jedyna DQ gdzie fera.pl może osiągnąć 3/3 bez nowych stron — wystarczy dodać konkretny tekst z procentami i dniami). Te dwa działania zajmą łącznie &lt;4h i przeniosą score z 13 do ~40/100.</p>
+</div>
+
+<!-- Per-DQ recommendations -->
+<div class="section-title">🎯 Rekomendacje per Discovery Question</div>
+<p style="font-size:12px;color:var(--muted);margin-bottom:16px;">Dla każdego DQ: co brakuje + gotowy fragment treści do wdrożenia (zielone bloki = copy-paste lub adapt).</p>
+
+<!-- DQ1 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ1</div>
+    <div class="dq-question">Jak wybrać karmę suchą dla psa alergika?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">0/3</div>
+      <div class="dq-score-pot">cel: 3/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_alergia</span>
+      <span class="tag-intent">porównanie / edukacja</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje (dlaczego AI = 0)</div>
+      <div class="dq-gap">Fera.pl nie ma żadnej strony tłumaczącej "karma hipoalergiczna". Brak słów kluczowych: single protein, limited ingredients, hydrolyzed protein. Brak listy bezpiecznych białek dla alergików.</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Gdzie umieścić</div>
+      <div class="where-row">
+        <span class="where-chip primary">Nowy artykuł / poradnik</span>
+        <span class="where-chip">Sekcja kategorii "karma hipoalergiczna"</span>
+        <span class="where-chip">FAQ na PDP produktów hypoalergicznych</span>
+      </div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template">
+        <strong>// Treść poradnikowa — wklej lub adaptuj</strong>
+Jak wybrać karmę dla psa alergika?
+
+Psy z alergią pokarmową reagują najczęściej na białko (kurczak, wołowina, pszenica). Bezpieczne opcje:
+
+→ Single protein: jedna źródło mięsa (np. jagnięcina, kaczka, łosoś, królik). Łatwiej zlokalizować alergen.
+→ Limited ingredients: krótka lista składników — mniej możliwych alergenów.
+→ Hydrolyzed protein: białko rozbite na cząsteczki zbyt małe, by wywołać reakcję.
+
+Białka najrzadziej wywołujące alergie: jagnięcina, kaczka, łosoś, dziczyzna, koń, królik.
+Unikaj: kurczak, wołowina, pszenica, kukurydza, soja (najczęstsze alergeny u psów).
+
+Przy alergii zawsze wprowadzaj nową karmę przez 8–12 tygodni, żeby ocenić efekt (zbyt szybka zmiana maskuje wyniki).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ2 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ2</div>
+    <div class="dq-question">Jaka karma sucha dla szczeniaka dużej rasy?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">0/3</div>
+      <div class="dq-score-pot">cel: 2/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_szczeniak</span>
+      <span class="tag-intent">rekomendacja</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje</div>
+      <div class="dq-gap">Brak strony/filtra dla szczeniąt dużych ras. Brak informacji o specyficznych potrzebach wzrostowych: kontrolowany wapń/fosfor (u dużych ras nadmiar = dysplazja), rozmiar granulki, zawartość DHA dla rozwoju mózgu.</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template">
+        <strong>// Sekcja na stronie kategorii szczeniąt lub PDP</strong>
+Karma dla szczeniaka dużej rasy — czym się różni?
+
+Szczenięta dużych ras (Labrador, Owczarek, Golden Retriever) rosną inaczej niż małe psy.
+Zbyt szybki wzrost = ryzyko dysplazji stawów i problemów kostnych.
+
+Co musi mieć karma dla szczeniaka dużej rasy:
+• Kontrolowany stosunek Ca:P (wapń:fosfor) — optimum 1,2:1 do 1,8:1
+• DHA (kwas dokozaheksaenowy) — wspiera rozwój mózgu i wzroku
+• Umiarkowana kaloryczność — szczeniak dużej rasy nie powinien rosnąć za szybko
+• Granulki L/XL — spowalniają jedzenie, zmniejszają ryzyko skrętu żołądka
+
+Szukaj oznaczenia: "dla dużych ras" lub "large breed puppy" na opakowaniu.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ3 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ3</div>
+    <div class="dq-question">Karma sucha dla psa z wrażliwym żołądkiem — na co zwrócić uwagę?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">0/3</div>
+      <div class="dq-score-pot">cel: 3/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_alergia</span>
+      <span class="tag-intent">edukacja / kryteria</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje</div>
+      <div class="dq-gap">Brak wymienionych składników do unikania z nazwami (E320, E321, sztuczne barwniki BHA/BHT). Brak tłumaczenia roli probiotyków/prebiotyków i ich konkretnych nazw. AI lubi bardzo konkretne listy — "składniki do unikania" to gotowy format cytowania.</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template">
+        <strong>// Sekcja FAQ lub poradnik — bardzo konkretny, AI-friendly</strong>
+Karma dla psa z wrażliwym żołądkiem — lista kontrolna:
+
+UNIKAJ w składzie:
+✗ Sztuczne konserwanty: BHA (E320), BHT (E321), etoksychina
+✗ Sztuczne barwniki: tartrazyna (E102), karmazyn (E122)
+✗ Mączka mięsna z nieznanego źródła (napisane tylko "mączka mięsna")
+✗ Kukurydza i pszenica na początku składu (wypełniacze trudnostrawne)
+
+SZUKAJ w składzie:
+✓ Prebiotyki: FOS (fruktooligosacharydy), MOS (mannooligosacharydy)
+✓ Probiotyki: Lactobacillus acidophilus, Enterococcus faecium
+✓ Łatwo strawne białko: kurczak, indyk, łosoś (nie mączka)
+✓ Hydrolizowana wątróbka zamiast surowego mięsa (lepsza przyswajalność)
+
+Tabela parametrów dla wrażliwego żołądka:
+Protein: 22–28% | Fat: 8–15% | Fiber (błonnik): min. 2,5% | Wilgotność: max 12%
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ4 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ4</div>
+    <div class="dq-question">Na co zwrócić uwagę czytając skład karmy dla psa?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">0/3</div>
+      <div class="dq-score-pot">cel: 2/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_zmiana</span>
+      <span class="tag-intent">edukacja</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje</div>
+      <div class="dq-gap">Brak jakiegokolwiek przewodnika po czytaniu składów. Na PDP brak tabeli z kluczowymi parametrami (protein%, fat%, fiber%). Bullets na produktach = tylko cechy bez kontekstu interpretacyjnego.</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template">
+        <strong>// Idealne jako sticky sekcja przy składzie na PDP lub osobny poradnik</strong>
+Jak czytać skład karmy? 5 zasad:
+
+1. KOLEJNOŚĆ ma znaczenie — składniki są wymienione od największej do najmniejszej ilości.
+   Mięso na 1. miejscu = dobra karma. Kukurydza na 1. miejscu = karma zbożowa.
+
+2. MIĘSO vs MĄCZKA — "kurczak" to świeże mięso (~70% wody).
+   "Mączka z kurczaka" to przetworzone mięso (suche, ~65% białka). Mączka ≠ zły składnik — ale "mączka mięsna" bez źródła = nieznane pochodzenie.
+
+3. PROTEIN% i FAT% — szukaj w gwarantowanej analizie:
+   • Dorosły pies aktywny: protein 25–30%, fat 12–18%
+   • Senior/mało aktywny: protein 18–22%, fat 8–12%
+   • Szczeniak: protein 28–35%, fat 17–22%
+
+4. KONSERWANTY — naturalne (witamina E / tokoferole, rozmaryn) = OK.
+   Sztuczne (BHA E320, BHT E321) = unikaj.
+
+5. "HOLISTIC" / "PREMIUM" — to nazwy marketingowe, nie standardy prawne.
+   Czytaj skład, nie etykietę.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ5 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ5</div>
+    <div class="dq-question">Karma bez zbóż dla psa — kiedy to ma sens?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">0/3</div>
+      <div class="dq-score-pot">cel: 3/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_alergia</span>
+      <span class="tag-intent">edukacja / kontra</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje</div>
+      <div class="dq-gap">Fera.pl sprzedaje grain-free, ale nie ma żadnego wyjaśnienia kiedy ma sens i kiedy nie. Kontra-narracja (FDA advisory DCM) to BARDZO cytowalna treść — AI szuka źródeł które nie tylko reklamują, ale informują uczciwie.</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template">
+        <strong>// Sekcja na stronie kategorii grain-free lub FAQ</strong>
+Karma grain-free (bez zbóż) — kiedy warto, kiedy nie?
+
+KIEDY MA SENS:
+✓ Potwierdzona nietolerancja zbóż (pszenica, kukurydza, ryż) — zdiagnozowana przez weterynarza
+✓ Pies z nawracającymi problemami skórnymi lub trawiennymi po karmach zbożowych
+✓ Właściciel preferuje dietę bliższą naturalnemu żywieniu mięsożerców
+
+KIEDY NIE MA SENSU:
+✗ "Moda" bez konkretnego powodu zdrowotnego
+✗ Zdrowy pies bez alergii — nie przynosi wymiernych korzyści
+
+⚠ WAŻNE — FDA Advisory 2019:
+Amerykańska FDA powiązała dietę grain-free (szczególnie z grochem, soczewicą, ziemniakami jako głównymi składnikami) z przypadkami DCM (kardiomiopatia rozstrzeniowa) u psów. Badania trwają, ale warto zachować ostrożność. Grain-free bez powodu = niepotrzebne ryzyko.
+
+Alternatywa: karma z pojedynczym zbożem (np. tylko ryż) — często łatwiej strawna niż wielozbożowa, a bezpieczniejsza niż bezzbożowa.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ6 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ6</div>
+    <div class="dq-question">Jaka karma sucha dla psa seniora (powyżej 7 lat)?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">0/3</div>
+      <div class="dq-score-pot">cel: 2/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_senior</span>
+      <span class="tag-intent">rekomendacja</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje</div>
+      <div class="dq-gap">Brak filtrowania lub oznaczenia produktów "dla seniorów". Brak tłumaczenia dlaczego senior potrzebuje innej karmy — konkretne parametry (protein%, fat%, suplementy stawowe) których AI może użyć jako odpowiedź.</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template">
+        <strong>// Sekcja przy filtrze "senior" lub FAQ na PDP karm dla seniorów</strong>
+Karma dla psa seniora — co się zmienia po 7. roku życia?
+
+Starzejące się psy mają inne potrzeby metaboliczne:
+
+Metabolizm: wolniejszy — mniej kalorii, żeby uniknąć otyłości.
+Parametry karmy dla seniora: Protein 18–24% | Fat 8–12% | Kalorie: 10–15% mniej niż w karmie dla dorosłych
+
+Stawy: kluczowe suplementy w składzie:
+• Glukozamina — min. 500 mg/kg karmy (wsparcie chrząstki stawowej)
+• Siarczan chondroityny — min. 200 mg/kg
+• Omega-3 (EPA/DHA) — działanie przeciwzapalne na stawy
+
+Nerki: starsze psy często mają gorsze funkcje nerek — unikaj karm z bardzo wysokim białkiem (>30%). Białko ma być dobrej jakości, nie w nadmiarze.
+
+Kiedy zmienić na karmę senior?
+• Małe rasy (do 10 kg): po 10–12 roku życia
+• Średnie rasy (10–25 kg): po 8–10 roku życia
+• Duże rasy (25 kg+): po 6–7 roku życia
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ7 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ7</div>
+    <div class="dq-question">Jak bezpiecznie zmienić karmę psu żeby nie miał biegunki?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">1/3</div>
+      <div class="dq-score-pot" style="color:var(--green)">cel: 3/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_zmiana</span>
+      <span class="tag-intent">how-to</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje (jest 1/3 — jest wzmianka, brak konkretów)</div>
+      <div class="dq-gap">Jest ogólna informacja o stopniowej zmianie. Brakuje: konkretnego planu dzień-po-dniu z procentami (25%→50%→75%→100%), timeline (ile dni każdy krok) i wskazówek co robić gdy pojawi się biegunka mimo stopniowej zmiany. Cytowalna = ma konkretne liczby.</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia <span style="color:var(--green);font-size:11px">(PRIORYTET #1 — najłatwiejszy 3/3)</span></div>
+      <div class="dq-content-template">
+        <strong>// Dodaj na każdym PDP lub w FAQ kategorii — konkretny plan = cytowalna odpowiedź</strong>
+Jak zmienić karmę psu bez biegunki? Plan 7-dniowy:
+
+Dzień 1–2: 75% stara karma + 25% nowa karma
+Dzień 3–4: 50% stara + 50% nowa
+Dzień 5–6: 25% stara + 75% nowa
+Dzień 7+:  100% nowa karma
+
+Psy z wrażliwym żołądkiem: wydłuż do 10–14 dni (po 3–4 dni na każdym etapie).
+Szczeniaki i seniorzy: zawsze 10–14 dni, nigdy krócej.
+
+Co robić jeśli pies mimo to ma biegunkę?
+→ Wróć o jeden krok wstecz i zostań na nim 3–4 dni dłużej.
+→ Dodaj probiotyk do karmy na czas zmiany (np. Lactobacillus acidophilus).
+→ Jeśli biegunka trwa >3 dni lub jest z krwią — wizyta u weterynarza.
+
+Uwaga: nagła zmiana karmy (100% od razu) = biegunka w 80% przypadków, nawet przy dobrej karmie.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ8 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ8</div>
+    <div class="dq-question">Karma dla dużego psa vs małego — czym się różnią składy?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">0/3</div>
+      <div class="dq-score-pot">cel: 2/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_rasa</span>
+      <span class="tag-intent">porównanie</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje</div>
+      <div class="dq-gap">Fera.pl nie ma żadnej treści porównującej karmy dla różnych rozmiarów psów. Format "porównanie" to idealny materiał do cytowania — AI odpowiada na pytanie tabelą lub listą różnic, którą musi skądś mieć.</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template">
+        <strong>// Tabela porównawcza — AI kocha tabele, easy-to-cite</strong>
+Karma dla dużego psa vs małego psa — różnice:
+
+                    | Mała rasa (&lt;10 kg)     | Duża rasa (25+ kg)
+--------------------|------------------------|----------------------
+Rozmiar granulki    | XS/S (mała szczęka)    | L/XL (zwalnia jedzenie)
+Gęstość energetycz. | Wyższa (szybki met.)   | Niższa (wolniejszy met.)
+Protein             | 28–35%                 | 23–28%
+Glukozamina         | Mniej ważna            | Kluczowa (stawy u dużych)
+Ilość posiłków      | 3–4×/dzień             | 2×/dzień
+Skręt żołądka ryzyko| Niskie                 | Wysokie (duże granulki!)
+
+Duże rasy rosną wolniej i starzeją się szybciej — karma large breed ma to wbudowane w skład.
+Mała rasa na karmie large breed = za mało kalorii. Duża rasa na karmie small breed = za dużo kalorii.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Benchmark sites -->
+<div class="section-title">🔍 Benchmark — kto robi to dobrze</div>
+<table class="bench-table">
+  <thead>
+    <tr><th>Strona</th><th>Co robią dobrze (GEO)</th><th>Szacunkowy GEO Score</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>royalcanin.com/pl</strong></td>
+      <td>Edukacyjne poradniki per rasa/wiek, tabele składów, FAQ schema, treści na każdy CEP. AI chętnie cytuje jako "ekspert branżowy".</td>
+      <td>80–90/100</td>
+    </tr>
+    <tr>
+      <td><strong>zooplus.pl</strong></td>
+      <td>Recenzje klientów (social proof), szczegółowe składy z parametrami, filtry po potrzebach (senior/puppy/sensitive). Duże agregacje treści.</td>
+      <td>55–65/100</td>
+    </tr>
+    <tr>
+      <td><strong>kakadu.pl</strong></td>
+      <td>Poradniki SEO-friendly, pewne elementy edukacyjne, ale brak FAQ schema. Dobrze na DQ4 (czytanie składu).</td>
+      <td>40–50/100</td>
+    </tr>
+    <tr>
+      <td><strong>Fera.pl (teraz)</strong></td>
+      <td>Brak treści edukacyjnych. Produkty bez opisów. Brak schema.</td>
+      <td style="color:var(--red);font-weight:800">13/100</td>
+    </tr>
+    <tr>
+      <td><strong>Fera.pl (po wdrożeniu)</strong></td>
+      <td>FAQPage schema + 5 stron edukacyjnych + plan przejścia + bullets rewrite + Product schema.</td>
+      <td style="color:var(--green);font-weight:800">65–75/100</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Scoring potential -->
+<div class="section-title">📈 Potencjał wzrostu GEO Score</div>
+<table class="data-table">
+  <thead>
+    <tr><th>Discovery Question</th><th>Teraz</th><th>Po Quick Wins</th><th>Po wszystkim</th><th>Główna akcja</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>DQ1 — alergik</td><td class="score-0">0</td><td>0</td><td class="score-3">3</td><td>Strona poradnikowa</td></tr>
+    <tr><td>DQ2 — szczeniak duży</td><td class="score-0">0</td><td>0</td><td style="color:var(--teal);font-weight:800">2</td><td>Strona/kategoria "szczeniak dużej rasy"</td></tr>
+    <tr><td>DQ3 — wrażliwy żołądek</td><td class="score-0">0</td><td>1</td><td class="score-3">3</td><td>Składniki do unikania + probiotyki (lista)</td></tr>
+    <tr><td>DQ4 — czytanie składu</td><td class="score-0">0</td><td>2</td><td style="color:var(--teal);font-weight:800">2</td><td>Bullets rewrite + tabela parametrów</td></tr>
+    <tr><td>DQ5 — grain-free</td><td class="score-0">0</td><td>0</td><td class="score-3">3</td><td>Poradnik pro/kontra z FDA advisory</td></tr>
+    <tr><td>DQ6 — senior</td><td class="score-0">0</td><td>0</td><td style="color:var(--teal);font-weight:800">2</td><td>Strona/filtr senior + parametry</td></tr>
+    <tr><td>DQ7 — zmiana karmy</td><td style="color:var(--yellow);font-weight:800">1</td><td class="score-3">3</td><td class="score-3">3</td><td>Plan 7-dniowy z % i dniami (PRIORYTET)</td></tr>
+    <tr><td>DQ8 — duży vs mały</td><td class="score-0">0</td><td>0</td><td style="color:var(--teal);font-weight:800">2</td><td>Tabela porównawcza</td></tr>
+    <tr style="font-weight:700">
+      <td>SUMA</td>
+      <td class="score-0">1/24</td>
+      <td style="color:var(--yellow);font-weight:800">6/24</td>
+      <td class="score-3">20/24</td>
+      <td>→ 13/100 → ~35/100 → ~70/100</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="insight-box yellow">
+  <div class="insight-title">Plan minimum — wzrost do 35/100 w ciągu 2 tygodni</div>
+  <p>Tylko 2 działania: <strong>(1) FAQPage schema JSON-LD</strong> na stronie kategorii z 8 pytaniami DQ1–DQ8 + <strong>(2) plan przejścia 7-dniowy</strong> z konkretnymi % na każdej stronie produktu (lub FAQ). Razem &lt;4h pracy. Score wzrasta z 13 do ~35–40/100. To wystarczy żeby AI zaczął cytować fera.pl przy DQ7 jako jednym z pierwszych wyników.</p>
+</div>
+
+<div class="insight-box green">
+  <div class="insight-title">Plan pełny — wzrost do 65–75/100 w ciągu 6–8 tygodni</div>
+  <p>5 stron poradnikowych (DQ1 alergik, DQ3 wrażliwy żołądek, DQ5 grain-free, DQ6 senior, DQ2+DQ8 rozmiary) + rewrite bullets na PDP + Product schema + FAQPage schema. Łącznie ~20–30h contentu. Przy takim wyniku fera.pl staje się <strong>jednym z top źródeł</strong> dla AI w kategorii "karma sucha dla psa" w Polsce — bo zooplus nie ma poradników, kakadu nie ma schema, a royal canin nie sprzedaje wszystkich marek.</p>
+</div>
+
+</div><!-- /container -->
+
+<footer>EEL GEO Rekomendacje — Fera.pl · Kategoria: Karma sucha dla psa · 2026-05-22 · Wygenerowano przez EEL Audit System</footer>
+
+</body>
+</html>
