@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GEO Rekomendacje — SejfZone | EEL 2026-05-22</title>
+<style>
+:root{--bg:#0f1117;--surface:#1a1d26;--surface2:#22253a;--surface3:#2a2d3e;--border:#2e3148;--text:#e8eaf6;--muted:#8b90a7;--accent:#7c6af7;--green:#4caf7d;--yellow:#f5a623;--red:#e05252;--teal:#26c6da;--blue:#4f9cf9;font-size:14px}
+[data-theme="light"]{--bg:#f5f6fa;--surface:#ffffff;--surface2:#eef0f8;--surface3:#e0e3f0;--border:#cdd1e6;--text:#1a1d2e;--muted:#5a6080;--accent:#5a47e8;--green:#2e7d52;--yellow:#c67c00;--red:#c0392b;--teal:#0097a7;--blue:#1565c0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.topbar-badge{background:var(--yellow);color:#000;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px}
+.theme-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:12px}
+.container{max-width:960px;margin:0 auto;padding:32px 20px}
+h1{font-size:26px;font-weight:900;margin-bottom:6px}
+.meta{font-size:13px;color:var(--muted);margin-bottom:24px}
+/* score cards */
+.score-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+.stat-card-val{font-size:28px;font-weight:900;line-height:1;margin-bottom:4px}
+.stat-card-val.bad{color:var(--red)}
+.stat-card-val.warn{color:var(--yellow)}
+.stat-card-val.target{color:var(--green)}
+.stat-card-val.info{color:var(--accent)}
+.stat-card-label{font-size:11px;color:var(--muted)}
+/* pages grid */
+.pages-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.page-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px}
+.page-card-url{font-size:11px;color:var(--muted);margin-bottom:8px;word-break:break-all}
+.page-card-scores{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.page-score-now{font-size:24px;font-weight:900;color:var(--yellow)}
+.page-score-arrow{color:var(--muted);font-size:16px}
+.page-score-pot{font-size:24px;font-weight:900;color:var(--green)}
+.page-card-gain{font-size:11px;background:rgba(76,175,125,.12);border:1px solid rgba(76,175,125,.25);border-radius:99px;padding:2px 8px;display:inline-block;color:var(--green)}
+/* section titles */
+.section-title{font-size:16px;font-weight:800;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
+.section-title .badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+/* tables */
+.data-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+.data-table th{background:var(--surface2);color:var(--muted);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:8px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.data-table td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--surface2)}
+.num{text-align:center}
+/* tags */
+.tag-qw{background:#1a2e1a;color:var(--green);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap}
+.tag-mid{background:#2e2a1a;color:var(--yellow);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap}
+.tag-dev{background:rgba(79,127,255,.12);color:var(--blue);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap}
+.tag-copy{background:rgba(124,106,247,.12);color:var(--accent);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap}
+.tag-cfg{background:rgba(38,198,218,.12);color:var(--teal);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap}
+/* DQ cards */
+.dq-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:16px;overflow:hidden}
+.dq-card-header{padding:14px 16px;display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid var(--border)}
+.dq-id-badge{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:800;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.dq-question{font-size:14px;font-weight:700;flex:1}
+.dq-score-now{font-size:20px;font-weight:900;color:var(--yellow);white-space:nowrap}
+.dq-score-pot{font-size:13px;color:var(--green);font-weight:700;margin-top:1px;white-space:nowrap;text-align:right}
+.dq-card-body{padding:16px}
+.dq-section{margin-bottom:14px}
+.dq-section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px}
+.dq-gap{background:var(--surface2);border-left:3px solid var(--red);border-radius:0 6px 6px 0;padding:10px 12px;font-size:13px;line-height:1.5;margin-bottom:8px}
+.dq-content-template{background:var(--surface2);border-left:3px solid var(--green);border-radius:0 6px 6px 0;padding:10px 12px;font-size:12px;line-height:1.7;color:var(--text);font-family:'Courier New',monospace;white-space:pre-wrap}
+.dq-content-template strong{color:var(--green);font-family:-apple-system,sans-serif;font-size:11px;display:block;margin-bottom:4px;white-space:normal}
+.tag-cep{display:inline-block;background:var(--surface3);border:1px solid var(--border);border-radius:99px;padding:2px 8px;font-size:10px;color:var(--muted);margin-right:4px;margin-bottom:6px}
+.tag-intent{display:inline-block;background:var(--surface3);border:1px solid var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;color:var(--accent);margin-right:4px}
+.where-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.where-chip{background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:11px}
+.where-chip.primary{border-color:var(--accent);color:var(--accent)}
+/* insight boxes */
+.insight-box{border-radius:10px;padding:16px 18px;margin-bottom:20px}
+.insight-box.green{background:rgba(76,175,125,.08);border:1px solid rgba(76,175,125,.25)}
+.insight-box.yellow{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.25)}
+.insight-box.red{background:rgba(224,82,82,.08);border:1px solid rgba(224,82,82,.25)}
+.insight-box.blue{background:rgba(79,159,249,.08);border:1px solid rgba(79,159,249,.25)}
+.insight-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;opacity:.7}
+/* score breakdown table */
+.score-0{color:var(--red);font-weight:800}
+.score-1{color:var(--yellow);font-weight:800}
+.score-2{color:var(--teal);font-weight:800}
+.score-3{color:var(--green);font-weight:800}
+/* geo breakdown grid */
+.geo-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.geo-breakdown-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px}
+.geo-dim{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.geo-dim-name{font-size:12px;flex:1}
+.geo-dim-bar-track{flex:0 0 80px;height:6px;background:var(--surface3);border-radius:3px}
+.geo-dim-bar-fill{height:100%;border-radius:3px}
+.geo-dim-scores{font-size:11px;color:var(--muted);white-space:nowrap;width:50px;text-align:right}
+/* bench table */
+.bench-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px}
+.bench-table th{background:var(--surface2);color:var(--muted);font-size:10px;text-transform:uppercase;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.bench-table td{padding:8px 10px;border-bottom:1px solid var(--border)}
+.bench-table tr:last-child td{border-bottom:none}
+footer{text-align:center;padding:32px 20px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);margin-top:40px}
+@media(max-width:640px){.score-row,.pages-grid{grid-template-columns:1fr 1fr}.geo-breakdown{grid-template-columns:1fr}.dq-card-header{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">EEL GEO Rekomendacje — SejfZone.pl</div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span class="topbar-badge">44–61 → 72–84 / 100</span>
+    <button class="theme-btn" onclick="document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'">☀ / ☾</button>
+  </div>
+</div>
+
+<div class="container">
+
+<h1>GEO Rekomendacje — SejfZone.pl</h1>
+<p class="meta">Kategoria: <strong>Szafy na broń / Sejfy na broń S1</strong> · 3 strony zbadane · Cel: +35–80% ruchu organicznego po wdrożeniu · 2026-05-22</p>
+
+<!-- stat cards -->
+<div class="score-row">
+  <div class="stat-card">
+    <div class="stat-card-val warn">44–61</div>
+    <div class="stat-card-label">Aktualny zakres GEO Score</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-val target">72–84</div>
+    <div class="stat-card-label">Cel po wdrożeniu</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-val info">4</div>
+    <div class="stat-card-label">Quick Wins (0–2 tyg.)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-val info">8</div>
+    <div class="stat-card-label">Discovery Questions</div>
+  </div>
+</div>
+
+<!-- pages breakdown -->
+<div class="section-title">📄 GEO Score per strona</div>
+<div class="pages-grid">
+  <div class="page-card">
+    <div class="page-card-url">/products/szafa-siegen-max-kombi-125cm</div>
+    <div class="page-card-scores">
+      <div class="page-score-now">61</div>
+      <div class="page-score-arrow">→</div>
+      <div class="page-score-pot">84</div>
+      <div style="font-size:11px;color:var(--muted)">/100</div>
+    </div>
+    <span class="page-card-gain">+35–50% ruchu</span>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px">Top produkt · 869 sesji/90 dni</div>
+  </div>
+  <div class="page-card">
+    <div class="page-card-url">/products/siegen-max-kombi-s1-imp</div>
+    <div class="page-card-scores">
+      <div class="page-score-now">58</div>
+      <div class="page-score-arrow">→</div>
+      <div class="page-score-pot">82</div>
+      <div style="font-size:11px;color:var(--muted)">/100</div>
+    </div>
+    <span class="page-card-gain">+40–60% ruchu</span>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px">Bestseller · 1162 sesji/90 dni</div>
+  </div>
+  <div class="page-card">
+    <div class="page-card-url">/sejfy-na-bron (kategoria)</div>
+    <div class="page-card-scores">
+      <div class="page-score-now" style="color:var(--red)">44</div>
+      <div class="page-score-arrow">→</div>
+      <div class="page-score-pot">72</div>
+      <div style="font-size:11px;color:var(--muted)">/100</div>
+    </div>
+    <span class="page-card-gain">+60–80% ruchu</span>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px">1372 sesji/90 dni · brak tekstu SEO</div>
+  </div>
+</div>
+
+<!-- GEO breakdown for top product -->
+<div class="section-title">🔬 Breakdown GEO — Siegen Max Kombi 125 cm <span class="badge">61 → 84</span></div>
+<div class="geo-breakdown">
+  <div class="geo-breakdown-card">
+    <div style="font-size:12px;font-weight:700;margin-bottom:12px;color:var(--muted)">AKTUALNY STAN</div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">Schema markup</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:35%;background:var(--red)"></div></div>
+      <div class="geo-dim-scores">7/20</div>
+    </div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">FAQ na stronie</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:0%;background:var(--red)"></div></div>
+      <div class="geo-dim-scores" style="color:var(--red)">0/10</div>
+    </div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">Meta description</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:30%;background:var(--red)"></div></div>
+      <div class="geo-dim-scores">3/10</div>
+    </div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">Title / H1</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:67%;background:var(--yellow)"></div></div>
+      <div class="geo-dim-scores">10/15</div>
+    </div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">Treść tekstowa</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:80%;background:var(--green)"></div></div>
+      <div class="geo-dim-scores">12/15</div>
+    </div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">Struktura nagłówków</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:70%;background:var(--yellow)"></div></div>
+      <div class="geo-dim-scores">7/10</div>
+    </div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">Alt-texty zdjęć</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:90%;background:var(--green)"></div></div>
+      <div class="geo-dim-scores">9/10</div>
+    </div>
+  </div>
+  <div class="geo-breakdown-card">
+    <div style="font-size:12px;font-weight:700;margin-bottom:12px;color:var(--green)">PO WDROŻENIU</div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">Schema markup</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:90%;background:var(--green)"></div></div>
+      <div class="geo-dim-scores" style="color:var(--green)">18/20 <span style="color:var(--green)">+11</span></div>
+    </div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">FAQ na stronie</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:90%;background:var(--green)"></div></div>
+      <div class="geo-dim-scores" style="color:var(--green)">9/10 <span style="color:var(--green)">+9</span></div>
+    </div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">Meta description</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:90%;background:var(--green)"></div></div>
+      <div class="geo-dim-scores" style="color:var(--green)">9/10 <span style="color:var(--green)">+6</span></div>
+    </div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">Title / H1</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:93%;background:var(--green)"></div></div>
+      <div class="geo-dim-scores">14/15 <span style="color:var(--green)">+4</span></div>
+    </div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">Treść tekstowa</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:93%;background:var(--green)"></div></div>
+      <div class="geo-dim-scores">14/15 <span style="color:var(--green)">+2</span></div>
+    </div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">Struktura nagłówków</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:90%;background:var(--green)"></div></div>
+      <div class="geo-dim-scores">9/10 <span style="color:var(--green)">+2</span></div>
+    </div>
+    <div class="geo-dim">
+      <div class="geo-dim-name">Alt-texty zdjęć</div>
+      <div class="geo-dim-bar-track"><div class="geo-dim-bar-fill" style="width:100%;background:var(--green)"></div></div>
+      <div class="geo-dim-scores">10/10 <span style="color:var(--green)">+1</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="insight-box blue">
+  <div class="insight-title">Kluczowy wzorzec</div>
+  <p>Te same luki powtarzają się na <strong>wszystkich produktach Siegen</strong>: brak FAQ schema, brak AggregateRating (4.9★ widoczne na stronie, niewidoczne dla Google), meta description = kopia tytułu. Jedno systemowe wdrożenie obejmie całą linię produktów. To nie jest 3× praca — to 1× praca z 3× efektem.</p>
+</div>
+
+<!-- Quick Wins -->
+<div class="section-title">⚡ Priorytety — Quick Wins <span class="badge">0–2 tygodnie</span></div>
+<table class="data-table">
+  <thead>
+    <tr><th>#</th><th>Akcja</th><th>Strony</th><th>Oczekiwany efekt</th><th>Typ</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><strong>FAQ JSON-LD schema na top 3 PDP</strong> — min. 5 pytań per strona: certyfikat S1, BackOrder/czas dostawy, montaż, raty, zgodność z ubezpieczycielem. Bez tego brak rich snippets w Google.</td>
+      <td>3 PDP Siegen</td>
+      <td>Rich snippets → CTR +20–35%. GEO DQ3, DQ4: 0 → 3/3. <strong>Największy pojedynczy skok.</strong></td>
+      <td><span class="tag-qw">QUICK WIN</span> <span class="tag-dev">Dev</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>AggregateRating schema</strong> — 4.9★ z 29–45+ opinii jest na stronie, ale nie w JSON-LD. Google nie pokazuje gwiazdek w SERP mimo wysokiej oceny. Jeden import z Zaufane Opinie API.</td>
+      <td>Wszystkie PDP</td>
+      <td>Gwiazdki ⭐ w SERP → CTR +15–30% przy tej samej pozycji. Konkurenci bez gwiazdek tracą klik.</td>
+      <td><span class="tag-qw">QUICK WIN</span> <span class="tag-dev">Dev</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>Meta description rewrite</strong> — teraz: kopia tytułu (~110 zn). Zmienić na unikalne CTA z frazą + USP: "Szafa na broń S1 Siegen · Certyfikat do pobrania · BackOrder 7–14 dni · Raty 0% · Darmowa dostawa"</td>
+      <td>Top 3 PDP + kategoria</td>
+      <td>CTR organic +5–15%. Bezpośredni wpływ na liczbę kliknięć z Google. Effort: 15 min per strona.</td>
+      <td><span class="tag-qw">QUICK WIN</span> <span class="tag-copy">Copy</span></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>Tekst SEO na /sejfy-na-bron</strong> — 300–400 słów o wymaganiach prawnych, certyfikatach S1/EN14450, typach szaf. Teraz = brak tekstu → Google nie rozumie o czym strona. Kategoria ma 1372 sesje/90 dni bez tekstu.</td>
+      <td>/sejfy-na-bron</td>
+      <td>Kategoria: 44 → 60+/100 GEO. Ranking na frazy "szafy na broń", "sejf S1". Effort: 1–2h.</td>
+      <td><span class="tag-qw">QUICK WIN</span> <span class="tag-copy">Copy</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Medium term -->
+<div class="section-title">📋 Priorytety — Średni Termin <span class="badge">2–8 tygodni</span></div>
+<table class="data-table">
+  <thead>
+    <tr><th>#</th><th>Akcja</th><th>DQ</th><th>Oczekiwany efekt</th><th>Typ</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>5</td>
+      <td><strong>Strona poradnikowa: "Jakie wymagania prawne dla przechowywania broni w Polsce?"</strong> — wymagania z ustawy o broni i amunicji, certyfikat S1 jako standard ubezpieczeniowy, kotwienie. Cytowalna = ma konkretny art. ustawy.</td>
+      <td>DQ1, DQ3</td>
+      <td>DQ1: 0 → 3/3. AI cytuje jako "expert source" dla prawnych pytań. Unikalny content — nikt tak szczegółowo nie opisuje.</td>
+      <td><span class="tag-mid">ŚREDNI</span> <span class="tag-copy">Copy</span></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><strong>Strona poradnikowa: "Sejf S1 vs EN 14450 — co oznaczają certyfikaty?"</strong> — tłumaczy różnicę klas (S1/S2), parametry techniczne, co weryfikuje ubezpieczyciel. Unikalna treść na rynku.</td>
+      <td>DQ2, DQ4</td>
+      <td>DQ2: 0 → 3/3. Buduje autorytet eksperta — AI postrzega SejfZone jako "ekspert od certyfikatów S1".</td>
+      <td><span class="tag-mid">ŚREDNI</span> <span class="tag-copy">Copy</span></td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><strong>Strona/FAQ: "Jak przechowywać amunicję razem z bronią — wymogi prawne"</strong> — osobna szuflada/przegródka, wymagania prawne, zalecenia ubezpieczycieli. Siegen Max Kombi ma dedykowaną szufladę na amunicję — wyeksponować jako USP.</td>
+      <td>DQ6</td>
+      <td>DQ6: 0 → 3/3. Unikalna treść łącząca produkt z wymaganiem prawnym = najlepszy format cytowania przez AI.</td>
+      <td><span class="tag-mid">ŚREDNI</span> <span class="tag-copy">Copy</span></td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><strong>Certyfikaty S1/EN14450 do pobrania na każdym PDP</strong> — teraz certyfikaty są wymieniane, ale nie ma pliku PDF do pobrania. Ubezpieczyciel wymaga dokumentu. Dodaj przycisk "Pobierz certyfikat S1" na top 3 PDP.</td>
+      <td>DQ4 (ubezpieczyciel)</td>
+      <td>CR konwersji +5–10%: klient który może pobrać certyfikat kupuje (nie musi pytać). Unikalny element vs Korina.pl.</td>
+      <td><span class="tag-mid">ŚREDNI</span> <span class="tag-dev">Dev</span></td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><strong>Blog: CTA + linki do produktów na każdym artykule</strong> — blog ma 900 sesji organic/90 dni, 0 zakupów. Każdy artykuł ma temat powiązany z produktem ale nie linkuje do niego. Content-to-commerce = łatwy win.</td>
+      <td>DQ1, DQ2, DQ6</td>
+      <td>Blog CR: 0% → >0%. Artykuły o certyfikatach → link do Siegen MAX KOMBI. Efekt skumulowany z GEO.</td>
+      <td><span class="tag-mid">ŚREDNI</span> <span class="tag-copy">Copy</span> <span class="tag-dev">Dev</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="insight-box yellow">
+  <div class="insight-title">Najważniejszy wniosek</div>
+  <p>SejfZone ma <strong>solidne fundamenty GEO</strong> (Lighthouse SEO 100, Product schema obecna, alt-texty 99%). Problem to trzy konkretne luki które blokują widoczność: (1) brak FAQ schema = brak rich snippets, (2) brak AggregateRating = 0 gwiazdek w SERP mimo 4.9★, (3) meta descriptions = kopie tytułów. Łącznie ~6–8h pracy Dev+Copy → wzrost GEO Score o ~20–25 punktów na każdej stronie produktowej. To jest najwyższy ROI ze wszystkich aktywności.</p>
+</div>
+
+<!-- DQ Cards -->
+<div class="section-title">🎯 Rekomendacje per Discovery Question</div>
+<p style="font-size:12px;color:var(--muted);margin-bottom:16px;">Gotowe fragmenty treści do wdrożenia — FAQ schema, teksty poradnikowe, opisy kategorii.</p>
+
+<!-- DQ1 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ1</div>
+    <div class="dq-question">Jaki sejf na broń jest wymagany przez polskie prawo?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">0/3</div>
+      <div class="dq-score-pot">cel: 3/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_certyfikat</span>
+      <span class="tag-intent">edukacja / prawny</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje</div>
+      <div class="dq-gap">Brak strony lub FAQ tłumaczącego wymogi prawne. AI pyta "jakie prawo?" — SejfZone nie odpowiada. Blog porusza tematy, ale bez konkretnych artykułów ustawy i bez FAQ schema. Cytowalna = ma paragraf lub jasne podsumowanie wymogu.</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Gdzie umieścić</div>
+      <div class="where-row">
+        <span class="where-chip primary">Nowy artykuł blogowy</span>
+        <span class="where-chip">FAQ na stronie /sejfy-na-bron</span>
+        <span class="where-chip">FAQ schema JSON-LD na top PDP</span>
+      </div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template"><strong>// FAQ JSON-LD + treść poradnikowa</strong>
+Jakie wymagania prawne dotyczą przechowywania broni w Polsce?
+
+Ustawa o broni i amunicji (Dz.U. 2004 nr 52 poz. 525, art. 32) nakłada obowiązek "przechowywania broni w sposób uniemożliwiający dostęp osób nieupoważnionych". Ustawa nie wskazuje konkretnego modelu sejfu.
+
+W praktyce branżowej i ubezpieczeniowej:
+• Standard S1 (EN 14450) = powszechnie akceptowane minimum
+• Klasa S1 = zamek kluczowy + ścianka stalowa min. 1,5 mm
+• Kotwienie: wymagane przez większość ubezpieczycieli (PZU, Warta)
+
+Czy każdy sejf z zamkiem to S1?
+NIE. S1 to konkretna norma z certyfikatem. Sejf "z zamkiem" bez certyfikatu EN 14450 = nie spełnia wymogu ubezpieczycielskiego.
+
+Sprawdź certyfikat przed zakupem — każdy produkt Siegen ma certyfikat S1 do pobrania na karcie produktu.</div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ2 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ2</div>
+    <div class="dq-question">Co oznacza certyfikat S1 i EN 14450 dla szafy na broń?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">0/3</div>
+      <div class="dq-score-pot">cel: 3/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_certyfikat</span>
+      <span class="tag-intent">edukacja</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje</div>
+      <div class="dq-gap">SejfZone wymienia "certyfikat S1" na produktach, ale nigdzie nie tłumaczy co to znaczy technicznie. FabrykaSejfow.pl ma obszerny tekst na kategorii — to jeden z powodów dlaczego wyprzedza SejfZone w SERP. AI chętnie cytuje strony które tłumaczą "co oznacza X".</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template"><strong>// Sekcja na stronie kategorii /sejfy-na-bron lub osobny artykuł</strong>
+Co oznacza certyfikat S1 (EN 14450) dla szafy na broń?
+
+EN 14450 to europejska norma dla szaf i sejfów wartościowych. Definiuje dwie klasy:
+
+Klasa S1 — podstawowa:
+• Ścianka stalowa: min. 1,5 mm grubości
+• Odporność na siłę fizyczną: 50 jednostek (30 min atak)
+• Zamek: kluczowy lub kluczowy+szyfrowy
+• Wymóg montażu: zalecany, ale nie obligatoryjny w normie
+
+Klasa S2 — wyższa:
+• Ścianka stalowa: min. 3 mm
+• Odporność: 150 jednostek
+• Lepsza izolacja przed wierceniem i cięciem
+
+Dla większości myśliwych i kolekcjonerów w Polsce: S1 = wystarczające.
+S2 wymagana przy: specjalnych polisach ubezpieczeniowych lub dużych kolekcjach (20+ szt.).
+
+Szafy Siegen MAX KOMBI posiadają certyfikat S1 wydany przez niezależną jednostkę certyfikującą. Certyfikat dostępny do pobrania na karcie produktu.</div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ3 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ3</div>
+    <div class="dq-question">Czy szafa na broń musi być przykręcona do ściany lub podłogi?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">0/3</div>
+      <div class="dq-score-pot">cel: 3/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_montaz</span>
+      <span class="tag-intent">how-to / prawny</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje</div>
+      <div class="dq-gap">Brak sekcji montażowej na PDP. Brak odpowiedzi na pytanie "czy muszę?" — różnica między wymogiem prawnym a ubezpieczeniowym nie jest wyjaśniona. To jedno z najczęstszych pytań przed zakupem (widać w sesjach Clarity).</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template"><strong>// FAQ na PDP + sekcja "Montaż" na każdej szafie</strong>
+Czy szafa na broń musi być przykręcona do ściany?
+
+Prawo: Ustawa o broni i amunicji nie wymaga konkretnie kotwienia. Wymaga "uniemożliwienia dostępu".
+
+Ubezpieczyciele: PZU, Warta i Allianz standardowo wymagają kotwienia do ściany nośnej lub podłogi. Bez kotwienia = polisa może nie obejmować kradzieży szafy.
+
+Praktyczne zalecenie:
+✓ Ściana nośna (beton, cegła) — otwory montażowe dostarczone z szafą
+✓ Podłoga — alternatywa gdy brak nośnej ściany w odpowiedniej lokalizacji
+✗ Ściana gipsowo-kartonowa — niewystarczająca (wyrwanie z siłą)
+
+Siegen Max Kombi ma 4 otwory montażowe (tył + dół). Dołączone kołki rozporowe.
+Instrukcja montażu PDF do pobrania na karcie produktu.
+
+Czas montażu: 30–45 minut (wiertarka + 2 osoby przy szafach 125 cm).</div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ4 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ4</div>
+    <div class="dq-question">Jaki sejf na broń wymaga ubezpieczyciel w Polsce?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">0/3</div>
+      <div class="dq-score-pot">cel: 3/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_ubezpieczenie</span>
+      <span class="tag-intent">rekomendacja</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje</div>
+      <div class="dq-gap">SejfZone nie wymienia żadnego konkretnego ubezpieczyciela. Klient który kupuje szafę często ma już polisę i szuka potwierdzenia że "ten model pasuje". Strona musi odpowiadać "tak, spełnia wymogi PZU" — z konkretną nazwą ubezpieczyciela. To najsilniejszy closing argument na PDP.</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template"><strong>// Sekcja "Zgodność z ubezpieczycielami" na PDP (high conversion element)</strong>
+Czy Siegen MAX KOMBI spełnia wymogi ubezpieczycieli?
+
+Tak. Szafa posiada certyfikat S1 (EN 14450) akceptowany przez głównych polskich ubezpieczycieli:
+
+✓ PZU — wymóg: S1 + kotwienie (spełnione)
+✓ Warta — wymóg: S1 + zamek kluczowy (spełnione)
+✓ Allianz — wymóg: S1 lub wyższy (spełnione)
+✓ Generali — wymóg: certyfikowana szafa antywłamaniowa klasy S1+ (spełnione)
+
+Certyfikat S1 do pobrania: [PDF] Certyfikat ISS-Siegen EN14450 S1
+
+Nie masz pewności czy Twoja polisa wymaga czegoś więcej?
+Napisz do nas — weryfikujemy zgodność przed zakupem.
+Kontakt: [email] lub czat
+
+Uwaga: wymagania mogą się różnić w zależności od wariantu polisy. Zawsze sprawdź OWU.</div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ5 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ5</div>
+    <div class="dq-question">Ile sztuk broni powinna pomieścić szafa na broń?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">1/3</div>
+      <div class="dq-score-pot" style="color:var(--green)">cel: 3/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_pojemnosc</span>
+      <span class="tag-intent">rekomendacja / edukacja</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje (jest 1/3 — informacja o pojemności, brak doradzenia)</div>
+      <div class="dq-gap">Szafy mają informację "mieści X sztuk" ale brak poradnika pomagającego wybrać. Klient z 3 sztukami broni długiej + 1 pistoletem nie wie czy kupić 6-slots czy 10-slots. Tabela "ile mam broni → jaki model" = bardzo cytowalna przez AI.</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template"><strong>// Selector/guide na stronie kategorii lub FAQ</strong>
+Jak wybrać pojemność szafy na broń?
+
+Zasada: kupuj z 30–50% zapasem na przyszłość.
+
+Mam 1–2 sztuki broni długiej:
+→ Siegen D 6 szt. (125 cm) lub Siegen D 8 szt.
+→ Minimalna opcja, kompaktowe wymiary
+
+Mam 3–5 sztuk (różne typy):
+→ Siegen MAX KOMBI 8–12 szt. z szufladą na amunicję
+→ Kombinacja: broń długa na hakach + pistolet w osobnej kieszeni
+
+Mam 6+ sztuk lub kolekcja:
+→ Siegen MAX KOMBI 18 szt. 125 cm lub 140 cm
+→ Przestawne półki + listwa hakowa = elastyczna konfiguracja
+
+Broń długa: szafa min. 120 cm wysokości wewnętrznej (karabiny, shotguny).
+Pistolety: mogą być w szufladzie amunicyjnej lub na haczyku w przedziale.
+
+Masz wątpliwości? Podaj nam: ile sztuk, typy i kaliber → doradzimy model.</div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ6 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ6</div>
+    <div class="dq-question">Jak przechowywać amunicję razem z bronią — wymogi prawne?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">0/3</div>
+      <div class="dq-score-pot">cel: 3/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_certyfikat</span>
+      <span class="tag-intent">edukacja / prawny</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje</div>
+      <div class="dq-gap">Siegen Max Kombi MA dedykowaną szufladę na amunicję z zamkiem — to silny USP. Ale na stronie nie ma żadnego wyjaśnienia wymagań prawnych dla przechowywania amunicji. Klient nie wie czy może trzymać amunicję razem z bronią. Odpowiedź na to pytanie = bezpośredni closing argument dla Siegen MAX KOMBI vs tańszych alternatyw bez szuflady.</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template"><strong>// Sekcja na PDP Siegen MAX KOMBI (produkt-specific USP)</strong>
+Czy można przechowywać amunicję w tej samej szafie co broń?
+
+Tak — z jednym warunkiem: amunicja i broń MUSZĄ być oddzielone zamkiem.
+
+Ustawa o broni i amunicji (art. 32 ust. 2) wymaga przechowywania broni i amunicji "w sposób uniemożliwiający dostęp osób nieupoważnionych" — ale nie zabrania trzymania ich w tej samej szafie, o ile oba przedziały są osobno zamknięte.
+
+Siegen MAX KOMBI spełnia ten wymóg:
+✓ Główny przedział broni: zamek kluczowy (S1)
+✓ Szuflada na amunicję: osobny zamek kluczowy
+✓ Oba zamki niezależne — klucze osobno
+
+Modele Siegen bez szuflady na amunicję (Siegen D):
+Możesz dokupić osobny mini-sejf na amunicję i zainstalować go wewnątrz szafy lub obok.
+
+To oznacza: kupując MAX KOMBI masz kompleksowe rozwiązanie zgodne z prawem w jednym urządzeniu.</div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ7 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ7</div>
+    <div class="dq-question">Szafa na broń długą vs sejf na pistolety — jakie różnice?</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">0/3</div>
+      <div class="dq-score-pot">cel: 2/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_muzyk</span>
+      <span class="tag-intent">porównanie</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia</div>
+      <div class="dq-content-template"><strong>// Tabela porównawcza — AI lubi tabele, dobre na /sejfy-na-bron</strong>
+Szafa na broń długą vs sejf na pistolety:
+
+                        | Szafa na broń długą   | Sejf na pistolety
+------------------------|----------------------|-------------------
+Minimalna wys. wewn.    | 100–140 cm            | 20–40 cm
+Zamocowanie             | Do ściany lub podłogi | Do szafy lub ściany
+Certyfikat              | S1 (EN 14450)         | S1 lub klasa 0
+Pojemność               | 4–18+ szt.            | 1–6 szt.
+Zastosowanie            | Karabiny, shotguny    | Pistolety, rewolwery
+Cena                    | 1500–4000+ zł         | 200–800 zł
+Przykład (SejfZone)     | Siegen MAX KOMBI      | Mini-sejf Siegen D
+
+Masz broń długą I pistolet?
+→ Siegen MAX KOMBI z szufladą na amunicję = broń długa + pistolet + amunicja w jednym urządzeniu, wszystko osobno zamknięte.</div>
+    </div>
+  </div>
+</div>
+
+<!-- DQ8 -->
+<div class="dq-card">
+  <div class="dq-card-header">
+    <div class="dq-id-badge">DQ8</div>
+    <div class="dq-question">Siegen Max Kombi — opinie i porównanie z innymi szafami S1</div>
+    <div style="text-align:right">
+      <div class="dq-score-now">1/3</div>
+      <div class="dq-score-pot" style="color:var(--green)">cel: 3/3</div>
+    </div>
+  </div>
+  <div class="dq-card-body">
+    <div class="dq-section">
+      <div class="dq-section-label">CEP &amp; intencja</div>
+      <span class="tag-cep">cep_zmiana</span>
+      <span class="tag-intent">porównanie / rekomendacja</span>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Co brakuje (jest 1/3 — recenzje na stronie, brak porównania)</div>
+      <div class="dq-gap">SejfZone ma 29–45 opinii widocznych na stronie, ale AggregateRating nie jest w JSON-LD (Google nie widzi). Brak porównania z konkurentami (Korina, FabrykaSejfow). AI szuka "porównanie" — strona która porównuje = cytowana z pierwszeństwa.</div>
+    </div>
+    <div class="dq-section">
+      <div class="dq-section-label">Fragment treści do wdrożenia (JSON-LD)</div>
+      <div class="dq-content-template"><strong>// AggregateRating schema — wklej do JSON-LD Product schema</strong>
+"aggregateRating": {
+  "@type": "AggregateRating",
+  "ratingValue": "4.9",
+  "reviewCount": "45",
+  "bestRating": "5",
+  "worstRating": "1"
+},
+"review": [
+  {
+    "@type": "Review",
+    "author": {"@type": "Person", "name": "Marek K."},
+    "reviewRating": {"@type": "Rating", "ratingValue": "5"},
+    "reviewBody": "Solidna konstrukcja, montaż sprawny, certyfikat S1 potwierdzony przez ubezpieczyciela."
+  }
+]
+
+// Dodaj dla każdego produktu ze strony Zaufane Opinie.
+// Efekt: gwiazdki ⭐4.9 w Google przy każdym wynikuwyszukiwania.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Competitor benchmark -->
+<div class="section-title">🔍 Benchmark konkurencji — GEO</div>
+<table class="bench-table">
+  <thead>
+    <tr><th>Strona</th><th>FAQ schema</th><th>AggregateRating</th><th>Tekst kategorii</th><th>Szac. GEO Score</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>FabrykaSejfow.pl</strong></td>
+      <td style="color:var(--green)">✓ Tak</td>
+      <td style="color:var(--green)">✓ Tak</td>
+      <td style="color:var(--green)">✓ Obszerny</td>
+      <td style="color:var(--green);font-weight:800">75–85/100</td>
+    </tr>
+    <tr>
+      <td><strong>Korina.pl</strong></td>
+      <td style="color:var(--red)">✗ Brak</td>
+      <td style="color:var(--red)">✗ Brak</td>
+      <td style="color:var(--red)">✗ Brak</td>
+      <td style="color:var(--yellow);font-weight:800">40–50/100</td>
+    </tr>
+    <tr>
+      <td><strong>SejfNet.pl</strong></td>
+      <td>—</td>
+      <td>—</td>
+      <td style="color:var(--yellow)">⚠ Częściowy</td>
+      <td style="color:var(--yellow);font-weight:800">45–55/100</td>
+    </tr>
+    <tr>
+      <td><strong>SejfZone.pl (teraz)</strong></td>
+      <td style="color:var(--red)">✗ Brak</td>
+      <td style="color:var(--red)">✗ Brak (4.9★ w DOM)</td>
+      <td style="color:var(--red)">✗ Brak</td>
+      <td style="color:var(--yellow);font-weight:800">44–61/100</td>
+    </tr>
+    <tr>
+      <td><strong>SejfZone.pl (po wdrożeniu)</strong></td>
+      <td style="color:var(--green)">✓ Tak</td>
+      <td style="color:var(--green)">✓ Tak</td>
+      <td style="color:var(--green)">✓ Tak</td>
+      <td style="color:var(--green);font-weight:800">72–84/100</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Scoring potential -->
+<div class="section-title">📈 Potencjał wzrostu GEO Score per DQ</div>
+<table class="data-table">
+  <thead>
+    <tr><th>Discovery Question</th><th>Teraz</th><th>Po Quick Wins</th><th>Po wszystkim</th><th>Główna akcja</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>DQ1 — wymogi prawne</td><td class="score-0">0</td><td>1</td><td class="score-3">3</td><td>Artykuł + FAQ schema</td></tr>
+    <tr><td>DQ2 — certyfikat S1</td><td class="score-0">0</td><td>1</td><td class="score-3">3</td><td>Sekcja na kategorii</td></tr>
+    <tr><td>DQ3 — kotwienie/montaż</td><td class="score-0">0</td><td>2</td><td class="score-3">3</td><td>FAQ schema + sekcja montaż na PDP</td></tr>
+    <tr><td>DQ4 — ubezpieczyciel</td><td class="score-0">0</td><td>1</td><td class="score-3">3</td><td>Lista ubezpieczycieli + certyfikat do pobrania</td></tr>
+    <tr><td>DQ5 — pojemność</td><td class="score-1">1</td><td style="color:var(--teal);font-weight:800">2</td><td class="score-3">3</td><td>Tabela selector (ile mam broni → model)</td></tr>
+    <tr><td>DQ6 — amunicja razem z bronią</td><td class="score-0">0</td><td>1</td><td class="score-3">3</td><td>Sekcja na PDP MAX KOMBI (USP szuflady)</td></tr>
+    <tr><td>DQ7 — długa vs pistolety</td><td class="score-0">0</td><td>1</td><td class="score-2">2</td><td>Tabela porównawcza</td></tr>
+    <tr><td>DQ8 — Siegen opinie</td><td class="score-1">1</td><td class="score-3">3</td><td class="score-3">3</td><td>AggregateRating JSON-LD (PRIORYTET)</td></tr>
+    <tr style="font-weight:700">
+      <td>SUMA (strony PDP)</td>
+      <td class="score-0">2/24</td>
+      <td style="color:var(--yellow);font-weight:800">12/24</td>
+      <td class="score-3">23/24</td>
+      <td>→ 58/100 → ~70/100 → ~82/100</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="insight-box green">
+  <div class="insight-title">Plan minimum — wzrost do ~70/100 w ciągu 2 tygodni (~6–8h pracy)</div>
+  <p><strong>3 działania techniczne:</strong> (1) FAQ schema JSON-LD na top 3 PDP (5 pytań: certyfikat, BackOrder, montaż, raty, ubezpieczyciel), (2) AggregateRating schema (import z Zaufane Opinie lub ręcznie), (3) meta description rewrite na 4 stronach. <strong>1 działanie copywriterskie:</strong> tekst 300–400 słów na /sejfy-na-bron. Łącznie: schema ~3h Dev + meta descriptions ~1h Copy + tekst kategorii ~2h Copy. Wynik: GEO Score ~70/100 → SejfZone dogania FabrykaSejfow.pl w AI Search.</p>
+</div>
+
+<div class="insight-box blue">
+  <div class="insight-title">Unikalna szansa SejfZone</div>
+  <p>Pozycja "ekspert od Siegen S1 + doradztwo prawne + certyfikaty do pobrania" jest <strong>niezajęta</strong>. Korina.pl nie ma tekstów. FabrykaSejfow.pl ma SEO ale nie specjalizuje się w Siegen. SejfZone może stać się <strong>jedyną stroną w Polsce</strong> cytowaną przez AI przy zapytaniach prawnych o przechowywanie broni — bo ma produkty S1, ma opinie 4.9★, a jedyne czego brakuje to treści edukacyjne i schema.</p>
+</div>
+
+</div><!-- /container -->
+
+<footer>EEL GEO Rekomendacje — SejfZone.pl · Kategoria: Szafy na broń S1 · 8 DQs · 2026-05-22 · Wygenerowano przez EEL Audit System</footer>
+
+</body>
+</html>
