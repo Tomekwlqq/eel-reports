@@ -75,6 +75,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sa
 .kb-source { font-size: 11px; color: var(--muted); margin-bottom: 16px; }
 .kb-source code { color: var(--teal); }
 
+/* ── ENC JUMP BAR ── */
+.enc-jump-bar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 16px; padding: 8px 12px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; border-left: 3px solid var(--accent);
+}
+.ejb-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-right: 4px; }
+.ejb-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface3); color: var(--text);
+  transition: background .15s, border-color .15s;
+}
+.ejb-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
 /* ── MARKDOWN BODY ── */
 .md-body { max-width: 860px; }
 .md-h2 { font-size: 20px; font-weight: 700; color: var(--text); margin: 24px 0 12px;
@@ -346,6 +362,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sa
 </div>
 
 <div id="enc-panel-s02" class="sub-tab-panel">
+  <div class="enc-jump-bar"><span class="ejb-label">Zobacz też:</span><button class="ejb-btn" onclick="jumpToElements('homepage')">🗂 Lista elementów: Home Page</button><button class="ejb-btn" onclick="jumpToBenchmark('homepage')">📊 Benchmark: Home Page</button></div>
   <div class="kb-source">Źródło: <code>ecommerce-encyclopedia.md — 2. Strona Główna / Homepage</code></div>
   <div class="md-body">
     <div id="enc-sekcja-hero-above-the-fold" class="enc-term">
@@ -412,6 +429,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sa
 </div>
 
 <div id="enc-panel-s03" class="sub-tab-panel">
+  <div class="enc-jump-bar"><span class="ejb-label">Zobacz też:</span><button class="ejb-btn" onclick="jumpToElements('nav')">🗂 Lista elementów: Nawigacja</button><button class="ejb-btn" onclick="jumpToBenchmark('nav')">📊 Benchmark: Nawigacja</button><button class="ejb-btn" onclick="jumpToElements('header')">🗂 Lista elementów: Header</button></div>
   <div class="kb-source">Źródło: <code>ecommerce-encyclopedia.md — 3. Nawigacja / Navigation</code></div>
   <div class="md-body">
     <div id="enc-menu-gowne" class="enc-term">
@@ -467,6 +485,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sa
 </div>
 
 <div id="enc-panel-s04" class="sub-tab-panel">
+  <div class="enc-jump-bar"><span class="ejb-label">Zobacz też:</span><button class="ejb-btn" onclick="jumpToElements('search')">🗂 Lista elementów: Search</button><button class="ejb-btn" onclick="jumpToBenchmark('search')">📊 Benchmark: Search</button></div>
   <div class="kb-source">Źródło: <code>ecommerce-encyclopedia.md — 4. Wyszukiwarka / Site Search</code></div>
   <div class="md-body">
     <div id="enc-wyszukiwarka-on-site" class="enc-term">
@@ -522,6 +541,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sa
 </div>
 
 <div id="enc-panel-s05" class="sub-tab-panel">
+  <div class="enc-jump-bar"><span class="ejb-label">Zobacz też:</span><button class="ejb-btn" onclick="jumpToElements('listing')">🗂 Lista elementów: Listing</button><button class="ejb-btn" onclick="jumpToElements('tile')">🗂 Lista elementów: Product Tile</button><button class="ejb-btn" onclick="jumpToBenchmark('listing')">📊 Benchmark: Listing</button><button class="ejb-btn" onclick="jumpToBenchmark('tile')">📊 Benchmark: Product Tile</button></div>
   <div class="kb-source">Źródło: <code>ecommerce-encyclopedia.md — 5. Strona Kategorii / Category Page</code></div>
   <div class="md-body">
     <div id="enc-strona-kategorii-listing-page" class="enc-term">
@@ -586,6 +606,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sa
 </div>
 
 <div id="enc-panel-s06" class="sub-tab-panel">
+  <div class="enc-jump-bar"><span class="ejb-label">Zobacz też:</span><button class="ejb-btn" onclick="jumpToElements('pdp')">🗂 Lista elementów: PDP</button><button class="ejb-btn" onclick="jumpToBenchmark('pdp')">📊 Benchmark: PDP</button></div>
   <div class="kb-source">Źródło: <code>ecommerce-encyclopedia.md — 6. Karta Produktu / Product Page</code></div>
   <div class="md-body">
     <div id="enc-karuzela-zdjec-produktu" class="enc-term">
@@ -698,6 +719,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sa
 </div>
 
 <div id="enc-panel-s07" class="sub-tab-panel">
+  <div class="enc-jump-bar"><span class="ejb-label">Zobacz też:</span><button class="ejb-btn" onclick="jumpToElements('cart')">🗂 Lista elementów: Koszyk</button><button class="ejb-btn" onclick="jumpToBenchmark('cart')">📊 Benchmark: Koszyk</button></div>
   <div class="kb-source">Źródło: <code>ecommerce-encyclopedia.md — 7. Koszyk / Shopping Cart</code></div>
   <div class="md-body">
     <div id="enc-strona-koszyka" class="enc-term">
@@ -752,6 +774,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sa
 </div>
 
 <div id="enc-panel-s08" class="sub-tab-panel">
+  <div class="enc-jump-bar"><span class="ejb-label">Zobacz też:</span><button class="ejb-btn" onclick="jumpToElements('checkout')">🗂 Lista elementów: Checkout</button><button class="ejb-btn" onclick="jumpToBenchmark('checkout')">📊 Benchmark: Checkout</button></div>
   <div class="kb-source">Źródło: <code>ecommerce-encyclopedia.md — 8. Proces Zakupu / Checkout</code></div>
   <div class="md-body">
     <div id="enc-checkout-jednostronicowy-vs-wieloetapowy" class="enc-term">
@@ -884,6 +907,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sa
 </div>
 
 <div id="enc-panel-s10" class="sub-tab-panel">
+  <div class="enc-jump-bar"><span class="ejb-label">Zobacz też:</span><button class="ejb-btn" onclick="jumpToElements('pdp')">🗂 Lista elementów: PDP (trust badges)</button><button class="ejb-btn" onclick="jumpToElements('checkout')">🗂 Lista elementów: Checkout (trust signals)</button><button class="ejb-btn" onclick="jumpToBenchmark('pdp')">📊 Benchmark: PDP</button></div>
   <div class="kb-source">Źródło: <code>ecommerce-encyclopedia.md — 10. Zaufanie i Bezpieczeństwo / Trust & Security</code></div>
   <div class="md-body">
     <div id="enc-certyfikat-ssl-https" class="enc-term">
@@ -1376,6 +1400,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sa
 </div>
 
 <div id="enc-panel-s20" class="sub-tab-panel">
+  <div class="enc-jump-bar"><span class="ejb-label">Zobacz też:</span><button class="ejb-btn" onclick="jumpToElements('tech')">🗂 Lista elementów: Tech</button><button class="ejb-btn" onclick="jumpToElements('widgets')">🗂 Lista elementów: Widgety</button><button class="ejb-btn" onclick="jumpToBenchmark('widgets')">📊 Benchmark: Widgety</button></div>
   <div class="kb-source">Źródło: <code>ecommerce-encyclopedia.md — 20. Technologia / Technology & Performance</code></div>
   <div class="md-body">
     <div id="enc-szybkosc-strony-core-web-vitals" class="enc-term">
@@ -6271,6 +6296,37 @@ function switchSubTab(group, id, btn) {
   btn.closest('.sub-tab-bar').querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(prefix + id).classList.add('active');
   btn.classList.add('active');
+}
+
+// ── CROSS-NAV: Encyclopedia → Elements / Benchmark ──
+function jumpToElements(section) {
+  document.querySelectorAll('.main-tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.top-nav-btn').forEach(b => {
+    b.classList.remove('active');
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'elements'")) b.classList.add('active');
+  });
+  document.getElementById('main-panel-elements').classList.add('active');
+  var sel = document.getElementById('el-section-filter');
+  if (sel) { sel.value = section; filterElements(); }
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+function jumpToBenchmark(subTab) {
+  document.querySelectorAll('.main-tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.top-nav-btn').forEach(b => {
+    b.classList.remove('active');
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'benchmark'")) b.classList.add('active');
+  });
+  document.getElementById('main-panel-benchmark').classList.add('active');
+  var prefix = 'bench-panel-';
+  document.querySelectorAll('[id^="' + prefix + '"]').forEach(p => p.classList.remove('active'));
+  var subPanel = document.getElementById(prefix + subTab);
+  if (subPanel) subPanel.classList.add('active');
+  var bar = document.getElementById('main-panel-benchmark').querySelector('.sub-tab-bar');
+  if (bar) bar.querySelectorAll('.sub-tab-btn').forEach(b => {
+    b.classList.remove('active');
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + subTab + "'")) b.classList.add('active');
+  });
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 // ── TRACKER FILTERS ──
