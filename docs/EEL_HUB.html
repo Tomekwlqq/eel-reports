@@ -185,7 +185,27 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sa
 .enc-term { margin-bottom: 24px; padding-bottom: 16px; }
 .enc-en { color: var(--teal); font-size: 12px; margin: -4px 0 10px; font-style: italic; }
 .enc-cat { background: var(--surface2); color: var(--muted); font-size: 11px; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-top: 8px; }
+
+[data-theme="light"] {
+  --bg: #f5f6fa;
+  --surface: #ffffff;
+  --surface2: #eef0f7;
+  --border: #d0d4e8;
+  --text: #1a1d2e;
+  --muted: #5a6080;
+  --accent: #4c5ef7;
+  --gold: #d08000;
+  --teal: #0090b0;
+  --green: #16a34a;
+  --red: #dc2626;
+  --yellow: #d97706;
+}
+.theme-btn { background: none; border: 1px solid var(--border); color: var(--muted);
+             border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 13px;
+             margin-left: 12px; transition: all .15s; }
+.theme-btn:hover { color: var(--text); border-color: var(--accent); }
 </style>
+<script>(function(){var t=localStorage.getItem('eel-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');})()</script>
 </head>
 <body>
 
@@ -197,6 +217,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sa
   <div class="page-meta">
     Aktualizacja: 2026-05-21<br>
     315 elementów · 4 sklepów · 10 KB plików
+    <button class="theme-btn" onclick="toggleTheme()" id="theme-toggle">☀️</button>
   </div>
 </div>
 
@@ -6218,6 +6239,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sa
 </div>
 
 <script>
+// ── THEME ──
+function toggleTheme() {
+  var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('eel-theme', 'dark');
+    document.getElementById('theme-toggle').textContent = '☀️';
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('eel-theme', 'light');
+    document.getElementById('theme-toggle').textContent = '🌙';
+  }
+}
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('eel-theme') === 'light') document.getElementById('theme-toggle').textContent = '🌙';
+});
+
 // ── MAIN TABS ──
 function switchMainTab(id, btn) {
   document.querySelectorAll('.main-tab-panel').forEach(p => p.classList.remove('active'));
