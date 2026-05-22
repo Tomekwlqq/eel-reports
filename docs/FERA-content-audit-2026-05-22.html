@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fera.pl — Content Audit PDP | EEL 2026-05-22</title>
+<style>
+:root[data-theme="dark"] {
+  --bg: #0f1117; --surface: #161b27; --surface2: #1e2535; --surface3: #252d3d;
+  --border: #2a3347; --text: #e8eaf0; --muted: #7b8aaa; --accent: #6c8ef5;
+  --green: #22c55e; --yellow: #f59e0b; --red: #ef4444; --teal: #14b8a6;
+}
+:root[data-theme="light"] {
+  --bg: #f5f7ff; --surface: #ffffff; --surface2: #f0f2ff; --surface3: #e8ecf8;
+  --border: #d1d9f0; --text: #1a2040; --muted: #5a6a8a; --accent: #4c6ef5;
+  --green: #16a34a; --yellow: #d97706; --red: #dc2626; --teal: #0d9488;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.5; }
+
+.topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.topbar-title { font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
+.topbar-meta { font-size: 12px; color: var(--muted); }
+.theme-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+.page-header { margin-bottom: 32px; }
+.page-header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.page-header .meta { color: var(--muted); font-size: 13px; }
+
+.summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+.summary-card .label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+.summary-card .value { font-size: 28px; font-weight: 800; }
+.summary-card .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.val-red { color: var(--red); }
+.val-yellow { color: var(--yellow); }
+.val-green { color: var(--green); }
+
+.section-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 700; }
+.badge-red { background: rgba(239,68,68,.15); color: var(--red); }
+.badge-yellow { background: rgba(245,158,11,.15); color: var(--yellow); }
+.badge-green { background: rgba(34,197,94,.15); color: var(--green); }
+.badge-blue { background: rgba(108,142,245,.15); color: var(--accent); }
+
+/* Product table */
+.product-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; font-size: 13px; }
+.product-table th { background: var(--surface2); padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; border-bottom: 2px solid var(--border); white-space: nowrap; }
+.product-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.product-table tr:hover td { background: var(--surface2); }
+.score-cell { font-weight: 800; font-size: 16px; }
+.check { color: var(--green); font-weight: 700; }
+.cross { color: var(--red); font-weight: 700; }
+.warn { color: var(--yellow); font-weight: 700; }
+.product-name { font-weight: 600; max-width: 220px; }
+.score-bar { height: 6px; border-radius: 3px; background: var(--surface3); margin-top: 4px; }
+.score-fill { height: 100%; border-radius: 3px; }
+
+/* Gaps section */
+.gap-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+.gap-item { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--red); border-radius: 8px; padding: 14px 18px; display: flex; align-items: flex-start; gap: 14px; }
+.gap-item.warn { border-left-color: var(--yellow); }
+.gap-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.gap-body {}
+.gap-title { font-weight: 700; margin-bottom: 3px; }
+.gap-desc { color: var(--muted); font-size: 12px; line-height: 1.5; }
+.gap-impact { font-size: 11px; font-weight: 700; margin-top: 6px; }
+.impact-high { color: var(--red); }
+.impact-med { color: var(--yellow); }
+
+/* Experiments */
+.exp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 32px; }
+.exp-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+.exp-card .exp-id { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: .06em; margin-bottom: 6px; }
+.exp-card .exp-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.exp-card .exp-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.exp-card .exp-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.exp-card .exp-value { font-size: 12px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+
+/* Sephora comparison */
+.comparison-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 32px; }
+.comparison-table th { background: var(--surface2); padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; border-bottom: 2px solid var(--border); }
+.comparison-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.col-fera { background: rgba(239,68,68,.04); }
+.col-sephora { background: rgba(34,197,94,.04); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">EEL Content Audit — Fera.pl</div>
+  <div class="topbar-meta">Kategoria: Karma sucha dla psa | 2026-05-22 | n=5 produktów | Benchmark: Sephora.com</div>
+  <button class="theme-btn" onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'">☀ / ☾</button>
+</div>
+
+<div class="container">
+
+  <div class="page-header">
+    <h1>Fera.pl — Content Audit PDP</h1>
+    <div class="meta">Kategoria: Karma sucha dla psa &nbsp;·&nbsp; 5 produktów przeskanowanych &nbsp;·&nbsp; HTML mapping + content extraction via Playwright &nbsp;·&nbsp; Benchmark: Sephora.com</div>
+  </div>
+
+  <!-- Summary KPIs -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="label">Avg Content Score</div>
+      <div class="value val-red">27<span style="font-size:16px">/100</span></div>
+      <div class="sub">Próg minimalny: 60/100</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Bullets (list items)</div>
+      <div class="value val-red">0%</div>
+      <div class="sub">0/5 produktów ma bullets</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Product Schema</div>
+      <div class="value val-red">0%</div>
+      <div class="sub">Brak na wszystkich PDP</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">FAQ na PDP</div>
+      <div class="value val-red">0%</div>
+      <div class="sub">0/5 ma sekcję FAQ</div>
+    </div>
+  </div>
+
+  <!-- Product scores table -->
+  <div class="section-title">📊 Wyniki per produkt <span class="badge badge-red">5 produktów</span></div>
+  <table class="product-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Produkt</th>
+        <th>Score</th>
+        <th>Tytuł</th>
+        <th>Bullets</th>
+        <th>Krótki opis</th>
+        <th>FAQ</th>
+        <th>Zdjęcia</th>
+        <th>Specs</th>
+        <th>Schema</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td class="product-name">ROYAL CANIN Dog Anallergenic 8 kg</td>
+        <td class="score-cell"><span style="color:var(--red)">35</span>
+          <div class="score-bar"><div class="score-fill" style="width:35%;background:var(--red)"></div></div>
+        </td>
+        <td><span class="warn">⚠</span> 140 znaków<br><span style="font-size:11px;color:var(--muted)">za długi, brand ✓, waga ✓</span></td>
+        <td class="cross">✗ brak</td>
+        <td class="cross">✗ brak</td>
+        <td class="cross">✗ brak</td>
+        <td class="check">✓ 8 img</td>
+        <td>5 wierszy</td>
+        <td class="cross">✗ tylko Breadcrumb</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td class="product-name">BRIT Premium By Nature Adult Large L 15 kg x2</td>
+        <td class="score-cell"><span style="color:var(--red)">23</span>
+          <div class="score-bar"><div class="score-fill" style="width:23%;background:var(--red)"></div></div>
+        </td>
+        <td><span class="check">✓</span> 46 znaków<br><span style="font-size:11px;color:var(--muted)">brand ✓, waga ✓, EN tytuł</span></td>
+        <td class="cross">✗ brak</td>
+        <td class="cross">✗ brak</td>
+        <td class="cross">✗ brak</td>
+        <td class="cross">✗ 1 img</td>
+        <td>3 wiersze</td>
+        <td class="cross">✗ brak</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td class="product-name">CHAPPI 13,5kg sucha karma z wołowiną</td>
+        <td class="score-cell"><span style="color:var(--red)">33</span>
+          <div class="score-bar"><div class="score-fill" style="width:33%;background:var(--red)"></div></div>
+        </td>
+        <td><span class="check">✓</span> 68 znaków<br><span style="font-size:11px;color:var(--muted)">brand ✓, waga ✓, PL składniki</span></td>
+        <td class="cross">✗ brak</td>
+        <td class="cross">✗ brak</td>
+        <td class="cross">✗ brak</td>
+        <td class="warn">⚠ 4 img</td>
+        <td>11 wierszy</td>
+        <td class="cross">✗ brak</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td class="product-name">BOSCH Soft Maxi bawół wodny 12,5 kg</td>
+        <td class="score-cell"><span style="color:var(--red)">23</span>
+          <div class="score-bar"><div class="score-fill" style="width:23%;background:var(--red)"></div></div>
+        </td>
+        <td><span class="check">✓</span> 78 znaków<br><span style="font-size:11px;color:var(--muted)">brand ✓, waga ✓, składniki</span></td>
+        <td class="cross">✗ brak</td>
+        <td class="cross">✗ brak</td>
+        <td class="cross">✗ brak</td>
+        <td class="cross">✗ 1 img</td>
+        <td>2 wiersze</td>
+        <td class="cross">✗ brak</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td class="product-name">BRIT Premium By Nature Light Turkey &amp; Oat 15 kg</td>
+        <td class="score-cell"><span style="color:var(--red)">22</span>
+          <div class="score-bar"><div class="score-fill" style="width:22%;background:var(--red)"></div></div>
+        </td>
+        <td><span class="warn">⚠</span> 49 znaków<br><span style="font-size:11px;color:var(--muted)">EN tytuł — brak PL słów kluczowych</span></td>
+        <td class="cross">✗ brak</td>
+        <td class="cross">✗ brak</td>
+        <td class="cross">✗ brak</td>
+        <td class="warn">⚠ 3 img</td>
+        <td>12 wierszy</td>
+        <td class="cross">✗ brak</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Scoring methodology -->
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:32px;font-size:12px;color:var(--muted)">
+    <strong style="color:var(--text)">Metodologia scoringu (4 × 25pt = 100pt):</strong>&nbsp;
+    Tytuł (brand+waga+długość 40-100 chars+PL słowa kluczowe) &nbsp;·&nbsp;
+    Bullets (obecność +15, benefit language +7, ≥4 bulety +3) &nbsp;·&nbsp;
+    Media (≥6 img=20pt, 3-5=13pt, 1-2=5pt, video=+5pt) &nbsp;·&nbsp;
+    Schema (Product/ProductGroup +15, aggregateRating +5, Offers +5)
+  </div>
+
+  <!-- Critical gaps -->
+  <div class="section-title">🚨 Krytyczne luki content (100% produktów)</div>
+  <div class="gap-list">
+    <div class="gap-item">
+      <div class="gap-icon">📋</div>
+      <div class="gap-body">
+        <div class="gap-title">Brak bullet points na WSZYSTKICH produktach (0/5)</div>
+        <div class="gap-desc">Żaden z 5 przeskanowanych produktów nie ma listy bullet points (punktorów). Shopper nie może szybko zeskanować kluczowych cech i korzyści — musi czytać blok ciągłego tekstu lub tabelę specs. Benchmark: Sephora.com ma rozbudowane bullet "About This Product" na każdym PDP.</div>
+        <div class="gap-impact impact-high">IMPACT: Wysoki &nbsp;·&nbsp; CR na PDP, time-on-page, conversion intent</div>
+      </div>
+    </div>
+    <div class="gap-item">
+      <div class="gap-icon">🏷️</div>
+      <div class="gap-body">
+        <div class="gap-title">Brak krótkich opisów / lead tekstu (0/5)</div>
+        <div class="gap-desc">Żaden produkt nie ma krótkiego opisu (2-3 zdania) bezpośrednio przy cenie i CTA. Krótki opis to pierwsze słowa jakie shopper czyta po tytule — powinien adresować Primary Concern ("karma hipoalergiczna dla psów z alergią skórną") i sygnalizować benefit. Benchmark: Sephora ma "quick description" tuż pod tytułem.</div>
+        <div class="gap-impact impact-high">IMPACT: Wysoki &nbsp;·&nbsp; ATC rate, bounce PDP</div>
+      </div>
+    </div>
+    <div class="gap-item">
+      <div class="gap-icon">🔍</div>
+      <div class="gap-body">
+        <div class="gap-title">Brak Product Schema na PDP — krytyczny gap SEO (0/5)</div>
+        <div class="gap-desc">Żaden produkt nie ma Schema.org Product markup. Oznacza to: Google nie widzi ceny, ratingu i dostępności w rich results. Sephora ma ProductGroup schema z aggregateRating, VideoObject, FAQPage. Fera.pl ma tylko BreadcrumbList. Utrata rich snippets = niższy CTR z organic search.</div>
+        <div class="gap-impact impact-high">IMPACT: Krytyczny SEO &nbsp;·&nbsp; Organic CTR, rich results, Google Shopping eligibility</div>
+      </div>
+    </div>
+    <div class="gap-item">
+      <div class="gap-icon">❓</div>
+      <div class="gap-body">
+        <div class="gap-title">Brak FAQ na PDP (0/5)</div>
+        <div class="gap-desc">Żaden produkt nie ma sekcji FAQ. Dla karmy dla psa kluczowe pytania to: "Dla jakiej rasy?", "Czy zawiera zboże?", "Jak dawkować?", "Czy dla szczeniaka?". Brak FAQ = brak GEO optimization (Sephora ma FAQPage schema). Benchmark: Sephora ma FAQPage schema na każdym PDP beauty.</div>
+        <div class="gap-impact impact-high">IMPACT: Wysoki &nbsp;·&nbsp; GEO/AIO visibility, on-page trust, return rate</div>
+      </div>
+    </div>
+    <div class="gap-item warn">
+      <div class="gap-icon">📸</div>
+      <div class="gap-body">
+        <div class="gap-title">Nierówna liczba zdjęć (1–8) — brak standardu</div>
+        <div class="gap-desc">2 produkty mają tylko 1 zdjęcie (Brit Premium, Bosch). 1 produkt ma 8 zdjęć (Royal Canin). Brak standardu jakości zdjęć. Rekomendacja: minimum 4 zdjęcia per produkt (białe tło, opakowanie z przodu, składniki, kontekst użycia).</div>
+        <div class="gap-impact impact-med">IMPACT: Średni &nbsp;·&nbsp; conversion PDP, perceived product quality</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Benchmark vs Sephora -->
+  <div class="section-title">🏆 Benchmark: Fera.pl vs Sephora.com</div>
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Element PDP</th>
+        <th class="col-fera">Fera.pl</th>
+        <th class="col-sephora">Sephora.com</th>
+        <th>Delta / Uwaga</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Bullet points</strong></td>
+        <td class="col-fera cross">✗ brak (0/5)</td>
+        <td class="col-sephora check">✓ "About This Product" bullets</td>
+        <td>Sephora: cechy + korzyści + skin type per bullet</td>
+      </tr>
+      <tr>
+        <td><strong>Krótki opis</strong></td>
+        <td class="col-fera cross">✗ brak</td>
+        <td class="col-sephora check">✓ QuickDescription przy CTA</td>
+        <td>Sephora: 1-2 zdania benefit-first pod tytułem</td>
+      </tr>
+      <tr>
+        <td><strong>Schema PDP</strong></td>
+        <td class="col-fera cross">✗ BreadcrumbList only</td>
+        <td class="col-sephora check">✓ ProductGroup + aggregateRating + FAQPage + VideoObject</td>
+        <td>Sephora: pełne rich results w Google</td>
+      </tr>
+      <tr>
+        <td><strong>FAQ</strong></td>
+        <td class="col-fera cross">✗ brak</td>
+        <td class="col-sephora check">✓ FAQPage schema</td>
+        <td>Sephora: FAQ jako structured data → GEO/AIO</td>
+      </tr>
+      <tr>
+        <td><strong>Video</strong></td>
+        <td class="col-fera cross">✗ brak</td>
+        <td class="col-sephora check">✓ VideoObject schema</td>
+        <td>Sephora: video produkt + schema VideoObject</td>
+      </tr>
+      <tr>
+        <td><strong>Ingredienty/Skład</strong></td>
+        <td class="col-fera check">✓ tabela specs (2-12 wierszy)</td>
+        <td class="col-sephora check">✓ dedykowana sekcja Ingredients</td>
+        <td>Fera: specs tab, Sephora: Ingredients tab oddzielny</td>
+      </tr>
+      <tr>
+        <td><strong>Wishlist / Love</strong></td>
+        <td class="col-fera cross">✗ brak</td>
+        <td class="col-sephora check">✓ "Sign in to love" per produkt</td>
+        <td>Sephora: aria-label="love [product]" + login CTA</td>
+      </tr>
+      <tr>
+        <td><strong>Delivery info</strong></td>
+        <td class="col-fera cross">✗ brak</td>
+        <td class="col-sephora check">✓ "Get It Shipped" info</td>
+        <td>Sephora: shipping option w ATC area</td>
+      </tr>
+      <tr>
+        <td><strong>ATC button tekst</strong></td>
+        <td class="col-fera warn">⚠ nie znaleziony przez std selector</td>
+        <td class="col-sephora check">✓ "Add to Basket" (nie "Cart"!)</td>
+        <td>Sephora używa "Basket" — słownik zaktualizowany</td>
+      </tr>
+      <tr>
+        <td><strong>Rating / reviews</strong></td>
+        <td class="col-fera warn">⚠ widget obecny, brak review count</td>
+        <td class="col-sephora check">✓ 235 reviews z data-at="review_count"</td>
+        <td>Sephora: review count na tile I PDP, w schema</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Recommended experiments -->
+  <div class="section-title">🧪 Rekomendowane eksperymenty (auto-generated)</div>
+  <div class="exp-grid">
+    <div class="exp-card">
+      <div class="exp-id">EXP-FERA-001 · ADD · EASY</div>
+      <div class="exp-title">Dodaj bullet points do opisu produktu (PDP)</div>
+      <div class="exp-meta">
+        <span class="badge badge-blue">pdp → long_description</span>
+        <span class="badge badge-red">100% produktów bez</span>
+      </div>
+      <div class="exp-desc">Przekształć aktualny tekst opisowy w 4-6 punktorów: cecha → korzyść → kontekst. Format: "Hipoalergiczna formuła — idealna dla psów z alergią skórną i pokarmową". Pierwszy bullet = primary concern.</div>
+      <div class="exp-value">💎 Best: CR PDP +8-15% &nbsp;·&nbsp; 📊 Typical: +4-8% &nbsp;·&nbsp; ⏱ Window: 14 dni</div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-id">EXP-FERA-002 · ADD · EASY</div>
+      <div class="exp-title">Dodaj krótki opis (2 zdania) pod tytułem na PDP</div>
+      <div class="exp-meta">
+        <span class="badge badge-blue">pdp → short_description</span>
+        <span class="badge badge-red">100% produktów bez</span>
+      </div>
+      <div class="exp-desc">Dodaj 2-3 zdania benefit-first bezpośrednio pod h1, przed galerią. Adresuj Primary Concern kupującego (np. "Pełnoporcjowa karma dla dorosłych psów z alergią. Hydrolizowane białko — minimalne ryzyko reakcji."). Skomunikuj szybko kto to dla kogo.</div>
+      <div class="exp-value">💎 Best: Bounce PDP -12% &nbsp;·&nbsp; 📊 Typical: -6% &nbsp;·&nbsp; ⏱ Window: 14 dni</div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-id">EXP-FERA-003 · ADD · MEDIUM</div>
+      <div class="exp-title">Implementuj Product Schema (JSON-LD) na PDP</div>
+      <div class="exp-meta">
+        <span class="badge badge-blue">pdp → schema_product</span>
+        <span class="badge badge-red">SEO krytyczny</span>
+      </div>
+      <div class="exp-desc">Dodaj JSON-LD Product schema z: name, brand, description, image, offers (price, priceCurrency, availability), aggregateRating (jeśli rating istnieje). Wzorzec: Sephora ProductGroup z hasVariant. Wynik: rich snippets w Google — cena i gwiazdki widoczne w SERP.</div>
+      <div class="exp-value">💎 Best: Organic CTR +20-35% &nbsp;·&nbsp; 📊 Typical: +10-20% &nbsp;·&nbsp; ⏱ Window: 4-8 tyg (indexing)</div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-id">EXP-FERA-004 · ADD · MEDIUM</div>
+      <div class="exp-title">Dodaj sekcję FAQ na PDP (3-5 pytań)</div>
+      <div class="exp-meta">
+        <span class="badge badge-blue">pdp → faq</span>
+        <span class="badge badge-yellow">GEO + Conversion</span>
+      </div>
+      <div class="exp-desc">Dodaj accordion FAQ (3-5 pytań) pod opisem. Przykłady: "Dla jakiej rasy?", "Czy bez zbóż?", "Jak dawkować?", "Czy dla szczeniąt?". Implementuj FAQPage schema. Wynik: widoczność w AI Overviews (GEO) + zmniejszona liczba zwrotów (lepsza kwalifikacja kupującego).</div>
+      <div class="exp-value">💎 Best: GEO visibility +40% &nbsp;·&nbsp; 📊 Typical: Return rate -5% &nbsp;·&nbsp; ⏱ Window: 21 dni</div>
+    </div>
+  </div>
+
+  <!-- Dictionary learnings -->
+  <div class="section-title">📖 Nowe wpisy do Słownika Elementów</div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:32px">
+    <p style="color:var(--muted);font-size:12px;margin-bottom:12px">Selektory i synonimy odkryte podczas tego audytu. Dodane do <code>data/elements_dictionary.json</code> i <code>data/platform_patterns.json</code>.</p>
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:8px 10px;font-weight:700">Sephora — Cart icon</td>
+        <td style="padding:8px 10px;color:var(--muted)">Nowy synonim EN: <strong>"basket"</strong> (nie "cart"). Selektor: <code>svg[aria-label="Go To Basket"]</code></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:8px 10px;font-weight:700">Sephora — ATC button</td>
+        <td style="padding:8px 10px;color:var(--muted)">Nowy tekst: <strong>"Add to Basket"</strong>. Selektor: <code>button</code> z tekstem "Add to Basket"</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:8px 10px;font-weight:700">Sephora — Review count</td>
+        <td style="padding:8px 10px;color:var(--muted)">Nowy stabilny selektor: <code>[data-at="review_count"]</code>, <code>[data-comp="ReviewCount"]</code></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:8px 10px;font-weight:700">Sephora — Rating</td>
+        <td style="padding:8px 10px;color:var(--muted)">Nowy selektor: <code>[data-comp*="StarRating"]</code> z aria-label="X.X stars"</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:8px 10px;font-weight:700">Sephora — Wishlist</td>
+        <td style="padding:8px 10px;color:var(--muted)">Nowy pattern: <code>[aria-label*="love"]</code> "Sign in to love [product]" — unikalne podejście</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 10px;font-weight:700">Sephora — Schema PDP</td>
+        <td style="padding:8px 10px;color:var(--muted)">Wzorzec: <strong>ProductGroup</strong> (nie Product) + FAQPage + VideoObject + BreadcrumbList + ItemList</td>
+      </tr>
+    </table>
+  </div>
+
+  <div style="text-align:center;color:var(--muted);font-size:11px;padding:16px 0 8px">
+    EEL Content Audit — wygenerowany przez Claude + Playwright &nbsp;·&nbsp; Fera.pl &nbsp;·&nbsp; 2026-05-22
+  </div>
+
+</div>
+</body>
+</html>
