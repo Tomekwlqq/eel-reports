@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EEL — Tactic Card Design</title>
+<script>(function(){var t=localStorage.getItem('eel-tactic-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');})()</script>
+<style>
+/* ── TOKENS ───────────────────────────────────────── */
+:root {
+  --bg:        #0f1117;
+  --surface:   #1a1d2e;
+  --surface2:  #22263a;
+  --surface3:  #2a2f47;
+  --border:    #2e3350;
+  --text:      #e8eaf6;
+  --muted:     #7b82b0;
+  --accent:    #5c6ef7;
+  --accent2:   #7c8ff8;
+  --gold:      #f0a500;
+  --teal:      #00c4c4;
+  --green:     #22c55e;
+  --red:       #ef4444;
+  --purple:    #a855f7;
+  --orange:    #f97316;
+
+  --radius:    12px;
+  --radius-sm: 6px;
+  --font:      'Inter', system-ui, -apple-system, sans-serif;
+}
+
+[data-theme="light"] {
+  --bg:        #f0f2fb;
+  --surface:   #ffffff;
+  --surface2:  #eef0f9;
+  --surface3:  #e4e7f5;
+  --border:    #cdd0e8;
+  --text:      #1a1d2e;
+  --muted:     #5a6080;
+  --accent:    #4c5ef7;
+  --accent2:   #3d4fe8;
+  --gold:      #c07800;
+  --teal:      #007a8c;
+  --green:     #16a34a;
+  --red:       #dc2626;
+  --purple:    #9333ea;
+  --orange:    #ea5c0a;
+}
+
+/* ── RESET ───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 24px 16px 60px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── PAGE HEADER ─────────────────────────────────── */
+.page-header {
+  max-width: 720px;
+  margin: 0 auto 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.page-title {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.theme-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.theme-btn:hover { border-color: var(--accent); color: var(--text); }
+
+/* ── CARD WRAPPER ─────────────────────────────────── */
+.card {
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* ── CARD HEADER ─────────────────────────────────── */
+.card-header {
+  padding: 20px 24px 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+.exp-id {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent2);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.exp-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 14px;
+}
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.badge-area {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  color: var(--accent2);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.badge-add    { background: color-mix(in srgb, var(--green) 15%, transparent);  color: var(--green);  border: 1px solid color-mix(in srgb, var(--green) 30%, transparent); }
+.badge-modify { background: color-mix(in srgb, var(--gold) 15%, transparent);   color: var(--gold);   border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent); }
+.badge-remove { background: color-mix(in srgb, var(--red) 15%, transparent);    color: var(--red);    border: 1px solid color-mix(in srgb, var(--red) 30%, transparent); }
+.badge-easy   { background: color-mix(in srgb, var(--green) 12%, transparent);  color: var(--green);  border: 1px solid color-mix(in srgb, var(--green) 25%, transparent); }
+.badge-medium { background: color-mix(in srgb, var(--gold) 12%, transparent);   color: var(--gold);   border: 1px solid color-mix(in srgb, var(--gold) 25%, transparent); }
+.badge-hard   { background: color-mix(in srgb, var(--red) 12%, transparent);    color: var(--red);    border: 1px solid color-mix(in srgb, var(--red) 25%, transparent); }
+.badge-time {
+  background: var(--surface3);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.badge-client {
+  background: color-mix(in srgb, var(--purple) 12%, transparent);
+  color: var(--purple);
+  border: 1px solid color-mix(in srgb, var(--purple) 25%, transparent);
+}
+
+/* ── CARD BODY ───────────────────────────────────── */
+.card-body {
+  display: grid;
+  gap: 0;
+}
+
+/* ── SECTION ─────────────────────────────────────── */
+.section {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.section:last-child { border-bottom: none; }
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.section-label .icon { font-size: 12px; }
+
+/* ── STEPS LIST ──────────────────────────────────── */
+.steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.step {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.step-num {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+.step-text {
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* ── HINTS BLOCK ─────────────────────────────────── */
+.hints-wrap {
+  margin-top: 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+.hints-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.hints {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.hint {
+  display: flex;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.hint::before {
+  content: '✦';
+  color: var(--gold);
+  flex-shrink: 0;
+  font-size: 10px;
+  margin-top: 3px;
+}
+
+/* ── BIAS CARDS ──────────────────────────────────── */
+.biases {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.bias-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.bias-icon { font-size: 14px; flex-shrink: 0; }
+.bias-body {}
+.bias-name {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+.bias-why {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* ── MEASUREMENT ─────────────────────────────────── */
+.measure-method {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: color-mix(in srgb, var(--teal) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--teal) 25%, transparent);
+  color: var(--teal);
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.measure-steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.measure-step {
+  display: flex;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.measure-step .step-idx {
+  flex-shrink: 0;
+  font-weight: 600;
+  color: var(--teal);
+  min-width: 18px;
+}
+
+/* ── VALUE GRID ──────────────────────────────────── */
+.value-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+@media (max-width: 480px) { .value-grid { grid-template-columns: 1fr; } }
+
+.value-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+.value-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.value-label-icon { font-size: 13px; }
+.value-number {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.value-number.green  { color: var(--green); }
+.value-number.gold   { color: var(--gold); }
+.value-number.teal   { color: var(--teal); }
+.value-number.muted  { color: var(--muted); font-size: 13px; font-weight: 500; }
+.value-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ── REVERSIBLE BADGE ──────────────────────────────── */
+.reversible-yes {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: color-mix(in srgb, var(--green) 12%, transparent);
+  color: var(--green);
+  border: 1px solid color-mix(in srgb, var(--green) 25%, transparent);
+  padding: 3px 10px; border-radius: 99px;
+  font-size: 12px; font-weight: 600;
+}
+.reversible-no {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: color-mix(in srgb, var(--orange) 12%, transparent);
+  color: var(--orange);
+  border: 1px solid color-mix(in srgb, var(--orange) 25%, transparent);
+  padding: 3px 10px; border-radius: 99px;
+  font-size: 12px; font-weight: 600;
+}
+
+/* ── SEQUENCES ───────────────────────────────────── */
+.sequences {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.seq-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent);
+}
+.seq-arrow {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.seq-text {
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.seq-type {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ── CARD FOOTER ─────────────────────────────────── */
+.card-footer {
+  padding: 14px 24px;
+  background: var(--surface2);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.footer-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+}
+.status-dot.ready  { background: var(--gold); box-shadow: 0 0 6px var(--gold); }
+.status-dot.active { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.status-dot.done   { background: var(--muted); }
+.footer-date {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── DESIGN NOTES (pokazuje spec do review) ──────── */
+.design-notes {
+  max-width: 720px;
+  margin: 40px auto 0;
+  padding: 20px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.design-notes-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.spec-row {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-key {
+  min-width: 140px;
+  flex-shrink: 0;
+  color: var(--muted);
+  font-weight: 500;
+}
+.spec-val { color: var(--text); }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-title">EEL — Tactic Card · Design View</div>
+  <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">☀️</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     EXAMPLE CARD: EXP-001
+     ═══════════════════════════════════════════════════════════════════ -->
+<div class="card">
+
+  <!-- HEADER -->
+  <div class="card-header">
+    <div class="exp-id">EXP-001</div>
+    <div class="exp-title">Dodaj video preview do kart produktów na listingu</div>
+    <div class="meta-row">
+      <span class="badge badge-area">category → listing_card_video</span>
+      <span class="badge badge-add">ADD</span>
+      <span class="badge badge-medium">Medium</span>
+      <span class="badge badge-time">⏱ 1-2 dni</span>
+      <span class="badge badge-client">GLOV</span>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="card-body">
+
+    <!-- CO KONKRETNIE ZROBIĆ -->
+    <div class="section">
+      <div class="section-label"><span class="icon">🔧</span> Co konkretnie zrobić</div>
+      <ol class="steps">
+        <li class="step">
+          <span class="step-num">1</span>
+          <span class="step-text">Przygotuj krótkie video (3–6 sekund) dla TOP 5 bestselerów — packshot + kluczowy benefit w ruchu</span>
+        </li>
+        <li class="step">
+          <span class="step-num">2</span>
+          <span class="step-text">Zaimplementuj autoplay on hover (desktop) i natychmiastowy autoplay (mobile) bez dźwięku</span>
+        </li>
+        <li class="step">
+          <span class="step-num">3</span>
+          <span class="step-text">Format: kwadrat (1:1) lub portret (4:5) — landscape zajmuje za mało miejsca na mobile</span>
+        </li>
+        <li class="step">
+          <span class="step-num">4</span>
+          <span class="step-text">Fallback: jeśli video niedostępne lub wolne łącze → pokaż pierwsze zdjęcie produktu</span>
+        </li>
+      </ol>
+      <div class="hints-wrap">
+        <div class="hints-label">✨ Jak zrobić to dobrze</div>
+        <ul class="hints">
+          <li class="hint">3-sekundowa pętla max — uwaga spada drastycznie po 3s</li>
+          <li class="hint">Bez dźwięku — autoplay z dźwiękiem to irytacja, nie engagement</li>
+          <li class="hint">Pokaż produkt z 3 kątów + kluczowy benefit wizualny w ostatnim kadrze</li>
+          <li class="hint">Zacznij od TOP 5 bestselerów, nie całego katalogu — mniejszy koszt produkcji, szybszy test</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DLACZEGO TO MOŻE ZADZIAŁAĆ -->
+    <div class="section">
+      <div class="section-label"><span class="icon">🧠</span> Dlaczego to może zadziałać</div>
+      <div class="biases">
+        <div class="bias-item">
+          <span class="bias-icon">📌</span>
+          <div class="bias-body">
+            <div class="bias-name">Picture Superiority Effect</div>
+            <div class="bias-why">Mózg przetwarza ruch szybciej niż statyczny obraz — video przyciąga uwagę zanim user zdąży przeskanować siatkę produktów</div>
+          </div>
+        </div>
+        <div class="bias-item">
+          <span class="bias-icon">📌</span>
+          <div class="bias-body">
+            <div class="bias-name">Context Effect</div>
+            <div class="bias-why">Produkt w ruchu (używany, noszony, w akcji) daje kontekst użycia — zmienia percepcję wartości vs. packshot na białym tle</div>
+          </div>
+        </div>
+        <div class="bias-item">
+          <span class="bias-icon">📌</span>
+          <div class="bias-body">
+            <div class="bias-name">Mere Exposure Effect</div>
+            <div class="bias-why">Dłuższy czas patrzenia na kartę (video zatrzymuje scroll) → większa familiarność → wyższa szansa kliknięcia</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAK MIERZYĆ -->
+    <div class="section">
+      <div class="section-label"><span class="icon">📊</span> Jak mierzyć</div>
+      <div class="measure-method">GA4 Before/After</div>
+      <ol class="measure-steps">
+        <li class="measure-step"><span class="step-idx">1.</span> GA4 → Reports → Engagement → Pages and screens → filtruj po URL kategorii z video</li>
+        <li class="measure-step"><span class="step-idx">2.</span> Zapisz baseline: CTR (category → PDP) z ostatnich 14 dni przed wdrożeniem</li>
+        <li class="measure-step"><span class="step-idx">3.</span> Wdróż video na TOP 5 bestselerów</li>
+        <li class="measure-step"><span class="step-idx">4.</span> Po 14 dniach: ten sam raport — porównaj CTR. Różnica ≥ 5% = sygnał, ≥ 10% = wyraźny efekt</li>
+        <li class="measure-step"><span class="step-idx">5.</span> Bonus: sprawdź też <em>add_to_cart rate</em> per produkt z video vs. bez</li>
+      </ol>
+    </div>
+
+    <!-- CO MOŻESZ ZYSKAĆ -->
+    <div class="section">
+      <div class="section-label"><span class="icon">💰</span> Co możesz zyskać</div>
+      <div class="value-grid">
+        <div class="value-item">
+          <div class="value-label"><span class="value-label-icon">💎</span> Najlepszy scenariusz</div>
+          <div class="value-number green">CTR +15–30%</div>
+          <div class="value-sub">category → PDP w 14 dniach</div>
+        </div>
+        <div class="value-item">
+          <div class="value-label"><span class="value-label-icon">📊</span> Typowy scenariusz</div>
+          <div class="value-number gold">CTR +5–15%</div>
+          <div class="value-sub">category → PDP w 14 dniach</div>
+        </div>
+        <div class="value-item">
+          <div class="value-label"><span class="value-label-icon">🧠</span> Czego się uczysz</div>
+          <div class="value-number muted">Czy motion content zwiększa zaangażowanie w tej kategorii produktowej</div>
+        </div>
+        <div class="value-item">
+          <div class="value-label"><span class="value-label-icon">⏱</span> Kiedy zobaczysz</div>
+          <div class="value-number teal">14 dni</div>
+          <div class="value-sub">od wdrożenia</div>
+        </div>
+      </div>
+      <div style="margin-top:12px; display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted);">
+        Odwracalny: <span class="reversible-yes">↩ Tak</span>
+      </div>
+    </div>
+
+    <!-- NASTĘPNE KROKI -->
+    <div class="section">
+      <div class="section-label"><span class="icon">→</span> Następne kroki po tym eksperymencie</div>
+      <div class="sequences">
+        <div class="seq-item">
+          <span class="seq-arrow">→</span>
+          <div>
+            <div class="seq-text">Testuj warianty video: 3s loop vs 6s loop vs gif — który format daje wyższy CTR</div>
+            <div class="seq-type">Sekwencja — MODIFY listing_card_video</div>
+          </div>
+        </div>
+        <div class="seq-item">
+          <span class="seq-arrow">→</span>
+          <div>
+            <div class="seq-text">Composite: video + badge "Bestseller" w jednym deploy — wzmocnienie efektu Von Restorff</div>
+            <div class="seq-type">Composite — ADD listing_card_badge</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /card-body -->
+
+  <!-- FOOTER -->
+  <div class="card-footer">
+    <div class="footer-status">
+      <span class="status-dot ready"></span>
+      🟡 Gotowy do wdrożenia
+    </div>
+    <div class="footer-date">2026-05-22 · /eel-build</div>
+  </div>
+
+</div><!-- /card -->
+
+<!-- DESIGN SPEC NOTES -->
+<div class="design-notes">
+  <div class="design-notes-title">Design Spec — Elementy karty</div>
+  <div class="spec-row"><span class="spec-key">EXP ID + tytuł</span><span class="spec-val">Nagłówek karty. ID = auto-increment (EXP-001, EXP-002...). Tytuł = actionable name.</span></div>
+  <div class="spec-row"><span class="spec-key">Meta badges</span><span class="spec-val">Area→Element · Typ (ADD/MODIFY/REMOVE kolorem) · Trudność · Czas · Klient</span></div>
+  <div class="spec-row"><span class="spec-key">Co zrobić</span><span class="spec-val">Numerowana lista kroków + sekcja "Jak zrobić to dobrze" (hints z T5)</span></div>
+  <div class="spec-row"><span class="spec-key">Dlaczego zadziała</span><span class="spec-val">2-3 biasy z T3 (affinity 4-5) + 1-zdaniowe wyjaśnienie per bias</span></div>
+  <div class="spec-row"><span class="spec-key">Jak mierzyć</span><span class="spec-val">Metoda z T6 + konkretne kroki numerowane</span></div>
+  <div class="spec-row"><span class="spec-key">Co zyskasz</span><span class="spec-val">Grid 4 kafelki: best/typical (z T4) + czego się uczysz + kiedy. Reversible badge osobno.</span></div>
+  <div class="spec-row"><span class="spec-key">Następne kroki</span><span class="spec-val">Max 2: Sekwencja (kolejny krok) lub Composite (ten sam deploy). Z typem podanym jako chip.</span></div>
+  <div class="spec-row"><span class="spec-key">Status</span><span class="spec-val">🟡 Gotowy / 🔄 W toku / ✅ Zrobione / 📊 Wyniki zebrane</span></div>
+  <div class="spec-row"><span class="spec-key">Kolory typów</span><span class="spec-val">ADD = green · MODIFY = gold · REMOVE = red</span></div>
+  <div class="spec-row"><span class="spec-key">Kolory trudności</span><span class="spec-val">Easy = green · Medium = gold · Hard = red</span></div>
+  <div class="spec-row"><span class="spec-key">Kolory metryk</span><span class="spec-val">Best case = green · Typical = gold · Window/czas = teal · Learning = muted</span></div>
+  <div class="spec-row"><span class="spec-key">Fonty</span><span class="spec-val">Inter / system-ui. Tytuł: 20px 700. Body: 14px 400. Labels: 10-11px 700 uppercase.</span></div>
+  <div class="spec-row"><span class="spec-key">Radiusy</span><span class="spec-val">Card: 12px. Inner elements: 6px. Badges/pills: 99px (fully rounded).</span></div>
+</div>
+
+<script>
+function toggleTheme() {
+  var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('eel-tactic-theme', 'dark');
+    document.getElementById('theme-btn').textContent = '☀️';
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('eel-tactic-theme', 'light');
+    document.getElementById('theme-btn').textContent = '🌙';
+  }
+}
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('eel-tactic-theme') === 'light') {
+    document.getElementById('theme-btn').textContent = '🌙';
+  }
+});
+</script>
+</body>
+</html>
