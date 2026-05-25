@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa Percepcji — Sejfy Domowe | SejfZone</title>
+<style>
+:root {
+  --bg: #f6f8fa;
+  --bg-sidebar: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f0f3f6;
+  --border: #d0d7de;
+  --border-subtle: #e8ecf0;
+  --text-primary: #1f2328;
+  --text-secondary: #57606a;
+  --text-muted: #8c959f;
+  --accent: #0969da;
+  --accent-hover: #0757ba;
+  --success: #1a7f37;
+  --warning: #9a6700;
+  --danger: #cf222e;
+  --sidebar-w: 280px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text-primary);min-height:100vh;display:flex;flex-direction:column}
+/* TOPBAR */
+.topbar{background:var(--bg-sidebar);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+.topbar h1{font-size:15px;font-weight:600;color:var(--text-primary);white-space:nowrap}
+.topbar h1 span{color:var(--accent)}
+.search-wrap{flex:1;min-width:160px;max-width:320px;position:relative}
+.search-wrap input{width:100%;padding:5px 10px 5px 30px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:var(--bg-card);color:var(--text-primary);outline:none}
+.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(9,105,218,.15)}
+.search-wrap::before{content:'🔍';position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:12px}
+.filter-chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.chip{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid transparent;transition:all .15s;user-select:none;white-space:nowrap}
+.chip.active{border-color:transparent}
+.chip-pr{background:#fff;border-color:var(--border);color:var(--text-secondary)}
+.chip-pr.active.p1{background:#cf222e;color:#fff;border-color:#cf222e}
+.chip-pr.active.p2{background:#9a6700;color:#fff;border-color:#9a6700}
+.chip-pr.active.p3{background:#0969da;color:#fff;border-color:#0969da}
+.chip-pr.active.p4{background:#6e7781;color:#fff;border-color:#6e7781}
+.chip-st{background:#fff;border-color:var(--border);color:var(--text-secondary)}
+.chip-st.active.nowy{background:#1a7f37;color:#fff;border-color:#1a7f37}
+.chip-st.active.istnieje{background:#0969da;color:#fff;border-color:#0969da}
+.chip-st.active.rozbudowac{background:#9a6700;color:#fff;border-color:#9a6700}
+.statsbar{font-size:12px;color:var(--text-muted);white-space:nowrap;padding:0 20px;background:var(--bg);border-bottom:1px solid var(--border-subtle)}
+/* LAYOUT */
+.layout{display:flex;flex:1;min-height:0}
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);background:var(--bg-sidebar);border-right:1px solid var(--border);padding:0;flex-shrink:0;display:flex;flex-direction:column;overflow-y:auto;position:sticky;top:56px;max-height:calc(100vh - 56px)}
+.sidebar-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg-sidebar);flex-shrink:0}
+.stab{flex:1;padding:10px 4px;border:none;background:none;cursor:pointer;font-size:11px;font-weight:600;color:var(--text-muted);text-align:center;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:2px;border-bottom:2px solid transparent}
+.stab:hover{color:var(--text-primary);background:var(--bg)}
+.stab.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--bg-card)}
+.stab-icon{font-size:16px}
+.sidebar-content{padding:14px 12px;flex:1;overflow-y:auto}
+.filter-section{margin-bottom:16px}
+.filter-label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.path-btns{display:flex;flex-wrap:wrap;gap:5px}
+.path-btn{padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:2px solid transparent;transition:all .15s;color:#fff;opacity:.55}
+.path-btn.active{opacity:1;transform:scale(1.05)}
+.path-btn.all{background:var(--text-secondary)!important}
+.state-chips{display:flex;flex-wrap:wrap;gap:4px}
+.sch{padding:3px 8px;border-radius:12px;font-size:11px;font-weight:500;cursor:pointer;background:var(--bg);border:1.5px solid var(--border);color:var(--text-secondary);transition:all .15s}
+.sch.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* CARDS */
+.main{flex:1;padding:16px;overflow-y:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:14px;cursor:default;transition:all .15s;border-left:4px solid #ccc}
+.card:hover{background:var(--bg-card-hover);box-shadow:0 2px 8px rgba(0,0,0,.08);transform:translateY(-1px)}
+.card-meta{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.card-nr{font-size:11px;color:var(--text-muted);font-weight:500;min-width:24px}
+.badge{padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;color:#fff}
+.badge-state{padding:2px 6px;border-radius:10px;font-size:10px;font-weight:500;background:var(--bg);border:1px solid var(--border);color:var(--text-secondary)}
+.pr-chip{padding:1px 6px;border-radius:8px;font-size:10px;font-weight:700}
+.pr-P1{background:#ffeef0;color:#cf222e;border:1px solid #ffb8c2}
+.pr-P2{background:#fff8e1;color:#9a6700;border:1px solid #ffd56b}
+.pr-P3{background:#ddf4ff;color:#0969da;border:1px solid #a5d6fb}
+.pr-P4{background:#f6f8fa;color:#6e7781;border:1px solid #d0d7de}
+.st-ISTNIEJE{background:#dafbe1;color:#1a7f37;border:1px solid #80d4a0}
+.st-ROZBUDOWAĆ{background:#fff8c5;color:#9a6700;border:1px solid #f7c948}
+.st-BRAK{background:#f6f8fa;color:#57606a;border:1px solid #d0d7de}
+.card-title{font-size:13px;font-weight:600;color:var(--text-primary);line-height:1.4;margin-bottom:6px}
+.card-kw{font-size:11px;color:var(--text-muted);font-style:italic;margin-top:4px}
+.type-tag{padding:1px 6px;border-radius:4px;font-size:10px;font-weight:500;background:var(--bg);border:1px solid var(--border);color:var(--text-muted)}
+/* LISTA TAB */
+.lista-wrap{display:flex;flex-direction:column;height:100%}
+.lista-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border-subtle)}
+.lista-controls button{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text-secondary);transition:all .15s}
+.lista-controls button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.copy-btn{background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-secondary);padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;margin-left:auto;transition:all .15s}
+.copy-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.progress-bar-wrap{margin-bottom:12px}
+.progress-bar-track{height:6px;background:var(--border-subtle);border-radius:3px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--success);border-radius:3px;transition:width .3s}
+.progress-label{font-size:11px;color:var(--text-muted);margin-top:4px;text-align:right}
+.lista-list{flex:1;overflow-y:auto;list-style:none}
+.lista-item{display:flex;align-items:flex-start;gap:8px;padding:7px 4px;border-bottom:1px solid var(--border-subtle);cursor:pointer;transition:background .1s;border-radius:4px}
+.lista-item:hover{background:var(--bg-card-hover)}
+.lista-item input[type=checkbox]{margin-top:2px;flex-shrink:0;cursor:pointer;accent-color:var(--success);width:14px;height:14px}
+.lista-item.checked .lista-item-text{text-decoration:line-through;color:var(--text-muted)}
+.lista-item-text{font-size:12px;line-height:1.45}
+.lista-item-meta{font-size:10px;color:var(--text-muted);margin-top:2px}
+/* INFO TAB */
+.info-wrap{font-size:13px;line-height:1.6;color:var(--text-primary)}
+.info-section{margin-bottom:20px}
+.info-section h3{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border-subtle)}
+.info-section p{font-size:12px;color:var(--text-secondary);margin-bottom:6px}
+.cep-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.cep-card{padding:8px 10px;border-radius:6px;font-size:11px;color:#fff;font-weight:600;line-height:1.4}
+.cep-card span{display:block;font-size:10px;font-weight:400;opacity:.9;margin-top:2px}
+.type-legend{display:flex;flex-direction:column;gap:5px}
+.type-row{display:flex;gap:8px;align-items:flex-start}
+.type-row .badge{flex-shrink:0;background:var(--bg);color:var(--text-secondary);border:1px solid var(--border);font-size:10px;padding:1px 6px}
+.type-row p{font-size:11px;color:var(--text-secondary)}
+/* EMPTY STATE */
+.empty{text-align:center;padding:60px 20px;color:var(--text-muted)}
+.empty svg{width:48px;height:48px;margin-bottom:12px;opacity:.4}
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar">
+  <h1>🔒 Mapa Percepcji — <span>Sejfy Domowe</span></h1>
+  <div class="search-wrap"><input type="text" id="search" placeholder="Szukaj artykułu…" oninput="render()"></div>
+  <div class="filter-chips">
+    <div class="chip chip-pr" data-pr="P1" onclick="togglePr('P1')">P1</div>
+    <div class="chip chip-pr" data-pr="P2" onclick="togglePr('P2')">P2</div>
+    <div class="chip chip-pr" data-pr="P3" onclick="togglePr('P3')">P3</div>
+    <div class="chip chip-pr" data-pr="P4" onclick="togglePr('P4')">P4</div>
+    <div style="width:1px;background:var(--border);height:18px;margin:0 2px"></div>
+    <div class="chip chip-st" data-st="NOWY" onclick="toggleSt('NOWY')">NOWY</div>
+    <div class="chip chip-st" data-st="ISTNIEJE" onclick="toggleSt('ISTNIEJE')">ISTNIEJE</div>
+    <div class="chip chip-st" data-st="ROZBUDOWAĆ" onclick="toggleSt('ROZBUDOWAĆ')">ROZBUDOWAĆ</div>
+  </div>
+</div>
+<div class="statsbar" id="statsbar" style="padding:4px 20px;font-size:12px;color:var(--text-muted)">Ładowanie…</div>
+
+<div class="layout">
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-tabs">
+      <button class="stab active" id="stab-mapa" onclick="switchTab('mapa')"><span class="stab-icon">🗺️</span>MAPA</button>
+      <button class="stab" id="stab-lista" onclick="switchTab('lista')"><span class="stab-icon">☑️</span>LISTA</button>
+      <button class="stab" id="stab-info" onclick="switchTab('info')"><span class="stab-icon">ℹ️</span>INFO</button>
+    </div>
+    <div class="sidebar-content" id="sidebar-content"></div>
+  </div>
+  <div class="main" id="main"></div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const A = [
+  {nr:1,t:"Czy warto mieć sejf w domu? 7 rzeczy które tracisz bez sejfu",p:"A",s:["A1"],y:"ROZBUDUJ",k:"czy warto mieć sejf w domu",st:"ROZBUDOWAĆ",pr:"P1"},
+  {nr:2,t:"Ile kosztuje sejf domowy? Przewodnik po cenach w każdej klasie",p:"A",s:["A2","E2"],y:"ROZBUDUJ",k:"ile kosztuje sejf domowy",st:"ROZBUDOWAĆ",pr:"P2"},
+  {nr:3,t:"Czy tani sejf to dobry pomysł? Kiedy warto dopłacić",p:"A",s:["A2"],y:"ROZBUDUJ",k:"tani sejf domowy",st:"ROZBUDOWAĆ",pr:"P3"},
+  {nr:4,t:"Przed czym chroni sejf ognioodporny? Temperatura, czas, certyfikaty",p:"C",s:["C2"],y:"ROZBUDUJ",k:"sejf ognioodporny",st:"ROZBUDOWAĆ",pr:"P2"},
+  {nr:5,t:"Rodzaje sejfów domowych — jaki wybrać do domu, biura, firmy?",p:"Cross",s:["A3","D3"],y:"ROZBUDUJ",k:"rodzaje sejfów domowych",st:"ROZBUDOWAĆ",pr:"P2"},
+  {nr:6,t:"Co powinien mieć dobry sejf domowy? Lista cech do sprawdzenia",p:"A",s:["A3"],y:"ROZBUDUJ",k:"dobry sejf domowy",st:"ROZBUDOWAĆ",pr:"P2"},
+  {nr:7,t:"Sejf domowy — czy warto go mieć? Fakty i mity o bezpieczeństwie",p:"A",s:["A1"],y:"ROZBUDUJ",k:"sejf domowy",st:"ROZBUDOWAĆ",pr:"P2"},
+  {nr:8,t:"Jak zamontować sejf w domu? Montaż sejfu wolnostojącego krok po kroku",p:"A",s:["A5"],y:"ROZBUDUJ",k:"jak zamontować sejf",st:"ROZBUDOWAĆ",pr:"P2"},
+  {nr:9,t:"Jak ukryć sejf w domu — 12 sprawdzonych miejsc",p:"A",s:["A5"],y:"ROZBUDUJ",k:"jak ukryć sejf w domu",st:"ROZBUDOWAĆ",pr:"P2"},
+  {nr:10,t:"Montaż sejfu w ścianie — krok po kroku, materiały, koszty",p:"A",s:["A5"],y:"ROZBUDUJ",k:"montaż sejfu w ścianie",st:"ROZBUDOWAĆ",pr:"P2"},
+  {nr:11,t:"Klasy bezpieczeństwa sejfów S1, S2 i 0 do VI — kompletny przewodnik",p:"Cross",s:["A3","B3","C2"],y:"ROZBUDUJ",k:"klasy bezpieczeństwa sejfów",st:"ROZBUDOWAĆ",pr:"P1"},
+  {nr:12,t:"Co warto przechowywać w sejfie? Lista priorytetów dla właścicieli",p:"A",s:["A1"],y:"ROZBUDUJ",k:"co trzymać w sejfie",st:"ROZBUDOWAĆ",pr:"P1"},
+  {nr:13,t:"Sejf podpodłogowy — co to jest, jak montować, dla kogo?",p:"A",s:["A5"],y:"ROZBUDUJ",k:"sejf podpodłogowy",st:"ROZBUDOWAĆ",pr:"P3"},
+  {nr:14,t:"Sejf meblowy — czy jest bezpieczny? Prawdy i mity",p:"A",s:["A3"],y:"ROZBUDUJ",k:"sejf meblowy bezpieczeństwo",st:"ROZBUDOWAĆ",pr:"P3"},
+  {nr:15,t:"Sejf na dokumenty — co przechowywać i jaka klasa ognioodporności?",p:"C",s:["C3"],y:"ROZBUDUJ",k:"sejf na dokumenty klasa ognioodporności",st:"ROZBUDOWAĆ",pr:"P2"},
+  {nr:16,t:"Sejf a pożar — jak długo wytrzymuje ogień i w jakiej temperaturze?",p:"C",s:["C1","C2"],y:"ROZBUDUJ",k:"sejf ognioodporny temperatura czas",st:"ROZBUDOWAĆ",pr:"P2"},
+  {nr:17,t:"Sejf wodoodporny — czy istnieje i jak chronić zawartość przed zalaniem?",p:"C",s:["C2"],y:"ROZBUDUJ",k:"sejf wodoodporny",st:"ROZBUDOWAĆ",pr:"P3"},
+  {nr:18,t:"FAQ PDP: Sejfy domowe Adorf — najczęstsze pytania i specyfikacja",p:"E",s:["E3"],y:"ROZBUDUJ",k:"adorf sejf faq",st:"ROZBUDOWAĆ",pr:"P2"},
+  {nr:19,t:"FAQ PDP: Sejfy Baden-Baden — dla kogo i jakie wymiary?",p:"E",s:["E3"],y:"ROZBUDUJ",k:"baden-baden sejf faq",st:"ROZBUDOWAĆ",pr:"P2"},
+  {nr:20,t:"Jak otwierają sejfy złodzieje — i jak się przed tym bronić?",p:"A",s:["A1","A2"],y:"ROZBUDUJ",k:"jak złodzieje otwierają sejfy",st:"ROZBUDOWAĆ",pr:"P3"},
+  {nr:21,t:"Jaki sejf wybrać do domu w 2026? Kompletny przewodnik dla początkujących",p:"Cross",s:["A2","A3"],y:"NOWY",k:"jaki sejf do domu",st:"BRAK",pr:"P1"},
+  {nr:22,t:"Sejf antywłamaniowy vs ognioodporny — czym się różnią i co wybrać?",p:"Cross",s:["A3","C2"],y:"NOWY",k:"sejf antywłamaniowy vs ognioodporny",st:"BRAK",pr:"P1"},
+  {nr:23,t:"Sejf wolnostojący vs ścienny vs meblowy — wady i zalety każdego typu",p:"Cross",s:["A3","G2"],y:"NOWY",k:"rodzaje sejfów domowych typy",st:"BRAK",pr:"P2"},
+  {nr:24,t:"Certyfikat VdS, EN 1143-1, EN 14450 — jak porównać sejfy różnych norm?",p:"Cross",s:["A3","B2","C2"],y:"NOWY",k:"certyfikat vds co to",st:"BRAK",pr:"P2"},
+  {nr:25,t:"Jaka klasa sejfu wystarczy do domu? Kalkulator dla każdego przypadku",p:"A",s:["A3","B3"],y:"NOWY",k:"jaka klasa sejfu do domu",st:"BRAK",pr:"P2"},
+  {nr:26,t:"Ranking sejfów domowych 2026 — TOP 10 w każdym przedziale cenowym",p:"Cross",s:["A4","E3"],y:"NOWY",k:"ranking sejfów domowych",st:"BRAK",pr:"P1"},
+  {nr:27,t:"Adorf vs Baden-Baden vs SAVE4EVER — porównanie popularnych sejfów domowych",p:"A",s:["A4"],y:"NOWY",k:"adorf sejf opinie",st:"BRAK",pr:"P2"},
+  {nr:28,t:"Jaki sejf na dokumenty? Wymiary A4, A3 a pojemność i klasa sejfu",p:"C",s:["C3"],y:"NOWY",k:"sejf na dokumenty a4 wymiary",st:"BRAK",pr:"P2"},
+  {nr:29,t:"Psychologia złodzieja — gdzie szuka sejfu i jak go zaskoczyć?",p:"A",s:["A1","A5"],y:"NOWY",k:"gdzie złodziej szuka sejfu",st:"BRAK",pr:"P3"},
+  {nr:30,t:"ELEMENT PDP: Ikony płatności — BLIK, karta, PayPo, 60 dni zwrotu",p:"Cross",s:["A6"],y:"ELEMENT-PDP",k:"płatności sejf sklep",st:"BRAK",pr:"P1"},
+  {nr:31,t:"FAQ: Dostawa, gwarancja, zwroty — wszystko co musisz wiedzieć przed zakupem",p:"Cross",s:["A6"],y:"FAQ-PDP",k:"gwarancja sejf zwrot",st:"BRAK",pr:"P2"},
+  {nr:32,t:"Wymóg sejfu w polisie ubezpieczeniowej — jak go spełnić i co udowodnić?",p:"B",s:["B1","B2"],y:"NOWY",k:"wymagania ubezpieczyciela sejf",st:"BRAK",pr:"P1"},
+  {nr:33,t:"Sejf a ubezpieczenie domu — jakie wymagania stawiają PZU, Allianz, Warta?",p:"B",s:["B1","B2"],y:"NOWY",k:"sejf wymagany przez ubezpieczenie",st:"BRAK",pr:"P1"},
+  {nr:34,t:"FAQ: Certyfikat sejfu dla ubezpieczyciela — co zaakceptuje polisa?",p:"B",s:["B2","B3"],y:"FAQ-PDP",k:"jaki sejf do polisy ubezpieczeniowej",st:"BRAK",pr:"P2"},
+  {nr:35,t:"Certyfikaty i dokumentacja — pobierz potwierdzenie dla ubezpieczyciela",p:"B",s:["B4"],y:"STRONA",k:"certyfikat en 14450 s1 pobierz",st:"BRAK",pr:"P1"},
+  {nr:36,t:"FAQ: Jakie dokumenty otrzymuję przy zakupie sejfu? Pełna lista",p:"B",s:["B4"],y:"FAQ-PDP",k:"dokumenty przy zakupie sejfu",st:"BRAK",pr:"P2"},
+  {nr:37,t:"ELEMENT PDP: \"W zestawie: certyfikat EN 14450 + faktura VAT\"",p:"B",s:["B5"],y:"ELEMENT-PDP",k:"sejf certyfikat faktura vat",st:"BRAK",pr:"P2"},
+  {nr:38,t:"FAQ: Co jest w pudełku? Dokumenty, certyfikaty, instrukcja — pełna lista",p:"B",s:["B5"],y:"FAQ-PDP",k:"co w pudełku sejf certyfikat",st:"BRAK",pr:"P3"},
+  {nr:39,t:"Mały sejf biurowy na leki, dokumenty, gotówkę — jaki wybrać?",p:"D",s:["D1"],y:"NOWY",k:"mały sejf biurowy",st:"BRAK",pr:"P2"},
+  {nr:40,t:"Sejf biometryczny dla rodziców — szybki dostęp dla dorosłych, niedostępny dla dzieci",p:"F",s:["F2"],y:"NOWY",k:"sejf biometryczny rodzina dzieci",st:"BRAK",pr:"P2"},
+  {nr:41,t:"Mały sejf domowy — TOP 5 modeli do 800 zł",p:"E",s:["E3"],y:"NOWY",k:"mały sejf domowy",st:"BRAK",pr:"P2"},
+  {nr:42,t:"FAQ PDP: Czy dziecko może otworzyć sejf z kodem? Jak zmienić PIN?",p:"F",s:["F2"],y:"FAQ-PDP",k:"czy dziecko otworzy sejf",st:"BRAK",pr:"P3"},
+  {nr:43,t:"Sejf na pieniądze — jaki wybrać i gdzie bezpiecznie trzymać gotówkę?",p:"E",s:["E2","E3"],y:"NOWY",k:"sejf na pieniądze",st:"BRAK",pr:"P2"},
+  {nr:44,t:"TEKST SEO: Sejfy domowe — kategoria /sejfy-domowe",p:"Cross",s:["A2","A3"],y:"TEKST-SEO",k:"sejf domowy",st:"BRAK",pr:"P1"},
+  {nr:45,t:"Jak wybrać sejf do biura lub małej firmy? Klasy, pojemność, montaż",p:"D",s:["D2","D3"],y:"NOWY",k:"sejf do biura",st:"BRAK",pr:"P2"},
+  {nr:46,t:"Jaki sejf na pieniądze do 500 zł? Ranking tanich sejfów z certyfikatem",p:"E",s:["E3","E4"],y:"NOWY",k:"sejf na pieniądze tani",st:"BRAK",pr:"P2"},
+  {nr:47,t:"Sejf na biżuterię — co wybrać, gdzie montować, jak ubezpieczyć?",p:"E",s:["E1","E2"],y:"NOWY",k:"sejf na biżuterię",st:"BRAK",pr:"P2"},
+  {nr:48,t:"Sejf kamuflażowy — jak wygląda, czy działa i czy warto kupić?",p:"A",s:["A5"],y:"NOWY",k:"sejf kamuflażowy",st:"BRAK",pr:"P3"},
+  {nr:49,t:"Jaki sejf wybrać na walutę obcą i monety kolekcjonerskie?",p:"E",s:["E2","E3"],y:"NOWY",k:"sejf na walutę monety",st:"BRAK",pr:"P3"},
+  {nr:50,t:"Sejf ognioodporny — co naprawdę chroni, a co to tylko marketing?",p:"C",s:["C1","C2"],y:"NOWY",k:"sejf ognioodporny ochrona",st:"BRAK",pr:"P1"},
+  {nr:51,t:"Klasa ognioodporności NT, 30, 60, 120 minut — co oznacza i co wybrać?",p:"C",s:["C2"],y:"NOWY",k:"klasa ognioodporności sejfu",st:"BRAK",pr:"P1"},
+  {nr:52,t:"Sejf na dokumenty a4 — jakie wymiary są potrzebne naprawdę?",p:"C",s:["C3"],y:"NOWY",k:"sejf na dokumenty rozmiar",st:"BRAK",pr:"P2"},
+  {nr:53,t:"Sejf ognioodporny vs zwykły antywłamaniowy — kiedy warto przepłacić?",p:"C",s:["C2","C3"],y:"NOWY",k:"sejf ognioodporny czy antywłamaniowy",st:"BRAK",pr:"P2"},
+  {nr:54,t:"Jak długo dokumenty papierowe przetrwają w pożarze bez sejfu?",p:"C",s:["C1"],y:"NOWY",k:"ochrona dokumentów pożar",st:"BRAK",pr:"P2"},
+  {nr:55,t:"Dysk twardy, pendrive, CD — jaką klasę ognioodporności wybrać dla danych?",p:"C",s:["C2","C3"],y:"NOWY",k:"sejf na dysk twardy ognioodporny",st:"BRAK",pr:"P2"},
+  {nr:56,t:"TEKST SEO: Sejfy ognioodporne — kategoria i landing page",p:"C",s:["C2"],y:"TEKST-SEO",k:"sejf ognioodporny",st:"BRAK",pr:"P2"},
+  {nr:57,t:"Sejf dla firmy — jakie przepisy i normy obowiązują w Polsce?",p:"D",s:["D1","D2"],y:"NOWY",k:"sejf firmowy przepisy polska",st:"BRAK",pr:"P2"},
+  {nr:58,t:"Skrytka na gotówkę w sklepie — jaka klasa sejfu i jak zamontować?",p:"D",s:["D2","D3"],y:"NOWY",k:"sejf na gotówkę do sklepu",st:"BRAK",pr:"P2"},
+  {nr:59,t:"Sejf dla gastronomii, handlu i usług — wymogi Sanepidu i ubezpieczyciela",p:"D",s:["D2"],y:"NOWY",k:"sejf gastronomia sklep wymagania",st:"BRAK",pr:"P3"},
+  {nr:60,t:"TEKST SEO: Sejfy biurowe i firmowe — kategoria",p:"D",s:["D2","D3"],y:"TEKST-SEO",k:"sejf biurowy firmowy",st:"BRAK",pr:"P2"},
+  {nr:61,t:"Jak wybrać zamek do sejfu domowego — kluczowy, elektroniczny, biometryczny?",p:"Cross",s:["A3","F2"],y:"NOWY",k:"zamek do sejfu domowego jaki",st:"BRAK",pr:"P1"},
+  {nr:62,t:"Zamek biometryczny w sejfie — czy jest niezawodny i czy go potrzebujesz?",p:"F",s:["F2"],y:"NOWY",k:"zamek biometryczny sejf opinie",st:"BRAK",pr:"P2"},
+  {nr:63,t:"Zamek elektroniczny w sejfie — co zrobić gdy bateria się wyczerpie?",p:"Cross",s:["A5"],y:"NOWY",k:"zamek elektroniczny bateria sejf problem",st:"BRAK",pr:"P2"},
+  {nr:64,t:"Jak zmienić kod w sejfie elektronicznym? Krok po kroku dla popularnych modeli",p:"Cross",s:["A5"],y:"NOWY",k:"jak zmienić kod sejf elektroniczny",st:"BRAK",pr:"P2"},
+  {nr:65,t:"Zapomniałem kodu do sejfu — co zrobić i do kogo zadzwonić?",p:"Cross",s:["A5"],y:"NOWY",k:"nie pamiętam kodu sejf co zrobić",st:"BRAK",pr:"P2"},
+  {nr:66,t:"Sejf ścienny — jak zamontować i czy warto ukryć go za obrazem?",p:"A",s:["A5"],y:"NOWY",k:"sejf ścienny montaż",st:"BRAK",pr:"P2"},
+  {nr:67,t:"Sejf wolnostojący — gdzie ustawić w domu i jak przymocować?",p:"A",s:["A5"],y:"NOWY",k:"sejf wolnostojący gdzie postawić",st:"BRAK",pr:"P2"},
+  {nr:68,t:"Sejf podłogowy — co to jest i dlaczego trudniej go ukraść?",p:"A",s:["A5"],y:"NOWY",k:"sejf podłogowy co to",st:"BRAK",pr:"P3"},
+  {nr:69,t:"Kotwy montażowe do sejfu — jak dobrać do betonu, cegły, drewna?",p:"A",s:["A5"],y:"NOWY",k:"kotwy do sejfu montaż",st:"BRAK",pr:"P3"},
+  {nr:70,t:"Sejf w piwnicy — czy to dobry pomysł? Wilgoć, dostęp, bezpieczeństwo",p:"A",s:["A5"],y:"NOWY",k:"sejf w piwnicy",st:"BRAK",pr:"P3"},
+  {nr:71,t:"Sejf w garażu — co wziąć pod uwagę: temperatura, wilgoć, dostęp?",p:"A",s:["A5"],y:"NOWY",k:"sejf w garażu",st:"BRAK",pr:"P3"},
+  {nr:72,t:"EMAIL: Dziękujemy za zakup sejfu — co teraz? Instrukcja montażu i pierwszego otwarcia",p:"Cross",s:["A6"],y:"EMAIL",k:"—",st:"BRAK",pr:"P2"},
+  {nr:73,t:"EMAIL: 7 dni po dostawie — czy masz już zamontowany sejf?",p:"Cross",s:["A6"],y:"EMAIL",k:"—",st:"BRAK",pr:"P3"},
+  {nr:74,t:"EMAIL: Zaproszenie do wystawienia opinii — 30 dni po zakupie",p:"Cross",s:["A6"],y:"EMAIL",k:"—",st:"BRAK",pr:"P3"},
+  {nr:75,t:"FAQ PDP: Ile waży sejf domowy i jak go bezpiecznie przenieść?",p:"A",s:["A5"],y:"FAQ-PDP",k:"ile waży sejf domowy",st:"BRAK",pr:"P2"},
+  {nr:76,t:"FAQ PDP: Czy mogę zamontować sejf samodzielnie? Co jest potrzebne?",p:"A",s:["A5"],y:"FAQ-PDP",k:"montaż sejfu samodzielnie",st:"BRAK",pr:"P2"},
+  {nr:77,t:"TEKST SEO: Sejfy podłogowe i ścienne — kategoria",p:"A",s:["A4","A5"],y:"TEKST-SEO",k:"sejf podłogowy ścienny",st:"BRAK",pr:"P3"},
+  {nr:78,t:"Sejf na laptopa i dokumenty A4 — jakie minimalne wymiary wybrać?",p:"C",s:["C3"],y:"NOWY",k:"sejf na laptopa a4 wymiary",st:"BRAK",pr:"P2"},
+  {nr:79,t:"Przewodnik po klasach sejfów dla laika — S1, I, II, NT 60 w prostym języku",p:"A",s:["A3"],y:"NOWY",k:"klasy sejfów prosty przewodnik",st:"BRAK",pr:"P1"},
+  {nr:80,t:"Jaki sejf kupić za 1000 zł? Co dostaniesz w tym budżecie?",p:"A",s:["A4"],y:"NOWY",k:"sejf domowy 1000 zł",st:"BRAK",pr:"P2"},
+  {nr:81,t:"Jaki sejf kupić za 500 zł? Realny przegląd najtańszych certyfikowanych modeli",p:"A",s:["A4"],y:"NOWY",k:"sejf domowy 500 zł",st:"BRAK",pr:"P2"},
+  {nr:82,t:"Sejf domowy za 2000 zł — co dostaniesz i kiedy to ma sens?",p:"A",s:["A4"],y:"NOWY",k:"sejf domowy 2000 zł",st:"BRAK",pr:"P3"},
+  {nr:83,t:"Jak sprawdzić autentyczność certyfikatu sejfu? Gdzie weryfikować?",p:"B",s:["B2"],y:"NOWY",k:"certyfikat sejfu jak sprawdzić",st:"BRAK",pr:"P2"},
+  {nr:84,t:"Norma EN 1143-1 vs EN 14450 — czym różnią się szafy na broń od sejfów domowych?",p:"Cross",s:["A3","B2"],y:"NOWY",k:"en 1143-1 en 14450 różnica",st:"BRAK",pr:"P2"},
+  {nr:85,t:"Co to jest klasa S1 i czy sejfy domowe muszą ją mieć?",p:"Cross",s:["A3","B2"],y:"NOWY",k:"klasa s1 sejf domowy",st:"BRAK",pr:"P2"},
+  {nr:86,t:"Kalkulator ubezpieczeniowy — jaką klasę sejfu wymaga moja polisa?",p:"B",s:["B3"],y:"NOWY",k:"kalkulator klasy sejfu ubezpieczenie",st:"BRAK",pr:"P2"},
+  {nr:87,t:"Jak negocjować niższe ubezpieczenie domu dzięki sejfowi? Praktyczne wskazówki",p:"B",s:["B1"],y:"NOWY",k:"sejf ubezpieczenie domu niższe składki",st:"BRAK",pr:"P3"},
+  {nr:88,t:"PZU, Warta, Allianz — zestawienie wymagań dla sejfu domowego 2026",p:"B",s:["B2","B3"],y:"NOWY",k:"ubezpieczyciel wymagania sejf porównanie",st:"BRAK",pr:"P2"},
+  {nr:89,t:"Jak udokumentować zawartość sejfu dla ubezpieczyciela?",p:"B",s:["B4"],y:"NOWY",k:"inwentaryzacja zawartości sejfu",st:"BRAK",pr:"P3"},
+  {nr:90,t:"TEKST SEO: Sejfy domowe klasa I/II — kategoria i landing page",p:"B",s:["B2","B3"],y:"TEKST-SEO",k:"sejf klasa i ii domowy",st:"BRAK",pr:"P3"},
+  {nr:91,t:"Ile możesz przechować w sejfie domowym bez zgłoszenia do ubezpieczyciela?",p:"B",s:["B1"],y:"NOWY",k:"limit gotówki w sejfie ubezpieczenie",st:"BRAK",pr:"P2"},
+  {nr:92,t:"Sejf na broń w domu — jak poinformować ubezpieczyciela o jego nabyciu?",p:"B",s:["B4"],y:"NOWY",k:"sejf na broń a polisa domowa",st:"BRAK",pr:"P3"},
+  {nr:93,t:"Złoto, srebrne monety, biżuteria — jaka klasa sejfu chroni kolekcję?",p:"E",s:["E2"],y:"NOWY",k:"sejf na złoto kolekcja metale szlachetne",st:"BRAK",pr:"P2"},
+  {nr:94,t:"Sejf na biżuterię — rozmiar, klasa, specjalne wnętrze?",p:"E",s:["E1","E2"],y:"NOWY",k:"sejf na biżuterię jaki wybrać",st:"BRAK",pr:"P1"},
+  {nr:95,t:"Gdzie w domu trzymać gotówkę na czarną godzinę? Sejf vs szuflada",p:"E",s:["E1"],y:"NOWY",k:"gdzie trzymać gotówkę w domu",st:"BRAK",pr:"P2"},
+  {nr:96,t:"Ile gotówki warto mieć w sejfie domowym? Limit i zdrowy rozsądek",p:"E",s:["E1"],y:"NOWY",k:"ile gotówki w sejfie domowym",st:"BRAK",pr:"P3"},
+  {nr:97,t:"Sejf na paszport i dokumenty tożsamości — czy to ma sens?",p:"E",s:["E2"],y:"NOWY",k:"sejf na paszport dokumenty",st:"BRAK",pr:"P2"},
+  {nr:98,t:"Kryptowaluty i seed phrase — jak bezpiecznie przechowywać w sejfie?",p:"E",s:["E2"],y:"NOWY",k:"sejf na kryptowaluty seed phrase",st:"BRAK",pr:"P3"},
+  {nr:99,t:"Sejf na leki i środki psychoaktywne — przepisy i praktyka",p:"F",s:["F1"],y:"NOWY",k:"sejf na leki przepisy",st:"BRAK",pr:"P2"},
+  {nr:100,t:"Mały domowy sejf na leki — jaki model wybrać do przechowalni",p:"F",s:["F1"],y:"NOWY",k:"mały sejf na leki domowy",st:"BRAK",pr:"P2"},
+  {nr:101,t:"Sejf dla pracowników zdalnych — jak zabezpieczyć dane i sprzęt firmy w domu?",p:"D",s:["D1"],y:"NOWY",k:"sejf praca zdalna dane firmowe",st:"BRAK",pr:"P3"},
+  {nr:102,t:"Dane osobowe i RODO — czy firma powinna mieć sejf? Co mówi prawo?",p:"D",s:["D2"],y:"NOWY",k:"sejf dane osobowe rodo firma",st:"BRAK",pr:"P2"},
+  {nr:103,t:"Sejf noclegowy — jak bezpiecznie ukryć gotówkę w mieszkaniu Airbnb?",p:"F",s:["F1"],y:"NOWY",k:"sejf wynajem mieszkanie airbnb",st:"BRAK",pr:"P3"},
+  {nr:104,t:"Sejf dla opiekunki i niani — jak ukryć leki i gotówkę przed osobami z dostępem",p:"F",s:["F1"],y:"NOWY",k:"sejf opiekunka dostęp do domu",st:"BRAK",pr:"P3"},
+  {nr:105,t:"Kontrola dostępu w firmie — sejf czy szafka zamykana kluczem? Różnica prawna",p:"D",s:["D2"],y:"NOWY",k:"sejf vs szafka firmowa przepisy",st:"BRAK",pr:"P3"},
+  {nr:106,t:"Jaki sejf na recepcji hotelu lub gabinetu lekarskiego?",p:"D",s:["D3"],y:"NOWY",k:"sejf gabinet lekarski hotel recepcja",st:"BRAK",pr:"P3"},
+  {nr:107,t:"Sejf na broń dla myśliwego w pokoju gościnnym — co na to prawo?",p:"Cross",s:["A4","F1"],y:"NOWY",k:"sejf pokój gościnny broń",st:"BRAK",pr:"P4"},
+  {nr:108,t:"Urządzam nowy dom — co kupić: sejf, szafkę czy sejf meblowy?",p:"G",s:["G1"],y:"NOWY",k:"sejf do nowego domu co kupić",st:"BRAK",pr:"P2"},
+  {nr:109,t:"Sejf jako element wyposażenia domu — jak dopasować do wnętrza?",p:"G",s:["G2"],y:"NOWY",k:"sejf domowy estetyka design",st:"BRAK",pr:"P3"},
+  {nr:110,t:"Sejf meblowy ukryty w szafie — czy to skuteczna ochrona?",p:"G",s:["G2"],y:"NOWY",k:"sejf meblowy szafa wnętrze",st:"BRAK",pr:"P3"},
+  {nr:111,t:"Czy sejf ścienny można zamontować samodzielnie? Poradnik dla majsterkowicza",p:"G",s:["G3"],y:"NOWY",k:"sejf ścienny montaż samodzielny",st:"BRAK",pr:"P3"},
+  {nr:112,t:"Lista narzędzi potrzebnych do montażu sejfu w ścianie lub podłodze",p:"G",s:["G3"],y:"NOWY",k:"montaż sejfu narzędzia lista",st:"BRAK",pr:"P3"},
+  {nr:113,t:"EMAIL: Witamy w rodzinie SejfZone — poradnik dla nowego właściciela sejfu",p:"Cross",s:["G4","A6"],y:"EMAIL",k:"—",st:"BRAK",pr:"P2"},
+  {nr:114,t:"FAQ PDP: Ile kosztuje dostawa sejfu domowego? Czy jest bezpłatna?",p:"G",s:["G4","A6"],y:"FAQ-PDP",k:"dostawa sejfu domowego koszt",st:"BRAK",pr:"P2"},
+  {nr:115,t:"Kiedy warto kupić droższy sejf? Różnica między klasą S1 a klasą II",p:"A",s:["A3"],y:"NOWY",k:"sejf klasa i vs klasa ii porównanie",st:"BRAK",pr:"P2"},
+  {nr:116,t:"Sejf domowy — najczęstsze błędy przy wyborze (i jak ich uniknąć)",p:"A",s:["A3"],y:"NOWY",k:"błędy przy wyborze sejfu domowego",st:"BRAK",pr:"P2"},
+  {nr:117,t:"Czy warto kupić sejf używany? Ryzyka i co sprawdzić",p:"Cross",s:["A4"],y:"NOWY",k:"sejf używany kupno opinie",st:"BRAK",pr:"P3"},
+  {nr:118,t:"Gdzie kupić sejf domowy — sklep specjalistyczny vs Allegro vs market budowlany",p:"A",s:["A4"],y:"NOWY",k:"gdzie kupić sejf domowy",st:"BRAK",pr:"P2"},
+  {nr:119,t:"Sejf z Castoramy vs sejf certyfikowany — co konkretnie tracisz przy tanim zakupie?",p:"A",s:["A4"],y:"NOWY",k:"sejf castorama vs certyfikowany",st:"BRAK",pr:"P2"},
+  {nr:120,t:"Adorf 250 S1 — pełna specyfikacja, dla kogo, FAQ",p:"E",s:["E3"],y:"FAQ-PDP",k:"adorf 250 s1 specyfikacja",st:"BRAK",pr:"P2"},
+  {nr:121,t:"Baden Baden meblowy — opis produktu, dla kogo, kiedy wybrać?",p:"E",s:["E3"],y:"FAQ-PDP",k:"baden-baden meblowy sejf opis",st:"BRAK",pr:"P2"},
+  {nr:122,t:"Sejf na broń krótką jako sejf domowy — czy to legalne i opłacalne?",p:"Cross",s:["E3","D1"],y:"NOWY",k:"sejf na broń krótką do domu",st:"BRAK",pr:"P3"},
+  {nr:123,t:"Co to jest BackOrder w SejfZone i jak to działa dla sejfów domowych?",p:"Cross",s:["A6"],y:"NOWY",k:"backorder sejf domowy jak działa",st:"BRAK",pr:"P2"},
+  {nr:124,t:"TEKST SEO: Kasetki i mini-sejfy — kategoria",p:"E",s:["E3","E4"],y:"TEKST-SEO",k:"kasetka wartościowa mini sejf",st:"BRAK",pr:"P3"},
+  {nr:125,t:"Kasetka metalowa vs mini sejf — czym się różnią i co wybrać?",p:"E",s:["E3"],y:"NOWY",k:"kasetka metalowa vs mini sejf",st:"BRAK",pr:"P3"},
+  {nr:126,t:"Skrytka hotelowa — dlaczego nie zastępuje prawdziwego sejfu?",p:"Cross",s:["A1"],y:"NOWY",k:"skrytka hotelowa sejf porównanie",st:"BRAK",pr:"P4"},
+  {nr:127,t:"Sejf domowy a monitoring CCTV — jak uzupełnić system ochrony?",p:"A",s:["A1","A2"],y:"NOWY",k:"sejf domowy monitoring kamera",st:"BRAK",pr:"P3"},
+  {nr:128,t:"Sejf z alarmem — czy to niezbędne i jakie modele mają wbudowany alarm?",p:"A",s:["A3"],y:"NOWY",k:"sejf domowy z alarmem",st:"BRAK",pr:"P3"},
+  {nr:129,t:"Jak przygotować sejf do kontroli ubezpieczyciela po kradzieży?",p:"B",s:["B4"],y:"NOWY",k:"sejf kontrola ubezpieczyciel kradzież",st:"BRAK",pr:"P3"},
+  {nr:130,t:"Jak wygląda odszkodowanie z OC i AC a zawartość sejfu?",p:"B",s:["B1"],y:"NOWY",k:"odszkodowanie ubezpieczenie zawartość sejfu",st:"BRAK",pr:"P3"},
+  {nr:131,t:"FAQ PDP: Czy sejf jest wodoodporny? Co zrobić po zalaniu?",p:"C",s:["C2"],y:"FAQ-PDP",k:"sejf wodoodporny zalanie",st:"BRAK",pr:"P3"},
+  {nr:132,t:"FAQ PDP: Jak długo trwa realizacja zamówienia na sejf domowy?",p:"Cross",s:["A6"],y:"FAQ-PDP",k:"czas realizacji sejf domowy",st:"BRAK",pr:"P2"},
+  {nr:133,t:"FAQ PDP: Jak sprawdzić klasę i certyfikat sejfu — co oznaczają tabliczki?",p:"Cross",s:["A3","B2"],y:"FAQ-PDP",k:"tabliczka certyfikat sejf domowy",st:"BRAK",pr:"P2"},
+  {nr:134,t:"FAQ PDP: Czy sejf wolnostojący muszę przykręcić do ściany?",p:"A",s:["A5"],y:"FAQ-PDP",k:"sejf wolnostojący przykręcić obowiązek",st:"BRAK",pr:"P2"},
+  {nr:135,t:"FAQ PDP: Jaką wagę wytrzymuje półka w sejfie? Jak ułożyć zawartość?",p:"A",s:["A5"],y:"FAQ-PDP",k:"pojemność sejfu waga półka",st:"BRAK",pr:"P3"},
+  {nr:136,t:"Historia sejfów — od kasy pancernej do smart-safes",p:"Cross",s:["Cross"],y:"NOWY",k:"historia sejfów kasy pancerne",st:"BRAK",pr:"P4"},
+  {nr:137,t:"Sejf na piętrze — jak bezpiecznie wmontować bez ryzyka dla stropu?",p:"A",s:["A5"],y:"NOWY",k:"sejf na piętrze montaż strop",st:"BRAK",pr:"P3"},
+  {nr:138,t:"Dlaczego złodziej bierze sejf razem z zawartością? Jak temu zapobiec?",p:"A",s:["A1","A5"],y:"NOWY",k:"złodziej kradnie cały sejf jak zapobiec",st:"BRAK",pr:"P2"},
+  {nr:139,t:"Sejf antywłamaniowy klasy 0 — co naprawdę oferuje i dla kogo wystarczy?",p:"A",s:["A3"],y:"NOWY",k:"sejf klasa 0 antywłamaniowy",st:"BRAK",pr:"P2"},
+  {nr:140,t:"Sejf klasy I — kiedy wybrać i jakie produkty SejfZone warto rozważyć?",p:"A",s:["A4"],y:"NOWY",k:"sejf klasa i kiedy wybrać",st:"BRAK",pr:"P2"},
+  {nr:141,t:"Sejf klasy II — dla kogo i jakie realne scenariusze ochrony zapewnia?",p:"A",s:["A4"],y:"NOWY",k:"sejf klasa ii zastosowania",st:"BRAK",pr:"P2"},
+  {nr:142,t:"Sejf premium powyżej 3000 zł — co dostaniesz za te pieniądze?",p:"A",s:["A4"],y:"NOWY",k:"sejf premium klasa iii iv",st:"BRAK",pr:"P3"},
+  {nr:143,t:"Jak wyczyścić i zakonserwować sejf? Poradnik pielęgnacji",p:"Cross",s:["A6"],y:"NOWY",k:"czyszczenie konserwacja sejfu",st:"BRAK",pr:"P4"},
+  {nr:144,t:"Jak bezpiecznie zmienić zamek w sejfie? Kiedy warto to zrobić?",p:"Cross",s:["A5"],y:"NOWY",k:"wymiana zamka w sejfie",st:"BRAK",pr:"P3"},
+  {nr:145,t:"Gwarancja na sejf domowy — co obejmuje i ile trwa?",p:"Cross",s:["A6"],y:"NOWY",k:"gwarancja sejf domowy",st:"BRAK",pr:"P2"},
+  {nr:146,t:"Serwis zamka sejfu — kiedy i do kogo się zgłosić?",p:"Cross",s:["A6"],y:"NOWY",k:"serwis zamek sejf",st:"BRAK",pr:"P3"},
+  {nr:147,t:"FAQ PDP: Adorf 250 S1 — najczęstsze pytania techniczne",p:"E",s:["E3"],y:"FAQ-PDP",k:"adorf 250 faq techniczne",st:"BRAK",pr:"P2"},
+  {nr:148,t:"FAQ PDP: Czy kupując sejf otrzymam fakturę VAT?",p:"Cross",s:["A6"],y:"FAQ-PDP",k:"sejf faktura vat",st:"BRAK",pr:"P2"},
+  {nr:149,t:"FAQ PDP: Jak działa gwarancja i reklamacja sejfu w SejfZone?",p:"Cross",s:["A6"],y:"FAQ-PDP",k:"reklamacja sejf gwarancja",st:"BRAK",pr:"P2"},
+  {nr:150,t:"Jak wyglądają testy włamaniowe sejfów? Co jest naprawdę sprawdzane?",p:"A",s:["A2"],y:"NOWY",k:"test sejfu włamaniowy norma",st:"BRAK",pr:"P3"},
+  {nr:151,t:"Jak nie przepłacić za sejf domowy — 7 błędów kupujących",p:"A",s:["A4"],y:"NOWY",k:"jak wybrać sejf nie przepłacić",st:"BRAK",pr:"P2"},
+  {nr:152,t:"Sejf domowy z kodem vs z kluczem vs biometryczny — dla kogo co?",p:"Cross",s:["A3","F2"],y:"NOWY",k:"sejf kod klucz biometryczny porównanie",st:"BRAK",pr:"P2"},
+  {nr:153,t:"Porównanie zamków do sejfów domowych — kluczowy, elektroniczny, Lagard, KABA",p:"Cross",s:["A3"],y:"NOWY",k:"zamki sejfów porównanie",st:"BRAK",pr:"P3"},
+  {nr:154,t:"Czy sejf meblowy jest zgodny z wymaganiami ubezpieczycieli w Polsce?",p:"B",s:["B3"],y:"NOWY",k:"sejf meblowy ubezpieczyciel wymagania",st:"BRAK",pr:"P2"},
+  {nr:155,t:"Sejf na nóżkach vs wbudowany — co lepiej chroni i co łatwiej zainstalować?",p:"A",s:["A5"],y:"NOWY",k:"sejf nóżki vs wbudowany",st:"BRAK",pr:"P3"},
+  {nr:156,t:"Ile zmieści sejf pojemnością 10, 20, 30, 50 litrów? Wizualizacja",p:"A",s:["A4"],y:"NOWY",k:"pojemność sejfu litry co wchodzi",st:"BRAK",pr:"P2"},
+  {nr:157,t:"Jak wybrać sejf na wakacje i wyjazd — tymczasowe rozwiązania",p:"Cross",s:["E2"],y:"NOWY",k:"sejf na wakacje tymczasowy",st:"BRAK",pr:"P4"},
+  {nr:158,t:"Dostawa sejfu domowego — co warto wiedzieć o transporcie i rozpakowaniu?",p:"Cross",s:["A6"],y:"NOWY",k:"dostawa sejfu domowego paleta kurier",st:"BRAK",pr:"P3"},
+  {nr:159,t:"Czy mogę zwrócić sejf domowy? Prawo zwrotu i praktyka w SejfZone",p:"Cross",s:["A6"],y:"NOWY",k:"zwrot sejfu domowego",st:"BRAK",pr:"P2"},
+  {nr:160,t:"Sejf a pożar elektryczny — czy zabezpiecza przed skrótem i nadtopieniem elektroniki?",p:"C",s:["C2"],y:"NOWY",k:"sejf pożar elektryczny elektronika",st:"BRAK",pr:"P3"},
+  {nr:161,t:"Klasa ognioodporności S60P — co oznacza dla ochrony nośników danych?",p:"C",s:["C2","C3"],y:"NOWY",k:"s60p klasa ognioodporności nośniki danych",st:"BRAK",pr:"P2"},
+  {nr:162,t:"Sejf ognioodporny NT 60 vs NT 120 — kiedy warto wybrać dłuższą ochronę?",p:"C",s:["C2"],y:"NOWY",k:"nt 60 vs nt 120 sejf ognioodporny",st:"BRAK",pr:"P2"},
+  {nr:163,t:"Czy sejf biurowy chroni dane cyfrowe? Laptopy, nośniki, dyski — ochrona przed ogniem",p:"D",s:["D3"],y:"NOWY",k:"sejf biurowy ochrona danych cyfrowych",st:"BRAK",pr:"P2"},
+  {nr:164,t:"Sejf do domu jednorodzinnego vs mieszkania w bloku — co wybrać?",p:"A",s:["A4","A5"],y:"NOWY",k:"sejf dom jednorodzinny vs blok",st:"BRAK",pr:"P2"},
+  {nr:165,t:"Ile waży typowy sejf i jak go bezpiecznie wnieść na piętro?",p:"G",s:["G3"],y:"NOWY",k:"waga sejfu transport wejście piętro",st:"BRAK",pr:"P3"},
+  {nr:166,t:"Certyfikowany sklep z sejfami — dlaczego warto kupić u autoryzowanego sprzedawcy?",p:"Cross",s:["A6"],y:"NOWY",k:"autoryzowany sklep sejfy certyfikowany",st:"BRAK",pr:"P2"},
+  {nr:167,t:"SejfZone — kim jesteśmy? Eksperci od sejfów od 2010 roku",p:"Cross",s:["A6"],y:"STRONA",k:"sejfzone opinie sklep sejfy",st:"BRAK",pr:"P2"},
+  {nr:168,t:"Partnerzy SejfZone — producenci, marki i dostawcy sejfów domowych",p:"Cross",s:["A6"],y:"STRONA",k:"sejfzone adorf produkt",st:"BRAK",pr:"P3"},
+  {nr:169,t:"EMAIL: Rocznica zakupu — sprawdź zamek i co zmienić po roku użytkowania sejfu",p:"Cross",s:["A6"],y:"EMAIL",k:"—",st:"BRAK",pr:"P4"},
+  {nr:170,t:"EMAIL: Sejf kupiłeś, czas go skonfigurować — przewodnik po pierwszym uruchomieniu",p:"Cross",s:["A6"],y:"EMAIL",k:"—",st:"BRAK",pr:"P2"},
+  {nr:171,t:"FAQ PDP: Adorf vs Baden-Baden — krótkie porównanie dla kupujących",p:"E",s:["E3"],y:"FAQ-PDP",k:"adorf vs baden-baden sejf",st:"BRAK",pr:"P2"},
+  {nr:172,t:"Czy sejf domowy trzeba zgłaszać do spółdzielni lub zarządcy nieruchomości?",p:"A",s:["A5"],y:"NOWY",k:"sejf domowy spółdzielnia zgłoszenie",st:"BRAK",pr:"P3"},
+  {nr:173,t:"Sejf dla seniorów — łatwy zamek, duże cyfry, prosta obsługa",p:"F",s:["F1"],y:"NOWY",k:"sejf dla seniora prosty zamek",st:"BRAK",pr:"P3"},
+  {nr:174,t:"Sejf mini na klucze i dokumenty — wystarczająca ochrona czy zabawka?",p:"E",s:["E3"],y:"NOWY",k:"sejf mini klucze dokumenty",st:"BRAK",pr:"P3"},
+  {nr:175,t:"Jak wybrać sejf jeśli masz ograniczoną przestrzeń? Modele kompaktowe",p:"A",s:["A4"],y:"NOWY",k:"sejf mały kompaktowy mieszkanie",st:"BRAK",pr:"P2"},
+  {nr:176,t:"Najczęstsze pytania o sejfy domowe — 20 FAQ dla kupujących",p:"Cross",s:["Cross"],y:"FAQ-PDP",k:"sejf domowy faq pytania",st:"BRAK",pr:"P2"},
+  {nr:177,t:"Sejf na broń a sejf domowy — czy jeden może zastąpić drugi?",p:"Cross",s:["A3","D1"],y:"NOWY",k:"sejf na broń a sejf domowy różnica",st:"BRAK",pr:"P2"},
+  {nr:178,t:"Różnica między szafą metalową a certyfikowanym sejfem — co ważne dla ubezpieczyciela",p:"B",s:["B2","B3"],y:"NOWY",k:"szafa metalowa vs sejf certyfikowany",st:"BRAK",pr:"P2"},
+  {nr:179,t:"TEKST SEO: Bestsellery sejfów domowych — strona kategorii",p:"E",s:["E3","E4"],y:"TEKST-SEO",k:"bestsellery sejfy domowe",st:"BRAK",pr:"P3"},
+  {nr:180,t:"Jak przygotować listę zawartości sejfu do celów ubezpieczeniowych?",p:"B",s:["B4"],y:"NOWY",k:"lista zawartości sejfu ubezpieczenie",st:"BRAK",pr:"P3"},
+  {nr:181,t:"FAQ PDP: Szybki dostęp do sejfu — co oznacza tryb alarmowy i jak go włączyć?",p:"F",s:["F2"],y:"FAQ-PDP",k:"szybki dostęp sejf tryb alarmowy",st:"BRAK",pr:"P3"},
+  {nr:182,t:"Jak zapamiętać kod do sejfu — praktyczne techniki i co NIE robić",p:"Cross",s:["A5"],y:"NOWY",k:"jak zapamiętać kod sejf",st:"BRAK",pr:"P3"},
+  {nr:183,t:"Czy warto kupić sejf z WiFi lub Bluetooth? Smart safe — zalety i wady",p:"Cross",s:["A3"],y:"NOWY",k:"smart safe wifi bluetooth sejf",st:"BRAK",pr:"P3"},
+  {nr:184,t:"Sejf domowy na zakupy przez Internet — co sprawdzić zanim klikniesz \"kup\"",p:"Cross",s:["A4"],y:"NOWY",k:"sejf domowy zakupy internet co sprawdzić",st:"BRAK",pr:"P2"},
+  {nr:185,t:"FAQ PDP: Co to znaczy BackOrder dla sejfu domowego w SejfZone?",p:"Cross",s:["A6"],y:"FAQ-PDP",k:"backorder sejf czas dostawy",st:"BRAK",pr:"P2"},
+  {nr:186,t:"Kalkulator rat — ile zapłacę miesięcznie za sejf domowy?",p:"Cross",s:["A6"],y:"ELEMENT-PDP",k:"sejf raty kalkulator",st:"BRAK",pr:"P2"},
+  {nr:187,t:"ELEMENT PDP: Sekcja \"Dlaczego SejfZone?\" — argumenty konwersyjne",p:"Cross",s:["A6"],y:"ELEMENT-PDP",k:"dlaczego sejfzone",st:"BRAK",pr:"P2"},
+  {nr:188,t:"ELEMENT PDP: Badge \"Certyfikat EN 14450\" — snippet do kart produktów",p:"Cross",s:["A4"],y:"ELEMENT-PDP",k:"badge certyfikat en 14450",st:"BRAK",pr:"P2"},
+  {nr:189,t:"ELEMENT PDP: Social proof — widget opinii Zaufane Opinie na PDP",p:"Cross",s:["A6"],y:"ELEMENT-PDP",k:"opinie sejfzone zaufane",st:"BRAK",pr:"P2"},
+  {nr:190,t:"ELEMENT PDP: Tekst konwersyjny dla kategorii /sejfy-domowe",p:"Cross",s:["A3"],y:"ELEMENT-PDP",k:"sejf domowy sklep sejfzone",st:"BRAK",pr:"P1"},
+  {nr:191,t:"Jak złodzieje omijają systemy alarmowe i sejfy w filmach a rzeczywistość",p:"A",s:["A1"],y:"NOWY",k:"jak złodzieje łamią sejfy fakty i mity",st:"BRAK",pr:"P4"},
+  {nr:192,t:"Sejf domowy a notariusz — czy warto przechowywać testament w sejfie?",p:"E",s:["E2"],y:"NOWY",k:"sejf testament notariusz",st:"BRAK",pr:"P4"},
+  {nr:193,t:"Sejf do sypialni — jaki rozmiar, gdzie ustawić, jak nie przeszkadzał w życiu codziennym",p:"A",s:["A5","G2"],y:"NOWY",k:"sejf do sypialni",st:"BRAK",pr:"P2"},
+  {nr:194,t:"Sejf do salonu — modele o estetycznym designie i certyfikacie",p:"G",s:["G2"],y:"NOWY",k:"sejf do salonu design estetyczny",st:"BRAK",pr:"P3"},
+  {nr:195,t:"FAQ PDP: Co zrobić jeśli klucz do sejfu się zgubi?",p:"Cross",s:["A5"],y:"FAQ-PDP",k:"klucz sejf zguba",st:"BRAK",pr:"P2"},
+  {nr:196,t:"FAQ PDP: Jak wygląda dostawa sejfu domowego — kurier, paleta, odbiór własny?",p:"Cross",s:["A6"],y:"FAQ-PDP",k:"dostawa sejf domowy",st:"BRAK",pr:"P2"},
+  {nr:197,t:"TEKST SEO: Strona główna SejfZone — meta description i H1",p:"Cross",s:["Cross"],y:"TEKST-SEO",k:"sejf domowy sklep",st:"BRAK",pr:"P3"},
+  {nr:198,t:"Sejf dla kolekcjonera zegarków i biżuterii — specjalne wymagania wnętrza",p:"E",s:["E2","E3"],y:"NOWY",k:"sejf kolekcjoner zegarki biżuteria",st:"BRAK",pr:"P3"},
+  {nr:199,t:"Podróżny sejf na dokumenty — czy taki produkt istnieje i kiedy ma sens?",p:"Cross",s:["E2"],y:"NOWY",k:"podróżny sejf dokumenty",st:"BRAK",pr:"P4"},
+  {nr:200,t:"Jak wyczyścić wnętrze sejfu i usunąć wilgoć?",p:"Cross",s:["A6"],y:"NOWY",k:"czyszczenie wnętrze sejfu wilgoć",st:"BRAK",pr:"P4"},
+  {nr:201,t:"Sejf ognoodporny na paszporty i akty — jakie parametry są potrzebne?",p:"C",s:["C3"],y:"NOWY",k:"sejf ognioodporny paszport akt urodzenia",st:"BRAK",pr:"P2"},
+  {nr:202,t:"Jak złożyć reklamację sejfu? Procedura i prawa kupującego",p:"Cross",s:["A6"],y:"NOWY",k:"reklamacja sejfu procedura",st:"BRAK",pr:"P2"},
+  {nr:203,t:"Sejf o podwyższonej ognioodporności — kiedy wybrać klasę S120P?",p:"C",s:["C2","C3"],y:"NOWY",k:"sejf s120p klasa ognioodporności",st:"BRAK",pr:"P3"},
+  {nr:204,t:"Kto instaluje sejfy domowe? Czy SejfZone oferuje montaż?",p:"Cross",s:["A5"],y:"NOWY",k:"instalacja sejfu firma montaż",st:"BRAK",pr:"P2"},
+  {nr:205,t:"FAQ PDP: Czy mogę zamówić sejf domowy na fakturę firmową?",p:"D",s:["D5","Cross"],y:"FAQ-PDP",k:"sejf faktura firmowa",st:"BRAK",pr:"P2"},
+  {nr:206,t:"Czym jest kasa pancerna i czym różni się od nowoczesnego sejfu?",p:"Cross",s:["Cross"],y:"NOWY",k:"kasa pancerna sejf różnica",st:"BRAK",pr:"P3"},
+  {nr:207,t:"Sejf z zamkiem kluczowym — czy to wciąż popularne i dla kogo?",p:"A",s:["A3"],y:"NOWY",k:"sejf zamek kluczowy popularność",st:"BRAK",pr:"P3"},
+  {nr:208,t:"Dlaczego kupujemy sejfy za mało? Raport o bezpieczeństwie domowym w Polsce",p:"A",s:["A1"],y:"NOWY",k:"bezpieczeństwo domowe Polska raport",st:"BRAK",pr:"P4"},
+  {nr:209,t:"SejfZone — kontakt i doradztwo przy wyborze sejfu",p:"Cross",s:["A6"],y:"STRONA",k:"sejfzone kontakt doradztwo",st:"BRAK",pr:"P2"},
+  {nr:210,t:"Producenci sejfów dostępni w SejfZone — przegląd marek",p:"Cross",s:["A4"],y:"STRONA",k:"producenci sejfów adorf sejfzone",st:"BRAK",pr:"P3"},
+  {nr:211,t:"Jaki sejf wybrać po narodzinach dziecka? Checklista dla rodziców",p:"F",s:["F1"],y:"NOWY",k:"sejf dziecko w domu noworodek",st:"BRAK",pr:"P3"},
+  {nr:212,t:"Sejf z szufladą — kiedy to ma sens i jakie modele dostępne w SejfZone?",p:"A",s:["A4"],y:"NOWY",k:"sejf z szufladą",st:"BRAK",pr:"P3"},
+  {nr:213,t:"Jaki sejf wybrać dla emeryta? Niski budżet, prosta obsługa, solidna ochrona",p:"F",s:["F1"],y:"NOWY",k:"sejf dla emeryta tani prosty",st:"BRAK",pr:"P3"},
+  {nr:214,t:"Jak rozmawiać z ubezpieczycielem o wymaganiach co do sejfu? Wskazówki",p:"B",s:["B1","B2"],y:"NOWY",k:"rozmowa z ubezpieczycielem sejf",st:"BRAK",pr:"P3"},
+  {nr:215,t:"Cross-sell: Sejf domowy + alarm + kamera — kompleksowa ochrona domu",p:"A",s:["A1","A2"],y:"NOWY",k:"sejf alarm kamera ochrona domu",st:"BRAK",pr:"P3"},
+  {nr:216,t:"Dlaczego warto kupić sejf przed wakacjami? Sezonowy trigger sprzedażowy",p:"A",s:["A1"],y:"NOWY",k:"sejf przed wakacjami dom bez opieki",st:"BRAK",pr:"P3"},
+  {nr:217,t:"Sejf domowy — najczęstsze awarie i jak sobie z nimi radzić?",p:"Cross",s:["A6"],y:"NOWY",k:"awaria sejf domowy",st:"BRAK",pr:"P3"},
+  {nr:218,t:"Najlepsze sejfy domowe pod 1500 zł z certyfikatem — przegląd 2026",p:"A",s:["A4"],y:"NOWY",k:"sejf domowy 1500 zł certyfikat",st:"BRAK",pr:"P2"},
+  {nr:219,t:"Poradnik zakupu sejfu domowego — od potrzeby do decyzji",p:"Cross",s:["A1","A6"],y:"NOWY",k:"poradnik zakupu sejfu domowego",st:"BRAK",pr:"P1"},
+  {nr:220,t:"TEKST SEO: Sejfy na dokumenty — kategoria i landing page",p:"C",s:["C3"],y:"TEKST-SEO",k:"sejf na dokumenty",st:"BRAK",pr:"P2"},
+  {nr:221,t:"Jak sprawdzić, czy zamek elektroniczny w sejfie jest jeszcze sprawny?",p:"Cross",s:["A5"],y:"NOWY",k:"sprawdzenie zamka elektronicznego sejf",st:"BRAK",pr:"P3"},
+  {nr:222,t:"FAQ PDP: Jak długo czekam na sejf domowy z BackOrder?",p:"Cross",s:["A6"],y:"FAQ-PDP",k:"sejf domowy backorder czas oczekiwania",st:"BRAK",pr:"P2"},
+  {nr:223,t:"Sejf na strychu — czy to bezpieczne i na co uważać?",p:"A",s:["A5"],y:"NOWY",k:"sejf strych bezpieczeństwo",st:"BRAK",pr:"P4"},
+  {nr:224,t:"Sejf a wyłudzenie przez service: jak zabezpieczyć PIN i klucze?",p:"Cross",s:["A5"],y:"NOWY",k:"sejf wyłudzenie socjotechnika",st:"BRAK",pr:"P4"},
+  {nr:225,t:"Czy złodziej profesjonalny ominie sejf klasy I? Co daje wyższa klasa?",p:"A",s:["A3"],y:"NOWY",k:"sejf klasa i złodziej profesjonalny",st:"BRAK",pr:"P3"},
+  {nr:226,t:"Email: Twój sejf jest zamontowany — teraz zadbaj o bezpieczeństwo danych dostępowych",p:"Cross",s:["A6"],y:"EMAIL",k:"—",st:"BRAK",pr:"P3"},
+  {nr:227,t:"ELEMENT PDP: Widget \"Sprawdź czas realizacji\" dla sejfów domowych",p:"Cross",s:["A6"],y:"ELEMENT-PDP",k:"czas realizacji sprawdź sejf",st:"BRAK",pr:"P2"},
+  {nr:228,t:"FAQ PDP: Sejf domowy — pytania najczęściej zadawane kategorii /sejfy-domowe",p:"Cross",s:["A3","E3"],y:"FAQ-PDP",k:"sejf domowy faq kategoria",st:"BRAK",pr:"P1"},
+  {nr:229,t:"Ranking producentów sejfów domowych dostępnych w Polsce 2026",p:"Cross",s:["A4"],y:"NOWY",k:"producenci sejfów ranking Polska",st:"BRAK",pr:"P2"},
+  {nr:230,t:"Sejf do garażu z podwyższoną odpornością na wilgoć i temperaturę",p:"A",s:["A5"],y:"NOWY",k:"sejf garaż wilgoć temperatura",st:"BRAK",pr:"P3"}
+];
+
+// Path colors — ciepłe odcienie, inne niż szafy na broń
+const PC = {A:'#dc2626',B:'#d97706',C:'#65a30d',D:'#0284c7',E:'#7c3aed',F:'#db2777',G:'#0f766e',Cross:'#6b7280'};
+const PN = {A:'A — Włamanie',B:'B — Ubezpieczyciel',C:'C — Pożar/Dokumenty',D:'D — Firma/Biuro',E:'E — Kosztowności',F:'F — Prywatność',G:'G — Nowy dom',Cross:'Cross — Wielościeżkowe'};
+const PS = {
+  A:['A1','A2','A3','A4','A5','A6'],B:['B1','B2','B3','B4','B5'],
+  C:['C1','C2','C3','C4'],D:['D1','D2','D3','D4','D5'],
+  E:['E1','E2','E3','E4'],F:['F1','F2','F3'],G:['G1','G2','G3','G4'],Cross:['Cross']
+};
+const TC = {NOWY:'#1a7f37',ISTNIEJE:'#0969da','ROZBUDOWAĆ':'#9a6700','ROZBUDUJ':'#9a6700','FAQ-PDP':'#6f42c1','TEKST-SEO':'#0891b2','ELEMENT-PDP':'#be185d',EMAIL:'#854d0e',STRONA:'#6e7781'};
+const SC = {'ISTNIEJE':'st-ISTNIEJE','ROZBUDOWAĆ':'st-ROZBUDOWAĆ',BRAK:'st-BRAK'};
+const PRC = {P1:'pr-P1',P2:'pr-P2',P3:'pr-P3',P4:'pr-P4'};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let selPath='All', selStates=[], selPr=[], selSt=[], sortKey='pr';
+let checked={};
+A.forEach(a=>{if(a.st==='ISTNIEJE')checked[a.nr]=true;});
+
+// ── FILTERS ───────────────────────────────────────────────────────────────────
+function filtered(){
+  const q=document.getElementById('search')?.value?.toLowerCase()||'';
+  return A.filter(a=>{
+    if(selPath!=='All'&&a.p!==selPath)return false;
+    if(selStates.length&&!a.s.some(s=>selStates.includes(s)))return false;
+    if(selPr.length&&!selPr.includes(a.pr))return false;
+    if(selSt.length){
+      const norm=a.st==='ROZBUDOWAĆ'||a.y==='ROZBUDUJ'?'ROZBUDOWAĆ':a.st;
+      if(!selSt.includes(norm))return false;
+    }
+    if(q&&!a.t.toLowerCase().includes(q)&&!a.k.toLowerCase().includes(q))return false;
+    return true;
+  });
+}
+
+function sortedArticles(arr){
+  const order={P1:1,P2:2,P3:3,P4:4};
+  const sc={BRAK:1,'ROZBUDOWAĆ':2,ISTNIEJE:3};
+  if(sortKey==='pr')return [...arr].sort((a,b)=>(order[a.pr]-order[b.pr])||a.nr-b.nr);
+  if(sortKey==='sciezka')return [...arr].sort((a,b)=>a.p.localeCompare(b.p)||a.nr-b.nr);
+  return [...arr].sort((a,b)=>a.nr-b.nr);
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+let activeTab='mapa';
+function switchTab(tab){
+  activeTab=tab;
+  ['mapa','lista','info'].forEach(t=>{
+    document.getElementById('stab-'+t).classList.toggle('active',t===tab);
+  });
+  const tb=document.getElementById('topbar');
+  const sb=document.getElementById('statsbar');
+  if(tab==='info'){tb.style.display='flex';sb.style.display='none';}
+  else{tb.style.display='flex';sb.style.display='block';}
+  renderSidebar();
+  if(tab==='mapa')render();
+  else if(tab==='lista')renderList();
+  else renderInfo();
+}
+
+// ── RENDER MAPA ───────────────────────────────────────────────────────────────
+function render(){
+  if(activeTab!=='mapa')return;
+  const arr=filtered();
+  const main=document.getElementById('main');
+  const sb=document.getElementById('statsbar');
+  sb.textContent=`Wyświetlam ${arr.length} z ${A.length} artykułów`;
+  if(!arr.length){main.innerHTML='<div class="empty"><div style="font-size:48px">🔍</div><p>Brak wyników dla wybranych filtrów</p></div>';return;}
+  main.innerHTML='<div class="grid">'+arr.map(a=>{
+    const pc=PC[a.p]||'#6b7280';
+    const norm=a.st==='ROZBUDOWAĆ'||a.y==='ROZBUDUJ'?'ROZBUDOWAĆ':a.st;
+    const yc=TC[a.y]||'#6b7280';
+    const states=a.s.join(', ');
+    return `<div class="card" style="border-left-color:${pc}">
+      <div class="card-meta">
+        <span class="card-nr">#${a.nr}</span>
+        <span class="badge" style="background:${pc}">${a.p}</span>
+        <span class="badge-state">${states}</span>
+        <span class="pr-chip ${PRC[a.pr]}">${a.pr}</span>
+        <span class="badge-state ${SC[norm]||'st-BRAK'}">${norm}</span>
+      </div>
+      <div class="card-title">${a.t}</div>
+      <div style="display:flex;gap:5px;align-items:center;margin-top:4px">
+        <span class="type-tag" style="border-color:${yc};color:${yc}">${a.y}</span>
+      </div>
+      ${a.k&&a.k!=='—'?`<div class="card-kw">🔑 ${a.k}</div>`:''}
+    </div>`;
+  }).join('')+'</div>';
+}
+
+// ── RENDER LISTA ──────────────────────────────────────────────────────────────
+function toggleCheck(nr){
+  checked[nr]=!checked[nr];
+  renderList();
+}
+function setSort(s){sortKey=s;document.querySelectorAll('.sort-btn').forEach(b=>b.classList.toggle('active',b.dataset.s===s));renderList();}
+function copyList(){
+  const arr=sortedArticles(A);
+  const txt=arr.map(a=>`[${checked[a.nr]?'x':' '}] ${a.nr}. ${a.t} (${a.p} | ${a.s.join('+')} | ${a.y} | ${a.st==='ROZBUDOWAĆ'||a.y==='ROZBUDUJ'?'ROZBUDOWAĆ':a.st} | ${a.pr})`).join('\n');
+  navigator.clipboard.writeText(txt).then(()=>{const b=document.getElementById('copy-btn');b.textContent='✅ Skopiowano!';setTimeout(()=>b.textContent='📋 Kopiuj listę',2000);});
+}
+function renderList(){
+  if(activeTab!=='lista')return;
+  const total=A.length;
+  const done=Object.values(checked).filter(Boolean).length;
+  const pct=Math.round(done/total*100);
+  document.getElementById('main').innerHTML=`
+    <div class="lista-wrap" style="max-width:860px;margin:0 auto">
+      <div class="lista-controls">
+        <span style="font-size:12px;color:var(--text-muted);font-weight:600">SORTUJ:</span>
+        <button class="sort-btn ${sortKey==='pr'?'active':''}" data-s="pr" onclick="setSort('pr')">Priorytet</button>
+        <button class="sort-btn ${sortKey==='nr'?'active':''}" data-s="nr" onclick="setSort('nr')">Numer</button>
+        <button class="sort-btn ${sortKey==='sciezka'?'active':''}" data-s="sciezka" onclick="setSort('sciezka')">Ścieżka</button>
+        <button class="copy-btn" id="copy-btn" onclick="copyList()">📋 Kopiuj listę</button>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+        <div class="progress-label">${done} / ${total} gotowych (${pct}%)</div>
+      </div>
+      <ul class="lista-list">
+        ${sortedArticles(A).map(a=>`
+        <li class="lista-item ${checked[a.nr]?'checked':''}" onclick="toggleCheck(${a.nr})">
+          <input type="checkbox" ${checked[a.nr]?'checked':''} onclick="event.stopPropagation();toggleCheck(${a.nr})">
+          <div>
+            <div class="lista-item-text">${a.nr}. ${a.t}</div>
+            <div class="lista-item-meta" style="color:${PC[a.p]||'#6b7280'}">
+              ${a.p} | ${a.s.join('+')} | ${a.y} | ${a.st==='ROZBUDOWAĆ'||a.y==='ROZBUDUJ'?'ROZBUDOWAĆ':a.st} | <b>${a.pr}</b>
+            </div>
+          </div>
+        </li>`).join('')}
+      </ul>
+    </div>`;
+}
+
+// ── RENDER INFO ───────────────────────────────────────────────────────────────
+function renderInfo(){
+  if(activeTab!=='info')return;
+  document.getElementById('main').innerHTML=`
+  <div class="info-wrap" style="max-width:720px;margin:0 auto">
+    <div class="info-section">
+      <h3>Skąd wzięły się ścieżki?</h3>
+      <p>Każda ścieżka (A–G) wynika z osobnego <strong>CEP (Category Entry Point)</strong> — momentu/sytuacji, która sprawia, że ktoś po raz pierwszy myśli o kupnie sejfu domowego. Framework: Ehrenberg-Bass Institute (Byron Sharp, Jenni Romaniuk).</p>
+      <div class="cep-grid">
+        <div class="cep-card" style="background:#dc2626">A — Włamanie u sąsiada<span>Trigger strachu: "ja też mogę stracić"</span></div>
+        <div class="cep-card" style="background:#d97706">B — Wymóg ubezpieczyciela<span>PZU/Allianz/Warta wymagają certyfikowanego sejfu</span></div>
+        <div class="cep-card" style="background:#65a30d">C — Pożar / powódź / zalanie<span>Ochrona dokumentów, aktów, danych cyfrowych</span></div>
+        <div class="cep-card" style="background:#0284c7">D — Firma / biuro<span>Gotówka, pieczęć, akta kadrowe, RODO</span></div>
+        <div class="cep-card" style="background:#7c3aed">E — Kosztowności w domu<span>Biżuteria, gotówka, monety, kryptowaluty</span></div>
+        <div class="cep-card" style="background:#db2777">F — Prywatność i dostęp<span>Dzieci, pracownicy, opiekunki, najemcy</span></div>
+        <div class="cep-card" style="background:#0f766e">G — Przeprowadzka / nowy dom<span>Urządzam się porządnie — sejf jako element wyposażenia</span></div>
+        <div class="cep-card" style="background:#6b7280">Cross — Wielościeżkowe<span>Rankingi, FAQ ogólne, teksty SEO kategorii, emaile</span></div>
+      </div>
+    </div>
+    <div class="info-section">
+      <h3>Jak powstawała ta mapa?</h3>
+      <p><b>Dane wejściowe:</b> GA4 SejfZone (90 dni: 9 303 sesje, 32 zakupy, CR 0.61% organic), ranking kategorii (/sejfy-domowe: 535 sesji), 24 istniejące artykuły ze ścieżki E, analiza konkurencji, GEO check na produktach Adorf i Baden-Baden.</p>
+      <p><b>Framework:</b> Eugene Schwartz (5 poziomów świadomości) → rozbudowany o sub-stany specyficzne dla polskiego rynku sejfów domowych. 7 CEP-ów × 4–6 stanów = 35 unikalnych stanów percepcji.</p>
+      <p><b>Priorytetyzacja:</b> P1 = luka SEO + wysoki intent + brak treści u konkurencji. P4 = inspiracyjne, niski potencjał konwersji.</p>
+    </div>
+    <div class="info-section">
+      <h3>Jak czytać mapę?</h3>
+      <p>🗺️ <b>MAPA</b> — filtruj po ścieżce (kolorowe przyciski po lewej) żeby zobaczyć artykuły dla konkretnego CEP-a. Filtruj po P1 żeby zobaczyć co pisać w pierwszej kolejności.</p>
+      <p>☑️ <b>LISTA</b> — interaktywna checklista do zarządzania postępem. Artykuły ISTNIEJE są domyślnie zaznaczone. Eksportuj do schowka przyciskiem "Kopiuj listę".</p>
+      <p>Zalecana kolejność: najpierw P1 artykuły z ścieżek A i C (największy ruch organiczny), potem ELEMENTY-PDP (szybki wpływ na konwersję), potem P2 Blog.</p>
+    </div>
+    <div class="info-section">
+      <h3>Typy treści</h3>
+      <div class="type-legend">
+        <div class="type-row"><span class="badge" style="background:#1a7f37;color:#fff">NOWY</span><p>Nowy artykuł blogowy — do napisania od zera</p></div>
+        <div class="type-row"><span class="badge" style="background:#0969da;color:#fff">ISTNIEJE</span><p>Artykuł już opublikowany — wystarczy SEO check</p></div>
+        <div class="type-row"><span class="badge" style="background:#9a6700;color:#fff">ROZBUDOWAĆ</span><p>Artykuł istnieje, ale wymaga rozbudowy lub przepisania</p></div>
+        <div class="type-row"><span class="badge" style="background:#6f42c1;color:#fff">FAQ-PDP</span><p>Sekcja FAQ na stronie produktu — bezpośredni wpływ na konwersję</p></div>
+        <div class="type-row"><span class="badge" style="background:#0891b2;color:#fff">TEKST-SEO</span><p>Tekst SEO dla kategorii lub landing page — wpływa na pozycje kategorii</p></div>
+        <div class="type-row"><span class="badge" style="background:#be185d;color:#fff">ELEMENT-PDP</span><p>Element strony produktu: badge, widget, sekcja — konwersja</p></div>
+        <div class="type-row"><span class="badge" style="background:#854d0e;color:#fff">EMAIL</span><p>Automatyczny email posprzedażowy — retencja i upsell</p></div>
+      </div>
+    </div>
+    <div class="info-section">
+      <h3>Statystyki</h3>
+      <p>230 pozycji łącznie: <b>27 × P1</b>, <b>105 × P2</b>, 83 × P3, 15 × P4<br>
+      210 nowych (BRAK) | 20 do rozbudowy (ROZBUDOWAĆ)<br>
+      7 ścieżek A–G + Cross | Kategoria: Sejfy Domowe SejfZone</p>
+    </div>
+  </div>`;
+}
+
+// ── RENDER SIDEBAR ─────────────────────────────────────────────────────────────
+function renderSidebar(){
+  const sc=document.getElementById('sidebar-content');
+  if(activeTab==='lista'){
+    sc.innerHTML='<p style="font-size:12px;color:var(--text-muted);padding:8px 0">Interaktywna lista wszystkich 230 artykułów z checkboxami i eksportem.</p>';
+    renderList();return;
+  }
+  if(activeTab==='info'){
+    sc.innerHTML='<p style="font-size:12px;color:var(--text-muted);padding:8px 0">Metodologia, źródła CEP i przewodnik po typach treści.</p>';
+    renderInfo();return;
+  }
+  // MAPA sidebar
+  const allPaths=['All','A','B','C','D','E','F','G','Cross'];
+  const stateOptions=selPath!=='All'?(PS[selPath]||[]):[];
+
+  sc.innerHTML=`
+    <div class="filter-section">
+      <div class="filter-label">Ścieżka</div>
+      <div class="path-btns">
+        ${allPaths.map(p=>{
+          const col=p==='All'?'#57606a':(PC[p]||'#6b7280');
+          const label=p==='All'?'Wszystkie':p;
+          return `<button class="path-btn ${p==='All'?'all':''} ${selPath===p?'active':''}"
+            style="background:${col}" onclick="setPath('${p}')">${label}</button>`;
+        }).join('')}
+      </div>
+    </div>
+    ${stateOptions.length?`
+    <div class="filter-section">
+      <div class="filter-label">Stan percepcji</div>
+      <div class="state-chips">
+        ${stateOptions.map(s=>`<span class="sch ${selStates.includes(s)?'active':''}" onclick="toggleState('${s}')">${s}</span>`).join('')}
+      </div>
+    </div>`:''}
+    <div class="filter-section">
+      <div class="filter-label">Typ treści</div>
+      <div class="state-chips">
+        ${['NOWY','ROZBUDOWAĆ','ISTNIEJE','FAQ-PDP','TEKST-SEO','ELEMENT-PDP','EMAIL','STRONA'].map(t=>{
+          const active=selSt.includes(t);
+          return `<span class="sch ${active?'active':''}" style="${active?`background:${TC[t]||'var(--accent)'};border-color:${TC[t]||'var(--accent)'}`:''}" onclick="toggleStFilter('${t}')">${t}</span>`;
+        }).join('')}
+      </div>
+    </div>
+    <div class="filter-section" style="border-top:1px solid var(--border-subtle);padding-top:12px">
+      <div class="filter-label">Legenda</div>
+      ${Object.entries(PC).filter(([p])=>p!=='Cross').map(([p,c])=>`
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+          <span style="width:10px;height:10px;border-radius:50%;background:${c};flex-shrink:0"></span>
+          <span style="font-size:11px;color:var(--text-secondary)">${PN[p]}</span>
+        </div>`).join('')}
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+          <span style="width:10px;height:10px;border-radius:50%;background:${PC.Cross};flex-shrink:0"></span>
+          <span style="font-size:11px;color:var(--text-secondary)">${PN.Cross}</span>
+        </div>
+    </div>`;
+}
+
+function setPath(p){selPath=p;selStates=[];renderSidebar();render();}
+function toggleState(s){selStates=selStates.includes(s)?selStates.filter(x=>x!==s):[...selStates,s];renderSidebar();render();}
+function togglePr(p){
+  selPr=selPr.includes(p)?selPr.filter(x=>x!==p):[...selPr,p];
+  document.querySelectorAll('.chip-pr').forEach(c=>{
+    const cp=c.dataset.pr;
+    c.classList.toggle('active',selPr.includes(cp));
+    if(selPr.includes(cp))c.classList.add(cp.toLowerCase());else c.classList.remove(cp.toLowerCase());
+  });
+  render();
+}
+function toggleSt(s){
+  selSt=selSt.includes(s)?selSt.filter(x=>x!==s):[...selSt,s];
+  document.querySelectorAll('.chip-st').forEach(c=>{
+    const cs=c.dataset.st;
+    c.classList.toggle('active',selSt.includes(cs));
+    if(selSt.includes(cs)){const k=cs.toLowerCase().replace('ować','owac');c.classList.add(k);}
+    else{c.classList.remove(cs.toLowerCase().replace('ować','owac'));}
+  });
+  render();
+}
+function toggleStFilter(t){
+  selSt=selSt.includes(t)?selSt.filter(x=>x!==t):[...selSt,t];
+  renderSidebar();render();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderSidebar();
+render();
+</script>
+</body>
+</html>
