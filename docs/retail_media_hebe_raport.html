@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retail Media Networks — Kompleksowy Raport + Rekomendacja dla hebe.pl</title>
+<style>
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e91e8c;
+    --accent2: #7c3aed;
+    --accent3: #0ea5e9;
+    --bg: #f8f9fc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* NAV */
+  nav { background: var(--primary); color: white; padding: 0 2rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+  nav .nav-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; gap: 2rem; height: 56px; overflow-x: auto; scrollbar-width: none; }
+  nav a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.8rem; white-space: nowrap; padding: 0.3rem 0.6rem; border-radius: 4px; transition: all 0.2s; font-weight: 500; }
+  nav a:hover, nav a.active { color: white; background: rgba(255,255,255,0.15); }
+  .nav-logo { font-weight: 700; font-size: 0.95rem; color: white; white-space: nowrap; border-right: 1px solid rgba(255,255,255,0.2); padding-right: 2rem; margin-right: 0.5rem; }
+  .nav-badge { background: var(--accent); color: white; font-size: 0.65rem; padding: 0.15rem 0.4rem; border-radius: 999px; font-weight: 700; margin-left: 4px; }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, var(--primary) 0%, #16213e 50%, #0f3460 100%); color: white; padding: 5rem 2rem 4rem; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+  .hero-inner { max-width: 1400px; margin: 0 auto; position: relative; }
+  .hero-tag { display: inline-block; background: rgba(233,30,140,0.3); border: 1px solid rgba(233,30,140,0.5); color: #f9a8d4; font-size: 0.75rem; font-weight: 600; padding: 0.3rem 0.8rem; border-radius: 999px; margin-bottom: 1.5rem; letter-spacing: 0.05em; text-transform: uppercase; }
+  .hero h1 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; line-height: 1.15; margin-bottom: 1rem; }
+  .hero h1 span { background: linear-gradient(90deg, var(--accent), #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-sub { font-size: 1.15rem; color: rgba(255,255,255,0.7); max-width: 700px; margin-bottom: 2rem; }
+  .hero-meta { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .hero-meta-item { display: flex; flex-direction: column; gap: 0.15rem; }
+  .hero-meta-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.4); }
+  .hero-meta-val { font-size: 1.1rem; font-weight: 700; color: white; }
+  .hero-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-top: 3rem; }
+  .hero-stat { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.25rem; }
+  .hero-stat .val { font-size: 1.8rem; font-weight: 800; color: white; }
+  .hero-stat .lbl { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 0.2rem; }
+
+  /* LAYOUT */
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 4rem 0; }
+  section:nth-child(even) { background: white; }
+
+  /* SECTION HEADERS */
+  .section-tag { display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+  h2.section-title { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+  .section-desc { color: var(--muted); font-size: 1rem; max-width: 700px; margin-bottom: 2.5rem; }
+
+  /* CARDS */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; transition: box-shadow 0.2s, transform 0.2s; }
+  .card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.1); transform: translateY(-2px); }
+  .card-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1rem; }
+  .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--primary); }
+  .card p { font-size: 0.875rem; color: var(--muted); line-height: 1.55; }
+  .card ul { list-style: none; margin-top: 0.75rem; }
+  .card ul li { font-size: 0.83rem; color: var(--muted); padding: 0.2rem 0; border-top: 1px solid var(--border); display: flex; gap: 0.5rem; align-items: baseline; }
+  .card ul li:first-child { border-top: none; }
+  .card ul li::before { content: '→'; color: var(--accent); font-size: 0.75rem; flex-shrink: 0; }
+
+  /* TIER BADGES */
+  .tier { display: inline-block; font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 4px; margin-bottom: 0.5rem; }
+  .tier-1 { background: #fef3c7; color: #92400e; }
+  .tier-2 { background: #e0f2fe; color: #0c4a6e; }
+  .tier-3 { background: #f0fdf4; color: #14532d; }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+  thead { background: var(--primary); color: white; }
+  thead th { padding: 0.9rem 1rem; text-align: left; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.03em; white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #f8fafc; }
+  tbody td { padding: 0.75rem 1rem; vertical-align: top; }
+  .price-chip { display: inline-block; background: #f0fdf4; color: #16a34a; font-size: 0.78rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 4px; white-space: nowrap; }
+  .cpc-chip { background: #eff6ff; color: #1d4ed8; }
+  .cpm-chip { background: #fdf4ff; color: #7e22ce; }
+  .flat-chip { background: #fff7ed; color: #c2410c; }
+
+  /* TECH STACK */
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+  .tech-item { border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem; background: var(--card); }
+  .tech-item .tech-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem; color: var(--primary); }
+  .tech-item .tech-role { font-size: 0.78rem; color: var(--muted); }
+  .tech-item .tech-badge { display: inline-block; font-size: 0.65rem; padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 600; margin-top: 0.4rem; }
+  .t-existing { background: #dcfce7; color: #166534; }
+  .t-needed { background: #fef3c7; color: #92400e; }
+  .t-optional { background: #f0f9ff; color: #0369a1; }
+
+  /* HEBE RECOMMENDATION */
+  .hebe-hero { background: linear-gradient(135deg, #fce7f3 0%, #ede9fe 50%, #e0f2fe 100%); border-radius: 20px; padding: 2.5rem; margin-bottom: 2rem; border: 1px solid rgba(233,30,140,0.15); }
+  .hebe-hero h3 { font-size: 1.6rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+  .hebe-hero p { color: var(--muted); font-size: 0.95rem; max-width: 800px; }
+  .hebe-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .hebe-stat { background: white; border-radius: 10px; padding: 1rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .hebe-stat .sv { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+  .hebe-stat .sl { font-size: 0.73rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* PHASES */
+  .phases { display: flex; flex-direction: column; gap: 1.5rem; }
+  .phase { border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
+  .phase-head { display: flex; align-items: center; gap: 1rem; padding: 1.25rem 1.5rem; }
+  .phase-1 .phase-head { background: linear-gradient(90deg, #fce7f3, #fdf4ff); }
+  .phase-2 .phase-head { background: linear-gradient(90deg, #ede9fe, #e0f2fe); }
+  .phase-3 .phase-head { background: linear-gradient(90deg, #e0f2fe, #f0fdf4); }
+  .phase-num { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 800; color: white; flex-shrink: 0; }
+  .ph1 { background: var(--accent); }
+  .ph2 { background: var(--accent2); }
+  .ph3 { background: var(--accent3); }
+  .phase-head-text h4 { font-size: 1.05rem; font-weight: 700; color: var(--primary); }
+  .phase-head-text p { font-size: 0.8rem; color: var(--muted); }
+  .phase-body { padding: 1.25rem 1.5rem; background: white; }
+  .phase-formats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+  .pf { border: 1px solid var(--border); border-radius: 10px; padding: 1rem; }
+  .pf-name { font-weight: 700; font-size: 0.9rem; color: var(--primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
+  .pf-detail { font-size: 0.8rem; color: var(--muted); line-height: 1.55; }
+  .pf-price { margin-top: 0.5rem; }
+
+  /* PLACEMENT MAP */
+  .page-map { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+  .page-card { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: white; }
+  .page-card-head { background: var(--primary); color: white; padding: 0.9rem 1.25rem; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; }
+  .page-card-body { padding: 1.25rem; }
+  .slot { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+  .slot:last-child { border-bottom: none; }
+  .slot-num { width: 22px; height: 22px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .slot-info { flex: 1; }
+  .slot-name { font-size: 0.85rem; font-weight: 600; color: var(--primary); }
+  .slot-desc { font-size: 0.78rem; color: var(--muted); }
+
+  /* NETWORKS LIST */
+  .networks { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
+  .network { border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; background: white; }
+  .network-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+  .network-name { font-weight: 700; font-size: 0.95rem; color: var(--primary); }
+  .network-revenue { font-size: 0.8rem; font-weight: 700; color: var(--green); }
+  .network-details { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+  .network-details li { list-style: none; padding: 0.1rem 0; }
+  .network-details li::before { content: '· '; color: var(--accent); }
+
+  /* BENCHMARK TABLE */
+  .bm-positive { color: var(--green); font-weight: 600; }
+  .bm-warn { color: var(--amber); font-weight: 600; }
+
+  /* CALLOUT */
+  .callout { border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; border-left: 4px solid; }
+  .callout-info { background: #eff6ff; border-color: var(--accent3); }
+  .callout-warn { background: #fffbeb; border-color: var(--amber); }
+  .callout-success { background: #f0fdf4; border-color: var(--green); }
+  .callout-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.3rem; }
+  .callout p { font-size: 0.875rem; color: var(--muted); }
+
+  /* FOOTER */
+  footer { background: var(--primary); color: rgba(255,255,255,0.5); padding: 2rem; text-align: center; font-size: 0.8rem; }
+  footer strong { color: white; }
+
+  /* UTILITY */
+  .tag { display: inline-block; font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 4px; background: #f1f5f9; color: var(--muted); margin-right: 0.25rem; margin-top: 0.25rem; }
+  .highlight { color: var(--accent); font-weight: 700; }
+  strong.num { color: var(--accent2); }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+  .divider { height: 1px; background: var(--border); margin: 2rem 0; }
+
+  /* SCROLLSPY */
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">Retail Media Report</span>
+    <a href="#definicje">Definicje</a>
+    <a href="#formaty">Formaty</a>
+    <a href="#technologie">Technologie</a>
+    <a href="#modele">Modele rozlicz.</a>
+    <a href="#sieci">Sieci RMN</a>
+    <a href="#best-practices">Best Practices</a>
+    <a href="#rynek">Dane rynkowe</a>
+    <a href="#beauty">Beauty RMN</a>
+    <a href="#hebe">🎯 Hebe <span class="nav-badge">REC</span></a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Raport badawczy · Maj 2026</div>
+    <h1>Retail Media Networks<br><span>Kompendium & Rekomendacja</span></h1>
+    <p class="hero-sub">Kompletny przegląd ekosystemu retail media — definicje, formaty, technologie, sieci, modele rozliczeniowe i rekomendacje wdrożeniowe. Finał: strategia dla hebe.pl.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span class="hero-meta-label">Źródła</span><span class="hero-meta-val">Web research + nblm + site analysis</span></div>
+      <div class="hero-meta-item"><span class="hero-meta-label">Zakres</span><span class="hero-meta-val">Global + PL + Hebe.pl</span></div>
+      <div class="hero-meta-item"><span class="hero-meta-label">Przygotował</span><span class="hero-meta-val">Claude (Sonnet 4.6)</span></div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="val">$180 mld</div><div class="lbl">Rynek globalny RMN 2025</div></div>
+      <div class="hero-stat"><div class="val">70–90%</div><div class="lbl">Marża operacyjna ad revenue</div></div>
+      <div class="hero-stat"><div class="val">6.1x</div><div class="lbl">Średni ROAS retail media</div></div>
+      <div class="hero-stat"><div class="val">+30%</div><div class="lbl">Wzrost YoY rynek Polska</div></div>
+      <div class="hero-stat"><div class="val">+40%</div><div class="lbl">CPM premium beauty vs average</div></div>
+      <div class="hero-stat"><div class="val">1–3%</div><div class="lbl">GMV = media revenue at maturity</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SEKCJA 1: DEFINICJE -->
+<section id="definicje">
+<div class="container">
+  <div class="section-tag">01 · Podstawy</div>
+  <h2 class="section-title">Definicje i Typologia</h2>
+  <p class="section-desc">Retail Media Network to technologiczna i handlowa platforma, która umożliwia markom reklamowanie się w środowiskach własnych danych retailera — na stronie, w aplikacji, w sklepach i poza nimi.</p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Kluczowa różnica: Retail Media vs. Trade Marketing</div>
+    <p><strong>Trade marketing</strong> — retailer sprzedaje fizyczną "półkę": wyróżnione miejsce na regale, endcap, dodatkowe facing. Budżet od działów sprzedaży (KAM). Brak mierzalności cyfrowej.<br>
+    <strong>Retail Media</strong> — retailer sprzedaje cyfrową "widoczność" i dane: sponsored placement w wyszukiwarce, baner display, audience w programmatic. Budżet od działów digital/mediowych. Closed-loop attribution.</p>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon" style="background:#fce7f3;">🏬</div>
+      <div class="tier tier-1">Tier 1 — Giganci</div>
+      <h3>Wielcy Gracze</h3>
+      <p>Retailerzy z własną, w pełni dojrzałą platformą RMN, budżetem R&D, dedicated DSP i clean room. Skala: miliardy $.</p>
+      <ul>
+        <li>Amazon Advertising ($56.2 mld przych.)</li>
+        <li>Walmart Connect ($4.4 mld)</li>
+        <li>Target Roundel ($649 mln)</li>
+        <li>Kroger Precision Marketing</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#ede9fe;">🛒</div>
+      <div class="tier tier-2">Tier 2 — Regionalni</div>
+      <h3>Silni Regionalni</h3>
+      <p>Retailerzy z mln+ zarejestrowanych userów, własną platformą lub SaaS RMN, widocznym rev. strumieniem. Rynek krajowy.</p>
+      <ul>
+        <li>Allegro Ads PL (PLN 1.04 mld)</li>
+        <li>Tesco Media (UK, dunnhumby)</li>
+        <li>Carrefour Links (EU)</li>
+        <li>Ulta Beauty UB Media (USA)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#f0fdf4;">🌿</div>
+      <div class="tier tier-3">Tier 3 — Niszowi</div>
+      <h3>Niszowi / Startujący</h3>
+      <p>Retailerzy z lojalną, niszową bazą danych. Wdrożenie RMN poprzez SaaS (Kevel, Topsort). Walidacja modelu.</p>
+      <ul>
+        <li>Drogerie beauty (Hebe, Douglas, Boots)</li>
+        <li>Empik Polska</li>
+        <li>Ceneo Ads</li>
+        <li>Każdy e-commerce 500K+ sessions</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:1rem;color:var(--primary);">Kanały Retail Media (On-site / Off-site / In-store)</h3>
+  <div class="two-col">
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-icon" style="background:#eff6ff;">💻</div>
+        <h3>On-site</h3>
+        <p>Reklamy w środowisku własnym retailera — strona WWW, aplikacja mobilna, newsletter, push notifications. Highest purchase intent. Closed-loop attribution z 1P data.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#fdf4ff;">📡</div>
+        <h3>Off-site</h3>
+        <p>Retailer sprzedaje swoje 1P audience segmenty do zewnętrznych mediów — Meta, Google, programmatic DSP. Retargeting poza własnym środowiskiem. Premium CPM vs. ogólny programmatic.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-icon" style="background:#f0fdf4;">🏪</div>
+        <h3>In-store (najszybciej rosnący)</h3>
+        <p>Ekrany cyfrowe w sklepach stacjonarnych: digital signage przy kasach, przymierzalniach, endcapach, smart carts. Integracja z 1P data (np. karta lojalnościowa) daje targetowanie per lokalizacja, pora dnia, segmenty.</p>
+        <ul>
+          <li>CVS: docelowo 11 000 ekranów</li>
+          <li>Boots UK: 600 ekranów in-store</li>
+          <li>Empik PL: 1/3 sieci sklepów</li>
+          <li>CPM in-store: $10–$40</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- SEKCJA 2: FORMATY -->
+<section id="formaty" style="background:white;">
+<div class="container">
+  <div class="section-tag">02 · Formaty reklamowe</div>
+  <h2 class="section-title">10 Formatów Retail Media</h2>
+  <p class="section-desc">Każdy format obsługuje inny etap lejka zakupowego i inny model rozliczeniowy. Skuteczna sieć RMN łączy co najmniej 3–4 z nich.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon" style="background:#fce7f3;">🔍</div>
+      <h3>1. Sponsored Products</h3>
+      <p>Najważniejszy format. CPC-based. Produkt reklamodawcy pojawia się w górnych pozycjach wyników wyszukiwania i stron kategorii — wizualnie identyczny z wynikami organicznymi, oznaczony etykietą "Sponsored".</p>
+      <ul>
+        <li>Placement: SRP top 1–4, co 5–6 organicznych</li>
+        <li>Model: CPC auction (second-price lub first-price)</li>
+        <li>CTR beauty: 0.8%–2.5% · CVR: 3%–8%</li>
+        <li>ROAS: 4x–8x (beauty segment)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#ede9fe;">🏷️</div>
+      <h3>2. Sponsored Brands</h3>
+      <p>Banner z logo marki + 3–4 produkty + CTA, wyświetlany na górze wyników wyszukiwania lub strony kategorii. Cel: budowanie brand awareness + click-to-category.</p>
+      <ul>
+        <li>Placement: top SRP, top kategorii</li>
+        <li>Model: CPM lub CPC</li>
+        <li>Cel: share of voice, brand building</li>
+        <li>Wariant: Brand Store (dedykowana landing page)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#e0f2fe;">🖼️</div>
+      <h3>3. Display Banners</h3>
+      <p>Banery graficzne (statyczne, animowane, HTML5) na homepage, stronach kategorii i PDP. Rozmiary: billboard, leaderboard, rectangle, halfpage. Zakupywane w modelu CPM lub flat fee za premium umiejscowienie.</p>
+      <ul>
+        <li>Homepage hero: premium CPM $30–$80</li>
+        <li>Category header: standard CPM $8–$25</li>
+        <li>PDP sidebar: $5–$15 CPM</li>
+        <li>Flat day rate dla homepage takeover</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#fef9c3;">▶️</div>
+      <h3>4. Video On-site</h3>
+      <p>Video reklamowe (6s, 15s, 30s) wbudowane w strony produktu, kategorie i homepage. Rosnący segment — szczególnie w beauty (tutorials, demonstracje). Autoplay silent + click-to-play.</p>
+      <ul>
+        <li>Placement: PDP mid-page, category hero</li>
+        <li>Model: CPM (video views) lub CPCV (completed)</li>
+        <li>Najwyższy CTR z wszystkich formatów display</li>
+        <li>Integracja z shoppable (klik = add to cart)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#fdf4ff;">📧</div>
+      <h3>5. Email / Newsletter Sponsorship</h3>
+      <p>Sponsorowane bloki w newsletterach retailera — targowane do zarejestrowanych klientów z historią zakupów. Najwyższy intent z off-site formatów bo baza 1P. Możliwe targetowanie per kategoria, recency, loyalty tier.</p>
+      <ul>
+        <li>Dedykowany blok sponsorowany: CPM $15–$40</li>
+        <li>Dedicated send: flat fee ($500–$5000)</li>
+        <li>Targetowanie: segment lojalnościowy, kategoria zakupów</li>
+        <li>Open rate retail: 20–40% vs. 15% average</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#f0fdf4;">📲</div>
+      <h3>6. Push Notifications</h3>
+      <p>Sponsorowane powiadomienia w aplikacji retailera i web push. Wysyłane w imieniu retailera, ale finansowane przez markę. Targetowane do segmentów lojalnościowych (np. "kupiłeś krem X — nowy serum od tej marki").</p>
+      <ul>
+        <li>CTR push: 5–10x wyższy niż email</li>
+        <li>Model: CPM lub CPC</li>
+        <li>Ograniczony przez opt-in rate bazy</li>
+        <li>Często managed-service (brak self-serve)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#fff7ed;">🏪</div>
+      <h3>7. In-store Digital</h3>
+      <p>Ekrany i digital signage w sklepach fizycznych. Segmenty: ekrany przy kasach (dwell time 2–4 min), endcap screens, smart carts, digital shelf labels (ESL z cenami dynamicznymi). Powiązanie z 1P data: inne treści o 7:00 i 19:00.</p>
+      <ul>
+        <li>CPM in-store: $10–$40</li>
+        <li>CVS: 11K ekranów docelowo</li>
+        <li>Dwell time: najdłuższy kontakt w retail media</li>
+        <li>Mierzalność: footfall lift, konwersja w sklepie</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#e0f2fe;">📺</div>
+      <h3>8. Connected TV (CTV) / Streaming</h3>
+      <p>Reklamy w serwisach streamingowych partnerów, targetowane 1P data retailera. Amazon's Prime Video jest pionierem. Dla beauty: programy lifestyle, beauty content. Closest-loop measurement: obejrzał reklamę → kupił w sklepie.</p>
+      <ul>
+        <li>CPM CTV: $20–$60 (premium targetowanie)</li>
+        <li>Unique reach: dotarcie poza e-commerce</li>
+        <li>Mierzalność: view-through attribution</li>
+        <li>Wymaga skali danych (min. 1M+ members)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#fce7f3;">🌐</div>
+      <h3>9. Social Syndication (Off-site)</h3>
+      <p>Retailer sprzedaje audience segmenty (hashed email, zakupowe cohorts) do Meta Custom Audiences, Pinterest Audiences. Marka reklamuje się na Instagramie używając danych lojalnościowych Hebe. Premium vs. cold audience.</p>
+      <ul>
+        <li>Modele: CPM lub revenue share</li>
+        <li>Wyższy ROAS niż zimna audience</li>
+        <li>Wymaga clean room / LiveRamp</li>
+        <li>RODO compliance: consent wymagany</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#ede9fe;">⚙️</div>
+      <h3>10. Programmatic Off-site (DSP)</h3>
+      <p>Retailer uruchamia własny DSP lub integruje z The Trade Desk / DV360. Marka kupuje audience retailera w otwartym ekosystemie programmatic — display, video, DOOH, audio. Walled garden oparty na 1P data.</p>
+      <ul>
+        <li>Kluczowe DSPs: The Trade Desk, DV360, Amazon DSP</li>
+        <li>Model: CPM + data fee</li>
+        <li>Premium: +20–40% vs. standard programmatic</li>
+        <li>Wymaga: clean room + tech partnership</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- SEKCJA 3: TECHNOLOGIE -->
+<section id="technologie">
+<div class="container">
+  <div class="section-tag">03 · Infrastruktura</div>
+  <h2 class="section-title">Technologie i Infrastruktura</h2>
+  <p class="section-desc">Retail Media Network potrzebuje warstwy ad-serving, clean room do pomiaru, DSP do off-site i API integracji z platformą e-commerce.</p>
+
+  <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--primary);">Ad Servery — Rdzeniowe Platformy RMN</h3>
+  <div class="table-wrap" style="margin-bottom:2rem;">
+    <table>
+      <thead>
+        <tr>
+          <th>Platforma</th>
+          <th>Model</th>
+          <th>Kluczowe cechy</th>
+          <th>Kto używa</th>
+          <th>Est. koszt</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Criteo Commerce Media</strong></td>
+          <td>SaaS</td>
+          <td>40% rynku global, $4.5B media spend, 220+ retailerów, proven in beauty/pharmacy, już u Hebe jako retargeting</td>
+          <td>Ryanair, Boots, Douglas</td>
+          <td>Rev-share ~15–25%</td>
+        </tr>
+        <tr>
+          <td><strong>CitrusAd (Epsilon)</strong></td>
+          <td>SaaS</td>
+          <td>Ulta Beauty, Southeastern Grocers, fast onboarding, native sponsored products + display, self-serve portal</td>
+          <td>Ulta Beauty, Liquor Barons</td>
+          <td>$20–50K setup + rev-share</td>
+        </tr>
+        <tr>
+          <td><strong>Kevel (Adzerk)</strong></td>
+          <td>API-first SaaS</td>
+          <td>Flexibilne, brak "walled garden", własny branding, dobre dla mid-market, Spotify i Reddit używali</td>
+          <td>Etsy, Yelp, mid-market retail</td>
+          <td>~$5K–$25K/mies.</td>
+        </tr>
+        <tr>
+          <td><strong>Zitcha</strong></td>
+          <td>SaaS (nowy)</td>
+          <td>All-in-one RMN dla mid-market, self-serve brands portal, Shopify native integration, Australia origin</td>
+          <td>Woolworths NZ, The Warehouse</td>
+          <td>Competitive (niszowy)</td>
+        </tr>
+        <tr>
+          <td><strong>Topsort</strong></td>
+          <td>SaaS/API</td>
+          <td>VC-backed, fast-grow, Instacart-style UX, ML bidding, dobry dla marketplace</td>
+          <td>Marketplace e-commerce</td>
+          <td>Rev-share + SaaS</td>
+        </tr>
+        <tr>
+          <td><strong>PromoteIQ (Microsoft)</strong></td>
+          <td>Enterprise SaaS</td>
+          <td>Microsoft-backed, deep SFCC i Magento integracje, managed service</td>
+          <td>Kroger, FoodLion</td>
+          <td>Enterprise pricing</td>
+        </tr>
+        <tr>
+          <td><strong>Luigi's Box Ads</strong></td>
+          <td>SaaS (search native)</td>
+          <td><strong>JUŻ U HEBE</strong> — search boosting → sponsorowane wyniki możliwe natychmiast, native integracja</td>
+          <td>Hebe.pl, Pilulka</td>
+          <td>Addon do licencji search</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--primary);">Clean Rooms — Bezpieczna Kolaboracja Danych</h3>
+  <div class="cards" style="margin-bottom:2rem;">
+    <div class="card">
+      <div class="card-icon" style="background:#e0f2fe;">❄️</div>
+      <h3>Snowflake Data Clean Rooms</h3>
+      <p>Dominujące poza Amazonem. Dane nie opuszczają środowiska. Ulta Beauty używa Snowflake do clean room z brandami.</p>
+      <ul><li>Best fit: retailerzy w infrastrukturze cloud</li><li>Koszt: Snowflake credits + platform fee</li></ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#ede9fe;">🔗</div>
+      <h3>LiveRamp Safe Haven</h3>
+      <p>Platform-agnostic, wspiera AWS/Azure/GCP/Databricks. Lider IDC MarketScape. Najlepszy dla multi-cloud, multi-partner matching.</p>
+      <ul><li>Best fit: off-site data activation</li><li>Koszt: SaaS + volume-based</li></ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#fce7f3;">🇪🇺</div>
+      <h3>InfoSum</h3>
+      <p>Federacyjne clean room — dane NIGDY nie opuszczają środowiska właściciela. Silny w UK/EU (RODO compliance). Tesco i Criteo go używają.</p>
+      <ul><li>Best fit: europejskie retailery beauty</li><li>RODO-native od podstaw</li></ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#f0fdf4;">☁️</div>
+      <h3>AWS Clean Rooms</h3>
+      <p>Native dla ekosystemu AWS. Amazon Ads partners. Dobrze zintegrowane z S3/Redshift. Idealne jeśli retailer jest na AWS.</p>
+      <ul><li>Best fit: AWS-native retailers</li><li>Pay per query model</li></ul>
+    </div>
+  </div>
+
+  <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--primary);">Modele Attribution (Mierzenie Wyników)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Model</th><th>Opis</th><th>Kiedy stosować</th><th>Pułapka</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Last-click</strong></td><td>Pełny credit dla ostatniej reklamy przed zakupem</td><td>Sponsored Products (high intent)</td><td>Nie widzi górnej części lejka</td></tr>
+        <tr><td><strong>View-through</strong></td><td>Credit dla obejrzanej (nie klikniętej) reklamy, która poprzedza zakup w oknie (np. 14 dni)</td><td>Display, CTV, in-store screens</td><td>Może zawyżać wyniki display</td></tr>
+        <tr><td><strong>Multi-touch attribution</strong></td><td>Proporcjonalny podział kredytu między wszystkie touchpointy</td><td>Full-funnel kampanie</td><td>Kompleksowość, wymaga clean room</td></tr>
+        <tr><td><strong>Closed-loop</strong></td><td>Bezpośrednie powiązanie impression/click z transakcją (z 1P data)</td><td>Standard retail media</td><td>Tylko w środowisku własnym retailera</td></tr>
+        <tr><td><strong>Incrementality (RCT/holdout)</strong></td><td>Prawdziwy lift sprzedaży: test vs. control group</td><td>Premium mierzenie, duże kampanie</td><td>Wymaga skali, może nie być self-serve</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<!-- SEKCJA 4: MODELE ROZLICZENIOWE -->
+<section id="modele" style="background:white;">
+<div class="container">
+  <div class="section-tag">04 · Ekonomia</div>
+  <h2 class="section-title">Modele Rozliczeniowe i Benchmarki</h2>
+  <p class="section-desc">Retail media oferuje kilka modeli — od auksyjnego CPC (niskie ryzyko dla marki) do flat fee takeover (premium visibility). Benchmarki są wyższe niż open programmatic.</p>
+
+  <div class="table-wrap" style="margin-bottom:2rem;">
+    <table>
+      <thead>
+        <tr>
+          <th>Format</th>
+          <th>Model</th>
+          <th>Benchmark (USA)</th>
+          <th>Beauty Premium</th>
+          <th>Typowy ROAS</th>
+          <th>Uwagi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Sponsored Products</strong></td>
+          <td><span class="price-chip cpc-chip">CPC</span></td>
+          <td>$0.30–$5.00+</td>
+          <td>$1.00–$3.50</td>
+          <td class="bm-positive">4x–8x</td>
+          <td>Aukcja second-price lub first-price. Beauty w środku przedziału.</td>
+        </tr>
+        <tr>
+          <td><strong>Category Sponsored</strong></td>
+          <td><span class="price-chip cpc-chip">CPC</span></td>
+          <td>$0.25–$2.50</td>
+          <td>$0.60–$1.80</td>
+          <td class="bm-positive">3x–6x</td>
+          <td>Niższy CPC niż search, ale szerszy zasięg.</td>
+        </tr>
+        <tr>
+          <td><strong>Sponsored Brands banner</strong></td>
+          <td><span class="price-chip cpm-chip">CPM</span></td>
+          <td>$8–$25</td>
+          <td>$12–$30</td>
+          <td class="bm-warn">2x–4x</td>
+          <td>Brand awareness. Mniejszy ROAS, ale share of voice.</td>
+        </tr>
+        <tr>
+          <td><strong>Homepage Hero Banner</strong></td>
+          <td><span class="price-chip cpm-chip">CPM</span> / <span class="price-chip flat-chip">Flat</span></td>
+          <td>$30–$80 CPM</td>
+          <td>Premium</td>
+          <td class="bm-warn">1.5x–3x</td>
+          <td>Flat fee za dzień: $1K–$20K+ zależnie od ruchu.</td>
+        </tr>
+        <tr>
+          <td><strong>Category Header</strong></td>
+          <td><span class="price-chip cpm-chip">CPM</span></td>
+          <td>$8–$25</td>
+          <td>$12–$30</td>
+          <td class="bm-warn">2x–4x</td>
+          <td>Dobry dla marek kategorialnych.</td>
+        </tr>
+        <tr>
+          <td><strong>PDP Sponsored</strong></td>
+          <td><span class="price-chip cpm-chip">CPM</span> / <span class="price-chip cpc-chip">CPC</span></td>
+          <td>$5–$20</td>
+          <td>$8–$20</td>
+          <td class="bm-warn">2x–5x</td>
+          <td>"Customers also viewed" widget → sponsored.</td>
+        </tr>
+        <tr>
+          <td><strong>Email Blok Sponsorowany</strong></td>
+          <td><span class="price-chip cpm-chip">CPM</span> / <span class="price-chip flat-chip">Flat</span></td>
+          <td>$15–$40 CPM</td>
+          <td>$20–$50</td>
+          <td class="bm-warn">2x–4x</td>
+          <td>Targeting 1P data = premium CPM. Open rate 20–40%.</td>
+        </tr>
+        <tr>
+          <td><strong>Push Notification</strong></td>
+          <td><span class="price-chip cpm-chip">CPM</span></td>
+          <td>$5–$15</td>
+          <td>$8–$20</td>
+          <td class="bm-positive">3x–6x</td>
+          <td>Ograniczony inventory (opt-in), ale wysoki CTR.</td>
+        </tr>
+        <tr>
+          <td><strong>In-store Screen</strong></td>
+          <td><span class="price-chip cpm-chip">CPM</span> / <span class="price-chip flat-chip">Flat</span></td>
+          <td>$10–$40</td>
+          <td>—</td>
+          <td>Pomiar: lift</td>
+          <td>Rynek benchmarków wciąż formalizowany przez IAB.</td>
+        </tr>
+        <tr>
+          <td><strong>CTV / Off-site DSP</strong></td>
+          <td><span class="price-chip cpm-chip">CPM</span></td>
+          <td>$20–$60</td>
+          <td>$30–$80</td>
+          <td class="bm-warn">2x–5x</td>
+          <td>Premium vs. open programmatic (gdzie $1–$5 CPM).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-success">
+    <div class="callout-title">Marże sieci RMN: 70–90% (BCG, 2024)</div>
+    <p>To najwyższe marże w handlu detalicznym. Retailer płaci za infrastrukturę platformy (SaaS ~$20–40K/mies.) i sprzedaż, ale ma ~$0 koszt produkcji medium. Przykład: $200M GMV retailer przy 2% media yield = $4M media revenue, z czego $3–3.5M zysk operacyjny.</p>
+  </div>
+
+  <div class="two-col" style="margin-top:1.5rem;">
+    <div class="card">
+      <div class="card-icon" style="background:#fce7f3;">🏆</div>
+      <h3>Aukcje: Jak Działa Bidding</h3>
+      <p style="margin-bottom:0.75rem;">Sponsored Products wyceniają się przez aukcję. Dwa główne modele:</p>
+      <ul>
+        <li><strong>Second-price (Vickrey):</strong> wygrywasz, płacisz $0.01 powyżej 2. najwyższej oferty. Standard dla search.</li>
+        <li><strong>First-price:</strong> płacisz tyle ile zaofertowałeś. Rosnący trend w display.</li>
+        <li><strong>Rank = Bid × Quality Score</strong> (CTR pred. × relevance) — nie tylko cena wygrywa.</li>
+        <li>Floor price: minimalna cena, poniżej której nie wyświetla się reklama.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#f0fdf4;">💰</div>
+      <h3>Minimum Spend i Pakiety</h3>
+      <p style="margin-bottom:0.75rem;">Typowe struktury sprzedaży dla małych-średnich RMN:</p>
+      <ul>
+        <li>Self-serve min: $500–$2000/mies. (brak AM)</li>
+        <li>Managed service min: $5000–$50 000/mies.</li>
+        <li>Pakiety sezonowe: flat fee za "tygodniowe" pozycje premium</li>
+        <li>Pakiety kategoryjne: "Pielęgnacja twarzy — pakiet Silver/Gold"</li>
+        <li>Co-op budgety: marka wydaje obowiązkowo % od zakupów w sieci</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- SEKCJA 5: SIECI -->
+<section id="sieci">
+<div class="container">
+  <div class="section-tag">05 · Ekosystem</div>
+  <h2 class="section-title">Główne Sieci Retail Media (Global + EU + PL)</h2>
+  <p class="section-desc">Przegląd najważniejszych graczy — od gigantów Tier 1 po regionalne i niszowe sieci beauty/drogerie.</p>
+
+  <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--primary);">Tier 1 — Globalni Liderzy</h3>
+  <div class="networks" style="margin-bottom:2rem;">
+    <div class="network">
+      <div class="network-head">
+        <div class="network-name">Amazon Advertising</div>
+        <div class="network-revenue">$56.2 mld / rok</div>
+      </div>
+      <ul class="network-details">
+        <li>~76% udziału w rynku retail media USA</li>
+        <li>Formaty: Sponsored Products, Brands, Display, DSP, AMC clean room</li>
+        <li>Amazon Marketing Cloud (Snowflake-based)</li>
+        <li>CPC wzrósł +4.6% YoY (Q1 2025)</li>
+        <li>Prime Video Ads: CTV retail media</li>
+      </ul>
+    </div>
+    <div class="network">
+      <div class="network-head">
+        <div class="network-name">Walmart Connect</div>
+        <div class="network-revenue">$4.4 mld / rok</div>
+      </div>
+      <ul class="network-details">
+        <li>2. co do wielkości RMN w USA</li>
+        <li>Oparty na CitrusAd + Walmart DSP</li>
+        <li>Integracja z Walmart+ (subskrypcja lojalnościowa)</li>
+        <li>Q1 2025 ROAS: +5.1% YoY</li>
+        <li>In-store network: ekrany we wszystkich Walmart US</li>
+      </ul>
+    </div>
+    <div class="network">
+      <div class="network-head">
+        <div class="network-name">Target Roundel</div>
+        <div class="network-revenue">$649 mln / rok</div>
+      </div>
+      <ul class="network-details">
+        <li>W pełni własna technologia (własny ad server)</li>
+        <li>Integracja z Target Circle (loyalty)</li>
+        <li>Sieć partnerska: Google, Pinterest, Hearst</li>
+        <li>Premium positioning: lifestyle brand safety</li>
+        <li>Closed-loop measurement: online + in-store</li>
+      </ul>
+    </div>
+    <div class="network">
+      <div class="network-head">
+        <div class="network-name">Kroger Precision Marketing</div>
+        <div class="network-revenue">Tier 1 scale</div>
+      </div>
+      <ul class="network-details">
+        <li>60M+ loyalty households</li>
+        <li>dunnhumby data partnership</li>
+        <li>84.51° data science unit</li>
+        <li>Grocerants + pharmacy data</li>
+        <li>Off-site: The Trade Desk partnership</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--primary);">Beauty & Drogerie — Segment Specjalny</h3>
+  <div class="table-wrap" style="margin-bottom:2rem;">
+    <table>
+      <thead>
+        <tr><th>Sieć</th><th>Loyalty Members</th><th>Platforma</th><th>Kluczowe cechy</th><th>Wycena</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ulta Beauty — UB Media</strong></td>
+          <td>37M+</td>
+          <td>CitrusAd + Snowflake</td>
+          <td>Self-serve portal, 300+ brand partners, Google off-site, CPC $1–3.50, robust measurement</td>
+          <td>CPM $10–25, CPC $1–3.50</td>
+        </tr>
+        <tr>
+          <td><strong>Sephora Media Network</strong></td>
+          <td>34M+</td>
+          <td>Własna (mniej dojrzała)</td>
+          <td>Luxury positioning, LVMH brands, Meta off-site, managed-service only, premium CPM</td>
+          <td>Niepubliczne</td>
+        </tr>
+        <tr>
+          <td><strong>CVS Media Exchange (CMX)</strong></td>
+          <td>74M+</td>
+          <td>LiveRamp + własny</td>
+          <td>Pharmacy + beauty data, 11K ekranów docelowo, health intent premium</td>
+          <td>+20–30% vs. avg CPM</td>
+        </tr>
+        <tr>
+          <td><strong>Walgreens Advertising Group</strong></td>
+          <td>100M touchpoints</td>
+          <td>Własny</td>
+          <td>Health/wellness/pharmacy, 8.5K sklepów, in-store network rozwijany</td>
+          <td>+20–30% premium</td>
+        </tr>
+        <tr>
+          <td><strong>Boots Media Group (UK)</strong></td>
+          <td>17M+ Advantage</td>
+          <td>dunnhumby + własny</td>
+          <td>600 ekranów in-store, beauty + pharmacy, UK Tier 2</td>
+          <td>Managed service</td>
+        </tr>
+        <tr>
+          <td><strong>Douglas (EU)</strong></td>
+          <td>50M+ loyalty EU</td>
+          <td>W trakcie wdrożenia</td>
+          <td>Europejska platforma beauty, digital-first approach, multi-country</td>
+          <td>Wczesna faza</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--primary);">Polska — Ekosystem Retail Media</h3>
+  <div class="networks">
+    <div class="network">
+      <div class="network-head">
+        <div class="network-name">Allegro Ads</div>
+        <div class="network-revenue">PLN 1.04 mld / rok</div>
+      </div>
+      <ul class="network-details">
+        <li>+32% YoY — najszybciej rosnąca sieć PL</li>
+        <li>14M+ kupujących miesięcznie, 60M+ ofert</li>
+        <li>Formaty: sponsored listings, display, email, off-site (Facebook+Google)</li>
+        <li>Tier 1 Polska, Tier 2 globalnie</li>
+        <li>AI-driven insights, GrowthLoop partnership</li>
+      </ul>
+    </div>
+    <div class="network">
+      <div class="network-head">
+        <div class="network-name">Empik Retail Media</div>
+        <div class="network-revenue">ROAS ~10x</div>
+      </div>
+      <ul class="network-details">
+        <li>ROAS ~10x = jeden z najwyższych w PL</li>
+        <li>Ekrany in-store w 1/3 sieci (2024)</li>
+        <li>Formaty: display + sponsored + email + in-store</li>
+        <li>Lesson: nawet 1/3 sklepów = wystarczający pilot</li>
+        <li>Model niszowy, silna affinita audience</li>
+      </ul>
+    </div>
+    <div class="network">
+      <div class="network-head">
+        <div class="network-name">Ceneo Ads</div>
+        <div class="network-revenue">High-intent traffic</div>
+      </div>
+      <ul class="network-details">
+        <li>Porównywarka cenowa (Allegro Group)</li>
+        <li>Sponsored placements w wynikach Ceneo</li>
+        <li>Purchase research phase = peak intent</li>
+        <li>CPC model (bidding per kategoria)</li>
+        <li>Rosyjski rynek discovery nowych marek</li>
+      </ul>
+    </div>
+    <div class="network">
+      <div class="network-head">
+        <div class="network-name">Rossmann / Sephora / Douglas</div>
+        <div class="network-revenue">Brak publicznego RMN</div>
+      </div>
+      <ul class="network-details">
+        <li><strong>BRAK</strong> formalnej sieci retail media w Polsce</li>
+        <li>Rossmann: influencerzy (nowa strategia 2024)</li>
+        <li>Sephora: zarządzana przez LVMH EU</li>
+        <li>Douglas: w trakcie wdrożenia EU-wide</li>
+        <li>Hebe ma first-mover advantage w beauty PL</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- SEKCJA 6: BEST PRACTICES -->
+<section id="best-practices" style="background:white;">
+<div class="container">
+  <div class="section-tag">06 · Metodologia</div>
+  <h2 class="section-title">Best Practices</h2>
+  <p class="section-desc">Sprawdzone zasady wdrożeniowe — od kolejności uruchamiania formatów po brand safety i mierzenie wyników.</p>
+
+  <div class="two-col">
+    <div>
+      <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--primary);">Kolejność Wdrożeń (Minimum Viable Inventory)</h3>
+      <div class="phases">
+        <div style="border:1px solid var(--border);border-radius:12px;padding:1.25rem;background:white;">
+          <div style="font-weight:700;color:var(--accent);margin-bottom:0.5rem;">Krok 1: Sponsored Search</div>
+          <p style="font-size:0.85rem;color:var(--muted);">Zawsze zaczynaj od search. Najwyższy intent, najłatwiejsza mierzalność, najszybszy ROAS. Podstawa każdej sieci RMN.</p>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:12px;padding:1.25rem;background:white;">
+          <div style="font-weight:700;color:var(--accent2);margin-bottom:0.5rem;">Krok 2: Category Page Display</div>
+          <p style="font-size:0.85rem;color:var(--muted);">Header banery kategorii. Widoczność brandingowa. Niskie ryzyko UX bo klient jest "w trybie przeglądania".</p>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:12px;padding:1.25rem;background:white;">
+          <div style="font-weight:700;color:var(--accent3);margin-bottom:0.5rem;">Krok 3: Homepage Premium</div>
+          <p style="font-size:0.85rem;color:var(--muted);">Hero baner, hero rotator, featured brands section. Flat fee lub premium CPM. Ograniczona inventory = premium pricing.</p>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:12px;padding:1.25rem;background:white;">
+          <div style="font-weight:700;color:var(--green);margin-bottom:0.5rem;">Krok 4: PDP + Email + Push</div>
+          <p style="font-size:0.85rem;color:var(--muted);">Cross-sell na PDP, bloki w newsletterach, push notifications. Rozszerzenie inventory dla rosnącej bazy reklamodawców.</p>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:12px;padding:1.25rem;background:white;">
+          <div style="font-weight:700;color:var(--amber);margin-bottom:0.5rem;">Krok 5: Off-site + Clean Room</div>
+          <p style="font-size:0.85rem;color:var(--muted);">Audience extension do Meta/Google, clean room dla measurement. Wymaga dojrzałości danych i infrastruktury.</p>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:12px;padding:1.25rem;background:white;">
+          <div style="font-weight:700;color:var(--red);margin-bottom:0.5rem;">Krok 6: In-store + CTV</div>
+          <p style="font-size:0.85rem;color:var(--muted);">Ekrany w sklepach, ewentualne CTV. Największy CAPEX, ale unikalne touchpointy. Pilot 5–10% sieci na start.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--primary);">Segmentacja Audience (1P Data)</h3>
+      <div class="card" style="margin-bottom:1rem;">
+        <h3>Segmenty Zakupowe</h3>
+        <ul>
+          <li>Recent purchasers (7–30 dni) → upsell</li>
+          <li>Category browsers (brak zakupu) → konwersja</li>
+          <li>Lapsed buyers (90+ dni) → reaktywacja</li>
+          <li>High-LTV / VIP members → premium offer</li>
+          <li>New-to-brand (kupiło u nas, nie u marki X)</li>
+          <li>Lookalike audience (1P → off-site extension)</li>
+        </ul>
+      </div>
+
+      <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--primary);margin-top:1.5rem;">Zasady UX — Nie Zepsuj Doświadczenia</h3>
+      <div class="card">
+        <h3>Reguły Brand Safety</h3>
+        <ul>
+          <li>Maks. 1 sponsored na 4–6 organicznych (category listing)</li>
+          <li>Maks. 2–3 sponsorowane marki per strona (unikaj monopolizacji)</li>
+          <li>Sponsored label: zawsze widoczny, czytelny, zgodny z regulacjami</li>
+          <li>Competitor exclusions: marka A nie pokazuje się na PDP marki B</li>
+          <li>Category safety: baby food nie pojawi się w alkohol section</li>
+          <li>Frequency capping: maks. 3–5 impressions/użytkownik/dzień</li>
+          <li>RODO compliance: consent wymagany, żadnych cookiesless workarounds</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- SEKCJA 7: DANE RYNKOWE -->
+<section id="rynek">
+<div class="container">
+  <div class="section-tag">07 · Rynek</div>
+  <h2 class="section-title">Dane Rynkowe 2024–2026</h2>
+  <p class="section-desc">Retail media to jeden z najszybciej rosnących segmentów reklamy cyfrowej — 3x szybciej niż cały digital, z marżami nie do pobicia w handlu detalicznym.</p>
+
+  <div class="cards" style="margin-bottom:2rem;">
+    <div class="card" style="border-color:var(--accent);border-width:2px;">
+      <div class="card-icon" style="background:#fce7f3;">🌍</div>
+      <h3>Rynek Globalny</h3>
+      <ul>
+        <li>2025: $140–180 mld (szacunki)</li>
+        <li>CAGR 2024–2028: 15–22% rocznie</li>
+        <li>Udział w digital: ~20% i rośnie</li>
+        <li>Amazon: ~76% rynku USA ($56.2 mld)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#e0f2fe;">🇪🇺</div>
+      <h3>Europa</h3>
+      <ul>
+        <li>2026: €25+ mld</li>
+        <li>UK najdojrzalszy rynek (Tesco, Boots, Nectar360)</li>
+        <li>FR: Carrefour, Leclerc</li>
+        <li>DE: Zalando, REWE</li>
+        <li>PL: Allegro, Empik — szybki wzrost</li>
+      </ul>
+    </div>
+    <div class="card" style="border-color:var(--accent2);border-width:2px;">
+      <div class="card-icon" style="background:#ede9fe;">🇵🇱</div>
+      <h3>Polska</h3>
+      <ul>
+        <li>2024: PLN 1.6–1.8 mld</li>
+        <li>+30% YoY — 3–4x szybciej niż cały digital PL</li>
+        <li>Allegro Ads: PLN 1.04 mld (63% rynku)</li>
+        <li>Rynek beauty RMN: praktycznie nieobsadzony</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#f0fdf4;">📊</div>
+      <h3>Ekonomia Sieci</h3>
+      <ul>
+        <li>Marże operacyjne: 70–90% (BCG)</li>
+        <li>Rev. at maturity: 1–3% GMV retailera</li>
+        <li>Avg. ROAS dla advertiserów: 6.1x</li>
+        <li>Beauty premium: +20–40% CPM vs. average</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Dlaczego retail media jest tak opłacalne dla retailera?</div>
+    <p>Koszt krańcowy każdej kolejnej impressions = $0. Platforma SaaS to $20–40K/mies., ale każda złotówka reklamy powyżej BEP to czysta marża. Retailer sprzedaje uwagę klientów, których i tak posiada — teraz po prostu monetyzuje tę uwagę systematycznie.</p>
+  </div>
+</div>
+</section>
+
+<!-- SEKCJA 8: BEAUTY CASE STUDIES -->
+<section id="beauty" style="background:white;">
+<div class="container">
+  <div class="section-tag">08 · Case Studies</div>
+  <h2 class="section-title">Beauty & Drogerie — Studia Przypadku</h2>
+  <p class="section-desc">Beauty to jeden z najlepszych segmentów dla retail media — wysoka marża produktów, powtarzalne zakupy i silne preferencje brandowe = idealna baza dla targetowania.</p>
+
+  <div class="cards">
+    <div class="card" style="border-color:#e91e8c;border-width:2px;">
+      <div class="card-icon" style="background:#fce7f3;">💄</div>
+      <h3>Ulta Beauty — UB Media <span class="tier tier-1">Benchmark</span></h3>
+      <p><strong>Najlepszy wzorzec dla Hebe.</strong> CitrusAd + Snowflake clean room, 37M+ Ultamate Rewards members, 300+ brand partners po 2.5 roku operacji.</p>
+      <ul>
+        <li>Technologia: CitrusAd (sponsored) + Snowflake (clean room)</li>
+        <li>Self-serve portal: tak, od dnia 1</li>
+        <li>CPC: $1.00–$3.50 · Display CPM: $10–$25</li>
+        <li>Off-site: Google partnership</li>
+        <li>Timeline: 2.5 roku do 300 brand partners</li>
+        <li>Segmenty: loyalty tier, category, purchase recency</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#ede9fe;">🖤</div>
+      <h3>Sephora Media Network</h3>
+      <p>Luxury positioning. LVMH brands priority. Managed-service only — brak self-serve. Meta off-site. Mniej transparentny cennik.</p>
+      <ul>
+        <li>34M+ Beauty Insider members</li>
+        <li>Ukierunkowanie: ultra-premium, haute brands</li>
+        <li>Brak self-serve → niższy adoption rate</li>
+        <li>Off-site: Meta Custom Audiences</li>
+        <li>Mierzalność: mniej dojrzała niż Ulta</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#e0f2fe;">💊</div>
+      <h3>Boots Media Group (UK)</h3>
+      <p>Drogeria + apteka. 600 ekranów in-store + digital. dunnhumby data partnerstwo. Pharmacy data = premium targeting health intent.</p>
+      <ul>
+        <li>17M+ Advantage Card members</li>
+        <li>600 ekranów in-store (uruchomione 2023)</li>
+        <li>dunnhumby: data science partnership</li>
+        <li>Pharmacy + beauty = cross-sell segments</li>
+        <li>UK Tier 2 RMN</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#f0fdf4;">📚</div>
+      <h3>Empik (Polska)</h3>
+      <p>Niszowy retailer PL, ale ROAS ~10x — jeden z najwyższych w kraju. 1/3 sieci z ekranami in-store w 2024. Proof: niszowy RMN może działać doskonale.</p>
+      <ul>
+        <li>ROAS ~10x na EmpikPlace</li>
+        <li>1/3 sklepów z ekranami (2024)</li>
+        <li>Formaty: display + sponsored + email + in-store</li>
+        <li>Lekcja: głęboka nicha = premium ROAS</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-warn" style="margin-top:2rem;">
+    <div class="callout-title">Kluczowy insight: Beauty RMN jest strukturalnie lepszy</div>
+    <p>Beauty/drogerie commands <strong>20–40% CPM premium</strong> vs. average retail media. Dlaczego? (1) Wysoka marża produktów → marki mogą płacić więcej. (2) Silne preferencje brandowe → advertiserzy walczą o visibility. (3) Powtarzalne zakupy → 1P data jest bogatsza. (4) Impulse purchase + discovery → display performuje lepiej niż w grocery.</p>
+  </div>
+</div>
+</section>
+
+<!-- SEKCJA 9: HEBE REKOMENDACJA -->
+<section id="hebe" style="background: linear-gradient(180deg, #fff 0%, #fdf4ff 100%);">
+<div class="container">
+  <div class="section-tag">09 · Rekomendacja dla Hebe.pl</div>
+  <h2 class="section-title">Hebe Media Network — Strategia Wdrożenia</h2>
+  <p class="section-desc">Na podstawie analizy strony, tech stacku i benchmarków beauty RMN. Hebe ma wszystkie składniki — brakuje tylko monetyzacji.</p>
+
+  <!-- HEBE OVERVIEW -->
+  <div class="hebe-hero">
+    <h3>hebe.pl — Profil Platformy (stan maj 2026)</h3>
+    <p>Drogeria beauty należąca do Jeronimo Martins (właściciel Biedronki). Kategorie: beauty, zdrowie, apteka, mama & dziecko, perfumy. Platforma SFCC (Salesforce Commerce Cloud), zaawansowany ad tech stack, program lojalnościowy My Hebe z rozbudowaną 1P data.</p>
+    <div class="hebe-stats">
+      <div class="hebe-stat"><div class="sv">780+</div><div class="sl">Sklepów fizycznych PL</div></div>
+      <div class="hebe-stat"><div class="sv">3.7M+</div><div class="sl">Szac. memberships My Hebe</div></div>
+      <div class="hebe-stat"><div class="sv">316</div><div class="sl">Content slotów na homepage (SFCC)</div></div>
+      <div class="hebe-stat"><div class="sv">5 179</div><div class="sl">Wyników dla "witamina c" (głęboki katalog)</div></div>
+      <div class="hebe-stat"><div class="sv">0</div><div class="sl">Rywal PL z beauty RMN</div></div>
+      <div class="hebe-stat"><div class="sv">✓</div><div class="sl">First-mover advantage</div></div>
+    </div>
+  </div>
+
+  <!-- TECH STACK -->
+  <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:1rem;color:var(--primary);">Aktualny Tech Stack Hebe (wykryty)</h3>
+  <div class="tech-grid" style="margin-bottom:2rem;">
+    <div class="tech-item">
+      <div class="tech-name">Luigi's Box</div>
+      <div class="tech-role">Search + Recommendations — LBX-505233</div>
+      <span class="tech-badge t-existing">JUŻ DZIAŁA</span>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:0.4rem;">→ Sponsored Search możliwy natychmiast przez boosting API. Nie trzeba nowej technologii.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-name">UseInsider</div>
+      <div class="tech-role">Personalizacja web + push — ID: 10005125</div>
+      <span class="tech-badge t-existing">JUŻ DZIAŁA</span>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:0.4rem;">→ 35–62 elementów per strona. Można monetyzować sponsorowane sloty w rekomendacjach.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-name">SFCC Content Slots</div>
+      <div class="tech-role">316 slotów "banners-html" na homepage</div>
+      <span class="tech-badge t-existing">JUŻ DZIAŁA</span>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:0.4rem;">→ Banery reklamowe przez istniejący CMS. Brak dodatkowej tech.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-name">Criteo</div>
+      <div class="tech-role">Retargeting produktowy — a=100042</div>
+      <span class="tech-badge t-existing">JUŻ DZIAŁA</span>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:0.4rem;">→ Criteo Commerce Max może być rozbudowany o on-site RMN. Vendor już zna Hebe.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-name">My Hebe DataLayer</div>
+      <div class="tech-role">card_number, user_segment, transaction_history</div>
+      <span class="tech-badge t-existing">JUŻ DZIAŁA</span>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:0.4rem;">→ Gotowa baza 1P data do audience segmentacji. Fundament RMN.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-name">Google DV360 / Floodlight</div>
+      <div class="tech-role">Programmatic — DC-9774307</div>
+      <span class="tech-badge t-existing">JUŻ DZIAŁA</span>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:0.4rem;">→ Gotowy do off-site audience extension. Pipeline do Google programmatic.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-name">Ad Server RMN (nowy)</div>
+      <div class="tech-role">Dedykowany retail media — Criteo lub Kevel</div>
+      <span class="tech-badge t-needed">DO WDROŻENIA</span>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:0.4rem;">→ Pełna platforma RMN (brand portal, reporting, billing).</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-name">Clean Room</div>
+      <div class="tech-role">Snowflake lub InfoSum (EU RODO)</div>
+      <span class="tech-badge t-optional">FAZA 3</span>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:0.4rem;">→ Needed for off-site measurement i advanced audience sharing z brandami.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-name">Self-Serve Portal</div>
+      <div class="tech-role">Brand dashboard: kampanie, raporty, billing</div>
+      <span class="tech-badge t-needed">DO WDROŻENIA</span>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:0.4rem;">→ Wzorzec: Ulta Beauty self-serve. Kluczowe dla scale-up ponad 50 brand partners.</p>
+    </div>
+  </div>
+
+  <!-- FAZY WDROŻENIA -->
+  <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:1rem;color:var(--primary);">Plan Wdrożenia — 3 Fazy</h3>
+  <div class="phases">
+
+    <!-- FAZA 1 -->
+    <div class="phase phase-1">
+      <div class="phase-head">
+        <div class="phase-num ph1">1</div>
+        <div class="phase-head-text">
+          <h4>Faza 1 — Quick Wins: Sponsored Search + Category Display (0–3 miesięcy)</h4>
+          <p>Implementacja na istniejącym stacku. Minimalny capex. Pierwsze przychody.</p>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-formats">
+          <div class="pf">
+            <div class="pf-name">🔍 Sponsored Search</div>
+            <div class="pf-detail">
+              <strong>Umiejscowienie:</strong> SRP top 2–3 pozycje (powyżej organiki), oznaczone "Sponsored".<br>
+              <strong>Technologia:</strong> Luigi's Box Sponsored Listings (już zainstalowane!) lub Criteo Commerce Max.<br>
+              <strong>Model:</strong> CPC — aukcja drugiej ceny.<br>
+              <strong>Targeting:</strong> keyword-level (keyword = kategoria lub brand).<br>
+              <strong>Potencjał:</strong> 5179+ wyników na "witamina c" = ogromna inventory głębokość.
+            </div>
+            <div class="pf-price">
+              <span class="price-chip cpc-chip">CPC 0.80–2.50 PLN</span>
+            </div>
+          </div>
+          <div class="pf">
+            <div class="pf-name">📋 Category Sponsored Tiles</div>
+            <div class="pf-detail">
+              <strong>Umiejscowienie:</strong> Strony kategorii (np. "Pielęgnacja twarzy") — co 5–6 kafelków organicznych, nativnie wbudowane w grid.<br>
+              <strong>Technologia:</strong> SFCC content slots + Luigi's Box boosting lub Kevel API.<br>
+              <strong>Model:</strong> CPC auction.<br>
+              <strong>Targeting:</strong> category-level (marka X w kategorii, gdzie sprzedaje).
+            </div>
+            <div class="pf-price">
+              <span class="price-chip cpc-chip">CPC 0.60–1.80 PLN</span>
+            </div>
+          </div>
+          <div class="pf">
+            <div class="pf-name">🏷️ Brand Store (Landing Pages)</div>
+            <div class="pf-detail">
+              <strong>Umiejscowienie:</strong> Dedykowane podstrony brand.hebe.pl lub /brands/[marka].<br>
+              <strong>Technologia:</strong> SFCC Page Designer (już dostępny).<br>
+              <strong>Model:</strong> Flat fee miesięczny lub roczny.<br>
+              <strong>Cel:</strong> premium brand presence, showcase nowych kolekcji.
+            </div>
+            <div class="pf-price">
+              <span class="price-chip flat-chip">2000–8000 PLN/mies.</span>
+            </div>
+          </div>
+        </div>
+        <div class="callout callout-success" style="margin-top:1rem;">
+          <div class="callout-title">Koszt Fazy 1 (szacunek)</div>
+          <p>Jeśli Luigi's Box Sponsored (addon): ~$5–15K setup. Jeśli Criteo Commerce Max: negocjacja rev-share. Managed service na start (1 person sales). Czas do live: 6–10 tygodni.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAZA 2 -->
+    <div class="phase phase-2">
+      <div class="phase-head">
+        <div class="phase-num ph2">2</div>
+        <div class="phase-head-text">
+          <h4>Faza 2 — Display Pełne + Email + Push (3–6 miesięcy)</h4>
+          <p>Rozbudowanie inventory. Pierwsza platforma self-serve. Uruchomienie audience data.</p>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-formats">
+          <div class="pf">
+            <div class="pf-name">🖼️ Homepage Hero Baner</div>
+            <div class="pf-detail">
+              <strong>Umiejscowienie:</strong> Główny slider/hero rotator na hebe.pl (pierwsze co widzi użytkownik).<br>
+              <strong>Technologia:</strong> SFCC content slots — już 316 slotów "banners-html".<br>
+              <strong>Model:</strong> CPM lub flat fee dzienny/tygodniowy.<br>
+              <strong>Targeting:</strong> brak (homepage = all users) lub segmentacja UseInsider per user_segment.
+            </div>
+            <div class="pf-price">
+              <span class="price-chip cpm-chip">CPM 25–60 PLN</span> <span class="price-chip flat-chip">Flat 3 000–12 000 PLN/dzień</span>
+            </div>
+          </div>
+          <div class="pf">
+            <div class="pf-name">📐 Category Header Baner</div>
+            <div class="pf-detail">
+              <strong>Umiejscowienie:</strong> Górna część stron kategorii — baner 970×250 lub leaderboard.<br>
+              <strong>Technologia:</strong> SFCC sloty + lightweight JS injection.<br>
+              <strong>Model:</strong> CPM.<br>
+              <strong>Targeting:</strong> category affinity (klient przeglądający "Twarze" = audience dla marek pielęgnacyjnych).
+            </div>
+            <div class="pf-price">
+              <span class="price-chip cpm-chip">CPM 12–30 PLN</span>
+            </div>
+          </div>
+          <div class="pf">
+            <div class="pf-name">📧 Email Blok Sponsorowany</div>
+            <div class="pf-detail">
+              <strong>Umiejscowienie:</strong> Dedykowany blok w newsletterach My Hebe (segmentowanych do bazy lojalnościowej).<br>
+              <strong>Technologia:</strong> ESP Hebe + UseInsider personalizacja.<br>
+              <strong>Model:</strong> CPM (baza lojalnościowa) lub flat fee per send.<br>
+              <strong>Targeting:</strong> user_segment, category history, recency — na bazie DataLayer My Hebe.
+            </div>
+            <div class="pf-price">
+              <span class="price-chip cpm-chip">CPM 15–40 PLN</span>
+            </div>
+          </div>
+          <div class="pf">
+            <div class="pf-name">📲 Push Notification Sponsorowane</div>
+            <div class="pf-detail">
+              <strong>Umiejscowienie:</strong> Push notifications w aplikacji Hebe + web push.<br>
+              <strong>Technologia:</strong> UseInsider (już zainstalowany, ID: 10005125).<br>
+              <strong>Model:</strong> CPM lub CPC.<br>
+              <strong>Targeting:</strong> segment lojalnościowy, purchase trigger ("kupił krem → nowy serum tej marki").
+            </div>
+            <div class="pf-price">
+              <span class="price-chip cpm-chip">CPM 8–20 PLN</span>
+            </div>
+          </div>
+          <div class="pf">
+            <div class="pf-name">🛍️ PDP Sponsored Cross-sell</div>
+            <div class="pf-detail">
+              <strong>Umiejscowienie:</strong> Sekcja "Sprawdź też" / "Może Ci się spodobać" na stronach produktów.<br>
+              <strong>Technologia:</strong> UseInsider rekomendacje + sponsorowane sloty alternatywne.<br>
+              <strong>Model:</strong> CPM lub CPC.<br>
+              <strong>Targeting:</strong> kontekstowe (kategoria PDP).
+            </div>
+            <div class="pf-price">
+              <span class="price-chip cpm-chip">CPM 8–20 PLN</span> <span class="price-chip cpc-chip">CPC 0.40–1.20 PLN</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAZA 3 -->
+    <div class="phase phase-3">
+      <div class="phase-head">
+        <div class="phase-num ph3">3</div>
+        <div class="phase-head-text">
+          <h4>Faza 3 — Off-site + In-store + Clean Room (6–18 miesięcy)</h4>
+          <p>Audience extension poza hebe.pl. Pilot ekranów in-store. Dojrzała platforma RMN.</p>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-formats">
+          <div class="pf">
+            <div class="pf-name">🌐 Off-site Audience Extension</div>
+            <div class="pf-detail">
+              <strong>Mechanizm:</strong> My Hebe hashed emails → Meta Custom Audiences + Google Customer Match.<br>
+              <strong>Technologia:</strong> LiveRamp lub InfoSum (RODO-compliant matching).<br>
+              <strong>Model:</strong> CPM + data fee.<br>
+              <strong>Propozycja dla marek:</strong> "Docierasz do aktywnych klientów Hebe na Instagramie — za premią vs. cold audience."
+            </div>
+            <div class="pf-price">
+              <span class="price-chip cpm-chip">CPM +20–40% premium</span>
+            </div>
+          </div>
+          <div class="pf">
+            <div class="pf-name">🏪 In-store Screens (pilot)</div>
+            <div class="pf-detail">
+              <strong>Umiejscowienie:</strong> Ekrany przy kasach, endcapy, ewentualnie wejście do sklepu.<br>
+              <strong>Pilot:</strong> 20–50 sklepów (5–10% sieci). Rotacja kreacji per pora dnia.<br>
+              <strong>Model:</strong> CPM lub flat week rate.<br>
+              <strong>Wzorzec:</strong> Empik (1/3 sieci na start). Boots UK (600 ekranów).
+            </div>
+            <div class="pf-price">
+              <span class="price-chip cpm-chip">CPM 10–35 PLN</span>
+            </div>
+          </div>
+          <div class="pf">
+            <div class="pf-name">🧠 Clean Room + Incrementality</div>
+            <div class="pf-detail">
+              <strong>Platforma:</strong> Snowflake DC lub InfoSum (EU native).<br>
+              <strong>Use case 1:</strong> Marki uploadują swoje dane → matching z My Hebe → segment planning.<br>
+              <strong>Use case 2:</strong> Attribution — które impressions przełożyły się na zakup w Hebe.<br>
+              <strong>Use case 3:</strong> Holdout testing — prawdziwy lift kampanii.
+            </div>
+            <div class="pf-price">
+              <span class="price-chip flat-chip">Premium service layer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAP PLACEMENTS -->
+  <h3 style="font-size:1.2rem;font-weight:700;margin:2rem 0 1rem;color:var(--primary);">Mapa Umiejscowień — Gdzie Co Trafia</h3>
+  <div class="page-map">
+    <div class="page-card">
+      <div class="page-card-head">🏠 Homepage (hebe.pl)</div>
+      <div class="page-card-body">
+        <div class="slot">
+          <div class="slot-num">1</div>
+          <div class="slot-info">
+            <div class="slot-name">Hero Rotator (baner główny)</div>
+            <div class="slot-desc">Flat fee lub premium CPM. Marki premium / sezonowe kampanie. 970×350 lub fullwidth.</div>
+          </div>
+        </div>
+        <div class="slot">
+          <div class="slot-num">2</div>
+          <div class="slot-info">
+            <div class="slot-name">Featured Brands Section</div>
+            <div class="slot-desc">Grid 3–4 brandów "Wyróżnione marki". Flat monthly fee per brand.</div>
+          </div>
+        </div>
+        <div class="slot">
+          <div class="slot-num">3</div>
+          <div class="slot-info">
+            <div class="slot-name">Category Promo Banners</div>
+            <div class="slot-desc">Bloki tematyczne (np. "Nowości w pielęgnacji"). CPM, targeting per segment.</div>
+          </div>
+        </div>
+        <div class="slot">
+          <div class="slot-num">4</div>
+          <div class="slot-info">
+            <div class="slot-name">Sponsored Product Highlights</div>
+            <div class="slot-desc">"Polecane produkty" — sponsorowany karuzel. CPC.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-card">
+      <div class="page-card-head">🔍 Strona Wyników (SRP)</div>
+      <div class="page-card-body">
+        <div class="slot">
+          <div class="slot-num">1</div>
+          <div class="slot-info">
+            <div class="slot-name">Sponsored Products #1–3 (top)</div>
+            <div class="slot-desc">Powyżej organiki. Najwyższy CTR w całej sieci. CPC auction. Label "Sponsored" obowiązkowy.</div>
+          </div>
+        </div>
+        <div class="slot">
+          <div class="slot-num">2</div>
+          <div class="slot-info">
+            <div class="slot-name">Sponsored Brand Header</div>
+            <div class="slot-desc">Baner marki na górze SRP. CPM. Widoczny dla wszystkich szukających w kategorii.</div>
+          </div>
+        </div>
+        <div class="slot">
+          <div class="slot-num">3</div>
+          <div class="slot-info">
+            <div class="slot-name">Mid-listing Sponsored Tiles</div>
+            <div class="slot-desc">Co 5–6 organicznych: 1 sponsored tile. CPC. Nativna integracja w gridzie.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-card">
+      <div class="page-card-head">📂 Strona Kategorii</div>
+      <div class="page-card-body">
+        <div class="slot">
+          <div class="slot-num">1</div>
+          <div class="slot-info">
+            <div class="slot-name">Category Header Banner</div>
+            <div class="slot-desc">970×250 leaderboard. CPM. Targetowanie per kategoria = high affinity.</div>
+          </div>
+        </div>
+        <div class="slot">
+          <div class="slot-num">2</div>
+          <div class="slot-info">
+            <div class="slot-name">Sponsored Listings (grid)</div>
+            <div class="slot-desc">Co 5–6 organicznych: 1 sponsored tile. CPC. Kontekstowe dopasowanie kategorii.</div>
+          </div>
+        </div>
+        <div class="slot">
+          <div class="slot-num">3</div>
+          <div class="slot-info">
+            <div class="slot-name">Brand Showcase Widget</div>
+            <div class="slot-desc">Wyróżnienie marki na danej kategorii — logo + CTA. Flat fee per kategoria.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-card">
+      <div class="page-card-head">📦 Strona Produktu (PDP)</div>
+      <div class="page-card-body">
+        <div class="slot">
+          <div class="slot-num">1</div>
+          <div class="slot-info">
+            <div class="slot-name">Sponsored "Sprawdź też"</div>
+            <div class="slot-desc">Sekcja cross-sell — pierwsze 2–4 produkty sponsorowane. CPM lub CPC.</div>
+          </div>
+        </div>
+        <div class="slot">
+          <div class="slot-num">2</div>
+          <div class="slot-info">
+            <div class="slot-name">Brand Banner (pod opisem)</div>
+            <div class="slot-desc">Baner marki poniżej opisu produktu. Widoczny przy scrollowaniu. CPM.</div>
+          </div>
+        </div>
+        <div class="slot">
+          <div class="slot-num">3</div>
+          <div class="slot-info">
+            <div class="slot-name">Competitor Conquest (opt-in)</div>
+            <div class="slot-desc">Reklama marki X na PDP marki Y (za zgodą Hebe polityki). Premium pricing.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-card">
+      <div class="page-card-head">🛒 Koszyk + Checkout</div>
+      <div class="page-card-body">
+        <div class="slot">
+          <div class="slot-num">1</div>
+          <div class="slot-info">
+            <div class="slot-name">Cart Cross-sell Sponsored</div>
+            <div class="slot-desc">"Nie zapomnij o..." — sponsorowane produkty uzupełniające. CPC. Highest purchase intent w całym e-commerce.</div>
+          </div>
+        </div>
+        <div class="slot">
+          <div class="slot-num">2</div>
+          <div class="slot-info">
+            <div class="slot-name">Checkout Banner (ostrożnie)</div>
+            <div class="slot-desc">Tylko jeśli nie wpływa na CVR. Testuj A/B przed wdrożeniem. Flat fee.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-card">
+      <div class="page-card-head">📧 Email + Push</div>
+      <div class="page-card-body">
+        <div class="slot">
+          <div class="slot-num">1</div>
+          <div class="slot-info">
+            <div class="slot-name">Newsletter Blok Sponsorowany</div>
+            <div class="slot-desc">Dedykowany blok w tygodniowym newsletterze My Hebe. CPM na bazie list size × open rate.</div>
+          </div>
+        </div>
+        <div class="slot">
+          <div class="slot-num">2</div>
+          <div class="slot-info">
+            <div class="slot-name">Triggered Email Sponsorship</div>
+            <div class="slot-desc">Email po zakupie produktu X → sponsorowana propozycja produktu uzupełniającego. High-intent.</div>
+          </div>
+        </div>
+        <div class="slot">
+          <div class="slot-num">3</div>
+          <div class="slot-info">
+            <div class="slot-name">Push Notification Sponsored</div>
+            <div class="slot-desc">Via UseInsider. Segment-targeted. CTR 5–10x wyższy niż email. CPM na opt-in bazie.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENNIK REKOMENDOWANY -->
+  <h3 style="font-size:1.2rem;font-weight:700;margin:2rem 0 1rem;color:var(--primary);">Rekomendowany Cennik — Hebe Media Network (PLN)</h3>
+  <div class="table-wrap" style="margin-bottom:2rem;">
+    <table>
+      <thead>
+        <tr>
+          <th>Format</th>
+          <th>Umiejscowienie</th>
+          <th>Model</th>
+          <th>Cena</th>
+          <th>Typowy ROAS marki</th>
+          <th>Faza</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Sponsored Search</strong></td>
+          <td>SRP top 1–3</td>
+          <td><span class="price-chip cpc-chip">CPC</span></td>
+          <td>0.80–2.50 PLN/klik</td>
+          <td class="bm-positive">5x–9x</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td><strong>Category Sponsored</strong></td>
+          <td>Grid kategorii</td>
+          <td><span class="price-chip cpc-chip">CPC</span></td>
+          <td>0.60–1.80 PLN/klik</td>
+          <td class="bm-positive">4x–7x</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td><strong>Brand Store</strong></td>
+          <td>Dedykowana podstrona</td>
+          <td><span class="price-chip flat-chip">Flat</span></td>
+          <td>2 000–8 000 PLN/mies.</td>
+          <td>Brand KPI</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td><strong>Homepage Hero</strong></td>
+          <td>Główny rotator</td>
+          <td><span class="price-chip cpm-chip">CPM</span> / <span class="price-chip flat-chip">Flat</span></td>
+          <td>25–60 PLN CPM · 4 000–12 000 PLN/dzień</td>
+          <td class="bm-warn">2x–4x</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td><strong>Category Header</strong></td>
+          <td>Top kategorii</td>
+          <td><span class="price-chip cpm-chip">CPM</span></td>
+          <td>12–30 PLN CPM</td>
+          <td class="bm-warn">2x–5x</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td><strong>PDP Sponsored</strong></td>
+          <td>"Sprawdź też"</td>
+          <td><span class="price-chip cpm-chip">CPM</span> / <span class="price-chip cpc-chip">CPC</span></td>
+          <td>8–20 PLN CPM · 0.40–1.20 PLN/klik</td>
+          <td class="bm-warn">3x–6x</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td><strong>Email Blok</strong></td>
+          <td>Newsletter My Hebe</td>
+          <td><span class="price-chip cpm-chip">CPM</span></td>
+          <td>15–40 PLN CPM</td>
+          <td class="bm-warn">2x–5x</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td><strong>Push Sponsored</strong></td>
+          <td>App + web push</td>
+          <td><span class="price-chip cpm-chip">CPM</span></td>
+          <td>8–20 PLN CPM</td>
+          <td class="bm-positive">4x–7x</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td><strong>Off-site Audience Ext.</strong></td>
+          <td>Meta / Google</td>
+          <td><span class="price-chip cpm-chip">CPM</span></td>
+          <td>+25–40% premium vs. standard Meta CPM</td>
+          <td class="bm-warn">3x–6x</td>
+          <td>3</td>
+        </tr>
+        <tr>
+          <td><strong>In-store Screens</strong></td>
+          <td>Sklepy fizyczne</td>
+          <td><span class="price-chip cpm-chip">CPM</span> / <span class="price-chip flat-chip">Flat</span></td>
+          <td>10–35 PLN CPM · flat/tydzień per sklep</td>
+          <td>Lift measurement</td>
+          <td>3</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MODEL SPRZEDAŻY -->
+  <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:1rem;color:var(--primary);">Model Sprzedaży Reklam</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-icon" style="background:#fce7f3;">🤝</div>
+      <h3>Faza 1–2: Managed Service</h3>
+      <p>Dedykowany account manager (1–2 osoby) obsługuje marki. Hebe tworzy i optymalizuje kampanie w imieniu marki. Min. spend: <strong>2 000–5 000 PLN/mies.</strong></p>
+      <ul>
+        <li>Niska bariera wejścia dla marek</li>
+        <li>Szybsze przychody (nie czekasz na self-serve)</li>
+        <li>Limit: skalowalność (AM bottleneck po 30+ markach)</li>
+        <li>Pakiety sezonowe: Walentynki, Beauty Week, Black Friday</li>
+        <li>Co-op budgety: % od obrotów zakupowych marki</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:#ede9fe;">⚙️</div>
+      <h3>Faza 2–3: Self-Serve Portal</h3>
+      <p>Brand dashboard — marki samodzielnie tworzą kampanie, wybierają formaty, targetowanie i budżet. Wzorzec Ulta Beauty UB Media.</p>
+      <ul>
+        <li>Nieograniczona skalowalność</li>
+        <li>Min. spend: 2 000 PLN (brak AM)</li>
+        <li>Kampanie search: aukcja w czasie rzeczywistym</li>
+        <li>Raporty: impressions, clicks, ROAS, atrybucja</li>
+        <li>Billing: comiesięczny lub prepaid</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- REVENUE POTENTIAL -->
+  <div class="callout callout-success" style="margin-top:2rem;">
+    <div class="callout-title">Potencjał Przychodu Hebe Media Network (szacunek)</div>
+    <p>
+      Przy GMV Hebe ~2–3 mld PLN rocznie (szacunek na bazie skali Jeronimo Martins PL):<br>
+      • <strong>Conservative (0.5% GMV):</strong> ~10–15 mln PLN/rok — osiągalne po 12 miesiącach od Fazy 1<br>
+      • <strong>Mid (1.5% GMV):</strong> ~30–45 mln PLN/rok — benchmark beauty RMN (Boots-level)<br>
+      • <strong>Mature (2.5% GMV):</strong> ~50–75 mln PLN/rok — Ulta Beauty model, 2–3 lata<br>
+      • Marża operacyjna: <strong>70–80%</strong> (po kosztach platformy i salesforce)<br>
+      • Beauty premium CPM: Hebe powinna pobierać <strong>+20–30% premium</strong> vs. standardowych retail media w PL (silna affinita, 1P data, specjalistyczna audience)
+    </p>
+  </div>
+
+  <!-- FIRST MOVER -->
+  <div class="callout callout-warn" style="margin-top:1rem;">
+    <div class="callout-title">First-Mover Window: 12–18 miesięcy</div>
+    <p>Ani Rossmann, ani Sephora, ani Douglas nie mają publicznej sieci retail media w Polsce (stan maj 2026). Hebe ma 12–18 miesięcy okna pierwszego gracza. Rynek beauty PL = 20–40% premium CPM premium. Każdy miesiąc opóźnienia = utracone przychody reklamowe i relacje z partnerami brandowymi, które pójdą do Allegro Ads lub Meta.</p>
+  </div>
+</div>
+</section>
+
+<footer>
+  <p>Retail Media Networks — Kompendium i Rekomendacja dla hebe.pl</p>
+  <p style="margin-top:0.5rem;"><strong>Przygotował:</strong> Claude Sonnet 4.6 (Anthropic) | <strong>Data:</strong> Maj 2026 | <strong>Źródła:</strong> Web research (25+ sources) + NotebookLM analysis + hebe.pl site audit</p>
+  <p style="margin-top:0.5rem;">Dane rynkowe: GrandViewResearch, BCG, IAB, Criteo, eMarketer, Allegro IR, Mordor Intelligence.</p>
+</footer>
+
+</body>
+</html>
