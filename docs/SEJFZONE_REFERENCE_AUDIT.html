@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SejfZone Reference Audit v1 — Mapping | 2026-05-20</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3350;
+    --text: #e4e6f0;
+    --muted: #8b91b3;
+    --accent: #6c7fff;
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,.12);
+    --red: #f87171;
+    --red-bg: rgba(248,113,113,.12);
+    --yellow: #fbbf24;
+    --yellow-bg: rgba(251,191,36,.12);
+    --grey: #64748b;
+    --grey-bg: rgba(100,116,139,.12);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+
+  .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; gap: 16px; }
+  .header-logo { font-size: 20px; font-weight: 800; color: var(--text); }
+  .header-meta { color: var(--muted); font-size: 12px; margin-left: auto; text-align: right; }
+  .philosophy-bar { background: linear-gradient(90deg,#1e1440,#1a2040); border-bottom: 1px solid var(--border); padding: 9px 40px; font-size: 12px; color: var(--accent); }
+  .philosophy-bar strong { color: var(--text); }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 28px 40px; }
+
+  .tabs { display: flex; gap: 2px; margin-bottom: 24px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .tab-btn { background: none; border: none; color: var(--muted); padding: 9px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .15s; border-radius: 6px 6px 0 0; }
+  .tab-btn:hover { color: var(--text); background: var(--surface); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--surface); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 18px; }
+  .card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .tech-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+  .tech-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 3px; }
+  .tech-value { font-size: 13px; font-weight: 600; }
+
+  .annotated-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .annotated-view.mobile-view { grid-template-columns: 280px 1fr; }
+  .av-image-col { position: relative; background: #000; border-right: 1px solid var(--border); }
+  .av-image-col img { width: 100%; display: block; cursor: zoom-in; }
+  .av-image-col .av-label { position: absolute; top: 0; left: 0; right: 0; background: rgba(0,0,0,.7); padding: 6px 12px; font-size: 11px; color: var(--muted); display: flex; gap: 8px; align-items: center; z-index: 2; }
+  .vp-tag { background: var(--border); padding: 1px 7px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+  .av-dots { position: absolute; inset: 0; pointer-events: none; }
+  .av-dot { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,.9); box-shadow: 0 2px 8px rgba(0,0,0,.6); transform: translate(-50%, -50%); pointer-events: none; }
+  .av-annotations { background: var(--surface); padding: 14px 0; display: flex; flex-direction: column; }
+  .av-col-label { padding: 0 16px 12px; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); font-weight: 700; border-bottom: 1px solid var(--border); }
+  .av-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 16px; border-bottom: 1px solid rgba(46,51,80,.4); }
+  .av-item:last-child { border-bottom: none; }
+  .av-num { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .av-num.widget { background: #0891b2; color: #fff; font-size: 10px; width: 24px; height: 24px; border-radius: 4px; }
+  .av-text { font-size: 12.5px; color: var(--text); line-height: 1.5; flex: 1; }
+  .widget-section-label { font-size: 11px; font-weight: 700; color: #0891b2; text-transform: uppercase; letter-spacing: .05em; margin: 16px 16px 6px; }
+
+  /* Screenshot placeholder */
+  .screenshot-placeholder {
+    background: var(--surface2);
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .screenshot-placeholder .ph-filename { font-family: 'SF Mono', monospace; font-size: 12px; color: var(--accent); margin-top: 8px; display: block; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--border); font-weight: 600; }
+  td { padding: 9px 12px; border-bottom: 1px solid rgba(46,51,80,.4); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(108,127,255,.03); }
+
+  .ok   { color: var(--green); font-weight: 600; }
+  .warn { color: var(--yellow); font-weight: 600; }
+  .fail { color: var(--red); font-weight: 600; }
+  .unk  { color: var(--grey); font-weight: 600; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-ok   { background: var(--green-bg); color: var(--green); }
+  .badge-warn { background: var(--yellow-bg); color: var(--yellow); }
+  .badge-fail { background: var(--red-bg); color: var(--red); }
+  .badge-grey { background: var(--grey-bg); color: var(--grey); }
+  .badge-blue { background: rgba(108,127,255,.12); color: var(--accent); }
+
+  code { background: var(--surface2); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-family: 'SF Mono', monospace; font-size: 11px; color: #a5b4fc; }
+
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; margin: 20px 0 10px; }
+  .section-label:first-child { margin-top: 0; }
+
+  .note { padding: 11px 15px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; }
+  .note-warn { background: var(--yellow-bg); border-left: 3px solid var(--yellow); }
+  .note-fail { background: var(--red-bg); border-left: 3px solid var(--red); }
+  .note-ok   { background: var(--green-bg); border-left: 3px solid var(--green); }
+  .note-info { background: rgba(108,127,255,.1); border-left: 3px solid var(--accent); }
+
+  .schema-block { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
+  .schema-label { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--accent); font-weight: 700; margin-bottom: 10px; }
+
+  .dual-tile { display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:18px; }
+  .dual-tile .tile-col { background:#000; border-right:1px solid var(--border); position:relative; }
+  .dual-tile .tile-col:last-child { border-right:none; }
+  .dual-tile .tile-col img { width:100%; display:block; cursor:zoom-in; }
+  .dual-tile .tile-label { position:absolute; top:0;left:0;right:0; background:rgba(0,0,0,.7); padding:5px 10px; font-size:11px; color:var(--muted); display:flex; gap:6px; align-items:center; z-index:2; }
+  .dual-tile-annot { background:var(--surface); border:1px solid var(--border); border-radius:0 0 10px 10px; border-top:none; margin-top:-1px; padding:14px 16px; display:grid; grid-template-columns:1fr 1fr; gap:0; margin-bottom:18px; }
+  .dual-tile-annot .annot-col { padding:0 12px; }
+  .dual-tile-annot .annot-col:first-child { border-right:1px solid var(--border); }
+  .annot-col-label { font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); font-weight:700; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+  .annot-item { display:flex; gap:10px; align-items:flex-start; padding:7px 0; border-bottom:1px solid rgba(46,51,80,.3); }
+  .annot-item:last-child { border-bottom:none; }
+  .annot-num { flex-shrink:0; width:20px; height:20px; border-radius:50%; background:var(--accent); color:#fff; font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:1px; }
+  .annot-text { font-size:12px; color:var(--text); line-height:1.5; flex:1; }
+
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 22px; }
+  .summary-col { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+  .summary-col h3 { font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+  .summary-col h3.good { color: var(--green); }
+  .summary-col h3.bad { color: var(--red); }
+  .summary-col h3.warn { color: var(--yellow); }
+  .summary-col ol { padding-left: 16px; }
+  .summary-col ol li { font-size: 12px; padding: 3px 0; line-height: 1.5; }
+
+  /* Industry specific */
+  .cert-badge { display:inline-flex; align-items:center; gap:5px; background: rgba(34,197,94,.1); border:1px solid rgba(34,197,94,.3); border-radius:5px; padding:3px 9px; font-size:11px; font-weight:700; color:var(--green); margin:2px; }
+  .spec-row { display:flex; gap:8px; align-items:center; padding:6px 0; border-bottom:1px solid rgba(46,51,80,.3); font-size:12.5px; }
+  .spec-row:last-child { border-bottom:none; }
+  .spec-key { color:var(--muted); min-width:180px; }
+  .spec-val { color:var(--text); font-weight:600; }
+
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 1000; align-items: center; justify-content: center; cursor: zoom-out; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 92vw; max-height: 92vh; object-fit: contain; border-radius: 8px; }
+
+  [data-theme="light"] {
+    --bg: #f4f6fb; --surface: #ffffff; --surface2: #edf0f8; --border: #d8ddf0;
+    --text: #1a1d2e; --muted: #5c6280; --accent: #4f5fe8; --green: #16a34a;
+    --green-bg: rgba(22,163,74,.12); --red: #dc2626; --red-bg: rgba(220,38,38,.12);
+    --yellow: #b45309; --yellow-bg: rgba(180,83,9,.12); --grey: #6b7280; --grey-bg: rgba(107,114,128,.12);
+  }
+  [data-theme="light"] .philosophy-bar { background: linear-gradient(90deg,#ede8ff,#e8f0ff); }
+  .theme-btn { margin-left: 8px; background: none; border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+</style>
+<script>
+(function(){
+  var s=localStorage.getItem('theme'),sys=window.matchMedia('(prefers-color-scheme:light)').matches;
+  if(s?s==='light':sys) document.documentElement.setAttribute('data-theme','light');
+})();
+function toggleTheme(){
+  var light=document.documentElement.getAttribute('data-theme')==='light';
+  if(light){document.documentElement.removeAttribute('data-theme');localStorage.setItem('theme','dark');}
+  else{document.documentElement.setAttribute('data-theme','light');localStorage.setItem('theme','light');}
+  var btn=document.getElementById('theme-toggle');
+  if(btn) btn.textContent=light?'☀️ Jasny':'🌙 Ciemny';
+}
+function showTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+function zoom(img){
+  var lb=document.getElementById('lightbox');
+  document.getElementById('lb-img').src=img.src;
+  lb.classList.add('open');
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var btn=document.getElementById('theme-toggle');
+  var light=document.documentElement.getAttribute('data-theme')==='light';
+  if(btn) btn.textContent=light?'🌙 Ciemny':'☀️ Jasny';
+  document.getElementById('lightbox').addEventListener('click',function(){this.classList.remove('open');});
+});
+</script>
+</head>
+<body>
+
+<div id="lightbox" class="lightbox"><img id="lb-img" src="" alt=""></div>
+
+<div class="header">
+  <div class="header-logo">SejfZone Reference Audit <span style="font-size:13px;font-weight:400;color:var(--accent);margin-left:8px">v1 — Mapping</span></div>
+  <div style="display:flex;gap:6px;align-items:center">
+    <span class="badge badge-blue">sejfzone.pl</span>
+    <span class="badge badge-grey">IdoSell (IAI Shop)</span>
+    <span class="badge badge-grey">PL</span>
+    <span class="badge badge-grey">10 widoków</span>
+    <span class="badge badge-grey">Shopper View + HTML Scan</span>
+  </div>
+  <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()">☀️ Jasny</button>
+  <div class="header-meta">2026-05-20 | HP · Nav · Listing · Search · Tile · PDP · Koszyk · Checkout · Blog · ContentMap</div>
+</div>
+
+<div class="philosophy-bar">
+  <strong>Fundament:</strong> E-commerce to NIE strona. To zbiór akcji i ich stymulatorów. Shopper kupuje <strong>OCZAMI</strong>. Każdy widok = <strong>Shopper View</strong> (screen + anotacje) + <strong>HTML Scan</strong>. | Branża: sejfy, szafy ognioodporne — produkty wysokiej wartości, zakup rzadki, decyzja rozciągnięta w czasie.
+</div>
+
+<div class="container">
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('overview',this)">Przegląd</button>
+  <button class="tab-btn" onclick="showTab('hp',this)">1. Home Page</button>
+  <button class="tab-btn" onclick="showTab('nav',this)">2. Nav</button>
+  <button class="tab-btn" onclick="showTab('listing',this)">3. Listing Kategoria</button>
+  <button class="tab-btn" onclick="showTab('search',this)">4. Open Search</button>
+  <button class="tab-btn" onclick="showTab('tile',this)">5. Kafelek / Product Tile</button>
+  <button class="tab-btn" onclick="showTab('pdp',this)">6. PDP</button>
+  <button class="tab-btn" onclick="showTab('cart',this)">7. Koszyk</button>
+  <button class="tab-btn" onclick="showTab('checkout',this)">8. Checkout</button>
+  <button class="tab-btn" onclick="showTab('blog',this)">9. Blog</button>
+  <button class="tab-btn" onclick="showTab('contentmap',this)">Content Map</button>
+  <button class="tab-btn" onclick="showTab('summary',this)">Summary</button>
+</div>
+
+<!-- ═══════════════════════════════════════════ OVERVIEW ═══ -->
+<div id="tab-overview" class="tab-panel active">
+
+  <div class="note note-warn">
+    <strong>Screenshots pending.</strong> Playwright MCP był niedostępny podczas auditu. Screenshoty są gotowe do zebrania. Uruchom z terminala:<br>
+    <code>cd /Users/Tomek_Main/Documents/Claude/Projects/Ecomms_Activation_Agency && python sejfzone_screenshots.py</code><br>
+    Script: <code>sejfzone_screenshots.py</code> | Output dir: <code>sejfzone_audit_screenshots/</code> | 15 shotów
+  </div>
+
+  <div class="card">
+    <div class="card-title">Tech Stack</div>
+    <div class="tech-grid">
+      <div class="tech-item"><div class="tech-label">Platform</div><div class="tech-value">IdoSell (IAI Shop)</div></div>
+      <div class="tech-item"><div class="tech-label">Język</div><div class="tech-value">PL</div></div>
+      <div class="tech-item"><div class="tech-label">Waluta</div><div class="tech-value">PLN (brutto)</div></div>
+      <div class="tech-item"><div class="tech-label">GA4</div><div class="tech-value">G-2ZP80V8MVN</div></div>
+      <div class="tech-item"><div class="tech-label">GTM</div><div class="tech-value">GTM-WTF522SV</div></div>
+      <div class="tech-item"><div class="tech-label">Omnibus</div><div class="tech-value">Tak (30-day low)</div></div>
+      <div class="tech-item"><div class="tech-label">Wishlist</div><div class="tech-value">Lista zakupowa (native)</div></div>
+      <div class="tech-item"><div class="tech-label">Porównywarka</div><div class="tech-value">Tak (native IdoSell)</div></div>
+      <div class="tech-item"><div class="tech-label">Powiadamianie</div><div class="tech-value">Powiadom o dostępności</div></div>
+      <div class="tech-item"><div class="tech-label">Marka producenta</div><div class="tech-value">ISS (własna)</div></div>
+      <div class="tech-item"><div class="tech-label">Serie</div><div class="tech-value">SAVE4EVER, ADORF, SIEGEN, BADEN-BADEN</div></div>
+      <div class="tech-item"><div class="tech-label">Certyfikaty</div><div class="tech-value">EN 1143-1 kl. I/II, S1</div></div>
+      <div class="tech-item"><div class="tech-label">Dostawa</div><div class="tech-value">Darmowa</div></div>
+      <div class="tech-item"><div class="tech-label">Zwroty</div><div class="tech-value">60 dni</div></div>
+      <div class="tech-item"><div class="tech-label">Gwarancja</div><div class="tech-value">2 lata</div></div>
+      <div class="tech-item"><div class="tech-label">Kontakt</div><div class="tech-value">+48 453 399 243</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Mapa auditu — pokrycie widoków</div>
+    <div class="table-wrap"><table>
+      <tr><th>Widok</th><th>URL / kontekst</th><th>Shopper View (HTML Scan)</th><th>Screenshoty</th><th>Status</th></tr>
+      <tr><td><strong>Homepage</strong></td><td>sejfzone.pl</td><td class="ok">Tak — HTML scan</td><td class="warn">Oczekuje</td><td><span class="badge badge-warn">Częściowy</span></td></tr>
+      <tr><td><strong>Nav</strong></td><td>Header desktop + mobile</td><td class="ok">Tak — HTML scan</td><td class="warn">Oczekuje</td><td><span class="badge badge-warn">Częściowy</span></td></tr>
+      <tr><td><strong>Listing</strong></td><td>/sejfy-antywlamaniowe</td><td class="ok">Tak — pełna struktura filtrów</td><td class="warn">Oczekuje</td><td><span class="badge badge-warn">Częściowy</span></td></tr>
+      <tr><td><strong>Search</strong></td><td>/pl/search.html?q=sejf</td><td class="ok">Tak — HTML scan</td><td class="warn">Oczekuje</td><td><span class="badge badge-warn">Częściowy</span></td></tr>
+      <tr><td><strong>Kafelek</strong></td><td>Listing tile (SAVE4EVER)</td><td class="ok">Tak — elementy z HTML scan</td><td class="warn">Oczekuje</td><td><span class="badge badge-warn">Częściowy</span></td></tr>
+      <tr><td><strong>PDP</strong></td><td>/pl/products/sejf-antywlamaniowy-save4ever…-55.html</td><td class="ok">Tak — pełna struktura</td><td class="warn">Oczekuje</td><td><span class="badge badge-warn">Częściowy</span></td></tr>
+      <tr><td><strong>Koszyk</strong></td><td>Koszyk (IdoSell native)</td><td class="unk">Brak — URL nie znaleziony bez JS</td><td class="warn">Oczekuje</td><td><span class="badge badge-grey">Brak danych</span></td></tr>
+      <tr><td><strong>Checkout</strong></td><td>Zamówienie (IdoSell native)</td><td class="unk">Brak — wymaga sesji</td><td class="warn">Oczekuje</td><td><span class="badge badge-grey">Brak danych</span></td></tr>
+      <tr><td><strong>Blog</strong></td><td>/blog (404 — brak bloga)</td><td class="fail">Brak bloga</td><td class="fail">N/A</td><td><span class="badge badge-fail">Brak</span></td></tr>
+      <tr><td><strong>Content Map</strong></td><td>PDP + listing cross-analysis</td><td class="ok">Tak — model tytułu, specs, certyfikaty</td><td>—</td><td><span class="badge badge-ok">Gotowy</span></td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Nowe elementy vs GLOV (branżowe — sejfy)</div>
+    <div class="note note-info" style="margin-bottom:12px">Poniższe elementy nie występują w GLOV audit — specyficzne dla branży sejfów/produktów bezpieczeństwa.</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Widok</th><th>Opis</th></tr>
+      <tr><td><strong>Certyfikat EN 1143-1</strong></td><td>Tile + PDP</td><td>Badge/ikona klasy odporności na włamanie (klasa I / klasa II). Na kafelku jako ikona z podpisem, na PDP jako tekst "klasa I wg normy EN 1143-1"</td></tr>
+      <tr><td><strong>Klasa S1</strong></td><td>PDP (szafy na broń)</td><td>Certyfikat odporności (EN 14450 / S1) dla szaf na broń — inna norma niż sejfy</td></tr>
+      <tr><td><strong>Filtry wymiarowe — slidery mm</strong></td><td>Listing + Search</td><td>Filtry: Wysokość mm, Szerokość mm, Głębokość mm — zakresowe slidery. GLOV nie ma filtrów wymiarowych.</td></tr>
+      <tr><td><strong>Filtr: Odporność na włamanie</strong></td><td>Listing</td><td>Checkbox klasa I / klasa II — filtr specyficzny dla kategorii sejfów antywłamaniowych</td></tr>
+      <tr><td><strong>Filtr: Seria produktowa</strong></td><td>Listing + Search</td><td>Checkbox seria (save4ever I, save4ever II, Adorf, Baden-Baden, Siegen) — GLOV nie ma filtrów serii</td></tr>
+      <tr><td><strong>Ikony spec na kafelku</strong></td><td>Tile</td><td>3 ikony pod tytułem: odporność na włamanie (tarcza), rodzaj zamka (kłódka), waga (kg). Z wartościami. GLOV kafelek nie ma ikon specyfikacji.</td></tr>
+      <tr><td><strong>Warianty: kolor RAL + rodzaj zamka</strong></td><td>PDP</td><td>Matryca wariantów: Kolor (RAL kod + nazwa) × Rodzaj zamka (Kluczowy/Elektroniczny). GLOV ma prostsze warianty (kolor/rozmiar).</td></tr>
+      <tr><td><strong>Swatch RAL na listingu</strong></td><td>Tile</td><td>Thumbnails kolorów jako mini-swatch linkujące bezpośrednio do wariantu kolorystycznego</td></tr>
+      <tr><td><strong>Wymiary zewnętrzne na kafelku</strong></td><td>Tile</td><td>"Wymiar zewn. WxSxG (mm): 400 x 400 x 270" widoczny w kafelku. GLOV nie pokazuje wymiarów na kafelku.</td></tr>
+      <tr><td><strong>Waga (kg) na kafelku</strong></td><td>Tile</td><td>"39 kg" jako ikona+wartość. GLOV nie ma wagi na kafelku.</td></tr>
+      <tr><td><strong>Porównywarka produktów</strong></td><td>Tile + PDP</td><td>Link "+ Dodaj do porównania" na każdym kafelku i PDP. GLOV nie ma porównywarki.</td></tr>
+      <tr><td><strong>Lista zakupowa (nie wishlist)</strong></td><td>PDP</td><td>IdoSell "lista zakupowa" — inna semantyka niż Growave Wishlist GLOV. Ikona + "#addToShoppingList"</td></tr>
+      <tr><td><strong>Marka producenta jako link</strong></td><td>PDP</td><td>Logo ISS linkuje do strony producenta (/pl/producers/iss-…). GLOV nie pokazuje producenta jako osobny element.</td></tr>
+      <tr><td><strong>Powiadom o dostępności</strong></td><td>PDP</td><td>"Powiadom mnie o dostępności produktu" — dedykowany widget. GLOV nie ma tego widgetu.</td></tr>
+      <tr><td><strong>Omnibus (30-day lowest)</strong></td><td>Tile + PDP</td><td>Regularna cena + "Najniższa cena produktu w okresie 30 dni przed wprowadzeniem obniżki". Format PL-specyficzny dla dyrektywy Omnibus.</td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ HOME PAGE ═══ -->
+<div id="tab-hp" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">Shopper View — Home Page</div>
+
+    <div class="section-label">Desktop — 1280px (full-page)</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">HP Desktop — full-page <span class="vp-tag">1280px</span></div>
+        <img src="sejfzone_audit_screenshots/hp_desktop.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/hp_desktop.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Anatomia strony głównej — od góry (HTML scan)</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Header (sticky)</strong> — Logo "Sejf Zone" (lewy), ikona lupy (search), ikona konta, ikona koszyka. Pasek nawigacji z kategoriami poniżej logo.</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Promo bar / trust bar</strong> — "Darmowa dostawa | 60 dni na zwrot | Gwarancja 2 lata" (do potwierdzenia screenshotem)</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Hero sekcja</strong> — "Sklep z sejfami – sejfy domowe, biurowe i szafy na broń". Headline + CTA do kategorii.</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Sekcja marek/serii</strong> — SAVE4EVER (sejfy antywłamaniowe), ADORF / BADEN-BADEN (meblowe), SIEGEN (szafy na broń). Lista z opisami i CTA.</div></div>
+        <div class="av-item"><div class="av-num">5</div><div class="av-text"><strong>Bestsellery / Polecane produkty</strong> — Karuzela lub grid produktów z kafelkami (z ikonami spec i cenami).</div></div>
+        <div class="av-item"><div class="av-num">6</div><div class="av-text"><strong>Sekcja USP / zaufanie</strong> — "Certyfikowane sejfy ISS", "Darmowa dostawa", "60 dni na zwrot", "Gwarancja 2 lata". (na podstawie meta description)</div></div>
+        <div class="av-item"><div class="av-num">7</div><div class="av-text"><strong>Footer</strong> — Kontakt: tel. +48 453 399 243, sklep@sejfzone.pl, ul. Błażeja 48C, 61-608 Poznań. Linki kategorii, regulamin, polityka prywatności.</div></div>
+        <div class="widget-section-label">Widgety</div>
+        <div class="av-item"><div class="av-num widget">W1</div><div class="av-text"><strong>Cookie consent (IAI/IdoSell native)</strong> — baner zgody na ciasteczka przy pierwszej wizycie. Przyciski akceptacji.</div></div>
+        <div class="av-item"><div class="av-num widget">W2</div><div class="av-text"><strong>Consent Mode v2 (Google)</strong> — GTM consent mode z domyślnym "denied" dla analytics/ads. Aktualizacja po kliknięciu cookie.</div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — 390px (full-page)</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">HP Mobile <span class="vp-tag">390px</span></div>
+        <img src="sejfzone_audit_screenshots/hp_mobile.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/hp_mobile.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Mobile HP — układ</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Header mobile</strong> — Logo + hamburger (☰) + ikona koszyka. Bez secondary nav bar.</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Hero sekcja</strong> — Headline + CTA, układ pojedynczej kolumny.</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Grid produktów</strong> — 2 kolumny kafelków (do potwierdzenia screenshotem).</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Footer</strong> — Dane kontaktowe, linki nawigacyjne w układzie accordion lub flat lista.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ NAV ═══ -->
+<div id="tab-nav" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">Shopper View — Nawigacja</div>
+
+    <div class="section-label">Desktop — nawigacja (do potwierdzenia screenshotem)</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Nav Desktop <span class="vp-tag">1280px</span></div>
+        <img src="sejfzone_audit_screenshots/nav_desktop.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/nav_desktop.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Nawigacja desktop — elementy</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Promo bar / trust bar</strong> — Widoczny nad header. Treść: "Darmowa dostawa | 60 dni na zwrot | Gwarancja 2 lata" (do weryfikacji).</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Header (sticky)</strong> — Logo "Sejf Zone" (lewy), ikona lupy (search, prawy), ikona konta, ikona koszyka z licznikiem.</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Główne menu nawigacyjne</strong> — Poziome linki kategorii: Sejfy antywłamaniowe · Sejfy meblowe · Szafy na broń. Typ: flat linki lub dropdown (do weryfikacji).</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Wyszukiwarka</strong> — Ikona lupy w nagłówku. Aktywacja przez klik → expand search bar.</div></div>
+        <div class="av-item"><div class="av-num">5</div><div class="av-text"><strong>Konto użytkownika</strong> — Link: Zaloguj się / Zarejestruj się / Sprawdź status zamówienia. Bez konta gość.</div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — hamburger menu (otwarty)</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">Nav Mobile — hamburger <span class="vp-tag">390px</span></div>
+        <img src="sejfzone_audit_screenshots/nav_hamburger_mobile.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/nav_hamburger_mobile.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Hamburger menu — elementy</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Hamburger (☰)</strong> — Ikona w nagłówku mobile. Otwiera slide-in menu (lewy lub pełny ekran).</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Konto</strong> — Zaloguj się / Zarejestruj się / Sprawdź status zamówienia — dostępne z menu.</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Kategorie główne:</strong> Sejfy antywłamaniowe · Sejfy meblowe · Szafy na broń. Typ linków (flat/dropdown) do weryfikacji screenshotem.</div></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">Pełna struktura nawigacji (z HTML scan)</div>
+      <div class="table-wrap"><table>
+        <tr><th>Pozycja</th><th>URL</th><th>Typ</th></tr>
+        <tr><td>Sejfy antywłamaniowe</td><td>/sejfy-antywlamaniowe</td><td>Kategoria główna</td></tr>
+        <tr><td>Sejfy meblowe</td><td>/sejfy-meblowe</td><td>Kategoria główna</td></tr>
+        <tr><td>Szafy na broń</td><td>/szafy-na-bron</td><td>Kategoria główna</td></tr>
+        <tr><td>Zaloguj się</td><td>/login.php</td><td>Konto</td></tr>
+        <tr><td>Zarejestruj się</td><td>/client-new.php?register</td><td>Konto</td></tr>
+        <tr><td>Sprawdź status zamówienia</td><td>/order-open.php</td><td>Konto / obsługa</td></tr>
+      </table></div>
+      <p style="font-size:12px;color:var(--muted);margin-top:10px">Struktura pod-kategorii (dropdown) do weryfikacji screenshotem — HTML scan pokazuje 3 kategorie główne z linków na stronie.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ LISTING ═══ -->
+<div id="tab-listing" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">Shopper View — Listing Kategoria</div>
+    <div class="note note-info">Audytowana kategoria: <strong>Sejfy antywłamaniowe</strong> — <code>sejfzone.pl/sejfy-antywlamaniowe</code>. Pełna lista filtrów i struktura znana z HTML scan.</div>
+
+    <div class="section-label">Desktop — 1280px (full-page)</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Listing Desktop — Sejfy antywłamaniowe <span class="vp-tag">1280px</span></div>
+        <img src="sejfzone_audit_screenshots/listing_desktop.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/listing_desktop.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Listing Kategoria — anatomia (HTML scan)</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Typ listingu: Paginacja</strong> — IdoSell standardowo używa paginacji (nie infinite scroll). Do weryfikacji screenshotem.</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Nagłówek kategorii</strong> — H1: "SEJFY ANTYWŁAMANIOWE". Breadcrumb nad nagłówkiem (do weryfikacji).</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Panel filtracji (lewa kolumna lub górny pasek)</strong> — 5 grup filtrów (patrz poniżej). Typ UI: slidery zakresowe mm + checkboxy.</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Sortowanie (dropdown)</strong> — 7 opcji: Najlepsza trafność · Sortuj po nazwie A-Z · Sortuj po nazwie Z-A · Sortuj od najtańszych · Sortuj od najdroższych · Sortuj od najstarszych · Sortuj od najnowszych.</div></div>
+        <div class="av-item"><div class="av-num">5</div><div class="av-text"><strong>Grid produktów</strong> — Kafelki SAVE4EVER. Grid desktop: do weryfikacji (2 lub 3 kolumny). Widoczne: zdjęcie + badge + tytuł + ikony spec + cena + swatch kolorów.</div></div>
+        <div class="av-item"><div class="av-num">6</div><div class="av-text"><strong>Badge na kafelkach</strong> — "Promocja" + "Nasz bestseller" — jednoczesne 2 badge na jednym kafelku (SAVE4EVER klasa I).</div></div>
+        <div class="av-item"><div class="av-num">7</div><div class="av-text"><strong>Paginacja / liczba produktów</strong> — Widoczna na dole listingu. Łącznie: 22 produkty w kategorii (16 klasy I + 6 klasy II z filtrów).</div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — 390px (full-page)</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">Listing Mobile <span class="vp-tag">390px</span></div>
+        <img src="sejfzone_audit_screenshots/listing_mobile.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/listing_mobile.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Listing mobile</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Filtry mobile</strong> — link "#menu_filter" widoczny — filtry prawdopodobnie w slide-in/overlay na mobile. Przycisk "Filtrowanie" jako trigger.</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Grid produktów</strong> — 2 kolumny (do weryfikacji). Kafelki z ikonami spec i cenami.</div></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">Filtry — pełna lista (HTML scan)</div>
+      <div class="table-wrap"><table>
+        <tr><th>Filtr</th><th>Typ UI</th><th>Wartości / zakres</th><th>Unikalny vs GLOV</th></tr>
+        <tr><td><strong>Wysokość w mm</strong></td><td>Slider zakresowy</td><td>Min–Max (mm)</td><td><span class="badge badge-fail">Nowy (branżowy)</span></td></tr>
+        <tr><td><strong>Szerokość w mm</strong></td><td>Slider zakresowy</td><td>Min–Max (mm)</td><td><span class="badge badge-fail">Nowy (branżowy)</span></td></tr>
+        <tr><td><strong>Głębokość w mm</strong></td><td>Slider zakresowy</td><td>Min–Max (mm)</td><td><span class="badge badge-fail">Nowy (branżowy)</span></td></tr>
+        <tr><td><strong>Seria</strong></td><td>Checkbox</td><td>save4ever I (16 prod.) · save4ever II (6 prod.)</td><td><span class="badge badge-fail">Nowy (branżowy)</span></td></tr>
+        <tr><td><strong>Odporność na włamanie</strong></td><td>Checkbox</td><td>klasa I (16 prod.) · Klasa II (6 prod.)</td><td><span class="badge badge-fail">Nowy (branżowy)</span></td></tr>
+        <tr><td><strong>Cena</strong></td><td>Slider zakresowy</td><td>zł–zł</td><td><span class="badge badge-grey">Standard</span></td></tr>
+      </table></div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ SEARCH ═══ -->
+<div id="tab-search" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">Shopper View — Open Search</div>
+    <div class="note note-info">URL wyników wyszukiwania: <code>sejfzone.pl/pl/search.html?q=sejf</code>. Strona wyników to pełny listing z filtrami — nie overlay/autocomplete.</div>
+
+    <div class="section-label">Desktop — 1280px</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Search Desktop <span class="vp-tag">1280px</span></div>
+        <img src="sejfzone_audit_screenshots/search_desktop.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/search_desktop.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Search — anatomia (HTML scan)</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Wyszukiwarka</strong> — Ikona lupy w header. Aktywacja → expand lub redirect do strony wyników.</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Strona wyników</strong> — H1: "Wyniki wyszukiwania". Identyczna struktura filtrów co listing kategorii.</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Filtry w wynikach</strong> — Wysokość/Szerokość/Głębokość mm (slidery), Seria (Adorf 32, Baden-Baden...), Cena. Branżowe filtry wymiarowe dostępne też w wynikach wyszukiwania.</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Produkty w wynikach</strong> — Grid produktów identyczny jak listing. Autocomplete/predictive search: brak danych (wymaga JS/screenshota).</div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — 390px</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">Search Mobile <span class="vp-tag">390px</span></div>
+        <img src="sejfzone_audit_screenshots/search_mobile.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/search_mobile.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Search mobile</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Search UI mobile</strong> — Dostępny przez hamburger lub dedykowaną ikonę. Typ: redirect do strony wyników (nie inline autocomplete).</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ TILE ═══ -->
+<div id="tab-tile" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">Shopper View — Kafelek / Product Tile</div>
+    <div class="note note-info">Kafelek audytowany: <strong>Sejf antywłamaniowy SAVE4EVER klasa I 40×40×27 cm szary – zamek kluczowy</strong>. HTML scan z listingu /sejfy-antywlamaniowe.</div>
+
+    <div class="dual-tile">
+      <div class="tile-col">
+        <div class="tile-label">Default state <span class="vp-tag">desktop</span></div>
+        <img src="sejfzone_audit_screenshots/tile_default_desktop.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/tile_default_desktop.jpeg">
+      </div>
+      <div class="tile-col">
+        <div class="tile-label">Hover state <span class="vp-tag">desktop</span></div>
+        <p style="font-size:12px;color:var(--muted);padding:12px;background:rgba(0,0,0,.2);border-radius:6px;">Screenshot hover state — brak pliku (opcjonalny)</p>
+      </div>
+    </div>
+    <div class="dual-tile-annot">
+      <div class="annot-col">
+        <div class="annot-col-label">Default state — elementy kafelka</div>
+        <div class="annot-item"><div class="annot-num">1</div><div class="annot-text"><strong>Zdjęcie produktu</strong> — Główne zdjęcie (np. sejf frontem). Hover: swap na 2. zdjęcie (do weryfikacji).</div></div>
+        <div class="annot-item"><div class="annot-num">2</div><div class="annot-text"><strong>Badge (multi)</strong> — "Promocja" + "Nasz bestseller" — 2 badge jednocześnie na jednym kafelku.</div></div>
+        <div class="annot-item"><div class="annot-num">3</div><div class="annot-text"><strong>Tytuł produktu</strong> — Sejf antywłamaniowy SAVE4EVER klasa I 40×40×27 cm szary – zamek kluczowy</div></div>
+        <div class="annot-item"><div class="annot-num">4</div><div class="annot-text"><strong>Ikony spec (3 ikony z wartościami):</strong><br>• Odporność na włamanie: klasa I<br>• Rodzaj zamka: Kluczowy<br>• Waga (kg): 39 kg</div></div>
+        <div class="annot-item"><div class="annot-num">5</div><div class="annot-text"><strong>Wymiary zewn.</strong> — "Wymiar zewn. WxSxG (mm): 400 x 400 x 270"</div></div>
+        <div class="annot-item"><div class="annot-num">6</div><div class="annot-text"><strong>Swatche wariantów</strong> — Mini-thumbnails kolorów: grafitowy RAL7024, szary RAL7035. Klikalny → bezpośrednio do wariantu.</div></div>
+        <div class="annot-item"><div class="annot-num">7</div><div class="annot-text"><strong>Cena z Omnibus</strong> — 1 946,55 zł brutto/1szt. + "Najniższa cena 30 dni: ~2 049,00 zł~" + "-5%"</div></div>
+        <div class="annot-item"><div class="annot-num">8</div><div class="annot-text"><strong>Link "+ Dodaj do porównania"</strong> — Widoczny na kafelku. Otwiera pływającą porównywarkę.</div></div>
+      </div>
+      <div class="annot-col">
+        <div class="annot-col-label">Hover state</div>
+        <div class="annot-item"><div class="annot-num">1</div><div class="annot-text">Hover state do weryfikacji screenshotem. Prawdopodobna zmiana: pojawienie się przycisku "Dodaj do koszyka" lub zmiana zdjęcia.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ PDP ═══ -->
+<div id="tab-pdp" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">Shopper View — PDP</div>
+    <div class="note note-info">Audytowany produkt: <strong>Sejf antywłamaniowy SAVE4EVER klasa I 40×40×27 cm szary – zamek kluczowy</strong><br>URL: <code>sejfzone.pl/pl/products/sejf-antywlamaniowy-save4ever-klasa-i-40x40x27-cm-szary-zamek-kluczowy-55.html</code></div>
+
+    <div class="section-label">Desktop — 1280px (full-page)</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">PDP Desktop — full-page <span class="vp-tag">1280px</span></div>
+        <img src="sejfzone_audit_screenshots/pdp_desktop.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/pdp_desktop.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">PDP — anatomia od góry (HTML scan)</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Breadcrumb</strong> — Do weryfikacji screenshotem. Prawdopodobnie: Home › Sejfy antywłamaniowe › [tytuł produktu]</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Galeria produktu</strong> — Min. 4 zdjęcia (3 dodatkowe thumbnails widoczne). Układ: główne zdjęcie + miniatury boczne lub dolne.</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Badge (multi)</strong> — "Promocja Okazja Nasz bestseller" — 3 badge jednocześnie w górnej części PDP.</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Tytuł (H1)</strong> — Sejf antywłamaniowy SAVE4EVER klasa I 40×40×27 cm szary – zamek kluczowy</div></div>
+        <div class="av-item"><div class="av-num">5</div><div class="av-text"><strong>Certyfikat EN 1143-1</strong> — "Odporność na włamanie: klasa I wg normy EN 1143-1" — jako punkt listy pod tytułem. Kluczowy element branżowy.</div></div>
+        <div class="av-item"><div class="av-num">6</div><div class="av-text"><strong>Marka producenta ISS</strong> — Logo ISS jako klikalny link do strony producenta (/pl/producers/iss-…). Zdjęcie logo załadowane lazy.</div></div>
+        <div class="av-item"><div class="av-num">7</div><div class="av-text"><strong>Warianty — Kolor</strong> — Swatch: grafitowy / RAL 7024 | szary / RAL 7035. Wybór wizualny + opis.</div></div>
+        <div class="av-item"><div class="av-num">8</div><div class="av-text"><strong>Warianty — Rodzaj zamka</strong> — Dropdown/button: Elektroniczny | Kluczowy. Wybór wpływa na produkt + wariant.</div></div>
+        <div class="av-item"><div class="av-num">9</div><div class="av-text"><strong>Warianty — Rozmiar</strong> — "one size" (jeden rozmiar dla tego modelu). Pole obecne, wartość jednoznaczna.</div></div>
+        <div class="av-item"><div class="av-num">10</div><div class="av-text"><strong>Cena z Omnibus</strong> — 1 946,55 zł brutto / 1szt. + Najniższa cena 30 dni: ~2 049,00 zł~ -5% + Cena regularna przekreślona.</div></div>
+        <div class="av-item"><div class="av-num">11</div><div class="av-text"><strong>Stepper ilości</strong> — Pole "12345 więcej z" — pole do wpisania ilości z przyciskami +/-.</div></div>
+        <div class="av-item"><div class="av-num">12</div><div class="av-text"><strong>CTA — Dodaj do koszyka</strong> — Główny przycisk ATC. Kolor/styl do weryfikacji screenshotem.</div></div>
+        <div class="av-item"><div class="av-num">13</div><div class="av-text"><strong>Linki dodatkowe</strong> — "+ Dodaj do porównania" | "Dodaj do listy zakupowej". Obok/pod przyciskiem ATC.</div></div>
+        <div class="av-item"><div class="av-num">14</div><div class="av-text"><strong>Kanały zakupu</strong> — "Możesz kupić także poprzez:" — zewnętrzne kanały zakupu (do weryfikacji).</div></div>
+        <div class="av-item"><div class="av-num">15</div><div class="av-text"><strong>Dostępność / czas dostawy</strong> — Ikona z wykresem dostępności. "Produkt na zamówienie" — widget dostępności z harmonogramem dostaw.</div></div>
+        <div class="av-item"><div class="av-num">16</div><div class="av-text"><strong>Powiadom o dostępności</strong> — Link "#tellAvailability" — widget zapisu na powiadomienie gdy produkt dostępny.</div></div>
+        <div class="av-item"><div class="av-num">17</div><div class="av-text"><strong>Opis produktu / specyfikacja techniczna</strong> — Sekcja BTF z tabelą specyfikacji: wymiary, waga, typ zamka, certyfikaty. Do weryfikacji czy jest accordion czy flat tekst.</div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — 390px (full-page)</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">PDP Mobile — full-page <span class="vp-tag">390px</span></div>
+        <img src="sejfzone_audit_screenshots/pdp_mobile.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/pdp_mobile.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">PDP mobile — układ</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Galeria</strong> — Karuzela pozioma lub swipe. Thumbnails pod lub nad głównym zdjęciem.</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Tytuł + certyfikat + marka</strong> — W pojedynczej kolumnie, poniżej galerii.</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Warianty + cena + ATC</strong> — Pełna sekcja zakupowa poniżej informacji o produkcie.</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Opis/specyfikacja</strong> — Sekcja BTF. Accordion lub flat — do weryfikacji.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ KOSZYK ═══ -->
+<div id="tab-cart" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">Shopper View — Koszyk</div>
+    <div class="note note-warn"><strong>Brak danych z HTML scan.</strong> Koszyk IdoSell wymaga sesji JavaScript (dynamiczne ładowanie po ATC). URL koszyka na IdoSell nie jest dostępny statycznie. Screenshoty (ATC → koszyk) dostarczą pełnych danych.</div>
+
+    <div class="section-label">Desktop — 1280px</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Koszyk Desktop <span class="vp-tag">1280px</span></div>
+        <img src="sejfzone_audit_screenshots/cart_page_desktop.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/cart_page_desktop.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Koszyk — przewidywana struktura IdoSell</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Typ koszyka</strong> — IdoSell standardowo: pełna strona koszyka (nie drawer). Drawer możliwy jako add-on. Do weryfikacji screenshotem.</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Lista produktów</strong> — Zdjęcie + nazwa + wariant + cena + stepper + usuń.</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Podsumowanie</strong> — Suma + koszt dostawy (prawdopodobnie 0 zł — darmowa dostawa) + VAT breakdown.</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>CTA</strong> — Przejdź do kasy / Zamów. Plus opcja kontynuacji zakupów.</div></div>
+        <div class="av-item"><div class="av-num">5</div><div class="av-text"><strong>Cross-sell / polecane</strong> — Mogą pojawić się sugestie produktów komplementarnych (do weryfikacji).</div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — 390px</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">Koszyk Mobile <span class="vp-tag">390px</span></div>
+        <img src="sejfzone_audit_screenshots/cart_mobile.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/cart_mobile.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Koszyk mobile</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text">Pełna strona koszyka lub mini-koszyk. Układ jednokolumnowy mobile. Do weryfikacji screenshotem.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ CHECKOUT ═══ -->
+<div id="tab-checkout" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">Shopper View — Checkout</div>
+    <div class="note note-warn"><strong>Brak danych z HTML scan.</strong> Checkout IdoSell wymaga aktywnej sesji z produktem w koszyku. Do wypełnienia po uruchomieniu screenshotów.</div>
+
+    <div class="section-label">Desktop — 1280px</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Checkout Krok 1 <span class="vp-tag">1280px</span></div>
+        <img src="sejfzone_audit_screenshots/checkout_step1_desktop.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/checkout_step1_desktop.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Checkout — przewidywana struktura IdoSell</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Platforma checkout</strong> — IdoSell native checkout (nie Shopify Payments). Własny URL /zamow lub /zamowienie.</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Kroki procesu</strong> — IdoSell standardowo: Dane dostawy → Płatność → Potwierdzenie. Liczba kroków do weryfikacji.</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Metody płatności</strong> — Do weryfikacji. IdoSell wspiera: przelew, płatności online (PayU/Przelewy24), BLIK, kartę.</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Metody dostawy</strong> — Do weryfikacji. Darmowa dostawa deklarowana na HP.</div></div>
+        <div class="av-item"><div class="av-num">5</div><div class="av-text"><strong>Logowanie / gość</strong> — IdoSell pozwala na zakup jako gość lub z kontem.</div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — 390px</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">Checkout Mobile <span class="vp-tag">390px</span></div>
+        <img src="sejfzone_audit_screenshots/checkout_step1_mobile.jpeg" style="max-width:100%;border-radius:8px;display:block;" alt="sejfzone_audit_screenshots/checkout_step1_mobile.jpeg">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Checkout mobile</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text">Układ jednokolumnowy. Kroki i elementy identyczne co desktop — do weryfikacji screenshotem.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ BLOG ═══ -->
+<div id="tab-blog" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">Blog</div>
+    <div class="note note-fail">
+      <strong>Blog niedostępny.</strong> URL <code>sejfzone.pl/blog</code> zwraca HTTP 404. SejfZone nie prowadzi bloga (lub blog jest pod innym URL — do weryfikacji). Brak kanału contentowego w strukturze sklepu.
+    </div>
+    <div style="margin:16px 0;">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Screenshot — /blog (desktop)</div>
+      <img src="sejfzone_audit_screenshots/blog_desktop.jpeg" style="max-width:100%;border-radius:8px;display:block;cursor:zoom-in;" alt="sejfzone_audit_screenshots/blog_desktop.jpeg" onclick="zoom(this)">
+    </div>
+    <div class="table-wrap"><table>
+      <tr><th>Sprawdzony URL</th><th>Status</th></tr>
+      <tr><td>/blog</td><td class="fail">404 Not Found</td></tr>
+      <tr><td>/pl/blog.html</td><td class="unk">Nie sprawdzono</td></tr>
+      <tr><td>/artykuly</td><td class="unk">Nie sprawdzono</td></tr>
+    </table></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">Discovery: Brak bloga = brak organicznego kanału contentowego. SEO impact do weryfikacji w EEL GA4 analysis.</p>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ CONTENT MAP ═══ -->
+<div id="tab-contentmap" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">Content Map — Model tytułu produktu</div>
+
+    <div class="schema-block">
+      <div class="schema-label">Model tytułu PDP — SAVE4EVER</div>
+      <div style="background:rgba(0,0,0,.3);border-radius:6px;padding:12px;font-family:'SF Mono',monospace;font-size:13px;color:#a5b4fc;margin-bottom:12px">
+        Sejf antywłamaniowy [SERIA] klasa [KLASA] [W]×[S]×[G] cm [kolor] – zamek [TYP]
+      </div>
+      <div class="table-wrap"><table>
+        <tr><th>Komponent tytułu</th><th>Wartość (przykład)</th><th>Typ</th></tr>
+        <tr><td>Typ produktu</td><td>Sejf antywłamaniowy</td><td>Kategoria</td></tr>
+        <tr><td>Seria</td><td>SAVE4EVER</td><td>Brand/seria</td></tr>
+        <tr><td>Klasa odporności</td><td>klasa I</td><td>Certyfikat/spec</td></tr>
+        <tr><td>Wymiary (W×S×G cm)</td><td>40×40×27 cm</td><td>Spec — rozmiar</td></tr>
+        <tr><td>Kolor</td><td>szary / grafitowy</td><td>Wariant</td></tr>
+        <tr><td>Typ zamka</td><td>zamek kluczowy / elektroniczny</td><td>Wariant funkcjonalny</td></tr>
+      </table></div>
+    </div>
+
+    <div class="schema-block">
+      <div class="schema-label">Certyfikaty i normy — mapa</div>
+      <div style="margin-bottom:12px">
+        <span class="cert-badge">EN 1143-1 klasa I</span>
+        <span class="cert-badge">EN 1143-1 klasa II</span>
+        <span class="cert-badge">S1 (szafy na broń)</span>
+      </div>
+      <div class="table-wrap"><table>
+        <tr><th>Norma</th><th>Opis</th><th>Widoczność w UI</th></tr>
+        <tr><td><code>EN 1143-1</code></td><td>Odporność na włamanie — europejski standard dla sejfów. Klasa I i II.</td><td>Tytuł PDP + bullet pod tytułem + ikona na kafelku</td></tr>
+        <tr><td><code>S1 / EN 14450</code></td><td>Odporność klasy S1 — standard dla szaf na broń SIEGEN</td><td>W tytule produktu szaf na broń + ikona</td></tr>
+      </table></div>
+    </div>
+
+    <div class="schema-block">
+      <div class="schema-label">Specyfikacja techniczna — Tier-1 parametry (z kafelka i PDP)</div>
+      <div class="spec-row"><span class="spec-key">Odporność na włamanie</span><span class="spec-val">klasa I / klasa II (EN 1143-1)</span></div>
+      <div class="spec-row"><span class="spec-key">Rodzaj zamka</span><span class="spec-val">Kluczowy / Elektroniczny</span></div>
+      <div class="spec-row"><span class="spec-key">Waga (kg)</span><span class="spec-val">39 kg (SAVE4EVER 40×40×27)</span></div>
+      <div class="spec-row"><span class="spec-key">Wymiar zewn. W×S×G (mm)</span><span class="spec-val">400 × 400 × 270</span></div>
+      <div class="spec-row"><span class="spec-key">Kolor / RAL</span><span class="spec-val">Grafitowy RAL 7024 / Szary RAL 7035</span></div>
+      <div class="spec-row"><span class="spec-key">Marka producenta</span><span class="spec-val">ISS</span></div>
+      <div class="spec-row"><span class="spec-key">Seria</span><span class="spec-val">SAVE4EVER (antywłamaniowe) / ADORF, BADEN-BADEN (meblowe) / SIEGEN (na broń)</span></div>
+    </div>
+
+    <div class="schema-block">
+      <div class="schema-label">Analiza USP — treść ze strony głównej</div>
+      <div class="table-wrap"><table>
+        <tr><th>USP</th><th>Treść</th><th>Lokalizacja</th></tr>
+        <tr><td>Certyfikacja</td><td>"Sejfy z certyfikowanymi sejfami domowymi, biurowymi i szafami na broń. Sejfy antywłamaniowe i ognioodporne marki ISS."</td><td>Meta description + HP</td></tr>
+        <tr><td>Dostawa</td><td>Darmowa dostawa</td><td>HP + PDP (meta desc)</td></tr>
+        <tr><td>Zwroty</td><td>60 dni na zwrot</td><td>HP trust bar</td></tr>
+        <tr><td>Gwarancja</td><td>2 lata</td><td>HP trust bar</td></tr>
+        <tr><td>Promo aktywna</td><td>-5% na SAVE4EVER (aktywna w momencie auditu)</td><td>Kafelki + PDP (Omnibus)</td></tr>
+      </table></div>
+    </div>
+
+    <div class="schema-block">
+      <div class="schema-label">Kategorie i seria — mapowanie produktów</div>
+      <div class="table-wrap"><table>
+        <tr><th>Kategoria</th><th>Seria</th><th>Certyfikat</th><th>Liczba produktów</th></tr>
+        <tr><td>Sejfy antywłamaniowe</td><td>SAVE4EVER I</td><td>EN 1143-1 klasa I</td><td>16</td></tr>
+        <tr><td>Sejfy antywłamaniowe</td><td>SAVE4EVER II</td><td>EN 1143-1 klasa II</td><td>6</td></tr>
+        <tr><td>Sejfy meblowe</td><td>ADORF</td><td>—</td><td>32</td></tr>
+        <tr><td>Sejfy meblowe</td><td>BADEN-BADEN</td><td>—</td><td>—</td></tr>
+        <tr><td>Szafy na broń</td><td>SIEGEN</td><td>S1 (EN 14450)</td><td>—</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ SUMMARY ═══ -->
+<div id="tab-summary" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">Summary — Visual Mapping v1</div>
+
+    <div class="summary-grid">
+      <div class="summary-col">
+        <h3 class="good">Nowe elementy vs GLOV</h3>
+        <ol>
+          <li>Certyfikaty EN 1143-1 / S1 widoczne na kafelku i PDP</li>
+          <li>Filtry wymiarowe (H/W/G mm slidery) na listingu i search</li>
+          <li>Filtr: Odporność na włamanie (klasa I/II)</li>
+          <li>Ikony spec na kafelku: odporność + zamek + waga</li>
+          <li>Wymiary zewn. W×S×G (mm) na kafelku</li>
+          <li>Matryca wariantów: kolor RAL × rodzaj zamka</li>
+          <li>Swatche RAL na listingu</li>
+          <li>Porównywarka produktów (native IdoSell)</li>
+          <li>Widget "Powiadom o dostępności"</li>
+          <li>Marka producenta ISS jako klikalny link</li>
+          <li>Lista zakupowa (nie typowy wishlist)</li>
+          <li>Omnibus 30-day lowest price</li>
+          <li>Dostępność na zamówienie z harmonogramem</li>
+          <li>3 badge jednocześnie na PDP (Promocja+Okazja+Bestseller)</li>
+          <li>Brak bloga / contentu</li>
+        </ol>
+      </div>
+      <div class="summary-col">
+        <h3 class="warn">Do weryfikacji screenshotem</h3>
+        <ol>
+          <li>Typ koszyka (drawer vs pełna strona)</li>
+          <li>Checkout — kroki i metody płatności</li>
+          <li>Hover state kafelka</li>
+          <li>Autocomplete w searchbar</li>
+          <li>Dropdown/megamenu w nawigacji</li>
+          <li>Sticky header na scroll</li>
+          <li>Promo bar — treść i wygląd</li>
+          <li>HP hero — layout i CTA</li>
+          <li>Grid kolumny desktop/mobile na listingu</li>
+          <li>Accordion vs flat opis na PDP</li>
+          <li>Cross-sell na PDP lub koszyku</li>
+          <li>Blog — URL alternatywny</li>
+          <li>Recenzje produktów (obecne/brak)</li>
+          <li>Breadcrumbs — obecne/brak</li>
+          <li>Filtr mobile — overlay/drawer</li>
+        </ol>
+      </div>
+      <div class="summary-col">
+        <h3 class="bad">Blokady auditu</h3>
+        <ol>
+          <li>Screenshoty: 0/15 — Playwright MCP niedostępny (browser closed), Bash zablokowany w sesji</li>
+          <li>Koszyk: URL koszyka niedostępny statycznie — wymaga JS/sesji</li>
+          <li>Checkout: wymaga produktu w koszyku + sesji</li>
+          <li>Blog: 404 — brak lub nieznany URL</li>
+          <li>Recenzje: niedostępne bez JS-render</li>
+        </ol>
+        <div style="margin-top:14px;padding:10px;background:var(--surface2);border-radius:6px;font-size:12px;">
+          <strong>Uruchom screenshoty:</strong><br>
+          <code style="font-size:11px">cd /Users/Tomek_Main/Documents/Claude/Projects/Ecomms_Activation_Agency</code><br>
+          <code style="font-size:11px">python sejfzone_screenshots.py</code><br>
+          Script przygotowany, 15 shotów w kolejce.
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:0">
+      <div class="card-title">Platforma: IdoSell vs Shopify — różnice dla EEL</div>
+      <div class="table-wrap"><table>
+        <tr><th>Aspekt</th><th>GLOV (Shopify)</th><th>SejfZone (IdoSell)</th></tr>
+        <tr><td>URL kategorii</td><td>/collections/nazwa</td><td>/nazwa-kategorii (slug)</td></tr>
+        <tr><td>URL produktu</td><td>/products/slug</td><td>/pl/products/slug-id.html</td></tr>
+        <tr><td>Cart</td><td>Drawer (Shopify native) + pełna strona</td><td>Pełna strona koszyka (IdoSell native)</td></tr>
+        <tr><td>Checkout</td><td>Shopify Checkout (hosted)</td><td>IdoSell checkout (own domain)</td></tr>
+        <tr><td>Wishlist</td><td>Growave (third-party app)</td><td>Lista zakupowa (IdoSell native)</td></tr>
+        <tr><td>Recenzje</td><td>Growave Reviews</td><td>Nieznane (do weryfikacji)</td></tr>
+        <tr><td>Warianty</td><td>Shopify variant options (kolor/rozmiar)</td><td>IdoSell multi-dimension (kolor+zamek+rozmiar)</td></tr>
+        <tr><td>Filtry</td><td>Facets (Shopify metafields)</td><td>IdoSell attributy + własne slidery mm</td></tr>
+        <tr><td>Omnibus</td><td>Brak (nie PL-specyficzne)</td><td>Native (IAI Omnibus module)</td></tr>
+        <tr><td>Porównywarka</td><td>Brak</td><td>Native IdoSell</td></tr>
+      </table></div>
+    </div>
+
+  </div>
+
+</div>
+
+</div><!-- /container -->
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
