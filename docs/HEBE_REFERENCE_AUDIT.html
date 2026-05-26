@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hebe Reference Audit v1 — Visual Mapping | 2026-05-26</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3350;
+    --text: #e4e6f0;
+    --muted: #8b91b3;
+    --accent: #6c7fff;
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,.12);
+    --red: #f87171;
+    --red-bg: rgba(248,113,113,.12);
+    --yellow: #fbbf24;
+    --yellow-bg: rgba(251,191,36,.12);
+    --grey: #64748b;
+    --grey-bg: rgba(100,116,139,.12);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+
+  /* HEADER */
+  .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; gap: 16px; }
+  .header-logo { font-size: 20px; font-weight: 800; color: var(--text); }
+  .header-meta { color: var(--muted); font-size: 12px; margin-left: auto; text-align: right; }
+  .philosophy-bar { background: linear-gradient(90deg,#1e1440,#1a2040); border-bottom: 1px solid var(--border); padding: 9px 40px; font-size: 12px; color: var(--accent); }
+  .philosophy-bar strong { color: var(--text); }
+
+  /* LAYOUT */
+  .container { max-width: 1400px; margin: 0 auto; padding: 28px 40px; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 2px; margin-bottom: 24px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .tab-btn { background: none; border: none; color: var(--muted); padding: 9px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .15s; border-radius: 6px 6px 0 0; }
+  .tab-btn:hover { color: var(--text); background: var(--surface); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--surface); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* CARD */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 18px; }
+  .card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+  /* TECH GRID */
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .tech-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+  .tech-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 3px; }
+  .tech-value { font-size: 13px; font-weight: 600; }
+
+  /* ANNOTATED SHOPPER VIEW */
+  .annotated-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .annotated-view.mobile-view {
+    grid-template-columns: 280px 1fr;
+  }
+  .av-image-col {
+    position: relative;
+    background: #000;
+    border-right: 1px solid var(--border);
+  }
+  .av-image-col img {
+    width: 100%;
+    display: block;
+    cursor: zoom-in;
+  }
+  .av-image-col .av-label {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    background: rgba(0,0,0,.7);
+    padding: 6px 12px;
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  /* Placeholder for missing screenshots */
+  .av-placeholder {
+    background: var(--surface2);
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    color: var(--muted);
+    font-size: 13px;
+    gap: 8px;
+    margin-bottom: 18px;
+    padding: 40px;
+    text-align: center;
+  }
+  .av-placeholder .ph-icon { font-size: 32px; }
+  .av-placeholder .ph-cmd { font-family: 'SF Mono', monospace; font-size: 11px; color: var(--accent); background: var(--surface2); border: 1px solid var(--border); padding: 4px 10px; border-radius: 4px; margin-top: 8px; }
+  .vp-tag { background: var(--border); padding: 1px 7px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+
+  /* Annotation list col */
+  .av-annotations {
+    background: var(--surface);
+    padding: 14px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .av-col-label {
+    padding: 0 16px 12px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--accent);
+    font-weight: 700;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+  .av-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(46,51,80,.4);
+  }
+  .av-item:last-child { border-bottom: none; }
+  .av-num {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .av-num.bad { background: var(--red); }
+  .av-num.warn { background: var(--yellow); color: #000; }
+  .av-num.ok2 { background: var(--green); }
+  .av-num.widget { background: #0891b2; color: #fff; font-size: 10px; width: 24px; height: 24px; border-radius: 4px; }
+  .widget-section-label { font-size: 11px; font-weight: 700; color: #0891b2; text-transform: uppercase; letter-spacing: .05em; margin: 16px 0 6px; }
+  .av-text { font-size: 12.5px; color: var(--text); line-height: 1.5; flex: 1; }
+  .av-text .tag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 3px; font-weight: 600; margin-left: 4px; vertical-align: middle; }
+  .av-text .tag-ok { background: var(--green-bg); color: var(--green); }
+  .av-text .tag-fail { background: var(--red-bg); color: var(--red); }
+  .av-text .tag-warn { background: var(--yellow-bg); color: var(--yellow); }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--border); font-weight: 600; }
+  td { padding: 9px 12px; border-bottom: 1px solid rgba(46,51,80,.4); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(108,127,255,.03); }
+
+  /* STATUS */
+  .ok   { color: var(--green); font-weight: 600; }
+  .warn { color: var(--yellow); font-weight: 600; }
+  .fail { color: var(--red); font-weight: 600; }
+  .unk  { color: var(--grey); font-weight: 600; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-ok   { background: var(--green-bg); color: var(--green); }
+  .badge-warn { background: var(--yellow-bg); color: var(--yellow); }
+  .badge-fail { background: var(--red-bg); color: var(--red); }
+  .badge-grey { background: var(--grey-bg); color: var(--grey); }
+  .badge-blue { background: rgba(108,127,255,.12); color: var(--accent); }
+
+  code { background: var(--surface2); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-family: 'SF Mono', monospace; font-size: 11px; color: #a5b4fc; }
+
+  /* SECTION LABEL */
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; margin: 20px 0 10px; }
+  .section-label:first-child { margin-top: 0; }
+
+  /* NOTE BOXES */
+  .note { padding: 11px 15px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; }
+  .note-warn { background: var(--yellow-bg); border-left: 3px solid var(--yellow); }
+  .note-fail { background: var(--red-bg); border-left: 3px solid var(--red); }
+  .note-ok   { background: var(--green-bg); border-left: 3px solid var(--green); }
+  .note-blue { background: rgba(108,127,255,.1); border-left: 3px solid var(--accent); }
+
+  /* CONTENT SCHEMA */
+  .schema-block { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
+  .schema-block pre { font-family: 'SF Mono', monospace; font-size: 12px; color: #a5b4fc; white-space: pre-wrap; margin-bottom: 12px; padding: 10px; background: rgba(0,0,0,.3); border-radius: 6px; border: 1px solid var(--border); }
+  .schema-label { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--accent); font-weight: 700; margin-bottom: 10px; }
+
+  /* KPI STRIP */
+  .kpi-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+  .kpi-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .kpi-label { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 4px; }
+  .kpi-value { font-size: 22px; font-weight: 800; }
+  .kpi-value.green { color: var(--green); }
+  .kpi-value.amber { color: var(--yellow); }
+  .kpi-value.red { color: var(--red); }
+  .kpi-value.blue { color: var(--accent); }
+
+  /* SUMMARY */
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 22px; }
+  .summary-col { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+  .summary-col h3 { font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+  .summary-col h3.good { color: var(--green); }
+  .summary-col h3.bad { color: var(--red); }
+  .summary-col h3.warn { color: var(--yellow); }
+  .summary-col ol { padding-left: 16px; }
+  .summary-col ol li { font-size: 12px; padding: 3px 0; line-height: 1.5; }
+
+  /* NAV TREE */
+  .nav-tree { font-family: 'SF Mono', monospace; font-size: 12px; line-height: 2; }
+  .nav-item { padding: 2px 0; }
+  .nav-item.nav-sub { padding-left: 20px; color: var(--muted); }
+
+  /* LIGHTBOX */
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 1000; align-items: center; justify-content: center; cursor: zoom-out; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 92vw; max-height: 92vh; object-fit: contain; border-radius: 8px; box-shadow: 0 8px 40px rgba(0,0,0,.8); }
+
+  /* LIGHT THEME */
+  [data-theme="light"] {
+    --bg: #f4f6fb; --surface: #ffffff; --surface2: #edf0f8; --border: #d8ddf0;
+    --text: #1a1d2e; --muted: #5c6280; --accent: #4f5fe8;
+    --green: #16a34a; --green-bg: rgba(22,163,74,.12);
+    --red: #dc2626; --red-bg: rgba(220,38,38,.12);
+    --yellow: #b45309; --yellow-bg: rgba(180,83,9,.12);
+    --grey: #6b7280; --grey-bg: rgba(107,114,128,.12);
+  }
+  [data-theme="light"] .philosophy-bar { background: linear-gradient(90deg,#ede8ff,#e8f0ff); color: var(--accent); }
+  [data-theme="light"] .philosophy-bar strong { color: var(--text); }
+  .theme-btn { margin-left: 8px; background: none; border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all .15s; white-space: nowrap; }
+  .theme-btn:hover { color: var(--text); border-color: var(--muted); }
+</style>
+<script>
+(function(){
+  var s=localStorage.getItem('theme'),sys=window.matchMedia('(prefers-color-scheme:light)').matches;
+  if(s?s==='light':sys) document.documentElement.setAttribute('data-theme','light');
+})();
+function toggleTheme(){
+  var light=document.documentElement.getAttribute('data-theme')==='light';
+  if(light){document.documentElement.removeAttribute('data-theme');localStorage.setItem('theme','dark');}
+  else{document.documentElement.setAttribute('data-theme','light');localStorage.setItem('theme','light');}
+  var btn=document.getElementById('theme-toggle');
+  if(btn) btn.textContent=light?'☀️ Jasny':'🌙 Ciemny';
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var btn=document.getElementById('theme-toggle');
+  var light=document.documentElement.getAttribute('data-theme')==='light';
+  if(btn) btn.textContent=light?'🌙 Ciemny':'☀️ Jasny';
+});
+</script>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">Hebe Reference Audit <span style="font-size:13px;font-weight:400;color:var(--accent);margin-left:8px">v1 — Visual Mapping</span></div>
+  <div style="display:flex;gap:6px;align-items:center">
+    <span class="badge badge-blue">hebe.pl</span>
+    <span class="badge badge-grey">Salesforce Commerce Cloud</span>
+    <span class="badge badge-grey">PL</span>
+    <span class="badge badge-grey">PLN</span>
+    <span class="badge badge-grey">Shopper View + Action Map</span>
+  </div>
+  <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()">☀️ Jasny</button>
+  <div class="header-meta">2026-05-26 | HP · Nav · Listing · Tile · PDP · Koszyk · Checkout · Blog</div>
+</div>
+
+<div class="philosophy-bar">
+  <strong>Fundament:</strong> E-commerce to NIE strona. To zbiór akcji i ich stymulatorów. Shopper kupuje <strong>OCZAMI</strong>. Każdy widok = <strong>Shopper View</strong> (screen + anotacje) + <strong>Action Map</strong> + <strong>Content Schema</strong>.
+</div>
+
+<div class="container">
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('overview',this)">Przegląd</button>
+  <button class="tab-btn" onclick="showTab('hp',this)">1. Home Page</button>
+  <button class="tab-btn" onclick="showTab('nav',this)">2. Nav</button>
+  <button class="tab-btn" onclick="showTab('listing',this)">3. Listing Kategoria</button>
+  <button class="tab-btn" onclick="showTab('search',this)">4. Open Search</button>
+  <button class="tab-btn" onclick="showTab('tile',this)">5. Kafelek / Product Tile</button>
+  <button class="tab-btn" onclick="showTab('pdp',this)">6. PDP</button>
+  <button class="tab-btn" onclick="showTab('cart',this)">7. Koszyk</button>
+  <button class="tab-btn" onclick="showTab('checkout',this)">8. Checkout</button>
+  <button class="tab-btn" onclick="showTab('blog',this)">9. Blog</button>
+  <button class="tab-btn" onclick="showTab('contentmap',this)">Content Map</button>
+  <button class="tab-btn" onclick="showTab('summary',this)">Summary</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ OVERVIEW ═══ -->
+<div id="tab-overview" class="tab-panel active">
+
+  <div class="note note-blue">
+    <strong>Platforma:</strong> Salesforce Commerce Cloud (SFCC / Demandware) — potwierdzono przez URL <code>/on/demandware.static/Sites-Hebe-Site/</code> oraz sygnatury JS. Hebe to największa polska drogeria beauty online (Jeronimo Martins, właściciel Biedronki). 780+ sklepów stacjonarnych, program lojalnościowy My Hebe (~4M członków). <strong>Screenshoty: oczekują na uruchomienie take_screenshots.py</strong> — pola Shopper View wypełnione opisami HTML-scan + web fetch.
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚙️ Tech Stack — Quick View</div>
+    <div class="tech-grid">
+      <div class="tech-item"><div class="tech-label">Platform</div><div class="tech-value">SFCC / Demandware</div></div>
+      <div class="tech-item"><div class="tech-label">Język</div><div class="tech-value">PL</div></div>
+      <div class="tech-item"><div class="tech-label">Waluta</div><div class="tech-value">PLN</div></div>
+      <div class="tech-item"><div class="tech-label">Search</div><div class="tech-value">Luigi's Box</div></div>
+      <div class="tech-item"><div class="tech-label">Personalizacja</div><div class="tech-value">UseInsider</div></div>
+      <div class="tech-item"><div class="tech-label">Rekomendacje AI</div><div class="tech-value">SF Einstein (cquotient)</div></div>
+      <div class="tech-item"><div class="tech-label">UGC Gallery</div><div class="tech-value">Flowbox</div></div>
+      <div class="tech-item"><div class="tech-label">Cookie Consent</div><div class="tech-value">OneTrust</div></div>
+      <div class="tech-item"><div class="tech-label">Chat</div><div class="tech-value">Zowie AI</div></div>
+      <div class="tech-item"><div class="tech-label">Retargeting</div><div class="tech-value">Criteo + RTB House</div></div>
+      <div class="tech-item"><div class="tech-label">Loyalty</div><div class="tech-value">My Hebe (~4M)</div></div>
+      <div class="tech-item"><div class="tech-label">Sklepy fiz.</div><div class="tech-value">780+</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 KPI — Przegląd</div>
+    <div class="kpi-strip">
+      <div class="kpi-box"><div class="kpi-label">Narzędzia wykryte</div><div class="kpi-value green">15</div></div>
+      <div class="kpi-box"><div class="kpi-label">Trackery analityczne</div><div class="kpi-value blue">4</div></div>
+      <div class="kpi-box"><div class="kpi-label">Personalizacja sloty</div><div class="kpi-value amber">30+</div></div>
+      <div class="kpi-box"><div class="kpi-label">Content sloty HP</div><div class="kpi-value blue">316</div></div>
+      <div class="kpi-box"><div class="kpi-label">Duplikaty analytics</div><div class="kpi-value amber">2</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗺 Mapa auditu — pokrycie widoków</div>
+    <div class="table-wrap"><table>
+      <tr><th>Widok</th><th>URL / kontekst</th><th>Shopper View</th><th>Action Map</th><th>Content Schema</th><th>Screenshoty</th></tr>
+      <tr><td><strong>Nav</strong></td><td>Header (sticky)</td><td>✅ opis HTML-scan</td><td>✅</td><td>—</td><td class="ok">✅ nav_desktop + nav_hamburger_mobile</td></tr>
+      <tr><td><strong>Homepage</strong></td><td>hebe.pl</td><td>✅ opis HTML-scan + web fetch</td><td>✅</td><td>—</td><td class="ok">✅ hp_desktop + hp_mobile</td></tr>
+      <tr><td><strong>Listing Kategoria</strong></td><td>/makijaz (Hebe Studio)</td><td>✅ opis HTML-scan</td><td>✅</td><td>—</td><td class="ok">✅ listing_desktop + listing_mobile</td></tr>
+      <tr><td><strong>Open Search</strong></td><td>Luigi's Box overlay</td><td>✅ opis</td><td>✅</td><td>—</td><td class="ok">✅ search_desktop + search_mobile</td></tr>
+      <tr><td><strong>Kafelek / Product Tile</strong></td><td>Tile ze strony kategorii</td><td>✅ opis</td><td>✅</td><td>T1–T8</td><td class="ok">✅ tile_default_desktop</td></tr>
+      <tr><td><strong>PDP</strong></td><td>/{slug}-{12-digit-id}.html</td><td>✅ opis</td><td>✅</td><td>✅ tytuł, opis, ATF/BTF</td><td class="ok">✅ pdp_desktop + pdp_mobile</td></tr>
+      <tr><td><strong>Koszyk</strong></td><td>/cart</td><td>✅ opis</td><td>✅</td><td>—</td><td class="ok">✅ cart_page_desktop + cart_mobile</td></tr>
+      <tr><td><strong>Checkout</strong></td><td>/checkout</td><td>✅ opis</td><td>✅</td><td>—</td><td class="warn">⏳ brak screenshot (wymaga sesji z kartą)</td></tr>
+      <tr><td><strong>Blog</strong></td><td>/blog</td><td>✅ web fetch</td><td>✅</td><td>Kategorie artykułów</td><td class="warn">⏳ brak screenshot</td></tr>
+    </table></div>
+    <div class="note note-warn" style="margin-top:12px">
+      <strong>Screenshoty:</strong> Uruchom <code>python take_screenshots.py --url https://www.hebe.pl</code> z katalogu EEL. Po wygenerowaniu screenshotów zaktualizuj każdą zakładkę Shopper View — zastąp placeholdery img src.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠️ Krytyczne znaleziska</div>
+    <div class="note note-warn">
+      <strong>2× GA4 ID:</strong> Wykryto dwa oddzielne GA4 tracking IDs — <code>G-LRXBRD7NT1</code> i <code>G-480R3PZWEM</code>. Potencjalny split danych lub duplikat. Wymaga weryfikacji czy to intentional (multi-property) czy błąd konfiguracji GTM.
+    </div>
+    <div class="note note-warn">
+      <strong>UseInsider — agresywna personalizacja:</strong> 30+ elementów <code>ins-</code> na listing, 35+ na PDP. Personalizacja UseInsider może powodować niekonzystentny UX między sesjami i utrudniać CRO testy A/B (interferuje z GTM experiments).
+    </div>
+    <div class="note note-blue">
+      <strong>316 content slotów na HP:</strong> <code>class="banners-html"</code> — rozbudowana SFCC CMS architektura z wieloma wymiennymi miejscami reklamowymi. Potencjał Retail Media Network (RMN) jest wysoki — brak aktualnie widocznych oznaczeń "Sponsored" na kafelkach produktów na listingu.
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════ HOMEPAGE ════ -->
+<div id="tab-hp" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Homepage</div>
+
+    <div class="section-label">Desktop — 1440px (pełna strona)</div>
+
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">HP Desktop full page <span class="vp-tag">1440px</span></div>
+        <img src="hebe_audit_screenshots/hp_desktop.jpeg" alt="Hebe HP Desktop" onclick="zoom(this)" style="margin-top:30px">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Sekcje HP od góry (desktop) — źródło: HTML scan + web fetch 2026-05-26</div>
+      </div>
+    </div>
+
+    <div class="av-annotations" style="border:1px solid var(--border);border-radius:10px">
+      <div class="av-col-label">Sekcje HP od góry (desktop) — źródło: HTML scan + web fetch 2026-05-26</div>
+      <div class="av-item">
+        <div class="av-num">1</div>
+        <div class="av-text"><strong>Promo bar (sticky, rotujący)</strong> — "Pielęgnacja twarzy do -40%! Beauty of Joseon, Cosrx, Biodance" + CTA "SKORZYSTAJ" — 1 slot reklamowy, rotujący. Darmowa dostawa InPost 24/7 od 15 zł — osobny pasek.</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">2</div>
+        <div class="av-text"><strong>Header</strong> [sticky] — Logo Hebe (SVG <code>/on/demandware.static/Sites-Hebe-Site/-/default/dw1f6d246e/images/utils/site-logo.svg</code>) | Wyszukiwarka Luigi's Box (search-as-you-type) | CTA "POBIERZ APLIKACJĘ" | Ikona konta | Wishlist | Koszyk</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">3</div>
+        <div class="av-text"><strong>Top nav primary (8 pozycji):</strong> WSZYSTKIE KATEGORIE | PROMOCJE | CZAS NA SPF | DZIEŃ MAMY | HEBE STUDIO | K-BEAUTY | NOWOŚCI | 🔥 VIRAL SHOP. Subnav prawy: MARKI | GAZETKA | HEBE COLLECTION | SKLEPY | APTEKA (→ hebeapteka.pl)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">4</div>
+        <div class="av-text"><strong>Hero slider</strong> — duży baner full-width, ~8–10 slajdów, rotujący. Widoki: kampania Biodance/CLIV, Darmowa Dostawa, Dzień Mamy. Każdy slajd z CTA button</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">5</div>
+        <div class="av-text"><strong>Brand carousel</strong> — poziomy scroll z logami partnerskich marek. Clickable (→ filtr marki na listingu)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">6</div>
+        <div class="av-text"><strong>Sekcja tematyczna — K-Beauty</strong> — "Koreańskie i Japońskie" (edytorial + karuzela produktów). Beauty of Joseon, Cosrx, Biodance, Missha, Prreti, BRINGGREEN, Skin79</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">7</div>
+        <div class="av-text"><strong>Sekcja tematyczna — Top Składniki</strong> — filtrowanie po składnikach aktywnych: kwasy, aloes, niacynamid, oleje, keratyna, śluz ślimaka. Linkuje do dedykowanych landing pages składnikowych</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">8</div>
+        <div class="av-text"><strong>Sekcja tematyczna — Makijaż</strong> — kafelki kategorii: Twarz / Oczy / Brwi / Usta / Akcesoria. Hebe Studio branding</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">9</div>
+        <div class="av-text"><strong>NOWOŚCI</strong> — np. "NOWOŚCI Gosh Copenhagen" — brand showcase z carousel produktów</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">10</div>
+        <div class="av-text"><strong>Pielęgnacja twarzy</strong> — produkt showcase, karuzela z filtrami składnikowymi</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">11</div>
+        <div class="av-text"><strong>Brand Activation — L'Oréal Paris</strong> — "Wygraj metamorfozę z L'Oréal Paris" — dedykowana sekcja marki (brand activation / sponsorship slot)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">12</div>
+        <div class="av-text"><strong>Włosy / Pielęgnacja włosów</strong> — showcase kategorii włosowej</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">13</div>
+        <div class="av-text"><strong>VIRAL SHOP</strong> — sekcja influencer bestsellers / viral produkty TikTok/Reels</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">14</div>
+        <div class="av-text"><strong>Flowbox UGC Gallery</strong> — galeria social media (Instagram-style), shoppable posts. <code>flowbox.js</code> — user-generated content</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">15</div>
+        <div class="av-text"><strong>Trust bar / Footerbar</strong> — 4 ikony zaufania: bezpieczne płatności | darmowy zwrot | szybka dostawa | 100% oryginalność. Linki do gazetki/katalogu</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">16</div>
+        <div class="av-text"><strong>Footer</strong> — kolumny linków, newsletter signup, social media (Instagram, Facebook, TikTok, YouTube), płatności, aplikacja mobilna</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">Mobile — 390px (full page)</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">HP Mobile full page <span class="vp-tag">390px</span></div>
+        <img src="hebe_audit_screenshots/hp_mobile.jpeg" alt="Hebe HP Mobile" onclick="zoom(this)" style="margin-top:30px">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">HP Mobile — widok z góry</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧩 Widgety — elementy nakładkowe</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Widgety działające niezależnie (sticky, floating, overlay). Opisujemy raz w HP.</p>
+    <div class="av-annotations" style="max-width:700px;border:1px solid var(--border);border-radius:10px">
+      <div class="widget-section-label" style="padding:10px 16px 0">Widgety aktywne na hebe.pl</div>
+      <div class="av-item">
+        <div class="av-num widget">W1</div>
+        <div class="av-text"><strong>OneTrust</strong> [<code>otSDKStub.js</code>] — consent management banner GDPR. Pojawia się przy pierwszej wizycie (overlay). Przycisk "Zaakceptuj wszystkie" / opcje szczegółowe</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num widget">W2</div>
+        <div class="av-text"><strong>Zowie AI Chatbot</strong> [<code>chat-widget</code>, ID: hebe-poland] — floating chat button (prawy dolny róg). AI-powered customer service chatbot</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num widget">W3</div>
+        <div class="av-text"><strong>UseInsider</strong> [<code>ins-</code> prefixed elements, ID: 10005125] — nakładki personalizacji. Push notifications overlay, exit-intent, personalizowane bannery wstrzykiwane dynamicznie (30+ elementów na listing, 35+ na PDP)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num widget">W4</div>
+        <div class="av-text"><strong>My Hebe — promo overlay</strong> — "Dołącz do My Hebe i zgarnij 10 zł na zakupy!" — pojawia się na stronie koszyka dla niezalogowanych</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Action Map — HP</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja sklepu</th><th>Event GA4 / GTM</th><th>Status</th></tr>
+      <tr><td>Promo bar rotujący</td><td>Klik → strona promo / kategoria</td><td><code>select_promotion</code></td><td><span class="warn">⚠️ GTM-MQCNTG8 — niezweryfikowany</span></td></tr>
+      <tr><td>Header wyszukiwarka (Luigi's Box)</td><td>Focus → search overlay</td><td><code>search</code> / <code>LBX event</code></td><td><span class="warn">⚠️ Luigi's Box własne eventy — gap w GA4?</span></td></tr>
+      <tr><td>CTA "POBIERZ APLIKACJĘ"</td><td>Klik → store (App Store/Google Play)</td><td>—</td><td><span class="fail">❌ brak event — exit nietrackowany</span></td></tr>
+      <tr><td>Nav link (kategoria)</td><td>Klik → listing</td><td>—</td><td><span class="fail">❌ brak custom event nav_click</span></td></tr>
+      <tr><td>Hero slider — CTA</td><td>Klik → landing / promo</td><td><code>select_promotion</code></td><td><span class="warn">⚠️ niezweryfikowany</span></td></tr>
+      <tr><td>Brand carousel — klik marki</td><td>Klik → listing marki</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Sekcja tematyczna — klik składnika</td><td>Klik → landing page składnika</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Flowbox UGC — klik posta</td><td>Expand post / klik produktu</td><td>—</td><td><span class="warn">⚠️ Flowbox własne eventy — gap GA4</span></td></tr>
+      <tr><td>Brand Activation (L'Oréal)</td><td>Klik → landing marki</td><td><code>select_promotion</code></td><td><span class="warn">⚠️ niezweryfikowany — Retail Media slot</span></td></tr>
+      <tr><td>Koszyk ikona</td><td>Klik → koszyk</td><td><code>view_cart</code></td><td><span class="warn">⚠️ SFCC native — niezweryfikowany</span></td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════ NAV ════ -->
+<div id="tab-nav" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Nawigacja</div>
+
+    <div class="section-label">Desktop — 1440px (header sticky)</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Nav Desktop <span class="vp-tag">1440px</span></div>
+        <img src="hebe_audit_screenshots/nav_desktop.jpeg" alt="Hebe Nav Desktop" onclick="zoom(this)" style="margin-top:30px">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Nawigacja Desktop</div>
+      </div>
+    </div>
+
+    <div class="av-annotations" style="border:1px solid var(--border);border-radius:10px">
+      <div class="av-col-label">Anatomia nawigacji — od góry</div>
+      <div class="av-item">
+        <div class="av-num">1</div>
+        <div class="av-text"><strong>Promo bar</strong> — rotujący, sticky. Aktywna promo: "Pielęgnacja twarzy do -40%" + "Darmowa dostawa InPost 24/7 od 15 zł"</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">2</div>
+        <div class="av-text"><strong>Header row 1:</strong> Logo Hebe (lewy) | Wyszukiwarka Luigi's Box (center-left) | "POBIERZ APLIKACJĘ" CTA | Ikona konta | Wishlist | Koszyk (prawy)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">3</div>
+        <div class="av-text"><strong>Primary nav (8 pozycji, centrum):</strong> WSZYSTKIE KATEGORIE | PROMOCJE | CZAS NA SPF | DZIEŃ MAMY | HEBE STUDIO | K-BEAUTY | NOWOŚCI | 🔥 VIRAL SHOP</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">4</div>
+        <div class="av-text"><strong>Secondary nav (5 pozycji, prawy):</strong> MARKI | GAZETKA | HEBE COLLECTION | SKLEPY | APTEKA (→ hebeapteka.pl, external link)</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">Mobile — hamburger menu</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">Nav Hamburger Mobile <span class="vp-tag">390px</span></div>
+        <img src="hebe_audit_screenshots/nav_hamburger_mobile.jpeg" alt="Hebe Nav Hamburger Mobile" onclick="zoom(this)" style="margin-top:30px">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Mobile menu otwarty</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗺 Pełna struktura nawigacji</div>
+    <div class="schema-block">
+      <div class="schema-label">Primary nav — Desktop (8 pozycji głównych)</div>
+      <div class="table-wrap"><table>
+        <tr><th>#</th><th>Etykieta</th><th>URL</th><th>Typ</th></tr>
+        <tr><td>1</td><td>WSZYSTKIE KATEGORIE</td><td>/</td><td>mega-menu dropdown</td></tr>
+        <tr><td>2</td><td>PROMOCJE</td><td>/c/sale</td><td>flat link</td></tr>
+        <tr><td>3</td><td>CZAS NA SPF</td><td>/c/spf</td><td>seasonal campaign</td></tr>
+        <tr><td>4</td><td>DZIEŃ MAMY</td><td>/c/dzien-mamy</td><td>seasonal campaign</td></tr>
+        <tr><td>5</td><td>HEBE STUDIO</td><td>/hebe-studio</td><td>brand sub-site</td></tr>
+        <tr><td>6</td><td>K-BEAUTY</td><td>/k-beauty</td><td>thematic landing</td></tr>
+        <tr><td>7</td><td>NOWOŚCI</td><td>/c/new</td><td>flat link</td></tr>
+        <tr><td>8</td><td>🔥 VIRAL SHOP</td><td>/viral-shop</td><td>trending / influencer</td></tr>
+      </table></div>
+    </div>
+    <div class="schema-block" style="margin-top:12px">
+      <div class="schema-label">Secondary nav — Desktop (5 pozycji pomocniczych, prawy)</div>
+      <div class="table-wrap"><table>
+        <tr><th>#</th><th>Etykieta</th><th>Cel</th></tr>
+        <tr><td>1</td><td>MARKI</td><td>Strona wszystkich marek A–Z</td></tr>
+        <tr><td>2</td><td>GAZETKA</td><td>Gazetka promocyjna (PDF)</td></tr>
+        <tr><td>3</td><td>HEBE COLLECTION</td><td>Własna marka Hebe</td></tr>
+        <tr><td>4</td><td>SKLEPY</td><td>Wyszukiwarka sklepów stacjonarnych (780+)</td></tr>
+        <tr><td>5</td><td>APTEKA</td><td>hebeapteka.pl (zewnętrzny link)</td></tr>
+      </table></div>
+    </div>
+    <div class="schema-block" style="margin-top:12px">
+      <div class="schema-label">Account nav — po zalogowaniu (/account)</div>
+      <div class="table-wrap"><table>
+        <tr><th>Pozycja</th><th>URL</th></tr>
+        <tr><td>Program my hebe</td><td>/myhebe</td></tr>
+        <tr><td>Moje zamówienia</td><td>/orders</td></tr>
+        <tr><td>Moje dane</td><td>/profile</td></tr>
+      </table></div>
+    </div>
+    <div class="note note-warn" style="margin-top:12px">
+      <strong>SFCC URL patterns:</strong> Kategorie używają formatu <code>/{slug}/</code> np. <code>/makijaz</code>, <code>/hebe-studio-wlosy/</code>. Produkty: <code>/{slug}-{12-cyfrowy-ID}.html</code>. Filter params: <code>?prefn1=brand&amp;prefv1=BrandName</code> — standardowy SFCC refinement pattern.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Action Map — Nawigacja</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja shopperki</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Primary nav link</td><td>Klik → kategoria</td><td>—</td><td><span class="fail">❌ brak custom event nav_click</span></td></tr>
+      <tr><td>"WSZYSTKIE KATEGORIE" mega-menu</td><td>Hover/klik → mega dropdown</td><td>—</td><td><span class="fail">❌ interakcja nie trackowana</span></td></tr>
+      <tr><td>"VIRAL SHOP" wyróżniony</td><td>Klik → landing viral</td><td><code>select_promotion</code></td><td><span class="warn">⚠️ niezweryfikowany</span></td></tr>
+      <tr><td>APTEKA (external)</td><td>Klik → hebeapteka.pl (exit)</td><td>—</td><td><span class="fail">❌ brak exit tracking</span></td></tr>
+      <tr><td>Hamburger (mobile)</td><td>Tap → otwiera menu</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Wyszukiwarka (Luigi's Box)</td><td>Focus → search overlay</td><td><code>LBX-505233 event</code></td><td><span class="warn">⚠️ Luigi's Box własny tracking — gap GA4</span></td></tr>
+      <tr><td>Koszyk ikona</td><td>Klik → koszyk</td><td><code>view_cart</code></td><td><span class="warn">⚠️ SFCC native</span></td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════ LISTING ════ -->
+<div id="tab-listing" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Listing Kategoria (Makijaż / Hebe Studio)</div>
+
+    <div class="section-label">Desktop — 1440px</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Listing Desktop <span class="vp-tag">1440px</span></div>
+        <img src="hebe_audit_screenshots/listing_desktop.jpeg" alt="Hebe Listing Desktop" onclick="zoom(this)" style="margin-top:30px">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Listing Desktop — URL: /makijaz → redirect /hebe-studio-makijaz/</div>
+      </div>
+    </div>
+
+    <div class="av-annotations" style="border:1px solid var(--border);border-radius:10px">
+      <div class="av-col-label">Anatomia Listing — od góry (źródło: HTML scan /makijaz)</div>
+      <div class="av-item">
+        <div class="av-num">1</div>
+        <div class="av-text"><strong>Breadcrumbs</strong> — Hebe Studio › Makijaż. SFCC breadcrumb trail</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">2</div>
+        <div class="av-text"><strong>H1 + H2 kategoria</strong> — "Makijaż" z podkategoriami jako pozioma nawigacja: Twarz (399) | Oczy (240) | Brwi (50) | Usta (110) | Pędzle (30) | Akcesoria (23) | Zestawy (63)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">3</div>
+        <div class="av-text"><strong>Sidebar / Filtry (lewy)</strong> — Marki (alfabetyczna lista z count badges), Kategorie (drzewo subcategorii), Atrybuty (Promocje, Profesjonalne, Wegańskie, Dla mężczyzn, Tylko w Hebe). SFCC refinements: <code>?prefn1=brand&amp;prefv1=BrandName</code></div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">4</div>
+        <div class="av-text"><strong>Sort options</strong> — Trafność wyszukiwania | Najpopularniejsze | Cena rosnąco | Cena malejąco. Domyślne: Trafność</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">5</div>
+        <div class="av-text"><strong>Grid produktów</strong> — 3–4 kolumny desktop. UseInsider: 30+ elementów <code>ins-</code> — spersonalizowane bannery wstrzykiwane między produkty. Criteo: 1 slot reklamowy (nieoznaczony "Sponsored")</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num warn">⚠</div>
+        <div class="av-text"><strong>Brak oznaczeń "Sponsored"</strong> na kafelkach — Criteo i UseInsider bannery nie są wyraźnie oznaczone jako reklama. Potencjalne ryzyko compliance (UOKiK / DORA)</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">Mobile — 390px</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">Listing Mobile <span class="vp-tag">390px</span></div>
+        <img src="hebe_audit_screenshots/listing_mobile.jpeg" alt="Hebe Listing Mobile" onclick="zoom(this)" style="margin-top:30px">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Listing Mobile</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Struktura kategorii (z HTML scan)</div>
+    <div class="schema-block">
+      <div class="schema-label">Hebe Studio — Makijaż (subcategorie z count badges)</div>
+      <div class="nav-tree">
+        <div class="nav-item">→ Hebe Studio (8686 prod.)</div>
+        <div class="nav-item nav-sub">↳ Zapachy (3406)</div>
+        <div class="nav-item nav-sub">↳ Włosy (2408)</div>
+        <div class="nav-item nav-sub">↳ Twarz (1802)</div>
+        <div class="nav-item nav-sub">↳ Ciało (271)</div>
+        <div class="nav-item nav-sub" style="color:var(--accent)">↳ Makijaż (890) — aktywna</div>
+        <div class="nav-item" style="padding-left:40px">↳ Twarz (399)</div>
+        <div class="nav-item" style="padding-left:40px">↳ Oczy (240)</div>
+        <div class="nav-item" style="padding-left:40px">↳ Brwi (50)</div>
+        <div class="nav-item" style="padding-left:40px">↳ Usta (110)</div>
+        <div class="nav-item" style="padding-left:40px">↳ Pędzle do makijażu (30)</div>
+        <div class="nav-item" style="padding-left:40px">↳ Akcesoria (23)</div>
+        <div class="nav-item" style="padding-left:40px">↳ Zestawy (63)</div>
+        <div class="nav-item nav-sub">↳ Paznokcie (14)</div>
+      </div>
+    </div>
+    <div class="schema-block" style="margin-top:12px">
+      <div class="schema-label">Przykładowe marki (filtry) — Makijaż Hebe Studio</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">
+        <span class="badge badge-grey">Benefit (61)</span>
+        <span class="badge badge-grey">Claré (101)</span>
+        <span class="badge badge-grey">Clarins (14)</span>
+        <span class="badge badge-grey">Clinique (56)</span>
+        <span class="badge badge-grey">Dior (1)</span>
+        <span class="badge badge-grey">Babor (2)</span>
+        <span class="badge badge-grey">Avène (3)</span>
+        <span class="badge badge-grey">bareMinerals (1)</span>
+        <span class="badge badge-grey">Bobbi Brown (3)</span>
+        <span class="badge badge-grey">Amuse (2)</span>
+        <span class="badge badge-grey">CLIV (2)</span>
+        <span class="badge badge-grey">Collistar (5)</span>
+        <span class="badge badge-grey">Dear Klairs (1)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Action Map — Listing</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja shopperki</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Klik kafelka produktu</td><td>Przejście na PDP</td><td><code>select_item</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>Produkt w viewport</td><td>Widok na liście</td><td><code>view_item_list</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>Filtr (marka/kategoria)</td><td>Klik → refinement</td><td>—</td><td><span class="fail">❌ brak filter_select event</span></td></tr>
+      <tr><td>Sort options</td><td>Zmiana sortowania</td><td>—</td><td><span class="fail">❌ brak sort_change event</span></td></tr>
+      <tr><td>Subcategoria tab (Twarz/Oczy)</td><td>Klik → subcategoria</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>UseInsider baner (spersonalizowany)</td><td>Klik → promo landing</td><td>—</td><td><span class="fail">❌ UseInsider własne eventy — gap GA4</span></td></tr>
+      <tr><td>Criteo slot</td><td>Klik → PDP (sponsored)</td><td>—</td><td><span class="warn">⚠️ Criteo tracking (poza GA4)</span></td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════ SEARCH ════ -->
+<div id="tab-search" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Open Search (Luigi's Box)</div>
+
+    <div class="section-label">Desktop — search overlay otwarty</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Search Desktop <span class="vp-tag">1440px</span></div>
+        <img src="hebe_audit_screenshots/search_desktop.jpeg" alt="Hebe Search Desktop" onclick="zoom(this)" style="margin-top:30px">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Search — Luigi's Box overlay</div>
+      </div>
+    </div>
+
+    <div class="av-annotations" style="border:1px solid var(--border);border-radius:10px">
+      <div class="av-col-label">Search overlay — Luigi's Box (LBX-505233)</div>
+      <div class="av-item">
+        <div class="av-num">1</div>
+        <div class="av-text"><strong>Search bar</strong> — pole tekstowe z ikoną lupy. Search-as-you-type (live suggestions po wpisaniu 2+ znaków). Luigi's Box Instant Search</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">2</div>
+        <div class="av-text"><strong>Autocomplete suggestions</strong> — lista podpowiedzi (frazy, marki, kategorie, produkty). AI-powered relevance ranking LBX</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">3</div>
+        <div class="av-text"><strong>Product previews</strong> — miniaturki produktów z ceną w overlay (rich autocomplete). Clickable bezpośrednio do PDP</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num warn">⚠</div>
+        <div class="av-text"><strong>Gap analytics:</strong> Luigi's Box ma własne eventy analityczne (LBX dashboard) — search queries, click-through, zero-results. Te dane NIE trafiają automatycznie do GA4 jako standardowe eventy. Wymaga custom GTM trigger lub LBX → GA4 integration</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">Mobile — search screen</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">Search Mobile <span class="vp-tag">390px</span></div>
+        <img src="hebe_audit_screenshots/search_mobile.jpeg" alt="Hebe Search Mobile" onclick="zoom(this)" style="margin-top:30px">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Search Mobile</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Action Map — Search</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja shopperki</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Klik w wyszukiwarkę (focus)</td><td>Otwiera overlay</td><td>—</td><td><span class="fail">❌ brak search_open event</span></td></tr>
+      <tr><td>Wpisanie frazy</td><td>Autocomplete live</td><td><code>search</code> (per GA4)</td><td><span class="warn">⚠️ LBX event — gap GA4</span></td></tr>
+      <tr><td>Klik sugestii</td><td>Przejście na wyniki / PDP</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Enter / "Szukaj"</td><td>Pełna strona wyników</td><td><code>search</code></td><td><span class="warn">⚠️ SFCC native</span></td></tr>
+      <tr><td>Zero results</td><td>Brak wyników</td><td>—</td><td><span class="fail">❌ brak zero_results event — krytyczna luka</span></td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════ TILE ════ -->
+<div id="tab-tile" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Kafelek / Product Tile</div>
+
+    <div class="section-label">Desktop — tile ze strony listingowej (default state)</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Product Tile Desktop <span class="vp-tag">1440px</span></div>
+        <img src="hebe_audit_screenshots/tile_default_desktop.jpeg" alt="Hebe Tile Desktop" onclick="zoom(this)" style="margin-top:30px">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Anatomia kafelka produktowego — T1–T8</div>
+        <div class="av-item"><div class="av-num">T1</div><div class="av-text"><strong>Zdjęcie produktu</strong> — white background, hover swap (drugie zdjęcie jeśli dostępne)</div></div>
+        <div class="av-item"><div class="av-num">T2</div><div class="av-text"><strong>Marka</strong> — nad tytułem produktu (brand label, link do filtra marki)</div></div>
+        <div class="av-item"><div class="av-num">T3</div><div class="av-text"><strong>Nazwa produktu</strong> — 1–2 linijki, truncated</div></div>
+        <div class="av-item"><div class="av-num">T4</div><div class="av-text"><strong>Cena</strong> — aktualna + przekreślona stara + badge % rabatu (jeśli promocja)</div></div>
+        <div class="av-item"><div class="av-num">T5</div><div class="av-text"><strong>Badge promo</strong> — np. "-40%" nakładka na zdjęcie (lewy górny róg)</div></div>
+        <div class="av-item"><div class="av-num warn">T6</div><div class="av-text"><strong>Wishlist</strong> — ikona serca? Do weryfikacji (❓ nie potwierdzone w HTML scan)</div></div>
+        <div class="av-item"><div class="av-num warn">T7</div><div class="av-text"><strong>Quick ATC</strong> — przycisk "dodaj" na hover? SFCC nie ma domyślnie — do weryfikacji</div></div>
+        <div class="av-item"><div class="av-num warn">T8</div><div class="av-text"><strong>Gwiazdki / rating</strong> — widoczne na kafelku? Provider niezidentyfikowany</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📐 Anatomia kafelka — T1–T8</div>
+    <div class="table-wrap"><table>
+      <tr><th>#</th><th>Element</th><th>Stan default</th><th>Stan hover</th><th>Ocena</th></tr>
+      <tr>
+        <td><strong>T1</strong></td>
+        <td><strong>Zdjęcie produktu</strong></td>
+        <td>White BG, 1:1 aspect ratio</td>
+        <td>Drugie zdjęcie (lifestyle?) — do weryfikacji po screenshottach</td>
+        <td><span class="warn">⚠️ do weryfikacji po screenshot</span></td>
+      </tr>
+      <tr>
+        <td><strong>T2</strong></td>
+        <td><strong>Badge statusu</strong></td>
+        <td>NOWOŚĆ / BESTSELLER / WYPRZEDAŻ / % OFF badge</td>
+        <td>—</td>
+        <td><span class="ok">✅ SFCC tag-based badges</span></td>
+      </tr>
+      <tr>
+        <td><strong>T3</strong></td>
+        <td><strong>Marka</strong></td>
+        <td>Tekst nad nazwą produktu (np. "COSRX", "Claré")</td>
+        <td>—</td>
+        <td><span class="ok">✅ brand wyróżniony osobno</span></td>
+      </tr>
+      <tr>
+        <td><strong>T4</strong></td>
+        <td><strong>Nazwa produktu</strong></td>
+        <td>Skrócona nazwa, 2 linie max</td>
+        <td>—</td>
+        <td><span class="warn">⚠️ długie nazwy obcinane — sprawdzić truncation</span></td>
+      </tr>
+      <tr>
+        <td><strong>T5</strong></td>
+        <td><strong>Cena + promo</strong></td>
+        <td>Cena aktualna + przekreślona (promo) + badge "% taniej"</td>
+        <td>—</td>
+        <td><span class="ok">✅ Omnibus visible (najniższa cena 30 dni) — do weryfikacji</span></td>
+      </tr>
+      <tr>
+        <td><strong>T6</strong></td>
+        <td><strong>Rating gwiazdki</strong></td>
+        <td>Do weryfikacji — własny system czy zewnętrzny?</td>
+        <td>—</td>
+        <td><span class="warn">⚠️ niezidentyfikowany dostawca recenzji</span></td>
+      </tr>
+      <tr>
+        <td><strong>T7</strong></td>
+        <td><strong>Wishlist icon</strong></td>
+        <td>Serce (prawy górny róg zdjęcia) — widoczne zawsze?</td>
+        <td>—</td>
+        <td><span class="warn">⚠️ do weryfikacji po screenshot</span></td>
+      </tr>
+      <tr>
+        <td><strong>T8</strong></td>
+        <td><strong>Quick-add / ATC</strong></td>
+        <td>Brak (tylko na hover?)</td>
+        <td>Przycisk "Dodaj do koszyka" / redirect PDP</td>
+        <td><span class="warn">⚠️ do weryfikacji — czy SFCC ma quick-add?</span></td>
+      </tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Action Map — Kafelek</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja shopperki</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Klik zdjęcia / tytułu</td><td>Przejście na PDP</td><td><code>select_item</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>Wishlist serce</td><td>Dodaj do listy życzeń</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Quick-add (jeśli istnieje)</td><td>ATC bez PDP</td><td><code>add_to_cart</code></td><td><span class="warn">⚠️ do weryfikacji</span></td></tr>
+      <tr><td>Hover — zmiana zdjęcia</td><td>Widok drugiego zdjęcia</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Badge klik (NOWOŚĆ/% OFF)</td><td>—</td><td>—</td><td><span class="unk">❓ badgey są dekoracyjne czy klikalne?</span></td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════ PDP ════ -->
+<div id="tab-pdp" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — PDP (Product Detail Page)</div>
+
+    <div class="section-label">Desktop — 1440px (full page) — ATF fold</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">PDP Desktop full page <span class="vp-tag">1440px</span></div>
+        <img src="hebe_audit_screenshots/pdp_desktop.jpeg" alt="Hebe PDP Desktop" onclick="zoom(this)" style="margin-top:30px">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">PDP Desktop — URL: /{slug}-{12-digit-ID}.html</div>
+      </div>
+    </div>
+
+    <div class="av-annotations" style="border:1px solid var(--border);border-radius:10px">
+      <div class="av-col-label">Anatomia PDP — ATF (Above the Fold, desktop 1440px)</div>
+      <div class="av-item">
+        <div class="av-num">1</div>
+        <div class="av-text"><strong>Breadcrumbs</strong> — Hebe › Pielęgnacja › Nawilżanie › {Nazwa produktu}. SFCC breadcrumb</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">2</div>
+        <div class="av-text"><strong>Gallery (lewy panel)</strong> — zdjęcia produktu: white BG (główne) + miniatury (slider). Możliwy zoom on-hover. Do weryfikacji: ile zdjęć, czy lifestyle, czy wideo</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">3</div>
+        <div class="av-text"><strong>Nazwa marki</strong> — nad H1 (np. "COSRX") — linkuje do strony marki</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">4</div>
+        <div class="av-text"><strong>H1 — Tytuł produktu</strong> — {Slug} + {ID}. Model tytułu: wariuje per produkt (brak jednolitego szablonu — do audytu contentowego)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">5</div>
+        <div class="av-text"><strong>Rating + Recenzje</strong> — gwiazdki + liczba recenzji (clickable scroll do sekcji reviews). Dostawca do identyfikacji po screenshocie</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">6</div>
+        <div class="av-text"><strong>Cena</strong> — aktualna PLN + przekreślona (compare-at). Badge promo "% taniej". Omnibus (najniższa cena 30 dni) — wymagany prawem — do weryfikacji widoczności</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">7</div>
+        <div class="av-text"><strong>Warianty</strong> — (jeśli istnieją) dropdown lub swatch. SFCC: max 3 opcje</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">8</div>
+        <div class="av-text"><strong>ATC button</strong> — "Dodaj do koszyka" — pełna szerokość lub stały width. My Hebe promo obok: "Dołącz i zgarnij 10 zł"</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">9</div>
+        <div class="av-text"><strong>Dostawa / Dostępność</strong> — info o dostawie (InPost, kurier) + dostępność w sklepach stacjonarnych (click & collect)</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">Mobile — 390px (full page)</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">PDP Mobile full page <span class="vp-tag">390px</span></div>
+        <img src="hebe_audit_screenshots/pdp_mobile.jpeg" alt="Hebe PDP Mobile" onclick="zoom(this)" style="margin-top:30px">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">PDP Mobile — kluczowe różnice vs desktop</div>
+        <div class="av-item"><div class="av-num">M1</div><div class="av-text"><strong>Gallery</strong> — swipe poziomy (nie thumbnails sidebar)</div></div>
+        <div class="av-item"><div class="av-num">M2</div><div class="av-text"><strong>ATC button</strong> — sticky na dole ekranu lub pełna szerokość</div></div>
+        <div class="av-item"><div class="av-num">M3</div><div class="av-text"><strong>Accordion sekcji</strong> — opis, składniki, dostawa zwinięte domyślnie</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📄 PDP — BTF (Below the Fold) — sekcje głębokie</div>
+    <div class="av-annotations" style="border:1px solid var(--border);border-radius:10px">
+      <div class="av-col-label">Sekcje BTF na PDP (poniżej ATF, po scrollu)</div>
+      <div class="av-item">
+        <div class="av-num">10</div>
+        <div class="av-text"><strong>Opis produktu</strong> — długi opis HTML. Do audytu: czy jest krótki opis (shortdesc) osobno czy jeden blok tekstu?</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">11</div>
+        <div class="av-text"><strong>Składniki (INCI)</strong> — lista składników (kosmetyki wymagają INCI). Accordion lub expanded section?</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">12</div>
+        <div class="av-text"><strong>Cross-sell "Może Ci się spodobać"</strong> — 7 elementów <code>[class*="cross-sell"]</code>. Salesforce Einstein AI Recommendations (<code>cdn.cquotient.com/js/v2/gretel.min.js</code>) — SFCC native AI recommendations</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">13</div>
+        <div class="av-text"><strong>Flowbox UGC</strong> — 1 element galerii social proof (Instagram/TikTok posts z produktem). Shoppable content</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">14</div>
+        <div class="av-text"><strong>Sekcja recenzji</strong> — opinie klientów (gwiazdki + tekst). Dostawca niezidentyfikowany — do weryfikacji po screenshot (możliwe: własne SFCC reviews, Bazaarvoice, lub TrustMate)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">15</div>
+        <div class="av-text"><strong>UseInsider personalizacja</strong> — 35 elementów <code>ins-</code> na PDP (najwyższy wolumen ze wszystkich stron). Bannery personalizacji, exit-intent, cross-category rekomendacje</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Action Map — PDP</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja shopperki</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Wejście na PDP</td><td>Widok produktu</td><td><code>view_item</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>"Dodaj do koszyka"</td><td>ATC</td><td><code>add_to_cart</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>Gallery — klik miniatury</td><td>Zmiana zdjęcia głównego</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Zoom zdjęcia</td><td>Powiększenie</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Rating — klik gwiazdek</td><td>Scroll do recenzji</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Cross-sell — klik produktu</td><td>Przejście na inny PDP</td><td><code>select_item</code></td><td><span class="warn">⚠️ Einstein tracking — gap GA4</span></td></tr>
+      <tr><td>Flowbox UGC — klik posta</td><td>Expand post</td><td>—</td><td><span class="fail">❌ Flowbox własne — gap GA4</span></td></tr>
+      <tr><td>Wishlist</td><td>Dodaj do listy życzeń</td><td>—</td><td><span class="fail">❌ brak add_to_wishlist GA4</span></td></tr>
+      <tr><td>Dostawa — klik "sprawdź sklepy"</td><td>Overlay store locator</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>UseInsider overlay</td><td>Interakcja z personalizacją</td><td>—</td><td><span class="fail">❌ UseInsider własne — gap GA4</span></td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📐 Schema.org — weryfikacja danych strukturalnych</div>
+    <div class="schema-block">
+      <div class="schema-label">Wykryte @type: "Product" — na PDP</div>
+      <pre>@context: https://schema.org
+@type: Product
+name: {product-name}
+brand: {brand-name}
+offers:
+  @type: Offer
+  price: {price}
+  priceCurrency: PLN
+  availability: InStock / OutOfStock
+aggregateRating:
+  @type: AggregateRating
+  ratingValue: {stars}
+  reviewCount: {count}</pre>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">Źródło: HTML scan wcześniejszej sesji. Wymaga weryfikacji po Playwright screenshot — Google Rich Results Test.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════ KOSZYK ════ -->
+<div id="tab-cart" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Koszyk</div>
+
+    <div class="section-label">Desktop — /cart (po dodaniu produktu)</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Koszyk Desktop <span class="vp-tag">1440px</span></div>
+        <img src="hebe_audit_screenshots/cart_page_desktop.jpeg" alt="Hebe Koszyk Desktop" onclick="zoom(this)" style="margin-top:30px">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Anatomia koszyka — Shopper View Desktop</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Lista produktów</strong> — zdjęcie, nazwa, marka, wariant, cena, ilość (stepper), usunięcie</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Promo My Hebe</strong> — "Dołącz do My Hebe i zgarnij 10 zł na zakupy!" — widget loyalty dla niezalogowanych</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Order Summary</strong> — suma + dostawa + CTA "Przejdź do kasy" (full-width)</div></div>
+        <div class="av-item"><div class="av-num warn">⚠</div><div class="av-text"><strong>Kod rabatowy</strong> — pole do weryfikacji czy widoczne na tym widoku</div></div>
+      </div>
+    </div>
+    </div>
+
+    <div class="av-annotations" style="border:1px solid var(--border);border-radius:10px">
+      <div class="av-col-label">Anatomia koszyka (na podstawie wcześniejszej analizy)</div>
+      <div class="av-item">
+        <div class="av-num">1</div>
+        <div class="av-text"><strong>Lista produktów</strong> — zdjęcie, nazwa, marka, wariant, cena, ilość (stepper), usunięcie</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">2</div>
+        <div class="av-text"><strong>Promo My Hebe</strong> — "Dołącz do My Hebe i zgarnij 10 zł na zakupy!" — widget loyalty dla niezalogowanych. Program: ~4M members, diamondowy system tierów (punkty za zakupy)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">3</div>
+        <div class="av-text"><strong>Podsumowanie</strong> — suma produktów + dostawa + rabaty. CTA "Przejdź do kasy" (full-width)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">4</div>
+        <div class="av-text"><strong>Cross-sell / "Może Ci się spodobać"</strong> — Einstein Recommendations w koszyku (niezweryfikowane — do sprawdzenia po screenshot)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num warn">⚠</div>
+        <div class="av-text"><strong>Pole kodu rabatowego</strong> — istnieje? SFCC standard checkout zazwyczaj ma. Do weryfikacji</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">Mobile — koszyk</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Koszyk Mobile <span class="vp-tag">390px</span></div>
+        <img src="hebe_audit_screenshots/cart_mobile.jpeg" alt="Hebe Koszyk Mobile" onclick="zoom(this)" style="margin-top:30px">
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Koszyk Mobile — layout różnice</div>
+        <div class="av-item"><div class="av-num">M1</div><div class="av-text"><strong>Lista produktów</strong> — jeden kolumna, zwarta, thumbnail mały</div></div>
+        <div class="av-item"><div class="av-num">M2</div><div class="av-text"><strong>CTA "Przejdź do kasy"</strong> — sticky footer lub full-width button na dole listy</div></div>
+        <div class="av-item"><div class="av-num">M3</div><div class="av-text"><strong>My Hebe promo</strong> — widoczny na mobile jako baner poniżej listy?</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Action Map — Koszyk</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja shopperki</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Widok koszyka</td><td>Otwarcie /cart</td><td><code>view_cart</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>Zmiana ilości</td><td>Stepper +/−</td><td><code>add_to_cart</code> / <code>remove_from_cart</code></td><td><span class="warn">⚠️ do weryfikacji</span></td></tr>
+      <tr><td>Usunięcie produktu</td><td>Klik "usuń"</td><td><code>remove_from_cart</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>"Przejdź do kasy"</td><td>Inicjacja checkout</td><td><code>begin_checkout</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>My Hebe promo CTA</td><td>Klik → rejestracja/login</td><td>—</td><td><span class="fail">❌ brak loyalty_promo_click event</span></td></tr>
+      <tr><td>Kod rabatowy (jeśli istnieje)</td><td>Wpisanie kodu</td><td>—</td><td><span class="fail">❌ brak promo_code_apply event</span></td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════ CHECKOUT ════ -->
+<div id="tab-checkout" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Checkout</div>
+
+    <div class="note note-warn">
+      <strong>Ograniczenie:</strong> Checkout wymaga sesji zalogowanej lub guest checkout z produktami w koszyku. take_screenshots.py wykonuje ATC + redirect do checkout. Screenshot może pokazywać tylko Krok 1 (dane dostawy) lub bramkę płatności.
+    </div>
+
+    <div class="section-label">Desktop — checkout Krok 1 (dane dostawy)</div>
+    <div class="av-placeholder">
+      <div class="ph-icon">📸</div>
+      <div>Screenshot oczekuje — <code>checkout_step1_desktop.jpeg</code></div>
+    </div>
+
+    <div class="av-annotations" style="border:1px solid var(--border);border-radius:10px">
+      <div class="av-col-label">Anatomia checkout — SFCC native multi-step</div>
+      <div class="av-item">
+        <div class="av-num">1</div>
+        <div class="av-text"><strong>Krok 1 — Dane dostawy:</strong> Imię, Nazwisko, Adres, Kod pocztowy, Miasto, Telefon. Login/Register prompt dla niezalogowanych. Guest checkout dostępny?</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">2</div>
+        <div class="av-text"><strong>Krok 2 — Metoda dostawy:</strong> InPost Paczkomat (od 0 zł przy zamówieniu 15+), Kurier DPD/DHL/InPost, Odbiór w sklepie stacjonarnym (click & collect — 780 lokalizacji)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">3</div>
+        <div class="av-text"><strong>Krok 3 — Płatność:</strong> Blik, Karta (Visa/MC), Przelew online (PayU/Przelewy24), Ratalna płatność (Klarna/PayPo?) — do weryfikacji. PayPo wzmiankowane w stack detection</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">4</div>
+        <div class="av-text"><strong>Order summary (sidebar)</strong> — lista produktów, suma, dostawa, kod rabatowy, łączna kwota</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">Mobile — checkout</div>
+    <div class="av-placeholder">
+      <div class="ph-icon">📸</div>
+      <div>Screenshot oczekuje — <code>checkout_step1_mobile.jpeg</code></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Action Map — Checkout</div>
+    <div class="table-wrap"><table>
+      <tr><th>Krok</th><th>Akcja shopperki</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Wejście w checkout</td><td>begin_checkout</td><td><code>begin_checkout</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>Krok 1 → Krok 2</td><td>Potwierdzenie danych</td><td><code>checkout_progress</code> / <code>add_shipping_info</code></td><td><span class="warn">⚠️ GA4 enhanced ecom — do weryfikacji</span></td></tr>
+      <tr><td>Wybór metody dostawy</td><td>Klik opcji dostawy</td><td><code>add_shipping_info</code></td><td><span class="warn">⚠️ do weryfikacji</span></td></tr>
+      <tr><td>Wybór płatności</td><td>Klik metody płatności</td><td><code>add_payment_info</code></td><td><span class="warn">⚠️ do weryfikacji</span></td></tr>
+      <tr><td>Finalizacja zakupu</td><td>"Zamawiam i płacę"</td><td><code>purchase</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════ BLOG ════ -->
+<div id="tab-blog" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Blog (hebe.pl/blog)</div>
+
+    <div class="section-label">Desktop — strona główna bloga</div>
+    <div class="av-placeholder">
+      <div class="ph-icon">📸</div>
+      <div>Screenshot oczekuje — <code>blog_desktop.jpeg</code></div>
+    </div>
+
+    <div class="av-annotations" style="border:1px solid var(--border);border-radius:10px">
+      <div class="av-col-label">Anatomia bloga (źródło: web fetch hebe.pl/blog 2026-05-26)</div>
+      <div class="av-item">
+        <div class="av-num">1</div>
+        <div class="av-text"><strong>H2 — Wartość bloga</strong> — "Kosmetyki z dobrym składem — blog Hebe". Editorial copy: "W naszych artykułach polecamy konkretne produkty, które możesz łatwo zamówić ze strony Hebe lub nabyć w naszych stacjonarnych drogeriach." — silny commerce-linked content strategy</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">2</div>
+        <div class="av-text"><strong>Kategorie artykułów (horizontal nav)</strong> — 18 kategorii: Zapachy | Blog Makijaż | Blog Twarz | Włosy | Blog Ciało | paznokcie | Dermokosmetyki | Skóra | Hebe poleca | Składniki | Naturalne | Mężczyźni | Urodomaniaczki | Prezenty | Zdrowie | Kwasy | Inne | #...</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num">3</div>
+        <div class="av-text"><strong>Grid artykułów</strong> — karty: cover image + kategoria badge + tytuł + data. Przykłady: "Odkryj kolekcję MIYO BeautyVtrick w Hebe" (09/2024), "Claresa &amp; Kitulec – odkryj swoją moc" (brand collaboration content)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num ok2">✓</div>
+        <div class="av-text"><strong>Commerce-linked content</strong> — artykuły linkują bezpośrednio do produktów na hebe.pl. Blog = content commerce funnel. SEO → artykuł → produkt → kup. Mocna strategia</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num warn">⚠</div>
+        <div class="av-text"><strong>URL bloga:</strong> <code>/blog</code> (SFCC CMS). Subcategorie: <code>/blog-makijaz/</code>, <code>/blog-twarz/</code> itd. Artykuły: <code>/blog-makijaz/{slug}.html</code> — SFCC page template</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Taksonomia kategorii bloga (18 kategorii)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span class="badge badge-blue">Zapachy</span>
+      <span class="badge badge-blue">Blog Makijaż</span>
+      <span class="badge badge-blue">Blog Twarz</span>
+      <span class="badge badge-blue">Włosy</span>
+      <span class="badge badge-blue">Blog Ciało</span>
+      <span class="badge badge-blue">paznokcie</span>
+      <span class="badge badge-blue">Dermokosmetyki</span>
+      <span class="badge badge-blue">Skóra</span>
+      <span class="badge badge-blue">Hebe poleca</span>
+      <span class="badge badge-blue">Składniki</span>
+      <span class="badge badge-blue">Naturalne</span>
+      <span class="badge badge-blue">Mężczyźni</span>
+      <span class="badge badge-blue">Urodomaniaczki</span>
+      <span class="badge badge-blue">Prezenty</span>
+      <span class="badge badge-blue">Zdrowie</span>
+      <span class="badge badge-blue">Kwasy</span>
+      <span class="badge badge-blue">Inne</span>
+    </div>
+    <div class="note note-ok" style="margin-top:12px">
+      <strong>Siła content strategy:</strong> "Składniki kosmetyków" — dedykowana strona <code>/skladniki-kosmetykow/</code> linkowana z bloga. 18 kategorii pokrywa pełne spektrum beauty intent queries (skin, hair, makeup, fragrance, health, eco). Blog CTA → konkretny produkt = commerce funnel.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Action Map — Blog</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja shopperki</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Klik kategorii bloga</td><td>Filtrowanie artykułów</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Klik karty artykułu</td><td>Przejście do artykułu</td><td><code>page_view</code></td><td><span class="ok">✅ GA4 auto</span></td></tr>
+      <tr><td>Scroll artykułu</td><td>Czytanie</td><td><code>scroll</code></td><td><span class="warn">⚠️ GA4 auto scroll 90%</span></td></tr>
+      <tr><td>Klik "kup produkt" w artykule</td><td>Przejście na PDP</td><td>—</td><td><span class="fail">❌ brak blog_to_pdp event — kluczowa luka</span></td></tr>
+      <tr><td>Czas czytania</td><td>Engagement</td><td><code>user_engagement</code></td><td><span class="warn">⚠️ GA4 auto, brak milestones</span></td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════ CONTENT MAP ════ -->
+<div id="tab-contentmap" class="tab-panel">
+
+  <div class="note note-blue">
+    <strong>Content Map — Hebe v1:</strong> Analiza struktury contentowej na podstawie HTML scan, web fetch, wcześniejszej sesji (2026-05-25). Screenshoty oczekują. Sekcja zostanie rozbudowana po uruchomieniu pełnego pipeline z Playwright.
+  </div>
+
+  <div class="card">
+    <div class="card-title">📐 Tech Stack — Pełna tabela</div>
+    <div class="table-wrap"><table>
+      <tr><th>Narzędzie</th><th>ID / Sygnał</th><th>Kategoria</th><th>Status</th></tr>
+      <tr><td><strong>Google Tag Manager</strong></td><td><code>GTM-MQCNTG8</code></td><td>Tag management</td><td><span class="ok">✅ aktywny</span></td></tr>
+      <tr><td><strong>Google Analytics 4 (1)</strong></td><td><code>G-LRXBRD7NT1</code></td><td>Analytics</td><td><span class="ok">✅ aktywny</span></td></tr>
+      <tr><td><strong>Google Analytics 4 (2)</strong></td><td><code>G-480R3PZWEM</code></td><td>Analytics</td><td><span class="warn">⚠️ 2x GA4 — multi-property lub duplikat!</span></td></tr>
+      <tr><td><strong>Google Ads</strong></td><td><code>AW-801449617</code></td><td>Paid ads remarketing</td><td><span class="ok">✅ aktywny</span></td></tr>
+      <tr><td><strong>Google DV360</strong></td><td><code>DC-9774307</code> (Floodlight)</td><td>Programmatic display</td><td><span class="ok">✅ aktywny</span></td></tr>
+      <tr><td><strong>Meta Pixel</strong></td><td><code>774887990456441</code></td><td>Facebook/Instagram retargeting</td><td><span class="ok">✅ aktywny</span></td></tr>
+      <tr><td><strong>Microsoft/Bing Ads</strong></td><td><code>97015158</code></td><td>Remarketing Bing</td><td><span class="ok">✅ aktywny</span></td></tr>
+      <tr><td><strong>Criteo</strong></td><td><code>a=100042</code></td><td>Retargeting produktowy</td><td><span class="ok">✅ aktywny</span></td></tr>
+      <tr><td><strong>RTB House / CreativeCDN</strong></td><td><code>tags.creativecdn.com · umO8vSpYyU9rxByIRSFw.js</code></td><td>RTB retargeting</td><td><span class="ok">✅ aktywny</span></td></tr>
+      <tr><td><strong>pixel.wp.pl (Wirtualna Polska)</strong></td><td><code>5B650E-AC7-11933</code></td><td>Polskie SSP / programmatic</td><td><span class="ok">✅ aktywny</span></td></tr>
+      <tr><td><strong>UseInsider</strong></td><td><code>ID: 10005125</code></td><td>Personalizacja web + push</td><td><span class="ok">✅ aktywny (30-35 elementów per strona)</span></td></tr>
+      <tr><td><strong>Luigi's Box</strong></td><td><code>LBX-505233</code></td><td>Search + Recommendations</td><td><span class="ok">✅ aktywny (3 sloty per strona)</span></td></tr>
+      <tr><td><strong>Salesforce Einstein</strong></td><td><code>cdn.cquotient.com/js/v2/gretel.min.js</code></td><td>AI Recommendations (SFCC native)</td><td><span class="ok">✅ aktywny na PDP + koszyk</span></td></tr>
+      <tr><td><strong>Flowbox</strong></td><td><code>flowbox.js</code></td><td>UGC gallery + shoppable</td><td><span class="ok">✅ HP + PDP</span></td></tr>
+      <tr><td><strong>OneTrust</strong></td><td><code>otSDKStub.js</code></td><td>Cookie consent / CMP</td><td><span class="ok">✅ aktywny</span></td></tr>
+      <tr><td><strong>Zowie</strong></td><td><code>chat-widget · hebe-poland</code></td><td>AI chatbot CS</td><td><span class="ok">✅ aktywny</span></td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Analytics Coverage Map — co jest trackowane</div>
+    <div class="table-wrap"><table>
+      <tr><th>Akcja</th><th>Widok</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Wejście na PDP</td><td>PDP</td><td><code>view_item</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>Dodaj do koszyka</td><td>PDP / Tile</td><td><code>add_to_cart</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>Klik produktu w listingu</td><td>Listing</td><td><code>select_item</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>Widok produktu w viewport</td><td>Listing</td><td><code>view_item_list</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>Przejście do kasy</td><td>Koszyk</td><td><code>begin_checkout</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>Zakup</td><td>Checkout</td><td><code>purchase</code></td><td><span class="warn">⚠️ SFCC native — do weryfikacji</span></td></tr>
+      <tr><td>Wyszukiwanie</td><td>Global</td><td><code>search</code></td><td><span class="warn">⚠️ LBX + SFCC — gap</span></td></tr>
+      <tr><td>Klik nav kategorię</td><td>Nav</td><td>—</td><td><span class="fail">❌ brak nav_click event</span></td></tr>
+      <tr><td>Blog → PDP</td><td>Blog</td><td>—</td><td><span class="fail">❌ brak cross-content event</span></td></tr>
+      <tr><td>Filter / Sort w listingu</td><td>Listing</td><td>—</td><td><span class="fail">❌ brak filter_select</span></td></tr>
+      <tr><td>Scroll depth PDP</td><td>PDP</td><td>—</td><td><span class="fail">❌ brak scroll milestones</span></td></tr>
+      <tr><td>Wishlist dodanie</td><td>Tile / PDP</td><td>—</td><td><span class="fail">❌ brak add_to_wishlist GA4</span></td></tr>
+      <tr><td>UseInsider interakcja</td><td>Global</td><td>—</td><td><span class="fail">❌ UseInsider własne — gap GA4</span></td></tr>
+      <tr><td>Luigi's Box klik sugestii</td><td>Search</td><td>—</td><td><span class="fail">❌ LBX własne — gap GA4</span></td></tr>
+      <tr><td>Flowbox UGC interakcja</td><td>HP / PDP</td><td>—</td><td><span class="fail">❌ Flowbox własne — gap GA4</span></td></tr>
+      <tr><td>CTA Aplikacja mobilna</td><td>Nav</td><td>—</td><td><span class="fail">❌ exit do App Store — nietrackowany</span></td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗺 Platform Patterns — Hebe / SFCC (self-learning)</div>
+    <div class="schema-block">
+      <div class="schema-label">URL patterns wykryte</div>
+      <pre>
+Kategorie:     /{slug}/                          np. /makijaz, /pielegnacja
+               /{slug}-{sub}/                   np. /hebe-studio-makijaz/
+Subcategorie:  /{slug}-{sub}-{sub2}/            np. /hebe-studio-makijaz-twarz/
+Produkty:      /{slug}-{12-cyfrowy-ID}.html      np. /cosrx-snail-92-123456789012.html
+Filter:        ?prefn1={filter}&prefv1={value}   np. ?prefn1=brand&prefv1=COSRX
+Static assets: /on/demandware.static/Sites-Hebe-Site/-/default/{hash}/
+Blog:          /blog                             lista
+               /blog-{kategoria}/                np. /blog-makijaz/
+               /blog-{kategoria}/{slug}.html     artykuł
+Konto:         /account, /myhebe, /orders, /profile
+Checkout:      /checkout (SFCC multi-step)</pre>
+    </div>
+    <div class="schema-block" style="margin-top:12px">
+      <div class="schema-label">Tech signatures / detekcja SFCC</div>
+      <pre>
+window.pageContext       → SFCC page context object
+/on/demandware.static/  → SFCC static asset CDN
+/on/demandware.store/   → SFCC dynamic routes
+Sites-Hebe-Site         → Site ID w SFCC
+cquotient.com           → Salesforce Einstein Recommendations
+</pre>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════ SUMMARY ════ -->
+<div id="tab-summary" class="tab-panel">
+
+  <div class="summary-grid">
+    <div class="summary-col">
+      <h3 class="good">Mocne strony (TOP 5)</h3>
+      <ol>
+        <li><strong>Tech stack klasy enterprise:</strong> SFCC + UseInsider + SF Einstein + Luigi's Box + Criteo + DV360 — dojrzały stack personalizacyjny i reklamowy</li>
+        <li><strong>Program lojalnościowy My Hebe:</strong> ~4M members, diamond tiers — first-party data o wartości Retail Media Network. Analogia Ulta Beauty (USA)</li>
+        <li><strong>Content commerce blog:</strong> 18 kategorii, commerce-linked artykuły → produkty. "Składniki kosmetyków" = SEO powerplay</li>
+        <li><strong>316 content slotów HP:</strong> Rozbudowana SFCC CMS architektura z wieloma wym. miejscami reklamowymi — gotowość do RMN</li>
+        <li><strong>Flowbox UGC + VIRAL SHOP:</strong> Shoppable social content i influencer-driven sekcja — nowoczesne podejście do discovery</li>
+      </ol>
+    </div>
+    <div class="summary-col">
+      <h3 class="bad">Krytyczne luki (TOP 5)</h3>
+      <ol>
+        <li><strong>2x GA4 ID:</strong> <code>G-LRXBRD7NT1</code> + <code>G-480R3PZWEM</code> — potencjalny split danych analytics lub duplikat. Priorytet 1</li>
+        <li><strong>Analytics gap — 3 narzędzia własne:</strong> UseInsider / Luigi's Box / Flowbox mają własne eventy — nie trafiają do GA4. Blind spots w funnel analysis</li>
+        <li><strong>Brak filter_select + nav_click events:</strong> Nie wiemy jak shopper nawiguje — krytyczna luka dla CRO</li>
+        <li><strong>Blog → PDP tracking gap:</strong> Artykuły linkują do produktów ale klik nie jest trackowany — nie wiemy ile konwersji generuje blog</li>
+        <li><strong>Brak oznaczeń "Sponsored"</strong> na listingu (Criteo + UseInsider) — potencjalne ryzyko compliance UOKiK</li>
+      </ol>
+    </div>
+    <div class="summary-col">
+      <h3 class="warn">Quick Wins (TOP 5)</h3>
+      <ol>
+        <li>GTM trigger na klik linków nawigacyjnych → <code>nav_click</code> event w GA4 — 1 godzina pracy</li>
+        <li>GTM trigger na Luigi's Box select_item → <code>search_click</code> event — integracja LBX → GA4 dataLayer</li>
+        <li>Weryfikacja 2x GA4 ID — zdeduplikować lub udokumentować multi-property setup</li>
+        <li>Omnibus price visibility audit — ustawa o cenach wymaga widoczności najniższej ceny 30 dni na kafelku</li>
+        <li>Blog → PDP: dodać UTM lub custom event na kliknięcia produktów w artykułach</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Top 3 obserwacje o hebe.pl (pierwsze wrażenia)</div>
+    <div class="note note-blue" style="margin-bottom:12px">
+      <strong>1. Retail Media Network w stadium embrionalnym.</strong> Hebe ma wszystkie składniki RMN-tier-1: 4M loyality members, 780 sklepów, pełny stack ad-tech (Criteo, DV360, Meta, Bing, RTB House, pixel.wp.pl), UseInsider do personalizacji, 316 content slotów na HP. Brak: transparentnych oznaczeń "Sponsored" na listingu, publicznego Self-Serve ad portalu dla marek. Porównanie: Sephora / Ulta Beauty w USA mają dojrzałe RMN. Hebe = 2–3 lata za Europą Zachodnią.
+    </div>
+    <div class="note note-warn" style="margin-bottom:12px">
+      <strong>2. Personalizacja UseInsider vs. A/B testing — konflikt.</strong> 30–35 elementów UseInsider per strona (lista, PDP) = każda sesja jest inaczej wyglądającą stroną. To utrudnia: standardowe screenshoty audytu, CRO testy A/B (interferuje z GTM Experiments), quality assurance UI. Trade-off: personalizacja kosztem powtarzalności UX.
+    </div>
+    <div class="note note-ok">
+      <strong>3. Content commerce = wyróżnik konkurencyjny.</strong> Blog z 18 kategoriami + "Składniki kosmetyków" + linkowanie artykuł → produkt to rzadka strateg na polskim rynku beauty (Rossmann, Notino nie mają tak development content funnela). SEO value + lower-funnel intent content = długoterminowy asset.
+    </div>
+  </div>
+
+  <div class="card" style="font-size:12px;color:var(--muted)">
+    Audit v1 — Visual Mapping (HTML scan + web fetch, screenshoty oczekują). Wykonany przez <strong style="color:var(--text)">Claude Code (Sonnet 4.6)</strong>. Źródła: <strong style="color:var(--text)">ctx_fetch_and_index</strong> (hebe.pl/makijaz/blog), <strong style="color:var(--text)">wcześniejsza analiza RMN (2026-05-25)</strong>, <strong style="color:var(--text)">EEL Audit Catechism + GLOV Reference Audit</strong>. Platforma: Salesforce Commerce Cloud (SFCC/Demandware). Data: 2026-05-26. Następny krok: <code>python take_screenshots.py --url https://www.hebe.pl</code> → zastąp placeholdery screenshotami.
+  </div>
+
+</div>
+
+</div><!-- /container -->
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+function zoom(img) {
+  document.getElementById('lightbox-img').src = img.src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
+</script>
+</body>
+</html>
