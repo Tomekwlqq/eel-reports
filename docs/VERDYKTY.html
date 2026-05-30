@@ -122,11 +122,98 @@ a:hover { text-decoration: underline; }
 
 .session-stats { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 30px; padding-top: 14px; border-top: 1px solid var(--border); }
 
+/* === ANCHOR NAV === */
+.quick-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,250,250,0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  margin: -14px -14px 18px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  white-space: nowrap;
+}
+.quick-nav a {
+  display: inline-block; font-size: 12px;
+  padding: 4px 10px; margin-right: 4px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 14px; color: var(--text-muted);
+  text-decoration: none;
+}
+.quick-nav a:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
+
+/* === ALGORYTM (4 fazy × 13 kroków) === */
+.algorithm-intro {
+  background: linear-gradient(135deg, #eef2ff 0%, #fff 80%);
+  border: 1.5px solid #c7d2fe; border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 14px;
+}
+.algorithm-intro h3 { font-size: 14px; color: #3730a3; margin-bottom: 6px; }
+.algorithm-intro p { font-size: 13px; color: #1e1b4b; }
+
+.phase {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.phase.p-scan { border-left: 5px solid var(--good); }
+.phase.p-visual { border-left: 5px solid var(--bad); }
+.phase.p-semantic { border-left: 5px solid var(--warn); }
+.phase.p-synth { border-left: 5px solid var(--opus); }
+
+.phase-header { display: flex; align-items: center; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+.phase-num { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; }
+.phase.p-scan .phase-num { background: var(--good); }
+.phase.p-visual .phase-num { background: var(--bad); }
+.phase.p-semantic .phase-num { background: var(--warn); }
+.phase.p-synth .phase-num { background: var(--opus); }
+.phase-title { font-size: 15px; font-weight: 700; color: var(--text); }
+.phase-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+.phase-steps { list-style: none; padding: 0; margin: 0; }
+.step { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--border); }
+.step:last-child { border-bottom: 0; padding-bottom: 0; }
+.step-num { flex-shrink: 0; width: 28px; height: 28px; border-radius: 6px; background: #e0e7ff; color: #1e3a8a; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; }
+.step-content { flex: 1; min-width: 0; }
+.step-content h5 { font-size: 13.5px; font-weight: 700; margin-bottom: 6px; color: var(--text); line-height: 1.3; }
+
+.step-flow {
+  display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
+  font-size: 11px; background: #f9fafb; padding: 6px 8px;
+  border-radius: 6px; margin-bottom: 6px;
+}
+.step-flow .pill { padding: 2px 7px; border-radius: 4px; border: 1px solid var(--border); background: white; color: var(--text-muted); }
+.step-flow .pill.tool { background: var(--accent-bg); color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; font-weight: 600; border-color: #c7d2fe; }
+.step-flow .arr { color: var(--text-muted); font-weight: 700; padding: 0 2px; }
+
+.step-comment { font-size: 12px; padding: 5px 10px; border-radius: 4px; margin-top: 4px; line-height: 1.4; }
+.step-comment.good { background: #f0fdf4; color: #065f46; border-left: 3px solid var(--good); }
+.step-comment.bad { background: #fef2f2; color: #7c2d12; border-left: 3px solid var(--bad); }
+.step-comment.warn { background: #fffbeb; color: #78350f; border-left: 3px solid var(--warn); }
+.step-comment strong { color: inherit; }
+
+.algorithm-summary {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px; margin-top: 12px;
+  font-size: 13px;
+}
+.algorithm-summary strong { color: var(--accent); }
+
 @media (min-width: 768px) {
   body { padding: 30px 30px 80px; }
   h1 { font-size: 28px; }
   h2 { font-size: 19px; }
   .verdict-card { padding: 18px 22px; }
+  .quick-nav { margin: -30px -30px 24px; padding: 12px 30px; }
+  .quick-nav a { font-size: 13px; padding: 5px 12px; }
+  .step-content h5 { font-size: 14.5px; }
+  .step-flow { font-size: 12px; }
+  .phase-title { font-size: 16px; }
 }
 </style>
 </head>
@@ -136,7 +223,18 @@ a:hover { text-decoration: underline; }
 <h1>📋 Verdykty — sesja 30.05.2026</h1>
 <p class="subtitle">Wszystko w jednym miejscu · czytaj w drodze · last updated: 30.05 wieczór</p>
 
-<div class="tldr">
+<nav class="quick-nav" aria-label="Spis sekcji">
+  <a href="#tldr">⚡ TL;DR</a>
+  <a href="#algorithm">🧠 Algorytm</a>
+  <a href="#deep">🔬 Per warstwa</a>
+  <a href="#verdicts">🚦 Verdykty</a>
+  <a href="#blockers">🚧 Blockery</a>
+  <a href="#proposals">💡 Propozycje</a>
+  <a href="#sequence">📊 Sekwencja</a>
+  <a href="#links">📅 Deliverables</a>
+</nav>
+
+<div class="tldr" id="tldr">
   <h2>⚡ TL;DR</h2>
   <p><strong>1. PRODUKTY_EGZEKUCYJNE.html ✅</strong> — Task #28 zamknięty. 130 wpisów (55/55 par komplet), 4 presety problemów głównych, Opus Score 1-10.</p>
   <p style="margin-top: 6px;"><strong>2. KNOWLEDGE_BASE.html ✅</strong> — 277 kart biblii, cotygodniowy update przez re-publish.</p>
@@ -144,7 +242,298 @@ a:hover { text-decoration: underline; }
   <p style="margin-top: 6px;"><strong>4. GLOV_REFERENCE_AUDIT.html — 6.5/10, NIE gold standard.</strong> Brakuje 4 krytycznych elementów warstwy 2.</p>
 </div>
 
-<h2>🔬 Głęboka ocena per warstwa (z EEL_MASTER_TRACKER.md)</h2>
+<h2 id="algorithm">🧠 Algorytm — jak audyt EEL się buduje (krok po kroku)</h2>
+
+<div class="algorithm-intro">
+  <h3>Filozofia: HTML → struktura → bazy → screenshoty → kropki z nazwami</h3>
+  <p>Audyt to nie checklist na sztuk. To pipeline 13 kroków × 4 fazy: <strong>scan</strong> (dane) → <strong>visual</strong> (obrazki + kropki) → <strong>semantic</strong> (treść + kategoria + GEO + GA4) → <strong>synthesis</strong> (raport + Truth Checker). Każdy krok ma swój input, narzędzie, output i opinię co dobrze działa a co nie. Dot_generator wynika z HTML-a — bo HTML pierwszy zna gdzie są klikalne, screenshot tylko mówi w jakim pikselu są na obrazku.</p>
+  <p style="margin-top:8px;padding-top:8px;border-top:1px solid #c7d2fe;font-size:12.5px"><strong>📌 Punkt referencyjny:</strong> <a href="https://tomekwlqq.github.io/eel-reports/GLOV-raport-test-2026-05-21.html" target="_blank" style="color:#3730a3;font-weight:600">GLOV raport 2026-05-21</a> — wszystkie kroki, gold standard, propozycje i blockery odnoszą się do tego raportu jako benchmarku egzekucji. Verdict GLOV: 6.5/10 (current best, NIE gold — brakuje 4 krytycznych elementów warstwy 2: density, hierarchy, pseudo-CTA, dead zones).</p>
+</div>
+
+<!-- FAZA 1: SCAN -->
+<div class="phase p-scan">
+  <div class="phase-header">
+    <div class="phase-num">1</div>
+    <div>
+      <div class="phase-title">FAZA 1 · SCAN — pobieramy dane</div>
+      <div class="phase-sub">Warstwa 1 (HTML) · 3 kroki · loop ZAMKNIĘTY ✅ 7/10</div>
+    </div>
+  </div>
+  <ol class="phase-steps">
+
+    <li class="step">
+      <div class="step-num">1.1</div>
+      <div class="step-content">
+        <h5>URL → discover branża + platforma</h5>
+        <div class="step-flow">
+          <span class="pill">domena klienta</span>
+          <span class="arr">→</span>
+          <span class="pill tool">tech_stack_detector.py</span>
+          <span class="arr">→</span>
+          <span class="pill">platforma + branża guess</span>
+        </div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> 80%+ accuracy, confidence scoring (script_src=0.6, global_var=0.5, cookie=0.4, threshold=0.4), cache per domena. Multi-platform: Shopify, IdoSell, WooCommerce, PrestaShop.</div>
+        <div class="step-comment bad">❌ <strong>BAD:</strong> industry detection słabe — W18 (Industry Benchmarks) <em>nie istnieje</em>, polegamy na manualnym tagowaniu. Klient pyta "is mój CR dobry?" → nie umiemy odpowiedzieć bez bazy benchmarków.</div>
+      </div>
+    </li>
+
+    <li class="step">
+      <div class="step-num">1.2</div>
+      <div class="step-content">
+        <h5>HTML scan per page-type (8 widoków)</h5>
+        <div class="step-flow">
+          <span class="pill">domena + lista URL</span>
+          <span class="arr">→</span>
+          <span class="pill tool">audit_html.py + nav_scanner.py</span>
+          <span class="arr">→</span>
+          <span class="pill">DOM per page (po JS render)</span>
+        </div>
+        <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>Widoki:</em> Nav · HP · Listing · PDP · Tile (default+hover) · Search · Cart drawer · Checkout · Blog</p>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> Playwright z networkidle (Shopify ~3s) — pełen DOM po hydration. nav_scanner.py 40K wyciąga strukturę nawigacji multi-level.</div>
+        <div class="step-comment bad">❌ <strong>BAD:</strong> overlay / cookie banner / GDPR popup blokują widok — wymaga per-platform dismiss logic ("Potwierdzam wszystkie" dla IdoSell). Niektóre sklepy = łapanka.</div>
+      </div>
+    </li>
+
+    <li class="step">
+      <div class="step-num">1.3</div>
+      <div class="step-content">
+        <h5>Element discovery z DOM (selektor → nazwa standardowa)</h5>
+        <div class="step-flow">
+          <span class="pill">DOM</span>
+          <span class="arr">→</span>
+          <span class="pill tool">elements_dictionary.json + platform_patterns.json</span>
+          <span class="arr">→</span>
+          <span class="pill">named elements + queue.json (pending)</span>
+        </div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> baza 302+ elementów (W1 elements_master 204K), workflow approval z Hub Tab 5 UI (sl_server port 8744). Tomek może edytować nazwy + dodawać selektory live.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD (skala blocker):</strong> Tomek aprobuje KAŻDY element ręcznie. <strong>P1.1 auto-promote ≥0.8</strong> odciążyłoby ~70%. Bez tego po 10 klientach = grzęźnie w queue.</div>
+      </div>
+    </li>
+
+  </ol>
+</div>
+
+<!-- FAZA 2: VISUAL -->
+<div class="phase p-visual">
+  <div class="phase-header">
+    <div class="phase-num">2</div>
+    <div>
+      <div class="phase-title">FAZA 2 · VISUAL — obrazki + kropki z nazwami</div>
+      <div class="phase-sub">Warstwa 2 · 4 kroki · loop OTWARTY ❌ 4/10 · największy gap</div>
+    </div>
+  </div>
+  <ol class="phase-steps">
+
+    <li class="step">
+      <div class="step-num">2.1</div>
+      <div class="step-content">
+        <h5>Screenshot pipeline (Playwright, 16 PNG per klient)</h5>
+        <div class="step-flow">
+          <span class="pill">8 page-types × 2 viewports</span>
+          <span class="arr">→</span>
+          <span class="pill tool">take_screenshots.py (29K)</span>
+          <span class="arr">→</span>
+          <span class="pill">16 PNG full-page</span>
+        </div>
+        <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>Viewporty:</em> desktop 1440×900 + mobile 390×844 (iPhone 12 standard)</p>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> UNIVERSAL skrypt, mobile-aware, full-page capture (długie scrolle złożone), standardowy format input dla kolejnych kroków.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> 16 PNG × N klientów = storage rośnie szybko. Brak compression / WebP fallback. Brak fold-by-fold split automatycznego (długie screenshoty trzeba dzielić ręcznie).</div>
+      </div>
+    </li>
+
+    <li class="step">
+      <div class="step-num">2.2</div>
+      <div class="step-content">
+        <h5>Bounding boxes klikalnych (gdzie są CTAs na obrazku)</h5>
+        <div class="step-flow">
+          <span class="pill">DOM + page.locator()</span>
+          <span class="arr">→</span>
+          <span class="pill tool">Playwright boundingBox()</span>
+          <span class="arr">→</span>
+          <span class="pill">x/y/w/h per element + visibility</span>
+        </div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> dokładne koordynaty per element (button, a, [onclick], [role=button]). Z DOM-em wiemy CO jest klikalne, z BBox WHERE na obrazku.</div>
+        <div class="step-comment bad">❌ <strong>BAD:</strong> pseudo-CTA (divy bez handler, cursor:pointer bez listener, button-style bez onClick) <em>nie wyłapane</em>. To dead-click frustration source. <strong>P2.5 pseudo_cta_patterns.json</strong> to rozwiązuje.</div>
+      </div>
+    </li>
+
+    <li class="step">
+      <div class="step-num">2.3</div>
+      <div class="step-content">
+        <h5>Dot overlay — nakładanie kropek z nazwami na screenshoty</h5>
+        <div class="step-flow">
+          <span class="pill">PNG + BBox + nazwa z biblioteki</span>
+          <span class="arr">→</span>
+          <span class="pill tool">❌ MANUAL placement (HTML editor)</span>
+          <span class="arr">→</span>
+          <span class="pill">av-dot HTML z left%/top%</span>
+        </div>
+        <div class="step-comment good">✅ <strong>GOOD koncept:</strong> precyzyjne nazwy (lookup z elements_master.json) → klient widzi "Search box / ATC button / Newsletter signup", nie generic kropki. To wynika z HTML-a + bibliotek.</div>
+        <div class="step-comment bad">❌ <strong>BAD (⭐ blocker skali #1):</strong> GLOV = <strong>167 dotów × manual placement</strong> w HTML editorze. Po 10 klientach Tomek tonie. <strong>P2.1 dot_generator.py</strong> = pre-condition skali. Playwright zwraca BBox → przelicz na left%/top% → wygeneruj av-dot HTML automatycznie. ~1-2 dni roboty, eliminuje blocker.</div>
+      </div>
+    </li>
+
+    <li class="step">
+      <div class="step-num">2.4</div>
+      <div class="step-content">
+        <h5>Density + hierarchy + dead zones fold-by-fold</h5>
+        <div class="step-flow">
+          <span class="pill">screenshots fold-split + BBox</span>
+          <span class="arr">→</span>
+          <span class="pill tool">🟡 audit_visual.py (1.5K STUB)</span>
+          <span class="arr">→</span>
+          <span class="pill">density/100×100px + hierarchy rank + dead zones</span>
+        </div>
+        <div class="step-comment good">✅ <strong>GOOD koncept:</strong> density per fold pokazuje "overloaded folds", hierarchy ranking ujawnia konflikt CTA, dead zones = puste obszary marnujące real estate.</div>
+        <div class="step-comment bad">❌ <strong>BAD:</strong> tylko stub 1.5K. Brak generatorów (<strong>P2.6 audit_visual full</strong>), brak baselines (<strong>P2.4 density_baselines.json</strong>), brak archetypów fold (<strong>P2.3 fold_archetypes.json</strong>). Bez tego GLOV audit grep'uje "density"=0, "hierarchy"=0, "dead.zone"=0 — czyli 4 krytyczne sekcje gold standardu po prostu nie istnieją.</div>
+      </div>
+    </li>
+
+  </ol>
+</div>
+
+<!-- FAZA 3: SEMANTIC -->
+<div class="phase p-semantic">
+  <div class="phase-header">
+    <div class="phase-num">3</div>
+    <div>
+      <div class="phase-title">FAZA 3 · SEMANTIC — treść, kategoria, GEO, GA4</div>
+      <div class="phase-sub">Warstwa 3 · 4 kroki · loop CZĘŚCIOWY ⚠️ 6/10 · GEO sub-warstwa silna</div>
+    </div>
+  </div>
+  <ol class="phase-steps">
+
+    <li class="step">
+      <div class="step-num">3.1</div>
+      <div class="step-content">
+        <h5>Content audit per PDP (6 pól standardowych)</h5>
+        <div class="step-flow">
+          <span class="pill">PDP HTML + struktura</span>
+          <span class="arr">→</span>
+          <span class="pill tool">audit_content.py (17K, bez skilla)</span>
+          <span class="arr">→</span>
+          <span class="pill">tytuł/bullets/specs/FAQ/zdjęcia/opis ocena</span>
+        </div>
+        <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>Model tytułu:</em> Brand + Name + Attribute + Variant · <em>bullets:</em> cecha → korzyść → kontekst · <em>FAQ:</em> czy z real CS · <em>zdjęcia:</em> white BG / lifestyle / wymiary / detal / infografika</p>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> skrypt 17K działa, 6 pól standardowych pokrytych, mapuje na Tier-1 / Tier-2 / Tier-3 strukturę spec table.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> brak skilla wrapującego (<strong>C02 / P3.5 Content Mapping skill</strong>) — czyli nie invocable przez slash. Brak <strong>copy_archetypes.json</strong> (typowe formuły opisów) i <strong>forbidden_patterns.json</strong> (co nie działa per kategoria, np. "darmowa wysyłka" w premium beauty = sygnał taniości).</div>
+      </div>
+    </li>
+
+    <li class="step">
+      <div class="step-num">3.2</div>
+      <div class="step-content">
+        <h5>Category mapping per klient</h5>
+        <div class="step-flow">
+          <span class="pill">nav + listing structure</span>
+          <span class="arr">→</span>
+          <span class="pill tool">/eel-category-mapping (interactive)</span>
+          <span class="arr">→</span>
+          <span class="pill">{klient}_CATEGORY_MAP.json</span>
+        </div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> skill istnieje, działa, daje category map per klient. Input dla GEO check i Content audit.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> bez <strong>P3.2 category_templates.json per branża</strong> (cosmetic/electronics/fashion/safety/automotive) każdy klient od zera. GLOV beauty patterns NIE wpływają na Hebe ani FERA. <strong>P3.3 tier_specs_master.json</strong> brakuje — Cortex v2 pary 2+8 i 3+8 wymagają tej bazy.</div>
+      </div>
+    </li>
+
+    <li class="step">
+      <div class="step-num">3.3</div>
+      <div class="step-content">
+        <h5>GEO check per produkt (Consumer Decision Tree score)</h5>
+        <div class="step-flow">
+          <span class="pill">PDP URL + CDT z W11/W17</span>
+          <span class="arr">→</span>
+          <span class="pill tool">geo_check.py + Playwright (JS render)</span>
+          <span class="arr">→</span>
+          <span class="pill">GEO score per pillar + rewrite blueprint</span>
+        </div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> validated methodology — SejfZone +20-25 score lift na 3 produktach (58→82, 52→79, 61→84). Baza 46 kategorii PL+EN (W17). 4 skille operacyjne (<code>/geo-content-diff</code>, <code>/geo-pdp-writer</code>, <code>/geo-review</code>, <code>/eel-category-mapping</code>). Playwright OBOWIĄZKOWY — bez JS Shopify FAQ/JSON-LD/ceny są niewidoczne.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> brak <strong>P3.7 C35 CDT Builder</strong> — auto-build CDT per nowy klient per kategoria z istniejących wzorców. Bez tego CDT manual research per klient. <strong>P3.6 R10-R20</strong> (11 raportów GA4 GEO-relevant) jeszcze nie zbudowane.</div>
+      </div>
+    </li>
+
+    <li class="step">
+      <div class="step-num">3.4</div>
+      <div class="step-content">
+        <h5>GA4 pull (R01-R09 raporty)</h5>
+        <div class="step-flow">
+          <span class="pill">property ID</span>
+          <span class="arr">→</span>
+          <span class="pill tool">/eel-ga4 + google-analytics-mcp</span>
+          <span class="arr">→</span>
+          <span class="pill">9 HTML block raportów + delta ±2σ</span>
+        </div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> bezpośredni MCP (nie Composio), R01-R09 covered (traffic, conv, AOV, funnel, source/medium, devices, geo, events, products), delta detection ±2σ flag anomalie WoW.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> brakuje <strong>R10-R20</strong> (internal search, scroll depth, cart abandonment, session quality, cohorts) — 11 raportów spec gotowa w <code>EEL_GA4_ANALYSES.md</code>, build pending. <strong>R10 Daily Dashboard live</strong> czeka na decyzję (alert channel + FDA launchd).</div>
+      </div>
+    </li>
+
+  </ol>
+</div>
+
+<!-- FAZA 4: SYNTHESIS -->
+<div class="phase p-synth">
+  <div class="phase-header">
+    <div class="phase-num">4</div>
+    <div>
+      <div class="phase-title">FAZA 4 · SYNTHESIS — raport + Truth Checker</div>
+      <div class="phase-sub">Composition + anti-hallucination · 2 kroki · 7/10</div>
+    </div>
+  </div>
+  <ol class="phase-steps">
+
+    <li class="step">
+      <div class="step-num">4.1</div>
+      <div class="step-content">
+        <h5>Build raportu HTML (14-tab standard)</h5>
+        <div class="step-flow">
+          <span class="pill">outputy faz 1-3</span>
+          <span class="arr">→</span>
+          <span class="pill tool">build_raport.py (19K)</span>
+          <span class="arr">→</span>
+          <span class="pill">CLIENT_AUDIT.html 14-tab</span>
+        </div>
+        <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>Standard:</em> AUDIT_TAB_STANDARD.md · Tech Stack v2 auto-gen z cache · CSS .tool-grid + tooltipy &quot;-safe · Visual refs w EEL_HUB.html (thumbnails + lightbox)</p>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> spójny 14-tab format wszędzie. <code>--domain &lt;domena&gt;</code> generuje tab-techstack automatycznie. Modułowy: BLOK A+B+C zintegrowane.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> visual section nie czyta z bibliotek (elements_master / visual_patterns) automatycznie — manual integration. To efekt kroku 2.3 manual blocker. Po P2.1+P2.6 ten krok też się odblokuje.</div>
+      </div>
+    </li>
+
+    <li class="step">
+      <div class="step-num">4.2</div>
+      <div class="step-content">
+        <h5>Truth Checker wrapper (anti-hallucination per insight)</h5>
+        <div class="step-flow">
+          <span class="pill">System Insights draft</span>
+          <span class="arr">→</span>
+          <span class="pill tool">Cortex Lab Validator agent</span>
+          <span class="arr">→</span>
+          <span class="pill">Insights z 5-line rubric per item</span>
+        </div>
+        <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>5-line rubric:</em> Co wiem · Co zakładam · Co może być błędne · Co zweryfikować · Co poprawić z 1 inputem</p>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> rubric z OPUS_48_WORKBENCH sekcja 9 (Anthropic: <em>"single highest leverage line of text in the whole document"</em>). Klient dostaje insight + transparency co jest pewne, co zakładam, co wymaga weryfikacji. Buduje zaufanie zamiast hallucination.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> Cortex Lab to <em>experimental</em> Agent Team (flag <code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1</code>) — jeszcze nie test runned na real klientcie. Dziś (30.05 wieczór) skonfigurowane, pierwszy mini test pending.</div>
+      </div>
+    </li>
+
+  </ol>
+</div>
+
+<div class="algorithm-summary">
+  <p><strong>Mapa dziur w algorytmie (gdzie skala się zatrzymuje):</strong></p>
+  <ul style="margin-top:6px">
+    <li><strong>Krok 1.3</strong> manual approval → P1.1 auto-promote ≥0.8</li>
+    <li><strong>Krok 2.3</strong> dot overlay manual → ⭐ <strong>P2.1 dot_generator.py</strong> (blocker skali #1, ~1-2 dni)</li>
+    <li><strong>Krok 2.4</strong> density/hierarchy STUB → P2.4 baselines + P2.6 audit_visual full</li>
+    <li><strong>Krok 3.1</strong> content bez skilla → P3.5 C02 wrap + P3.4 forbidden_patterns</li>
+    <li><strong>Krok 3.2</strong> kategoria od zera per klient → P3.2 category_templates per branża + P3.3 tier_specs_master</li>
+    <li><strong>Krok 3.3</strong> CDT manual → P3.7 C35 CDT Builder</li>
+    <li><strong>Krok 3.4</strong> 11 raportów GA4 → P3.6 R10-R20</li>
+  </ul>
+  <p style="margin-top:8px;color:var(--text-muted);font-size:12px"><em>Reszta dokumentu (warstwy + verdykty + propozycje + sekwencja) operacjonalizuje powyższą mapę dziur w propozycje P1.x / P2.x / P3.x z czasami i ryzykami.</em></p>
+</div>
+
+<h2 id="deep">🔬 Głęboka ocena per warstwa (z EEL_MASTER_TRACKER.md)</h2>
 
 <h3>WARSTWA 1 — HTML scan + Tech Stack + Element Discovery</h3>
 
@@ -375,7 +764,7 @@ a:hover { text-decoration: underline; }
   </div>
 </div>
 
-<h2>🚦 Verdict 1: Powtarzalność na skali (cross-check 3 warstw)</h2>
+<h2 id="verdicts">🚦 Verdict 1: Powtarzalność na skali (cross-check 3 warstw)</h2>
 
 <div class="verdict-card bad">
   <div class="score-row">
@@ -478,7 +867,7 @@ a:hover { text-decoration: underline; }
   </div>
 </div>
 
-<h2>🚧 Verdict 3: 5 głównych blockerów (priorytet implementacji)</h2>
+<h2 id="blockers">🚧 Verdict 3: 5 głównych blockerów (priorytet implementacji)</h2>
 
 <div class="blocker-card">
   <span class="blocker-num">1</span>
@@ -526,7 +915,7 @@ a:hover { text-decoration: underline; }
 
 <p style="margin-top: 8px;"><em>Bez tych 3 plików na warstwę — nie ma powtarzalności na skali.</em></p>
 
-<h2>💡 Propozycje ulepszeń per warstwa</h2>
+<h2 id="proposals">💡 Propozycje ulepszeń per warstwa</h2>
 
 <div class="tldr" style="background:linear-gradient(135deg,#fff7ed 0%,#fff 80%);border-color:#fed7aa">
   <h2>⚠️ Tylko do rozmowy</h2>
@@ -692,7 +1081,7 @@ a:hover { text-decoration: underline; }
   <p>C32 cortex-reasoner / C33 Signal Lake / C34 Visual Density / C35 CDT Builder / C36 CEP Ads Engine / C37 /eel-diagnose. Sprint 4 priorytet (Plichta deadline).</p>
 </div>
 
-<h3>📊 Rekomendowana sekwencja (do dyskusji)</h3>
+<h3 id="sequence">📊 Rekomendowana sekwencja (do dyskusji)</h3>
 
 <table>
   <tr><th>Priorytet</th><th>Co</th><th>Czas łącznie</th></tr>
@@ -705,9 +1094,10 @@ a:hover { text-decoration: underline; }
 
 <p style="font-size:13px;color:#7c2d12;margin-top:8px"><strong>Razem: ~25 dni roboczych</strong> dla pełnego ulepszenia 3 warstw — czyli 5 tygodni jednego dev × 1 osoba. Plichta start 09/2026 = 4 miesiące zapasu jeśli wszystko ruszy w czerwcu.</p>
 
-<h2>📅 Wszystkie dzisiejsze deliverables (linki)</h2>
+<h2 id="links">📅 Wszystkie dzisiejsze deliverables (linki)</h2>
 
 <div class="link-list">
+  <a href="https://tomekwlqq.github.io/eel-reports/GLOV-raport-test-2026-05-21.html" target="_blank" style="background:#fffbeb;padding:8px 10px;margin:-6px -10px 0;border-left:3px solid #f59e0b">📌 <strong>GLOV raport 2026-05-21 — REFERENCJA</strong> (benchmark egzekucji, current best 6.5/10)</a>
   <a href="https://tomekwlqq.github.io/eel-reports/KNOWLEDGE_BASE.html" target="_blank">📚 KNOWLEDGE_BASE — Biblia (277 kart)</a>
   <a href="https://tomekwlqq.github.io/eel-reports/PRODUKTY_EGZEKUCYJNE.html" target="_blank">🎯 PRODUKTY_EGZEKUCYJNE (130 z 562, v0.5)</a>
   <a href="https://tomekwlqq.github.io/eel-reports/SELF_LEARNING_3_WARSTW.html" target="_blank">🧠 SELF_LEARNING 3 warstw — analiza</a>
