@@ -526,6 +526,185 @@ a:hover { text-decoration: underline; }
 
 <p style="margin-top: 8px;"><em>Bez tych 3 plików na warstwę — nie ma powtarzalności na skali.</em></p>
 
+<h2>💡 Propozycje ulepszeń per warstwa</h2>
+
+<div class="tldr" style="background:linear-gradient(135deg,#fff7ed 0%,#fff 80%);border-color:#fed7aa">
+  <h2>⚠️ Tylko do rozmowy</h2>
+  <p>Tomek powiedział: <em>"sam nic nie zmieniaj, wszystko do rozmowy"</em>. To są kandydaci do dyskusji po powrocie z miasta. Żadna z propozycji NIE jest zaimplementowana.</p>
+</div>
+
+<h3>WARSTWA 1 (HTML) — 4 propozycje</h3>
+
+<div class="verdict-card good">
+  <h4 style="color:#065f46">P1.1 — Auto-promote ≥0.8 confidence</h4>
+  <p><strong>Co:</strong> w <code>discovery_loop.py</code> dodać regułę: gdy <code>confidence ≥ 0.8</code> → auto <code>pending→approved</code>, bez Tomka. Tomek dostaje weekly digest 20-30 nowych.</p>
+  <p><strong>Po co:</strong> Tomek aprobuje ~70% mniej elementów. Skala blocker rozwiązany.</p>
+  <p><strong>Czas:</strong> ~2h | <strong>Risk:</strong> false-positive w domain detection (nieznana domena) → mitigacja: max 5 auto-promote/dzień + manual override</p>
+</div>
+
+<div class="verdict-card good">
+  <h4 style="color:#065f46">P1.2 — JSON sharding (elements_master split per page-type)</h4>
+  <p><strong>Co:</strong> split <code>elements_master.json</code> (204K) na <code>elements_master_{section}.json</code> (header, footer, listing, PDP, cart, checkout itp.) + index file.</p>
+  <p><strong>Po co:</strong> przy 50+ klientach plik osiąga 2-3MB. Sharding daje czytelność + szybsze Edit/Read.</p>
+  <p><strong>Czas:</strong> ~4h | <strong>Risk:</strong> refactor wszystkich konsumentów (audit_html, discovery_loop, build_hub, sl_server)</p>
+</div>
+
+<div class="verdict-card good">
+  <h4 style="color:#065f46">P1.3 — Nightly snapshot + diff log</h4>
+  <p><strong>Co:</strong> cron 2:00 → snapshot JSON-ów do <code>data/snapshots/YYYY-MM-DD/</code> + diff vs previous → log do <code>SL_DIFF_LOG.md</code></p>
+  <p><strong>Po co:</strong> wiemy które elementy zmieniły się + czy nowsza wersja jest lepsza. Możemy rollback.</p>
+  <p><strong>Czas:</strong> ~2h | <strong>Risk:</strong> brak (czysty dodatek)</p>
+</div>
+
+<div class="verdict-card good">
+  <h4 style="color:#065f46">P1.4 — W18 Industry Benchmarks Accumulator (SL-1)</h4>
+  <p><strong>Co:</strong> każdy R10 GA4 pull dokłada do <code>industry_benchmarks.json</code>: CR/AOV/bounce per branża anonimowo. Po 20+ klientach mamy real PL benchmarki.</p>
+  <p><strong>Po co:</strong> W18 jest oznaczony "❌ Nie istnieje, SL-1 w Planning Queue". Bez tego klient pyta "is mój CR dobry?" i nie umiemy odpowiedzieć.</p>
+  <p><strong>Czas:</strong> ~1 dzień | <strong>Risk:</strong> brak</p>
+</div>
+
+<h3>WARSTWA 2 (Visual) — 8 propozycji (priorytet KRYTYCZNY)</h3>
+
+<div class="verdict-card bad">
+  <h4 style="color:#7c2d12">P2.1 — <code>dot_generator.py</code> ⭐ blocker skali</h4>
+  <p><strong>Co:</strong> Playwright zwraca bounding boxes klikalnych elementów (button/a/[onclick]) → przelicz na <code>left%/top%</code> → wygeneruj <code>av-dot</code> HTML automatycznie. Tomek tylko opisuje co dot oznacza.</p>
+  <p><strong>Po co:</strong> ELIMINUJE 167 dotów × manual placement = blocker skali #1. Po 10 klientach Tomek tonie w HTML, ten skrypt to <strong>pre-condition</strong>.</p>
+  <p><strong>Czas:</strong> ~1-2 dni | <strong>Risk:</strong> false-positive (decoracyjne divy bez handler ale wyglądają klikalne) → mitigacja: 2 tryby (strict z handler / loose z visual cue)</p>
+</div>
+
+<div class="verdict-card bad">
+  <h4 style="color:#7c2d12">P2.2 — <code>visual_patterns.json</code></h4>
+  <p><strong>Co:</strong> formalna baza wzorców per page-type per platforma. Init z istniejących GLOV+SejfZone+FERA+Hebe audytów.</p>
+  <p><strong>Format:</strong> per <code>{page_type}.{platform}</code> → typowy layout fold (% występowania), common patterns, anomalie do flagowania.</p>
+  <p><strong>Czas:</strong> ~1 dzień init + rośnie per audit | <strong>Risk:</strong> jakość zależna od ilości danych (start z 5 klientami = noisy)</p>
+</div>
+
+<div class="verdict-card bad">
+  <h4 style="color:#7c2d12">P2.3 — <code>fold_archetypes.json</code></h4>
+  <p><strong>Co:</strong> per page-type: typowe foldy z procentami. Np. "HP Fold 1: 60% Hero+CTA, 25% Hero+Search, 15% Hero+Promo".</p>
+  <p><strong>Po co:</strong> klient od razu wie czy jest typowy czy outlier. Outlier = potencjalny problem albo wyróżnik.</p>
+  <p><strong>Czas:</strong> ~1 dzień | <strong>Risk:</strong> brak</p>
+</div>
+
+<div class="verdict-card bad">
+  <h4 style="color:#7c2d12">P2.4 — <code>density_baselines.json</code></h4>
+  <p><strong>Co:</strong> typowa density per fold (ilość elementów per 100×100px) + outliers per branża.</p>
+  <p><strong>Po co:</strong> jeśli klient ma 3× więcej elementów w fold 1 niż branża → flag "overloaded fold".</p>
+  <p><strong>Czas:</strong> ~1 dzień | <strong>Risk:</strong> brak</p>
+</div>
+
+<div class="verdict-card bad">
+  <h4 style="color:#7c2d12">P2.5 — <code>pseudo_cta_patterns.json</code></h4>
+  <p><strong>Co:</strong> wzorce divów które wyglądają klikalne ale nie są (background-color CTA, cursor:pointer bez handler, button-like styling bez listener).</p>
+  <p><strong>Po co:</strong> dead clicks generator — pokazuje shopper-frustration source.</p>
+  <p><strong>Czas:</strong> ~1 dzień | <strong>Risk:</strong> false-positive (rzeczywiste CTAs z lazy-loaded handler)</p>
+</div>
+
+<div class="verdict-card bad">
+  <h4 style="color:#7c2d12">P2.6 — <code>audit_visual.py</code> z stub → full</h4>
+  <p><strong>Co:</strong> z 1.5K stub → 500+ linii implementacji: density calc + hierarchy ranking + pseudo-CTA detection + dead zones marking. Konsumuje 4 JSONy patterns powyżej.</p>
+  <p><strong>Czas:</strong> ~2-3 dni | <strong>Risk:</strong> kompleksowy refactor — robić w worktree</p>
+</div>
+
+<div class="verdict-card bad">
+  <h4 style="color:#7c2d12">P2.7 — C23 Visual Audit Builder sub-skille</h4>
+  <p><strong>Co:</strong> orchestrator <code>/ecomms-audit</code> + 3 sub-skille (<code>/store-visual-map</code> + <code>/action-map</code> + <code>/content-audit</code>). C23 jest w Planning Queue od dawna, nie zbudowany.</p>
+  <p><strong>Czas:</strong> ~3-5 dni | <strong>Risk:</strong> wymaga decyzji: zastępuje C01 czy uzupełnia?</p>
+</div>
+
+<div class="verdict-card bad">
+  <h4 style="color:#7c2d12">P2.8 — C34 Visual Density Maps (Cortex v2 NEW)</h4>
+  <p><strong>Co:</strong> heatmapy density fold-by-fold jako overlay na screenshotach. Sprint 4 Cortex v2.</p>
+  <p><strong>Czas:</strong> ~2-3 dni | <strong>Wymaga:</strong> P2.4 (density_baselines.json) jako prerequisite</p>
+</div>
+
+<h3>WARSTWA 3 (Content) — 7 propozycji</h3>
+
+<div class="verdict-card warn">
+  <h4 style="color:#78350f">P3.1 — <code>content_patterns.json</code> (konsolidacja category_maps)</h4>
+  <p><strong>Co:</strong> jeden master file z konsolidacją wszystkich istniejących per-klient category_maps. Per branża: typowe formuły tytułów, długość bulletów, presence FAQ.</p>
+  <p><strong>Po co:</strong> obecnie GLOV beauty patterns NIE wpływają na inne beauty klientów (FERA, Hebe). Każdy klient od zera.</p>
+  <p><strong>Czas:</strong> ~1 dzień | <strong>Risk:</strong> brak</p>
+</div>
+
+<div class="verdict-card warn">
+  <h4 style="color:#78350f">P3.2 — <code>category_templates.json</code> per branża</h4>
+  <p><strong>Co:</strong> templates per branża: cosmetic / electronics / fashion / safety / automotive (Plichta!). Klient → branża → template → 80% pracy zrobione automatycznie.</p>
+  <p><strong>Po co:</strong> redukuje manualność <code>/eel-category-mapping</code> z interactive → pre-filled.</p>
+  <p><strong>Czas:</strong> ~1-2 dni | <strong>Risk:</strong> branża mapping fuzzy</p>
+</div>
+
+<div class="verdict-card warn">
+  <h4 style="color:#78350f">P3.3 — <code>tier_specs_master.json</code></h4>
+  <p><strong>Co:</strong> formalna baza T1/T2/T3 per kategoria. Tomek je zna ale są rozproszone w docs.</p>
+  <p><strong>Po co:</strong> Cortex v2 wymaga tej bazy dla pary 2+8 (Visual×Category) i 3+8 (Content×Category).</p>
+  <p><strong>Czas:</strong> ~1-2 dni | <strong>Risk:</strong> brak</p>
+</div>
+
+<div class="verdict-card warn">
+  <h4 style="color:#78350f">P3.4 — <code>forbidden_patterns.json</code></h4>
+  <p><strong>Co:</strong> copy patterns które wiadomo że nie działają per kategoria (np. "darmowa wysyłka" w premium beauty = sygnał taniości).</p>
+  <p><strong>Czas:</strong> ~1 dzień | <strong>Risk:</strong> brak</p>
+</div>
+
+<div class="verdict-card warn">
+  <h4 style="color:#78350f">P3.5 — C02 Content Mapping skill (wrap audit_content.py)</h4>
+  <p><strong>Co:</strong> obecnie <code>audit_content.py</code> 17K istnieje, ale nie ma skilla. Wrap w SKILL.md → invocable.</p>
+  <p><strong>Czas:</strong> ~4-6h | <strong>Risk:</strong> brak (czysty wrapper)</p>
+</div>
+
+<div class="verdict-card warn">
+  <h4 style="color:#78350f">P3.6 — C04 GA4 R10-R20 (11 raportów)</h4>
+  <p><strong>Co:</strong> rozszerzenie <code>/eel-ga4</code>: internal search, scroll depth, cart abandonment, session quality, cohorts. Spec w EEL_GA4_ANALYSES.md.</p>
+  <p><strong>Czas:</strong> ~3-4 dni | <strong>Risk:</strong> per-raport definicja w GA4</p>
+</div>
+
+<div class="verdict-card warn">
+  <h4 style="color:#78350f">P3.7 — C35 CDT Builder (Cortex v2 NEW)</h4>
+  <p><strong>Co:</strong> auto-build CDT per nowy klient per kategoria z istniejących wzorców W11/W15/W17 + walidacja Ceneo (W36).</p>
+  <p><strong>Czas:</strong> ~3-5 dni | <strong>Wymaga:</strong> P3.2 + P3.3 jako prerequisite</p>
+</div>
+
+<h3>🌐 Cross-warstwowe propozycje (5)</h3>
+
+<div class="verdict-card warn">
+  <h4 style="color:#1e3a8a">G1 — Standardyzacja self-learning loop per warstwa</h4>
+  <p>Wzorzec z warstwy 1 (discovery queue → workflow approval → confidence scoring → commit) zaadoptować dla warstw 2 i 3. Wymaga ~1 dzień per warstwa.</p>
+</div>
+
+<div class="verdict-card warn">
+  <h4 style="color:#1e3a8a">G2 — Architektura skali JSON → Postgres (gdy &gt;50 klientów)</h4>
+  <p>Postgres dla master tables (elements, patterns, signatures) + JSON dla per-klient delta. Sprawdzić w sezonie 2026/27 gdy będzie scale critical.</p>
+</div>
+
+<div class="verdict-card warn">
+  <h4 style="color:#1e3a8a">G3 — C13 Auto-onboarding flow (depends on wszystkich 3 warstwach)</h4>
+  <p>Plan v2 demota C13 z 🔴 PILNE → ⚪ POŹNIEJ. Bez wzmocnionego rdzenia (warstwy 2 i 8) produkuje słabe raporty. Najpierw P2.1-P2.8 i P3.1-P3.7.</p>
+</div>
+
+<div class="verdict-card warn">
+  <h4 style="color:#1e3a8a">G4 — Klient industry mapper</h4>
+  <p>1 plik <code>industry_signatures.json</code> mapujący URL → branża (cosmetic/electronics/fashion/safety/automotive). Wykorzystywany przez P3.2 + W18 + content patterns.</p>
+</div>
+
+<div class="verdict-card warn">
+  <h4 style="color:#1e3a8a">G5 — Cortex v2 reasoner orchestrator (C32) + 6 nowych komponentów</h4>
+  <p>C32 cortex-reasoner / C33 Signal Lake / C34 Visual Density / C35 CDT Builder / C36 CEP Ads Engine / C37 /eel-diagnose. Sprint 4 priorytet (Plichta deadline).</p>
+</div>
+
+<h3>📊 Rekomendowana sekwencja (do dyskusji)</h3>
+
+<table>
+  <tr><th>Priorytet</th><th>Co</th><th>Czas łącznie</th></tr>
+  <tr><td>🔴 1 — krytyczny blocker skali</td><td>P2.1 dot_generator + P2.2 visual_patterns + P1.1 auto-promote</td><td>~3 dni</td></tr>
+  <tr><td>🔴 2 — unlock powtarzalności</td><td>P3.1 content_patterns + P3.2 category_templates + P2.6 audit_visual full</td><td>~5 dni</td></tr>
+  <tr><td>🟠 3 — nice to have po pierwszych klientach</td><td>P2.3-P2.5 (fold/density/pseudo-CTA) + P3.5 C02 wrap + P3.3 tier_specs</td><td>~4 dni</td></tr>
+  <tr><td>🟠 4 — Sprint 4 Cortex v2 (Plichta deadline)</td><td>P2.7 C23 + P2.8 C34 + P3.7 C35 + G5 C32 orchestrator</td><td>~10 dni</td></tr>
+  <tr><td>🟡 5 — architektura długoterminowa</td><td>P1.2 JSON sharding + P1.3 nightly diff + G2 Postgres path</td><td>~1 tydzień</td></tr>
+</table>
+
+<p style="font-size:13px;color:#7c2d12;margin-top:8px"><strong>Razem: ~25 dni roboczych</strong> dla pełnego ulepszenia 3 warstw — czyli 5 tygodni jednego dev × 1 osoba. Plichta start 09/2026 = 4 miesiące zapasu jeśli wszystko ruszy w czerwcu.</p>
+
 <h2>📅 Wszystkie dzisiejsze deliverables (linki)</h2>
 
 <div class="link-list">
