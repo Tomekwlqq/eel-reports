@@ -124,6 +124,22 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; 
 .expand-hint { font-size: 10px; color: var(--accent); font-weight: 500; margin-top: 6px; }
 .card.expanded .expand-hint::after { content: " ▾"; }
 .card:not(.expanded) .expand-hint::after { content: " ▸"; }
+
+/* Problem główny presets */
+.preset-section { background: linear-gradient(135deg, #ecfdf5 0%, var(--bg-card) 100%); border: 1.5px solid #10b981; border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; }
+.preset-section .preset-label { font-size: 11px; font-weight: 700; color: #065f46; margin-bottom: 6px; display: block; }
+.preset-list { display: flex; flex-direction: column; gap: 4px; }
+.preset-btn { padding: 8px 10px; background: var(--bg-card); border: 1.5px solid var(--border); border-radius: 6px; font-size: 11px; cursor: pointer; text-align: left; transition: all 0.15s; line-height: 1.4; }
+.preset-btn:hover { border-color: #10b981; background: #f0fdf4; }
+.preset-btn.active { background: #10b981; color: white; border-color: #10b981; font-weight: 600; }
+.preset-btn .preset-name { display: block; font-weight: 700; font-size: 12px; }
+.preset-btn .preset-anchor { display: block; font-size: 10px; opacity: 0.75; margin-top: 1px; }
+.preset-btn.active .preset-anchor { opacity: 0.9; }
+.preset-clear { font-size: 10px; color: var(--text-muted); cursor: pointer; text-align: center; padding: 4px; margin-top: 4px; }
+.preset-clear:hover { color: var(--accent); text-decoration: underline; }
+
+.anchor-info { background: #f0fdf4; border-left: 3px solid #10b981; padding: 8px 12px; margin-bottom: 14px; border-radius: 4px; font-size: 11px; color: #065f46; }
+.anchor-info strong { color: #047857; }
 </style>
 </head>
 <body>
@@ -131,7 +147,13 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; 
 
 <aside class="sidebar">
   <h1>🎯 Produkty Egzekucyjne</h1>
-  <p class="subtitle">Cortex EEL v0.2 · 30.05.2026</p>
+  <p class="subtitle">Cortex EEL v0.3 · 30.05.2026</p>
+
+  <div class="preset-section">
+    <span class="preset-label">🎯 Problem główny klienta</span>
+    <div class="preset-list" id="presetList"></div>
+    <div class="preset-clear" id="presetClear">✕ Wyczyść kotwicę</div>
+  </div>
 
   <div class="opus-cta">
     <strong>💎 Opus Recommended</strong><br>
@@ -225,6 +247,46 @@ const LAYERS = {
   11: { name: "Transakcja sklepu", short: "Transakcja", rdzen: false },
   12: { name: "Konkurencja (loop)", short: "Konkurencja", rdzen: false }
 };
+
+// Presety problemów głównych — definicja kotwic per typ klienta
+const PRESETS = [
+  {
+    id: "paid",
+    rank: 1,
+    name: "Paid Traffic",
+    anchor: [5],
+    description: "Klient pali budżet na Ads (Google + Meta + TikTok). Cel: efficiency, CAC, attribution.",
+    clientsExample: "Plichta (sieć dilerska Audi), GLOV, sklepy DTC z >50K/mc spend",
+    topCombos: ["5+8", "2+5", "2+5+8", "5+11", "2+5+8+9"]
+  },
+  {
+    id: "conversion",
+    rank: 2,
+    name: "Conversion Rate",
+    anchor: [2, 4, 7],
+    description: "Niska CR pomimo dobrego traffic. Cel: znaleźć i usunąć friction na ścieżce zakupowej.",
+    clientsExample: "Sklepy z high traffic + low CR, typowo Shopify/IdoSell po 1-2 roku w produkcji",
+    topCombos: ["2+4", "2+7", "4+7", "2+4+7", "2+4+8"]
+  },
+  {
+    id: "seo-geo",
+    rank: 3,
+    name: "SEO + GEO",
+    anchor: [6, 9],
+    description: "Klient chce widoczność w SERP + AI Overview / ChatGPT / Perplexity. Future-proof traffic.",
+    clientsExample: "SejfZone, Fera, Hebe — branded queries silne ale generic kategorialne słabe",
+    topCombos: ["6+9", "8+9", "3+9", "2+9", "8+9+3"]
+  },
+  {
+    id: "content",
+    rank: 4,
+    name: "Content",
+    anchor: [3, 8],
+    description: "PDP/kategorie słabo skonwertowane bo content niedopasowany do Tier Specs kategorii. Cel: rewrite blueprint.",
+    clientsExample: "Multi-product sklepy gdzie content generowany bulk/AI bez category alignment",
+    topCombos: ["3+8", "3+9", "2+3", "2+3+8", "3+8+9"]
+  }
+];
 
 const PRODUKTY = [
 
@@ -951,8 +1013,51 @@ let activeTier = null;
 let opusRecOnly = false;
 let minScore = 1;
 let searchQuery = "";
+let activePreset = null;
+
+function applyPreset(presetId) {
+  if (activePreset === presetId) {
+    // Toggle off
+    activePreset = null;
+    activeLayers.clear();
+  } else {
+    const preset = PRESETS.find(p => p.id === presetId);
+    if (!preset) return;
+    activePreset = presetId;
+    activeLayers = new Set(preset.anchor);
+  }
+  render();
+}
+
+function renderPresets() {
+  const list = document.getElementById('presetList');
+  list.innerHTML = PRESETS.map(p => {
+    const isActive = activePreset === p.id;
+    const anchorStr = p.anchor.join("+");
+    return `<button class="preset-btn ${isActive ? 'active' : ''}" data-preset="${p.id}">
+      <span class="preset-name">${p.rank}. ${p.name}</span>
+      <span class="preset-anchor">Kotwica: warstwy ${anchorStr}</span>
+    </button>`;
+  }).join('');
+  list.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
+  });
+}
+
+function renderAnchorInfo() {
+  if (!activePreset) return '';
+  const preset = PRESETS.find(p => p.id === activePreset);
+  if (!preset) return '';
+  return `<div class="anchor-info">
+    <strong>🎯 ${preset.name}</strong> — kotwica: warstwy <strong>${preset.anchor.join("+")}</strong>.<br>
+    ${preset.description}<br>
+    <em>Typowi klienci:</em> ${preset.clientsExample}<br>
+    <em>Top kombinacje:</em> ${preset.topCombos.join(" · ")}
+  </div>`;
+}
 
 function renderSidebar() {
+  renderPresets();
   const list = document.getElementById('layerList');
   list.innerHTML = Object.entries(LAYERS).map(([num, info]) => {
     const isActive = activeLayers.has(parseInt(num));
@@ -1139,12 +1244,18 @@ function render() {
     html = '<div style="text-align:center;padding:60px;color:var(--text-muted);"><h3>Brak wyników</h3><p>Spróbuj zmienić filtry lub obniżyć Min Opus Score.</p></div>';
   }
 
-  document.getElementById('content').innerHTML = html;
+  document.getElementById('content').innerHTML = renderAnchorInfo() + html;
 
   document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', () => card.classList.toggle('expanded'));
   });
 }
+
+document.getElementById('presetClear').addEventListener('click', () => {
+  activePreset = null;
+  activeLayers.clear();
+  render();
+});
 
 document.getElementById('searchInput').addEventListener('input', e => {
   searchQuery = e.target.value.trim();
