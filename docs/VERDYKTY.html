@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verdykty — sesja 30.05.2026</title>
+<style>
+:root {
+  --bg: #fafafa; --bg-card: #fff;
+  --text: #1f2937; --text-muted: #6b7280;
+  --border: #e5e7eb; --accent: #1e3a8a; --accent-bg: #dbeafe;
+  --good: #10b981; --warn: #f59e0b; --bad: #ef4444;
+  --opus: #7c3aed; --opus-bg: #f5f3ff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-text-size-adjust: 100%; }
+html { font-size: 16px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: 16px; line-height: 1.55; color: var(--text); background: var(--bg);
+  padding: 14px 14px 60px;
+}
+.container { max-width: 720px; margin: 0 auto; }
+
+h1 { font-size: 22px; color: var(--accent); margin-bottom: 4px; line-height: 1.25; }
+.subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
+
+.tldr { background: linear-gradient(135deg, #fffbeb 0%, var(--bg-card) 80%); border: 1.5px solid #fed7aa; border-radius: 10px; padding: 14px 16px; margin-bottom: 18px; }
+.tldr h2 { font-size: 15px; color: #9a3412; margin-bottom: 6px; }
+.tldr p { font-size: 14px; color: #7c2d12; }
+
+h2 {
+  font-size: 17px; color: var(--accent);
+  margin: 26px 0 10px;
+  padding-bottom: 6px; border-bottom: 2px solid var(--accent-bg);
+}
+h3 { font-size: 15px; color: var(--text); margin: 16px 0 6px; }
+p { margin: 6px 0; }
+ul { padding-left: 22px; margin: 6px 0; }
+li { margin-bottom: 4px; font-size: 15px; }
+
+.verdict-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 12px 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.verdict-card.bad { border-left: 5px solid var(--bad); }
+.verdict-card.warn { border-left: 5px solid var(--warn); }
+.verdict-card.good { border-left: 5px solid var(--good); }
+
+.score-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+}
+.score-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 50px; height: 50px; border-radius: 50%;
+  color: white; font-weight: 800; font-size: 18px;
+  flex-shrink: 0;
+}
+.score-num.s4 { background: var(--bad); }
+.score-num.s5 { background: #f97316; }
+.score-num.s6 { background: var(--warn); }
+.score-num.s7 { background: #3b82f6; }
+.score-num.s8 { background: var(--good); }
+.score-num.s9 { background: var(--good); }
+.score-num.s10 { background: #047857; }
+
+.score-title { font-size: 16px; font-weight: 700; }
+.score-sub { font-size: 12px; color: var(--text-muted); }
+
+.gap-list { background: #fef2f2; border-left: 4px solid var(--bad); padding: 10px 14px; margin: 8px 0; border-radius: 4px; }
+.gap-list h4 { font-size: 13px; color: var(--bad); margin-bottom: 4px; }
+.gap-list ul { padding-left: 18px; }
+.gap-list li { font-size: 14px; margin-bottom: 3px; }
+
+.win-list { background: #f0fdf4; border-left: 4px solid var(--good); padding: 10px 14px; margin: 8px 0; border-radius: 4px; }
+.win-list h4 { font-size: 13px; color: #065f46; margin-bottom: 4px; }
+.win-list ul { padding-left: 18px; }
+.win-list li { font-size: 14px; margin-bottom: 3px; }
+
+.blocker-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 8px 0;
+  font-size: 14px;
+}
+.blocker-card .blocker-num {
+  display: inline-block; background: var(--bad); color: white;
+  width: 24px; height: 24px; border-radius: 50%;
+  text-align: center; line-height: 24px; font-weight: 700; font-size: 13px;
+  margin-right: 8px;
+}
+.blocker-card.orange .blocker-num { background: var(--warn); }
+.blocker-card.yellow .blocker-num { background: #eab308; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; background: var(--bg-card); }
+th, td { padding: 8px 10px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+th { background: var(--accent-bg); font-weight: 700; color: var(--accent); font-size: 12px; }
+tr:nth-child(even) { background: #fafafa; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.link-list { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin: 12px 0; }
+.link-list a { display: block; padding: 6px 0; font-size: 14px; border-bottom: 1px solid var(--border); }
+.link-list a:last-child { border-bottom: 0; }
+.link-list a::before { content: "→ "; color: var(--accent); }
+
+.next-step {
+  background: linear-gradient(135deg, var(--opus-bg) 0%, var(--bg-card) 100%);
+  border: 1.5px solid var(--opus);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-top: 22px;
+}
+.next-step h2 { color: var(--opus); border: 0; padding: 0; margin: 0 0 6px; font-size: 16px; }
+.next-step ol { padding-left: 22px; margin-top: 6px; }
+.next-step li { font-size: 14px; margin-bottom: 6px; }
+
+.session-stats { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 30px; padding-top: 14px; border-top: 1px solid var(--border); }
+
+@media (min-width: 768px) {
+  body { padding: 30px 30px 80px; }
+  h1 { font-size: 28px; }
+  h2 { font-size: 19px; }
+  .verdict-card { padding: 18px 22px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>📋 Verdykty — sesja 30.05.2026</h1>
+<p class="subtitle">Wszystko w jednym miejscu · czytaj w drodze · last updated: 30.05 wieczór</p>
+
+<div class="tldr">
+  <h2>⚡ TL;DR</h2>
+  <p><strong>1. PRODUKTY_EGZEKUCYJNE.html ✅</strong> — Task #28 zamknięty. 130 wpisów (55/55 par komplet), 4 presety problemów głównych, Opus Score 1-10.</p>
+  <p style="margin-top: 6px;"><strong>2. KNOWLEDGE_BASE.html ✅</strong> — 277 kart biblii, cotygodniowy update przez re-publish.</p>
+  <p style="margin-top: 6px;"><strong>3. SELF_LEARNING 3 warstw — verdict mieszany.</strong> Warstwa 1 (HTML) gotowa do skali (7/10). Warstwa 2 (Visual) <strong>NIE skali</strong> (4/10) — doty ręczne. Warstwa 3 (Content) półautomatyczna (5/10).</p>
+  <p style="margin-top: 6px;"><strong>4. GLOV_REFERENCE_AUDIT.html — 6.5/10, NIE gold standard.</strong> Brakuje 4 krytycznych elementów warstwy 2.</p>
+</div>
+
+<h2>🚦 Verdict 1: Powtarzalność na skali (cross-check 3 warstw)</h2>
+
+<div class="verdict-card bad">
+  <div class="score-row">
+    <div class="score-num s4">4</div>
+    <div>
+      <div class="score-title">Warstwa 2 — Visual mapping</div>
+      <div class="score-sub">NIE skali · największy gap</div>
+    </div>
+  </div>
+  <p><strong>Główny blocker:</strong> doty placowane RĘCZNIE w HTML (GLOV: 167 dotów × <code>left:X%;top:Y%</code> pisane palcami). Po 10 klientach tonienie w editorze.</p>
+  <div class="gap-list">
+    <h4>Brakuje (krytycznie)</h4>
+    <ul>
+      <li><strong>dot_generator.py</strong> — PIL/cv2 → auto-detekcja klikalnych z HTML map</li>
+      <li><strong>visual_patterns.json</strong> — typowy layout fold per page-type per platforma</li>
+      <li><strong>fold_archetypes.json</strong> — np. "HP Fold 1: 60% Hero+CTA, 25% Hero+Search, 15% Hero+Promo"</li>
+      <li><strong>density_baselines.json</strong> — typowa density per fold + outliers</li>
+      <li><strong>pseudo_cta_patterns.json</strong> — wzorce pseudoklikabilnych elementów</li>
+    </ul>
+  </div>
+</div>
+
+<div class="verdict-card warn">
+  <div class="score-row">
+    <div class="score-num s5">5</div>
+    <div>
+      <div class="score-title">Warstwa 3 — Content mapping</div>
+      <div class="score-sub">Półautomatyczna · per-klient OK, brak konsolidacji</div>
+    </div>
+  </div>
+  <p><strong>Główny blocker:</strong> category map per klient = interactive <code>/eel-category-mapping</code>. GEO content rewrite = manual per produkt. Brak template-driven generation per branża.</p>
+  <div class="gap-list">
+    <h4>Brakuje</h4>
+    <ul>
+      <li><strong>category_templates.json</strong> per branża (cosmetic / electronics / fashion / safety)</li>
+      <li><strong>content_patterns.json</strong> — konsolidacja istniejących category_maps</li>
+      <li><strong>tier_specs_master.json</strong> — formalna baza T1/T2/T3 per kategoria</li>
+      <li><strong>forbidden_patterns.json</strong> — copy patterns które wiadomo że nie działają</li>
+    </ul>
+  </div>
+</div>
+
+<div class="verdict-card good">
+  <div class="score-row">
+    <div class="score-num s7">7</div>
+    <div>
+      <div class="score-title">Warstwa 1 — HTML scan</div>
+      <div class="score-sub">Najdojrzalsza · wzorzec do skopiowania</div>
+    </div>
+  </div>
+  <p><strong>Co działa:</strong> discovery queue (pending→approved→committed), multi-platform patterns (Shopify+IdoSell), confidence scoring (0.3-0.6), found_on tracking.</p>
+  <div class="gap-list">
+    <h4>Co ogranicza skalę</h4>
+    <ul>
+      <li>Tomek aprobuje KAŻDY element w queue → auto-promote ≥0.8 odciążyłoby</li>
+      <li>JSON nie skali powyżej ~500KB (przy 50+ klientach elements_master = 2-3MB)</li>
+      <li>Brak diff history → nie wiemy czy nowsza wersja JSON jest lepsza</li>
+    </ul>
+  </div>
+  <div class="win-list">
+    <h4>✅ Wzorzec do skopiowania dla warstw 2 i 3</h4>
+    <ul>
+      <li>_meta + version + last_updated + rule</li>
+      <li>confidence_scoring per detection method</li>
+      <li>discovery_queue.json z workflow approval</li>
+      <li>per-platform patterns nesting</li>
+    </ul>
+  </div>
+</div>
+
+<h2>🎯 Verdict 2: GLOV_REFERENCE_AUDIT.html (referencja egzekucji)</h2>
+
+<div class="verdict-card warn">
+  <div class="score-row">
+    <div class="score-num s6">6.5</div>
+    <div>
+      <div class="score-title">GLOV jako gold standard?</div>
+      <div class="score-sub">NIE jest gold · current best, ale wymaga upgrade</div>
+    </div>
+  </div>
+  <p><strong>Co JEST dobre:</strong></p>
+  <ul>
+    <li>167 av-dots + 127 legend (każdy dot opisany)</li>
+    <li>Pełne pokrycie 8 page-typów: Nav, HP, Listing, PDP, Tile (default+hover), Search, Cart drawer, Checkout, Blog</li>
+    <li>Desktop+mobile dla każdego widoku</li>
+    <li>18 unique screenshotów</li>
+    <li>Tabela Element/Akcja shopperki/GA4 event/Status</li>
+    <li>PDP ma 2-fold desktop + 3-fold mobile</li>
+  </ul>
+  <div class="gap-list">
+    <h4>Brakuje (krytyczne dla gold standard)</h4>
+    <ul>
+      <li>❌ <strong>Density maps</strong> fold-by-fold — grep "density" = 0 matches</li>
+      <li>❌ <strong>Hierarchy ranking</strong> per fold — grep "hierarch" = 0 matches</li>
+      <li>❌ <strong>Pseudo-CTAs</strong> jako kategoria — grep "pseudo" = 0</li>
+      <li>❌ <strong>Dead zones</strong> marked — grep "dead.zone" = 0</li>
+      <li>⚠️ Fold-by-fold linie: tylko 3 (powinno być ~16+ na long screenshots)</li>
+      <li>⚠️ Doty bez kategoryzacji (CTA / trust / nav / content / decoration)</li>
+    </ul>
+  </div>
+</div>
+
+<h2>🚧 Verdict 3: 5 głównych blockerów (priorytet implementacji)</h2>
+
+<div class="blocker-card">
+  <span class="blocker-num">1</span>
+  <strong>Doty Visual ręczne</strong> — po 10 klientach Tomek tonie w editorze. <code>dot_generator.py</code> = pre-condition dla skali. <em>(blocker krytyczny)</em>
+</div>
+
+<div class="blocker-card">
+  <span class="blocker-num">2</span>
+  <strong>Density / hierarchy / pseudo-CTA / dead zones</strong> — brak generatorów. Gold standard warstwy 2 wymaga build'u 4 modułów. <em>(blocker krytyczny)</em>
+</div>
+
+<div class="blocker-card orange">
+  <span class="blocker-num">3</span>
+  <strong>Element discovery queue manual</strong> — auto-promote confidence ≥0.8 odciążyłoby Tomka o ~70%. <em>(blocker średni)</em>
+</div>
+
+<div class="blocker-card orange">
+  <span class="blocker-num">4</span>
+  <strong>Category map per klient manual</strong> — bez category_templates.json per branża = każdy klient od zera. <em>(blocker średni)</em>
+</div>
+
+<div class="blocker-card yellow">
+  <span class="blocker-num">5</span>
+  <strong>Brak diff history</strong> — nie wiemy czy v2 jest lepsza niż v1. Nightly snapshot + diff log rozwiązuje. <em>(blocker low)</em>
+</div>
+
+<h2>🏗 Verdict 4: Architektura dla 130 produktów</h2>
+
+<p><strong>JSON-first jest właściwy wybór</strong> (na razie). Postgres = nadmiar dopóki &lt;50 klientów. Warstwa 1 pokazuje że JSON skali do 200KB+ z czytelnością.</p>
+
+<p><strong>Każdy z 130 produktów potrzebuje 4 plików:</strong></p>
+<ul>
+  <li><code>scripts/product_{id}.py</code> — executable</li>
+  <li><code>skills/{id}/SKILL.md</code> — invocable</li>
+  <li><code>data/{id}_patterns.json</code> — self-learning baza</li>
+  <li><code>data/{id}_discovery_queue.json</code> — workflow pending→approved→committed</li>
+</ul>
+
+<p><strong>Plus 3 pliki na poziomie warstwy:</strong></p>
+<ul>
+  <li><code>data/{layer}_patterns.json</code></li>
+  <li><code>data/{layer}_baselines.json</code></li>
+  <li><code>scripts/{layer}_generator.py</code></li>
+</ul>
+
+<p style="margin-top: 8px;"><em>Bez tych 3 plików na warstwę — nie ma powtarzalności na skali.</em></p>
+
+<h2>📅 Wszystkie dzisiejsze deliverables (linki)</h2>
+
+<div class="link-list">
+  <a href="https://tomekwlqq.github.io/eel-reports/KNOWLEDGE_BASE.html" target="_blank">📚 KNOWLEDGE_BASE — Biblia (277 kart)</a>
+  <a href="https://tomekwlqq.github.io/eel-reports/PRODUKTY_EGZEKUCYJNE.html" target="_blank">🎯 PRODUKTY_EGZEKUCYJNE (130 z 562, v0.5)</a>
+  <a href="https://tomekwlqq.github.io/eel-reports/SELF_LEARNING_3_WARSTW.html" target="_blank">🧠 SELF_LEARNING 3 warstw — analiza</a>
+  <a href="https://tomekwlqq.github.io/eel-reports/VERDYKTY.html" target="_blank">📋 VERDYKTY (ten plik)</a>
+  <a href="https://tomekwlqq.github.io/eel-reports/EEL_HUB.html" target="_blank">🏢 EEL Central Hub</a>
+  <a href="https://tomekwlqq.github.io/eel-reports/GEO-consumer-decision-trees.html" target="_blank">🌳 GEO Decision Trees (47 kat.)</a>
+</div>
+
+<div class="next-step">
+  <h2>🚀 Next step po powrocie z miasta</h2>
+  <ol>
+    <li><strong>Decyzja na warstwie 2:</strong> czy budujemy <code>dot_generator.py</code> jako Sprint 4 #1 priority? (krytyczny blocker skalowania)</li>
+    <li><strong>UBER UPGRADE U-1+U-4+U-7+U-8</strong> — Truth Checker wrapper + memory check + settings.json + CLAUDE.md slim (1.5h, atomowo)</li>
+    <li><strong>Auto-promote ≥0.8 confidence</strong> w element_discovery_queue.json — quick win warstwy 1 (15 min)</li>
+    <li><strong>Plichta Counter-Brief</strong> przygotować nim klient prześle brief — Paid Traffic preset = kotwica</li>
+  </ol>
+</div>
+
+<p class="session-stats">
+  Sesja 30.05.2026 · 4 deliverables HTML opublikowane · Task #28 zamknięty<br>
+  Tomek aktywny przez 1 dzień · 6+ iteracji syntez · Anthropic deep-dive zakończony
+</p>
+
+</div>
+</body>
+</html>
