@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produkty Egzekucyjne — Cortex EEL</title>
+<style>
+:root {
+  --bg: #fafafa; --bg-card: #fff; --bg-sidebar: #f3f4f6; --bg-input: #fff;
+  --border: #e5e7eb; --border-strong: #d1d5db;
+  --text: #1f2937; --text-muted: #6b7280; --text-light: #9ca3af;
+  --accent: #1e3a8a; --accent-light: #3b82f6; --accent-bg: #dbeafe;
+  --rdzen: #ea580c; --rdzen-bg: #fff7ed;
+  --tier1: #10b981; --tier2: #3b82f6; --tier3: #8b5cf6; --tier4: #f59e0b; --tier5: #ef4444;
+  --hot: #fde047;
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; line-height: 1.5; color: var(--text); background: var(--bg); }
+code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; background: var(--bg-sidebar); padding: 1px 5px; border-radius: 4px; }
+
+.app { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
+
+.sidebar { background: var(--bg-sidebar); border-right: 1px solid var(--border); padding: 20px 18px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.sidebar h1 { font-size: 18px; font-weight: 700; color: var(--accent); }
+.sidebar .subtitle { font-size: 11px; color: var(--text-muted); margin-bottom: 16px; }
+
+.section-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 18px 0 6px; }
+
+.layer-list { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
+.layer-btn { padding: 8px 6px; background: var(--bg-card); border: 1.5px solid var(--border); border-radius: 6px; font-size: 11px; font-weight: 500; color: var(--text); cursor: pointer; text-align: center; transition: all 0.15s; }
+.layer-btn:hover { border-color: var(--accent-light); }
+.layer-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+.layer-btn.rdzen { border-color: var(--rdzen); background: var(--rdzen-bg); }
+.layer-btn.rdzen.active { background: var(--rdzen); color: white; }
+.layer-btn .layer-num { font-size: 14px; font-weight: 700; display: block; }
+
+.filter-list { display: flex; flex-direction: column; gap: 4px; }
+.filter-btn { padding: 6px 10px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; font-size: 11px; cursor: pointer; text-align: left; }
+.filter-btn:hover { border-color: var(--accent-light); }
+.filter-btn.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+.stats { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-top: 14px; font-size: 11px; }
+.stats div { display: flex; justify-content: space-between; padding: 2px 0; }
+.stats strong { color: var(--accent); }
+
+.main { padding: 24px 32px; max-width: 1500px; }
+.main-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.search-input { flex: 1; max-width: 600px; padding: 9px 13px; font-size: 13px; background: var(--bg-input); border: 1px solid var(--border-strong); border-radius: 7px; }
+.search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+.results-count { font-size: 12px; color: var(--text-muted); }
+
+.intro { background: linear-gradient(135deg, #fffbeb 0%, var(--bg-card) 60%); border: 1px solid #fed7aa; border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; }
+.intro h2 { color: #9a3412; font-size: 16px; margin-bottom: 6px; }
+.intro p { font-size: 13px; color: #7c2d12; }
+
+.section-divider { margin: 30px 0 16px; font-size: 17px; font-weight: 700; color: var(--accent); padding-bottom: 8px; border-bottom: 2px solid var(--accent-bg); display: flex; align-items: center; gap: 8px; }
+.section-divider .count { font-size: 12px; font-weight: 400; color: var(--text-muted); margin-left: auto; }
+
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 12px; }
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; box-shadow: var(--shadow); transition: all 0.15s; cursor: pointer; }
+.card:hover { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); border-color: var(--accent-light); }
+.card.flagship { border-color: var(--rdzen); background: linear-gradient(135deg, var(--rdzen-bg) 0%, var(--bg-card) 60%); }
+.card.placeholder { opacity: 0.55; background: var(--bg-sidebar); }
+
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px; }
+.card-combo { font-family: ui-monospace, monospace; font-size: 11px; padding: 3px 8px; border-radius: 5px; background: var(--accent); color: white; font-weight: 700; flex-shrink: 0; }
+.card-combo.flagship { background: var(--rdzen); }
+.card-tier { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 10px; color: white; text-transform: uppercase; letter-spacing: 0.05em; }
+.tier-spark { background: var(--tier1); }
+.tier-lite { background: var(--tier2); }
+.tier-std { background: var(--tier3); }
+.tier-pro { background: var(--tier4); }
+.tier-premium { background: var(--tier5); }
+.tier-placeholder { background: var(--text-light); }
+
+.card-name { font-size: 14px; font-weight: 700; color: var(--text); margin: 6px 0 4px; }
+.card-name .star { color: var(--rdzen); margin-right: 4px; }
+.card-what { font-size: 12px; color: var(--text); line-height: 1.5; margin-bottom: 6px; }
+.card-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.meta-pill { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: var(--bg-sidebar); color: var(--text-muted); }
+.meta-pill.vu { background: var(--accent-bg); color: var(--accent); font-weight: 600; }
+.meta-pill.empirical { background: #ecfdf5; color: #065f46; font-weight: 700; }
+
+.card-body { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 12px; }
+.card.expanded .card-body { display: block; }
+.card-body h4 { font-size: 11px; font-weight: 700; color: var(--accent); margin: 8px 0 3px; text-transform: uppercase; letter-spacing: 0.03em; }
+.card-body ul { padding-left: 16px; margin: 4px 0; }
+.card-body li { margin-bottom: 2px; }
+.card-body p { margin: 4px 0; }
+.expand-hint { font-size: 10px; color: var(--accent); font-weight: 500; margin-top: 6px; }
+.card.expanded .expand-hint::after { content: " ▾"; }
+.card:not(.expanded) .expand-hint::after { content: " ▸"; }
+</style>
+</head>
+<body>
+<div class="app">
+
+<aside class="sidebar">
+  <h1>🎯 Produkty Egzekucyjne</h1>
+  <p class="subtitle">Cortex EEL v0.1 · 30.05.2026</p>
+
+  <div class="section-label">Warstwy (multi-select)</div>
+  <div class="layer-list" id="layerList"></div>
+
+  <div class="section-label">Typ kombinacji</div>
+  <div class="filter-list" id="typeFilters">
+    <button class="filter-btn active" data-type="all">Wszystkie</button>
+    <button class="filter-btn" data-type="singel">Solo (12)</button>
+    <button class="filter-btn" data-type="para">Pary (55)</button>
+    <button class="filter-btn" data-type="trojka">Trójki (165)</button>
+    <button class="filter-btn" data-type="czworka">Czwórki (330)</button>
+  </div>
+
+  <div class="section-label">Filtry jakości</div>
+  <div class="filter-list" id="qualityFilters">
+    <button class="filter-btn" data-quality="flagship">🏆 Flagship (V+U=10)</button>
+    <button class="filter-btn" data-quality="empirical">🎯 Empirical U=3/3</button>
+    <button class="filter-btn" data-quality="ready">✅ Ready (produkty gotowe)</button>
+    <button class="filter-btn" data-quality="placeholder">📋 Placeholder (do opisania)</button>
+  </div>
+
+  <div class="section-label">Tier</div>
+  <div class="filter-list" id="tierFilters">
+    <button class="filter-btn" data-tier="spark">Spark 499</button>
+    <button class="filter-btn" data-tier="lite">Lite 999</button>
+    <button class="filter-btn" data-tier="std">Standard 2K</button>
+    <button class="filter-btn" data-tier="pro">Pro 4K</button>
+    <button class="filter-btn" data-tier="premium">Premium 8K+</button>
+  </div>
+
+  <div class="stats" id="statsBox"></div>
+</aside>
+
+<main class="main">
+  <div class="intro">
+    <h2>Cytat Tomka, 30.05.2026</h2>
+    <p>"<em>Bardzo chciałbym dla wszystkich kombinacji — bo nie wiesz co tam możesz za skarby odkryć.</em>"</p>
+    <p style="margin-top: 8px;"><strong>Cel:</strong> pełne pokrycie 562 kombinacji (12 solo + 55 par + 165 trójek + 330 czwórek). v0.1 ma top ~60 wpisów opisanych + reszta jako placeholder. Rozwojowy.</p>
+  </div>
+
+  <div class="main-header">
+    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Szukaj produktu egzekucyjnego (nazwa, opis, kombinacja)...">
+    <span class="results-count" id="resultsCount"></span>
+  </div>
+
+  <div id="content"></div>
+</main>
+
+</div>
+
+<script>
+
+// 12 cegiełek
+const LAYERS = {
+  0: { name: "Wiedza filtr", short: "Wiedza", rdzen: false },
+  1: { name: "HTML scan", short: "HTML", rdzen: false },
+  2: { name: "Visual + tech", short: "Visual", rdzen: true },
+  3: { name: "Content scan", short: "Content", rdzen: false },
+  4: { name: "GA4", short: "GA4", rdzen: false },
+  5: { name: "Ads (Google+TikTok+Meta)", short: "Ads", rdzen: false },
+  6: { name: "GSC + Senuto", short: "GSC", rdzen: false },
+  7: { name: "Clarity", short: "Clarity", rdzen: false },
+  8: { name: "Category knowledge", short: "Category", rdzen: true },
+  9: { name: "GEO", short: "GEO", rdzen: false },
+  10: { name: "Tactics + biasy", short: "Tactics", rdzen: false },
+  11: { name: "Transakcja sklepu", short: "Transakcja", rdzen: false },
+  12: { name: "Konkurencja (loop)", short: "Konkurencja", rdzen: false }
+};
+
+// Format wpisu:
+// { id, layers: [..], type: solo/para/trojka/czworka, name, what, needs, output, tier, v, u, flagship, empirical, ready }
+// ready=true → karta normalna, ready=false → placeholder
+
+const PRODUKTY = [
+
+// =========== SOLO (12) ===========
+{ id: "p1-solo", layers: [1], type: "singel", name: "HTML Tag Audit",
+  what: "Skan tagów HTML + meta + schema.org per widok. Pełne mapowanie struktury technicznej.",
+  needs: ["URL klienta", "Playwright"],
+  output: "HTML_AUDIT_<klient>.md — tabela tagów + schema valid/invalid + rekomendacje",
+  tier: "spark", v: 3, u: 1, ready: true },
+
+{ id: "p2-solo", layers: [2], type: "singel", name: "⭐ Shop Visual Mapping (16 widoków)",
+  what: "Fold-by-fold screenshoty 16 widoków × desktop+mobile. Hierarchia wizualna, dead zones, pseudo-CTAs.",
+  needs: ["take_screenshots.py", "URL"],
+  output: "VISUAL_MAPPING_<klient>.html — 8 tabów × 2 viewporty + density maps",
+  tier: "lite", v: 5, u: 2, ready: true, flagship: false },
+
+{ id: "p3-solo", layers: [3], type: "singel", name: "Content Inventory",
+  what: "Skan tytułów PDP, bullets, FAQ, opisów kategorii. Per-element metryki długości i struktury.",
+  needs: ["URL klienta", "Scraper"],
+  output: "CONTENT_INVENTORY_<klient>.md — tabele per typ contentu",
+  tier: "lite", v: 4, u: 1, ready: true },
+
+{ id: "p4-solo", layers: [4], type: "singel", name: "GA4 R01-R10 Reports",
+  what: "Top 10 raportów analytics: overview, source/medium, behavior funnel, conversion paths, e-commerce, audiences.",
+  needs: ["GA4 property access", "google-analytics-mcp"],
+  output: "GA4_REPORTS_<klient>.html — R01-R10 zakładki",
+  tier: "std", v: 4, u: 1, ready: true },
+
+{ id: "p5-solo", layers: [5], type: "singel", name: "Ads Triad Snapshot",
+  what: "Google Ads + Meta Ads + TikTok Ads — performance, CAC, frequency, creative breakdown.",
+  needs: ["Ad accounts", "google-ads-mcp", "meta-ads MCP"],
+  output: "ADS_SNAPSHOT_<klient>.html",
+  tier: "std", v: 4, u: 1, ready: true },
+
+{ id: "p6-solo", layers: [6], type: "singel", name: "Organic Visibility (GSC + Senuto)",
+  what: "Wyświetlenia, CTR, average position per query + Senuto visibility score + brand vs non-brand.",
+  needs: ["GSC access", "Senuto export"],
+  output: "ORGANIC_REPORT_<klient>.html",
+  tier: "std", v: 3, u: 1, ready: true },
+
+{ id: "p7-solo", layers: [7], type: "singel", name: "Clarity Heatmap + Session Highlights",
+  what: "Heatmapy klików/scrolla per widok + top 10 sesji z dead clicks/rage clicks.",
+  needs: ["Clarity access", "clarity MCP"],
+  output: "CLARITY_REPORT_<klient>.html — heatmapy + linki do nagrań",
+  tier: "std", v: 4, u: 1, ready: true },
+
+{ id: "p8-solo", layers: [8], type: "singel", name: "⭐ Category Knowledge Brief (CEP+CDT+Tier Specs)",
+  what: "Per-kategoria: Category Entry Points, Consumer Decision Tree, Tier Specs Tier-1/2/3, Forbidden Patterns, typowy produkt, price tiers, vocabulary.",
+  needs: ["Lista kategorii klienta", "GEO Decision Trees lib (W11/W15/W17)"],
+  output: "CATEGORY_BRIEF_<klient>_<kategoria>.html — szablon per kategoria",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: false },
+
+{ id: "p9-solo", layers: [9], type: "singel", name: "GEO Check (AI Overview readiness)",
+  what: "Skan strony pod kątem citability w AI Overview (Google), ChatGPT, Perplexity, Bing Copilot. Score per pillar.",
+  needs: ["geo_check.py Playwright", "URL"],
+  output: "GEO_CHECK_<klient>.html — score + rekomendacje per pillar",
+  tier: "std", v: 4, u: 2, ready: true },
+
+{ id: "p10-solo", layers: [10], type: "singel", name: "Tactic Bank (200+ taktyki)",
+  what: "Lista taktyk z 400-pozycyjnej biblioteki EEL z mapowaniem do widoku/biasu. Tier 'quick win' priorytet.",
+  needs: ["EEL Tactic Database", "Snapshot klienta"],
+  output: "TACTIC_BANK_<klient>.html — filtrowalna lista 200+",
+  tier: "lite", v: 3, u: 1, ready: true },
+
+{ id: "p11-solo", layers: [11], type: "singel", name: "Checkout & Cart Inspection",
+  what: "Krok-po-kroku checkout: friction, distractions, trust signals, payment methods, error handling, cart persistence.",
+  needs: ["Test checkout (gość + zalogowany)"],
+  output: "CHECKOUT_INSPECTION_<klient>.md — per krok findings",
+  tier: "std", v: 4, u: 1, ready: true },
+
+{ id: "p12-solo", layers: [12], type: "singel", name: "Competitive Loop (1+2+3 vs 3 konkurentów)",
+  what: "Konkurencja przez warstwę 1+2+3: HTML + Visual + Content na 3 wybranych konkurentach. Krzyż-porównanie.",
+  needs: ["3 URL konkurentów", "Snapshot klienta"],
+  output: "COMPETITIVE_LOOP_<klient>.html — krzyż-tabela 4×3",
+  tier: "pro", v: 4, u: 2, ready: true },
+
+// =========== PARY (top 30 z 55) ===========
+{ id: "p2-8", layers: [2, 8], type: "para", name: "⭐ Cortex Reference Audit (RDZEŃ × RDZEŃ)",
+  what: "Layout per widok nałożony na Tier Specs + CEPs kategorii. Pokazuje GDZIE shopper widzi (lub NIE WIDZI) czego oczekuje per kategoria.",
+  needs: ["Layer 2 + Layer 8 outputs", "Cross-reference engine"],
+  output: "CORTEX_REFERENCE_AUDIT_<klient>.html — 8 tabów + Visual×Category overlay per widok",
+  tier: "premium", v: 5, u: 3, ready: true, flagship: true, empirical: false },
+
+{ id: "p1-4", layers: [1, 4], type: "para", name: "🎯 HTML × GA4 Eventy Crosswalk (PLICHTA)",
+  what: "Każdy HTML element vs każdy GA4 event. Pokazuje: czego trackują a userowi NIE pokazują (waste) + czego NIE trackują a użytkownik wykonuje (blind spots).",
+  needs: ["Layer 1", "Layer 4", "Event taxonomy"],
+  output: "HTML_GA4_CROSSWALK_<klient>.html — matrix elements × events + diagnoza",
+  tier: "pro", v: 5, u: 3, ready: true, flagship: true, empirical: true },
+
+{ id: "p2-4", layers: [2, 4], type: "para", name: "Visual × CR per widok",
+  what: "Konwersja per widok nałożona na ranking popularności wizualnej fold-by-fold.",
+  needs: ["Layer 2", "Layer 4"],
+  output: "VISUAL_CR_<klient>.html — heatmapa popularność × CR",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "p2-11", layers: [2, 11], type: "para", name: "Visual × Cart cross-sell",
+  what: "Cross-sell w PDP+koszyku nałożony na visual layout. Pokazuje WHERE cross-sell powinno być a nie jest.",
+  needs: ["Layer 2", "Layer 11"],
+  output: "CROSSELL_VISUAL_<klient>.html",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "p5-8", layers: [5, 8], type: "para", name: "CEP-based Ads Targeting",
+  what: "Ads campaigns aligned z CEPs kategorii. Pokazuje gdzie targeting jest brand-only vs CEP-based.",
+  needs: ["Layer 5", "Layer 8"],
+  output: "CEP_ADS_<klient>.html",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "p8-9", layers: [8, 9], type: "para", name: "CDT × AI Passages (GEO content blueprint)",
+  what: "Per CDT branch + Tier Spec kategorii → konkretny passage do PDP/kategorii pod AI Overview citability.",
+  needs: ["Layer 8", "Layer 9"],
+  output: "CDT_AI_BLUEPRINT_<klient>_<kategoria>.html",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "p2-9", layers: [2, 9], type: "para", name: "Visual × GEO Score",
+  what: "Layout PDP nałożony na GEO score per element. Pokazuje WHICH visual elements obniżają AI citability.",
+  needs: ["Layer 2", "Layer 9"],
+  output: "VISUAL_GEO_<klient>.html",
+  tier: "pro", v: 4, u: 2, ready: true, flagship: true },
+
+{ id: "p2-7", layers: [2, 7], type: "para", name: "Visual × Clarity (Heatmap × Layout)",
+  what: "Heatmapa Clarity nałożona na visual layout fold-by-fold. Dead clicks vs dead zones.",
+  needs: ["Layer 2", "Layer 7"],
+  output: "VISUAL_CLARITY_<klient>.html",
+  tier: "std", v: 4, u: 2, ready: true, flagship: true },
+
+{ id: "p2-10", layers: [2, 10], type: "para", name: "Visual × Tactics Bank",
+  what: "Każdy fold mapowany do potencjalnych taktyk z biblioteki 200+ (bias-aligned).",
+  needs: ["Layer 2", "Layer 10"],
+  output: "VISUAL_TACTICS_<klient>.html",
+  tier: "std", v: 4, u: 2, ready: true, flagship: true },
+
+{ id: "p3-8", layers: [3, 8], type: "para", name: "Content × Category Tier Specs",
+  what: "Per PDP: czy tytuł zawiera Tier-1 specs? czy bullets adresują CEPs? gap analysis per produkt.",
+  needs: ["Layer 3", "Layer 8"],
+  output: "CONTENT_CATEGORY_GAP_<klient>.html — tabela per produkt",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "p3-9", layers: [3, 9], type: "para", name: "Content × GEO (PDP rewrite blueprint)",
+  what: "Content per PDP → GEO-optimized rewrite blueprint. Tytuł + bullets + FAQ + passages.",
+  needs: ["Layer 3", "Layer 9"],
+  output: "PDP_REWRITE_<klient>_<slug>.md per produkt",
+  tier: "std", v: 4, u: 2, ready: true },
+
+{ id: "p4-5", layers: [4, 5], type: "para", name: "GA4 × Ads attribution gap",
+  what: "Differential GA4 vs Ads platforms attribution. Pokazuje gdzie cross-channel attribution kuleje.",
+  needs: ["Layer 4", "Layer 5"],
+  output: "ATTRIBUTION_GAP_<klient>.html",
+  tier: "std", v: 4, u: 1, ready: true },
+
+{ id: "p4-7", layers: [4, 7], type: "para", name: "GA4 × Clarity (funnels × heatmaps)",
+  what: "Funnel dropoff z GA4 + heatmapa Clarity per krok. Diagnostyka WHERE i WHY drop.",
+  needs: ["Layer 4", "Layer 7"],
+  output: "FUNNEL_CLARITY_<klient>.html",
+  tier: "std", v: 4, u: 1, ready: true },
+
+{ id: "p6-9", layers: [6, 9], type: "para", name: "Organic × GEO (SERP vs AI readiness)",
+  what: "Per query: ranking SERP + GEO score AI Overview readiness. Future-proof traffic strategy.",
+  needs: ["Layer 6", "Layer 9"],
+  output: "ORGANIC_GEO_<klient>.html",
+  tier: "std", v: 4, u: 2, ready: true },
+
+{ id: "p7-11", layers: [7, 11], type: "para", name: "Clarity × Checkout (friction diagnostics)",
+  what: "Clarity rage clicks + dead clicks w checkout overlayed na step-by-step inspection.",
+  needs: ["Layer 7", "Layer 11"],
+  output: "CHECKOUT_FRICTION_<klient>.html",
+  tier: "pro", v: 4, u: 2, ready: true },
+
+{ id: "p1-2", layers: [1, 2], type: "para", name: "HTML × Visual (Dev × Shopper view)",
+  what: "Krzyż-mapowanie elementu HTML do tego co shopper rzeczywiście widzi. Pseudo-CTAs detection.",
+  needs: ["Layer 1", "Layer 2"],
+  output: "DEV_SHOPPER_VIEW_<klient>.html",
+  tier: "lite", v: 4, u: 2, ready: true },
+
+{ id: "p1-3", layers: [1, 3], type: "para", name: "HTML × Content (schema completeness)",
+  what: "Per element HTML: czy content tam jest? czy schema oznacza go poprawnie?",
+  needs: ["Layer 1", "Layer 3"],
+  output: "SCHEMA_CONTENT_<klient>.html",
+  tier: "lite", v: 3, u: 1, ready: true },
+
+{ id: "p4-11", layers: [4, 11], type: "para", name: "GA4 × Transakcja (checkout funnel)",
+  what: "Każdy krok checkout: GA4 event coverage + step success rate + drop reasons.",
+  needs: ["Layer 4", "Layer 11"],
+  output: "CHECKOUT_FUNNEL_<klient>.html",
+  tier: "std", v: 4, u: 1, ready: true },
+
+{ id: "p8-10", layers: [8, 10], type: "para", name: "Category × Tactics (per-CEP playbook)",
+  what: "Per CEP kategorii → konkretne taktyki z biblioteki 200+ które ten CEP adresują.",
+  needs: ["Layer 8", "Layer 10"],
+  output: "CEP_TACTICS_<klient>.html",
+  tier: "pro", v: 4, u: 2, ready: true },
+
+{ id: "p8-11", layers: [8, 11], type: "para", name: "Category × Checkout (Tier-1 spec na checkout)",
+  what: "Czy Tier-1 specs kategorii są widoczne podczas checkout (last-mile reassurance)?",
+  needs: ["Layer 8", "Layer 11"],
+  output: "CATEGORY_CHECKOUT_<klient>.html",
+  tier: "std", v: 4, u: 2, ready: true },
+
+{ id: "p9-11", layers: [9, 11], type: "para", name: "GEO × Checkout (trust + AI signals)",
+  what: "Trust signals checkout pod kątem GEO citability (reviews, social proof, guarantees).",
+  needs: ["Layer 9", "Layer 11"],
+  output: "GEO_CHECKOUT_<klient>.html",
+  tier: "std", v: 3, u: 2, ready: true },
+
+// =========== TRÓJKI (top 15 z 165 z TROJKI_I_CZWORKI.md) ===========
+{ id: "t1-4-8", layers: [1, 4, 8], type: "trojka", name: "🎯 S1 — HTML × GA4 × Category (empiryczna U=3/3)",
+  what: "HTML elementów per kategoria — które elementy istnieją vs powinny istnieć per Tier Spec + jak są trackowane. Empirycznie najbardziej unikalne na świecie.",
+  needs: ["Layer 1+4+8"],
+  output: "EMPIRICAL_TRIPLE_S1_<klient>.html — 3D matrix",
+  tier: "premium", v: 5, u: 3, ready: true, flagship: true, empirical: true },
+
+{ id: "t1-2-4", layers: [1, 2, 4], type: "trojka", name: "🎯 S3 — HTML × Visual × GA4 (empiryczna U=3/3)",
+  what: "Pełny audyt Dev+Shopper+Analytics: element → widok → event. 360° pokrycie shopperskiej ścieżki.",
+  needs: ["Layer 1+2+4"],
+  output: "EMPIRICAL_TRIPLE_S3_<klient>.html",
+  tier: "premium", v: 5, u: 3, ready: true, flagship: true, empirical: true },
+
+{ id: "t2-4-8", layers: [2, 4, 8], type: "trojka", name: "Visual × GA4 × Category",
+  what: "Layout per kategoria + jak GA4 mierzy interakcje z tym layoutem.",
+  needs: ["Layer 2+4+8"],
+  output: "VGC_TRIPLE_<klient>.html",
+  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "t2-3-8", layers: [2, 3, 8], type: "trojka", name: "Visual × Content × Category",
+  what: "Per PDP: layout + content + zgodność z Tier Specs. Najgęstsze pokrycie shopper view.",
+  needs: ["Layer 2+3+8"],
+  output: "VCC_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "t2-8-9", layers: [2, 8, 9], type: "trojka", name: "Visual × Category × GEO",
+  what: "Layout per kategoria pod kątem AI citability. WHERE Claude/GPT/Perplexity 'widzą' tę kategorię w PDP.",
+  needs: ["Layer 2+8+9"],
+  output: "VCG_TRIPLE_<klient>.html",
+  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "t2-8-10", layers: [2, 8, 10], type: "trojka", name: "Visual × Category × Tactics",
+  what: "Per fold per kategoria — konkretne taktyki które najbardziej zadziałają w tej kategorii.",
+  needs: ["Layer 2+8+10"],
+  output: "VCT_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "t2-7-8", layers: [2, 7, 8], type: "trojka", name: "Visual × Clarity × Category",
+  what: "Heatmapa Clarity + layout + Tier Specs. Diagnoza dlaczego shopper nie klika na ważne elementy kategorii.",
+  needs: ["Layer 2+7+8"],
+  output: "VCC2_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "t4-8-9", layers: [4, 8, 9], type: "trojka", name: "GA4 × Category × GEO",
+  what: "GA4 organic traffic per kategoria + GEO readiness per kategoria. Future traffic strategy.",
+  needs: ["Layer 4+8+9"],
+  output: "GCG_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "t1-2-8", layers: [1, 2, 8], type: "trojka", name: "HTML × Visual × Category",
+  what: "Dev+Shopper view per kategoria — czy struktura HTML wspiera Tier Spec hierarchy?",
+  needs: ["Layer 1+2+8"],
+  output: "HVC_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "t1-4-2", layers: [1, 4, 2], type: "trojka", name: "HTML × GA4 × Visual",
+  what: "Co user widzi (visual) + co user robi (HTML interakcje) + co mierzymy (GA4) — pełna triangulacja shopper journey.",
+  needs: ["Layer 1+4+2"],
+  output: "HVA_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "t2-4-11", layers: [2, 4, 11], type: "trojka", name: "Visual × GA4 × Transakcja",
+  what: "Pełne checkout diagnostics: layout + events + step success rate. Najbardziej operacyjna trójka.",
+  needs: ["Layer 2+4+11"],
+  output: "VAT_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "t3-8-9", layers: [3, 8, 9], type: "trojka", name: "Content × Category × GEO",
+  what: "Content per produkt + Tier Spec category + GEO citability score. Full content rewrite blueprint.",
+  needs: ["Layer 3+8+9"],
+  output: "CCG_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "t5-8-10", layers: [5, 8, 10], type: "trojka", name: "Ads × Category × Tactics",
+  what: "Ads targeting per CEP kategorii + per CEP taktyki w landing pages. Full-funnel CEP alignment.",
+  needs: ["Layer 5+8+10"],
+  output: "ACT_TRIPLE_<klient>.html",
+  tier: "pro", v: 4, u: 2, ready: true, flagship: false },
+
+{ id: "t2-4-10", layers: [2, 4, 10], type: "trojka", name: "Visual × GA4 × Tactics",
+  what: "Per fold: visual hierarchy + GA4 interaction rate + sugerowane taktyki. Per-element scoring.",
+  needs: ["Layer 2+4+10"],
+  output: "VAT2_TRIPLE_<klient>.html",
+  tier: "pro", v: 4, u: 2, ready: true, flagship: false },
+
+{ id: "t4-7-11", layers: [4, 7, 11], type: "trojka", name: "GA4 × Clarity × Transakcja",
+  what: "Pełny diagnostyczny checkout: GA4 funnel + Clarity rage clicks + step inspection. WHY drop.",
+  needs: ["Layer 4+7+11"],
+  output: "ACT2_TRIPLE_<klient>.html",
+  tier: "pro", v: 4, u: 2, ready: true, flagship: false },
+
+// =========== CZWÓRKI (top 8 z 330) ===========
+{ id: "c1-2-4-8", layers: [1, 2, 4, 8], type: "czworka", name: "🏆 CS1 — MISTRZ czwórka (empiryczna U=3/3)",
+  what: "HTML+Visual+GA4+Category — pełna 4D diagnoza Cortex. Empirycznie najbardziej unikalna kombinacja audytowa na świecie (26 Google search potwierdzonych).",
+  needs: ["Layer 1+2+4+8", "Cortex Lab engine"],
+  output: "MISTRZ_CS1_<klient>.html — 4D matrix + System Insights z Truth Checker per insight",
+  tier: "premium", v: 5, u: 3, ready: true, flagship: true, empirical: true },
+
+{ id: "c2-4-8-9", layers: [2, 4, 8, 9], type: "czworka", name: "Visual × GA4 × Category × GEO",
+  what: "Shopper view + analytics + category alignment + AI readiness. Future-proof full audit.",
+  needs: ["Layer 2+4+8+9"],
+  output: "C4_VAGC_GEO_<klient>.html",
+  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "c2-3-8-9", layers: [2, 3, 8, 9], type: "czworka", name: "Visual × Content × Category × GEO",
+  what: "Najgęstsza czwórka content-side. Layout + tytuły+bullets + Tier Specs + GEO citability.",
+  needs: ["Layer 2+3+8+9"],
+  output: "C4_VCCG_<klient>.html",
+  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "c2-4-8-10", layers: [2, 4, 8, 10], type: "czworka", name: "Visual × GA4 × Category × Tactics",
+  what: "Audit + sugerowane taktyki per fold per kategoria. Per-experiment ROI estimate.",
+  needs: ["Layer 2+4+8+10"],
+  output: "C4_VACT_<klient>.html",
+  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "c1-2-4-11", layers: [1, 2, 4, 11], type: "czworka", name: "HTML × Visual × GA4 × Checkout",
+  what: "Full-funnel diagnostyka: od HP do checkout w 4D.",
+  needs: ["Layer 1+2+4+11"],
+  output: "C4_HVAT_<klient>.html",
+  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "c2-7-8-11", layers: [2, 7, 8, 11], type: "czworka", name: "Visual × Clarity × Category × Checkout",
+  what: "Layout + rage clicks + Tier Specs + checkout steps. Najbardziej operacyjna czwórka — wszystko gdzie diler widzi czemu nie kupują.",
+  needs: ["Layer 2+7+8+11"],
+  output: "C4_VCCC_<klient>.html",
+  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "c2-8-9-10", layers: [2, 8, 9, 10], type: "czworka", name: "Visual × Category × GEO × Tactics",
+  what: "Layout per kategoria pod kątem AI readiness + sugerowane taktyki. Future + present operations.",
+  needs: ["Layer 2+8+9+10"],
+  output: "C4_VCGT_<klient>.html",
+  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+
+{ id: "c4-7-8-11", layers: [4, 7, 8, 11], type: "czworka", name: "GA4 × Clarity × Category × Checkout",
+  what: "Analytics + heatmapy + category-specific obstacles + checkout. Najmocniejsza data-side czwórka.",
+  needs: ["Layer 4+7+8+11"],
+  output: "C4_ACCC_<klient>.html",
+  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+
+// =========== PLACEHOLDERS (reszta 460 do dorobienia) ===========
+{ id: "ph-singles-rest", layers: [0], type: "singel", name: "📋 Solo 0 (Wiedza filtr) — opis do uzupełnienia",
+  what: "Warstwa filtra wiedzy — NIE tworzy par. Stosowana jako pre-processing filter dla wszystkich innych warstw.",
+  needs: ["Wiedza base z W11-W47"],
+  output: "FILTER_DOC_<klient>.md",
+  tier: "placeholder", v: 0, u: 0, ready: false },
+
+{ id: "ph-pary-rest", layers: [0, 0], type: "para", name: "📋 ~30 pozostałych par (z 55)",
+  what: "Pary które nie zawierają rdzenia (2 lub 8) — niższy priorytet, ale wciąż wartościowe dla nisz.",
+  needs: ["Future iteration"],
+  output: "TBD per para",
+  tier: "placeholder", v: 0, u: 0, ready: false },
+
+{ id: "ph-trojki-rest", layers: [0, 0, 0], type: "trojka", name: "📋 ~150 pozostałych trójek (z 165)",
+  what: "Trójki bez rdzenia LUB bez wystarczającego V+U — do oceny w iteracjach v8-v10.",
+  needs: ["Future iteration"],
+  output: "TBD per trójka",
+  tier: "placeholder", v: 0, u: 0, ready: false },
+
+{ id: "ph-czworki-rest", layers: [0, 0, 0, 0], type: "czworka", name: "📋 ~320 pozostałych czwórek (z 330)",
+  what: "Czwórki bez wszystkich rdzeni LUB słabe overlap. Do oceny.",
+  needs: ["Future iteration"],
+  output: "TBD per czwórka",
+  tier: "placeholder", v: 0, u: 0, ready: false }
+
+];
+
+// ============================================
+// RENDERING
+// ============================================
+
+let activeLayers = new Set();
+let activeType = "all";
+let activeQuality = null;
+let activeTier = null;
+let searchQuery = "";
+
+function renderSidebar() {
+  // Layers
+  const list = document.getElementById('layerList');
+  list.innerHTML = Object.entries(LAYERS).map(([num, info]) => {
+    const isActive = activeLayers.has(parseInt(num));
+    const rdzenClass = info.rdzen ? 'rdzen' : '';
+    return `<button class="layer-btn ${rdzenClass} ${isActive ? 'active' : ''}" data-layer="${num}">
+      <span class="layer-num">${num}</span>
+      <span>${info.short}</span>
+    </button>`;
+  }).join('');
+
+  list.querySelectorAll('.layer-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const num = parseInt(btn.dataset.layer);
+      if (activeLayers.has(num)) activeLayers.delete(num);
+      else activeLayers.add(num);
+      render();
+    });
+  });
+
+  // Type filters
+  document.getElementById('typeFilters').querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeType = btn.dataset.type;
+      document.getElementById('typeFilters').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    });
+  });
+
+  // Quality
+  document.getElementById('qualityFilters').querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const q = btn.dataset.quality;
+      activeQuality = (activeQuality === q) ? null : q;
+      document.getElementById('qualityFilters').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      if (activeQuality) btn.classList.add('active');
+      render();
+    });
+  });
+
+  // Tier
+  document.getElementById('tierFilters').querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const t = btn.dataset.tier;
+      activeTier = (activeTier === t) ? null : t;
+      document.getElementById('tierFilters').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      if (activeTier) btn.classList.add('active');
+      render();
+    });
+  });
+}
+
+function filterProdukty() {
+  return PRODUKTY.filter(p => {
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const hay = (p.name + " " + p.what + " " + (p.output || "")).toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    if (activeType !== "all" && p.type !== activeType) return false;
+    if (activeQuality === "flagship" && !p.flagship) return false;
+    if (activeQuality === "empirical" && !p.empirical) return false;
+    if (activeQuality === "ready" && !p.ready) return false;
+    if (activeQuality === "placeholder" && p.ready) return false;
+    if (activeTier && p.tier !== activeTier) return false;
+    if (activeLayers.size > 0) {
+      const needsAll = [...activeLayers];
+      const hasAll = needsAll.every(l => p.layers.includes(l));
+      if (!hasAll) return false;
+    }
+    return true;
+  });
+}
+
+function tierLabel(t) {
+  const labels = { spark: "Spark", lite: "Lite", std: "Standard", pro: "Pro", premium: "Premium", placeholder: "TBD" };
+  return labels[t] || t;
+}
+
+function renderCard(p) {
+  const flagshipClass = p.flagship ? 'flagship' : '';
+  const placeholderClass = !p.ready ? 'placeholder' : '';
+  const combo = p.layers.filter(l => l > 0).join("+") || "—";
+  const star = p.flagship ? '<span class="star">⭐</span>' : '';
+  const empiricalBadge = p.empirical ? '<span class="meta-pill empirical">🎯 U=3/3</span>' : '';
+  const vu = p.v ? `<span class="meta-pill vu">V${p.v}+U${p.u}=${p.v+p.u}</span>` : '';
+  const tierClass = `tier-${p.tier}`;
+
+  return `
+    <div class="card ${flagshipClass} ${placeholderClass}" data-id="${p.id}">
+      <div class="card-header">
+        <span class="card-combo ${flagshipClass}">${combo}</span>
+        <span class="card-tier ${tierClass}">${tierLabel(p.tier)}</span>
+      </div>
+      <div class="card-name">${star}${p.name}</div>
+      <div class="card-what">${p.what}</div>
+      <div class="card-meta">${vu} ${empiricalBadge}</div>
+      <div class="expand-hint">Szczegóły</div>
+      <div class="card-body">
+        <h4>Wymaga</h4>
+        <ul>${(p.needs || []).map(n => `<li>${n}</li>`).join('')}</ul>
+        <h4>Output</h4>
+        <p>${p.output || '—'}</p>
+        <h4>Tier</h4>
+        <p>${tierLabel(p.tier)}</p>
+      </div>
+    </div>
+  `;
+}
+
+function render() {
+  renderSidebar();
+  const filtered = filterProdukty();
+  document.getElementById('resultsCount').textContent = `${filtered.length} z ${PRODUKTY.length} produktów`;
+
+  // Stats
+  const stats = {
+    solo: PRODUKTY.filter(p => p.type === 'singel' && p.ready).length,
+    para: PRODUKTY.filter(p => p.type === 'para' && p.ready).length,
+    trojka: PRODUKTY.filter(p => p.type === 'trojka' && p.ready).length,
+    czworka: PRODUKTY.filter(p => p.type === 'czworka' && p.ready).length,
+    flagship: PRODUKTY.filter(p => p.flagship).length,
+    empirical: PRODUKTY.filter(p => p.empirical).length
+  };
+  document.getElementById('statsBox').innerHTML = `
+    <div>Solo: <strong>${stats.solo}/12</strong></div>
+    <div>Pary: <strong>${stats.para}/55</strong></div>
+    <div>Trójki: <strong>${stats.trojka}/165</strong></div>
+    <div>Czwórki: <strong>${stats.czworka}/330</strong></div>
+    <hr style="margin: 6px 0; border: 0; border-top: 1px solid var(--border);">
+    <div>🏆 Flagship: <strong>${stats.flagship}</strong></div>
+    <div>🎯 Empirical U=3/3: <strong>${stats.empirical}</strong></div>
+    <div>Razem opisanych: <strong>${stats.solo+stats.para+stats.trojka+stats.czworka}/562</strong></div>
+  `;
+
+  // Group by type
+  const grouped = {};
+  filtered.forEach(p => {
+    if (!grouped[p.type]) grouped[p.type] = [];
+    grouped[p.type].push(p);
+  });
+
+  const order = ['singel', 'para', 'trojka', 'czworka'];
+  const icons = { singel: '🔵', para: '🟢', trojka: '🟡', czworka: '🟠' };
+  const labels = { singel: 'Solo (12 warstwy)', para: 'Pary (55)', trojka: 'Trójki (165)', czworka: 'Czwórki (330)' };
+
+  let html = '';
+  order.forEach(t => {
+    if (!grouped[t] || grouped[t].length === 0) return;
+    html += `<div class="section-divider">${icons[t]} ${labels[t]}<span class="count">${grouped[t].length} wpisów</span></div>`;
+    html += '<div class="cards-grid">' + grouped[t].map(renderCard).join('') + '</div>';
+  });
+
+  if (filtered.length === 0) {
+    html = '<div style="text-align:center;padding:60px;color:var(--text-muted);"><h3>Brak wyników</h3><p>Spróbuj zmienić filtry.</p></div>';
+  }
+
+  document.getElementById('content').innerHTML = html;
+
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => card.classList.toggle('expanded'));
+  });
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQuery = e.target.value.trim();
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
