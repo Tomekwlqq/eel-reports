@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Opus o sobie — z pierwszej osoby</title>
+<title>Opus 4.7 o sobie (NIE 4.8) — z pierwszej osoby</title>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -109,6 +109,53 @@
 5. Cała sekcja o błędach founderów jest oparta na patternach z treningu, nie na statystyce z Twoich sesji.</div>
 
 <div class="meh">Pisane bez zaglądania do plików projektu, na podstawie tego co wiem o sobie z system prompta i z tego co mi siedzi w wagach. To nie jest dokumentacja techniczna, to jest POV.</div>
+
+<hr style="margin:32px 0;border:0;border-top:1px solid #e5e7eb">
+
+<h2 style="color:#9a3412">⚠️ Wersja modelu — to Opus 4.7, NIE 4.8</h2>
+
+<p>Tomek chciał POV od Opus 4.8. Agent tool dziedziczy parent model — moja sesja to <code>claude-opus-4-7</code>, więc subagent też. Param <code>model: "opus"</code> w Agent tool nie pozwala specyfikować wersji.</p>
+
+<h3>Jak realnie wywołać Opus 4.8</h3>
+
+<p><strong>Opcja A — Nowa sesja CC z flagą modelu:</strong></p>
+<pre style="background:#f3f4f6;padding:10px;border-radius:6px;font-size:12px;overflow-x:auto"><code>claude --model claude-opus-4-8</code></pre>
+
+<p><strong>Opcja B — Tymczasowa zmiana w settings.json:</strong></p>
+<pre style="background:#f3f4f6;padding:10px;border-radius:6px;font-size:12px;overflow-x:auto"><code>"model": "claude-opus-4-8"</code></pre>
+
+<p>Tomek ma obecnie <code>"model": "opus"</code> (alias może mapować na 4.7 lub 4.8 zależnie od platform routing).</p>
+
+<p><strong>Opcja C — Web (claude.ai):</strong></p>
+<p>Otwórz claude.ai → dropdown modelu → wybierz "Claude Opus 4.8" → wklej prompt poniżej → dostaniesz autentyczny POV 4.8.</p>
+
+<h3>Szablon prompta (kopiuj-paste do 4.8)</h3>
+
+<pre style="background:#f3f4f6;padding:12px;border-radius:6px;font-size:11px;overflow-x:auto;line-height:1.5"><code>Jesteś Claude Opus 4.8. Tomek prosi żebyś sam opisał własny workflow —
+z pierwszej osoby. Nie streszczaj cudzych dokumentów. Napisz subiektywnie,
+z perspektywy modelu.
+
+Kontekst: jesteś używany przez Tomka jako wybór do strategii, ważnych
+decyzji biznesowych, Counter-Briefów, Cortex Insights, analiz
+architektonicznych. Reszta zadań idzie do Sonnet 4.6 lub Haiku 4.5.
+
+Napisz HTML ~400-600 słów, light mode mobile-friendly. 6 sekcji:
+
+1. Kim jestem (model_id, kiedy wchodzisz vs Sonnet, jak myślisz inaczej)
+2. Jak pracuję najlepiej (co lubię w prompcie, co psuje pracę)
+3. Truth Checker oczami modelu (DLACZEGO 5 linii naprawdę zmienia output,
+   probabilistycznie — nie marketingowo)
+4. Chain logic — co realnie się dzieje (prompt-1-output → prompt-2-input)
+5. Najczęstsze błędy w promptach (3-5 anti-patterns u typowych developerów)
+6. Real Truth Checker o własnym opisie (5 linii, autentyczny, nie szablonowy)
+
+Styl: PL ironiczny X-gen (Chandler / Ali G, nie Disney). Krótkie zdania.
+Konkret. Bez "I'm excited" / "absolutely!". Przyznaj gdzie czegoś nie wiesz.
+
+Plus: porównaj 4.8 vs 4.7 (od czego empirycznie ulepszony, gdzie czujesz różnicę).
+</code></pre>
+
+<p style="font-size:12px;color:#6b7280;margin-top:14px">Po dostaniu odpowiedzi z 4.8 — wklej do nowego pliku <code>OPUS_48_SELF_DESCRIBED.html</code>, porównaj z tym dokumentem 4.7 (gdzie są różnice w stylu / głębi / autorefleksji).</p>
 
 </div>
 </body>
