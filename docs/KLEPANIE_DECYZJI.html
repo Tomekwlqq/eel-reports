@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listy do klepnięcia — sesja 30.05 noc²</title>
+<style>
+:root {
+  --bg: #fafafa; --bg-card: #fff;
+  --text: #1f2937; --muted: #6b7280;
+  --border: #e5e7eb; --accent: #1e3a8a; --accent-bg: #dbeafe;
+  --good: #10b981; --warn: #f59e0b; --bad: #ef4444; --opus: #7c3aed;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-text-size-adjust: 100%; }
+html { font-size: 16px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: 15px; line-height: 1.55; color: var(--text); background: var(--bg);
+  padding: 14px 14px 60px;
+}
+.container { max-width: 880px; margin: 0 auto; }
+h1 { font-size: 22px; color: var(--accent); margin-bottom: 4px; line-height: 1.25; }
+.subtitle { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+
+h2 {
+  font-size: 17px; color: var(--accent); margin: 28px 0 10px;
+  padding-bottom: 6px; border-bottom: 2px solid var(--accent-bg);
+}
+h3 { font-size: 14px; color: var(--text); margin: 16px 0 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.section-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px; margin-bottom: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; background: var(--bg-card); }
+th, td { padding: 7px 9px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+th { background: var(--accent-bg); font-weight: 700; color: var(--accent); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px; }
+tr:nth-child(even) { background: #fafafa; }
+.row-fixed { background: #f0fdf4 !important; }
+.row-pending { background: #fffbeb !important; }
+.row-blocker { background: #fef2f2 !important; }
+.code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px; background: #f3f4f6; padding: 1px 5px; border-radius: 3px; }
+
+.checkbox-group { display: flex; gap: 6px; font-size: 11px; }
+.checkbox-group label { background: var(--bg-card); border: 1px solid var(--border); padding: 2px 8px; border-radius: 12px; cursor: pointer; }
+.checkbox-group input[type="checkbox"] { vertical-align: middle; margin-right: 3px; }
+
+.legend { background: #f9fafb; border-left: 4px solid var(--accent); padding: 8px 12px; font-size: 13px; color: var(--muted); margin: 10px 0; }
+.legend strong { color: var(--text); }
+
+.priority-tag { font-size: 10px; padding: 2px 6px; border-radius: 8px; font-weight: 700; letter-spacing: 0.3px; }
+.priority-must { background: var(--bad); color: white; }
+.priority-high { background: var(--warn); color: white; }
+.priority-mid { background: #3b82f6; color: white; }
+.priority-low { background: #94a3b8; color: white; }
+.priority-premium { background: var(--opus); color: white; }
+
+.method-engine { background: #ecfeff; color: #155e75; padding: 1px 5px; border-radius: 3px; font-size: 10px; }
+.method-editorial { background: #fef3c7; color: #78350f; padding: 1px 5px; border-radius: 3px; font-size: 10px; font-weight: 700; }
+.method-auto { background: #d1fae5; color: #065f46; padding: 1px 5px; border-radius: 3px; font-size: 10px; }
+.method-semi { background: #fed7aa; color: #7c2d12; padding: 1px 5px; border-radius: 3px; font-size: 10px; }
+.method-manual { background: #e0e7ff; color: #3730a3; padding: 1px 5px; border-radius: 3px; font-size: 10px; }
+.method-ai { background: #fce7f3; color: #831843; padding: 1px 5px; border-radius: 3px; font-size: 10px; }
+
+.title-chip { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; margin: 2px 4px 2px 0; border: 1px solid rgba(0,0,0,0.05); }
+.note { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 6px; }
+
+.toc { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 18px; }
+.toc a { display: block; padding: 4px 0; font-size: 13px; color: var(--accent); text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+.toc a::before { content: "↓ "; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🗳 Listy do klepnięcia</h1>
+<p class="subtitle">Sesja 30.05.2026 noc² · 3 listy decyzji · klep ✅/❌/➡️ per row</p>
+
+<div class="toc">
+  <a href="#sec1">1. Bugi MVP P0+P1 — status + decyzja</a>
+  <a href="#sec2">2. Content checklist — 83 items × klep scope</a>
+  <a href="#sec3">3. Model tytułu PDP — 9 chipów do potwierdzenia</a>
+  <a href="#sec4">4. Propozycje P-x.y — kolejność priorytetów</a>
+  <a href="#sec5">5. Pytania strategiczne — klep decyzję</a>
+</div>
+
+<!-- ════════════════════ SEKCJA 1: BUGI ════════════════════ -->
+<h2 id="sec1">1. Bugi MVP P0+P1 — status + decyzja</h2>
+
+<div class="legend">
+  <strong>Legenda:</strong> 🟢 fixed (zweryfikowane) · 🟡 częściowo fixed · 🔴 nie fixed (do dyskusji) · ➡️ ack / przejdź dalej · 🔄 jeszcze raz przetestuj
+</div>
+
+<div class="section-card">
+  <table>
+    <tr><th width="5%">#</th><th>Bug</th><th>Status</th><th>Co naprawione</th><th width="14%">Klep</th></tr>
+
+    <tr class="row-fixed">
+      <td>B1</td>
+      <td><strong>URL resolution</strong>: Hebe PDP → kategoria (a nie produkt), listing → YouTube</td>
+      <td>🟢 fixed v2</td>
+      <td>same-origin filter + Hebe pattern <code class="code">-NUMBER.html</code> + multi-segment listing slug</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">🔄</label></div></td>
+    </tr>
+
+    <tr class="row-fixed">
+      <td>B2</td>
+      <td><strong>www redirect</strong>: hebe.pl → www.hebe.pl, moje skrypty traciły origin match</td>
+      <td>🟢 fixed</td>
+      <td>location.origin runtime + www strip cross-side w resolve_view_url</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">🔄</label></div></td>
+    </tr>
+
+    <tr class="row-fixed">
+      <td>B3</td>
+      <td><strong>domain_slug inconsistency</strong>: hebe.pl_audit_screenshots vs hebe_pl_audit_screenshots cross-skrypty</td>
+      <td>🟢 fixed</td>
+      <td>shared <code class="code">_eel_pipeline_helpers.py</code> + spójny <code class="code">domain_slug()</code> wszędzie</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">🔄</label></div></td>
+    </tr>
+
+    <tr class="row-fixed">
+      <td>B4</td>
+      <td><strong>Pseudo-CTA severity calibration</strong>: 600 high + 0 med + 0 low (wszystko 'high' bez sensu)</td>
+      <td>🟢 fixed</td>
+      <td>Combo logic: R1 alone = low, R1+R2 lub R1+R3 = high, R2 lub R3 alone = medium. Hebe v3: 0 high / 11 medium / 589 low (sensowne).</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">🔄</label></div></td>
+    </tr>
+
+    <tr class="row-fixed">
+      <td>B5</td>
+      <td><strong>Title "www.hebe.pl" hydration</strong>: 2/3 PDPs z generic title</td>
+      <td>🟢 fixed</td>
+      <td>wait_for_selector('h1') + scroll dół/góra dla lazy load + fallback <code class="code">document.title</code> minus "| Brand"</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">🔄</label></div></td>
+    </tr>
+
+    <tr class="row-fixed">
+      <td>B6</td>
+      <td><strong>Images count = 0</strong> dla wszystkich Hebe PDPs (selector nie matchował)</td>
+      <td>🟢 fixed</td>
+      <td>Dorzucone selektory: <code class="code">[class*="thumb"] img</code>, <code class="code">.swiper-slide img</code>. Hebe v3: 95-183 per PDP.</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">🔄</label></div></td>
+    </tr>
+
+    <tr class="row-fixed">
+      <td>B7</td>
+      <td><strong>P8 content_consistency klucze</strong>: używał 'images' / 'bullets' as list, faktycznie 'images_count' / 'bullets.count' (dict)</td>
+      <td>🟢 fixed</td>
+      <td>Helpery <code class="code">_bullets_count()</code>, <code class="code">_meta_desc()</code>, fallback na różne formaty (str/dict/list)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">🔄</label></div></td>
+    </tr>
+
+    <tr class="row-fixed">
+      <td>B8</td>
+      <td><strong>Blog URL resolver false-positive</strong>: łapał <code class="code">/artykuly-higieniczne-waciki/</code> jako blog</td>
+      <td>🟢 fixed</td>
+      <td>Strict regex: blog musi być pierwszym segmentem lub mieć sub-path <code class="code">/blog/&lt;slug&gt;</code></td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">🔄</label></div></td>
+    </tr>
+
+    <tr class="row-pending">
+      <td>B9</td>
+      <td><strong>Bullets vs ingredients separation</strong>: na Hebe wszystkie PDPs zwracały bullets=20 (cap) bo selectory łapały ingredients (48 składników)</td>
+      <td>🟡 partial</td>
+      <td>Wyłączone <code class="code">[class*="ingredient"]</code> z bullets, dorzucone osobne pola <code class="code">ingredients</code> i <code class="code">specifications</code>. ALE Hebe v3 retest nadal pokazuje bullets=20 (cap), oznacza że selectory <code class="code">[class*="features"]</code> łapią inne elementy. Wymaga deep dive co konkretnie matchuje na Hebe.</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">🔄 deep dive</label><label><input type="checkbox">➡️ ack</label></div></td>
+    </tr>
+
+    <tr class="row-pending">
+      <td>B10</td>
+      <td><strong>P6 sections — generic_carousel 30/61</strong>: prawie połowa sekcji to generic (nie dopasowane do label'a w sections_dictionary)</td>
+      <td>🟡 partial</td>
+      <td>17 typów w dictionary; trzeba dorzucić labels widziane na Hebe (np "Polecane", "Dla Ciebie", "Hit tygodnia") albo zaakceptować że 47% match rate = OK dla v1 (baza rośnie z każdym klientem)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">📥 dorzuć labels</label><label><input type="checkbox">➡️ ack</label></div></td>
+    </tr>
+
+    <tr class="row-pending">
+      <td>B11</td>
+      <td><strong>P7 CTA — 16.9% unknown actions</strong>: 138 z 818 CTAs nie zmapowane do action_verbs lexicon</td>
+      <td>🟡 partial</td>
+      <td>11 typów action verbs; brakuje branża-specific (cosmetic: "Wypróbuj sample", "Stwórz routine"). Baza rośnie.</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">📥 dorzuć</label><label><input type="checkbox">➡️ ack</label></div></td>
+    </tr>
+
+    <tr class="row-pending">
+      <td>B12</td>
+      <td><strong>P6 generic carousel labels</strong>: 30 sekcji bez sensownego label'a (heading missing lub generic "Polecamy")</td>
+      <td>🟡 normal</td>
+      <td>To może być real Hebe gap — nie nasz bug. Wymaga decyzji: flagujemy klientowi jako "improve labels" czy traktujemy jako baseline?</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">⚠️ flag</label><label><input type="checkbox">➡️ baseline</label></div></td>
+    </tr>
+  </table>
+</div>
+
+<!-- ════════════════════ SEKCJA 2: CONTENT CHECKLIST ════════════════════ -->
+<h2 id="sec2">2. Content Checklist — 83 items × klep scope</h2>
+
+<div class="legend">
+  <strong>Legenda detection_method:</strong>
+  <span class="method-auto">auto</span> = auto-detected w skryptach ·
+  <span class="method-semi">semi_auto</span> = częściowo auto, wymaga manual check ·
+  <span class="method-manual">manual</span> = wymaga ręcznej oceny audytora ·
+  <span class="method-ai">AI</span> = wymaga AI image classification ·
+  <span class="method-editorial">editorial ⭐</span> = NIE z silnika sklepu (content team)<br>
+  <strong>Klep per item:</strong> ✅ keep · ❌ wyrzuć · ✏️ rename · 📥 dorzuć opcję
+</div>
+
+<h3 id="sec2-1">🛒 Listing Tile (kafelek) — 23 items</h3>
+<div class="section-card">
+  <h3 style="margin-top: 0">Graphic elements (11)</h3>
+  <table>
+    <tr><th width="4%">#</th><th width="28%">Element</th><th width="14%">Method</th><th>Opis</th><th width="14%">Klep</th></tr>
+    <tr><td>1</td><td>Packshot główny</td><td><span class="method-auto">auto</span></td><td>White BG główne zdjęcie</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>2</td><td>Enhanced/power packshot</td><td><span class="method-manual">manual+AI</span></td><td>Packshot z ramkami/ikonami/badges (premium signal)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>3</td><td>Secondary image on hover</td><td><span class="method-auto">auto</span></td><td>2. zdjęcie na hover (inny kąt / użycie)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>4</td><td>Video packshot</td><td><span class="method-auto">auto</span></td><td>Auto-play / loop video na kafelku</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>5</td><td>3D / 360° packshot</td><td><span class="method-auto">auto</span></td><td>Interactive 3D na kafelku (rzadkie)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>6</td><td>Secondary images strip</td><td><span class="method-auto">auto</span></td><td>Pasek thumbnails bez hover</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>7</td><td>Color/variant swatches</td><td><span class="method-auto">auto</span></td><td>Kropki kolorów / wariantów</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>8</td><td>Badge wizualny (Hit/Nowość/Promo)</td><td><span class="method-auto">auto</span></td><td>Ribbon/label nad packshotem</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>9</td><td>Quick view modal trigger</td><td><span class="method-auto">auto</span></td><td>Modal preview bez wchodzenia na PDP</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>10</td><td>Wishlist heart icon</td><td><span class="method-auto">auto</span></td><td>Serduszko (favorites)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>11</td><td>Compare icon</td><td><span class="method-auto">auto</span></td><td>Dodaj do porównywarki (electronics/AGD)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+  </table>
+
+  <h3>Textual elements (12)</h3>
+  <table>
+    <tr><th width="4%">#</th><th width="28%">Element</th><th width="14%">Method</th><th>Opis</th><th width="14%">Klep</th></tr>
+    <tr><td>12</td><td>Tytuł pełny</td><td><span class="method-auto">auto</span></td><td>Pełny tytuł produktu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>13</td><td>Tytuł skrócony</td><td><span class="method-semi">semi</span></td><td>Skrócony dla mobile / gdy &gt;60 chars</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>14</td><td>Krótki opis (1 zdanie)</td><td><span class="method-auto">auto</span></td><td>1-2 zdania pod tytułem (yourkaya.pl style)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>15</td><td>Cena główna</td><td><span class="method-auto">auto</span></td><td>Cena widoczna</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>16</td><td>Cena przekreślona (była)</td><td><span class="method-auto">auto</span></td><td>Cena regularna przekreślona</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>17</td><td>Procent zniżki</td><td><span class="method-auto">auto</span></td><td>-20% / -50% label</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>18</td><td>Kwota oszczędności</td><td><span class="method-auto">auto</span></td><td>"Oszczędzasz X zł" (lepsze dla high-price)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>19</td><td>Gwiazdki ocen</td><td><span class="method-auto">auto</span></td><td>4.8 ★</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>20</td><td>Liczba recenzji</td><td><span class="method-auto">auto</span></td><td>(127 ocen) obok gwiazdek</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>21</td><td>Status dostępności</td><td><span class="method-auto">auto</span></td><td>Dostępny / Ostatnie sztuki / Zarezerwuj</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>22</td><td>Delivery info inline</td><td><span class="method-auto">auto</span></td><td>Dostawa pojutrze / Darmowa wysyłka</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>23</td><td>Add to cart direct</td><td><span class="method-auto">auto</span></td><td>ATC button z kafelka (Amazon style)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+  </table>
+</div>
+
+<h3 id="sec2-2">📄 PDP Content — 60 items (7 podsekcji)</h3>
+
+<div class="section-card">
+  <h3 style="margin-top: 0">Graphic elements (15)</h3>
+  <table>
+    <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
+    <tr><td>24</td><td>Key Visual (KV) — hero</td><td><span class="method-auto">auto</span></td><td>Główne zoomable zdjęcie</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>25</td><td><strong>Secondary images (galeria)</strong></td><td><span class="method-auto">auto</span></td><td>Sub-opcje: count, square ratio, includes video, gallery visible below main, navigation type (dots/thumbnails/scroll/arrows), mobile vs desktop diff</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>26</td><td>Lifestyle pictures (in-use, in-context)</td><td><span class="method-ai">AI</span></td><td>Model/scena/environment</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>27</td><td>Product features pictures (cechy z ikonami)</td><td><span class="method-ai">AI</span></td><td>Zdjęcia z naniesionymi labelami</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>28</td><td>Product in use pictures (how-to-use)</td><td><span class="method-ai">AI</span></td><td>Sekwencja krok po kroku</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>29</td><td>Infografika cech</td><td><span class="method-ai">AI</span></td><td>Wizualne podsumowanie cech</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>30</td><td>Size chart</td><td><span class="method-auto">auto</span></td><td>Tabela rozmiarów (apparel/obuwie)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>31</td><td>Dimensions / scale image</td><td><span class="method-ai">AI</span></td><td>Wymiary obok produktu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>32</td><td>Before/after image</td><td><span class="method-ai">AI</span></td><td>Cosmetic/treatment dowód</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>33</td><td>Comparison chart (vs konkurencja / warianty)</td><td><span class="method-auto">auto</span></td><td>Tabela porównawcza</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>34</td><td>Additional video demo</td><td><span class="method-auto">auto</span></td><td>Video produktu w użyciu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>35</td><td>Social proof video (reviews/testimonial)</td><td><span class="method-semi">semi</span></td><td>Video reviews / influencer</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>36</td><td>UGC video (User-Generated Content)</td><td><span class="method-semi">semi</span></td><td>Video od klientów (IG, TikTok)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>37</td><td>3D / 360° rotation viewer</td><td><span class="method-auto">auto</span></td><td>Interactive 3D model</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>38</td><td>AR / virtual try-on</td><td><span class="method-auto">auto</span></td><td>Augmented Reality (makeup/glasses/furniture)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+  </table>
+
+  <h3>Textual elements (13)</h3>
+  <table>
+    <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
+    <tr><td>39</td><td>Tytuł (z modelem dekompozycji)</td><td><span class="method-auto">auto</span></td><td>9 chipów (sek 3)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>40</td><td>Lead / krótki opis (1-2 zdania)</td><td><span class="method-auto">auto</span></td><td>Pod tytułem (claim, USP)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>41</td><td>Bullets / key features (3-8)</td><td><span class="method-auto">auto</span></td><td>Sub-opcje: count, formula split (feature/feature+benefit/full triad)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>42</td><td>FAQ section</td><td><span class="method-auto">auto</span></td><td>Sub: count, FAQPage schema, from real CS</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>43</td><td>Specifications table (Tier 1/2/3)</td><td><span class="method-auto">auto</span></td><td>Sub: tier 1/2/3 alignment, units consistent</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>44</td><td>Ingredients / composition list (skład)</td><td><span class="method-auto">auto</span></td><td>NIE bullets — osobne pole (cosmetic/food/supplements)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>45</td><td>How it works (opis działania)</td><td><span class="method-semi">semi</span></td><td>Mechanism / active ingredients</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>46</td><td>How to use (jak używać)</td><td><span class="method-semi">semi</span></td><td>Instrukcja krok po kroku</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>47</td><td>Long description (opis produktu)</td><td><span class="method-auto">auto</span></td><td>3+ akapity (Cartylabs 2026 min)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>48</td><td>Brand story / storyline</td><td><span class="method-manual">manual</span></td><td>Krótka historia marki</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>49</td><td>Size & fit text (apparel)</td><td><span class="method-auto">auto</span></td><td>"Runs small", model measurements</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>50</td><td>Warnings / disclaimers</td><td><span class="method-auto">auto</span></td><td>Chemiczne, alergiczne, age-restricted</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>51</td><td>Shipping & returns info inline</td><td><span class="method-auto">auto</span></td><td>Bezpośrednio na PDP</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+  </table>
+
+  <h3>Social proof (6)</h3>
+  <table>
+    <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
+    <tr><td>52</td><td>Reviews block (full, z foto)</td><td><span class="method-auto">auto</span></td><td>Sub: count_shown, with_photos, filter/sort, verified badge</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>53</td><td>Aggregate rating summary</td><td><span class="method-auto">auto</span></td><td>4.8 ★ 1247 + breakdown 5/4/3/2/1</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>54</td><td>Trust badges (płatności, certyfikaty)</td><td><span class="method-auto">auto</span></td><td>Logos + dermatologically tested itp.</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>55</td><td>Money-back guarantee badge</td><td><span class="method-auto">auto</span></td><td>30/60/90 days</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>56</td><td>Press mentions / "As seen in"</td><td><span class="method-manual">manual</span></td><td>Logos magazynów/portali</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>57</td><td>Expert endorsement</td><td><span class="method-manual">manual</span></td><td>Polecane przez specjalistę (foto + cytat)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+  </table>
+
+  <h3>Conversion elements (7)</h3>
+  <table>
+    <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
+    <tr><td>58</td><td>Add to cart (main CTA)</td><td><span class="method-auto">auto</span></td><td>Primary button</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>59</td><td>Sticky ATC bar (mobile)</td><td><span class="method-auto">auto</span></td><td>Sticky bottom (+3-7% mobile ATC, VWO 2026)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>60</td><td>Buy Now / Express checkout</td><td><span class="method-auto">auto</span></td><td>Apple Pay / Google Pay / PayPal Express</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>61</td><td>Quantity selector</td><td><span class="method-auto">auto</span></td><td>+ / - lub dropdown</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>62</td><td>Variant selector (color/size/etc.)</td><td><span class="method-auto">auto</span></td><td>Wybór wariantu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>63</td><td>Subscribe & save (auto-replenishment)</td><td><span class="method-auto">auto</span></td><td>Amazon style, dla consumables</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>64</td><td>Installment payment (Klarna/Twisto)</td><td><span class="method-auto">auto</span></td><td>Płatność ratalna widoczna na PDP</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+  </table>
+
+  <h3>Personalization (4)</h3>
+  <table>
+    <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
+    <tr><td>65</td><td>Recently viewed</td><td><span class="method-auto">auto</span></td><td>Z silnika sklepu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>66</td><td>Personalized recommendations</td><td><span class="method-auto">auto</span></td><td>ML-driven (z silnika)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>67</td><td>Cross-sell ("Pasuje do" — auto)</td><td><span class="method-auto">auto</span></td><td>Z silnika sklepu (frequently bought together)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>68</td><td>Related products (same category)</td><td><span class="method-auto">auto</span></td><td>Z silnika</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+  </table>
+
+  <h3>⭐ Editorial / Curated Content (12) — NIE z silnika sklepu</h3>
+  <table>
+    <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
+    <tr><td>69</td><td>Comparison table — warianty produktu</td><td><span class="method-editorial">editorial</span></td><td>Tabela porównująca warianty TEGO SAMEGO produktu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>70</td><td>Comparison table — vs konkurencja</td><td><span class="method-editorial">editorial</span></td><td>"Why us vs them" (legal-sensitive)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>71</td><td>Product line presentation</td><td><span class="method-editorial">editorial</span></td><td>Cała linia marki — editorial showcase</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>72</td><td>Complementary products (ręcznie wybrane)</td><td><span class="method-editorial">editorial</span></td><td>Curated z powodem dlaczego pasują</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>73</td><td>Complete routine / starter kit</td><td><span class="method-editorial">editorial</span></td><td>"Twoja codzienna rutyna w 3 krokach"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>74</td><td>Use case scenarios</td><td><span class="method-editorial">editorial</span></td><td>"Sprawdzi się gdy..." / "Idealny do..."</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>75</td><td>Editor's pick z reason</td><td><span class="method-editorial">editorial</span></td><td>"Wybór editora — dlaczego ten produkt"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>76</td><td>Ingredient deep-dive (per kluczowy)</td><td><span class="method-editorial">editorial</span></td><td>"Niacynamid — co to, jak działa, dla kogo"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>77</td><td>Myth busting (prawda vs mit)</td><td><span class="method-editorial">editorial</span></td><td>"Mity vs fakty o SPF"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>78</td><td>Behind the brand</td><td><span class="method-editorial">editorial</span></td><td>Manifest, kim są, dlaczego ten produkt powstał</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>79</td><td>Sustainability credentials</td><td><span class="method-editorial">editorial</span></td><td>Eco/Vegan/Cruelty-free + wyjaśnienie</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>80</td><td>Scientific studies links</td><td><span class="method-editorial">editorial</span></td><td>Real peer-reviewed studies</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+  </table>
+
+  <h3>Interactive 2026 (3)</h3>
+  <table>
+    <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
+    <tr><td>81</td><td>AI chatbot assistant</td><td><span class="method-auto">auto</span></td><td>"Czy ten krem mi pasuje?" z analizą</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>82</td><td>Live chat</td><td><span class="method-auto">auto</span></td><td>Human support</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>83</td><td>Product configurator</td><td><span class="method-auto">auto</span></td><td>Gravur, custom engraving, personalized print</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+  </table>
+</div>
+
+<p class="note">💡 Items oznaczone <span class="method-editorial">editorial ⭐</span> to NIE z silnika sklepu — wymagają content teamu (premium signal, wyższy effort, większy differentiator).</p>
+
+<!-- ════════════════════ SEKCJA 3: MODEL TYTUŁU ════════════════════ -->
+<h2 id="sec3">3. Model tytułu PDP — 9 chipów do potwierdzenia</h2>
+
+<div class="section-card">
+  <p style="margin-bottom: 14px; font-size: 13px; color: var(--muted);">Każdy element na innym tle (color-coded chip). 7 podstawowych + 2 opcjonalne (audience/sezon). Tomek wskazał (sesja 30.05): "model tytułu chujowy, brzydki wizualnie — zrobiłbym każdy element na innym tle".</p>
+
+  <div style="background: #fafafa; padding: 16px; border-radius: 8px; margin-bottom: 14px;">
+    <p style="font-size: 11px; color: var(--muted); margin-bottom: 8px;">PRZYKŁAD złożenia (z Hebe PDP1):</p>
+    <span class="title-chip" style="background: #fef3c7;">Krem przeciwsłoneczny</span>
+    <span class="title-chip" style="background: #dbeafe;">z SPF50+</span>
+    <span class="title-chip" style="background: #fce7f3;">do twarzy</span>
+    <span class="title-chip" style="background: #dcfce7;">ochrona UVA/UVB</span>
+    <span class="title-chip" style="background: #f3e8ff;">Beauty of Joseon</span>
+    <span class="title-chip" style="background: #fee2e2;">Relief Sun: Rice + Probiotics</span>
+    <span class="title-chip" style="background: #f1f5f9;">50 ml</span>
+  </div>
+
+  <table>
+    <tr><th width="6%">#</th><th>Chip</th><th>Element</th><th>Required</th><th>Przykład</th><th width="14%">Klep</th></tr>
+    <tr><td>1</td><td><span class="title-chip" style="background: #fef3c7;">Kategoria</span></td><td>Kategoria/typ produktu</td><td><span class="priority-tag priority-must">MUST</span></td><td>"Krem przeciwsłoneczny"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>2</td><td><span class="title-chip" style="background: #dbeafe;">Materiał/Tech</span></td><td>Materiał lub technologia</td><td><span class="priority-tag priority-mid">CATEGORY</span></td><td>"z SPF50+", "z nano szkła"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>3</td><td><span class="title-chip" style="background: #fce7f3;">Przeznaczenie</span></td><td>Dla czego</td><td><span class="priority-tag priority-must">MUST</span></td><td>"do twarzy", "do paznokci"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>4</td><td><span class="title-chip" style="background: #dcfce7;">Benefit</span></td><td>Główny benefit</td><td><span class="priority-tag priority-low">OPTIONAL</span></td><td>"ochrona UVA/UVB"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>5</td><td><span class="title-chip" style="background: #f3e8ff;">Marka</span></td><td>Brand</td><td><span class="priority-tag priority-must">MUST</span></td><td>"Beauty of Joseon", "GLOV"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>6</td><td><span class="title-chip" style="background: #fee2e2;">Wariant</span></td><td>Wariant produktu</td><td><span class="priority-tag priority-mid">VARIANTS_DEP</span></td><td>"Relief Sun: Rice"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>7</td><td><span class="title-chip" style="background: #f1f5f9;">Ilość</span></td><td>Ilość / pojemność</td><td><span class="priority-tag priority-must">MUST</span></td><td>"50 ml", "1 szt"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>8</td><td><span class="title-chip" style="background: #fdf4ff;">Audience</span></td><td>Target / persona</td><td><span class="priority-tag priority-low">OPTIONAL</span></td><td>"dla kobiet z cerą wrażliwą"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>9</td><td><span class="title-chip" style="background: #ecfeff;">Sezon/LE</span></td><td>Sezon / limited edition</td><td><span class="priority-tag priority-low">OPTIONAL</span></td><td>"edycja letnia"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+  </table>
+
+  <p class="note">💡 Scoring rule: minimum_full_structure = 5 z 7 podstawowych (kategoria + przeznaczenie + brand + ilość + 1 attribute). Ideal = wszystkie 7 + audience jeśli persona-driven.</p>
+</div>
+
+<!-- ════════════════════ SEKCJA 4: PROPOZYCJE P-x.y ════════════════════ -->
+<h2 id="sec4">4. Propozycje P-x.y — kolejność priorytetów</h2>
+
+<div class="legend">
+  ✅ Built dziś (P2.5/P2.1/P2.6/P3.5/P6/P7/P8) · 🟡 Pending Plichta · 🟠 Long-term · ⚪ Backlog
+</div>
+
+<div class="section-card">
+  <table>
+    <tr><th width="6%">ID</th><th width="40%">Co</th><th width="10%">Status</th><th width="12%">Czas est</th><th width="14%">Klep priorytet</th></tr>
+
+    <tr class="row-fixed"><td><code class="code">P2.5</code></td><td>audit_pseudo_cta.py + /eel-pseudo-cta</td><td>✅ BUILT</td><td>453 lines</td><td>—</td></tr>
+    <tr class="row-fixed"><td><code class="code">P2.1</code></td><td>dot_generator.py + /eel-dot-generator (blocker skali #1)</td><td>✅ BUILT</td><td>690 lines</td><td>—</td></tr>
+    <tr class="row-fixed"><td><code class="code">P2.6</code></td><td>audit_visual.py FULL + /eel-audit-visual (4 sekcje gold standard)</td><td>✅ BUILT</td><td>698 lines</td><td>—</td></tr>
+    <tr class="row-fixed"><td><code class="code">P3.5</code></td><td>/eel-audit-content (wrap audit_content.py)</td><td>✅ BUILT</td><td>skill only</td><td>—</td></tr>
+    <tr class="row-fixed"><td><code class="code">P6</code></td><td>audit_sections.py + sections_dictionary 17 typów</td><td>✅ BUILT</td><td>~370 lines</td><td>—</td></tr>
+    <tr class="row-fixed"><td><code class="code">P7</code></td><td>audit_cta_search.py + cta_lexicon 11 actions + 5 prompts</td><td>✅ BUILT</td><td>~500 lines</td><td>—</td></tr>
+    <tr class="row-fixed"><td><code class="code">P8</code></td><td>audit_content_consistency.py (cross-PDP)</td><td>✅ BUILT</td><td>~340 lines</td><td>—</td></tr>
+
+    <tr class="row-pending"><td><code class="code">P1.1</code></td><td><strong>Auto-commit + synonym matching</strong> (reframe 30.05 — bazy rosną, korekta = prawo)</td><td>🟡 next</td><td>3-4h</td><td><div class="checkbox-group"><label><input type="checkbox">1️⃣</label><label><input type="checkbox">2️⃣</label><label><input type="checkbox">⏸</label></div></td></tr>
+    <tr class="row-pending"><td><code class="code">P3.2</code></td><td>category_templates.json per branża (automotive dla Plichta)</td><td>🟡 Plichta</td><td>1-2 dni</td><td><div class="checkbox-group"><label><input type="checkbox">1️⃣</label><label><input type="checkbox">2️⃣</label><label><input type="checkbox">⏸</label></div></td></tr>
+    <tr class="row-pending"><td><code class="code">P3.3</code></td><td>tier_specs_master.json</td><td>🟡 Plichta</td><td>1-2 dni</td><td><div class="checkbox-group"><label><input type="checkbox">1️⃣</label><label><input type="checkbox">2️⃣</label><label><input type="checkbox">⏸</label></div></td></tr>
+    <tr class="row-pending"><td><code class="code">P3.7</code></td><td>C35 CDT Builder (Cortex v2)</td><td>🟡 Sprint 4</td><td>3-5 dni</td><td><div class="checkbox-group"><label><input type="checkbox">1️⃣</label><label><input type="checkbox">2️⃣</label><label><input type="checkbox">⏸</label></div></td></tr>
+    <tr class="row-pending"><td><code class="code">P3.6</code></td><td>C04 GA4 R10-R20 (11 raportów)</td><td>🟡 expansion</td><td>3-4 dni</td><td><div class="checkbox-group"><label><input type="checkbox">1️⃣</label><label><input type="checkbox">2️⃣</label><label><input type="checkbox">⏸</label></div></td></tr>
+    <tr class="row-pending"><td><code class="code">P5.1</code></td><td>Truth Checker fallback script (🔴 → 🟢)</td><td>🟡 hardening</td><td>1 dzień</td><td><div class="checkbox-group"><label><input type="checkbox">1️⃣</label><label><input type="checkbox">2️⃣</label><label><input type="checkbox">⏸</label></div></td></tr>
+
+    <tr class="row-blocker"><td><code class="code">B-INT</code></td><td><strong>Integracja outputów do build_raport.py</strong> (audit_*.py + dot_generator → CLIENT_AUDIT.html z 7 nowych zakładek)</td><td>🟠 critical</td><td>2-3 dni</td><td><div class="checkbox-group"><label><input type="checkbox">1️⃣</label><label><input type="checkbox">2️⃣</label><label><input type="checkbox">⏸</label></div></td></tr>
+    <tr class="row-blocker"><td><code class="code">B-TACTICS</code></td><td><strong>Mapping taktyk: roboczy_all.xlsx → kody EXP-XXX → dictionarów</strong></td><td>🟠 critical</td><td>1-2 dni</td><td><div class="checkbox-group"><label><input type="checkbox">1️⃣</label><label><input type="checkbox">2️⃣</label><label><input type="checkbox">⏸</label></div></td></tr>
+    <tr class="row-blocker"><td><code class="code">B-CONTENTMAP</code></td><td><strong>Nowa zakładka Content Map v2</strong> (z listami z sekcji 2 powyżej)</td><td>🟠 critical</td><td>1-2 dni</td><td><div class="checkbox-group"><label><input type="checkbox">1️⃣</label><label><input type="checkbox">2️⃣</label><label><input type="checkbox">⏸</label></div></td></tr>
+  </table>
+</div>
+
+<!-- ════════════════════ SEKCJA 5: STRATEGICZNE PYTANIA ════════════════════ -->
+<h2 id="sec5">5. Pytania strategiczne — klep decyzję</h2>
+
+<div class="section-card">
+  <table>
+    <tr><th width="6%">#</th><th width="50%">Pytanie</th><th>Opcje</th></tr>
+
+    <tr><td>S1</td><td><strong>Format kodów taktyk</strong>: jeden EXP-NNN z polem action="activate|modify" CZY osobne EXP-A-NNN + EXP-M-NNN?</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">A·EXP-NNN+action</label><label><input type="checkbox">B·EXP-A/M-NNN ✓reko</label></div></td></tr>
+
+    <tr><td>S2</td><td><strong>Tactics_master: xlsx czy JSON?</strong> xlsx wygodne dla Tomka, JSON dla skryptów</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">A·xlsx only</label><label><input type="checkbox">B·JSON only</label><label><input type="checkbox">C·oba sync ✓reko</label></div></td></tr>
+
+    <tr><td>S3</td><td><strong>Mapping conflict</strong>: gdy element ma 2+ taktyk (Hero 3 Modyfikuj scenariusze), pokazujemy wszystkie czy priorytetyzujemy?</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">A·wszystkie</label><label><input type="checkbox">B·sort by Level</label><label><input type="checkbox">C·sort by Data Indicator match ✓reko</label></div></td></tr>
+
+    <tr><td>S4</td><td><strong>Detection_method dla AI items</strong>: czy auto-genujemy te (AR/3D/lifestyle pictures) czy zostawiamy manual?</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">A·local model</label><label><input type="checkbox">B·Ollama</label><label><input type="checkbox">C·manual flag ✓reko</label></div></td></tr>
+
+    <tr><td>S5</td><td><strong>Content Map v2 — visual anatomy kafelka</strong>: zostaje w Content Map (Tomek: tak) czy wyrzucamy do Visual Map?</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">A·zostaje ✓Tomek</label><label><input type="checkbox">B·wyrzucamy</label></div></td></tr>
+
+    <tr><td>S6</td><td><strong>Editorial content w raporcie</strong>: oddzielna sekcja "Editorial gaps" (12 itemów) czy mieszamy z PDP textual?</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">A·oddzielna ✓reko</label><label><input type="checkbox">B·mieszamy</label></div></td></tr>
+
+    <tr><td>S7</td><td><strong>Tactic card template</strong>: zostaje na pózniej (Tomek wskazał)? Bug B9 (bullets cap) — fixed teraz czy odkładamy?</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">A·obie później</label><label><input type="checkbox">B·B9 teraz</label></div></td></tr>
+
+    <tr><td>S8</td><td><strong>HEBE_CORTEX_AUDIT.html</strong>: budujemy teraz jako pierwszy real deliverable czy najpierw kończymy mapping taktyk?</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">A·HEBE first</label><label><input type="checkbox">B·tactics first ✓reko</label></div></td></tr>
+  </table>
+</div>
+
+<p class="note" style="margin-top: 24px;">Sesja 30.05.2026 noc² · 9 task'ów completed · 3 listy do klepnięcia · <a href="https://tomekwlqq.github.io/eel-reports/VERDYKTY.html">→ VERDYKTY v2</a> · <a href="https://tomekwlqq.github.io/eel-reports/GLOV-raport-test-2026-05-21.html">→ GLOV reference</a></p>
+
+</div>
+</body>
+</html>
