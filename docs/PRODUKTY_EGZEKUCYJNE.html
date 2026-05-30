@@ -12,7 +12,9 @@
   --accent: #1e3a8a; --accent-light: #3b82f6; --accent-bg: #dbeafe;
   --rdzen: #ea580c; --rdzen-bg: #fff7ed;
   --tier1: #10b981; --tier2: #3b82f6; --tier3: #8b5cf6; --tier4: #f59e0b; --tier5: #ef4444;
-  --hot: #fde047;
+  --opus: #7c3aed; --opus-bg: #f5f3ff;
+  --score-10: #059669; --score-9: #10b981; --score-8: #3b82f6; --score-7: #6366f1;
+  --score-6: #8b5cf6; --score-5: #a78bfa; --score-4: #c4b5fd;
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,7 +27,12 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; 
 .sidebar h1 { font-size: 18px; font-weight: 700; color: var(--accent); }
 .sidebar .subtitle { font-size: 11px; color: var(--text-muted); margin-bottom: 16px; }
 
-.section-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 18px 0 6px; }
+.opus-cta { background: linear-gradient(135deg, var(--opus-bg) 0%, var(--bg-card) 100%); border: 1.5px solid var(--opus); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; font-size: 11px; color: #4c1d95; }
+.opus-cta strong { color: var(--opus); }
+.opus-cta button { width: 100%; margin-top: 6px; padding: 6px; background: var(--opus); color: white; border: 0; border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer; }
+.opus-cta button:hover { background: #6d28d9; }
+
+.section-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 16px 0 6px; }
 
 .layer-list { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
 .layer-btn { padding: 8px 6px; background: var(--bg-card); border: 1.5px solid var(--border); border-radius: 6px; font-size: 11px; font-weight: 500; color: var(--text); cursor: pointer; text-align: center; transition: all 0.15s; }
@@ -39,10 +46,16 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; 
 .filter-btn { padding: 6px 10px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; font-size: 11px; cursor: pointer; text-align: left; }
 .filter-btn:hover { border-color: var(--accent-light); }
 .filter-btn.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.filter-btn.opus-active { background: var(--opus); color: white; border-color: var(--opus); }
+
+.score-slider { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; margin-top: 6px; font-size: 11px; }
+.score-slider input { width: 100%; margin-top: 4px; }
+.score-slider .label-row { display: flex; justify-content: space-between; }
 
 .stats { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-top: 14px; font-size: 11px; }
 .stats div { display: flex; justify-content: space-between; padding: 2px 0; }
 .stats strong { color: var(--accent); }
+.stats hr { margin: 6px 0; border: 0; border-top: 1px solid var(--border); }
 
 .main { padding: 24px 32px; max-width: 1500px; }
 .main-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
@@ -50,34 +63,53 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; 
 .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
 .results-count { font-size: 12px; color: var(--text-muted); }
 
-.intro { background: linear-gradient(135deg, #fffbeb 0%, var(--bg-card) 60%); border: 1px solid #fed7aa; border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; }
-.intro h2 { color: #9a3412; font-size: 16px; margin-bottom: 6px; }
-.intro p { font-size: 13px; color: #7c2d12; }
+.intro { background: linear-gradient(135deg, #fffbeb 0%, var(--bg-card) 60%); border: 1px solid #fed7aa; border-radius: 10px; padding: 14px 18px; margin-bottom: 18px; }
+.intro h2 { color: #9a3412; font-size: 15px; margin-bottom: 4px; }
+.intro p { font-size: 12px; color: #7c2d12; }
 
-.section-divider { margin: 30px 0 16px; font-size: 17px; font-weight: 700; color: var(--accent); padding-bottom: 8px; border-bottom: 2px solid var(--accent-bg); display: flex; align-items: center; gap: 8px; }
+.legend { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin-bottom: 18px; font-size: 12px; }
+.legend h3 { font-size: 12px; color: var(--accent); margin-bottom: 6px; }
+.legend table { width: 100%; font-size: 11px; }
+.legend td { padding: 2px 4px; vertical-align: top; }
+.legend td:first-child { white-space: nowrap; font-weight: 600; width: 80px; }
+
+.section-divider { margin: 28px 0 14px; font-size: 16px; font-weight: 700; color: var(--accent); padding-bottom: 7px; border-bottom: 2px solid var(--accent-bg); display: flex; align-items: center; gap: 8px; }
 .section-divider .count { font-size: 12px; font-weight: 400; color: var(--text-muted); margin-left: auto; }
 
 .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 12px; }
-.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; box-shadow: var(--shadow); transition: all 0.15s; cursor: pointer; }
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; box-shadow: var(--shadow); transition: all 0.15s; cursor: pointer; position: relative; }
 .card:hover { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); border-color: var(--accent-light); }
 .card.flagship { border-color: var(--rdzen); background: linear-gradient(135deg, var(--rdzen-bg) 0%, var(--bg-card) 60%); }
-.card.placeholder { opacity: 0.55; background: var(--bg-sidebar); }
+.card.opus-rec { border-left: 4px solid var(--opus); }
+.card.opus-rec.flagship { border-left: 4px solid var(--opus); border-top: 1px solid var(--rdzen); border-right: 1px solid var(--rdzen); border-bottom: 1px solid var(--rdzen); }
 
-.card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px; }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
 .card-combo { font-family: ui-monospace, monospace; font-size: 11px; padding: 3px 8px; border-radius: 5px; background: var(--accent); color: white; font-weight: 700; flex-shrink: 0; }
 .card-combo.flagship { background: var(--rdzen); }
+.card-badges { display: flex; gap: 4px; flex-shrink: 0; }
 .card-tier { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 10px; color: white; text-transform: uppercase; letter-spacing: 0.05em; }
 .tier-spark { background: var(--tier1); }
 .tier-lite { background: var(--tier2); }
 .tier-std { background: var(--tier3); }
 .tier-pro { background: var(--tier4); }
 .tier-premium { background: var(--tier5); }
-.tier-placeholder { background: var(--text-light); }
+
+.opus-badge { font-size: 9px; font-weight: 800; padding: 3px 7px; border-radius: 10px; background: var(--opus); color: white; text-transform: uppercase; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 3px; }
+.opus-badge.rec { background: var(--opus); }
+
+.score-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; color: white; }
+.score-10 { background: var(--score-10); }
+.score-9 { background: var(--score-9); }
+.score-8 { background: var(--score-8); }
+.score-7 { background: var(--score-7); }
+.score-6 { background: var(--score-6); }
+.score-5 { background: var(--score-5); }
+.score-4 { background: var(--score-4); }
 
 .card-name { font-size: 14px; font-weight: 700; color: var(--text); margin: 6px 0 4px; }
 .card-name .star { color: var(--rdzen); margin-right: 4px; }
 .card-what { font-size: 12px; color: var(--text); line-height: 1.5; margin-bottom: 6px; }
-.card-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.card-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; align-items: center; }
 .meta-pill { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: var(--bg-sidebar); color: var(--text-muted); }
 .meta-pill.vu { background: var(--accent-bg); color: var(--accent); font-weight: 600; }
 .meta-pill.empirical { background: #ecfdf5; color: #065f46; font-weight: 700; }
@@ -88,6 +120,7 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; 
 .card-body ul { padding-left: 16px; margin: 4px 0; }
 .card-body li { margin-bottom: 2px; }
 .card-body p { margin: 4px 0; }
+.opus-rationale { background: var(--opus-bg); border-left: 3px solid var(--opus); padding: 6px 10px; margin: 8px 0; font-size: 11px; color: #4c1d95; }
 .expand-hint { font-size: 10px; color: var(--accent); font-weight: 500; margin-top: 6px; }
 .card.expanded .expand-hint::after { content: " ▾"; }
 .card:not(.expanded) .expand-hint::after { content: " ▸"; }
@@ -98,7 +131,21 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; 
 
 <aside class="sidebar">
   <h1>🎯 Produkty Egzekucyjne</h1>
-  <p class="subtitle">Cortex EEL v0.1 · 30.05.2026</p>
+  <p class="subtitle">Cortex EEL v0.2 · 30.05.2026</p>
+
+  <div class="opus-cta">
+    <strong>💎 Opus Recommended</strong><br>
+    Filtr pokazuje tylko karty z Opus Score ≥ 7 — moje rekomendacje produktów które warto budować.
+    <button id="opusRecBtn">Pokaż tylko Opus Recommended</button>
+  </div>
+
+  <div class="section-label">Min Opus Score</div>
+  <div class="score-slider">
+    <div class="label-row">
+      <span>Min:</span><span id="minScoreLabel"><strong>1</strong></span>
+    </div>
+    <input type="range" id="minScoreSlider" min="1" max="10" value="1">
+  </div>
 
   <div class="section-label">Warstwy (multi-select)</div>
   <div class="layer-list" id="layerList"></div>
@@ -107,17 +154,16 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; 
   <div class="filter-list" id="typeFilters">
     <button class="filter-btn active" data-type="all">Wszystkie</button>
     <button class="filter-btn" data-type="singel">Solo (12)</button>
-    <button class="filter-btn" data-type="para">Pary (55)</button>
-    <button class="filter-btn" data-type="trojka">Trójki (165)</button>
-    <button class="filter-btn" data-type="czworka">Czwórki (330)</button>
+    <button class="filter-btn" data-type="para">Pary</button>
+    <button class="filter-btn" data-type="trojka">Trójki</button>
+    <button class="filter-btn" data-type="czworka">Czwórki</button>
   </div>
 
   <div class="section-label">Filtry jakości</div>
   <div class="filter-list" id="qualityFilters">
     <button class="filter-btn" data-quality="flagship">🏆 Flagship (V+U=10)</button>
     <button class="filter-btn" data-quality="empirical">🎯 Empirical U=3/3</button>
-    <button class="filter-btn" data-quality="ready">✅ Ready (produkty gotowe)</button>
-    <button class="filter-btn" data-quality="placeholder">📋 Placeholder (do opisania)</button>
+    <button class="filter-btn" data-quality="rdzen">⭐ Rdzeń (2 lub 8)</button>
   </div>
 
   <div class="section-label">Tier</div>
@@ -135,8 +181,21 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; 
 <main class="main">
   <div class="intro">
     <h2>Cytat Tomka, 30.05.2026</h2>
-    <p>"<em>Bardzo chciałbym dla wszystkich kombinacji — bo nie wiesz co tam możesz za skarby odkryć.</em>"</p>
-    <p style="margin-top: 8px;"><strong>Cel:</strong> pełne pokrycie 562 kombinacji (12 solo + 55 par + 165 trójek + 330 czwórek). v0.1 ma top ~60 wpisów opisanych + reszta jako placeholder. Rozwojowy.</p>
+    <p>"<em>To co nie ma sensu ani wartości, OUT.</em>" — zasada doboru kombinacji.</p>
+    <p style="margin-top: 6px;"><strong>v0.2:</strong> usunięte placeholdery + dodany Opus Score (1-10) per karta + filtr "Opus Recommended". Liczy się jakość, nie liczba.</p>
+  </div>
+
+  <div class="legend">
+    <h3>📖 Legenda scoringu</h3>
+    <table>
+      <tr><td>V (Value)</td><td>1-5 — biznesowa wartość kombinacji dla shopper journey diagnostics</td></tr>
+      <tr><td>U (Uniqueness)</td><td>1-3 — unikalność na rynku. U=3 = empirycznie potwierdzona (26 Google search) maksymalna unikalność</td></tr>
+      <tr><td>Opus Score</td><td>1-10 — mój overall score (V+U + biznesowa exec + jakość deliverable + powtarzalność)</td></tr>
+      <tr><td>Rec. ≥7</td><td>Opus rekomenduje budowę / wdrożenie u klienta</td></tr>
+      <tr><td>🏆 Flagship</td><td>V+U=10 — produkty premium dla Pro/Premium tier</td></tr>
+      <tr><td>🎯 Empirical</td><td>4 kombinacje z empirycznie potwierdzoną U=3/3: CS1, S1, S3, 1+4</td></tr>
+      <tr><td>⭐ Rdzeń</td><td>zawiera warstwę 2 (Visual) lub 8 (Category)</td></tr>
+    </table>
   </div>
 
   <div class="main-header">
@@ -151,14 +210,13 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; 
 
 <script>
 
-// 12 cegiełek
 const LAYERS = {
   0: { name: "Wiedza filtr", short: "Wiedza", rdzen: false },
   1: { name: "HTML scan", short: "HTML", rdzen: false },
   2: { name: "Visual + tech", short: "Visual", rdzen: true },
   3: { name: "Content scan", short: "Content", rdzen: false },
   4: { name: "GA4", short: "GA4", rdzen: false },
-  5: { name: "Ads (Google+TikTok+Meta)", short: "Ads", rdzen: false },
+  5: { name: "Ads", short: "Ads", rdzen: false },
   6: { name: "GSC + Senuto", short: "GSC", rdzen: false },
   7: { name: "Clarity", short: "Clarity", rdzen: false },
   8: { name: "Category knowledge", short: "Category", rdzen: true },
@@ -168,376 +226,717 @@ const LAYERS = {
   12: { name: "Konkurencja (loop)", short: "Konkurencja", rdzen: false }
 };
 
-// Format wpisu:
-// { id, layers: [..], type: solo/para/trojka/czworka, name, what, needs, output, tier, v, u, flagship, empirical, ready }
-// ready=true → karta normalna, ready=false → placeholder
-
 const PRODUKTY = [
 
 // =========== SOLO (12) ===========
-{ id: "p1-solo", layers: [1], type: "singel", name: "HTML Tag Audit",
+{ id: "p1", layers: [1], type: "singel", name: "HTML Tag Audit",
   what: "Skan tagów HTML + meta + schema.org per widok. Pełne mapowanie struktury technicznej.",
-  needs: ["URL klienta", "Playwright"],
-  output: "HTML_AUDIT_<klient>.md — tabela tagów + schema valid/invalid + rekomendacje",
-  tier: "spark", v: 3, u: 1, ready: true },
+  needs: ["Playwright", "URL"], output: "HTML_AUDIT_<klient>.md",
+  tier: "spark", v: 3, u: 1, opusScore: 4, opusRec: false,
+  opusWhy: "Podstawowy audit techniczny. Wartość jako element większej kombinacji, nie samodzielny produkt." },
 
-{ id: "p2-solo", layers: [2], type: "singel", name: "⭐ Shop Visual Mapping (16 widoków)",
+{ id: "p2", layers: [2], type: "singel", name: "⭐ Shop Visual Mapping (16 widoków)",
   what: "Fold-by-fold screenshoty 16 widoków × desktop+mobile. Hierarchia wizualna, dead zones, pseudo-CTAs.",
-  needs: ["take_screenshots.py", "URL"],
-  output: "VISUAL_MAPPING_<klient>.html — 8 tabów × 2 viewporty + density maps",
-  tier: "lite", v: 5, u: 2, ready: true, flagship: false },
+  needs: ["take_screenshots.py", "URL"], output: "VISUAL_MAPPING_<klient>.html — 8 tabów × 2 viewporty + density maps",
+  tier: "lite", v: 5, u: 2, opusScore: 8, opusRec: true,
+  opusWhy: "Rdzeń systemu Cortex. Każdy klient EEL musi to mieć jako baseline. Pojedyncza warstwa ale max value samodzielnie." },
 
-{ id: "p3-solo", layers: [3], type: "singel", name: "Content Inventory",
+{ id: "p3", layers: [3], type: "singel", name: "Content Inventory",
   what: "Skan tytułów PDP, bullets, FAQ, opisów kategorii. Per-element metryki długości i struktury.",
-  needs: ["URL klienta", "Scraper"],
-  output: "CONTENT_INVENTORY_<klient>.md — tabele per typ contentu",
-  tier: "lite", v: 4, u: 1, ready: true },
+  needs: ["URL", "Scraper"], output: "CONTENT_INVENTORY_<klient>.md",
+  tier: "lite", v: 4, u: 1, opusScore: 5, opusRec: false,
+  opusWhy: "Inventory bazowe — wartość w łączeniu z layer 8 (Category) lub 9 (GEO)." },
 
-{ id: "p4-solo", layers: [4], type: "singel", name: "GA4 R01-R10 Reports",
-  what: "Top 10 raportów analytics: overview, source/medium, behavior funnel, conversion paths, e-commerce, audiences.",
-  needs: ["GA4 property access", "google-analytics-mcp"],
-  output: "GA4_REPORTS_<klient>.html — R01-R10 zakładki",
-  tier: "std", v: 4, u: 1, ready: true },
+{ id: "p4", layers: [4], type: "singel", name: "GA4 R01-R10 Reports",
+  what: "Top 10 raportów: overview, source/medium, behavior funnel, conversion paths, e-commerce, audiences.",
+  needs: ["GA4 access", "google-analytics-mcp"], output: "GA4_REPORTS_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Standard analytics — większość agencji to robi. Wartość pojedyncza umiarkowana, ale dzielnie z layer 2 (Visual) lub 8 (Category) dramatycznie rośnie." },
 
-{ id: "p5-solo", layers: [5], type: "singel", name: "Ads Triad Snapshot",
-  what: "Google Ads + Meta Ads + TikTok Ads — performance, CAC, frequency, creative breakdown.",
-  needs: ["Ad accounts", "google-ads-mcp", "meta-ads MCP"],
-  output: "ADS_SNAPSHOT_<klient>.html",
-  tier: "std", v: 4, u: 1, ready: true },
+{ id: "p5", layers: [5], type: "singel", name: "Ads Triad Snapshot",
+  what: "Google + Meta + TikTok Ads — performance, CAC, frequency, creative breakdown.",
+  needs: ["Ad accounts", "MCPs"], output: "ADS_SNAPSHOT_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 5, opusRec: false,
+  opusWhy: "Standard ads audit. Wartość rośnie z layer 8 (CEP-based targeting) lub 4 (attribution gap)." },
 
-{ id: "p6-solo", layers: [6], type: "singel", name: "Organic Visibility (GSC + Senuto)",
-  what: "Wyświetlenia, CTR, average position per query + Senuto visibility score + brand vs non-brand.",
-  needs: ["GSC access", "Senuto export"],
-  output: "ORGANIC_REPORT_<klient>.html",
-  tier: "std", v: 3, u: 1, ready: true },
+{ id: "p6", layers: [6], type: "singel", name: "Organic Visibility (GSC + Senuto)",
+  what: "Wyświetlenia, CTR, average position + Senuto visibility + brand vs non-brand.",
+  needs: ["GSC", "Senuto export"], output: "ORGANIC_REPORT_<klient>.html",
+  tier: "std", v: 3, u: 1, opusScore: 4, opusRec: false,
+  opusWhy: "Pure SEO snapshot — wiele agencji robi to natywnie. Wartość rośnie z layer 9 (GEO future-proof)." },
 
-{ id: "p7-solo", layers: [7], type: "singel", name: "Clarity Heatmap + Session Highlights",
+{ id: "p7", layers: [7], type: "singel", name: "Clarity Heatmap + Session Highlights",
   what: "Heatmapy klików/scrolla per widok + top 10 sesji z dead clicks/rage clicks.",
-  needs: ["Clarity access", "clarity MCP"],
-  output: "CLARITY_REPORT_<klient>.html — heatmapy + linki do nagrań",
-  tier: "std", v: 4, u: 1, ready: true },
+  needs: ["Clarity", "clarity MCP"], output: "CLARITY_REPORT_<klient>.html + nagrania",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Behaviour insights — wartość samodzielna OK, ale prawdziwa moc w połączeniu z layer 2 (visual) lub 11 (checkout)." },
 
-{ id: "p8-solo", layers: [8], type: "singel", name: "⭐ Category Knowledge Brief (CEP+CDT+Tier Specs)",
-  what: "Per-kategoria: Category Entry Points, Consumer Decision Tree, Tier Specs Tier-1/2/3, Forbidden Patterns, typowy produkt, price tiers, vocabulary.",
-  needs: ["Lista kategorii klienta", "GEO Decision Trees lib (W11/W15/W17)"],
-  output: "CATEGORY_BRIEF_<klient>_<kategoria>.html — szablon per kategoria",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: false },
+{ id: "p8", layers: [8], type: "singel", name: "⭐ Category Knowledge Brief (CEP+CDT+Tier Specs)",
+  what: "Per-kategoria: CEPs, CDT, Tier Specs T1/T2/T3, Forbidden Patterns, vocabulary, price tiers, typowy produkt.",
+  needs: ["GEO Decision Trees W11/W15/W17", "Lista kategorii"], output: "CATEGORY_BRIEF_<klient>_<kategoria>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 9, opusRec: true,
+  opusWhy: "🏆 Drugi rdzeń Cortex. To czego konkurencja NIE umie. Niewielu na świecie publikuje CDT na poziomie kategorii. Każdy nowy klient = nowa szansa na vault contribution." },
 
-{ id: "p9-solo", layers: [9], type: "singel", name: "GEO Check (AI Overview readiness)",
-  what: "Skan strony pod kątem citability w AI Overview (Google), ChatGPT, Perplexity, Bing Copilot. Score per pillar.",
-  needs: ["geo_check.py Playwright", "URL"],
-  output: "GEO_CHECK_<klient>.html — score + rekomendacje per pillar",
-  tier: "std", v: 4, u: 2, ready: true },
+{ id: "p9", layers: [9], type: "singel", name: "GEO Check (AI Overview readiness)",
+  what: "Skan strony pod kątem citability w AI Overview / ChatGPT / Perplexity / Bing Copilot. Score per pillar.",
+  needs: ["geo_check.py Playwright", "URL"], output: "GEO_CHECK_<klient>.html — score + rekomendacje",
+  tier: "std", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Future-proof traffic strategy. Jeden z niewielu produktów które adresują GenAI-era SEO empirycznie. Już live u klientów SejfZone/Fera/Plichta." },
 
-{ id: "p10-solo", layers: [10], type: "singel", name: "Tactic Bank (200+ taktyki)",
-  what: "Lista taktyk z 400-pozycyjnej biblioteki EEL z mapowaniem do widoku/biasu. Tier 'quick win' priorytet.",
-  needs: ["EEL Tactic Database", "Snapshot klienta"],
-  output: "TACTIC_BANK_<klient>.html — filtrowalna lista 200+",
-  tier: "lite", v: 3, u: 1, ready: true },
+{ id: "p10", layers: [10], type: "singel", name: "Tactic Bank (200+ taktyki)",
+  what: "Lista taktyk z 400-pozycyjnej biblioteki EEL z mapowaniem do widoku/biasu. Tier quick win priorytet.",
+  needs: ["EEL Tactic DB", "Snapshot klienta"], output: "TACTIC_BANK_<klient>.html — filtrowalna",
+  tier: "lite", v: 3, u: 1, opusScore: 4, opusRec: false,
+  opusWhy: "Pre-built lib — wartość bardzo zależna od trafienia w specyficzny pain klienta." },
 
-{ id: "p11-solo", layers: [11], type: "singel", name: "Checkout & Cart Inspection",
-  what: "Krok-po-kroku checkout: friction, distractions, trust signals, payment methods, error handling, cart persistence.",
-  needs: ["Test checkout (gość + zalogowany)"],
-  output: "CHECKOUT_INSPECTION_<klient>.md — per krok findings",
-  tier: "std", v: 4, u: 1, ready: true },
+{ id: "p11", layers: [11], type: "singel", name: "Checkout & Cart Inspection",
+  what: "Krok-po-kroku checkout: friction, distractions, trust signals, payments, errors, cart persistence.",
+  needs: ["Test checkout (gość + zalogowany)"], output: "CHECKOUT_INSPECTION_<klient>.md",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Standard checkout audit — wiele firm to robi. Wartość rośnie z layer 7 (rage clicks) lub 4 (funnel)." },
 
-{ id: "p12-solo", layers: [12], type: "singel", name: "Competitive Loop (1+2+3 vs 3 konkurentów)",
-  what: "Konkurencja przez warstwę 1+2+3: HTML + Visual + Content na 3 wybranych konkurentach. Krzyż-porównanie.",
-  needs: ["3 URL konkurentów", "Snapshot klienta"],
-  output: "COMPETITIVE_LOOP_<klient>.html — krzyż-tabela 4×3",
-  tier: "pro", v: 4, u: 2, ready: true },
+{ id: "p12", layers: [12], type: "singel", name: "Competitive Loop (1+2+3 vs 3 konkurentów)",
+  what: "Konkurencja przez warstwy 1+2+3 na 3 wybranych konkurentach. Krzyż-porównanie.",
+  needs: ["3 URL konkurentów", "Snapshot klienta"], output: "COMPETITIVE_LOOP_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Layer 12 jest LOOP nad 1+2+3 — naturalna struktura już jest. Wymaga skrupulatnego matchingu kategorii konkurencji. Pojedynczy klient = high value." },
 
-// =========== PARY (top 30 z 55) ===========
-{ id: "p2-8", layers: [2, 8], type: "para", name: "⭐ Cortex Reference Audit (RDZEŃ × RDZEŃ)",
-  what: "Layout per widok nałożony na Tier Specs + CEPs kategorii. Pokazuje GDZIE shopper widzi (lub NIE WIDZI) czego oczekuje per kategoria.",
-  needs: ["Layer 2 + Layer 8 outputs", "Cross-reference engine"],
-  output: "CORTEX_REFERENCE_AUDIT_<klient>.html — 8 tabów + Visual×Category overlay per widok",
-  tier: "premium", v: 5, u: 3, ready: true, flagship: true, empirical: false },
+// =========== PARY (55 - wszystkie sensowne) ===========
 
-{ id: "p1-4", layers: [1, 4], type: "para", name: "🎯 HTML × GA4 Eventy Crosswalk (PLICHTA)",
-  what: "Każdy HTML element vs każdy GA4 event. Pokazuje: czego trackują a userowi NIE pokazują (waste) + czego NIE trackują a użytkownik wykonuje (blind spots).",
-  needs: ["Layer 1", "Layer 4", "Event taxonomy"],
-  output: "HTML_GA4_CROSSWALK_<klient>.html — matrix elements × events + diagnoza",
-  tier: "pro", v: 5, u: 3, ready: true, flagship: true, empirical: true },
-
-{ id: "p2-4", layers: [2, 4], type: "para", name: "Visual × CR per widok",
-  what: "Konwersja per widok nałożona na ranking popularności wizualnej fold-by-fold.",
-  needs: ["Layer 2", "Layer 4"],
-  output: "VISUAL_CR_<klient>.html — heatmapa popularność × CR",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
-
-{ id: "p2-11", layers: [2, 11], type: "para", name: "Visual × Cart cross-sell",
-  what: "Cross-sell w PDP+koszyku nałożony na visual layout. Pokazuje WHERE cross-sell powinno być a nie jest.",
-  needs: ["Layer 2", "Layer 11"],
-  output: "CROSSELL_VISUAL_<klient>.html",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
-
-{ id: "p5-8", layers: [5, 8], type: "para", name: "CEP-based Ads Targeting",
-  what: "Ads campaigns aligned z CEPs kategorii. Pokazuje gdzie targeting jest brand-only vs CEP-based.",
-  needs: ["Layer 5", "Layer 8"],
-  output: "CEP_ADS_<klient>.html",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
-
-{ id: "p8-9", layers: [8, 9], type: "para", name: "CDT × AI Passages (GEO content blueprint)",
-  what: "Per CDT branch + Tier Spec kategorii → konkretny passage do PDP/kategorii pod AI Overview citability.",
-  needs: ["Layer 8", "Layer 9"],
-  output: "CDT_AI_BLUEPRINT_<klient>_<kategoria>.html",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
-
-{ id: "p2-9", layers: [2, 9], type: "para", name: "Visual × GEO Score",
-  what: "Layout PDP nałożony na GEO score per element. Pokazuje WHICH visual elements obniżają AI citability.",
-  needs: ["Layer 2", "Layer 9"],
-  output: "VISUAL_GEO_<klient>.html",
-  tier: "pro", v: 4, u: 2, ready: true, flagship: true },
-
-{ id: "p2-7", layers: [2, 7], type: "para", name: "Visual × Clarity (Heatmap × Layout)",
-  what: "Heatmapa Clarity nałożona na visual layout fold-by-fold. Dead clicks vs dead zones.",
-  needs: ["Layer 2", "Layer 7"],
-  output: "VISUAL_CLARITY_<klient>.html",
-  tier: "std", v: 4, u: 2, ready: true, flagship: true },
-
-{ id: "p2-10", layers: [2, 10], type: "para", name: "Visual × Tactics Bank",
-  what: "Każdy fold mapowany do potencjalnych taktyk z biblioteki 200+ (bias-aligned).",
-  needs: ["Layer 2", "Layer 10"],
-  output: "VISUAL_TACTICS_<klient>.html",
-  tier: "std", v: 4, u: 2, ready: true, flagship: true },
-
-{ id: "p3-8", layers: [3, 8], type: "para", name: "Content × Category Tier Specs",
-  what: "Per PDP: czy tytuł zawiera Tier-1 specs? czy bullets adresują CEPs? gap analysis per produkt.",
-  needs: ["Layer 3", "Layer 8"],
-  output: "CONTENT_CATEGORY_GAP_<klient>.html — tabela per produkt",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
-
-{ id: "p3-9", layers: [3, 9], type: "para", name: "Content × GEO (PDP rewrite blueprint)",
-  what: "Content per PDP → GEO-optimized rewrite blueprint. Tytuł + bullets + FAQ + passages.",
-  needs: ["Layer 3", "Layer 9"],
-  output: "PDP_REWRITE_<klient>_<slug>.md per produkt",
-  tier: "std", v: 4, u: 2, ready: true },
-
-{ id: "p4-5", layers: [4, 5], type: "para", name: "GA4 × Ads attribution gap",
-  what: "Differential GA4 vs Ads platforms attribution. Pokazuje gdzie cross-channel attribution kuleje.",
-  needs: ["Layer 4", "Layer 5"],
-  output: "ATTRIBUTION_GAP_<klient>.html",
-  tier: "std", v: 4, u: 1, ready: true },
-
-{ id: "p4-7", layers: [4, 7], type: "para", name: "GA4 × Clarity (funnels × heatmaps)",
-  what: "Funnel dropoff z GA4 + heatmapa Clarity per krok. Diagnostyka WHERE i WHY drop.",
-  needs: ["Layer 4", "Layer 7"],
-  output: "FUNNEL_CLARITY_<klient>.html",
-  tier: "std", v: 4, u: 1, ready: true },
-
-{ id: "p6-9", layers: [6, 9], type: "para", name: "Organic × GEO (SERP vs AI readiness)",
-  what: "Per query: ranking SERP + GEO score AI Overview readiness. Future-proof traffic strategy.",
-  needs: ["Layer 6", "Layer 9"],
-  output: "ORGANIC_GEO_<klient>.html",
-  tier: "std", v: 4, u: 2, ready: true },
-
-{ id: "p7-11", layers: [7, 11], type: "para", name: "Clarity × Checkout (friction diagnostics)",
-  what: "Clarity rage clicks + dead clicks w checkout overlayed na step-by-step inspection.",
-  needs: ["Layer 7", "Layer 11"],
-  output: "CHECKOUT_FRICTION_<klient>.html",
-  tier: "pro", v: 4, u: 2, ready: true },
-
+// Pary z warstwą 1 (HTML)
 { id: "p1-2", layers: [1, 2], type: "para", name: "HTML × Visual (Dev × Shopper view)",
   what: "Krzyż-mapowanie elementu HTML do tego co shopper rzeczywiście widzi. Pseudo-CTAs detection.",
-  needs: ["Layer 1", "Layer 2"],
-  output: "DEV_SHOPPER_VIEW_<klient>.html",
-  tier: "lite", v: 4, u: 2, ready: true },
+  needs: ["Layer 1", "Layer 2"], output: "DEV_SHOPPER_VIEW_<klient>.html",
+  tier: "lite", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Klucz dla zrozumienia czemu accessibility metrics rozjeżdżają się z visual hierarchy. Pseudo-CTA detection unikalne." },
 
 { id: "p1-3", layers: [1, 3], type: "para", name: "HTML × Content (schema completeness)",
   what: "Per element HTML: czy content tam jest? czy schema oznacza go poprawnie?",
-  needs: ["Layer 1", "Layer 3"],
-  output: "SCHEMA_CONTENT_<klient>.html",
-  tier: "lite", v: 3, u: 1, ready: true },
+  needs: ["Layer 1", "Layer 3"], output: "SCHEMA_CONTENT_<klient>.html",
+  tier: "lite", v: 3, u: 1, opusScore: 5, opusRec: false,
+  opusWhy: "Standard tech audit — wartość średnia." },
+
+{ id: "p1-4", layers: [1, 4], type: "para", name: "🎯 HTML × GA4 Eventy Crosswalk (PLICHTA)",
+  what: "Każdy HTML element vs każdy GA4 event. Pokazuje: czego trackują a userowi NIE pokazują (waste) + czego NIE trackują a user wykonuje (blind spots).",
+  needs: ["Layer 1", "Layer 4", "Event taxonomy"], output: "HTML_GA4_CROSSWALK_<klient>.html",
+  tier: "pro", v: 5, u: 3, opusScore: 10, opusRec: true, flagship: true, empirical: true,
+  opusWhy: "🎯 Empirical U=3/3. Para która wywarła wrażenie na Plichta. Krytyczna dla każdego klienta z developement teamem + analytics. Nikt tego natywnie nie robi." },
+
+{ id: "p1-5", layers: [1, 5], type: "para", name: "HTML × Ads (landing-page tracking parity)",
+  what: "Czy elementy HTML wymagane przez pixel/conversion tags są obecne? Audit utm propagation.",
+  needs: ["Layer 1", "Layer 5"], output: "ADS_TRACKING_PARITY_<klient>.md",
+  tier: "std", v: 4, u: 1, opusScore: 5, opusRec: false,
+  opusWhy: "Specjalistyczny audit — wartość jeśli klient ma misconfigured pixels (częste). Niska unikalność (Triple Whale i inni robią to)." },
+
+{ id: "p1-6", layers: [1, 6], type: "para", name: "HTML × GSC (technical SEO findings)",
+  what: "Crawl errors GSC overlay na HTML — czego Google nie widzi a powinien.",
+  needs: ["Layer 1", "Layer 6"], output: "TECH_SEO_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 5, opusRec: false,
+  opusWhy: "Standard tech SEO. Wartość OK ale niska unikalność (Screaming Frog robi to lepiej)." },
+
+{ id: "p1-7", layers: [1, 7], type: "para", name: "HTML × Clarity (dev pseudo-interactions)",
+  what: "Klicki na elementy które wyglądają klikabilne ale nie mają handler'a (Clarity dead clicks → HTML).",
+  needs: ["Layer 1", "Layer 7"], output: "PSEUDO_INTERACTIONS_<klient>.html",
+  tier: "std", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Specyficzne — wykrywa konkretny UX bug type. Wysokoaktywne dla shopify/idosell sklepów gdzie devs zostawili 'cosmetic' divy." },
+
+{ id: "p1-8", layers: [1, 8], type: "para", name: "HTML × Category (struktura per kategoria)",
+  what: "Per kategoria klienta: czy HTML reflektuje Tier-1 specs w atrybutach produktu / kategorii?",
+  needs: ["Layer 1", "Layer 8"], output: "HTML_CATEGORY_GAP_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true,
+  opusWhy: "Łączy techniczny audit z category knowledge. Identyfikuje gdzie schema produktu zaniedbuje Tier-1. Wysoka wartość." },
+
+{ id: "p1-9", layers: [1, 9], type: "para", name: "HTML × GEO (schema dla AI Overview)",
+  what: "Per typ schema (Product, FAQ, HowTo): czy poprawnie skonfigurowany pod AI citability?",
+  needs: ["Layer 1", "Layer 9"], output: "GEO_SCHEMA_<klient>.html",
+  tier: "std", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "GEO + technical SEO przecięcie. Krytyczne dla AI-era widoczności. Konkurencja mało adresuje schema-specific GEO." },
+
+{ id: "p1-10", layers: [1, 10], type: "para", name: "HTML × Tactics (taktyki wymagające zmian HTML)",
+  what: "Z 200+ taktyk wybiera te które wymagają zmian HTML/template — przydzielone do dev team.",
+  needs: ["Layer 1", "Layer 10"], output: "DEV_TACTICS_<klient>.html",
+  tier: "lite", v: 3, u: 1, opusScore: 4, opusRec: false,
+  opusWhy: "Wartość średnia — tylko sortuje istniejącą listę." },
+
+{ id: "p1-11", layers: [1, 11], type: "para", name: "HTML × Transakcja (checkout HTML audit)",
+  what: "Per krok checkout: HTML structure, accessibility, error states, autocomplete fields.",
+  needs: ["Layer 1", "Layer 11"], output: "CHECKOUT_HTML_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Specyficzny dev audit checkout — wartość OK ale wymaga full-funnel inspection (layer 11 więcej)." },
+
+// Pary z warstwą 2 (Visual)
+{ id: "p2-3", layers: [2, 3], type: "para", name: "⭐ Visual × Content (per fold content alignment)",
+  what: "Per fold (screenshot): czy content w tym fold trafia w to czego shopper szuka? Hierarchia copy + visual.",
+  needs: ["Layer 2", "Layer 3"], output: "VISUAL_CONTENT_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "Rdzeń + Content. Bardzo praktyczne dla content team. Pokazuje gdzie copy zarąbiście napisany jest schowany." },
+
+{ id: "p2-4", layers: [2, 4], type: "para", name: "⭐ Visual × CR per widok",
+  what: "Konwersja per widok nałożona na ranking popularności wizualnej fold-by-fold.",
+  needs: ["Layer 2", "Layer 4"], output: "VISUAL_CR_<klient>.html — heatmapa popularność × CR",
+  tier: "pro", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Łączy Visual + Analytics — najjaśniejszy ROI per audit. Klient widzi DOKŁADNIE które widoki mają wysoki traffic ale low conversion." },
+
+{ id: "p2-5", layers: [2, 5], type: "para", name: "⭐ Visual × Ads landing pages",
+  what: "Visual hierarchy landing pages dla ads campaigns vs pretender'y konwersji. Message match + above the fold alignment.",
+  needs: ["Layer 2", "Layer 5"], output: "VISUAL_ADS_LP_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Ads spend optimization angle. Wartość mocna gdy klient pali budżet na słabo skonfigurowane LPs (większość)." },
+
+{ id: "p2-6", layers: [2, 6], type: "para", name: "Visual × GSC (organic landing pages)",
+  what: "Per top organic page: visual hierarchy vs query intent.",
+  needs: ["Layer 2", "Layer 6"], output: "VISUAL_ORGANIC_LP_<klient>.html",
+  tier: "std", v: 3, u: 1, opusScore: 4, opusRec: false,
+  opusWhy: "Wartość średnia — niska gęstość information." },
+
+{ id: "p2-7", layers: [2, 7], type: "para", name: "⭐ Visual × Clarity (Heatmap × Layout)",
+  what: "Heatmapa Clarity nałożona na visual layout fold-by-fold. Dead clicks vs dead zones.",
+  needs: ["Layer 2", "Layer 7"], output: "VISUAL_CLARITY_<klient>.html",
+  tier: "std", v: 4, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "Bardzo praktyczna para — pokazuje GDZIE shopper KLIKA vs gdzie był ZAPLANOWANY by kliknąć. Krytyczne dla quick wins." },
+
+{ id: "p2-8", layers: [2, 8], type: "para", name: "⭐⭐ Cortex Reference Audit (RDZEŃ × RDZEŃ)",
+  what: "Layout per widok nałożony na Tier Specs + CEPs kategorii. Pokazuje GDZIE shopper widzi (lub NIE WIDZI) czego oczekuje per kategoria.",
+  needs: ["Layer 2", "Layer 8", "Cross-reference engine"], output: "CORTEX_REFERENCE_AUDIT_<klient>.html — 8 tabów + Visual×Category overlay",
+  tier: "premium", v: 5, u: 3, opusScore: 10, opusRec: true, flagship: true, empirical: false,
+  opusWhy: "🏆🏆 Najjaśniejszy produkt Cortex. Rdzeń × Rdzeń. Każdy nowy klient EEL dostaje to jako gold standard. Buduje vault knowledge per kategoria." },
+
+{ id: "p2-9", layers: [2, 9], type: "para", name: "⭐ Visual × GEO Score",
+  what: "Layout PDP nałożony na GEO score per element. Pokazuje WHICH visual elements obniżają AI citability.",
+  needs: ["Layer 2", "Layer 9"], output: "VISUAL_GEO_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "Konkretny actionable insight: które fragmenty PDP musisz zmienić by AI lepiej cytowała. Future-proof angle." },
+
+{ id: "p2-10", layers: [2, 10], type: "para", name: "⭐ Visual × Tactics Bank",
+  what: "Każdy fold mapowany do potencjalnych taktyk z biblioteki 200+ (bias-aligned).",
+  needs: ["Layer 2", "Layer 10"], output: "VISUAL_TACTICS_<klient>.html",
+  tier: "std", v: 4, u: 2, opusScore: 7, opusRec: true, flagship: true,
+  opusWhy: "Praktyczna — dla każdego fold dostajesz ranked list of tactics + estimated lift. Łatwe do iteracji." },
+
+{ id: "p2-11", layers: [2, 11], type: "para", name: "⭐ Visual × Cart cross-sell",
+  what: "Cross-sell w PDP+koszyku nałożony na visual layout. Pokazuje WHERE cross-sell powinno być a nie jest.",
+  needs: ["Layer 2", "Layer 11"], output: "CROSSELL_VISUAL_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "AOV booster — top tier dla klientów na Shopify/Idosell. Visual placement matters more niż większość myśli." },
+
+// Pary z warstwą 3 (Content)
+{ id: "p3-4", layers: [3, 4], type: "para", name: "Content × GA4 (engagement metrics per copy)",
+  what: "Per element copy: bounce rate, scroll depth, time on element. Identyfikacja słabego copy.",
+  needs: ["Layer 3", "Layer 4"], output: "CONTENT_ENGAGEMENT_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 5, opusRec: false,
+  opusWhy: "Wartość średnia — wiele platform robi to natywnie. Edge: per-element granularity." },
+
+{ id: "p3-5", layers: [3, 5], type: "para", name: "Content × Ads (creative recycling)",
+  what: "Best-performing ad creatives → kopia pomysłu/copy do PDP/landing. Reverse engineering co konwertuje.",
+  needs: ["Layer 3", "Layer 5"], output: "CREATIVE_RECYCLE_<klient>.md",
+  tier: "std", v: 4, u: 1, opusScore: 5, opusRec: false,
+  opusWhy: "Praktyczne ale wymaga kreatywności manualnej. Trudno zautomatyzować z V/U > 5." },
+
+{ id: "p3-6", layers: [3, 6], type: "para", name: "Content × GSC (organic query × copy match)",
+  what: "Per top organic query: czy copy strony adresuje query? Per-query gap analysis.",
+  needs: ["Layer 3", "Layer 6"], output: "CONTENT_QUERY_GAP_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Standard content SEO — wartość OK. Niska unikalność (Surfer/Clearscope robi to)." },
+
+{ id: "p3-7", layers: [3, 7], type: "para", name: "Content × Clarity (engagement × heatmap)",
+  what: "Heatmapa scrolla na fragments copy + read time. Pokazuje który content user pomija.",
+  needs: ["Layer 3", "Layer 7"], output: "CONTENT_HEATMAP_<klient>.html",
+  tier: "std", v: 3, u: 1, opusScore: 4, opusRec: false,
+  opusWhy: "Wartość niska — Clarity natywnie pokazuje scroll depth." },
+
+{ id: "p3-8", layers: [3, 8], type: "para", name: "⭐ Content × Category Tier Specs",
+  what: "Per PDP: czy tytuł zawiera Tier-1 specs? czy bullets adresują CEPs? gap analysis per produkt.",
+  needs: ["Layer 3", "Layer 8"], output: "CONTENT_CATEGORY_GAP_<klient>.html — tabela per produkt",
+  tier: "pro", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Najwartościowsza para content-side. Direct actionable: 'tytuł brak Tier-1 spec X, dorzuć'. ROI mierzalny per produkt." },
+
+{ id: "p3-9", layers: [3, 9], type: "para", name: "⭐ Content × GEO (PDP rewrite blueprint)",
+  what: "Content per PDP → GEO-optimized rewrite blueprint. Tytuł + bullets + FAQ + passages.",
+  needs: ["Layer 3", "Layer 9"], output: "PDP_REWRITE_<klient>_<slug>.md per produkt",
+  tier: "std", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Już live u SejfZone (44-61 → 72-84 score). Powtarzalny produkt. Wymaga skill /geo-pdp-writer + /geo-content-diff." },
+
+{ id: "p3-10", layers: [3, 10], type: "para", name: "Content × Tactics (copy-driven tactics)",
+  what: "Z 200+ taktyk wybiera te które wymagają zmian copy — przydzielone do content team.",
+  needs: ["Layer 3", "Layer 10"], output: "COPY_TACTICS_<klient>.html",
+  tier: "lite", v: 3, u: 1, opusScore: 4, opusRec: false,
+  opusWhy: "Wartość średnia — sortowanie istniejącej listy." },
+
+{ id: "p3-11", layers: [3, 11], type: "para", name: "Content × Transakcja (trust copy w checkout)",
+  what: "Per krok checkout: czy trust copy (gwarancje, zwroty, security) jest na miejscu i widoczne?",
+  needs: ["Layer 3", "Layer 11"], output: "TRUST_COPY_CHECKOUT_<klient>.md",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Praktyczne ale wąskie — wartość konkretnego klienta zależna od bieżącego stanu checkout." },
+
+// Pary z warstwą 4 (GA4)
+{ id: "p4-5", layers: [4, 5], type: "para", name: "GA4 × Ads attribution gap",
+  what: "Differential GA4 vs Ads platforms attribution. Pokazuje gdzie cross-channel attribution kuleje.",
+  needs: ["Layer 4", "Layer 5"], output: "ATTRIBUTION_GAP_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Standard analytics audit — wiele firm to robi. Mocne dla klientów z misalignment problem (Plichta? do sprawdzenia)." },
+
+{ id: "p4-6", layers: [4, 6], type: "para", name: "GA4 × GSC (organic landing performance)",
+  what: "Per organic landing page: GSC impression/CTR vs GA4 engagement/conversion.",
+  needs: ["Layer 4", "Layer 6"], output: "ORGANIC_PERFORMANCE_<klient>.html",
+  tier: "std", v: 3, u: 1, opusScore: 4, opusRec: false,
+  opusWhy: "Standard organic audit — wartość średnia." },
+
+{ id: "p4-7", layers: [4, 7], type: "para", name: "⭐ GA4 × Clarity (funnels × heatmaps)",
+  what: "Funnel dropoff z GA4 + heatmapa Clarity per krok. Diagnostyka WHERE i WHY drop.",
+  needs: ["Layer 4", "Layer 7"], output: "FUNNEL_CLARITY_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 7, opusRec: true,
+  opusWhy: "Praktyczne — funnel mówi WHERE, heatmapa mówi WHY. Klient widzi dokładnie czemu drop." },
+
+{ id: "p4-8", layers: [4, 8], type: "para", name: "⭐ GA4 × Category (per-category performance)",
+  what: "Per kategoria: traffic, conversion rate, AOV. Identyfikuje under-performing kategorie + over-performing.",
+  needs: ["Layer 4", "Layer 8"], output: "CATEGORY_PERFORMANCE_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "Bardzo praktyczne dla klienta z 10+ kategoriami. Pokazuje gdzie strategicznie inwestować." },
+
+{ id: "p4-9", layers: [4, 9], type: "para", name: "⭐ GA4 × GEO (AI traffic share)",
+  what: "Z całego traffic: jaki % przychodzi z AI sources (ChatGPT, Perplexity referrals)? Trend over time.",
+  needs: ["Layer 4", "Layer 9"], output: "AI_TRAFFIC_SHARE_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "Bleeding edge — większość klientów NIE wie ile AI traffic dostaje. Mierzymy to teraz dla SejfZone/Fera." },
+
+{ id: "p4-10", layers: [4, 10], type: "para", name: "GA4 × Tactics (data-driven tactic priority)",
+  what: "GA4 KPIs identyfikują bottleneck KPI → ranked taktyki które adresują ten KPI z biblioteki 200+.",
+  needs: ["Layer 4", "Layer 10"], output: "DATA_TACTICS_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Praktyczne ale wymaga manualnego mapowania KPI ↔ tactic. Wartość OK." },
 
 { id: "p4-11", layers: [4, 11], type: "para", name: "GA4 × Transakcja (checkout funnel)",
   what: "Każdy krok checkout: GA4 event coverage + step success rate + drop reasons.",
-  needs: ["Layer 4", "Layer 11"],
-  output: "CHECKOUT_FUNNEL_<klient>.html",
-  tier: "std", v: 4, u: 1, ready: true },
+  needs: ["Layer 4", "Layer 11"], output: "CHECKOUT_FUNNEL_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 7, opusRec: true,
+  opusWhy: "Praktyczny checkout audit — wymaga proper event setup (często brak). Wartość mocna dla klientów na Shopify/IdoSell." },
 
-{ id: "p8-10", layers: [8, 10], type: "para", name: "Category × Tactics (per-CEP playbook)",
+// Pary z warstwą 5 (Ads)
+{ id: "p5-6", layers: [5, 6], type: "para", name: "Ads × GSC (paid vs organic visibility)",
+  what: "Per query: paid impression share + organic position. Identyfikuje gdzie marnotrawimy budżet na queries gdzie i tak rankujemy.",
+  needs: ["Layer 5", "Layer 6"], output: "PAID_ORGANIC_OVERLAP_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 5, opusRec: false,
+  opusWhy: "Standard ads optimization — Google Ads Editor robi to. Wartość średnia." },
+
+{ id: "p5-7", layers: [5, 7], type: "para", name: "Ads × Clarity (LP friction per campaign)",
+  what: "Per campaign landing page: Clarity rage clicks + dead clicks. Pokazuje gdzie pali się budget na słabe LPs.",
+  needs: ["Layer 5", "Layer 7"], output: "ADS_LP_FRICTION_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Praktyczne — pokazuje konkretny waste. Wartość OK ale wąska." },
+
+{ id: "p5-8", layers: [5, 8], type: "para", name: "⭐ CEP-based Ads Targeting",
+  what: "Ads campaigns aligned z CEPs kategorii. Pokazuje gdzie targeting jest brand-only vs CEP-based.",
+  needs: ["Layer 5", "Layer 8"], output: "CEP_ADS_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "Strategiczny insight — większość ads ignoruje CEPs. Direct ROI improvement." },
+
+{ id: "p5-9", layers: [5, 9], type: "para", name: "Ads × GEO (paid AI traffic)",
+  what: "Czy Ads landing pages są AI-citable? Future: czy Perplexity/ChatGPT Search pokazują nasze ads?",
+  needs: ["Layer 5", "Layer 9"], output: "ADS_GEO_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Future-proof — gdy Perplexity wprowadzi sponsored we wszystkich kategoriach, te LPs trzeba mieć gotowe." },
+
+{ id: "p5-10", layers: [5, 10], type: "para", name: "Ads × Tactics (creative test backlog)",
+  what: "Z 200+ taktyk wyciąga te które testują się jako ad creatives — backlog kreatywnych testów.",
+  needs: ["Layer 5", "Layer 10"], output: "AD_CREATIVES_BACKLOG_<klient>.md",
+  tier: "lite", v: 3, u: 1, opusScore: 4, opusRec: false,
+  opusWhy: "Wartość średnia — sortowanie listy." },
+
+{ id: "p5-11", layers: [5, 11], type: "para", name: "Ads × Transakcja (paid → checkout funnel)",
+  what: "Per campaign: traffic → checkout step rates. Identyfikuje campaigns które generują 'fake' traffic.",
+  needs: ["Layer 5", "Layer 11"], output: "PAID_CHECKOUT_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Standard ads audit — wartość OK. Niska unikalność (Triple Whale)." },
+
+// Pary z warstwą 6 (GSC)
+{ id: "p6-7", layers: [6, 7], type: "para", name: "GSC × Clarity (organic landings UX)",
+  what: "Per top organic landing page: Clarity behavioral data. Czy organic traffic ma UX issues?",
+  needs: ["Layer 6", "Layer 7"], output: "ORGANIC_UX_<klient>.html",
+  tier: "std", v: 3, u: 1, opusScore: 4, opusRec: false,
+  opusWhy: "Wartość niska — można derive z layer 4+7." },
+
+{ id: "p6-8", layers: [6, 8], type: "para", name: "GSC × Category (organic per kategoria)",
+  what: "Per kategoria: top queries, position, impressions. Identyfikacja under-visible kategorii.",
+  needs: ["Layer 6", "Layer 8"], output: "ORGANIC_CATEGORY_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Praktyczne dla SEO planning — wartość OK." },
+
+{ id: "p6-9", layers: [6, 9], type: "para", name: "⭐ Organic × GEO (SERP vs AI readiness)",
+  what: "Per query: ranking SERP + GEO score AI Overview readiness. Future-proof traffic strategy.",
+  needs: ["Layer 6", "Layer 9"], output: "ORGANIC_GEO_<klient>.html",
+  tier: "std", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Strategic angle — pokazuje które rankingi przetrwają AI shift, a które nie." },
+
+{ id: "p6-10", layers: [6, 10], type: "para", name: "GSC × Tactics (SEO-driven tactics)",
+  what: "Z 200+ taktyk wybiera te które adresują top GSC bottlenecks (low CTR, high impressions).",
+  needs: ["Layer 6", "Layer 10"], output: "SEO_TACTICS_<klient>.md",
+  tier: "lite", v: 3, u: 1, opusScore: 4, opusRec: false,
+  opusWhy: "Wartość średnia — sortowanie." },
+
+// Pary z warstwą 7 (Clarity)
+{ id: "p7-8", layers: [7, 8], type: "para", name: "⭐ Clarity × Category (per-category friction)",
+  what: "Per kategoria klienta: rage clicks, dead clicks, scroll depth. Identyfikuje category-specific UX bugs.",
+  needs: ["Layer 7", "Layer 8"], output: "CATEGORY_UX_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Praktyczne dla multi-category klientów. Pokazuje że X kategoria ma specific issues których brak w Y." },
+
+{ id: "p7-9", layers: [7, 9], type: "para", name: "Clarity × GEO (behaviour after AI source visit)",
+  what: "Sessions z AI referrals: gdzie te sessions konwertują/dropują? Czy AI traffic 'lecznie' inaczej?",
+  needs: ["Layer 7", "Layer 9"], output: "AI_VISITORS_BEHAVIOUR_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Bleeding edge — to są pierwsze dane porównawcze AI-referred vs organic-referred shoppers." },
+
+{ id: "p7-10", layers: [7, 10], type: "para", name: "Clarity × Tactics (rage-clicks driven tactics)",
+  what: "Z 200+ taktyk wybiera te które adresują top rage click patterns.",
+  needs: ["Layer 7", "Layer 10"], output: "BEHAVIOR_TACTICS_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Praktyczne — direct mapping problem → solution." },
+
+{ id: "p7-11", layers: [7, 11], type: "para", name: "⭐ Clarity × Checkout (friction diagnostics)",
+  what: "Clarity rage clicks + dead clicks w checkout overlayed na step-by-step inspection.",
+  needs: ["Layer 7", "Layer 11"], output: "CHECKOUT_FRICTION_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Cargo checkout — najbardziej krytyczny moment + behavioural data = exec roadmap." },
+
+// Pary z warstwą 8 (Category)
+{ id: "p8-9", layers: [8, 9], type: "para", name: "⭐ CDT × AI Passages (GEO content blueprint)",
+  what: "Per CDT branch + Tier Spec kategorii → konkretny passage do PDP/kategorii pod AI Overview citability.",
+  needs: ["Layer 8", "Layer 9"], output: "CDT_AI_BLUEPRINT_<klient>_<kategoria>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Category × GEO — bardzo unikalne. Generuje exact passages do AI-citation per kategoria. Już live w SejfZone." },
+
+{ id: "p8-10", layers: [8, 10], type: "para", name: "⭐ Category × Tactics (per-CEP playbook)",
   what: "Per CEP kategorii → konkretne taktyki z biblioteki 200+ które ten CEP adresują.",
-  needs: ["Layer 8", "Layer 10"],
-  output: "CEP_TACTICS_<klient>.html",
-  tier: "pro", v: 4, u: 2, ready: true },
+  needs: ["Layer 8", "Layer 10"], output: "CEP_TACTICS_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Praktyczne — direct mapping CEP → tactic dla quick wins." },
 
-{ id: "p8-11", layers: [8, 11], type: "para", name: "Category × Checkout (Tier-1 spec na checkout)",
+{ id: "p8-11", layers: [8, 11], type: "para", name: "⭐ Category × Checkout (Tier-1 spec na checkout)",
   what: "Czy Tier-1 specs kategorii są widoczne podczas checkout (last-mile reassurance)?",
-  needs: ["Layer 8", "Layer 11"],
-  output: "CATEGORY_CHECKOUT_<klient>.html",
-  tier: "std", v: 4, u: 2, ready: true },
+  needs: ["Layer 8", "Layer 11"], output: "CATEGORY_CHECKOUT_<klient>.html",
+  tier: "std", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Konkretny insight — czy potwierdzasz wybór klienta na ostatnim etapie? Większość sklepów tego nie robi." },
+
+// Pary z warstwą 9 (GEO)
+{ id: "p9-10", layers: [9, 10], type: "para", name: "GEO × Tactics (taktyki podnoszące GEO score)",
+  what: "Z 200+ taktyk wybiera te które najmocniej podnoszą GEO score per pillar.",
+  needs: ["Layer 9", "Layer 10"], output: "GEO_TACTICS_<klient>.md",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Specjalistyczne — wartość OK ale wąska." },
 
 { id: "p9-11", layers: [9, 11], type: "para", name: "GEO × Checkout (trust + AI signals)",
   what: "Trust signals checkout pod kątem GEO citability (reviews, social proof, guarantees).",
-  needs: ["Layer 9", "Layer 11"],
-  output: "GEO_CHECKOUT_<klient>.html",
-  tier: "std", v: 3, u: 2, ready: true },
+  needs: ["Layer 9", "Layer 11"], output: "GEO_CHECKOUT_<klient>.html",
+  tier: "std", v: 3, u: 2, opusScore: 5, opusRec: false,
+  opusWhy: "Wartość średnia — niewielu klientów ma proper review schema." },
 
-// =========== TRÓJKI (top 15 z 165 z TROJKI_I_CZWORKI.md) ===========
+// Pary z warstwą 10 (Tactics) i 11
+{ id: "p10-11", layers: [10, 11], type: "para", name: "Tactics × Transakcja (checkout taktyki)",
+  what: "Z 200+ taktyk wybiera te specjalnie dla checkout: progress bars, trust badges, error UX, guest checkout.",
+  needs: ["Layer 10", "Layer 11"], output: "CHECKOUT_TACTICS_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Praktyczne — direct backlog dla dev team." },
+
+// =========== TRÓJKI (top sensownych z 165) ===========
+
+// Trójki empiryczne (U=3/3) i top flagship
 { id: "t1-4-8", layers: [1, 4, 8], type: "trojka", name: "🎯 S1 — HTML × GA4 × Category (empiryczna U=3/3)",
   what: "HTML elementów per kategoria — które elementy istnieją vs powinny istnieć per Tier Spec + jak są trackowane. Empirycznie najbardziej unikalne na świecie.",
-  needs: ["Layer 1+4+8"],
-  output: "EMPIRICAL_TRIPLE_S1_<klient>.html — 3D matrix",
-  tier: "premium", v: 5, u: 3, ready: true, flagship: true, empirical: true },
+  needs: ["Layer 1+4+8"], output: "EMPIRICAL_TRIPLE_S1_<klient>.html — 3D matrix",
+  tier: "premium", v: 5, u: 3, opusScore: 10, opusRec: true, flagship: true, empirical: true,
+  opusWhy: "🎯 Empirical U=3/3. Najbardziej premium trójka. Wymaga zaawansowanego cross-walk engine. Dla anchor klientów typu Plichta." },
 
 { id: "t1-2-4", layers: [1, 2, 4], type: "trojka", name: "🎯 S3 — HTML × Visual × GA4 (empiryczna U=3/3)",
   what: "Pełny audyt Dev+Shopper+Analytics: element → widok → event. 360° pokrycie shopperskiej ścieżki.",
-  needs: ["Layer 1+2+4"],
-  output: "EMPIRICAL_TRIPLE_S3_<klient>.html",
-  tier: "premium", v: 5, u: 3, ready: true, flagship: true, empirical: true },
+  needs: ["Layer 1+2+4"], output: "EMPIRICAL_TRIPLE_S3_<klient>.html",
+  tier: "premium", v: 5, u: 3, opusScore: 10, opusRec: true, flagship: true, empirical: true,
+  opusWhy: "🎯 Empirical U=3/3. Krytyczna trójka dla dev-led organizacji. Plichta poziom." },
 
-{ id: "t2-4-8", layers: [2, 4, 8], type: "trojka", name: "Visual × GA4 × Category",
-  what: "Layout per kategoria + jak GA4 mierzy interakcje z tym layoutem.",
-  needs: ["Layer 2+4+8"],
-  output: "VGC_TRIPLE_<klient>.html",
-  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+{ id: "t2-4-8", layers: [2, 4, 8], type: "trojka", name: "⭐⭐ Visual × GA4 × Category",
+  what: "Layout per kategoria + jak GA4 mierzy interakcje z tym layoutem. Per-category dashboard.",
+  needs: ["Layer 2+4+8"], output: "VGC_TRIPLE_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 2+8 jako rdzeń + GA4. Najjaśniejsza practical trójka — visual analytics per kategoria." },
 
-{ id: "t2-3-8", layers: [2, 3, 8], type: "trojka", name: "Visual × Content × Category",
+{ id: "t2-3-8", layers: [2, 3, 8], type: "trojka", name: "⭐⭐ Visual × Content × Category",
   what: "Per PDP: layout + content + zgodność z Tier Specs. Najgęstsze pokrycie shopper view.",
-  needs: ["Layer 2+3+8"],
-  output: "VCC_TRIPLE_<klient>.html",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+  needs: ["Layer 2+3+8"], output: "VCC_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Pełen content-side audit per kategoria. Krytyczne dla shopper-first marketplaces." },
 
-{ id: "t2-8-9", layers: [2, 8, 9], type: "trojka", name: "Visual × Category × GEO",
+{ id: "t2-8-9", layers: [2, 8, 9], type: "trojka", name: "⭐⭐ Visual × Category × GEO",
   what: "Layout per kategoria pod kątem AI citability. WHERE Claude/GPT/Perplexity 'widzą' tę kategorię w PDP.",
-  needs: ["Layer 2+8+9"],
-  output: "VCG_TRIPLE_<klient>.html",
-  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+  needs: ["Layer 2+8+9"], output: "VCG_TRIPLE_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Future-proof × category × visual. Trzy najmocniejsze warstwy. Premium offering dla forward-thinking klientów." },
 
-{ id: "t2-8-10", layers: [2, 8, 10], type: "trojka", name: "Visual × Category × Tactics",
+{ id: "t2-8-10", layers: [2, 8, 10], type: "trojka", name: "⭐ Visual × Category × Tactics",
   what: "Per fold per kategoria — konkretne taktyki które najbardziej zadziałają w tej kategorii.",
-  needs: ["Layer 2+8+10"],
-  output: "VCT_TRIPLE_<klient>.html",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+  needs: ["Layer 2+8+10"], output: "VCT_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "Bardzo actionable — direct ranked taktyki per fold per kategoria. Implementation roadmap." },
 
-{ id: "t2-7-8", layers: [2, 7, 8], type: "trojka", name: "Visual × Clarity × Category",
+{ id: "t2-7-8", layers: [2, 7, 8], type: "trojka", name: "⭐ Visual × Clarity × Category",
   what: "Heatmapa Clarity + layout + Tier Specs. Diagnoza dlaczego shopper nie klika na ważne elementy kategorii.",
-  needs: ["Layer 2+7+8"],
-  output: "VCC2_TRIPLE_<klient>.html",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+  needs: ["Layer 2+7+8"], output: "VCC2_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "Diagnostic trójka — diagnoza fold × kategoria z behavioral data. Quick wins." },
 
-{ id: "t4-8-9", layers: [4, 8, 9], type: "trojka", name: "GA4 × Category × GEO",
+{ id: "t4-8-9", layers: [4, 8, 9], type: "trojka", name: "⭐ GA4 × Category × GEO",
   what: "GA4 organic traffic per kategoria + GEO readiness per kategoria. Future traffic strategy.",
-  needs: ["Layer 4+8+9"],
-  output: "GCG_TRIPLE_<klient>.html",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+  needs: ["Layer 4+8+9"], output: "GCG_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "Strategiczna — pokazuje które kategorie warto inwestować w AI-readiness. ROI matrix." },
 
-{ id: "t1-2-8", layers: [1, 2, 8], type: "trojka", name: "HTML × Visual × Category",
+{ id: "t1-2-8", layers: [1, 2, 8], type: "trojka", name: "⭐ HTML × Visual × Category",
   what: "Dev+Shopper view per kategoria — czy struktura HTML wspiera Tier Spec hierarchy?",
-  needs: ["Layer 1+2+8"],
-  output: "HVC_TRIPLE_<klient>.html",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+  needs: ["Layer 1+2+8"], output: "HVC_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "Pełen dev-side audit per kategoria. Dla klientów z dev teamem (Plichta poziom)." },
 
-{ id: "t1-4-2", layers: [1, 4, 2], type: "trojka", name: "HTML × GA4 × Visual",
-  what: "Co user widzi (visual) + co user robi (HTML interakcje) + co mierzymy (GA4) — pełna triangulacja shopper journey.",
-  needs: ["Layer 1+4+2"],
-  output: "HVA_TRIPLE_<klient>.html",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+{ id: "t1-2-4-alt", layers: [1, 4, 2], type: "trojka", name: "⭐ HTML × GA4 × Visual",
+  what: "Co user widzi (visual) + co user robi (HTML interakcje) + co mierzymy (GA4) — pełna triangulacja.",
+  needs: ["Layer 1+4+2"], output: "HVA_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "Triangulacja dev-shopper-analytics. Bardzo praktyczne dla dev-led organizacji." },
 
-{ id: "t2-4-11", layers: [2, 4, 11], type: "trojka", name: "Visual × GA4 × Transakcja",
-  what: "Pełne checkout diagnostics: layout + events + step success rate. Najbardziej operacyjna trójka.",
-  needs: ["Layer 2+4+11"],
-  output: "VAT_TRIPLE_<klient>.html",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+{ id: "t2-4-11", layers: [2, 4, 11], type: "trojka", name: "⭐ Visual × GA4 × Transakcja",
+  what: "Pełne checkout diagnostics: layout + events + step success rate. Najbardziej operacyjna trójka checkout.",
+  needs: ["Layer 2+4+11"], output: "VAT_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "Najmocniejsza checkout-focused trójka. Każdy klient z checkout problem dostaje tę." },
 
-{ id: "t3-8-9", layers: [3, 8, 9], type: "trojka", name: "Content × Category × GEO",
+{ id: "t3-8-9", layers: [3, 8, 9], type: "trojka", name: "⭐ Content × Category × GEO",
   what: "Content per produkt + Tier Spec category + GEO citability score. Full content rewrite blueprint.",
-  needs: ["Layer 3+8+9"],
-  output: "CCG_TRIPLE_<klient>.html",
-  tier: "pro", v: 5, u: 2, ready: true, flagship: true },
+  needs: ["Layer 3+8+9"], output: "CCG_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Już testowane w SejfZone (GEO rekomendacje 13→65 score). Production-ready. Powtarzalny." },
 
 { id: "t5-8-10", layers: [5, 8, 10], type: "trojka", name: "Ads × Category × Tactics",
   what: "Ads targeting per CEP kategorii + per CEP taktyki w landing pages. Full-funnel CEP alignment.",
-  needs: ["Layer 5+8+10"],
-  output: "ACT_TRIPLE_<klient>.html",
-  tier: "pro", v: 4, u: 2, ready: true, flagship: false },
+  needs: ["Layer 5+8+10"], output: "ACT_TRIPLE_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Pełen CEP funnel — ads + lp + taktyki. Spec product dla retail media klientów." },
 
-{ id: "t2-4-10", layers: [2, 4, 10], type: "trojka", name: "Visual × GA4 × Tactics",
+{ id: "t2-4-10", layers: [2, 4, 10], type: "trojka", name: "⭐ Visual × GA4 × Tactics",
   what: "Per fold: visual hierarchy + GA4 interaction rate + sugerowane taktyki. Per-element scoring.",
-  needs: ["Layer 2+4+10"],
-  output: "VAT2_TRIPLE_<klient>.html",
-  tier: "pro", v: 4, u: 2, ready: true, flagship: false },
+  needs: ["Layer 2+4+10"], output: "VAT2_TRIPLE_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Praktyczne — rank tactics by visual × GA4 impact. Implementation prioritization." },
 
-{ id: "t4-7-11", layers: [4, 7, 11], type: "trojka", name: "GA4 × Clarity × Transakcja",
+{ id: "t4-7-11", layers: [4, 7, 11], type: "trojka", name: "⭐ GA4 × Clarity × Transakcja",
   what: "Pełny diagnostyczny checkout: GA4 funnel + Clarity rage clicks + step inspection. WHY drop.",
-  needs: ["Layer 4+7+11"],
-  output: "ACT2_TRIPLE_<klient>.html",
-  tier: "pro", v: 4, u: 2, ready: true, flagship: false },
+  needs: ["Layer 4+7+11"], output: "ACT2_TRIPLE_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Najbardziej diagnostyczna checkout trójka — pełna triangulacja problemu." },
 
-// =========== CZWÓRKI (top 8 z 330) ===========
+// Trójki dodatkowe z rdzeniem
+{ id: "t2-3-9", layers: [2, 3, 9], type: "trojka", name: "⭐ Visual × Content × GEO (PDP rewrite premium)",
+  what: "Per PDP: layout + content + GEO score → full rewrite blueprint visual+textual.",
+  needs: ["Layer 2+3+9"], output: "VCG2_TRIPLE_<klient>.html",
+  tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "🏆 Premium content rewrite — visual + content + AI readiness. Top-tier deliverable per produkt." },
+
+{ id: "t2-3-4", layers: [2, 3, 4], type: "trojka", name: "⭐ Visual × Content × GA4",
+  what: "Per fold per copy: visual hierarchy + engagement metrics. Identyfikacja losing copy w high-traffic foldach.",
+  needs: ["Layer 2+3+4"], output: "VC4_TRIPLE_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Praktyczne — wykrywa konkretny copy który nie konwertuje pomimo dobrej pozycji visual." },
+
+{ id: "t2-5-8", layers: [2, 5, 8], type: "trojka", name: "Visual × Ads × Category (landing alignment)",
+  what: "Per ads campaign landing page: visual hierarchy + CEP match per kategoria. Message match + UX.",
+  needs: ["Layer 2+5+8"], output: "VAC_TRIPLE_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Mocna dla klientów z ads spend > 50K/mc. Pokazuje konkretne campaign × kategoria mismatch." },
+
+{ id: "t1-3-8", layers: [1, 3, 8], type: "trojka", name: "HTML × Content × Category (schema + content alignment)",
+  what: "Per produkt: czy schema oznacza content który adresuje Tier-1 specs?",
+  needs: ["Layer 1+3+8"], output: "HCC_TRIPLE_<klient>.html",
+  tier: "std", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Praktyczne — schema-aware content audit per kategoria. Tech + content + category." },
+
+{ id: "t1-4-11", layers: [1, 4, 11], type: "trojka", name: "HTML × GA4 × Transakcja (checkout dev audit)",
+  what: "Pełen dev-side audit checkout: HTML + events + step inspection. Identyfikuje wszystkie tracking gaps.",
+  needs: ["Layer 1+4+11"], output: "DEV_CHECKOUT_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Dla dev-led klientów. Pełen technical breakdown checkout problemów." },
+
+{ id: "t2-7-11", layers: [2, 7, 11], type: "trojka", name: "Visual × Clarity × Transakcja (full UX checkout)",
+  what: "Visual checkout + heatmapy + inspection. Pełen UX breakdown bez analytics dependency.",
+  needs: ["Layer 2+7+11"], output: "UX_CHECKOUT_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Dla klientów bez proper GA4 setup. UX-first checkout audit." },
+
+{ id: "t8-9-10", layers: [8, 9, 10], type: "trojka", name: "Category × GEO × Tactics (strategic playbook)",
+  what: "Per kategoria: AI readiness + taktyki które najlepiej działają w tej kategorii. Strategic playbook.",
+  needs: ["Layer 8+9+10"], output: "STRATEGIC_PLAYBOOK_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Strategic — łączy category knowledge + future-proof + executional taktyki." },
+
+{ id: "t2-9-10", layers: [2, 9, 10], type: "trojka", name: "Visual × GEO × Tactics",
+  what: "Visual elements which improve AI citability + sugerowane taktyki visual.",
+  needs: ["Layer 2+9+10"], output: "VGT_TRIPLE_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Bridges visual + GEO + tactics. Solid pro tier offering." },
+
+{ id: "t1-8-9", layers: [1, 8, 9], type: "trojka", name: "HTML × Category × GEO (schema-driven AI optimization)",
+  what: "Per kategoria: schema completeness + GEO score per element type. Tech-first AI optimization.",
+  needs: ["Layer 1+8+9"], output: "TECH_AI_CATEGORY_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Tech-side AI readiness per kategoria. Dla dev-led klientów building toward AI-era SEO." },
+
+{ id: "t3-7-8", layers: [3, 7, 8], type: "trojka", name: "Content × Clarity × Category (per-category content engagement)",
+  what: "Per kategoria: content + behaviour data. Identyfikuje content który shopper kategorii skip-uje.",
+  needs: ["Layer 3+7+8"], output: "CCC_TRIPLE_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Content × kategoria × behaviour — wąskie ale wartościowe dla multi-category." },
+
+{ id: "t4-8-10", layers: [4, 8, 10], type: "trojka", name: "GA4 × Category × Tactics (data-driven per category)",
+  what: "Per kategoria: bottleneck KPI + ranked taktyki adresujące ten KPI w tej kategorii.",
+  needs: ["Layer 4+8+10"], output: "DATA_CATEGORY_TACTICS_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Data + category + executable taktyki. Implementation prioritization at category level." },
+
+{ id: "t2-8-11", layers: [2, 8, 11], type: "trojka", name: "Visual × Category × Transakcja (category-aware checkout)",
+  what: "Czy Tier-1 specs kategorii są visualnie obecne w checkout? Last-mile reassurance.",
+  needs: ["Layer 2+8+11"], output: "VCT_CHECKOUT_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Praktyczne — wymusza category-specific checkout enhancements." },
+
+{ id: "t4-6-9", layers: [4, 6, 9], type: "trojka", name: "GA4 × GSC × GEO (full traffic strategy)",
+  what: "Pełen audit traffic: analytics + organic + AI-readiness. Strategic resource allocation.",
+  needs: ["Layer 4+6+9"], output: "FULL_TRAFFIC_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Strategic traffic angle. Bardzo wartościowe dla agency leadership." },
+
+// =========== CZWÓRKI (sensowne, top z 330) ===========
+
 { id: "c1-2-4-8", layers: [1, 2, 4, 8], type: "czworka", name: "🏆 CS1 — MISTRZ czwórka (empiryczna U=3/3)",
   what: "HTML+Visual+GA4+Category — pełna 4D diagnoza Cortex. Empirycznie najbardziej unikalna kombinacja audytowa na świecie (26 Google search potwierdzonych).",
-  needs: ["Layer 1+2+4+8", "Cortex Lab engine"],
-  output: "MISTRZ_CS1_<klient>.html — 4D matrix + System Insights z Truth Checker per insight",
-  tier: "premium", v: 5, u: 3, ready: true, flagship: true, empirical: true },
+  needs: ["Layer 1+2+4+8", "Cortex Lab engine"], output: "MISTRZ_CS1_<klient>.html — 4D matrix + System Insights z Truth Checker per insight",
+  tier: "premium", v: 5, u: 3, opusScore: 10, opusRec: true, flagship: true, empirical: true,
+  opusWhy: "🎯 Empirical U=3/3. JEDYNA czwórka empirycznie potwierdzona. Anchor produkt dla Plichta + każdego Premium tier klienta." },
 
-{ id: "c2-4-8-9", layers: [2, 4, 8, 9], type: "czworka", name: "Visual × GA4 × Category × GEO",
+{ id: "c2-4-8-9", layers: [2, 4, 8, 9], type: "czworka", name: "⭐⭐ Visual × GA4 × Category × GEO",
   what: "Shopper view + analytics + category alignment + AI readiness. Future-proof full audit.",
-  needs: ["Layer 2+4+8+9"],
-  output: "C4_VAGC_GEO_<klient>.html",
-  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+  needs: ["Layer 2+4+8+9"], output: "C4_VAGC_GEO_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Najlepsza non-empirical czwórka. 2 rdzenie + GA4 + GEO. Premium klient." },
 
-{ id: "c2-3-8-9", layers: [2, 3, 8, 9], type: "czworka", name: "Visual × Content × Category × GEO",
+{ id: "c2-3-8-9", layers: [2, 3, 8, 9], type: "czworka", name: "⭐⭐ Visual × Content × Category × GEO",
   what: "Najgęstsza czwórka content-side. Layout + tytuły+bullets + Tier Specs + GEO citability.",
-  needs: ["Layer 2+3+8+9"],
-  output: "C4_VCCG_<klient>.html",
-  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+  needs: ["Layer 2+3+8+9"], output: "C4_VCCG_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Content-side rewrite blueprint na premium poziomie. Pełen 'co i jak zmienić' per PDP." },
 
-{ id: "c2-4-8-10", layers: [2, 4, 8, 10], type: "czworka", name: "Visual × GA4 × Category × Tactics",
+{ id: "c2-4-8-10", layers: [2, 4, 8, 10], type: "czworka", name: "⭐⭐ Visual × GA4 × Category × Tactics",
   what: "Audit + sugerowane taktyki per fold per kategoria. Per-experiment ROI estimate.",
-  needs: ["Layer 2+4+8+10"],
-  output: "C4_VACT_<klient>.html",
-  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+  needs: ["Layer 2+4+8+10"], output: "C4_VACT_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Najbardziej executable czwórka. Audit → ranked taktyki z expected lift per fold per kategoria." },
 
-{ id: "c1-2-4-11", layers: [1, 2, 4, 11], type: "czworka", name: "HTML × Visual × GA4 × Checkout",
-  what: "Full-funnel diagnostyka: od HP do checkout w 4D.",
-  needs: ["Layer 1+2+4+11"],
-  output: "C4_HVAT_<klient>.html",
-  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+{ id: "c1-2-4-11", layers: [1, 2, 4, 11], type: "czworka", name: "⭐ HTML × Visual × GA4 × Checkout",
+  what: "Full-funnel diagnostyka: od HP do checkout w 4D. Najbardziej kompleksowa funnel-side czwórka.",
+  needs: ["Layer 1+2+4+11"], output: "C4_HVAT_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Pełna funnel diagnoza dla dev-led organizacji. Premium dev offering." },
 
-{ id: "c2-7-8-11", layers: [2, 7, 8, 11], type: "czworka", name: "Visual × Clarity × Category × Checkout",
+{ id: "c2-7-8-11", layers: [2, 7, 8, 11], type: "czworka", name: "⭐⭐ Visual × Clarity × Category × Checkout",
   what: "Layout + rage clicks + Tier Specs + checkout steps. Najbardziej operacyjna czwórka — wszystko gdzie diler widzi czemu nie kupują.",
-  needs: ["Layer 2+7+8+11"],
-  output: "C4_VCCC_<klient>.html",
-  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+  needs: ["Layer 2+7+8+11"], output: "C4_VCCC_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Najmocniejsza operational czwórka. Klient widzi DOKŁADNIE czemu shopper kategorii X nie kończy zakupu." },
 
-{ id: "c2-8-9-10", layers: [2, 8, 9, 10], type: "czworka", name: "Visual × Category × GEO × Tactics",
+{ id: "c2-8-9-10", layers: [2, 8, 9, 10], type: "czworka", name: "⭐⭐ Visual × Category × GEO × Tactics",
   what: "Layout per kategoria pod kątem AI readiness + sugerowane taktyki. Future + present operations.",
-  needs: ["Layer 2+8+9+10"],
-  output: "C4_VCGT_<klient>.html",
-  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+  needs: ["Layer 2+8+9+10"], output: "C4_VCGT_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Future-proof + executable. Najbardziej strategic czwórka dla forward-thinking klientów." },
 
-{ id: "c4-7-8-11", layers: [4, 7, 8, 11], type: "czworka", name: "GA4 × Clarity × Category × Checkout",
+{ id: "c4-7-8-11", layers: [4, 7, 8, 11], type: "czworka", name: "⭐ GA4 × Clarity × Category × Checkout",
   what: "Analytics + heatmapy + category-specific obstacles + checkout. Najmocniejsza data-side czwórka.",
-  needs: ["Layer 4+7+8+11"],
-  output: "C4_ACCC_<klient>.html",
-  tier: "premium", v: 5, u: 2, ready: true, flagship: true },
+  needs: ["Layer 4+7+8+11"], output: "C4_ACCC_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Data-driven kategorialna diagnoza checkout. Premium analytics offering." },
 
-// =========== PLACEHOLDERS (reszta 460 do dorobienia) ===========
-{ id: "ph-singles-rest", layers: [0], type: "singel", name: "📋 Solo 0 (Wiedza filtr) — opis do uzupełnienia",
-  what: "Warstwa filtra wiedzy — NIE tworzy par. Stosowana jako pre-processing filter dla wszystkich innych warstw.",
-  needs: ["Wiedza base z W11-W47"],
-  output: "FILTER_DOC_<klient>.md",
-  tier: "placeholder", v: 0, u: 0, ready: false },
+// Dodatkowe sensowne czwórki
+{ id: "c1-2-3-8", layers: [1, 2, 3, 8], type: "czworka", name: "⭐ HTML × Visual × Content × Category (PDP master audit)",
+  what: "Per PDP: tech + visual + copy + category fit. Najgęstsza PDP-side czwórka. Bez analytics dependency.",
+  needs: ["Layer 1+2+3+8"], output: "C4_PDP_MASTER_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Pełny PDP audit bez wymagania GA4 setup. Działa od dnia 1 z każdym klientem." },
 
-{ id: "ph-pary-rest", layers: [0, 0], type: "para", name: "📋 ~30 pozostałych par (z 55)",
-  what: "Pary które nie zawierają rdzenia (2 lub 8) — niższy priorytet, ale wciąż wartościowe dla nisz.",
-  needs: ["Future iteration"],
-  output: "TBD per para",
-  tier: "placeholder", v: 0, u: 0, ready: false },
+{ id: "c2-3-4-8", layers: [2, 3, 4, 8], type: "czworka", name: "⭐ Visual × Content × GA4 × Category (content perf master)",
+  what: "Content per kategoria + visual placement + engagement metrics. Co-czemu-jak per fold per kategoria.",
+  needs: ["Layer 2+3+4+8"], output: "C4_CONTENT_PERF_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Content strategy master. Identifies winning + losing copy per kategoria z visual context." },
 
-{ id: "ph-trojki-rest", layers: [0, 0, 0], type: "trojka", name: "📋 ~150 pozostałych trójek (z 165)",
-  what: "Trójki bez rdzenia LUB bez wystarczającego V+U — do oceny w iteracjach v8-v10.",
-  needs: ["Future iteration"],
-  output: "TBD per trójka",
-  tier: "placeholder", v: 0, u: 0, ready: false },
+{ id: "c2-4-7-8", layers: [2, 4, 7, 8], type: "czworka", name: "⭐ Visual × GA4 × Clarity × Category (UX master)",
+  what: "Pełna UX diagnoza per kategoria: layout + metrics + behaviour + category context.",
+  needs: ["Layer 2+4+7+8"], output: "C4_UX_MASTER_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Pełna UX-side diagnostyka per kategoria. Premium UX offering." },
 
-{ id: "ph-czworki-rest", layers: [0, 0, 0, 0], type: "czworka", name: "📋 ~320 pozostałych czwórek (z 330)",
-  what: "Czwórki bez wszystkich rdzeni LUB słabe overlap. Do oceny.",
-  needs: ["Future iteration"],
-  output: "TBD per czwórka",
-  tier: "placeholder", v: 0, u: 0, ready: false }
+{ id: "c1-2-8-9", layers: [1, 2, 8, 9], type: "czworka", name: "⭐ HTML × Visual × Category × GEO (tech + AI premium)",
+  what: "Tech audit + visual + kategoria + GEO. Najbardziej tech-first AI-era audit.",
+  needs: ["Layer 1+2+8+9"], output: "C4_TECH_AI_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Tech-first AI premium. Dla Plichta i dev-led organizacji z AI ambitions." },
+
+{ id: "c3-4-8-9", layers: [3, 4, 8, 9], type: "czworka", name: "⭐ Content × GA4 × Category × GEO (content master AI)",
+  what: "Content per kategoria + engagement + GEO readiness. Pełen content strategy.",
+  needs: ["Layer 3+4+8+9"], output: "C4_CONTENT_AI_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Content master dla AI-era. Bez visual dependency — pure content strategy." },
+
+{ id: "c2-3-7-8", layers: [2, 3, 7, 8], type: "czworka", name: "Visual × Content × Clarity × Category",
+  what: "Per fold per kategoria: layout + content + behaviour. Pełna shopper diagnostics.",
+  needs: ["Layer 2+3+7+8"], output: "C4_SHOPPER_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 8, opusRec: true,
+  opusWhy: "Pełna shopper-side analysis bez analytics. Solid pro tier." },
+
+{ id: "c1-4-8-11", layers: [1, 4, 8, 11], type: "czworka", name: "HTML × GA4 × Category × Transakcja",
+  what: "Pełen dev-side audit funnel per kategoria. Identyfikuje per-category checkout failures.",
+  needs: ["Layer 1+4+8+11"], output: "C4_DEV_FUNNEL_<klient>.html",
+  tier: "premium", v: 4, u: 2, opusScore: 8, opusRec: true,
+  opusWhy: "Dev-led + category-aware funnel diagnostics." },
+
+{ id: "c2-3-4-11", layers: [2, 3, 4, 11], type: "czworka", name: "Visual × Content × GA4 × Checkout",
+  what: "Visual + copy + analytics czeck przez checkout. Najbardziej content-aware checkout.",
+  needs: ["Layer 2+3+4+11"], output: "C4_CHECKOUT_CONTENT_<klient>.html",
+  tier: "premium", v: 4, u: 2, opusScore: 8, opusRec: true,
+  opusWhy: "Content-led checkout — niewielu robi to dobrze." },
+
+{ id: "c2-4-8-11", layers: [2, 4, 8, 11], type: "czworka", name: "⭐ Visual × GA4 × Category × Checkout (full checkout master)",
+  what: "Pełen analytics-driven checkout audit per kategoria. Top operational czwórka.",
+  needs: ["Layer 2+4+8+11"], output: "C4_FULL_CHECKOUT_<klient>.html",
+  tier: "premium", v: 5, u: 2, opusScore: 9, opusRec: true, flagship: true,
+  opusWhy: "🏆 Operational premium — analytics-driven kategorialna diagnoza checkout." },
+
+{ id: "c2-5-8-9", layers: [2, 5, 8, 9], type: "czworka", name: "Visual × Ads × Category × GEO",
+  what: "Ads LP per kategoria pod kątem AI. Najbardziej forward-thinking ads audit.",
+  needs: ["Layer 2+5+8+9"], output: "C4_ADS_AI_<klient>.html",
+  tier: "premium", v: 4, u: 2, opusScore: 8, opusRec: true,
+  opusWhy: "Future-proof ads strategy — kiedy Perplexity wprowadzi sponsored, te LPs będą gotowe." },
+
+{ id: "c2-3-8-10", layers: [2, 3, 8, 10], type: "czworka", name: "Visual × Content × Category × Tactics",
+  what: "Per PDP per kategoria: layout + content + sugerowane taktyki. Bez data dependency.",
+  needs: ["Layer 2+3+8+10"], output: "C4_PDP_TACTICS_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 8, opusRec: true,
+  opusWhy: "PDP-side blueprint bez data dependency. Działa dnia 1 z każdym klientem." },
+
+{ id: "c2-7-8-10", layers: [2, 7, 8, 10], type: "czworka", name: "Visual × Clarity × Category × Tactics",
+  what: "Behaviour + visual + category + ranked taktyki. UX-first quick wins blueprint.",
+  needs: ["Layer 2+7+8+10"], output: "C4_UX_TACTICS_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 8, opusRec: true,
+  opusWhy: "UX-first + executable. Solid pro offering." },
+
+{ id: "c1-2-4-9", layers: [1, 2, 4, 9], type: "czworka", name: "HTML × Visual × GA4 × GEO",
+  what: "Pełen 4D audit bez category dependency. Dla klientów z 1 kategorią lub mono-product.",
+  needs: ["Layer 1+2+4+9"], output: "C4_NO_CATEGORY_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "4D bez kategorii — dla mono-product klientów." }
 
 ];
 
@@ -549,17 +948,17 @@ let activeLayers = new Set();
 let activeType = "all";
 let activeQuality = null;
 let activeTier = null;
+let opusRecOnly = false;
+let minScore = 1;
 let searchQuery = "";
 
 function renderSidebar() {
-  // Layers
   const list = document.getElementById('layerList');
   list.innerHTML = Object.entries(LAYERS).map(([num, info]) => {
     const isActive = activeLayers.has(parseInt(num));
     const rdzenClass = info.rdzen ? 'rdzen' : '';
     return `<button class="layer-btn ${rdzenClass} ${isActive ? 'active' : ''}" data-layer="${num}">
-      <span class="layer-num">${num}</span>
-      <span>${info.short}</span>
+      <span class="layer-num">${num}</span><span>${info.short}</span>
     </button>`;
   }).join('');
 
@@ -572,7 +971,6 @@ function renderSidebar() {
     });
   });
 
-  // Type filters
   document.getElementById('typeFilters').querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       activeType = btn.dataset.type;
@@ -582,7 +980,6 @@ function renderSidebar() {
     });
   });
 
-  // Quality
   document.getElementById('qualityFilters').querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const q = btn.dataset.quality;
@@ -593,7 +990,6 @@ function renderSidebar() {
     });
   });
 
-  // Tier
   document.getElementById('tierFilters').querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const t = btn.dataset.tier;
@@ -603,21 +999,37 @@ function renderSidebar() {
       render();
     });
   });
+
+  // Opus Recommended button
+  document.getElementById('opusRecBtn').addEventListener('click', () => {
+    opusRecOnly = !opusRecOnly;
+    document.getElementById('opusRecBtn').textContent = opusRecOnly ? "✓ Pokazane tylko Opus Recommended" : "Pokaż tylko Opus Recommended";
+    document.getElementById('opusRecBtn').style.background = opusRecOnly ? "#6d28d9" : "var(--opus)";
+    render();
+  });
+
+  // Min Score slider
+  document.getElementById('minScoreSlider').addEventListener('input', e => {
+    minScore = parseInt(e.target.value);
+    document.getElementById('minScoreLabel').innerHTML = `<strong>${minScore}</strong>`;
+    render();
+  });
 }
 
 function filterProdukty() {
   return PRODUKTY.filter(p => {
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      const hay = (p.name + " " + p.what + " " + (p.output || "")).toLowerCase();
+      const hay = (p.name + " " + p.what + " " + (p.output || "") + " " + (p.opusWhy || "")).toLowerCase();
       if (!hay.includes(q)) return false;
     }
     if (activeType !== "all" && p.type !== activeType) return false;
     if (activeQuality === "flagship" && !p.flagship) return false;
     if (activeQuality === "empirical" && !p.empirical) return false;
-    if (activeQuality === "ready" && !p.ready) return false;
-    if (activeQuality === "placeholder" && p.ready) return false;
+    if (activeQuality === "rdzen" && !p.layers.some(l => l === 2 || l === 8)) return false;
     if (activeTier && p.tier !== activeTier) return false;
+    if (opusRecOnly && !p.opusRec) return false;
+    if ((p.opusScore || 0) < minScore) return false;
     if (activeLayers.size > 0) {
       const needsAll = [...activeLayers];
       const hasAll = needsAll.every(l => p.layers.includes(l));
@@ -628,35 +1040,42 @@ function filterProdukty() {
 }
 
 function tierLabel(t) {
-  const labels = { spark: "Spark", lite: "Lite", std: "Standard", pro: "Pro", premium: "Premium", placeholder: "TBD" };
+  const labels = { spark: "Spark", lite: "Lite", std: "Standard", pro: "Pro", premium: "Premium" };
   return labels[t] || t;
 }
 
 function renderCard(p) {
   const flagshipClass = p.flagship ? 'flagship' : '';
-  const placeholderClass = !p.ready ? 'placeholder' : '';
+  const opusRecClass = p.opusRec ? 'opus-rec' : '';
   const combo = p.layers.filter(l => l > 0).join("+") || "—";
   const star = p.flagship ? '<span class="star">⭐</span>' : '';
   const empiricalBadge = p.empirical ? '<span class="meta-pill empirical">🎯 U=3/3</span>' : '';
   const vu = p.v ? `<span class="meta-pill vu">V${p.v}+U${p.u}=${p.v+p.u}</span>` : '';
   const tierClass = `tier-${p.tier}`;
+  const scoreClass = `score-${p.opusScore || 1}`;
+  const opusRecBadge = p.opusRec ? '<span class="opus-badge rec">💎 OPUS REC</span>' : '';
+  const opusWhyBlock = p.opusWhy ? `<div class="opus-rationale"><strong>Opus rationale:</strong> ${p.opusWhy}</div>` : '';
 
   return `
-    <div class="card ${flagshipClass} ${placeholderClass}" data-id="${p.id}">
+    <div class="card ${flagshipClass} ${opusRecClass}" data-id="${p.id}">
       <div class="card-header">
         <span class="card-combo ${flagshipClass}">${combo}</span>
-        <span class="card-tier ${tierClass}">${tierLabel(p.tier)}</span>
+        <div class="card-badges">
+          <span class="score-badge ${scoreClass}">💎 ${p.opusScore || '?'}/10</span>
+          <span class="card-tier ${tierClass}">${tierLabel(p.tier)}</span>
+        </div>
       </div>
       <div class="card-name">${star}${p.name}</div>
       <div class="card-what">${p.what}</div>
-      <div class="card-meta">${vu} ${empiricalBadge}</div>
+      <div class="card-meta">${vu} ${empiricalBadge} ${opusRecBadge}</div>
       <div class="expand-hint">Szczegóły</div>
       <div class="card-body">
+        ${opusWhyBlock}
         <h4>Wymaga</h4>
         <ul>${(p.needs || []).map(n => `<li>${n}</li>`).join('')}</ul>
         <h4>Output</h4>
         <p>${p.output || '—'}</p>
-        <h4>Tier</h4>
+        <h4>Tier sprzedażowy</h4>
         <p>${tierLabel(p.tier)}</p>
       </div>
     </div>
@@ -668,46 +1087,56 @@ function render() {
   const filtered = filterProdukty();
   document.getElementById('resultsCount').textContent = `${filtered.length} z ${PRODUKTY.length} produktów`;
 
-  // Stats
   const stats = {
-    solo: PRODUKTY.filter(p => p.type === 'singel' && p.ready).length,
-    para: PRODUKTY.filter(p => p.type === 'para' && p.ready).length,
-    trojka: PRODUKTY.filter(p => p.type === 'trojka' && p.ready).length,
-    czworka: PRODUKTY.filter(p => p.type === 'czworka' && p.ready).length,
+    solo: PRODUKTY.filter(p => p.type === 'singel').length,
+    para: PRODUKTY.filter(p => p.type === 'para').length,
+    trojka: PRODUKTY.filter(p => p.type === 'trojka').length,
+    czworka: PRODUKTY.filter(p => p.type === 'czworka').length,
     flagship: PRODUKTY.filter(p => p.flagship).length,
-    empirical: PRODUKTY.filter(p => p.empirical).length
+    empirical: PRODUKTY.filter(p => p.empirical).length,
+    opusRec: PRODUKTY.filter(p => p.opusRec).length,
+    score10: PRODUKTY.filter(p => p.opusScore === 10).length,
+    score9: PRODUKTY.filter(p => p.opusScore === 9).length
   };
   document.getElementById('statsBox').innerHTML = `
-    <div>Solo: <strong>${stats.solo}/12</strong></div>
-    <div>Pary: <strong>${stats.para}/55</strong></div>
-    <div>Trójki: <strong>${stats.trojka}/165</strong></div>
-    <div>Czwórki: <strong>${stats.czworka}/330</strong></div>
-    <hr style="margin: 6px 0; border: 0; border-top: 1px solid var(--border);">
+    <div>Solo: <strong>${stats.solo}</strong></div>
+    <div>Pary: <strong>${stats.para}</strong> z 55</div>
+    <div>Trójki: <strong>${stats.trojka}</strong> z 165</div>
+    <div>Czwórki: <strong>${stats.czworka}</strong> z 330</div>
+    <hr>
+    <div>💎 Opus Rec: <strong>${stats.opusRec}</strong></div>
     <div>🏆 Flagship: <strong>${stats.flagship}</strong></div>
-    <div>🎯 Empirical U=3/3: <strong>${stats.empirical}</strong></div>
-    <div>Razem opisanych: <strong>${stats.solo+stats.para+stats.trojka+stats.czworka}/562</strong></div>
+    <div>🎯 Empirical: <strong>${stats.empirical}</strong></div>
+    <div>Score 10: <strong>${stats.score10}</strong></div>
+    <div>Score 9: <strong>${stats.score9}</strong></div>
+    <hr>
+    <div>Razem: <strong>${stats.solo+stats.para+stats.trojka+stats.czworka}</strong></div>
   `;
 
-  // Group by type
   const grouped = {};
   filtered.forEach(p => {
     if (!grouped[p.type]) grouped[p.type] = [];
     grouped[p.type].push(p);
   });
 
+  // Sort within each group by opusScore desc
+  Object.keys(grouped).forEach(k => {
+    grouped[k].sort((a, b) => (b.opusScore || 0) - (a.opusScore || 0));
+  });
+
   const order = ['singel', 'para', 'trojka', 'czworka'];
   const icons = { singel: '🔵', para: '🟢', trojka: '🟡', czworka: '🟠' };
-  const labels = { singel: 'Solo (12 warstwy)', para: 'Pary (55)', trojka: 'Trójki (165)', czworka: 'Czwórki (330)' };
+  const labels = { singel: 'Solo', para: 'Pary', trojka: 'Trójki', czworka: 'Czwórki' };
 
   let html = '';
   order.forEach(t => {
     if (!grouped[t] || grouped[t].length === 0) return;
-    html += `<div class="section-divider">${icons[t]} ${labels[t]}<span class="count">${grouped[t].length} wpisów</span></div>`;
+    html += `<div class="section-divider">${icons[t]} ${labels[t]}<span class="count">${grouped[t].length} wpisów (sortowane po Opus Score)</span></div>`;
     html += '<div class="cards-grid">' + grouped[t].map(renderCard).join('') + '</div>';
   });
 
   if (filtered.length === 0) {
-    html = '<div style="text-align:center;padding:60px;color:var(--text-muted);"><h3>Brak wyników</h3><p>Spróbuj zmienić filtry.</p></div>';
+    html = '<div style="text-align:center;padding:60px;color:var(--text-muted);"><h3>Brak wyników</h3><p>Spróbuj zmienić filtry lub obniżyć Min Opus Score.</p></div>';
   }
 
   document.getElementById('content').innerHTML = html;
