@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Self-Learning Analiza — warstwy 1+2+3 (HTML / Visual / Content)</title>
+<style>
+:root {
+  --bg: #fafafa; --bg-card: #fff; --text: #1f2937; --text-muted: #6b7280;
+  --border: #e5e7eb; --accent: #1e3a8a; --accent-bg: #dbeafe;
+  --good: #10b981; --warn: #f59e0b; --bad: #ef4444;
+  --opus: #7c3aed; --opus-bg: #f5f3ff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; line-height: 1.6; color: var(--text); background: var(--bg); padding: 24px; max-width: 1280px; margin: 0 auto; }
+h1 { font-size: 22px; color: var(--accent); margin-bottom: 4px; }
+.subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 24px; }
+h2 { font-size: 17px; color: var(--accent); margin: 28px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--accent-bg); }
+h3 { font-size: 14px; color: var(--text); margin: 16px 0 8px; }
+h4 { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; margin: 10px 0 5px; }
+p { margin: 6px 0; }
+ul { padding-left: 22px; margin: 6px 0; }
+ul li { margin-bottom: 3px; }
+code { font-family: ui-monospace, monospace; font-size: 12px; background: #f3f4f6; padding: 2px 6px; border-radius: 4px; }
+pre { background: #fafafa; border: 1px solid var(--border); padding: 12px; border-radius: 6px; overflow-x: auto; font-size: 11px; margin: 8px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 10px 0; }
+th, td { padding: 8px 10px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+th { background: var(--accent-bg); font-weight: 700; color: var(--accent); }
+tr:nth-child(even) { background: #fafafa; }
+
+.intro { background: linear-gradient(135deg, #fffbeb 0%, var(--bg-card) 60%); border: 1px solid #fed7aa; border-radius: 10px; padding: 16px 20px; margin-bottom: 24px; }
+.intro h2 { color: #9a3412; border: 0; padding: 0; margin: 0 0 6px; font-size: 15px; }
+.intro p { font-size: 13px; color: #7c2d12; }
+
+.layer-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; margin: 14px 0; }
+.layer-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.layer-num { font-size: 22px; font-weight: 800; color: var(--accent); background: var(--accent-bg); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.layer-title { font-size: 17px; font-weight: 700; }
+.score-badge { margin-left: auto; padding: 6px 14px; border-radius: 16px; color: white; font-weight: 700; font-size: 14px; }
+.score-8 { background: var(--good); }
+.score-7 { background: #3b82f6; }
+.score-6 { background: var(--warn); }
+.score-5 { background: #f97316; }
+
+.path-block { background: #f9fafb; border-left: 3px solid var(--accent); padding: 8px 12px; margin: 6px 0; font-family: ui-monospace, monospace; font-size: 11px; }
+.path-block .path-label { font-family: -apple-system, sans-serif; font-weight: 700; color: var(--accent); margin-right: 8px; }
+
+.verdict { background: var(--opus-bg); border-left: 3px solid var(--opus); padding: 8px 12px; margin: 10px 0; font-size: 12px; color: #4c1d95; }
+.verdict strong { color: var(--opus); }
+
+.good { color: var(--good); font-weight: 600; }
+.warn { color: var(--warn); font-weight: 600; }
+.bad { color: var(--bad); font-weight: 600; }
+
+.gap-list { background: #fef2f2; border-left: 3px solid var(--bad); padding: 8px 12px; margin: 8px 0; font-size: 12px; }
+.gap-list h4 { color: var(--bad); margin: 0 0 5px; }
+
+.truth { background: #fff7ed; border: 1.5px solid #fed7aa; border-radius: 10px; padding: 16px 20px; margin-top: 28px; }
+.truth h3 { color: #9a3412; }
+.truth ul li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<h1>Self-Learning Analiza — Warstwy 1 / 2 / 3</h1>
+<p class="subtitle">HTML scan · Visual mapping · Content mapping · referencja GLOV 21.05.2026 · 2026-05-30</p>
+
+<div class="intro">
+  <h2>Cel analizy</h2>
+  <p>Pytanie Tomka: <em>"Każdy produkt egzekucyjny będzie miał swój skrypt/skill/bazę. Chcę self-learning wszędzie — każdy następny job rozbudowuje wiedzę i bazę. Zanalizuj 3 obecnie istniejące rozwiązania."</em></p>
+  <p style="margin-top: 8px;"><strong>3 warstwy do analizy:</strong> Layer 1 (HTML scan) / Layer 2 (Visual mapping) / Layer 3 (Content mapping) — wszystkie 3 mają już skrypty + skille + bazy JSON w EEL. Referencja egzekucji: GLOV audit 21.05.2026.</p>
+</div>
+
+<h2>📊 Skrót — porównawcza tabela</h2>
+
+<table>
+<tr>
+  <th>Warstwa</th>
+  <th>Skill</th>
+  <th>Skrypt (linii)</th>
+  <th>Bazy JSON</th>
+  <th>Self-learning mechanizm</th>
+  <th>Score</th>
+</tr>
+<tr>
+  <td><strong>1. HTML</strong></td>
+  <td><code>/eel-audit</code><br><code>/eel-self-learn</code></td>
+  <td><code>audit_html.py</code> (451)<br><code>tech_stack_detector.py</code><br><code>nav_scanner.py</code></td>
+  <td><code>elements_master.json</code> (204K)<br><code>platform_patterns.json</code> (12K)<br><code>tech_stack_signatures.json</code> (36K)</td>
+  <td>✅ Discovery queue z workflow pending→approved→committed</td>
+  <td><span class="score-badge score-8">8/10</span></td>
+</tr>
+<tr>
+  <td><strong>2. Visual</strong></td>
+  <td><code>/eel-audit</code></td>
+  <td><code>take_screenshots.py</code> (717)<br><code>audit_visual.py</code> (44 stub)</td>
+  <td><code>data/html_maps/</code><br><code>data/scan_manifests/</code><br>visual_refs w master</td>
+  <td>⚠️ Częściowo — visual_refs rosną ale brak formalnego "visual patterns" katalogu</td>
+  <td><span class="score-badge score-5">5/10</span></td>
+</tr>
+<tr>
+  <td><strong>3. Content</strong></td>
+  <td><code>/geo-content-diff</code><br><code>/geo-pdp-writer</code><br><code>/eel-category-mapping</code></td>
+  <td><code>audit_content.py</code> (433)<br><code>category_map.py</code></td>
+  <td><code>data/category_maps/</code> per klient<br><code>geo_categories.json</code><br>content sub-elements w master</td>
+  <td>⚠️ Per-klient kategoria mapy rosną, ale brak konsolidacji w "content patterns DB"</td>
+  <td><span class="score-badge score-6">6/10</span></td>
+</tr>
+</table>
+
+<h2>🔍 Warstwa 1 — HTML Scan (najdojrzalsza)</h2>
+
+<div class="layer-card">
+  <div class="layer-header">
+    <div class="layer-num">1</div>
+    <div class="layer-title">HTML Scan + Tech Stack Detection</div>
+    <div class="score-badge score-8">8/10 — Najlepszy self-learning</div>
+  </div>
+
+  <h4>Skille</h4>
+  <div class="path-block"><span class="path-label">SKILL:</span><code>~/.claude/skills/eel-audit/SKILL.md</code></div>
+  <div class="path-block"><span class="path-label">SKILL:</span><code>~/.claude/skills/eel-self-learn/SKILL.md</code> — dedykowany skill <strong>Update</strong> (po scanie) + <strong>Verify</strong> (interaktywna weryfikacja)</div>
+
+  <h4>Skrypty</h4>
+  <div class="path-block"><span class="path-label">SCRIPT:</span><code>Projects/Ecomms_Activation_Agency/scripts/audit_html.py</code> (451 linii) — głównego skanu HTML</div>
+  <div class="path-block"><span class="path-label">SCRIPT:</span><code>scripts/tech_stack_detector.py</code> — wykrywa SaaS narzędzia z signatures</div>
+  <div class="path-block"><span class="path-label">SCRIPT:</span><code>scripts/nav_scanner.py</code> — scan struktury nawigacji</div>
+  <div class="path-block"><span class="path-label">SCRIPT:</span><code>scripts/discovery_loop.py</code> — pętla discovery + queue management</div>
+
+  <h4>Bazy JSON (rosnące self-learning)</h4>
+  <div class="path-block"><span class="path-label">DB:</span><code>data/elements_master.json</code> (<strong>204KB</strong>) — 200+ elementów, każdy z CSS per platforma + found_on per klient + vendors + visual_refs</div>
+  <div class="path-block"><span class="path-label">DB:</span><code>data/platform_patterns.json</code> (12K) — wzorce CSS per platforma (Shopify, IdoSell)</div>
+  <div class="path-block"><span class="path-label">DB:</span><code>data/tech_stack_signatures.json</code> (36K) — sygnatury narzędzi SaaS z confidence scoring</div>
+  <div class="path-block"><span class="path-label">QUEUE:</span><code>data/element_discovery_queue.json</code> — kolejka odkryć: <code>pending → approved → committed</code></div>
+
+  <h4>Mechanizm self-learning</h4>
+  <p>Cytat z <code>tech_stack_signatures.json</code>: <em>"Gdy znajdziesz nową sygnaturę narzędzia w HTML scan → dodaj tutaj. Kolejny audyt będzie precyzyjniejszy."</em></p>
+  <ul>
+    <li><span class="good">✅ Workflow approval</span> — każdy nowy element/selektor/vendor trafia do queue jako <code>pending</code>, Tomek aprobuje, potem <code>approved</code>, deploy = <code>committed</code></li>
+    <li><span class="good">✅ Multi-platform patterns</span> — Shopify, IdoSell każdy ma własne wzorce; każdy nowy klient platformy zasila</li>
+    <li><span class="good">✅ Confidence scoring</span> — w tech_stack_signatures: <code>script_src=0.6</code>, <code>global_var=0.5</code>, <code>cookie=0.4</code>, próg detekcji 0.4</li>
+    <li><span class="good">✅ Found_on tracking</span> — każdy element wie na których klientach był znaleziony</li>
+  </ul>
+
+  <h4>GLOV 21.05 referencja</h4>
+  <ul>
+    <li><code>Projects/Ecomms_Activation_Agency/glov_data.json</code> — output HTML scan GLOV</li>
+    <li><code>archive/GLOV_HP_SCAN_2026-05-24.md</code> — raw scan output (input do self-learn update)</li>
+    <li><code>reports/GLOV-hp-dev-view-2026-05-24.html</code> — visual delivery dev view</li>
+  </ul>
+
+  <div class="verdict"><strong>Verdict Opus:</strong> Najdojrzalsze rozwiązanie self-learning w setupie. Workflow approval + multi-platform + queue z confidence scoring. Wzorzec do skopiowania dla pozostałych warstw.</div>
+
+  <div class="gap-list">
+    <h4>⚠️ Co brakuje</h4>
+    <ul>
+      <li><strong>JSON nie skaluje się powyżej ~500KB</strong> — przy 50+ klientach elements_master.json osiągnie 2-3MB, edit przez Read/Edit będzie powolny</li>
+      <li><strong>Brak versioning</strong> — backup z 2026-05-24 jest tylko jednym snapshot; brak diff history</li>
+      <li><strong>Brak cross-validation</strong> — gdy 2 audyty wykryją sprzeczne selektory, brak rozwiązania konfliktu</li>
+    </ul>
+  </div>
+</div>
+
+<h2>📷 Warstwa 2 — Visual Mapping (słaba self-learning baza)</h2>
+
+<div class="layer-card">
+  <div class="layer-header">
+    <div class="layer-num">2</div>
+    <div class="layer-title">Visual Mapping + Screenshot Pipeline</div>
+    <div class="score-badge score-5">5/10 — Silny pipeline, słaba baza</div>
+  </div>
+
+  <h4>Skille + Skrypty</h4>
+  <div class="path-block"><span class="path-label">SKILL:</span><code>~/.claude/skills/eel-audit/SKILL.md</code></div>
+  <div class="path-block"><span class="path-label">SCRIPT:</span><code>Projects/Ecomms_Activation_Agency/take_screenshots.py</code> (<strong>717 linii</strong>) — major Playwright pipeline, 16 widoków × desktop+mobile</div>
+  <div class="path-block"><span class="path-label">SCRIPT:</span><code>scripts/audit_visual.py</code> (44 linii — <strong>stub</strong>)</div>
+
+  <h4>"Bazy" obecne</h4>
+  <div class="path-block"><span class="path-label">FILE:</span><code>data/html_maps/</code> — per klient HTML structure dumps</div>
+  <div class="path-block"><span class="path-label">FILE:</span><code>data/scan_manifests/</code> — manifest per scan</div>
+  <div class="path-block"><span class="path-label">FILE:</span><code>{klient}_audit_screenshots/</code> — surowe screenshoty (GLOV/FERA/SejfZone/Hebe/Ulta/JohnDog)</div>
+  <div class="path-block"><span class="path-label">EMBEDDED:</span>visual_refs[] w <code>elements_master.json</code> per element per klient per viewport (dot_label + left_pct + top_pct)</div>
+
+  <h4>Mechanizm self-learning</h4>
+  <ul>
+    <li><span class="good">✅ visual_refs rosną</span> — każdy klient dodaje per-dot pozycję do elements_master.json</li>
+    <li><span class="warn">⚠️ Brak formalnej "visual patterns DB"</span> — np. "Sticky header zazwyczaj fold 1 height 60-80px, opacity 0.95" — takiego katalogu nie ma</li>
+    <li><span class="warn">⚠️ Brak density maps history</span> — fold-by-fold density obliczasz per scan, nie zapisujesz patterns</li>
+    <li><span class="warn">⚠️ Brak fold archetypes</span> — np. "HP Fold 1 zwykle ma 3 typy: hero+CTA / hero+search / hero+promo"</li>
+    <li><span class="bad">❌ audit_visual.py jest 44 linii — STUB</span>; cała logika visual jest rozproszona między take_screenshots + ręczna analiza</li>
+  </ul>
+
+  <h4>GLOV 21.05 referencja</h4>
+  <ul>
+    <li><code>GLOV_audit_screenshots/</code> — surowe screenshoty</li>
+    <li><code>reports/glov_hp_desktop_full.jpeg</code> — full HP screenshot</li>
+    <li><code>GLOV_REFERENCE_AUDIT.html</code> — gold standard delivery (8 tabów × 2 viewports)</li>
+    <li><code>reports/GLOV-raport-test-2026-05-21.html</code> — sample reportu test</li>
+  </ul>
+
+  <div class="verdict"><strong>Verdict Opus:</strong> Pipeline screenshot jest dojrzały (717 linii Playwright), ALE baza self-learning prawie nie istnieje. Każdy audit zaczyna od zera bez learnigów z poprzednich. <strong>Największy gap do nadrobienia w Sprint 4.</strong></div>
+
+  <div class="gap-list">
+    <h4>⚠️ Co brakuje (krytycznie)</h4>
+    <ul>
+      <li><strong>visual_patterns.json</strong> — formalna baza: per page_type + per platform + per viewport — typowy fold layout, dead zones, common pseudo-CTAs</li>
+      <li><strong>fold_archetypes.json</strong> — np. "HP Fold 1 — Hero+CTA: 60% case, Hero+Search: 25%, Hero+Promo: 15%"</li>
+      <li><strong>density_baselines.json</strong> — typowa density per fold + outliers (klienci z anomalnym layoutem)</li>
+      <li><strong>pseudo_cta_patterns.json</strong> — wzorce elementów wyglądających klikabilne ale bez handler'a</li>
+    </ul>
+  </div>
+</div>
+
+<h2>✍️ Warstwa 3 — Content Mapping (średnia self-learning baza)</h2>
+
+<div class="layer-card">
+  <div class="layer-header">
+    <div class="layer-num">3</div>
+    <div class="layer-title">Content Scan + Category Mapping</div>
+    <div class="score-badge score-6">6/10 — Per-klient OK, brak konsolidacji</div>
+  </div>
+
+  <h4>Skille + Skrypty</h4>
+  <div class="path-block"><span class="path-label">SKILL:</span><code>~/.claude/skills/geo-content-diff/</code> — content diff per produkt</div>
+  <div class="path-block"><span class="path-label">SKILL:</span><code>~/.claude/skills/geo-pdp-writer/</code> — PDP rewrite</div>
+  <div class="path-block"><span class="path-label">SKILL:</span><code>~/.claude/skills/eel-category-mapping/</code> — mapowanie struktury kategorii</div>
+  <div class="path-block"><span class="path-label">SCRIPT:</span><code>scripts/audit_content.py</code> (433 linii)</div>
+  <div class="path-block"><span class="path-label">SCRIPT:</span><code>scripts/category_map.py</code></div>
+
+  <h4>Bazy JSON</h4>
+  <div class="path-block"><span class="path-label">DB:</span><code>data/category_maps/{klient}_CATEGORY_MAP.json</code> per klient (GLOV ma dedykowany)</div>
+  <div class="path-block"><span class="path-label">DB:</span><code>data/geo_categories.json</code> — GEO Consumer Decision Trees (47 kategorii w live raporcie)</div>
+  <div class="path-block"><span class="path-label">EMBEDDED:</span>content sub-elements w <code>elements_master.json</code> (sekcja Content)</div>
+  <div class="path-block"><span class="path-label">FILE:</span><code>data/discovery_reports/</code> — raporty discovery per klient</div>
+
+  <h4>Mechanizm self-learning</h4>
+  <ul>
+    <li><span class="good">✅ Category maps per klient rosną</span> — każdy klient dostaje dedykowany CATEGORY_MAP.json</li>
+    <li><span class="good">✅ GEO categories DB</span> — 47 kategorii w bazie (W11/W15/W17)</li>
+    <li><span class="warn">⚠️ Per-klient kategoria mapy są izolowane</span> — GLOV beauty patterns nie wpływają na inne beauty klientów</li>
+    <li><span class="warn">⚠️ Brak content_patterns.json</span> — np. "PDP cosmetic: 80% tytułów ma format 'Brand + nazwa + variant + ml', 60% bulletów < 5 pkt, 40% ma FAQ"</li>
+    <li><span class="warn">⚠️ Tier Specs nie są jeszcze konsolidowane</span> — Tomek je zna per kategoria ale brak formalnego pliku</li>
+  </ul>
+
+  <h4>GLOV 21.05 referencja</h4>
+  <ul>
+    <li><code>data/category_maps/glov_CATEGORY_MAP.json</code> — pełna struktura kategorii GLOV</li>
+    <li><code>glov_CATEGORY_MAP.json</code> (kopia w root projektu)</li>
+    <li>Content scan w <code>audit_content.py</code> output trafia do <code>discovery_reports/</code></li>
+  </ul>
+
+  <div class="verdict"><strong>Verdict Opus:</strong> Per-klient implementacja działa, ale brak konsolidacji do cross-category content patterns DB. Każdy nowy klient beauty/electronics/fashion zaczyna od zera. Quick win: konsolidacja istniejących category_maps do jednego content_patterns.json.</div>
+
+  <div class="gap-list">
+    <h4>⚠️ Co brakuje</h4>
+    <ul>
+      <li><strong>content_patterns.json</strong> — per kategoria: typowy format tytułu, długość bulletów, presence FAQ, format opisu</li>
+      <li><strong>tier_specs_master.json</strong> — formalna baza T1/T2/T3 per kategoria z found_on per klient</li>
+      <li><strong>copy_archetypes.json</strong> — typowe formuły opisów per kategoria (problem-rozwiązanie, benefit-feature, etc.)</li>
+      <li><strong>forbidden_patterns.json</strong> — copy patterns które wiadomo że nie działają w kategorii</li>
+    </ul>
+  </div>
+</div>
+
+<h2>🎯 Synteza — co wnioski dla 130 produktów egzekucyjnych</h2>
+
+<h3>Hierarchia dojrzałości self-learning</h3>
+<ol>
+  <li><strong class="good">Warstwa 1 (HTML) — 8/10</strong>: wzorzec do skopiowania. Discovery queue + multi-platform patterns + confidence scoring.</li>
+  <li><strong class="warn">Warstwa 3 (Content) — 6/10</strong>: per-klient OK, brak konsolidacji. Quick win: 1 plik content_patterns.json.</li>
+  <li><strong class="bad">Warstwa 2 (Visual) — 5/10</strong>: największy gap. Pipeline screenshot OK ale brak bazy visual patterns. Sprint 4 priority.</li>
+</ol>
+
+<h3>Wnioski dla architektury 130 produktów</h3>
+
+<h4>1. JSON-first jest właściwy wybór (na razie)</h4>
+<p>Warstwa 1 pokazuje że JSON skaluje się dla CSS selectors + signatures + patterns. 204KB elements_master.json nadal czytelny. <strong>Postgres jest nadmiarem</strong> dopóki nie macie >50 klientów lub nie potrzeba concurrent writes.</p>
+
+<h4>2. Każdy z 130 produktów potrzebuje 4 plików</h4>
+<ul>
+  <li><code>scripts/product_{id}.py</code> — executable skrypt</li>
+  <li><code>skills/{id}/SKILL.md</code> — invocable z Claude Code</li>
+  <li><code>data/{id}_patterns.json</code> — self-learning baza patterns</li>
+  <li><code>data/{id}_discovery_queue.json</code> — workflow pending→approved→committed</li>
+</ul>
+
+<h4>3. Wzorzec do skopiowania (z warstwy 1)</h4>
+<pre><code>{
+  "_meta": {
+    "description": "[Co ta baza śledzi]",
+    "last_updated": "YYYY-MM-DD",
+    "version": "1.0",
+    "rule": "Każdy audit klienta → nowe wzorce → kolejny audit precyzyjniejszy",
+    "confidence_scoring": { ... }
+  },
+  "patterns": [ ... ],
+  "found_on": [ ... klienci ... ],
+  "vendors": [ ... ],
+  "version_history": [ ... NEW snapshots ... ]
+}</code></pre>
+
+<h4>4. Wąskie gardła do rozwiązania PRZED skalowaniem</h4>
+<ul>
+  <li><strong>Versioning</strong>: backup_2026-05-24.json jest jednorazowy. Wprowadzić nightly snapshot + diff history.</li>
+  <li><strong>Cross-validation</strong>: gdy 2 audyty wykryją sprzeczne selektory dla tego samego elementu — kto wygrywa? Confidence + recency rule.</li>
+  <li><strong>Migration ścieżka do Postgres</strong>: gdy >50 klientów lub potrzeba search/aggregation across patterns. Postgres dla elements_master + JSON dla per-klient delta.</li>
+</ul>
+
+<h3>Konkretne wpisy execution dla PRODUKTY_EGZEKUCYJNE</h3>
+
+<table>
+<tr><th>Produkt</th><th>Skill</th><th>Skrypt</th><th>Baza JSON</th></tr>
+<tr><td><code>p1</code> HTML Tag Audit</td><td>/eel-audit + /eel-self-learn</td><td>scripts/audit_html.py</td><td>elements_master.json + platform_patterns.json + tech_stack_signatures.json + element_discovery_queue.json</td></tr>
+<tr><td><code>p2</code> Visual Mapping</td><td>/eel-audit</td><td>take_screenshots.py + audit_visual.py</td><td>html_maps/ + scan_manifests/ + visual_refs w elements_master <span class="warn">+ TODO visual_patterns.json</span></td></tr>
+<tr><td><code>p3</code> Content Inventory</td><td>/eel-category-mapping + /geo-content-diff</td><td>audit_content.py + category_map.py</td><td>category_maps/{klient}.json + geo_categories.json <span class="warn">+ TODO content_patterns.json</span></td></tr>
+<tr><td><code>p1-2</code> HTML × Visual (Dev × Shopper view)</td><td>/eel-audit</td><td>cross-walk audit_html × take_screenshots</td><td>elements_master.json (CSS + visual_refs cross-reference)</td></tr>
+<tr><td><code>p1-3</code> HTML × Content (schema completeness)</td><td>/eel-audit + /eel-category-mapping</td><td>audit_html + audit_content</td><td>elements_master.json schema-side + content_patterns TODO</td></tr>
+<tr><td><code>p2-3</code> Visual × Content (per fold content alignment)</td><td>/eel-audit + /geo-content-diff</td><td>visual_refs cross-walk audit_content</td><td>elements_master.json visual_refs + content sub-elements + TODO visual_patterns + content_patterns</td></tr>
+</table>
+
+<div class="truth">
+<h3>🔍 Truth Checker</h3>
+<ul>
+  <li><strong>Co wiem z tego co podałeś:</strong> Tomek prosi analizę 3 obecnych rozwiązań (HTML/Visual/Content) pod kątem self-learning, używając GLOV 21.05 jako referencji + wpis execution paths do PRODUKTY_EGZEKUCYJNE. Self-learning ma być wszędzie.</li>
+  <li><strong>Co zakładam:</strong> (1) Warstwa 1 jest najdojrzalsza bo jej widzę najwięcej kodu/JSON; może warstwa 2 ma ukryte mechanizmy w take_screenshots.py których nie sprawdziłem w pełni. (2) "GLOV 21.05" to GLOV-raport-test-2026-05-21.html + powiązane scan files; może masz na myśli inny artifact. (3) Postgres "nadmiar" przy &lt;50 klientach — to mój founder-intuition, NIE empirical w twoim kontekście (jakie SLA na queries?).</li>
+  <li><strong>Co może być błędne:</strong> (a) Audit_visual.py 44 linii może być wrapper'em, nie stub — pełna logika może być w take_screenshots.py i kategoryzowałem niepoprawnie. (b) GEO categories DB (47 kategorii) może mieć mechanizm self-learning którego nie zauważyłem (W11/W15/W17 wsady).</li>
+  <li><strong>Co zweryfikować zanim podejmiesz działanie:</strong> (1) Otworzyć audit_visual.py i potwierdzić że to faktycznie stub czy wrapper. (2) Sprawdzić W11/W15/W17 procedurę dodawania nowej kategorii — czy jest workflow. (3) Czy istnieje cron który aktualizuje JSONy nightly — to zmieniłoby diagnozę 2 i 3.</li>
+  <li><strong>Co poprawiłbym z jeszcze jednym inputem:</strong> Twój real-life feedback po pierwszym kliencie z każdego z 4 presetów (Paid/Conversion/SEO+GEO/Content) — jakich patterns brakowało w bazach, które self-learning slot dał największy zysk vs. który był martwy. To pokaże REAL bottleneck vs. mój teoretyczny ranking.</li>
+</ul>
+</div>
+
+</body>
+</html>

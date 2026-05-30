@@ -121,6 +121,12 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; 
 .card-body li { margin-bottom: 2px; }
 .card-body p { margin: 4px 0; }
 .opus-rationale { background: var(--opus-bg); border-left: 3px solid var(--opus); padding: 6px 10px; margin: 8px 0; font-size: 11px; color: #4c1d95; }
+.execution-ref { background: #f0fdf4; border-left: 3px solid #10b981; padding: 8px 12px; margin: 8px 0; font-size: 11px; color: #065f46; }
+.execution-ref strong { color: #047857; }
+.execution-ref code { background: #d1fae5; color: #065f46; font-size: 10px; }
+.execution-ref-row { display: flex; gap: 6px; margin: 3px 0; }
+.execution-ref-row .ref-label { font-weight: 700; min-width: 55px; flex-shrink: 0; }
+.execution-todo { background: #fef3c7; border-left: 3px solid var(--warn); padding: 6px 10px; margin: 6px 0; font-size: 11px; color: #78350f; }
 .expand-hint { font-size: 10px; color: var(--accent); font-weight: 500; margin-top: 6px; }
 .card.expanded .expand-hint::after { content: " ▾"; }
 .card:not(.expanded) .expand-hint::after { content: " ▸"; }
@@ -295,19 +301,42 @@ const PRODUKTY = [
   what: "Skan tagów HTML + meta + schema.org per widok. Pełne mapowanie struktury technicznej.",
   needs: ["Playwright", "URL"], output: "HTML_AUDIT_<klient>.md",
   tier: "spark", v: 3, u: 1, opusScore: 4, opusRec: false,
-  opusWhy: "Podstawowy audit techniczny. Wartość jako element większej kombinacji, nie samodzielny produkt." },
+  opusWhy: "Podstawowy audit techniczny. Wartość jako element większej kombinacji, nie samodzielny produkt.",
+  executionRefs: {
+    skill: ["/eel-audit", "/eel-self-learn (update/verify)"],
+    script: ["scripts/audit_html.py (451)", "scripts/tech_stack_detector.py", "scripts/nav_scanner.py", "scripts/discovery_loop.py"],
+    db: ["data/elements_master.json (204K)", "data/platform_patterns.json (12K)", "data/tech_stack_signatures.json (36K)", "data/element_discovery_queue.json"],
+    glov: ["archive/GLOV_HP_SCAN_2026-05-24.md", "glov_data.json"],
+    selfLearn: "✅ Workflow approval pending→approved→committed | multi-platform | confidence scoring 0.3-0.6"
+  } },
 
 { id: "p2", layers: [2], type: "singel", name: "⭐ Shop Visual Mapping (16 widoków)",
   what: "Fold-by-fold screenshoty 16 widoków × desktop+mobile. Hierarchia wizualna, dead zones, pseudo-CTAs.",
   needs: ["take_screenshots.py", "URL"], output: "VISUAL_MAPPING_<klient>.html — 8 tabów × 2 viewporty + density maps",
   tier: "lite", v: 5, u: 2, opusScore: 8, opusRec: true,
-  opusWhy: "Rdzeń systemu Cortex. Każdy klient EEL musi to mieć jako baseline. Pojedyncza warstwa ale max value samodzielnie." },
+  opusWhy: "Rdzeń systemu Cortex. Każdy klient EEL musi to mieć jako baseline. Pojedyncza warstwa ale max value samodzielnie.",
+  executionRefs: {
+    skill: ["/eel-audit"],
+    script: ["take_screenshots.py (717 linii, Playwright)", "scripts/audit_visual.py (44 linii STUB)"],
+    db: ["data/html_maps/", "data/scan_manifests/", "visual_refs[] embedded w elements_master.json"],
+    glov: ["GLOV_REFERENCE_AUDIT.html (6.5/10 — current best, NIE gold standard)", "GLOV_audit_screenshots/ (18 unique screens)"],
+    selfLearn: "⚠️ visual_refs rosną ale brak formalnej visual_patterns.json",
+    todo: "WARSTWA 2 ma 4 krytyczne braki PRZED gold standard: (1) density maps fold-by-fold (brak), (2) hierarchy ranking per fold (brak), (3) pseudo-CTAs jako osobna kategoria (brak), (4) dead zones marked (brak), (5) fold-by-fold linie tylko 3/16+, (6) doty bez kategoryzacji (CTA/trust/nav/content/deco). Sprint 4 priority."
+  } },
 
 { id: "p3", layers: [3], type: "singel", name: "Content Inventory",
   what: "Skan tytułów PDP, bullets, FAQ, opisów kategorii. Per-element metryki długości i struktury.",
   needs: ["URL", "Scraper"], output: "CONTENT_INVENTORY_<klient>.md",
   tier: "lite", v: 4, u: 1, opusScore: 5, opusRec: false,
-  opusWhy: "Inventory bazowe — wartość w łączeniu z layer 8 (Category) lub 9 (GEO)." },
+  opusWhy: "Inventory bazowe — wartość w łączeniu z layer 8 (Category) lub 9 (GEO).",
+  executionRefs: {
+    skill: ["/geo-content-diff", "/geo-pdp-writer", "/eel-category-mapping"],
+    script: ["scripts/audit_content.py (433)", "scripts/category_map.py"],
+    db: ["data/category_maps/{klient}_CATEGORY_MAP.json", "data/geo_categories.json (47 kategorii)", "content sub-elements w elements_master.json", "data/discovery_reports/"],
+    glov: ["data/category_maps/glov_CATEGORY_MAP.json", "glov_CATEGORY_MAP.json (root copy)"],
+    selfLearn: "⚠️ Per-klient maps rosną, brak konsolidacji cross-category",
+    todo: "content_patterns.json + tier_specs_master.json + copy_archetypes.json + forbidden_patterns.json"
+  } },
 
 { id: "p4", layers: [4], type: "singel", name: "GA4 R01-R10 Reports",
   what: "Top 10 raportów: overview, source/medium, behavior funnel, conversion paths, e-commerce, audiences.",
@@ -370,13 +399,25 @@ const PRODUKTY = [
   what: "Krzyż-mapowanie elementu HTML do tego co shopper rzeczywiście widzi. Pseudo-CTAs detection.",
   needs: ["Layer 1", "Layer 2"], output: "DEV_SHOPPER_VIEW_<klient>.html",
   tier: "lite", v: 4, u: 2, opusScore: 7, opusRec: true,
-  opusWhy: "Klucz dla zrozumienia czemu accessibility metrics rozjeżdżają się z visual hierarchy. Pseudo-CTA detection unikalne." },
+  opusWhy: "Klucz dla zrozumienia czemu accessibility metrics rozjeżdżają się z visual hierarchy. Pseudo-CTA detection unikalne.",
+  executionRefs: {
+    skill: ["/eel-audit"],
+    script: ["cross-walk audit_html.py × take_screenshots.py"],
+    db: ["elements_master.json — CSS + visual_refs cross-reference per element"],
+    glov: ["reports/GLOV-hp-dev-view-2026-05-24.html (dev view)", "GLOV_REFERENCE_AUDIT.html (shopper view) — para gotowa w prod"],
+    selfLearn: "✅ visual_refs łączą HTML elements z dot positions per klient"
+  } },
 
 { id: "p1-3", layers: [1, 3], type: "para", name: "HTML × Content (schema completeness)",
   what: "Per element HTML: czy content tam jest? czy schema oznacza go poprawnie?",
   needs: ["Layer 1", "Layer 3"], output: "SCHEMA_CONTENT_<klient>.html",
   tier: "lite", v: 3, u: 1, opusScore: 5, opusRec: false,
-  opusWhy: "Standard tech audit — wartość średnia." },
+  opusWhy: "Standard tech audit — wartość średnia.",
+  executionRefs: {
+    skill: ["/eel-audit", "/eel-category-mapping"],
+    script: ["audit_html.py (schema parsing) + audit_content.py (text inventory)"],
+    db: ["elements_master.json schema-side", "category_maps/", "TODO content_patterns.json"]
+  } },
 
 { id: "p1-4", layers: [1, 4], type: "para", name: "🎯 HTML × GA4 Eventy Crosswalk (PLICHTA)",
   what: "Każdy HTML element vs każdy GA4 event. Pokazuje: czego trackują a userowi NIE pokazują (waste) + czego NIE trackują a user wykonuje (blind spots).",
@@ -431,7 +472,14 @@ const PRODUKTY = [
   what: "Per fold (screenshot): czy content w tym fold trafia w to czego shopper szuka? Hierarchia copy + visual.",
   needs: ["Layer 2", "Layer 3"], output: "VISUAL_CONTENT_<klient>.html",
   tier: "pro", v: 5, u: 2, opusScore: 8, opusRec: true, flagship: true,
-  opusWhy: "Rdzeń + Content. Bardzo praktyczne dla content team. Pokazuje gdzie copy zarąbiście napisany jest schowany." },
+  opusWhy: "Rdzeń + Content. Bardzo praktyczne dla content team. Pokazuje gdzie copy zarąbiście napisany jest schowany.",
+  executionRefs: {
+    skill: ["/eel-audit + /geo-content-diff"],
+    script: ["take_screenshots.py + audit_content.py — visual_refs × text inventory cross-walk"],
+    db: ["elements_master.json (visual_refs + content sub-elements)", "category_maps/{klient}"],
+    glov: ["GLOV_REFERENCE_AUDIT.html (6.5/10 visual side — patrz p2 TODO)"],
+    todo: "visual_patterns.json + content_patterns.json (oba do dorobienia w Sprint 4)"
+  } },
 
 { id: "p2-4", layers: [2, 4], type: "para", name: "⭐ Visual × CR per widok",
   what: "Konwersja per widok nałożona na ranking popularności wizualnej fold-by-fold.",
@@ -1244,6 +1292,31 @@ function tierLabel(t) {
   return labels[t] || t;
 }
 
+function renderExecutionRefs(refs) {
+  if (!refs) return '';
+  let html = '<h4>🛠 Execution refs (skrypt / skill / baza self-learning)</h4><div class="execution-ref">';
+  if (refs.skill && refs.skill.length) {
+    html += `<div class="execution-ref-row"><span class="ref-label">Skill:</span> ${refs.skill.map(s => `<code>${s}</code>`).join(' · ')}</div>`;
+  }
+  if (refs.script && refs.script.length) {
+    html += `<div class="execution-ref-row"><span class="ref-label">Skrypt:</span> ${refs.script.map(s => `<code>${s}</code>`).join(' · ')}</div>`;
+  }
+  if (refs.db && refs.db.length) {
+    html += `<div class="execution-ref-row"><span class="ref-label">Baza:</span> ${refs.db.map(s => `<code>${s}</code>`).join(' · ')}</div>`;
+  }
+  if (refs.glov && refs.glov.length) {
+    html += `<div class="execution-ref-row"><span class="ref-label">GLOV ref:</span> ${refs.glov.map(s => `<code>${s}</code>`).join(' · ')}</div>`;
+  }
+  if (refs.selfLearn) {
+    html += `<div class="execution-ref-row" style="margin-top:6px"><span class="ref-label">Self-learn:</span> ${refs.selfLearn}</div>`;
+  }
+  html += '</div>';
+  if (refs.todo) {
+    html += `<div class="execution-todo"><strong>⚠️ TODO Sprint 4:</strong> ${refs.todo}</div>`;
+  }
+  return html;
+}
+
 function renderCard(p) {
   const flagshipClass = p.flagship ? 'flagship' : '';
   const opusRecClass = p.opusRec ? 'opus-rec' : '';
@@ -1277,6 +1350,7 @@ function renderCard(p) {
         <p>${p.output || '—'}</p>
         <h4>Tier sprzedażowy</h4>
         <p>${tierLabel(p.tier)}</p>
+        ${renderExecutionRefs(p.executionRefs)}
       </div>
     </div>
   `;
