@@ -521,8 +521,8 @@ a:hover { text-decoration: underline; }
           <span class="pill">density/100×100px + hierarchy rank + dead zones</span>
         </div>
         <div class="step-comment good">✅ <strong>GOOD koncept:</strong> density per fold pokazuje overloaded folds, hierarchy ranking ujawnia konflikt CTA, dead zones = puste obszary marnujące real estate. <strong>To są 4 brakujące sekcje gold standardu GLOV.</strong></div>
-        <div class="step-comment bad">❌ <strong>BAD:</strong> tylko stub 1.5K. GLOV grep "density"=0, "hierarchy"=0, "pseudo"=0, "dead.zone"=0.</div>
-        <div class="step-proposal" style="border-color:var(--bad);background:linear-gradient(135deg,#fef2f2 0%,#fff 90%)"><span class="proposal-id" style="background:var(--bad)">P2.6</span> <strong>audit_visual.py full</strong> — z 1.5K stub do 500+ linii: density calc + hierarchy ranking + pseudo-CTA detection + dead zones marking. ⭐ <strong>MVP CRITICAL · gold standard.</strong> <span class="proposal-meta">~2-3 dni · w MVP build</span></div>
+        <div class="step-comment good" style="background:#ecfdf5">✅ <strong>BUILT (30.05 noc):</strong> <code>scripts/audit_visual.py</code> rozbudowane z 44-line stub do <strong>698 linijek</strong> (backup: <code>audit_visual_v1_stub.py.bak</code>) + <code>/eel-audit-visual</code> skill widoczny. 4 sekcje gold standardu: density per fold + hotspots, hierarchy top-5 + conflict detection, pseudo-CTA integration (load z P2.5), dead zones >200×200px. HTML overlay z 4 toggleable layerami.</div>
+        <div class="step-proposal" style="border-color:var(--good);background:linear-gradient(135deg,#f0fdf4 0%,#fff 90%)"><span class="proposal-id" style="background:var(--good)">P2.6</span> ✅ <strong>audit_visual.py FULL — gold standard 4 sekcje</strong> — density + hierarchy + pseudo-CTA + dead zones per view, HTML overlay generator, legacy mode dla backward compat. GLOV grep "density"=0/"hierarchy"=0/"dead.zone"=0 — teraz wypełnione. <span class="proposal-meta">Built 30.05 · 698 linijek · usage: <code>python3 scripts/audit_visual.py --url https://glov.co</code></span></div>
         <div class="step-proposal"><span class="proposal-id">P2.4</span> density_baselines.json + <span class="proposal-id">P2.3</span> fold_archetypes.json — bazy referencyjne per page-type. <span class="proposal-meta">~2 dni · expansion (klient #3+)</span></div>
       </div>
     </li>
@@ -723,12 +723,12 @@ a:hover { text-decoration: underline; }
 <h3>🔴 P2.x — Warstwa 2 (Visual) (8 propozycji)</h3>
 <table>
   <tr><th>ID</th><th>Co</th><th>Krok</th><th>Czas</th><th>MVP?</th></tr>
-  <tr style="background:#fef2f2"><td><code>P2.1</code></td><td><strong>⭐ dot_generator.py — blocker skali #1</strong></td><td>2.3</td><td>1-2 dni</td><td><strong>MVP ✅</strong></td></tr>
+  <tr style="background:#f0fdf4"><td><code>P2.1</code></td><td><strong>✅ dot_generator.py — blocker skali #1 ELIMINATED (30.05)</strong></td><td>2.3</td><td>690 linijek</td><td><strong>MVP ✅</strong></td></tr>
   <tr><td><code>P2.2</code></td><td>visual_patterns.json (formalna baza wzorców)</td><td>2.4</td><td>1 dzień</td><td>expansion</td></tr>
   <tr><td><code>P2.3</code></td><td>fold_archetypes.json (typowe foldy %)</td><td>2.4</td><td>1 dzień</td><td>expansion</td></tr>
   <tr><td><code>P2.4</code></td><td>density_baselines.json</td><td>2.4</td><td>1 dzień</td><td>expansion</td></tr>
   <tr style="background:#f0fdf4"><td><code>P2.5</code></td><td><strong>audit_pseudo_cta.py + /eel-pseudo-cta skill (in-build 30.05)</strong></td><td>2.2</td><td>1-2h</td><td><strong>MVP ✅</strong></td></tr>
-  <tr style="background:#fef2f2"><td><code>P2.6</code></td><td><strong>⭐ audit_visual.py full (gold standard 4 sekcje)</strong></td><td>2.4</td><td>2-3 dni</td><td><strong>MVP ✅</strong></td></tr>
+  <tr style="background:#f0fdf4"><td><code>P2.6</code></td><td><strong>✅ audit_visual.py FULL — gold standard 4 sekcje BUILT (30.05)</strong></td><td>2.4</td><td>698 linijek</td><td><strong>MVP ✅</strong></td></tr>
   <tr><td><code>P2.7</code></td><td>C23 Visual Audit Builder sub-skille</td><td>cross</td><td>3-5 dni</td><td>Sprint 4 Plichta</td></tr>
   <tr><td><code>P2.8</code></td><td>C34 Visual Density Maps (Cortex v2 NEW)</td><td>2.4</td><td>2-3 dni</td><td>Sprint 4 Plichta</td></tr>
 </table>
@@ -765,12 +765,15 @@ a:hover { text-decoration: underline; }
 <!-- =================== SEKWENCJA =================== -->
 <h2 id="sequence">📊 Sekwencja priorytetów (MVP-first + expansion roadmap)</h2>
 
-<div class="priority-row">
-  <div class="priority-marker p0">0</div>
+<div class="priority-row" style="background:#f0fdf4;border-color:var(--good)">
+  <div class="priority-marker p0" style="background:var(--good)">✅</div>
   <div class="priority-body">
-    <strong>🎯 MVP-FIRST — 3 produkty premium (decyzja 30.05)</strong><br>
-    P3.5 wrap (4-6h) + P2.1 dot_generator (1-2 dni) + P2.6 audit_visual full (2-3 dni)
-    <div class="priority-time"><strong>~4-6 dni</strong> · unlock dla p2-8 + t2-3-8 + c1-2-4-8 · warstwy 1+2+3+4+8</div>
+    <strong>🎯 MVP-FIRST — 3 produkty premium ✅ Z WARSTWY 2 BUILT (30.05 noc)</strong><br>
+    ✅ <strong>P2.5 BUILT</strong> (audit_pseudo_cta.py 453 lines + /eel-pseudo-cta) — krok 2.2 bonus<br>
+    ✅ <strong>P2.1 BUILT</strong> (dot_generator.py 690 lines + /eel-dot-generator) — krok 2.3 · blocker skali #1 ELIMINATED<br>
+    ✅ <strong>P2.6 BUILT</strong> (audit_visual.py full 698 lines + /eel-audit-visual) — krok 2.4 · gold standard 4 sekcje<br>
+    🟡 <strong>P3.5 TODO</strong> — C02 Content Mapping skill wrap (~4-6h, najtańszy unlock pozostały)
+    <div class="priority-time"><strong>3/4 BUILT w sesji 30.05</strong> (~2,300 linijek + 3 skille) · ostatni krok: P3.5 wrap (next session)</div>
   </div>
 </div>
 
