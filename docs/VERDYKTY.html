@@ -563,9 +563,9 @@ a:hover { text-decoration: underline; }
           <span class="pill">tytuł/bullets/specs/FAQ/zdjęcia/opis ocena</span>
         </div>
         <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>Model tytułu:</em> Brand + Name + Attribute + Variant · <em>bullets:</em> cecha → korzyść → kontekst · <em>FAQ:</em> czy z real CS · <em>zdjęcia:</em> white BG / lifestyle / wymiary / detal / infografika</p>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> skrypt 17K działa, 6 pól standardowych, mapuje na Tier-1 / Tier-2 / Tier-3 struktury spec table. <strong>Content jest wizualny — auditujemy tym samym shopper-view co warstwa 2.</strong></div>
-        <div class="step-comment warn">⚠️ <strong>BAD:</strong> brak skilla wrapującego — nie invocable przez slash command. To LOW-HANGING FRUIT — gotowy skrypt, brakuje 4-6h roboty.</div>
-        <div class="step-proposal" style="border-color:var(--opus);background:linear-gradient(135deg,#f5f3ff 0%,#fff 90%)"><span class="proposal-id">P3.5</span> <strong>C02 Content Mapping skill wrap</strong> — wrap audit_content.py w SKILL.md → invocable. ⭐ <strong>MVP CRITICAL · najtańszy unlock całego dokumentu.</strong> <span class="proposal-meta">~4-6h · w MVP build (pierwszy)</span></div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> skrypt 17K (433 linijki) działa, 6 pól standardowych (title/meta_desc/bullets/FAQ/h2s/images/schema_types), mapuje na Tier-1/Tier-2/Tier-3 struktury spec table. <strong>Content jest wizualny — auditujemy tym samym shopper-view co warstwa 2.</strong></div>
+        <div class="step-comment good" style="background:#ecfdf5">✅ <strong>BUILT (30.05 noc²):</strong> <code>/eel-audit-content</code> skill widoczny w skill list (wrap audit_content.py — skrypt nie wymaga zmian). Auto-discovery PDP URLs + JS scan + summary stats (avg_bullets, faq_coverage) + SL hook (nieznane schema_types → discovery queue).</div>
+        <div class="step-proposal" style="border-color:var(--good);background:linear-gradient(135deg,#f0fdf4 0%,#fff 90%)"><span class="proposal-id" style="background:var(--good)">P3.5</span> ✅ <strong>C02 Content Mapping skill wrap</strong> — wrap audit_content.py (433 linijki, gotowy) w SKILL.md → invocable przez slash. <span class="proposal-meta">Built 30.05 · skill only · usage: <code>python3 scripts/audit_content.py https://glov.co --count 5</code></span></div>
       </div>
     </li>
 
@@ -740,7 +740,7 @@ a:hover { text-decoration: underline; }
   <tr><td><code>P3.2</code></td><td>category_templates.json per branża (Plichta-relevant)</td><td>3.2</td><td>1-2 dni</td><td>expansion (przed Plichta)</td></tr>
   <tr><td><code>P3.3</code></td><td>tier_specs_master.json</td><td>3.2</td><td>1-2 dni</td><td>expansion</td></tr>
   <tr><td><code>P3.4</code></td><td>forbidden_patterns.json (copy które nie działa)</td><td>3.1</td><td>1 dzień</td><td>expansion</td></tr>
-  <tr style="background:#f5f3ff"><td><code>P3.5</code></td><td><strong>⭐ C02 Content Mapping skill wrap — najtańszy unlock</strong></td><td>3.1</td><td>4-6h</td><td><strong>MVP ✅ (pierwszy)</strong></td></tr>
+  <tr style="background:#f0fdf4"><td><code>P3.5</code></td><td><strong>✅ C02 Content Mapping skill wrap BUILT (30.05) — /eel-audit-content</strong></td><td>3.1</td><td>~30 min (skill only)</td><td><strong>MVP ✅</strong></td></tr>
   <tr><td><code>P3.6</code></td><td>C04 GA4 R10-R20 (11 raportów)</td><td>3.4</td><td>3-4 dni</td><td>expansion</td></tr>
   <tr><td><code>P3.7</code></td><td>C35 CDT Builder (Cortex v2 NEW)</td><td>3.3</td><td>3-5 dni</td><td>Sprint 4 Plichta</td></tr>
 </table>
@@ -772,8 +772,8 @@ a:hover { text-decoration: underline; }
     ✅ <strong>P2.5 BUILT</strong> (audit_pseudo_cta.py 453 lines + /eel-pseudo-cta) — krok 2.2 bonus<br>
     ✅ <strong>P2.1 BUILT</strong> (dot_generator.py 690 lines + /eel-dot-generator) — krok 2.3 · blocker skali #1 ELIMINATED<br>
     ✅ <strong>P2.6 BUILT</strong> (audit_visual.py full 698 lines + /eel-audit-visual) — krok 2.4 · gold standard 4 sekcje<br>
-    🟡 <strong>P3.5 TODO</strong> — C02 Content Mapping skill wrap (~4-6h, najtańszy unlock pozostały)
-    <div class="priority-time"><strong>3/4 BUILT w sesji 30.05</strong> (~2,300 linijek + 3 skille) · ostatni krok: P3.5 wrap (next session)</div>
+    ✅ <strong>P3.5 BUILT</strong> (/eel-audit-content skill wrap audit_content.py 433 lines) — krok 3.1 · najtańszy unlock
+    <div class="priority-time"><strong>🎉 4/4 BUILT w sesji 30.05</strong> (~2,300 linijek nowych + 4 skille) · MVP READY · pipeline Hebe odpalany w tle dla weryfikacji</div>
   </div>
 </div>
 
