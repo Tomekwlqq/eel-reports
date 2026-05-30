@@ -144,6 +144,237 @@ a:hover { text-decoration: underline; }
   <p style="margin-top: 6px;"><strong>4. GLOV_REFERENCE_AUDIT.html — 6.5/10, NIE gold standard.</strong> Brakuje 4 krytycznych elementów warstwy 2.</p>
 </div>
 
+<h2>🔬 Głęboka ocena per warstwa (z EEL_MASTER_TRACKER.md)</h2>
+
+<h3>WARSTWA 1 — HTML scan + Tech Stack + Element Discovery</h3>
+
+<div class="verdict-card good">
+  <div class="score-row">
+    <div class="score-num s8">8</div>
+    <div>
+      <div class="score-title">Self-learning loop: ZAMKNIĘTY ✅</div>
+      <div class="score-sub">Najdojrzalszy ekosystem w EEL</div>
+    </div>
+  </div>
+
+  <h4 style="margin-top:8px;color:#065f46">Komponenty</h4>
+  <table>
+    <tr><th>Kod</th><th>Komponent</th><th>Status</th></tr>
+    <tr><td>C11</td><td>HTML Mapping (Developer View)</td><td>❌ skill brak ale <code>audit_html.py</code> 18K istnieje</td></tr>
+    <tr><td>C21</td><td>Element Benchmark</td><td>✅ działa, <code>/eel-benchmark</code></td></tr>
+    <tr><td>C22</td><td>EEL Central Hub (Tab 5 Self-Learning)</td><td>✅ działa</td></tr>
+  </table>
+
+  <h4 style="color:#065f46">Wsady (4)</h4>
+  <table>
+    <tr><th>Kod</th><th>Wsad</th><th>Plik</th></tr>
+    <tr><td>W1</td><td>Element Master (302+ elementów)</td><td><code>elements_master.json</code> 204K</td></tr>
+    <tr><td>W26</td><td>Area + Element Taxonomy</td><td>9 obszarów × ~60 elementów</td></tr>
+    <tr><td>W43</td><td>Self-Learning Schema v2</td><td><code>elements_dictionary.json</code> 29K + <code>platform_patterns.json</code> + <code>sl_server.py</code></td></tr>
+    <tr><td>W44</td><td>Tech Stack Signatures</td><td><code>tech_stack_signatures.json</code> 36K + cache</td></tr>
+  </table>
+
+  <h4 style="color:#065f46">Skille (3)</h4>
+  <table>
+    <tr><th>Skill</th><th>Co robi</th></tr>
+    <tr><td><code>/eel-self-learn</code></td><td>Update + Verify loop</td></tr>
+    <tr><td><code>/eel-benchmark</code></td><td>Dodaj sklep do benchmarku</td></tr>
+    <tr><td><code>/eel-audit</code></td><td>Visual + HTML w jednym</td></tr>
+  </table>
+
+  <h4 style="color:#065f46">Skrypty</h4>
+  <ul>
+    <li><code>audit_html.py</code> (18K) — main scan</li>
+    <li><code>nav_scanner.py</code> (40K) — nav structure</li>
+    <li><code>tech_stack_detector.py</code> (29K) — sygnatury z cache</li>
+    <li><code>discovery_loop.py</code> (31K) — enrich/add/review/commit</li>
+    <li><code>sl_server.py</code> (6.4K) — HTTP server port 8744 dla UI editing</li>
+  </ul>
+
+  <h4 style="color:#065f46">Proces self-learning (zamknięty loop)</h4>
+  <ol>
+    <li><code>take_screenshots</code> + <code>audit_html.py</code> → scan klienta</li>
+    <li><code>discovery_loop.py enrich</code> → wykryj nowe selektory/sygnatury/vendors</li>
+    <li>queue.json: <code>pending</code> → Tomek aprobuje w Hub Tab 5 UI (sl_server)</li>
+    <li><code>discovery_loop.py commit</code> → <code>elements_dictionary</code> + <code>platform_patterns</code> + <code>tech_stack_signatures</code></li>
+    <li>Kolejny audyt = precyzyjniejszy</li>
+  </ol>
+
+  <div class="win-list">
+    <h4>✅ Co działa wzorcowo</h4>
+    <ul>
+      <li>workflow approval z UI (Hub Tab 5 + sl_server)</li>
+      <li>multi-platform (Shopify+IdoSell+WooCommerce+PrestaShop)</li>
+      <li>confidence scoring (script_src=0.6, global_var=0.5, cookie=0.4, threshold=0.4)</li>
+      <li>cache per domena</li>
+      <li>Tomek może edytować nazwy elementów + dodawać selektory przez UI</li>
+    </ul>
+  </div>
+
+  <div class="gap-list">
+    <h4>⚠️ Co ogranicza skalę</h4>
+    <ul>
+      <li>Tomek aprobuje KAŻDY element ręcznie → auto-promote ≥0.8 odciążyłoby</li>
+      <li>JSON nie skali &gt;500KB (przy 50+ klientach elements_master = 2-3MB)</li>
+      <li>Brak diff history → nie wiemy czy v2 jest lepsza niż v1</li>
+      <li>SL-1 Benchmark Accumulator (W18 ❌) — brak auto-zbierania benchmarków branżowych</li>
+    </ul>
+  </div>
+</div>
+
+<h3>WARSTWA 2 — Visual Mapping + Screenshot pipeline</h3>
+
+<div class="verdict-card bad">
+  <div class="score-row">
+    <div class="score-num s4">4</div>
+    <div>
+      <div class="score-title">Self-learning loop: OTWARTY ❌</div>
+      <div class="score-sub">Największy gap w EEL</div>
+    </div>
+  </div>
+
+  <h4 style="margin-top:8px;color:#7c2d12">Komponenty</h4>
+  <table>
+    <tr><th>Kod</th><th>Komponent</th><th>Status</th></tr>
+    <tr><td>C01</td><td>Visual Mapping (current)</td><td>✅ działa ALE ⚠️ "Brak: embed screenshotów w HTML"</td></tr>
+    <tr><td>C23</td><td>Visual Audit Builder sub-skille (next-gen)</td><td>❌ nie istnieje — planowany 3 sub-skille (<code>/store-visual-map</code> + <code>/action-map</code> + <code>/content-audit</code>)</td></tr>
+    <tr><td>C34</td><td>Visual Density Maps (Cortex v2 NEW)</td><td>❌ proponowany, nie zbudowany</td></tr>
+  </table>
+
+  <h4 style="color:#7c2d12">Wsady (3 — ale rozproszone)</h4>
+  <table>
+    <tr><th>Kod</th><th>Wsad</th><th>Status</th></tr>
+    <tr><td>W1</td><td>Element Master z visual_refs[]</td><td>✅ embedded</td></tr>
+    <tr><td>W20</td><td>Competitor Intelligence (GLOV/JohnDog/SejfZone audyty)</td><td>🟡 3 klienci</td></tr>
+    <tr><td>W42</td><td>SejfZone Live Case Study (Visual subsection)</td><td>✅</td></tr>
+    <tr><td>W30</td><td>EEL Audit Catechism (NIERUSZALNY)</td><td>✅ standard formatu</td></tr>
+  </table>
+
+  <h4 style="color:#7c2d12">Skille (1)</h4>
+  <table>
+    <tr><th>Skill</th><th>Status</th></tr>
+    <tr><td><code>/eel-audit</code></td><td>✅ Visual + HTML w jednym</td></tr>
+    <tr><td><code>/store-visual-map</code></td><td>❌ planowany C23 sub-skill</td></tr>
+  </table>
+
+  <h4 style="color:#7c2d12">Skrypty</h4>
+  <ul>
+    <li><code>take_screenshots.py</code> (29K — wcześniej myliłem 717, faktycznie 29K plik) — ✅ UNIVERSAL Playwright</li>
+    <li><code>audit_visual.py</code> (1.5K) — 🟡 STUB od 2026-05-26</li>
+    <li><code>eel_report_html.py</code> (99K) — ✅ generator HTML 6-tab</li>
+    <li><code>scripts/build_raport.py</code> (19K) — ✅ Tech Stack v2 build</li>
+  </ul>
+
+  <h4 style="color:#7c2d12">Proces (OTWARTY loop)</h4>
+  <ol>
+    <li><code>take_screenshots.py</code> → 16 PNG per klient</li>
+    <li><strong>Manual:</strong> doty placed ręcznie w HTML editorze (167 dla GLOV)</li>
+    <li><code>eel_report_html.py</code> → HTML 6-tab</li>
+    <li><strong>Manual:</strong> dodanie do reports/ + push</li>
+    <li>❌ Brak loop wracającego patterns do bazy → kolejny klient od zera</li>
+  </ol>
+
+  <div class="gap-list">
+    <h4>❌ Brakuje krytycznie</h4>
+    <ul>
+      <li><code>dot_generator.py</code> — auto-detekcja klikalnych z HTML scan + Playwright bounding boxes</li>
+      <li><code>visual_patterns.json</code> — typowy layout fold per page-type per platforma</li>
+      <li><code>fold_archetypes.json</code> — "HP Fold 1: 60% Hero+CTA, 25% Hero+Search, 15% Hero+Promo"</li>
+      <li><code>density_baselines.json</code> — typowa density + outliers</li>
+      <li><code>pseudo_cta_patterns.json</code> — wzorce pseudoklikabilnych</li>
+      <li><code>dead_zones_baselines.json</code> — typowe dead zones per page type</li>
+      <li><code>/eel-html-mapping</code> skill ❌ + <code>/store-visual-map</code> ❌ + <code>audit_visual.py</code> nadbudowa (z 1.5K stub)</li>
+    </ul>
+  </div>
+
+  <div class="gap-list" style="background:#fef2f2">
+    <h4>🔴 Strategiczny gap (z Cortex v2 plan)</h4>
+    <p>Plan v2 przesuwa C01 z 🟠 WAŻNE → 🔴 KRYTYCZNY (rdzeń Cortex v2) — bo bez wzmocnionej warstwy 2 cały Cortex jest słaby. <strong>Sprint 4 priority.</strong></p>
+  </div>
+</div>
+
+<h3>WARSTWA 3 — Content + Category + GEO</h3>
+
+<div class="verdict-card warn">
+  <div class="score-row">
+    <div class="score-num s6">6</div>
+    <div>
+      <div class="score-title">Self-learning loop: CZĘŚCIOWY ⚠️</div>
+      <div class="score-sub">GEO sub-warstwa silna, Content Mapping ogólne brak</div>
+    </div>
+  </div>
+
+  <h4 style="margin-top:8px;color:#78350f">Komponenty (3 PILNE)</h4>
+  <table>
+    <tr><th>Kod</th><th>Komponent</th><th>Status</th></tr>
+    <tr><td>C02</td><td>Content Mapping (Skill)</td><td>❌ Nie istnieje (ale <code>audit_content.py</code> 17K istnieje)</td></tr>
+    <tr><td>C05</td><td>GEO Check (Skill)</td><td>🟡 <code>geo_check.py</code> jest, brak skilla + HTML output</td></tr>
+    <tr><td>C10</td><td>Category Mapping</td><td>✅ działa, <code>/eel-category-mapping</code></td></tr>
+    <tr><td>C35</td><td>CDT Builder (Cortex v2 NEW)</td><td>❌ proponowany</td></tr>
+  </table>
+
+  <h4 style="color:#78350f">Wsady (11 — najbogatszy ekosystem)</h4>
+  <table>
+    <tr><th>Kod</th><th>Wsad</th><th>Co zawiera</th></tr>
+    <tr><td>W11</td><td>GEO Decision Trees + Discovery Questions</td><td>PL + EN bazy</td></tr>
+    <tr><td>W12</td><td>GEO Principles + Score Rubric</td><td>scoring per element</td></tr>
+    <tr><td>W13</td><td>GEO Category Template Library</td><td>szablony struktury</td></tr>
+    <tr><td>W14</td><td>GEO Before-After Examples</td><td>15 SKU validated</td></tr>
+    <tr><td>W15</td><td>GEO CEP + DT Algorithm</td><td>v2 CEP-First</td></tr>
+    <tr><td>W16</td><td>GEO Category Intelligence Pipeline</td><td>algorytm auto</td></tr>
+    <tr><td>W17</td><td>GEO Category Data</td><td>46 kategorii PL+EN</td></tr>
+    <tr><td>W19</td><td>Copywriting Patterns</td><td>w W29 Seria 2</td></tr>
+    <tr><td>W29</td><td>EEL Tactics All Series</td><td>4 serie</td></tr>
+    <tr><td>W31</td><td>SejfZone Content Diff Methodology</td><td>validated GEO Scores 58→82, 52→79, 61→84</td></tr>
+    <tr><td>W36</td><td>GEO Ceneo Scraper + DT Verifier</td><td>94 opinii test</td></tr>
+  </table>
+
+  <h4 style="color:#78350f">Skille (4 GEO + 1 category)</h4>
+  <table>
+    <tr><th>Skill</th><th>Status</th></tr>
+    <tr><td><code>/eel-category-mapping</code></td><td>✅</td></tr>
+    <tr><td><code>/geo-content-diff</code></td><td>✅</td></tr>
+    <tr><td><code>/geo-pdp-writer</code></td><td>✅</td></tr>
+    <tr><td><code>/geo-review</code></td><td>✅</td></tr>
+    <tr><td><code>/eel-content-mapping</code></td><td>❌ skrypt jest, skilla nie ma</td></tr>
+    <tr><td><code>/eel-geo</code></td><td>❌ skrypt jest, skilla + HTML output nie ma</td></tr>
+  </table>
+
+  <h4 style="color:#78350f">Proces (CZĘŚCIOWY loop)</h4>
+  <ol>
+    <li><code>/eel-category-mapping</code> → <code>{klient}_CATEGORY_MAP.json</code> per klient</li>
+    <li><code>audit_content.py</code> → content inventory per produkt</li>
+    <li><code>/geo-content-diff</code> → diff per produkt (GEO score X/100 → Y/100)</li>
+    <li><code>/geo-pdp-writer</code> → rewrite</li>
+    <li><strong>Manual:</strong> review per produkt</li>
+    <li>⚠️ <code>category_maps/</code> rośnie per klient (good) ALE brak konsolidacji cross-category</li>
+  </ol>
+
+  <div class="win-list">
+    <h4>✅ Co działa silnie (GEO sub-warstwa)</h4>
+    <ul>
+      <li>46+ kategorii w bazie (W17) — bezpośrednie lookup table</li>
+      <li>4 skille GEO operacyjne</li>
+      <li>W31 validated methodology (3 produkty SejfZone +20-25 score lift)</li>
+      <li>category_map per klient ✅ działa</li>
+      <li>Tech Stack detection per kategoria</li>
+    </ul>
+  </div>
+
+  <div class="gap-list">
+    <h4>⚠️ Brakuje (konsolidacja)</h4>
+    <ul>
+      <li><code>content_patterns.json</code> — konsolidacja category_maps cross-category</li>
+      <li><code>category_templates.json</code> per branża (cosmetic/electronics/fashion/safety/automotive)</li>
+      <li><code>tier_specs_master.json</code> — formalna baza T1/T2/T3 per kategoria</li>
+      <li><code>copy_archetypes.json</code> — typowe formuły opisów per kategoria</li>
+      <li><code>forbidden_patterns.json</code> — copy patterns które nie działają</li>
+      <li>C02 Content Mapping skill (owrappować <code>audit_content.py</code>)</li>
+      <li>C04 GA4 R10-R20 — brakuje 11 raportów</li>
+    </ul>
+  </div>
+</div>
+
 <h2>🚦 Verdict 1: Powtarzalność na skali (cross-check 3 warstw)</h2>
 
 <div class="verdict-card bad">
