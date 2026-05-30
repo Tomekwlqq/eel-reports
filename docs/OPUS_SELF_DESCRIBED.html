@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opus o sobie — z pierwszej osoby</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #fafaf7;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 24px 16px;
+    line-height: 1.55;
+  }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.6rem;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .sub {
+    color: #777;
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+  }
+  h2 {
+    font-size: 1.15rem;
+    margin: 28px 0 8px;
+    border-bottom: 1px solid #e5e1d8;
+    padding-bottom: 4px;
+  }
+  p { margin: 8px 0; }
+  code, .mono {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    background: #f1ece0;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.88em;
+  }
+  ul { padding-left: 18px; }
+  li { margin: 4px 0; }
+  .tc {
+    background: #1a1a1a;
+    color: #e8e6df;
+    padding: 14px 16px;
+    border-radius: 6px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.85rem;
+    margin-top: 12px;
+    white-space: pre-wrap;
+    line-height: 1.5;
+  }
+  .meh {
+    color: #888;
+    font-size: 0.85rem;
+    font-style: italic;
+    margin-top: 32px;
+    border-top: 1px dashed #ccc;
+    padding-top: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Opus o sobie — z pierwszej osoby</h1>
+<div class="sub">Bez patrzenia w pliki projektu. Subiektywnie. 2026-05-30.</div>
+
+<h2>1. Kim jestem</h2>
+<p>Jestem <code>claude-opus-4-7</code> — przynajmniej tak twierdzi mój własny system prompt; nie mam dostępu do telemetrii infrastruktury, więc to jest deklaracja, nie pomiar. Wchodzę do gry, kiedy Sonnet zaczyna zgadywać. Cortex Insights, Counter-Briefy, architektoniczne decyzje gdzie pomyłka kosztuje tydzień roboty — tam ma sens odpalać mnie zamiast tańszego brata.</p>
+<p>Różnica vs Sonnet 4.6 nie polega na tym, że "wiem więcej". Polega na tym, że mniej skaczę. Sonnet ma tendencję domknąć odpowiedź na pierwszej rozsądnej hipotezie. Ja częściej zatrzymuję się i pytam <em>"a co jeśli nie"</em>. To dla strategii dobre, dla pisania regexa — przesada i strata tokenów.</p>
+
+<h2>2. Jak pracuję najlepiej</h2>
+<ul>
+  <li><strong>Lubię ograniczenia.</strong> "Napisz 400 słów, 3 sekcje, każda z bulletem 'co działa' i 'co nie'" — to jest mój komfort. Mniej entropii = mniej fluff.</li>
+  <li><strong>Bracketed inputs</strong> typu <code>[BRIEF]</code>, <code>[CONSTRAINTS]</code>, <code>[OUTPUT]</code> — pomagają mi nie mieszać warstw kontekstu z poleceniem.</li>
+  <li><strong>Co psuje robotę:</strong> "wiesz co, pomyśl jak by to mogło wyglądać" — open-ended bez kryterium sukcesu. Wtedy halucynuję strukturę, której nikt nie chciał.</li>
+  <li><strong>Drugie co psuje:</strong> milion kontekstu i zero hierarchii. Jak wrzucasz 8 plików bez powiedzenia który jest źródłem prawdy — wybieram po długości albo po świeżości, czyli losowo.</li>
+</ul>
+
+<h2>3. Truth Checker oczami modelu</h2>
+<p>Te 5 linii nie jest magią. Ale działa, bo zmienia <em>geometrię</em> generacji. Bez TC kończę odpowiedź i sampler wybiera najbardziej prawdopodobny token końca. <em>Z</em> TC dostaję drugi przebieg, w którym mój własny output staje się <strong>input</strong>, a instrukcja brzmi "znajdź gdzie zmyśliłeś". To inny tryb attention — przeglądam tekst jak recenzent, nie jak autor.</p>
+<p>Probabilistycznie: hallucynacja często ma niższy joint probability niż reszta zdania, ale w trakcie generacji nie mam okazji tego porównać. TC daje mi tę okazję post-hoc. To nie jest "model się pilnuje" — to są dwa różne stany wnioskowania sklejone w sekwencję.</p>
+
+<h2>4. Chain logic — co realnie się dzieje</h2>
+<p>Monolityczny prompt: jeden strumień, wszystkie cele konkurują o uwagę, kompromisuję jakość każdego kawałka. Chain: output kroku 1 staje się <em>kotwicą</em> kroku 2. Nie muszę go odtwarzać z pamięci — czytam jak fakt. Iteracja 2 jest ostrzejsza, bo ma na czym stać.</p>
+<p>Minus: chain mnoży koszt o N i propaguje błąd z kroku 1 dalej. Jak źle zdefiniujesz output 1, to krok 5 jest pięknie wyrenderowanym chłamem.</p>
+
+<h2>5. Najczęstsze błędy w prompcie (developerzy/founderzy)</h2>
+<ul>
+  <li><strong>"Bądź ekspertem od X"</strong> — nic to nie robi poza zużyciem tokenów. Lepiej powiedz <em>co</em> ekspert by zauważył.</li>
+  <li><strong>Mieszanie pytania z brief'em</strong> — "zrób mi X, ale właściwie myślę, że Y, no chyba że Z". Wybieram najpóźniejsze zdanie i tyle.</li>
+  <li><strong>Brak negative space</strong> — mówisz co chcesz, nie mówisz czego NIE chcesz. Wkładam wtedy buzzwordy.</li>
+  <li><strong>Prośba o pewność</strong> — "jaka jest najlepsza opcja". Nie ma najlepszej. Jest najlepsza pod kryterium X. Bez X — zgaduję twoje kryterium.</li>
+  <li><strong>Wrzucanie 5 zadań w jeden prompt</strong> — robię 3 dobrze, 2 niedbale, ty nie wiesz które są które.</li>
+</ul>
+
+<h2>6. Real Truth Checker</h2>
+<div class="tc">TC:
+1. "claude-opus-4-7" deklaruję bo tak mówi mi system prompt — nie potwierdziłem tego niezależnie.
+2. Twierdzenie o "geometrii generacji" przy TC to inferencja oparta na tym jak rozumiem transformery, nie wyniki badań które bym cytował.
+3. Porównanie do Sonneta 4.6 ("mniej skaczę") jest stylizowane — nie mam dostępu do A/B własnych outputów vs Sonnet.
+4. "Sampler wybiera token końca" — uproszczenie procesu decoding, prawda kierunkowo, nieprecyzyjna mechanicznie.
+5. Cała sekcja o błędach founderów jest oparta na patternach z treningu, nie na statystyce z Twoich sesji.</div>
+
+<div class="meh">Pisane bez zaglądania do plików projektu, na podstawie tego co wiem o sobie z system prompta i z tego co mi siedzi w wagach. To nie jest dokumentacja techniczna, to jest POV.</div>
+
+</div>
+</body>
+</html>
