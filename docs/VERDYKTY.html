@@ -394,20 +394,20 @@ a:hover { text-decoration: underline; }
       <div class="step-num">1.3</div>
       <div class="step-content">
         <div class="step-header">
-          <h5>Element discovery z DOM</h5>
+          <h5>Element discovery z DOM (rosnąca baza + synonimy)</h5>
           <span class="resilience-badge r-high">🟢 HIGH</span>
           <span class="mvp-badge">MVP</span>
         </div>
         <div class="step-flow">
           <span class="pill">DOM</span>
           <span class="arr">→</span>
-          <span class="pill tool">elements_dictionary + platform_patterns + sl_server</span>
+          <span class="pill tool">elements_dictionary (synonyms_pl + synonyms_en) + platform_patterns + sl_server</span>
           <span class="arr">→</span>
-          <span class="pill">named elements + queue.json (pending)</span>
+          <span class="pill">auto-named elements + auto-commit do bazy</span>
         </div>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> baza 302+ elementów (elements_master 204K), workflow approval z Hub Tab 5 UI (sl_server port 8744). Tomek edytuje nazwy + dodaje selektory live. Czysty 🟢 HIGH: pliki własne + lokalny serwer + JSON multi-platform.</div>
-        <div class="step-comment warn">⚠️ <strong>BAD:</strong> Tomek aprobuje KAŻDY element ręcznie. Auto-promote ≥0.8 odciążyłby ~70%. Po 10 klientach = grzęźnie w queue.</div>
-        <div class="step-proposal"><span class="proposal-id">P1.1</span> Auto-promote ≥0.8 confidence — w discovery_loop.py reguła. ~70% mniej manualnej pracy. <span class="proposal-meta">~2h · post-MVP (klient #2-3)</span></div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> baza 302+ elementów (elements_master 204K) + <strong>synonimy PL/EN per element już istnieją</strong> w elements_dictionary.json (W43, audits_count: 3, rule: <em>"system ma być mądrzejszy z każdym audytem"</em>). Multi-platform JSON, Hub Tab 5 UI (sl_server port 8744). Czysty 🟢 HIGH.</div>
+        <div class="step-comment good" style="background:#ecfdf5">✅ <strong>FILOZOFIA (decyzja 30.05):</strong> <strong>baza ROŚNIE z każdym scanem, nie ma gate'a approval.</strong> Auto-commit z synonym matching → element wpada do bazy z proponowaną nazwą. <strong>Tomek MOŻE wejść w Hub UI i poprawić nazwę / dorzucić synonim / edytować selektor — to jego PRAWO, nie obowiązek.</strong> Korekty ręczne = ulepszanie bazy, nie blocker.</div>
+        <div class="step-proposal" style="border-color:var(--good);background:linear-gradient(135deg,#f0fdf4 0%,#fff 90%)"><span class="proposal-id" style="background:var(--good)">P1.1</span> <strong>Auto-commit + synonym matching</strong> (reframe) — nowy element z DOM → fuzzy match przeciw <code>synonyms_pl</code> + <code>synonyms_en</code> w elements_dictionary → jeśli match ≥0.8: użyj canonical name, jeśli &lt;0.8: dodaj jako nowy entry z confidence flag. Brak queue.json pending — wszystko leci. Hub Tab 5 = panel korekty (opcjonalny), nie approval queue. <span class="proposal-meta">~3-4h · można w MVP (low risk, infrastruktura istnieje)</span></div>
       </div>
     </li>
 
@@ -677,7 +677,7 @@ a:hover { text-decoration: underline; }
 <div class="algorithm-summary">
   <p><strong>Mapa dziur w algorytmie i ich rozwiązań (linki do propozycji per krok):</strong></p>
   <ul style="margin-top:6px">
-    <li><strong>Krok 1.3</strong> manual approval → <span class="proposal-id">P1.1</span> auto-promote ≥0.8</li>
+    <li><strong>Krok 1.3</strong> ✅ <em>NIE blocker (decyzja 30.05):</em> baza rośnie z każdym scanem, auto-commit + synonym matching (W43 istnieje), Tomek ma PRAWO korekty z Hub UI, nie obowiązek. <span class="proposal-id" style="background:var(--good);color:white;padding:1px 6px;border-radius:3px">P1.1</span> reframe do "auto-commit z fuzzy synonym matching" (3-4h, low risk).</li>
     <li><strong>Krok 2.2</strong> pseudo-CTA niewykryte → <span class="proposal-id">P2.5</span> pseudo_cta_patterns.json</li>
     <li><strong>Krok 2.3</strong> dot overlay manual → ⭐ <span class="proposal-id" style="background:var(--bad);color:white;padding:1px 6px;border-radius:3px;font-weight:700;font-size:10.5px">P2.1</span> <strong>dot_generator.py (MVP CRITICAL)</strong></li>
     <li><strong>Krok 2.4</strong> density/hierarchy STUB → ⭐ <span class="proposal-id" style="background:var(--bad);color:white;padding:1px 6px;border-radius:3px;font-weight:700;font-size:10.5px">P2.6</span> <strong>audit_visual full (MVP CRITICAL)</strong> + P2.3 + P2.4</li>
@@ -698,7 +698,7 @@ a:hover { text-decoration: underline; }
 <h3>🟢 P1.x — Warstwa 1 (HTML) data layer (4 propozycje)</h3>
 <table>
   <tr><th>ID</th><th>Co</th><th>Krok</th><th>Czas</th><th>MVP?</th></tr>
-  <tr><td><code>P1.1</code></td><td>Auto-promote ≥0.8 confidence (~70% mniej manual approval)</td><td>1.3</td><td>2h</td><td>po MVP</td></tr>
+  <tr style="background:#f0fdf4"><td><code>P1.1</code></td><td><strong>Auto-commit + synonym matching (reframe 30.05)</strong> — baza rośnie z każdym scanem, fuzzy match przeciw synonyms_pl/en, Tomek korekta = prawo nie obowiązek</td><td>1.3</td><td>3-4h</td><td>MVP możliwe</td></tr>
   <tr><td><code>P1.2</code></td><td>JSON sharding (elements_master split per page-type)</td><td>1.3</td><td>4h</td><td>długoterminowo</td></tr>
   <tr><td><code>P1.3</code></td><td>Nightly snapshot + diff log</td><td>1.3</td><td>2h</td><td>długoterminowo</td></tr>
   <tr><td><code>P1.4</code></td><td>W18 Industry Benchmarks Accumulator</td><td>1.1</td><td>1 dzień</td><td>expansion</td></tr>
@@ -762,8 +762,8 @@ a:hover { text-decoration: underline; }
   <div class="priority-marker p1">1</div>
   <div class="priority-body">
     <strong>Expansion 1 — Plichta prerequisite</strong><br>
-    P3.2 category_templates per branża (automotive!) + P3.3 tier_specs_master + P1.1 auto-promote
-    <div class="priority-time">~3-4 dni · przed Plichta 09/2026 · unlock warstwa 8 per branża</div>
+    P3.2 category_templates per branża (automotive!) + P3.3 tier_specs_master <em>(P1.1 reframe może wskoczyć do MVP, ~3-4h)</em>
+    <div class="priority-time">~2-3 dni · przed Plichta 09/2026 · unlock warstwa 8 per branża</div>
   </div>
 </div>
 
