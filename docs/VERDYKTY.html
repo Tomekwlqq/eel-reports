@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Verdykty — sesja 30.05.2026</title>
+<title>Verdykty v2 — sesja 30.05.2026 (MVP-first + algorytm + resilience)</title>
 <style>
 :root {
   --bg: #fafafa; --bg-card: #fff;
@@ -19,14 +19,16 @@ body {
   font-size: 16px; line-height: 1.55; color: var(--text); background: var(--bg);
   padding: 14px 14px 60px;
 }
-.container { max-width: 720px; margin: 0 auto; }
+.container { max-width: 760px; margin: 0 auto; }
 
 h1 { font-size: 22px; color: var(--accent); margin-bottom: 4px; line-height: 1.25; }
 .subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
+.version-badge { display: inline-block; background: var(--opus-bg); color: var(--opus); padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; margin-left: 6px; vertical-align: middle; }
 
 .tldr { background: linear-gradient(135deg, #fffbeb 0%, var(--bg-card) 80%); border: 1.5px solid #fed7aa; border-radius: 10px; padding: 14px 16px; margin-bottom: 18px; }
 .tldr h2 { font-size: 15px; color: #9a3412; margin-bottom: 6px; }
-.tldr p { font-size: 14px; color: #7c2d12; }
+.tldr p { font-size: 14px; color: #7c2d12; margin-top: 6px; }
+.tldr p:first-of-type { margin-top: 0; }
 
 h2 {
   font-size: 17px; color: var(--accent);
@@ -50,15 +52,8 @@ li { margin-bottom: 4px; font-size: 15px; }
 .verdict-card.warn { border-left: 5px solid var(--warn); }
 .verdict-card.good { border-left: 5px solid var(--good); }
 
-.score-row {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
-}
-.score-num {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 50px; height: 50px; border-radius: 50%;
-  color: white; font-weight: 800; font-size: 18px;
-  flex-shrink: 0;
-}
+.score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.score-num { display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; color: white; font-weight: 800; font-size: 18px; flex-shrink: 0; }
 .score-num.s4 { background: var(--bad); }
 .score-num.s5 { background: #f97316; }
 .score-num.s6 { background: var(--warn); }
@@ -66,7 +61,6 @@ li { margin-bottom: 4px; font-size: 15px; }
 .score-num.s8 { background: var(--good); }
 .score-num.s9 { background: var(--good); }
 .score-num.s10 { background: #047857; }
-
 .score-title { font-size: 16px; font-weight: 700; }
 .score-sub { font-size: 12px; color: var(--text-muted); }
 
@@ -74,28 +68,10 @@ li { margin-bottom: 4px; font-size: 15px; }
 .gap-list h4 { font-size: 13px; color: var(--bad); margin-bottom: 4px; }
 .gap-list ul { padding-left: 18px; }
 .gap-list li { font-size: 14px; margin-bottom: 3px; }
-
 .win-list { background: #f0fdf4; border-left: 4px solid var(--good); padding: 10px 14px; margin: 8px 0; border-radius: 4px; }
 .win-list h4 { font-size: 13px; color: #065f46; margin-bottom: 4px; }
 .win-list ul { padding-left: 18px; }
 .win-list li { font-size: 14px; margin-bottom: 3px; }
-
-.blocker-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin: 8px 0;
-  font-size: 14px;
-}
-.blocker-card .blocker-num {
-  display: inline-block; background: var(--bad); color: white;
-  width: 24px; height: 24px; border-radius: 50%;
-  text-align: center; line-height: 24px; font-weight: 700; font-size: 13px;
-  margin-right: 8px;
-}
-.blocker-card.orange .blocker-num { background: var(--warn); }
-.blocker-card.yellow .blocker-num { background: #eab308; }
 
 table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; background: var(--bg-card); }
 th, td { padding: 8px 10px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
@@ -109,13 +85,7 @@ a:hover { text-decoration: underline; }
 .link-list a:last-child { border-bottom: 0; }
 .link-list a::before { content: "→ "; color: var(--accent); }
 
-.next-step {
-  background: linear-gradient(135deg, var(--opus-bg) 0%, var(--bg-card) 100%);
-  border: 1.5px solid var(--opus);
-  border-radius: 10px;
-  padding: 14px 16px;
-  margin-top: 22px;
-}
+.next-step { background: linear-gradient(135deg, var(--opus-bg) 0%, var(--bg-card) 100%); border: 1.5px solid var(--opus); border-radius: 10px; padding: 14px 16px; margin-top: 22px; }
 .next-step h2 { color: var(--opus); border: 0; padding: 0; margin: 0 0 6px; font-size: 16px; }
 .next-step ol { padding-left: 22px; margin-top: 6px; }
 .next-step li { font-size: 14px; margin-bottom: 6px; }
@@ -126,25 +96,55 @@ a:hover { text-decoration: underline; }
 .quick-nav {
   position: sticky; top: 0; z-index: 100;
   background: rgba(250,250,250,0.95);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  margin: -14px -14px 18px;
-  padding: 10px 14px;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  margin: -14px -14px 18px; padding: 10px 14px;
   border-bottom: 1px solid var(--border);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  white-space: nowrap;
+  overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap;
 }
 .quick-nav a {
   display: inline-block; font-size: 12px;
   padding: 4px 10px; margin-right: 4px;
   background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 14px; color: var(--text-muted);
-  text-decoration: none;
+  border-radius: 14px; color: var(--text-muted); text-decoration: none;
 }
 .quick-nav a:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
+.quick-nav a.primary { background: var(--opus-bg); color: var(--opus); border-color: var(--opus); font-weight: 600; }
 
-/* === ALGORYTM (4 fazy × 13 kroków) === */
+/* === MVP-FIRST HERO === */
+.mvp-hero {
+  background: linear-gradient(135deg, #f5f3ff 0%, #fff 70%);
+  border: 2px solid var(--opus); border-radius: 12px;
+  padding: 18px 18px 14px; margin-bottom: 20px;
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.12);
+}
+.mvp-hero .hero-label { display: inline-block; background: var(--opus); color: white; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px; }
+.mvp-hero h2 { font-size: 18px; color: var(--opus); border: 0; padding: 0; margin: 0 0 6px; }
+.mvp-hero .hero-tagline { font-size: 13px; color: #4c1d95; margin-bottom: 14px; }
+.mvp-hero .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.mvp-hero .hero-meta .meta-pill { background: white; border: 1px solid #ddd6fe; border-radius: 14px; padding: 4px 10px; font-size: 12px; color: var(--opus); }
+.mvp-hero .hero-meta .meta-pill strong { color: #3730a3; }
+
+.mvp-product {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-left: 4px solid var(--opus);
+  border-radius: 8px; padding: 12px 14px; margin: 10px 0;
+}
+.mvp-product h4 { font-size: 14px; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+.mvp-product .product-id { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px; background: #f5f3ff; color: var(--opus); padding: 1px 6px; border-radius: 4px; font-weight: 600; }
+.mvp-product .product-layers { font-size: 11.5px; color: var(--text-muted); margin: 4px 0; }
+.mvp-product .product-layers .layer-pill { display: inline-block; background: var(--accent-bg); color: var(--accent); padding: 1px 6px; border-radius: 4px; margin-right: 4px; font-weight: 600; font-family: ui-monospace, monospace; font-size: 11px; }
+.mvp-product .product-why { font-size: 12.5px; color: #4c1d95; background: #faf5ff; padding: 6px 10px; border-radius: 4px; margin-top: 6px; border-left: 3px solid var(--opus); }
+.mvp-product .product-empirical { display: inline-block; background: var(--good); color: white; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 4px; vertical-align: middle; }
+
+.build-table {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px 14px; margin: 14px 0 8px;
+}
+.build-table h4 { font-size: 13px; color: var(--opus); margin-bottom: 8px; }
+.build-table table { margin: 0; font-size: 12px; }
+.build-table .total-row { background: #f5f3ff !important; font-weight: 700; color: var(--opus); }
+
+/* === ALGORYTM === */
 .algorithm-intro {
   background: linear-gradient(135deg, #eef2ff 0%, #fff 80%);
   border: 1.5px solid #c7d2fe; border-radius: 10px;
@@ -154,11 +154,8 @@ a:hover { text-decoration: underline; }
 .algorithm-intro p { font-size: 13px; color: #1e1b4b; }
 
 .phase {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 14px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 14px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 .phase.p-scan { border-left: 5px solid var(--good); }
@@ -174,13 +171,21 @@ a:hover { text-decoration: underline; }
 .phase.p-synth .phase-num { background: var(--opus); }
 .phase-title { font-size: 15px; font-weight: 700; color: var(--text); }
 .phase-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.phase-resilience-avg { margin-left: auto; font-size: 11px; padding: 3px 8px; border-radius: 10px; background: #f3f4f6; color: var(--text-muted); font-weight: 600; }
 
 .phase-steps { list-style: none; padding: 0; margin: 0; }
 .step { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--border); }
 .step:last-child { border-bottom: 0; padding-bottom: 0; }
 .step-num { flex-shrink: 0; width: 28px; height: 28px; border-radius: 6px; background: #e0e7ff; color: #1e3a8a; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; }
 .step-content { flex: 1; min-width: 0; }
-.step-content h5 { font-size: 13.5px; font-weight: 700; margin-bottom: 6px; color: var(--text); line-height: 1.3; }
+.step-header { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 6px; }
+.step-content h5 { font-size: 13.5px; font-weight: 700; color: var(--text); line-height: 1.3; margin: 0; }
+
+.resilience-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; padding: 2px 7px; border-radius: 10px; font-weight: 700; letter-spacing: 0.3px; }
+.resilience-badge.r-high { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+.resilience-badge.r-medium { background: #fef3c7; color: #78350f; border: 1px solid #fcd34d; }
+.resilience-badge.r-low { background: #fee2e2; color: #7f1d1d; border: 1px solid #fca5a5; }
+.mvp-badge { display: inline-flex; align-items: center; font-size: 10px; padding: 2px 6px; border-radius: 8px; background: var(--opus-bg); color: var(--opus); border: 1px solid #c4b5fd; font-weight: 700; letter-spacing: 0.3px; }
 
 .step-flow {
   display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
@@ -197,12 +202,43 @@ a:hover { text-decoration: underline; }
 .step-comment.warn { background: #fffbeb; color: #78350f; border-left: 3px solid var(--warn); }
 .step-comment strong { color: inherit; }
 
+.step-proposal {
+  background: linear-gradient(135deg, #eef2ff 0%, #fff 90%);
+  border: 1px solid #c7d2fe; border-radius: 6px;
+  padding: 6px 10px; margin-top: 6px;
+  font-size: 12px; color: #1e1b4b;
+}
+.step-proposal .proposal-id { font-family: ui-monospace, monospace; background: var(--opus); color: white; padding: 1px 6px; border-radius: 3px; font-weight: 700; font-size: 10.5px; margin-right: 4px; }
+.step-proposal .proposal-meta { color: var(--text-muted); font-size: 11px; margin-top: 2px; }
+
 .algorithm-summary {
   background: var(--bg-card); border: 1px solid var(--border);
   border-radius: 10px; padding: 12px 14px; margin-top: 12px;
   font-size: 13px;
 }
 .algorithm-summary strong { color: var(--accent); }
+
+/* === GLOV VERDICT inline === */
+.glov-callout {
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;
+  padding: 10px 12px; margin: 12px 0;
+  font-size: 12.5px; color: #78350f;
+}
+.glov-callout h4 { font-size: 13px; color: #78350f; margin-bottom: 4px; }
+.glov-callout strong { color: #92400e; }
+
+/* === SEKWENCJA === */
+.priority-row { display: flex; align-items: stretch; gap: 0; margin: 8px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: white; }
+.priority-marker { flex-shrink: 0; width: 50px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; color: white; }
+.priority-marker.p0 { background: var(--opus); }
+.priority-marker.p1 { background: var(--bad); }
+.priority-marker.p2 { background: var(--bad); opacity: 0.85; }
+.priority-marker.p3 { background: var(--warn); }
+.priority-marker.p4 { background: var(--warn); opacity: 0.85; }
+.priority-marker.p5 { background: #eab308; }
+.priority-body { padding: 8px 12px; flex: 1; font-size: 13px; }
+.priority-body strong { color: var(--accent); }
+.priority-time { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
 
 @media (min-width: 768px) {
   body { padding: 30px 30px 80px; }
@@ -214,40 +250,90 @@ a:hover { text-decoration: underline; }
   .step-content h5 { font-size: 14.5px; }
   .step-flow { font-size: 12px; }
   .phase-title { font-size: 16px; }
+  .mvp-hero h2 { font-size: 22px; }
 }
 </style>
 </head>
 <body>
 <div class="container">
 
-<h1>📋 Verdykty — sesja 30.05.2026</h1>
-<p class="subtitle">Wszystko w jednym miejscu · czytaj w drodze · last updated: 30.05 wieczór</p>
+<h1>📋 Verdykty <span class="version-badge">v2 · MVP-first</span></h1>
+<p class="subtitle">Sesja 30.05.2026 · pełen rewrite po insight Tomka (premium 2,3,4) · referencja: <a href="https://tomekwlqq.github.io/eel-reports/GLOV-raport-test-2026-05-21.html" target="_blank">GLOV 21.05</a></p>
 
 <nav class="quick-nav" aria-label="Spis sekcji">
   <a href="#tldr">⚡ TL;DR</a>
+  <a href="#mvp" class="primary">🎯 MVP-first</a>
   <a href="#algorithm">🧠 Algorytm</a>
-  <a href="#deep">🔬 Per warstwa</a>
-  <a href="#verdicts">🚦 Verdykty</a>
-  <a href="#blockers">🚧 Blockery</a>
-  <a href="#proposals">💡 Propozycje</a>
+  <a href="#proposals">💡 Propozycje per krok</a>
   <a href="#sequence">📊 Sekwencja</a>
+  <a href="#architecture">🏗 Architektura</a>
+  <a href="#cross">🌐 Cross-warstwowe</a>
   <a href="#links">📅 Deliverables</a>
 </nav>
 
 <div class="tldr" id="tldr">
   <h2>⚡ TL;DR</h2>
-  <p><strong>1. PRODUKTY_EGZEKUCYJNE.html ✅</strong> — Task #28 zamknięty. 130 wpisów (55/55 par komplet), 4 presety problemów głównych, Opus Score 1-10.</p>
-  <p style="margin-top: 6px;"><strong>2. KNOWLEDGE_BASE.html ✅</strong> — 277 kart biblii, cotygodniowy update przez re-publish.</p>
-  <p style="margin-top: 6px;"><strong>3. SELF_LEARNING 3 warstw — verdict mieszany.</strong> Warstwa 1 (HTML) gotowa do skali (7/10). Warstwa 2 (Visual) <strong>NIE skali</strong> (4/10) — doty ręczne. Warstwa 3 (Content) półautomatyczna (5/10).</p>
-  <p style="margin-top: 6px;"><strong>4. GLOV_REFERENCE_AUDIT.html — 6.5/10, NIE gold standard.</strong> Brakuje 4 krytycznych elementów warstwy 2.</p>
+  <p><strong>1. MVP-first decyzja (NOWA, sesja 30.05).</strong> Zamiast budować 24 propozycje × 25 dni — bierzemy <strong>3 produkty premium</strong> z PRODUKTY_EGZEKUCYJNE pokrywające 5 warstw (1 HTML + 2 Visual + 3 Content + 4 GA4 + 8 Category). Build wymaga tylko <strong>~4-6 dni</strong> (P2.1 + P2.6 + P3.5).</p>
+  <p><strong>2. Algorytm 4 fazy × 13 kroków.</strong> Per krok: input → tool → output + ✅ GOOD / ❌ BAD + resilience badge 🟢/🟡/🔴. Propozycje P-x.y inline pod krokami które rozwiązują (nie w osobnym dziale).</p>
+  <p><strong>3. Resilience scoring NOWE 3-tier 🟢/🟡/🔴.</strong> Per krok mapuje odporność na zmiany u vendorów. Truth Checker (krok 4.2) = 🔴 → ma fallback path do 🟢 (P5.1 hardening). Każdy LOW dostaje propozycję P5.x.</p>
+  <p><strong>4. GLOV reference 21.05 = 6.5/10, current best, NIE gold.</strong> Brakuje 4 sekcji warstwy 2: density, hierarchy, pseudo-CTA, dead zones. Po MVP build → GLOV awansuje do 8+/10.</p>
 </div>
 
-<h2 id="algorithm">🧠 Algorytm — jak audyt EEL się buduje (krok po kroku)</h2>
+<!-- =================== MVP-FIRST HERO =================== -->
+<div class="mvp-hero" id="mvp">
+  <span class="hero-label">🎯 MVP-FIRST · Decyzja 30.05</span>
+  <h2>3 produkty premium = unlock ~4-6 dni</h2>
+  <p class="hero-tagline"><em>"Wystarczy wziąć 2, 3 i 4 premium z PRODUKTY_EGZEKUCYJNE"</em> — para + trójka + czwórka, każda flagship. Content (warstwa 3) non-negotiable bo PDP content jest wizualny i mocno zbieżny z visual auditem (tytuły/bullets/specs/FAQ/zdjęcia = elementy wizualne).</p>
+
+  <div class="hero-meta">
+    <span class="meta-pill"><strong>Warstwy MVP:</strong> 1+2+3+4+8</span>
+    <span class="meta-pill"><strong>Czas build:</strong> ~4-6 dni</span>
+    <span class="meta-pill"><strong>Empiryczne U=3/3:</strong> 1/3 produktów</span>
+    <span class="meta-pill"><strong>Scope cut:</strong> ~80% (z 25 → 5 dni)</span>
+  </div>
+
+  <div class="mvp-product">
+    <h4>1. <span class="product-id">p2-8</span> ⭐⭐ Cortex Reference Audit <em>(RDZEŃ × RDZEŃ)</em></h4>
+    <div class="product-layers"><strong>Typ:</strong> Para · <strong>Warstwy:</strong> <span class="layer-pill">2 Visual</span> <span class="layer-pill">8 Category</span></div>
+    <div class="product-why">🏆 Najjaśniejszy produkt Cortex. Rdzeń × Rdzeń. Każdy nowy klient EEL dostaje to jako gold standard. Buduje vault knowledge per kategoria.</div>
+  </div>
+
+  <div class="mvp-product">
+    <h4>2. <span class="product-id">t2-3-8</span> ⭐⭐ Visual × Content × Category</h4>
+    <div class="product-layers"><strong>Typ:</strong> Trójka · <strong>Warstwy:</strong> <span class="layer-pill">2 Visual</span> <span class="layer-pill">3 Content</span> <span class="layer-pill">8 Category</span></div>
+    <div class="product-why">🏆 Per PDP: layout + content + zgodność z Tier Specs. Najgęstsze pokrycie shopper view. Content + Visual razem — bo content jest wizualny.</div>
+  </div>
+
+  <div class="mvp-product">
+    <h4>3. <span class="product-id">c1-2-4-8</span> 🏆 CS1 — MISTRZ czwórka <span class="product-empirical">EMPIRYCZNA U=3/3</span></h4>
+    <div class="product-layers"><strong>Typ:</strong> Czwórka · <strong>Warstwy:</strong> <span class="layer-pill">1 HTML</span> <span class="layer-pill">2 Visual</span> <span class="layer-pill">4 GA4</span> <span class="layer-pill">8 Category</span></div>
+    <div class="product-why">🎯 Empirical U=3/3. JEDYNA czwórka empirycznie potwierdzona. Anchor produkt dla Plichta + każdego Premium tier klienta. Full Dev + Shopper + Analytics + Category.</div>
+  </div>
+
+  <div class="build-table">
+    <h4>🔧 Co realnie zbudować dla MVP (warstwy 1+2+3+4+8)</h4>
+    <table>
+      <tr><th>Warstwa</th><th>Stan</th><th>Co dla MVP</th><th>Czas</th><th>Resilience</th></tr>
+      <tr><td>1 HTML</td><td>✅ GOTOWE</td><td>nic — audit_html + elements_dictionary + sl_server + tech_stack_detector działają</td><td>0</td><td><span class="resilience-badge r-high">🟢 HIGH</span></td></tr>
+      <tr><td>2 Visual</td><td>❌ BLOCKER</td><td><strong>P2.1 dot_generator.py</strong> + <strong>P2.6 audit_visual full</strong></td><td><strong>3-5 dni</strong></td><td><span class="resilience-badge r-medium">🟡→🟢</span></td></tr>
+      <tr><td>3 Content</td><td>🟡 SKRYPT BEZ SKILLA</td><td><strong>P3.5 C02 wrap</strong> — audit_content.py (17K) w SKILL.md</td><td><strong>4-6h</strong></td><td><span class="resilience-badge r-high">🟢 HIGH</span></td></tr>
+      <tr><td>4 GA4</td><td>✅ GOTOWE R01-R09</td><td>nic — /eel-ga4 + google-analytics-mcp działa</td><td>0</td><td><span class="resilience-badge r-medium">🟡 MED</span></td></tr>
+      <tr><td>8 Category</td><td>✅ GOTOWE</td><td>nic — /eel-category-mapping działa</td><td>0</td><td><span class="resilience-badge r-high">🟢 HIGH</span></td></tr>
+      <tr class="total-row"><td colspan="3">RAZEM MVP build</td><td><strong>~4-6 dni</strong></td><td>—</td></tr>
+    </table>
+  </div>
+
+  <p style="font-size:12px;color:#4c1d95;margin-top:10px"><strong>Sekwencja MVP:</strong> P3.5 wrap (4-6h, low-hanging fruit) → P2.1 dot_generator (1-2 dni, blocker visible) → P2.6 audit_visual full (2-3 dni, gold standard 4 sekcje). Po tym MVP gotowy do produkcji na p2-8 + t2-3-8 + c1-2-4-8. Resztę propozycji (5 priorytetów × ~22 dni) traktujemy jako <strong>expansion roadmap</strong> po pierwszych klientach.</p>
+</div>
+
+<!-- =================== ALGORYTM =================== -->
+<h2 id="algorithm">🧠 Algorytm — jak audyt EEL się buduje (z resilience scoring)</h2>
 
 <div class="algorithm-intro">
   <h3>Filozofia: HTML → struktura → bazy → screenshoty → kropki z nazwami</h3>
-  <p>Audyt to nie checklist na sztuk. To pipeline 13 kroków × 4 fazy: <strong>scan</strong> (dane) → <strong>visual</strong> (obrazki + kropki) → <strong>semantic</strong> (treść + kategoria + GEO + GA4) → <strong>synthesis</strong> (raport + Truth Checker). Każdy krok ma swój input, narzędzie, output i opinię co dobrze działa a co nie. Dot_generator wynika z HTML-a — bo HTML pierwszy zna gdzie są klikalne, screenshot tylko mówi w jakim pikselu są na obrazku.</p>
-  <p style="margin-top:8px;padding-top:8px;border-top:1px solid #c7d2fe;font-size:12.5px"><strong>📌 Punkt referencyjny:</strong> <a href="https://tomekwlqq.github.io/eel-reports/GLOV-raport-test-2026-05-21.html" target="_blank" style="color:#3730a3;font-weight:600">GLOV raport 2026-05-21</a> — wszystkie kroki, gold standard, propozycje i blockery odnoszą się do tego raportu jako benchmarku egzekucji. Verdict GLOV: 6.5/10 (current best, NIE gold — brakuje 4 krytycznych elementów warstwy 2: density, hierarchy, pseudo-CTA, dead zones).</p>
+  <p>Audyt to pipeline 13 kroków × 4 fazy: <strong>scan</strong> (dane) → <strong>visual</strong> (obrazki + kropki) → <strong>semantic</strong> (treść + kategoria + GEO + GA4) → <strong>synthesis</strong> (raport + Truth Checker). Per krok: input → tool → output + GOOD/BAD + resilience badge 🟢/🟡/🔴 + propozycja P-x.y inline (jeśli krok ma blocker).</p>
+  <p style="margin-top:8px;padding-top:8px;border-top:1px solid #c7d2fe;font-size:12.5px"><strong>📌 Punkt referencyjny:</strong> <a href="https://tomekwlqq.github.io/eel-reports/GLOV-raport-test-2026-05-21.html" target="_blank" style="color:#3730a3;font-weight:600">GLOV raport 2026-05-21</a> — wszystkie kroki, gold standard, propozycje i blockery odnoszą się do tego raportu jako benchmarku egzekucji. Verdict GLOV: <strong>6.5/10</strong> (current best, NIE gold — brakuje 4 sekcji warstwy 2: density, hierarchy, pseudo-CTA, dead zones).</p>
+  <p style="margin-top:8px;font-size:12px;color:#1e1b4b"><strong>🎯 MVP-relevant kroki</strong> mają badge <span class="mvp-badge">MVP</span> w nagłówku. Reszta = expansion roadmap.</p>
 </div>
 
 <!-- FAZA 1: SCAN -->
@@ -258,13 +344,18 @@ a:hover { text-decoration: underline; }
       <div class="phase-title">FAZA 1 · SCAN — pobieramy dane</div>
       <div class="phase-sub">Warstwa 1 (HTML) · 3 kroki · loop ZAMKNIĘTY ✅ 7/10</div>
     </div>
+    <div class="phase-resilience-avg">🟢 AVG: HIGH</div>
   </div>
   <ol class="phase-steps">
 
     <li class="step">
       <div class="step-num">1.1</div>
       <div class="step-content">
-        <h5>URL → discover branża + platforma</h5>
+        <div class="step-header">
+          <h5>URL → discover branża + platforma</h5>
+          <span class="resilience-badge r-high">🟢 HIGH</span>
+          <span class="mvp-badge">MVP</span>
+        </div>
         <div class="step-flow">
           <span class="pill">domena klienta</span>
           <span class="arr">→</span>
@@ -272,41 +363,51 @@ a:hover { text-decoration: underline; }
           <span class="arr">→</span>
           <span class="pill">platforma + branża guess</span>
         </div>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> 80%+ accuracy, confidence scoring (script_src=0.6, global_var=0.5, cookie=0.4, threshold=0.4), cache per domena. Multi-platform: Shopify, IdoSell, WooCommerce, PrestaShop.</div>
-        <div class="step-comment bad">❌ <strong>BAD:</strong> industry detection słabe — W18 (Industry Benchmarks) <em>nie istnieje</em>, polegamy na manualnym tagowaniu. Klient pyta "is mój CR dobry?" → nie umiemy odpowiedzieć bez bazy benchmarków.</div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> 80%+ accuracy, confidence scoring (script_src=0.6, global_var=0.5, cookie=0.4, threshold=0.4), cache per domena. Multi-platform: Shopify, IdoSell, WooCommerce, PrestaShop. Własny skrypt + JSON sygnatury w repo = brak vendor lock.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> industry detection słabe — W18 (Industry Benchmarks) <em>nie istnieje</em>, polegamy na manualnym tagowaniu. Klient pyta "is mój CR dobry?" → nie umiemy odpowiedzieć.</div>
+        <div class="step-proposal"><span class="proposal-id">P1.4</span> W18 Industry Benchmarks Accumulator — każdy R10 GA4 pull dokłada do industry_benchmarks.json. <span class="proposal-meta">~1 dzień · expansion (nie MVP)</span></div>
       </div>
     </li>
 
     <li class="step">
       <div class="step-num">1.2</div>
       <div class="step-content">
-        <h5>HTML scan per page-type (8 widoków)</h5>
+        <div class="step-header">
+          <h5>HTML scan per page-type (8 widoków)</h5>
+          <span class="resilience-badge r-medium">🟡 MEDIUM</span>
+          <span class="mvp-badge">MVP</span>
+        </div>
         <div class="step-flow">
           <span class="pill">domena + lista URL</span>
           <span class="arr">→</span>
-          <span class="pill tool">audit_html.py + nav_scanner.py</span>
+          <span class="pill tool">audit_html.py + nav_scanner.py + Playwright</span>
           <span class="arr">→</span>
           <span class="pill">DOM per page (po JS render)</span>
         </div>
-        <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>Widoki:</em> Nav · HP · Listing · PDP · Tile (default+hover) · Search · Cart drawer · Checkout · Blog</p>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> Playwright z networkidle (Shopify ~3s) — pełen DOM po hydration. nav_scanner.py 40K wyciąga strukturę nawigacji multi-level.</div>
-        <div class="step-comment bad">❌ <strong>BAD:</strong> overlay / cookie banner / GDPR popup blokują widok — wymaga per-platform dismiss logic ("Potwierdzam wszystkie" dla IdoSell). Niektóre sklepy = łapanka.</div>
+        <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>Widoki:</em> Nav · HP · Listing · PDP · Tile · Search · Cart drawer · Checkout · Blog</p>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> Playwright z networkidle (Shopify ~3s) — pełen DOM po hydration. nav_scanner.py 40K multi-level nav. Skrypty własne, JSON cache w repo.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> Playwright = wtyczka (MEDIUM resilience). Fallback workable (Selenium / Puppeteer) ale roboczy. Overlay / cookie banner / GDPR popup blokują widok — wymaga per-platform dismiss logic.</div>
       </div>
     </li>
 
     <li class="step">
       <div class="step-num">1.3</div>
       <div class="step-content">
-        <h5>Element discovery z DOM (selektor → nazwa standardowa)</h5>
+        <div class="step-header">
+          <h5>Element discovery z DOM</h5>
+          <span class="resilience-badge r-high">🟢 HIGH</span>
+          <span class="mvp-badge">MVP</span>
+        </div>
         <div class="step-flow">
           <span class="pill">DOM</span>
           <span class="arr">→</span>
-          <span class="pill tool">elements_dictionary.json + platform_patterns.json</span>
+          <span class="pill tool">elements_dictionary + platform_patterns + sl_server</span>
           <span class="arr">→</span>
           <span class="pill">named elements + queue.json (pending)</span>
         </div>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> baza 302+ elementów (W1 elements_master 204K), workflow approval z Hub Tab 5 UI (sl_server port 8744). Tomek może edytować nazwy + dodawać selektory live.</div>
-        <div class="step-comment warn">⚠️ <strong>BAD (skala blocker):</strong> Tomek aprobuje KAŻDY element ręcznie. <strong>P1.1 auto-promote ≥0.8</strong> odciążyłoby ~70%. Bez tego po 10 klientach = grzęźnie w queue.</div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> baza 302+ elementów (elements_master 204K), workflow approval z Hub Tab 5 UI (sl_server port 8744). Tomek edytuje nazwy + dodaje selektory live. Czysty 🟢 HIGH: pliki własne + lokalny serwer + JSON multi-platform.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> Tomek aprobuje KAŻDY element ręcznie. Auto-promote ≥0.8 odciążyłby ~70%. Po 10 klientach = grzęźnie w queue.</div>
+        <div class="step-proposal"><span class="proposal-id">P1.1</span> Auto-promote ≥0.8 confidence — w discovery_loop.py reguła. ~70% mniej manualnej pracy. <span class="proposal-meta">~2h · post-MVP (klient #2-3)</span></div>
       </div>
     </li>
 
@@ -321,13 +422,18 @@ a:hover { text-decoration: underline; }
       <div class="phase-title">FAZA 2 · VISUAL — obrazki + kropki z nazwami</div>
       <div class="phase-sub">Warstwa 2 · 4 kroki · loop OTWARTY ❌ 4/10 · największy gap</div>
     </div>
+    <div class="phase-resilience-avg">🟡 AVG: MED→HIGH po P2.1</div>
   </div>
   <ol class="phase-steps">
 
     <li class="step">
       <div class="step-num">2.1</div>
       <div class="step-content">
-        <h5>Screenshot pipeline (Playwright, 16 PNG per klient)</h5>
+        <div class="step-header">
+          <h5>Screenshot pipeline (Playwright, 16 PNG per klient)</h5>
+          <span class="resilience-badge r-medium">🟡 MEDIUM</span>
+          <span class="mvp-badge">MVP</span>
+        </div>
         <div class="step-flow">
           <span class="pill">8 page-types × 2 viewports</span>
           <span class="arr">→</span>
@@ -335,16 +441,20 @@ a:hover { text-decoration: underline; }
           <span class="arr">→</span>
           <span class="pill">16 PNG full-page</span>
         </div>
-        <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>Viewporty:</em> desktop 1440×900 + mobile 390×844 (iPhone 12 standard)</p>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> UNIVERSAL skrypt, mobile-aware, full-page capture (długie scrolle złożone), standardowy format input dla kolejnych kroków.</div>
-        <div class="step-comment warn">⚠️ <strong>BAD:</strong> 16 PNG × N klientów = storage rośnie szybko. Brak compression / WebP fallback. Brak fold-by-fold split automatycznego (długie screenshoty trzeba dzielić ręcznie).</div>
+        <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>Viewporty:</em> desktop 1440×900 + mobile 390×844</p>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> UNIVERSAL skrypt, mobile-aware, full-page capture. Standardowy format input dla kolejnych kroków.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> Playwright = wtyczka (przykład Tomka resilience MEDIUM). Storage rośnie szybko. Brak compression / WebP fallback.</div>
       </div>
     </li>
 
     <li class="step">
       <div class="step-num">2.2</div>
       <div class="step-content">
-        <h5>Bounding boxes klikalnych (gdzie są CTAs na obrazku)</h5>
+        <div class="step-header">
+          <h5>Bounding boxes klikalnych (gdzie są CTAs)</h5>
+          <span class="resilience-badge r-medium">🟡 MEDIUM</span>
+          <span class="mvp-badge">MVP</span>
+        </div>
         <div class="step-flow">
           <span class="pill">DOM + page.locator()</span>
           <span class="arr">→</span>
@@ -352,15 +462,20 @@ a:hover { text-decoration: underline; }
           <span class="arr">→</span>
           <span class="pill">x/y/w/h per element + visibility</span>
         </div>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> dokładne koordynaty per element (button, a, [onclick], [role=button]). Z DOM-em wiemy CO jest klikalne, z BBox WHERE na obrazku.</div>
-        <div class="step-comment bad">❌ <strong>BAD:</strong> pseudo-CTA (divy bez handler, cursor:pointer bez listener, button-style bez onClick) <em>nie wyłapane</em>. To dead-click frustration source. <strong>P2.5 pseudo_cta_patterns.json</strong> to rozwiązuje.</div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> dokładne koordynaty per element (button, a, [onclick], [role=button]). DOM = CO klikalne, BBox = WHERE na obrazku.</div>
+        <div class="step-comment bad">❌ <strong>BAD:</strong> pseudo-CTA (divy bez handler, cursor:pointer bez listener) nie wyłapane. Dead-click frustration source.</div>
+        <div class="step-proposal"><span class="proposal-id">P2.5</span> pseudo_cta_patterns.json — wzorce divów wyglądających klikalnie ale bez handler. <span class="proposal-meta">~1 dzień · expansion (po MVP)</span></div>
       </div>
     </li>
 
     <li class="step">
       <div class="step-num">2.3</div>
       <div class="step-content">
-        <h5>Dot overlay — nakładanie kropek z nazwami na screenshoty</h5>
+        <div class="step-header">
+          <h5>Dot overlay — kropki z nazwami na screenshoty</h5>
+          <span class="resilience-badge r-high">🟢 HIGH</span>
+          <span class="mvp-badge">MVP</span>
+        </div>
         <div class="step-flow">
           <span class="pill">PNG + BBox + nazwa z biblioteki</span>
           <span class="arr">→</span>
@@ -368,15 +483,20 @@ a:hover { text-decoration: underline; }
           <span class="arr">→</span>
           <span class="pill">av-dot HTML z left%/top%</span>
         </div>
-        <div class="step-comment good">✅ <strong>GOOD koncept:</strong> precyzyjne nazwy (lookup z elements_master.json) → klient widzi "Search box / ATC button / Newsletter signup", nie generic kropki. To wynika z HTML-a + bibliotek.</div>
-        <div class="step-comment bad">❌ <strong>BAD (⭐ blocker skali #1):</strong> GLOV = <strong>167 dotów × manual placement</strong> w HTML editorze. Po 10 klientach Tomek tonie. <strong>P2.1 dot_generator.py</strong> = pre-condition skali. Playwright zwraca BBox → przelicz na left%/top% → wygeneruj av-dot HTML automatycznie. ~1-2 dni roboty, eliminuje blocker.</div>
+        <div class="step-comment good">✅ <strong>GOOD koncept:</strong> precyzyjne nazwy (lookup z elements_master). Klient widzi "Search box / ATC button / Newsletter signup", nie generic kropki. Wynika z HTML-a + bibliotek (filozofia Tomka).</div>
+        <div class="step-comment bad">❌ <strong>BAD (⭐ blocker skali #1):</strong> GLOV 167 dotów × <strong>manual placement</strong> w HTML editorze. Po 10 klientach tonienie.</div>
+        <div class="step-proposal" style="border-color:var(--bad);background:linear-gradient(135deg,#fef2f2 0%,#fff 90%)"><span class="proposal-id" style="background:var(--bad)">P2.1</span> <strong>dot_generator.py</strong> — Playwright zwraca BBox → przelicz na left%/top% → wygeneruj av-dot HTML automatycznie. ⭐ <strong>MVP CRITICAL · blocker skali #1.</strong> <span class="proposal-meta">~1-2 dni · w MVP build</span></div>
       </div>
     </li>
 
     <li class="step">
       <div class="step-num">2.4</div>
       <div class="step-content">
-        <h5>Density + hierarchy + dead zones fold-by-fold</h5>
+        <div class="step-header">
+          <h5>Density + hierarchy + dead zones fold-by-fold</h5>
+          <span class="resilience-badge r-high">🟢 HIGH</span>
+          <span class="mvp-badge">MVP</span>
+        </div>
         <div class="step-flow">
           <span class="pill">screenshots fold-split + BBox</span>
           <span class="arr">→</span>
@@ -384,12 +504,19 @@ a:hover { text-decoration: underline; }
           <span class="arr">→</span>
           <span class="pill">density/100×100px + hierarchy rank + dead zones</span>
         </div>
-        <div class="step-comment good">✅ <strong>GOOD koncept:</strong> density per fold pokazuje "overloaded folds", hierarchy ranking ujawnia konflikt CTA, dead zones = puste obszary marnujące real estate.</div>
-        <div class="step-comment bad">❌ <strong>BAD:</strong> tylko stub 1.5K. Brak generatorów (<strong>P2.6 audit_visual full</strong>), brak baselines (<strong>P2.4 density_baselines.json</strong>), brak archetypów fold (<strong>P2.3 fold_archetypes.json</strong>). Bez tego GLOV audit grep'uje "density"=0, "hierarchy"=0, "dead.zone"=0 — czyli 4 krytyczne sekcje gold standardu po prostu nie istnieją.</div>
+        <div class="step-comment good">✅ <strong>GOOD koncept:</strong> density per fold pokazuje overloaded folds, hierarchy ranking ujawnia konflikt CTA, dead zones = puste obszary marnujące real estate. <strong>To są 4 brakujące sekcje gold standardu GLOV.</strong></div>
+        <div class="step-comment bad">❌ <strong>BAD:</strong> tylko stub 1.5K. GLOV grep "density"=0, "hierarchy"=0, "pseudo"=0, "dead.zone"=0.</div>
+        <div class="step-proposal" style="border-color:var(--bad);background:linear-gradient(135deg,#fef2f2 0%,#fff 90%)"><span class="proposal-id" style="background:var(--bad)">P2.6</span> <strong>audit_visual.py full</strong> — z 1.5K stub do 500+ linii: density calc + hierarchy ranking + pseudo-CTA detection + dead zones marking. ⭐ <strong>MVP CRITICAL · gold standard.</strong> <span class="proposal-meta">~2-3 dni · w MVP build</span></div>
+        <div class="step-proposal"><span class="proposal-id">P2.4</span> density_baselines.json + <span class="proposal-id">P2.3</span> fold_archetypes.json — bazy referencyjne per page-type. <span class="proposal-meta">~2 dni · expansion (klient #3+)</span></div>
       </div>
     </li>
 
   </ol>
+
+  <div class="glov-callout">
+    <h4>📌 GLOV reference 21.05 verdict (warstwa 2 = 6.5/10)</h4>
+    <p>Co JEST: 167 av-dots + 127 legend, 8 page-typów, desktop+mobile, tabela Element/Akcja/GA4 event. <strong>Co brakuje (4 sekcje gold standard):</strong> density maps fold-by-fold, hierarchy ranking, pseudo-CTAs jako kategoria, dead zones marked. Po P2.6 audit_visual full — wszystkie 4 sekcje wskakują w build_raport, GLOV awansuje do 8+/10.</p>
+  </div>
 </div>
 
 <!-- FAZA 3: SEMANTIC -->
@@ -400,13 +527,18 @@ a:hover { text-decoration: underline; }
       <div class="phase-title">FAZA 3 · SEMANTIC — treść, kategoria, GEO, GA4</div>
       <div class="phase-sub">Warstwa 3 · 4 kroki · loop CZĘŚCIOWY ⚠️ 6/10 · GEO sub-warstwa silna</div>
     </div>
+    <div class="phase-resilience-avg">🟢 AVG: HIGH</div>
   </div>
   <ol class="phase-steps">
 
     <li class="step">
       <div class="step-num">3.1</div>
       <div class="step-content">
-        <h5>Content audit per PDP (6 pól standardowych)</h5>
+        <div class="step-header">
+          <h5>Content audit per PDP (6 pól standardowych)</h5>
+          <span class="resilience-badge r-high">🟢 HIGH</span>
+          <span class="mvp-badge">MVP</span>
+        </div>
         <div class="step-flow">
           <span class="pill">PDP HTML + struktura</span>
           <span class="arr">→</span>
@@ -415,15 +547,20 @@ a:hover { text-decoration: underline; }
           <span class="pill">tytuł/bullets/specs/FAQ/zdjęcia/opis ocena</span>
         </div>
         <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>Model tytułu:</em> Brand + Name + Attribute + Variant · <em>bullets:</em> cecha → korzyść → kontekst · <em>FAQ:</em> czy z real CS · <em>zdjęcia:</em> white BG / lifestyle / wymiary / detal / infografika</p>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> skrypt 17K działa, 6 pól standardowych pokrytych, mapuje na Tier-1 / Tier-2 / Tier-3 strukturę spec table.</div>
-        <div class="step-comment warn">⚠️ <strong>BAD:</strong> brak skilla wrapującego (<strong>C02 / P3.5 Content Mapping skill</strong>) — czyli nie invocable przez slash. Brak <strong>copy_archetypes.json</strong> (typowe formuły opisów) i <strong>forbidden_patterns.json</strong> (co nie działa per kategoria, np. "darmowa wysyłka" w premium beauty = sygnał taniości).</div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> skrypt 17K działa, 6 pól standardowych, mapuje na Tier-1 / Tier-2 / Tier-3 struktury spec table. <strong>Content jest wizualny — auditujemy tym samym shopper-view co warstwa 2.</strong></div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> brak skilla wrapującego — nie invocable przez slash command. To LOW-HANGING FRUIT — gotowy skrypt, brakuje 4-6h roboty.</div>
+        <div class="step-proposal" style="border-color:var(--opus);background:linear-gradient(135deg,#f5f3ff 0%,#fff 90%)"><span class="proposal-id">P3.5</span> <strong>C02 Content Mapping skill wrap</strong> — wrap audit_content.py w SKILL.md → invocable. ⭐ <strong>MVP CRITICAL · najtańszy unlock całego dokumentu.</strong> <span class="proposal-meta">~4-6h · w MVP build (pierwszy)</span></div>
       </div>
     </li>
 
     <li class="step">
       <div class="step-num">3.2</div>
       <div class="step-content">
-        <h5>Category mapping per klient</h5>
+        <div class="step-header">
+          <h5>Category mapping per klient</h5>
+          <span class="resilience-badge r-high">🟢 HIGH</span>
+          <span class="mvp-badge">MVP</span>
+        </div>
         <div class="step-flow">
           <span class="pill">nav + listing structure</span>
           <span class="arr">→</span>
@@ -431,15 +568,19 @@ a:hover { text-decoration: underline; }
           <span class="arr">→</span>
           <span class="pill">{klient}_CATEGORY_MAP.json</span>
         </div>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> skill istnieje, działa, daje category map per klient. Input dla GEO check i Content audit.</div>
-        <div class="step-comment warn">⚠️ <strong>BAD:</strong> bez <strong>P3.2 category_templates.json per branża</strong> (cosmetic/electronics/fashion/safety/automotive) każdy klient od zera. GLOV beauty patterns NIE wpływają na Hebe ani FERA. <strong>P3.3 tier_specs_master.json</strong> brakuje — Cortex v2 pary 2+8 i 3+8 wymagają tej bazy.</div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> skill istnieje, działa. Input dla GEO check, Content audit, build_raport. Czysty 🟢.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> bez category_templates per branża (cosmetic/electronics/fashion/safety/<strong>automotive</strong>) każdy klient od zera. <strong>Prerequisite Plichta deadline 09/2026.</strong></div>
+        <div class="step-proposal"><span class="proposal-id">P3.2</span> category_templates.json per branża + <span class="proposal-id">P3.3</span> tier_specs_master.json. <span class="proposal-meta">~2-3 dni · expansion (przed Plichta, nie MVP)</span></div>
       </div>
     </li>
 
     <li class="step">
       <div class="step-num">3.3</div>
       <div class="step-content">
-        <h5>GEO check per produkt (Consumer Decision Tree score)</h5>
+        <div class="step-header">
+          <h5>GEO check per produkt (Consumer Decision Tree score)</h5>
+          <span class="resilience-badge r-medium">🟡 MEDIUM</span>
+        </div>
         <div class="step-flow">
           <span class="pill">PDP URL + CDT z W11/W17</span>
           <span class="arr">→</span>
@@ -447,15 +588,20 @@ a:hover { text-decoration: underline; }
           <span class="arr">→</span>
           <span class="pill">GEO score per pillar + rewrite blueprint</span>
         </div>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> validated methodology — SejfZone +20-25 score lift na 3 produktach (58→82, 52→79, 61→84). Baza 46 kategorii PL+EN (W17). 4 skille operacyjne (<code>/geo-content-diff</code>, <code>/geo-pdp-writer</code>, <code>/geo-review</code>, <code>/eel-category-mapping</code>). Playwright OBOWIĄZKOWY — bez JS Shopify FAQ/JSON-LD/ceny są niewidoczne.</div>
-        <div class="step-comment warn">⚠️ <strong>BAD:</strong> brak <strong>P3.7 C35 CDT Builder</strong> — auto-build CDT per nowy klient per kategoria z istniejących wzorców. Bez tego CDT manual research per klient. <strong>P3.6 R10-R20</strong> (11 raportów GA4 GEO-relevant) jeszcze nie zbudowane.</div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> validated methodology — SejfZone +20-25 score lift (58→82, 52→79, 61→84). Baza 46 kategorii PL+EN (W17). 4 skille GEO operacyjne. Playwright OBOWIĄZKOWY — bez JS Shopify FAQ/JSON-LD/ceny niewidoczne.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> warstwa 9 (GEO) <strong>nie jest w MVP scope</strong>. Czeka na klient który tego potrzebuje (SejfZone follow-up albo nowy). Plus CDT manual research per klient bez P3.7 CDT Builder.</div>
+        <div class="step-proposal"><span class="proposal-id">P3.7</span> C35 CDT Builder — auto-build CDT per nowy klient per kategoria. <span class="proposal-meta">~3-5 dni · expansion · wymaga P3.2 + P3.3</span></div>
       </div>
     </li>
 
     <li class="step">
       <div class="step-num">3.4</div>
       <div class="step-content">
-        <h5>GA4 pull (R01-R09 raporty)</h5>
+        <div class="step-header">
+          <h5>GA4 pull (R01-R09 raporty)</h5>
+          <span class="resilience-badge r-medium">🟡 MEDIUM</span>
+          <span class="mvp-badge">MVP</span>
+        </div>
         <div class="step-flow">
           <span class="pill">property ID</span>
           <span class="arr">→</span>
@@ -463,8 +609,9 @@ a:hover { text-decoration: underline; }
           <span class="arr">→</span>
           <span class="pill">9 HTML block raportów + delta ±2σ</span>
         </div>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> bezpośredni MCP (nie Composio), R01-R09 covered (traffic, conv, AOV, funnel, source/medium, devices, geo, events, products), delta detection ±2σ flag anomalie WoW.</div>
-        <div class="step-comment warn">⚠️ <strong>BAD:</strong> brakuje <strong>R10-R20</strong> (internal search, scroll depth, cart abandonment, session quality, cohorts) — 11 raportów spec gotowa w <code>EEL_GA4_ANALYSES.md</code>, build pending. <strong>R10 Daily Dashboard live</strong> czeka na decyzję (alert channel + FDA launchd).</div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> R01-R09 covered (traffic, conv, AOV, funnel, source/medium, devices, geo, events, products), delta ±2σ flag anomalie WoW. Bezpośredni MCP (nie Composio — vendor lock-in zmniejszony).</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> google-analytics-mcp = oficjalna wtyczka Google (MEDIUM resilience, fallback przez GA4 REST API direct workable). R10-R20 nice to have.</div>
+        <div class="step-proposal"><span class="proposal-id">P3.6</span> C04 GA4 R10-R20 (11 raportów) — internal search, scroll depth, cart abandonment, session quality, cohorts. <span class="proposal-meta">~3-4 dni · expansion (po MVP)</span></div>
       </div>
     </li>
 
@@ -479,13 +626,18 @@ a:hover { text-decoration: underline; }
       <div class="phase-title">FAZA 4 · SYNTHESIS — raport + Truth Checker</div>
       <div class="phase-sub">Composition + anti-hallucination · 2 kroki · 7/10</div>
     </div>
+    <div class="phase-resilience-avg">🟡 AVG: MED (1× HIGH + 1× LOW)</div>
   </div>
   <ol class="phase-steps">
 
     <li class="step">
       <div class="step-num">4.1</div>
       <div class="step-content">
-        <h5>Build raportu HTML (14-tab standard)</h5>
+        <div class="step-header">
+          <h5>Build raportu HTML (14-tab standard)</h5>
+          <span class="resilience-badge r-high">🟢 HIGH</span>
+          <span class="mvp-badge">MVP</span>
+        </div>
         <div class="step-flow">
           <span class="pill">outputy faz 1-3</span>
           <span class="arr">→</span>
@@ -493,26 +645,29 @@ a:hover { text-decoration: underline; }
           <span class="arr">→</span>
           <span class="pill">CLIENT_AUDIT.html 14-tab</span>
         </div>
-        <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>Standard:</em> AUDIT_TAB_STANDARD.md · Tech Stack v2 auto-gen z cache · CSS .tool-grid + tooltipy &quot;-safe · Visual refs w EEL_HUB.html (thumbnails + lightbox)</p>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> spójny 14-tab format wszędzie. <code>--domain &lt;domena&gt;</code> generuje tab-techstack automatycznie. Modułowy: BLOK A+B+C zintegrowane.</div>
-        <div class="step-comment warn">⚠️ <strong>BAD:</strong> visual section nie czyta z bibliotek (elements_master / visual_patterns) automatycznie — manual integration. To efekt kroku 2.3 manual blocker. Po P2.1+P2.6 ten krok też się odblokuje.</div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> spójny 14-tab format. <code>--domain</code> generuje tab-techstack automatycznie. Modułowy: BLOK A+B+C zintegrowane. Python własny + Jinja templates — czysty 🟢.</div>
+        <div class="step-comment warn">⚠️ <strong>BAD:</strong> visual section nie czyta z bibliotek automatycznie — manual integration. Po P2.1+P2.6 ten krok też się odblokuje.</div>
       </div>
     </li>
 
     <li class="step">
       <div class="step-num">4.2</div>
       <div class="step-content">
-        <h5>Truth Checker wrapper (anti-hallucination per insight)</h5>
+        <div class="step-header">
+          <h5>Truth Checker wrapper (anti-hallucination)</h5>
+          <span class="resilience-badge r-low">🔴 LOW</span>
+        </div>
         <div class="step-flow">
           <span class="pill">System Insights draft</span>
           <span class="arr">→</span>
           <span class="pill tool">Cortex Lab Validator agent</span>
           <span class="arr">→</span>
-          <span class="pill">Insights z 5-line rubric per item</span>
+          <span class="pill">Insights z 5-line rubric</span>
         </div>
         <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>5-line rubric:</em> Co wiem · Co zakładam · Co może być błędne · Co zweryfikować · Co poprawić z 1 inputem</p>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> rubric z OPUS_48_WORKBENCH sekcja 9 (Anthropic: <em>"single highest leverage line of text in the whole document"</em>). Klient dostaje insight + transparency co jest pewne, co zakładam, co wymaga weryfikacji. Buduje zaufanie zamiast hallucination.</div>
-        <div class="step-comment warn">⚠️ <strong>BAD:</strong> Cortex Lab to <em>experimental</em> Agent Team (flag <code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1</code>) — jeszcze nie test runned na real klientcie. Dziś (30.05 wieczór) skonfigurowane, pierwszy mini test pending.</div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> rubric z OPUS_48_WORKBENCH (Anthropic: <em>"single highest leverage line"</em>). Klient dostaje transparency. Buduje zaufanie zamiast hallucination.</div>
+        <div class="step-comment bad">❌ <strong>BAD (🔴 LOW resilience):</strong> Cortex Lab Agent Team = <em>experimental</em> Anthropic feature (flag CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1). <strong>Single vendor, single experimental flag.</strong> Jeśli Anthropic wyłączy → wrapper traci wsparcie.</div>
+        <div class="step-proposal" style="border-color:var(--good);background:linear-gradient(135deg,#f0fdf4 0%,#fff 90%)"><span class="proposal-id" style="background:var(--good)">P5.1</span> <strong>Truth Checker fallback script</strong> — rubric to 5 linii tekstu, można zrobić jako zwykły post-processing skrypt (Python + template) bez Agent Team. Odporność: 🔴 LOW → 🟢 HIGH bez utraty funkcjonalności. <span class="proposal-meta">~1 dzień · resilience hardening (post-MVP, ale przed dependency lock-in)</span></div>
       </div>
     </li>
 
@@ -520,381 +675,138 @@ a:hover { text-decoration: underline; }
 </div>
 
 <div class="algorithm-summary">
-  <p><strong>Mapa dziur w algorytmie (gdzie skala się zatrzymuje):</strong></p>
+  <p><strong>Mapa dziur w algorytmie i ich rozwiązań (linki do propozycji per krok):</strong></p>
   <ul style="margin-top:6px">
-    <li><strong>Krok 1.3</strong> manual approval → P1.1 auto-promote ≥0.8</li>
-    <li><strong>Krok 2.3</strong> dot overlay manual → ⭐ <strong>P2.1 dot_generator.py</strong> (blocker skali #1, ~1-2 dni)</li>
-    <li><strong>Krok 2.4</strong> density/hierarchy STUB → P2.4 baselines + P2.6 audit_visual full</li>
-    <li><strong>Krok 3.1</strong> content bez skilla → P3.5 C02 wrap + P3.4 forbidden_patterns</li>
-    <li><strong>Krok 3.2</strong> kategoria od zera per klient → P3.2 category_templates per branża + P3.3 tier_specs_master</li>
-    <li><strong>Krok 3.3</strong> CDT manual → P3.7 C35 CDT Builder</li>
-    <li><strong>Krok 3.4</strong> 11 raportów GA4 → P3.6 R10-R20</li>
+    <li><strong>Krok 1.3</strong> manual approval → <span class="proposal-id">P1.1</span> auto-promote ≥0.8</li>
+    <li><strong>Krok 2.2</strong> pseudo-CTA niewykryte → <span class="proposal-id">P2.5</span> pseudo_cta_patterns.json</li>
+    <li><strong>Krok 2.3</strong> dot overlay manual → ⭐ <span class="proposal-id" style="background:var(--bad);color:white;padding:1px 6px;border-radius:3px;font-weight:700;font-size:10.5px">P2.1</span> <strong>dot_generator.py (MVP CRITICAL)</strong></li>
+    <li><strong>Krok 2.4</strong> density/hierarchy STUB → ⭐ <span class="proposal-id" style="background:var(--bad);color:white;padding:1px 6px;border-radius:3px;font-weight:700;font-size:10.5px">P2.6</span> <strong>audit_visual full (MVP CRITICAL)</strong> + P2.3 + P2.4</li>
+    <li><strong>Krok 3.1</strong> content bez skilla → ⭐ <span class="proposal-id" style="background:var(--opus);color:white;padding:1px 6px;border-radius:3px;font-weight:700;font-size:10.5px">P3.5</span> <strong>C02 wrap (MVP CRITICAL · najtańszy unlock)</strong></li>
+    <li><strong>Krok 3.2</strong> kategoria od zera per klient → <span class="proposal-id">P3.2</span> category_templates per branża + <span class="proposal-id">P3.3</span> tier_specs_master</li>
+    <li><strong>Krok 3.3</strong> CDT manual → <span class="proposal-id">P3.7</span> C35 CDT Builder</li>
+    <li><strong>Krok 3.4</strong> 11 raportów GA4 → <span class="proposal-id">P3.6</span> R10-R20</li>
+    <li><strong>Krok 4.2</strong> 🔴 LOW resilience → <span class="proposal-id" style="background:var(--good);color:white;padding:1px 6px;border-radius:3px;font-weight:700;font-size:10.5px">P5.1</span> Truth Checker fallback script</li>
   </ul>
-  <p style="margin-top:8px;color:var(--text-muted);font-size:12px"><em>Reszta dokumentu (warstwy + verdykty + propozycje + sekwencja) operacjonalizuje powyższą mapę dziur w propozycje P1.x / P2.x / P3.x z czasami i ryzykami.</em></p>
+  <p style="margin-top:8px;color:var(--text-muted);font-size:12px"><em>MVP scope: <span class="proposal-id" style="background:var(--bad);color:white;padding:1px 6px;border-radius:3px">P2.1</span> + <span class="proposal-id" style="background:var(--bad);color:white;padding:1px 6px;border-radius:3px">P2.6</span> + <span class="proposal-id" style="background:var(--opus);color:white;padding:1px 6px;border-radius:3px">P3.5</span> = ~4-6 dni. Reszta = expansion roadmap.</em></p>
 </div>
 
-<h2 id="deep">🔬 Głęboka ocena per warstwa (z EEL_MASTER_TRACKER.md)</h2>
+<!-- =================== PROPOZYCJE FULL =================== -->
+<h2 id="proposals">💡 Propozycje per krok algorytmu (24 + 5 cross + nowa P5.1 resilience)</h2>
 
-<h3>WARSTWA 1 — HTML scan + Tech Stack + Element Discovery</h3>
+<p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Wszystkie 24 propozycje z poprzedniej wersji + 5 cross-warstwowych + <strong>nowa kategoria P5.x Resilience hardening</strong>. Każda zmapowana do konkretnego kroku algorytmu (powyżej w sekcji ALGORYTM jako "step-proposal" pod krokiem).</p>
 
-<div class="verdict-card good">
-  <div class="score-row">
-    <div class="score-num s8">8</div>
-    <div>
-      <div class="score-title">Self-learning loop: ZAMKNIĘTY ✅</div>
-      <div class="score-sub">Najdojrzalszy ekosystem w EEL</div>
-    </div>
-  </div>
+<h3>🟢 P1.x — Warstwa 1 (HTML) data layer (4 propozycje)</h3>
+<table>
+  <tr><th>ID</th><th>Co</th><th>Krok</th><th>Czas</th><th>MVP?</th></tr>
+  <tr><td><code>P1.1</code></td><td>Auto-promote ≥0.8 confidence (~70% mniej manual approval)</td><td>1.3</td><td>2h</td><td>po MVP</td></tr>
+  <tr><td><code>P1.2</code></td><td>JSON sharding (elements_master split per page-type)</td><td>1.3</td><td>4h</td><td>długoterminowo</td></tr>
+  <tr><td><code>P1.3</code></td><td>Nightly snapshot + diff log</td><td>1.3</td><td>2h</td><td>długoterminowo</td></tr>
+  <tr><td><code>P1.4</code></td><td>W18 Industry Benchmarks Accumulator</td><td>1.1</td><td>1 dzień</td><td>expansion</td></tr>
+</table>
 
-  <h4 style="margin-top:8px;color:#065f46">Komponenty</h4>
-  <table>
-    <tr><th>Kod</th><th>Komponent</th><th>Status</th></tr>
-    <tr><td>C11</td><td>HTML Mapping (Developer View)</td><td>❌ skill brak ale <code>audit_html.py</code> 18K istnieje</td></tr>
-    <tr><td>C21</td><td>Element Benchmark</td><td>✅ działa, <code>/eel-benchmark</code></td></tr>
-    <tr><td>C22</td><td>EEL Central Hub (Tab 5 Self-Learning)</td><td>✅ działa</td></tr>
-  </table>
+<h3>🔴 P2.x — Warstwa 2 (Visual) (8 propozycji)</h3>
+<table>
+  <tr><th>ID</th><th>Co</th><th>Krok</th><th>Czas</th><th>MVP?</th></tr>
+  <tr style="background:#fef2f2"><td><code>P2.1</code></td><td><strong>⭐ dot_generator.py — blocker skali #1</strong></td><td>2.3</td><td>1-2 dni</td><td><strong>MVP ✅</strong></td></tr>
+  <tr><td><code>P2.2</code></td><td>visual_patterns.json (formalna baza wzorców)</td><td>2.4</td><td>1 dzień</td><td>expansion</td></tr>
+  <tr><td><code>P2.3</code></td><td>fold_archetypes.json (typowe foldy %)</td><td>2.4</td><td>1 dzień</td><td>expansion</td></tr>
+  <tr><td><code>P2.4</code></td><td>density_baselines.json</td><td>2.4</td><td>1 dzień</td><td>expansion</td></tr>
+  <tr><td><code>P2.5</code></td><td>pseudo_cta_patterns.json (dead clicks)</td><td>2.2</td><td>1 dzień</td><td>expansion</td></tr>
+  <tr style="background:#fef2f2"><td><code>P2.6</code></td><td><strong>⭐ audit_visual.py full (gold standard 4 sekcje)</strong></td><td>2.4</td><td>2-3 dni</td><td><strong>MVP ✅</strong></td></tr>
+  <tr><td><code>P2.7</code></td><td>C23 Visual Audit Builder sub-skille</td><td>cross</td><td>3-5 dni</td><td>Sprint 4 Plichta</td></tr>
+  <tr><td><code>P2.8</code></td><td>C34 Visual Density Maps (Cortex v2 NEW)</td><td>2.4</td><td>2-3 dni</td><td>Sprint 4 Plichta</td></tr>
+</table>
 
-  <h4 style="color:#065f46">Wsady (4)</h4>
-  <table>
-    <tr><th>Kod</th><th>Wsad</th><th>Plik</th></tr>
-    <tr><td>W1</td><td>Element Master (302+ elementów)</td><td><code>elements_master.json</code> 204K</td></tr>
-    <tr><td>W26</td><td>Area + Element Taxonomy</td><td>9 obszarów × ~60 elementów</td></tr>
-    <tr><td>W43</td><td>Self-Learning Schema v2</td><td><code>elements_dictionary.json</code> 29K + <code>platform_patterns.json</code> + <code>sl_server.py</code></td></tr>
-    <tr><td>W44</td><td>Tech Stack Signatures</td><td><code>tech_stack_signatures.json</code> 36K + cache</td></tr>
-  </table>
+<h3>🟠 P3.x — Warstwa 3 (Content + Category + GEO + GA4) (7 propozycji)</h3>
+<table>
+  <tr><th>ID</th><th>Co</th><th>Krok</th><th>Czas</th><th>MVP?</th></tr>
+  <tr><td><code>P3.1</code></td><td>content_patterns.json (konsolidacja category_maps)</td><td>3.1</td><td>1 dzień</td><td>expansion</td></tr>
+  <tr><td><code>P3.2</code></td><td>category_templates.json per branża (Plichta-relevant)</td><td>3.2</td><td>1-2 dni</td><td>expansion (przed Plichta)</td></tr>
+  <tr><td><code>P3.3</code></td><td>tier_specs_master.json</td><td>3.2</td><td>1-2 dni</td><td>expansion</td></tr>
+  <tr><td><code>P3.4</code></td><td>forbidden_patterns.json (copy które nie działa)</td><td>3.1</td><td>1 dzień</td><td>expansion</td></tr>
+  <tr style="background:#f5f3ff"><td><code>P3.5</code></td><td><strong>⭐ C02 Content Mapping skill wrap — najtańszy unlock</strong></td><td>3.1</td><td>4-6h</td><td><strong>MVP ✅ (pierwszy)</strong></td></tr>
+  <tr><td><code>P3.6</code></td><td>C04 GA4 R10-R20 (11 raportów)</td><td>3.4</td><td>3-4 dni</td><td>expansion</td></tr>
+  <tr><td><code>P3.7</code></td><td>C35 CDT Builder (Cortex v2 NEW)</td><td>3.3</td><td>3-5 dni</td><td>Sprint 4 Plichta</td></tr>
+</table>
 
-  <h4 style="color:#065f46">Skille (3)</h4>
-  <table>
-    <tr><th>Skill</th><th>Co robi</th></tr>
-    <tr><td><code>/eel-self-learn</code></td><td>Update + Verify loop</td></tr>
-    <tr><td><code>/eel-benchmark</code></td><td>Dodaj sklep do benchmarku</td></tr>
-    <tr><td><code>/eel-audit</code></td><td>Visual + HTML w jednym</td></tr>
-  </table>
+<h3>🔵 P5.x — Resilience hardening (NOWA kategoria, 30.05)</h3>
+<table>
+  <tr><th>ID</th><th>Co</th><th>Krok</th><th>Czas</th><th>Resilience</th></tr>
+  <tr style="background:#f0fdf4"><td><code>P5.1</code></td><td><strong>Truth Checker fallback script</strong> (bez Cortex Lab Agent Team)</td><td>4.2</td><td>1 dzień</td><td>🔴 → 🟢</td></tr>
+</table>
+<p style="font-size:12px;color:var(--text-muted);margin-top:6px"><em>Reguła: każdy krok 🔴 LOW dostaje propozycję P5.x hardening do fallback path 🟢. Nowe kroki LOW → dorzucamy P5.2, P5.3 itd.</em></p>
 
-  <h4 style="color:#065f46">Skrypty</h4>
-  <ul>
-    <li><code>audit_html.py</code> (18K) — main scan</li>
-    <li><code>nav_scanner.py</code> (40K) — nav structure</li>
-    <li><code>tech_stack_detector.py</code> (29K) — sygnatury z cache</li>
-    <li><code>discovery_loop.py</code> (31K) — enrich/add/review/commit</li>
-    <li><code>sl_server.py</code> (6.4K) — HTTP server port 8744 dla UI editing</li>
-  </ul>
+<h3>🌐 G — Cross-warstwowe (5 propozycji)</h3>
+<table>
+  <tr><th>ID</th><th>Co</th><th>Komentarz</th></tr>
+  <tr><td><code>G1</code></td><td>Standardyzacja self-learning loop per warstwa</td><td>Wzorzec z W1 zaadoptować dla W2 i W3</td></tr>
+  <tr><td><code>G2</code></td><td>JSON → Postgres path (gdy >50 klientów)</td><td>Postgres master + JSON delta per klient</td></tr>
+  <tr><td><code>G3</code></td><td>C13 Auto-onboarding flow</td><td>DEMOTED z 🔴 → ⚪ po algorytmie (wymaga wzmocnionego rdzenia)</td></tr>
+  <tr><td><code>G4</code></td><td>industry_signatures.json (URL → branża)</td><td>Wymagane przez P3.2 + W18 + content patterns</td></tr>
+  <tr><td><code>G5</code></td><td>Cortex v2 reasoner orchestrator (C32-C37)</td><td>Sprint 4 Plichta deadline</td></tr>
+</table>
 
-  <h4 style="color:#065f46">Proces self-learning (zamknięty loop)</h4>
-  <ol>
-    <li><code>take_screenshots</code> + <code>audit_html.py</code> → scan klienta</li>
-    <li><code>discovery_loop.py enrich</code> → wykryj nowe selektory/sygnatury/vendors</li>
-    <li>queue.json: <code>pending</code> → Tomek aprobuje w Hub Tab 5 UI (sl_server)</li>
-    <li><code>discovery_loop.py commit</code> → <code>elements_dictionary</code> + <code>platform_patterns</code> + <code>tech_stack_signatures</code></li>
-    <li>Kolejny audyt = precyzyjniejszy</li>
-  </ol>
+<!-- =================== SEKWENCJA =================== -->
+<h2 id="sequence">📊 Sekwencja priorytetów (MVP-first + expansion roadmap)</h2>
 
-  <div class="win-list">
-    <h4>✅ Co działa wzorcowo</h4>
-    <ul>
-      <li>workflow approval z UI (Hub Tab 5 + sl_server)</li>
-      <li>multi-platform (Shopify+IdoSell+WooCommerce+PrestaShop)</li>
-      <li>confidence scoring (script_src=0.6, global_var=0.5, cookie=0.4, threshold=0.4)</li>
-      <li>cache per domena</li>
-      <li>Tomek może edytować nazwy elementów + dodawać selektory przez UI</li>
-    </ul>
-  </div>
-
-  <div class="gap-list">
-    <h4>⚠️ Co ogranicza skalę</h4>
-    <ul>
-      <li>Tomek aprobuje KAŻDY element ręcznie → auto-promote ≥0.8 odciążyłoby</li>
-      <li>JSON nie skali &gt;500KB (przy 50+ klientach elements_master = 2-3MB)</li>
-      <li>Brak diff history → nie wiemy czy v2 jest lepsza niż v1</li>
-      <li>SL-1 Benchmark Accumulator (W18 ❌) — brak auto-zbierania benchmarków branżowych</li>
-    </ul>
+<div class="priority-row">
+  <div class="priority-marker p0">0</div>
+  <div class="priority-body">
+    <strong>🎯 MVP-FIRST — 3 produkty premium (decyzja 30.05)</strong><br>
+    P3.5 wrap (4-6h) + P2.1 dot_generator (1-2 dni) + P2.6 audit_visual full (2-3 dni)
+    <div class="priority-time"><strong>~4-6 dni</strong> · unlock dla p2-8 + t2-3-8 + c1-2-4-8 · warstwy 1+2+3+4+8</div>
   </div>
 </div>
 
-<h3>WARSTWA 2 — Visual Mapping + Screenshot pipeline</h3>
-
-<div class="verdict-card bad">
-  <div class="score-row">
-    <div class="score-num s4">4</div>
-    <div>
-      <div class="score-title">Self-learning loop: OTWARTY ❌</div>
-      <div class="score-sub">Największy gap w EEL</div>
-    </div>
-  </div>
-
-  <h4 style="margin-top:8px;color:#7c2d12">Komponenty</h4>
-  <table>
-    <tr><th>Kod</th><th>Komponent</th><th>Status</th></tr>
-    <tr><td>C01</td><td>Visual Mapping (current)</td><td>✅ działa ALE ⚠️ "Brak: embed screenshotów w HTML"</td></tr>
-    <tr><td>C23</td><td>Visual Audit Builder sub-skille (next-gen)</td><td>❌ nie istnieje — planowany 3 sub-skille (<code>/store-visual-map</code> + <code>/action-map</code> + <code>/content-audit</code>)</td></tr>
-    <tr><td>C34</td><td>Visual Density Maps (Cortex v2 NEW)</td><td>❌ proponowany, nie zbudowany</td></tr>
-  </table>
-
-  <h4 style="color:#7c2d12">Wsady (3 — ale rozproszone)</h4>
-  <table>
-    <tr><th>Kod</th><th>Wsad</th><th>Status</th></tr>
-    <tr><td>W1</td><td>Element Master z visual_refs[]</td><td>✅ embedded</td></tr>
-    <tr><td>W20</td><td>Competitor Intelligence (GLOV/JohnDog/SejfZone audyty)</td><td>🟡 3 klienci</td></tr>
-    <tr><td>W42</td><td>SejfZone Live Case Study (Visual subsection)</td><td>✅</td></tr>
-    <tr><td>W30</td><td>EEL Audit Catechism (NIERUSZALNY)</td><td>✅ standard formatu</td></tr>
-  </table>
-
-  <h4 style="color:#7c2d12">Skille (1)</h4>
-  <table>
-    <tr><th>Skill</th><th>Status</th></tr>
-    <tr><td><code>/eel-audit</code></td><td>✅ Visual + HTML w jednym</td></tr>
-    <tr><td><code>/store-visual-map</code></td><td>❌ planowany C23 sub-skill</td></tr>
-  </table>
-
-  <h4 style="color:#7c2d12">Skrypty</h4>
-  <ul>
-    <li><code>take_screenshots.py</code> (29K — wcześniej myliłem 717, faktycznie 29K plik) — ✅ UNIVERSAL Playwright</li>
-    <li><code>audit_visual.py</code> (1.5K) — 🟡 STUB od 2026-05-26</li>
-    <li><code>eel_report_html.py</code> (99K) — ✅ generator HTML 6-tab</li>
-    <li><code>scripts/build_raport.py</code> (19K) — ✅ Tech Stack v2 build</li>
-  </ul>
-
-  <h4 style="color:#7c2d12">Proces (OTWARTY loop)</h4>
-  <ol>
-    <li><code>take_screenshots.py</code> → 16 PNG per klient</li>
-    <li><strong>Manual:</strong> doty placed ręcznie w HTML editorze (167 dla GLOV)</li>
-    <li><code>eel_report_html.py</code> → HTML 6-tab</li>
-    <li><strong>Manual:</strong> dodanie do reports/ + push</li>
-    <li>❌ Brak loop wracającego patterns do bazy → kolejny klient od zera</li>
-  </ol>
-
-  <div class="gap-list">
-    <h4>❌ Brakuje krytycznie</h4>
-    <ul>
-      <li><code>dot_generator.py</code> — auto-detekcja klikalnych z HTML scan + Playwright bounding boxes</li>
-      <li><code>visual_patterns.json</code> — typowy layout fold per page-type per platforma</li>
-      <li><code>fold_archetypes.json</code> — "HP Fold 1: 60% Hero+CTA, 25% Hero+Search, 15% Hero+Promo"</li>
-      <li><code>density_baselines.json</code> — typowa density + outliers</li>
-      <li><code>pseudo_cta_patterns.json</code> — wzorce pseudoklikabilnych</li>
-      <li><code>dead_zones_baselines.json</code> — typowe dead zones per page type</li>
-      <li><code>/eel-html-mapping</code> skill ❌ + <code>/store-visual-map</code> ❌ + <code>audit_visual.py</code> nadbudowa (z 1.5K stub)</li>
-    </ul>
-  </div>
-
-  <div class="gap-list" style="background:#fef2f2">
-    <h4>🔴 Strategiczny gap (z Cortex v2 plan)</h4>
-    <p>Plan v2 przesuwa C01 z 🟠 WAŻNE → 🔴 KRYTYCZNY (rdzeń Cortex v2) — bo bez wzmocnionej warstwy 2 cały Cortex jest słaby. <strong>Sprint 4 priority.</strong></p>
+<div class="priority-row">
+  <div class="priority-marker p1">1</div>
+  <div class="priority-body">
+    <strong>Expansion 1 — Plichta prerequisite</strong><br>
+    P3.2 category_templates per branża (automotive!) + P3.3 tier_specs_master + P1.1 auto-promote
+    <div class="priority-time">~3-4 dni · przed Plichta 09/2026 · unlock warstwa 8 per branża</div>
   </div>
 </div>
 
-<h3>WARSTWA 3 — Content + Category + GEO</h3>
-
-<div class="verdict-card warn">
-  <div class="score-row">
-    <div class="score-num s6">6</div>
-    <div>
-      <div class="score-title">Self-learning loop: CZĘŚCIOWY ⚠️</div>
-      <div class="score-sub">GEO sub-warstwa silna, Content Mapping ogólne brak</div>
-    </div>
-  </div>
-
-  <h4 style="margin-top:8px;color:#78350f">Komponenty (3 PILNE)</h4>
-  <table>
-    <tr><th>Kod</th><th>Komponent</th><th>Status</th></tr>
-    <tr><td>C02</td><td>Content Mapping (Skill)</td><td>❌ Nie istnieje (ale <code>audit_content.py</code> 17K istnieje)</td></tr>
-    <tr><td>C05</td><td>GEO Check (Skill)</td><td>🟡 <code>geo_check.py</code> jest, brak skilla + HTML output</td></tr>
-    <tr><td>C10</td><td>Category Mapping</td><td>✅ działa, <code>/eel-category-mapping</code></td></tr>
-    <tr><td>C35</td><td>CDT Builder (Cortex v2 NEW)</td><td>❌ proponowany</td></tr>
-  </table>
-
-  <h4 style="color:#78350f">Wsady (11 — najbogatszy ekosystem)</h4>
-  <table>
-    <tr><th>Kod</th><th>Wsad</th><th>Co zawiera</th></tr>
-    <tr><td>W11</td><td>GEO Decision Trees + Discovery Questions</td><td>PL + EN bazy</td></tr>
-    <tr><td>W12</td><td>GEO Principles + Score Rubric</td><td>scoring per element</td></tr>
-    <tr><td>W13</td><td>GEO Category Template Library</td><td>szablony struktury</td></tr>
-    <tr><td>W14</td><td>GEO Before-After Examples</td><td>15 SKU validated</td></tr>
-    <tr><td>W15</td><td>GEO CEP + DT Algorithm</td><td>v2 CEP-First</td></tr>
-    <tr><td>W16</td><td>GEO Category Intelligence Pipeline</td><td>algorytm auto</td></tr>
-    <tr><td>W17</td><td>GEO Category Data</td><td>46 kategorii PL+EN</td></tr>
-    <tr><td>W19</td><td>Copywriting Patterns</td><td>w W29 Seria 2</td></tr>
-    <tr><td>W29</td><td>EEL Tactics All Series</td><td>4 serie</td></tr>
-    <tr><td>W31</td><td>SejfZone Content Diff Methodology</td><td>validated GEO Scores 58→82, 52→79, 61→84</td></tr>
-    <tr><td>W36</td><td>GEO Ceneo Scraper + DT Verifier</td><td>94 opinii test</td></tr>
-  </table>
-
-  <h4 style="color:#78350f">Skille (4 GEO + 1 category)</h4>
-  <table>
-    <tr><th>Skill</th><th>Status</th></tr>
-    <tr><td><code>/eel-category-mapping</code></td><td>✅</td></tr>
-    <tr><td><code>/geo-content-diff</code></td><td>✅</td></tr>
-    <tr><td><code>/geo-pdp-writer</code></td><td>✅</td></tr>
-    <tr><td><code>/geo-review</code></td><td>✅</td></tr>
-    <tr><td><code>/eel-content-mapping</code></td><td>❌ skrypt jest, skilla nie ma</td></tr>
-    <tr><td><code>/eel-geo</code></td><td>❌ skrypt jest, skilla + HTML output nie ma</td></tr>
-  </table>
-
-  <h4 style="color:#78350f">Proces (CZĘŚCIOWY loop)</h4>
-  <ol>
-    <li><code>/eel-category-mapping</code> → <code>{klient}_CATEGORY_MAP.json</code> per klient</li>
-    <li><code>audit_content.py</code> → content inventory per produkt</li>
-    <li><code>/geo-content-diff</code> → diff per produkt (GEO score X/100 → Y/100)</li>
-    <li><code>/geo-pdp-writer</code> → rewrite</li>
-    <li><strong>Manual:</strong> review per produkt</li>
-    <li>⚠️ <code>category_maps/</code> rośnie per klient (good) ALE brak konsolidacji cross-category</li>
-  </ol>
-
-  <div class="win-list">
-    <h4>✅ Co działa silnie (GEO sub-warstwa)</h4>
-    <ul>
-      <li>46+ kategorii w bazie (W17) — bezpośrednie lookup table</li>
-      <li>4 skille GEO operacyjne</li>
-      <li>W31 validated methodology (3 produkty SejfZone +20-25 score lift)</li>
-      <li>category_map per klient ✅ działa</li>
-      <li>Tech Stack detection per kategoria</li>
-    </ul>
-  </div>
-
-  <div class="gap-list">
-    <h4>⚠️ Brakuje (konsolidacja)</h4>
-    <ul>
-      <li><code>content_patterns.json</code> — konsolidacja category_maps cross-category</li>
-      <li><code>category_templates.json</code> per branża (cosmetic/electronics/fashion/safety/automotive)</li>
-      <li><code>tier_specs_master.json</code> — formalna baza T1/T2/T3 per kategoria</li>
-      <li><code>copy_archetypes.json</code> — typowe formuły opisów per kategoria</li>
-      <li><code>forbidden_patterns.json</code> — copy patterns które nie działają</li>
-      <li>C02 Content Mapping skill (owrappować <code>audit_content.py</code>)</li>
-      <li>C04 GA4 R10-R20 — brakuje 11 raportów</li>
-    </ul>
+<div class="priority-row">
+  <div class="priority-marker p2">2</div>
+  <div class="priority-body">
+    <strong>Expansion 2 — resilience + quality</strong><br>
+    P5.1 Truth Checker fallback (1 dzień) + P3.1 content_patterns + P3.4 forbidden_patterns + P2.5 pseudo-CTA
+    <div class="priority-time">~4-5 dni · 🔴 → 🟢 hardening + warstwa 3 konsolidacja</div>
   </div>
 </div>
 
-<h2 id="verdicts">🚦 Verdict 1: Powtarzalność na skali (cross-check 3 warstw)</h2>
-
-<div class="verdict-card bad">
-  <div class="score-row">
-    <div class="score-num s4">4</div>
-    <div>
-      <div class="score-title">Warstwa 2 — Visual mapping</div>
-      <div class="score-sub">NIE skali · największy gap</div>
-    </div>
-  </div>
-  <p><strong>Główny blocker:</strong> doty placowane RĘCZNIE w HTML (GLOV: 167 dotów × <code>left:X%;top:Y%</code> pisane palcami). Po 10 klientach tonienie w editorze.</p>
-  <div class="gap-list">
-    <h4>Brakuje (krytycznie)</h4>
-    <ul>
-      <li><strong>dot_generator.py</strong> — PIL/cv2 → auto-detekcja klikalnych z HTML map</li>
-      <li><strong>visual_patterns.json</strong> — typowy layout fold per page-type per platforma</li>
-      <li><strong>fold_archetypes.json</strong> — np. "HP Fold 1: 60% Hero+CTA, 25% Hero+Search, 15% Hero+Promo"</li>
-      <li><strong>density_baselines.json</strong> — typowa density per fold + outliers</li>
-      <li><strong>pseudo_cta_patterns.json</strong> — wzorce pseudoklikabilnych elementów</li>
-    </ul>
+<div class="priority-row">
+  <div class="priority-marker p3">3</div>
+  <div class="priority-body">
+    <strong>Expansion 3 — nice to have po pierwszych klientach</strong><br>
+    P2.3 fold_archetypes + P2.4 density_baselines + P1.4 W18 benchmarks + P3.6 R10-R20 GA4
+    <div class="priority-time">~5-6 dni · expansion warstwy 2 + 4</div>
   </div>
 </div>
 
-<div class="verdict-card warn">
-  <div class="score-row">
-    <div class="score-num s5">5</div>
-    <div>
-      <div class="score-title">Warstwa 3 — Content mapping</div>
-      <div class="score-sub">Półautomatyczna · per-klient OK, brak konsolidacji</div>
-    </div>
-  </div>
-  <p><strong>Główny blocker:</strong> category map per klient = interactive <code>/eel-category-mapping</code>. GEO content rewrite = manual per produkt. Brak template-driven generation per branża.</p>
-  <div class="gap-list">
-    <h4>Brakuje</h4>
-    <ul>
-      <li><strong>category_templates.json</strong> per branża (cosmetic / electronics / fashion / safety)</li>
-      <li><strong>content_patterns.json</strong> — konsolidacja istniejących category_maps</li>
-      <li><strong>tier_specs_master.json</strong> — formalna baza T1/T2/T3 per kategoria</li>
-      <li><strong>forbidden_patterns.json</strong> — copy patterns które wiadomo że nie działają</li>
-    </ul>
+<div class="priority-row">
+  <div class="priority-marker p4">4</div>
+  <div class="priority-body">
+    <strong>Expansion 4 — Sprint 4 Cortex v2 (Plichta full deliverable)</strong><br>
+    P2.7 C23 + P2.8 C34 + P3.7 C35 + G5 C32 orchestrator
+    <div class="priority-time">~10 dni · Cortex v2 build · Plichta anchor klient</div>
   </div>
 </div>
 
-<div class="verdict-card good">
-  <div class="score-row">
-    <div class="score-num s7">7</div>
-    <div>
-      <div class="score-title">Warstwa 1 — HTML scan</div>
-      <div class="score-sub">Najdojrzalsza · wzorzec do skopiowania</div>
-    </div>
-  </div>
-  <p><strong>Co działa:</strong> discovery queue (pending→approved→committed), multi-platform patterns (Shopify+IdoSell), confidence scoring (0.3-0.6), found_on tracking.</p>
-  <div class="gap-list">
-    <h4>Co ogranicza skalę</h4>
-    <ul>
-      <li>Tomek aprobuje KAŻDY element w queue → auto-promote ≥0.8 odciążyłoby</li>
-      <li>JSON nie skali powyżej ~500KB (przy 50+ klientach elements_master = 2-3MB)</li>
-      <li>Brak diff history → nie wiemy czy nowsza wersja JSON jest lepsza</li>
-    </ul>
-  </div>
-  <div class="win-list">
-    <h4>✅ Wzorzec do skopiowania dla warstw 2 i 3</h4>
-    <ul>
-      <li>_meta + version + last_updated + rule</li>
-      <li>confidence_scoring per detection method</li>
-      <li>discovery_queue.json z workflow approval</li>
-      <li>per-platform patterns nesting</li>
-    </ul>
+<div class="priority-row">
+  <div class="priority-marker p5">5</div>
+  <div class="priority-body">
+    <strong>Expansion 5 — architektura długoterminowa</strong><br>
+    P1.2 JSON sharding + P1.3 nightly diff + G2 Postgres path
+    <div class="priority-time">~1 tydzień · scale architecture · gdy >50 klientów</div>
   </div>
 </div>
 
-<h2>🎯 Verdict 2: GLOV_REFERENCE_AUDIT.html (referencja egzekucji)</h2>
+<p style="font-size:13px;color:var(--text-muted);margin-top:12px"><strong>Razem expansion: ~22-25 dni</strong> roboczych po MVP. Czyli 5-6 tygodni po pierwszych klientach. Plichta start 09/2026 = ~4 miesiące buffer.</p>
 
-<div class="verdict-card warn">
-  <div class="score-row">
-    <div class="score-num s6">6.5</div>
-    <div>
-      <div class="score-title">GLOV jako gold standard?</div>
-      <div class="score-sub">NIE jest gold · current best, ale wymaga upgrade</div>
-    </div>
-  </div>
-  <p><strong>Co JEST dobre:</strong></p>
-  <ul>
-    <li>167 av-dots + 127 legend (każdy dot opisany)</li>
-    <li>Pełne pokrycie 8 page-typów: Nav, HP, Listing, PDP, Tile (default+hover), Search, Cart drawer, Checkout, Blog</li>
-    <li>Desktop+mobile dla każdego widoku</li>
-    <li>18 unique screenshotów</li>
-    <li>Tabela Element/Akcja shopperki/GA4 event/Status</li>
-    <li>PDP ma 2-fold desktop + 3-fold mobile</li>
-  </ul>
-  <div class="gap-list">
-    <h4>Brakuje (krytyczne dla gold standard)</h4>
-    <ul>
-      <li>❌ <strong>Density maps</strong> fold-by-fold — grep "density" = 0 matches</li>
-      <li>❌ <strong>Hierarchy ranking</strong> per fold — grep "hierarch" = 0 matches</li>
-      <li>❌ <strong>Pseudo-CTAs</strong> jako kategoria — grep "pseudo" = 0</li>
-      <li>❌ <strong>Dead zones</strong> marked — grep "dead.zone" = 0</li>
-      <li>⚠️ Fold-by-fold linie: tylko 3 (powinno być ~16+ na long screenshots)</li>
-      <li>⚠️ Doty bez kategoryzacji (CTA / trust / nav / content / decoration)</li>
-    </ul>
-  </div>
-</div>
-
-<h2 id="blockers">🚧 Verdict 3: 5 głównych blockerów (priorytet implementacji)</h2>
-
-<div class="blocker-card">
-  <span class="blocker-num">1</span>
-  <strong>Doty Visual ręczne</strong> — po 10 klientach Tomek tonie w editorze. <code>dot_generator.py</code> = pre-condition dla skali. <em>(blocker krytyczny)</em>
-</div>
-
-<div class="blocker-card">
-  <span class="blocker-num">2</span>
-  <strong>Density / hierarchy / pseudo-CTA / dead zones</strong> — brak generatorów. Gold standard warstwy 2 wymaga build'u 4 modułów. <em>(blocker krytyczny)</em>
-</div>
-
-<div class="blocker-card orange">
-  <span class="blocker-num">3</span>
-  <strong>Element discovery queue manual</strong> — auto-promote confidence ≥0.8 odciążyłoby Tomka o ~70%. <em>(blocker średni)</em>
-</div>
-
-<div class="blocker-card orange">
-  <span class="blocker-num">4</span>
-  <strong>Category map per klient manual</strong> — bez category_templates.json per branża = każdy klient od zera. <em>(blocker średni)</em>
-</div>
-
-<div class="blocker-card yellow">
-  <span class="blocker-num">5</span>
-  <strong>Brak diff history</strong> — nie wiemy czy v2 jest lepsza niż v1. Nightly snapshot + diff log rozwiązuje. <em>(blocker low)</em>
-</div>
-
-<h2>🏗 Verdict 4: Architektura dla 130 produktów</h2>
+<!-- =================== ARCHITEKTURA =================== -->
+<h2 id="architecture">🏗 Architektura dla 130 produktów (zachowane z v1)</h2>
 
 <p><strong>JSON-first jest właściwy wybór</strong> (na razie). Postgres = nadmiar dopóki &lt;50 klientów. Warstwa 1 pokazuje że JSON skali do 200KB+ z czytelnością.</p>
 
@@ -913,195 +825,17 @@ a:hover { text-decoration: underline; }
   <li><code>scripts/{layer}_generator.py</code></li>
 </ul>
 
-<p style="margin-top: 8px;"><em>Bez tych 3 plików na warstwę — nie ma powtarzalności na skali.</em></p>
+<p style="margin-top: 8px;"><em>Bez tych 3 plików na warstwę — nie ma powtarzalności na skali. <strong>MVP startuje od 3 produktów premium (~12 plików + 3 warstwowe), nie od 130.</strong></em></p>
 
-<h2 id="proposals">💡 Propozycje ulepszeń per warstwa</h2>
-
-<div class="tldr" style="background:linear-gradient(135deg,#fff7ed 0%,#fff 80%);border-color:#fed7aa">
-  <h2>⚠️ Tylko do rozmowy</h2>
-  <p>Tomek powiedział: <em>"sam nic nie zmieniaj, wszystko do rozmowy"</em>. To są kandydaci do dyskusji po powrocie z miasta. Żadna z propozycji NIE jest zaimplementowana.</p>
-</div>
-
-<h3>WARSTWA 1 (HTML) — 4 propozycje</h3>
-
-<div class="verdict-card good">
-  <h4 style="color:#065f46">P1.1 — Auto-promote ≥0.8 confidence</h4>
-  <p><strong>Co:</strong> w <code>discovery_loop.py</code> dodać regułę: gdy <code>confidence ≥ 0.8</code> → auto <code>pending→approved</code>, bez Tomka. Tomek dostaje weekly digest 20-30 nowych.</p>
-  <p><strong>Po co:</strong> Tomek aprobuje ~70% mniej elementów. Skala blocker rozwiązany.</p>
-  <p><strong>Czas:</strong> ~2h | <strong>Risk:</strong> false-positive w domain detection (nieznana domena) → mitigacja: max 5 auto-promote/dzień + manual override</p>
-</div>
-
-<div class="verdict-card good">
-  <h4 style="color:#065f46">P1.2 — JSON sharding (elements_master split per page-type)</h4>
-  <p><strong>Co:</strong> split <code>elements_master.json</code> (204K) na <code>elements_master_{section}.json</code> (header, footer, listing, PDP, cart, checkout itp.) + index file.</p>
-  <p><strong>Po co:</strong> przy 50+ klientach plik osiąga 2-3MB. Sharding daje czytelność + szybsze Edit/Read.</p>
-  <p><strong>Czas:</strong> ~4h | <strong>Risk:</strong> refactor wszystkich konsumentów (audit_html, discovery_loop, build_hub, sl_server)</p>
-</div>
-
-<div class="verdict-card good">
-  <h4 style="color:#065f46">P1.3 — Nightly snapshot + diff log</h4>
-  <p><strong>Co:</strong> cron 2:00 → snapshot JSON-ów do <code>data/snapshots/YYYY-MM-DD/</code> + diff vs previous → log do <code>SL_DIFF_LOG.md</code></p>
-  <p><strong>Po co:</strong> wiemy które elementy zmieniły się + czy nowsza wersja jest lepsza. Możemy rollback.</p>
-  <p><strong>Czas:</strong> ~2h | <strong>Risk:</strong> brak (czysty dodatek)</p>
-</div>
-
-<div class="verdict-card good">
-  <h4 style="color:#065f46">P1.4 — W18 Industry Benchmarks Accumulator (SL-1)</h4>
-  <p><strong>Co:</strong> każdy R10 GA4 pull dokłada do <code>industry_benchmarks.json</code>: CR/AOV/bounce per branża anonimowo. Po 20+ klientach mamy real PL benchmarki.</p>
-  <p><strong>Po co:</strong> W18 jest oznaczony "❌ Nie istnieje, SL-1 w Planning Queue". Bez tego klient pyta "is mój CR dobry?" i nie umiemy odpowiedzieć.</p>
-  <p><strong>Czas:</strong> ~1 dzień | <strong>Risk:</strong> brak</p>
-</div>
-
-<h3>WARSTWA 2 (Visual) — 8 propozycji (priorytet KRYTYCZNY)</h3>
-
-<div class="verdict-card bad">
-  <h4 style="color:#7c2d12">P2.1 — <code>dot_generator.py</code> ⭐ blocker skali</h4>
-  <p><strong>Co:</strong> Playwright zwraca bounding boxes klikalnych elementów (button/a/[onclick]) → przelicz na <code>left%/top%</code> → wygeneruj <code>av-dot</code> HTML automatycznie. Tomek tylko opisuje co dot oznacza.</p>
-  <p><strong>Po co:</strong> ELIMINUJE 167 dotów × manual placement = blocker skali #1. Po 10 klientach Tomek tonie w HTML, ten skrypt to <strong>pre-condition</strong>.</p>
-  <p><strong>Czas:</strong> ~1-2 dni | <strong>Risk:</strong> false-positive (decoracyjne divy bez handler ale wyglądają klikalne) → mitigacja: 2 tryby (strict z handler / loose z visual cue)</p>
-</div>
-
-<div class="verdict-card bad">
-  <h4 style="color:#7c2d12">P2.2 — <code>visual_patterns.json</code></h4>
-  <p><strong>Co:</strong> formalna baza wzorców per page-type per platforma. Init z istniejących GLOV+SejfZone+FERA+Hebe audytów.</p>
-  <p><strong>Format:</strong> per <code>{page_type}.{platform}</code> → typowy layout fold (% występowania), common patterns, anomalie do flagowania.</p>
-  <p><strong>Czas:</strong> ~1 dzień init + rośnie per audit | <strong>Risk:</strong> jakość zależna od ilości danych (start z 5 klientami = noisy)</p>
-</div>
-
-<div class="verdict-card bad">
-  <h4 style="color:#7c2d12">P2.3 — <code>fold_archetypes.json</code></h4>
-  <p><strong>Co:</strong> per page-type: typowe foldy z procentami. Np. "HP Fold 1: 60% Hero+CTA, 25% Hero+Search, 15% Hero+Promo".</p>
-  <p><strong>Po co:</strong> klient od razu wie czy jest typowy czy outlier. Outlier = potencjalny problem albo wyróżnik.</p>
-  <p><strong>Czas:</strong> ~1 dzień | <strong>Risk:</strong> brak</p>
-</div>
-
-<div class="verdict-card bad">
-  <h4 style="color:#7c2d12">P2.4 — <code>density_baselines.json</code></h4>
-  <p><strong>Co:</strong> typowa density per fold (ilość elementów per 100×100px) + outliers per branża.</p>
-  <p><strong>Po co:</strong> jeśli klient ma 3× więcej elementów w fold 1 niż branża → flag "overloaded fold".</p>
-  <p><strong>Czas:</strong> ~1 dzień | <strong>Risk:</strong> brak</p>
-</div>
-
-<div class="verdict-card bad">
-  <h4 style="color:#7c2d12">P2.5 — <code>pseudo_cta_patterns.json</code></h4>
-  <p><strong>Co:</strong> wzorce divów które wyglądają klikalne ale nie są (background-color CTA, cursor:pointer bez handler, button-like styling bez listener).</p>
-  <p><strong>Po co:</strong> dead clicks generator — pokazuje shopper-frustration source.</p>
-  <p><strong>Czas:</strong> ~1 dzień | <strong>Risk:</strong> false-positive (rzeczywiste CTAs z lazy-loaded handler)</p>
-</div>
-
-<div class="verdict-card bad">
-  <h4 style="color:#7c2d12">P2.6 — <code>audit_visual.py</code> z stub → full</h4>
-  <p><strong>Co:</strong> z 1.5K stub → 500+ linii implementacji: density calc + hierarchy ranking + pseudo-CTA detection + dead zones marking. Konsumuje 4 JSONy patterns powyżej.</p>
-  <p><strong>Czas:</strong> ~2-3 dni | <strong>Risk:</strong> kompleksowy refactor — robić w worktree</p>
-</div>
-
-<div class="verdict-card bad">
-  <h4 style="color:#7c2d12">P2.7 — C23 Visual Audit Builder sub-skille</h4>
-  <p><strong>Co:</strong> orchestrator <code>/ecomms-audit</code> + 3 sub-skille (<code>/store-visual-map</code> + <code>/action-map</code> + <code>/content-audit</code>). C23 jest w Planning Queue od dawna, nie zbudowany.</p>
-  <p><strong>Czas:</strong> ~3-5 dni | <strong>Risk:</strong> wymaga decyzji: zastępuje C01 czy uzupełnia?</p>
-</div>
-
-<div class="verdict-card bad">
-  <h4 style="color:#7c2d12">P2.8 — C34 Visual Density Maps (Cortex v2 NEW)</h4>
-  <p><strong>Co:</strong> heatmapy density fold-by-fold jako overlay na screenshotach. Sprint 4 Cortex v2.</p>
-  <p><strong>Czas:</strong> ~2-3 dni | <strong>Wymaga:</strong> P2.4 (density_baselines.json) jako prerequisite</p>
-</div>
-
-<h3>WARSTWA 3 (Content) — 7 propozycji</h3>
-
-<div class="verdict-card warn">
-  <h4 style="color:#78350f">P3.1 — <code>content_patterns.json</code> (konsolidacja category_maps)</h4>
-  <p><strong>Co:</strong> jeden master file z konsolidacją wszystkich istniejących per-klient category_maps. Per branża: typowe formuły tytułów, długość bulletów, presence FAQ.</p>
-  <p><strong>Po co:</strong> obecnie GLOV beauty patterns NIE wpływają na inne beauty klientów (FERA, Hebe). Każdy klient od zera.</p>
-  <p><strong>Czas:</strong> ~1 dzień | <strong>Risk:</strong> brak</p>
-</div>
-
-<div class="verdict-card warn">
-  <h4 style="color:#78350f">P3.2 — <code>category_templates.json</code> per branża</h4>
-  <p><strong>Co:</strong> templates per branża: cosmetic / electronics / fashion / safety / automotive (Plichta!). Klient → branża → template → 80% pracy zrobione automatycznie.</p>
-  <p><strong>Po co:</strong> redukuje manualność <code>/eel-category-mapping</code> z interactive → pre-filled.</p>
-  <p><strong>Czas:</strong> ~1-2 dni | <strong>Risk:</strong> branża mapping fuzzy</p>
-</div>
-
-<div class="verdict-card warn">
-  <h4 style="color:#78350f">P3.3 — <code>tier_specs_master.json</code></h4>
-  <p><strong>Co:</strong> formalna baza T1/T2/T3 per kategoria. Tomek je zna ale są rozproszone w docs.</p>
-  <p><strong>Po co:</strong> Cortex v2 wymaga tej bazy dla pary 2+8 (Visual×Category) i 3+8 (Content×Category).</p>
-  <p><strong>Czas:</strong> ~1-2 dni | <strong>Risk:</strong> brak</p>
-</div>
-
-<div class="verdict-card warn">
-  <h4 style="color:#78350f">P3.4 — <code>forbidden_patterns.json</code></h4>
-  <p><strong>Co:</strong> copy patterns które wiadomo że nie działają per kategoria (np. "darmowa wysyłka" w premium beauty = sygnał taniości).</p>
-  <p><strong>Czas:</strong> ~1 dzień | <strong>Risk:</strong> brak</p>
-</div>
-
-<div class="verdict-card warn">
-  <h4 style="color:#78350f">P3.5 — C02 Content Mapping skill (wrap audit_content.py)</h4>
-  <p><strong>Co:</strong> obecnie <code>audit_content.py</code> 17K istnieje, ale nie ma skilla. Wrap w SKILL.md → invocable.</p>
-  <p><strong>Czas:</strong> ~4-6h | <strong>Risk:</strong> brak (czysty wrapper)</p>
-</div>
-
-<div class="verdict-card warn">
-  <h4 style="color:#78350f">P3.6 — C04 GA4 R10-R20 (11 raportów)</h4>
-  <p><strong>Co:</strong> rozszerzenie <code>/eel-ga4</code>: internal search, scroll depth, cart abandonment, session quality, cohorts. Spec w EEL_GA4_ANALYSES.md.</p>
-  <p><strong>Czas:</strong> ~3-4 dni | <strong>Risk:</strong> per-raport definicja w GA4</p>
-</div>
-
-<div class="verdict-card warn">
-  <h4 style="color:#78350f">P3.7 — C35 CDT Builder (Cortex v2 NEW)</h4>
-  <p><strong>Co:</strong> auto-build CDT per nowy klient per kategoria z istniejących wzorców W11/W15/W17 + walidacja Ceneo (W36).</p>
-  <p><strong>Czas:</strong> ~3-5 dni | <strong>Wymaga:</strong> P3.2 + P3.3 jako prerequisite</p>
-</div>
-
-<h3>🌐 Cross-warstwowe propozycje (5)</h3>
-
-<div class="verdict-card warn">
-  <h4 style="color:#1e3a8a">G1 — Standardyzacja self-learning loop per warstwa</h4>
-  <p>Wzorzec z warstwy 1 (discovery queue → workflow approval → confidence scoring → commit) zaadoptować dla warstw 2 i 3. Wymaga ~1 dzień per warstwa.</p>
-</div>
-
-<div class="verdict-card warn">
-  <h4 style="color:#1e3a8a">G2 — Architektura skali JSON → Postgres (gdy &gt;50 klientów)</h4>
-  <p>Postgres dla master tables (elements, patterns, signatures) + JSON dla per-klient delta. Sprawdzić w sezonie 2026/27 gdy będzie scale critical.</p>
-</div>
-
-<div class="verdict-card warn">
-  <h4 style="color:#1e3a8a">G3 — C13 Auto-onboarding flow (depends on wszystkich 3 warstwach)</h4>
-  <p>Plan v2 demota C13 z 🔴 PILNE → ⚪ POŹNIEJ. Bez wzmocnionego rdzenia (warstwy 2 i 8) produkuje słabe raporty. Najpierw P2.1-P2.8 i P3.1-P3.7.</p>
-</div>
-
-<div class="verdict-card warn">
-  <h4 style="color:#1e3a8a">G4 — Klient industry mapper</h4>
-  <p>1 plik <code>industry_signatures.json</code> mapujący URL → branża (cosmetic/electronics/fashion/safety/automotive). Wykorzystywany przez P3.2 + W18 + content patterns.</p>
-</div>
-
-<div class="verdict-card warn">
-  <h4 style="color:#1e3a8a">G5 — Cortex v2 reasoner orchestrator (C32) + 6 nowych komponentów</h4>
-  <p>C32 cortex-reasoner / C33 Signal Lake / C34 Visual Density / C35 CDT Builder / C36 CEP Ads Engine / C37 /eel-diagnose. Sprint 4 priorytet (Plichta deadline).</p>
-</div>
-
-<h3 id="sequence">📊 Rekomendowana sekwencja (do dyskusji)</h3>
-
-<table>
-  <tr><th>Priorytet</th><th>Co</th><th>Czas łącznie</th></tr>
-  <tr><td>🔴 1 — krytyczny blocker skali</td><td>P2.1 dot_generator + P2.2 visual_patterns + P1.1 auto-promote</td><td>~3 dni</td></tr>
-  <tr><td>🔴 2 — unlock powtarzalności</td><td>P3.1 content_patterns + P3.2 category_templates + P2.6 audit_visual full</td><td>~5 dni</td></tr>
-  <tr><td>🟠 3 — nice to have po pierwszych klientach</td><td>P2.3-P2.5 (fold/density/pseudo-CTA) + P3.5 C02 wrap + P3.3 tier_specs</td><td>~4 dni</td></tr>
-  <tr><td>🟠 4 — Sprint 4 Cortex v2 (Plichta deadline)</td><td>P2.7 C23 + P2.8 C34 + P3.7 C35 + G5 C32 orchestrator</td><td>~10 dni</td></tr>
-  <tr><td>🟡 5 — architektura długoterminowa</td><td>P1.2 JSON sharding + P1.3 nightly diff + G2 Postgres path</td><td>~1 tydzień</td></tr>
-</table>
-
-<p style="font-size:13px;color:#7c2d12;margin-top:8px"><strong>Razem: ~25 dni roboczych</strong> dla pełnego ulepszenia 3 warstw — czyli 5 tygodni jednego dev × 1 osoba. Plichta start 09/2026 = 4 miesiące zapasu jeśli wszystko ruszy w czerwcu.</p>
-
+<!-- =================== DELIVERABLES =================== -->
 <h2 id="links">📅 Wszystkie dzisiejsze deliverables (linki)</h2>
 
 <div class="link-list">
   <a href="https://tomekwlqq.github.io/eel-reports/GLOV-raport-test-2026-05-21.html" target="_blank" style="background:#fffbeb;padding:8px 10px;margin:-6px -10px 0;border-left:3px solid #f59e0b">📌 <strong>GLOV raport 2026-05-21 — REFERENCJA</strong> (benchmark egzekucji, current best 6.5/10)</a>
+  <a href="https://tomekwlqq.github.io/eel-reports/PRODUKTY_EGZEKUCYJNE.html" target="_blank"><strong>🎯 PRODUKTY_EGZEKUCYJNE (130 z 562, v0.5) — źródło MVP wyboru</strong></a>
   <a href="https://tomekwlqq.github.io/eel-reports/KNOWLEDGE_BASE.html" target="_blank">📚 KNOWLEDGE_BASE — Biblia (277 kart)</a>
-  <a href="https://tomekwlqq.github.io/eel-reports/PRODUKTY_EGZEKUCYJNE.html" target="_blank">🎯 PRODUKTY_EGZEKUCYJNE (130 z 562, v0.5)</a>
   <a href="https://tomekwlqq.github.io/eel-reports/SELF_LEARNING_3_WARSTW.html" target="_blank">🧠 SELF_LEARNING 3 warstw — analiza</a>
-  <a href="https://tomekwlqq.github.io/eel-reports/VERDYKTY.html" target="_blank">📋 VERDYKTY (ten plik)</a>
+  <a href="https://tomekwlqq.github.io/eel-reports/VERDYKTY.html" target="_blank">📋 VERDYKTY v2 (ten plik)</a>
   <a href="https://tomekwlqq.github.io/eel-reports/EEL_HUB.html" target="_blank">🏢 EEL Central Hub</a>
   <a href="https://tomekwlqq.github.io/eel-reports/GEO-consumer-decision-trees.html" target="_blank">🌳 GEO Decision Trees (47 kat.)</a>
 </div>
@@ -1109,16 +843,17 @@ a:hover { text-decoration: underline; }
 <div class="next-step">
   <h2>🚀 Next step po powrocie z miasta</h2>
   <ol>
-    <li><strong>Decyzja na warstwie 2:</strong> czy budujemy <code>dot_generator.py</code> jako Sprint 4 #1 priority? (krytyczny blocker skalowania)</li>
-    <li><strong>UBER UPGRADE U-1+U-4+U-7+U-8</strong> — Truth Checker wrapper + memory check + settings.json + CLAUDE.md slim (1.5h, atomowo)</li>
-    <li><strong>Auto-promote ≥0.8 confidence</strong> w element_discovery_queue.json — quick win warstwy 1 (15 min)</li>
-    <li><strong>Plichta Counter-Brief</strong> przygotować nim klient prześle brief — Paid Traffic preset = kotwica</li>
+    <li><strong>Decyzja A/B/C produktów MVP</strong> — domyślnie opcja C (p2-8 + t2-3-8 + c1-2-4-8). Lock OK czy mieszamy?</li>
+    <li><strong>Start MVP build:</strong> P3.5 wrap (4-6h, pierwszy) → P2.1 dot_generator (1-2 dni) → P2.6 audit_visual full (2-3 dni). Razem ~4-6 dni roboczych.</li>
+    <li><strong>Cortex Lab mini test</strong> przed real klientem — sanity check Agent Team na dummy briefie.</li>
+    <li><strong>P5.1 Truth Checker fallback</strong> — kiedy? Przed czy po MVP? (Reduces dependency na Cortex Lab experimental flag.)</li>
+    <li><strong>Plichta Counter-Brief</strong> przygotować nim klient prześle brief — Paid Traffic preset = kotwica.</li>
   </ol>
 </div>
 
 <p class="session-stats">
-  Sesja 30.05.2026 · 4 deliverables HTML opublikowane · Task #28 zamknięty<br>
-  Tomek aktywny przez 1 dzień · 6+ iteracji syntez · Anthropic deep-dive zakończony
+  Sesja 30.05.2026 v2 · 6 deliverables HTML opublikowane · VERDYKTY full rewrite + resilience scoring + MVP-first<br>
+  Tomek aktywny przez 1 dzień · 8+ iteracji syntez · Anthropic deep-dive zakończony · referencja GLOV 21.05
 </p>
 
 </div>
