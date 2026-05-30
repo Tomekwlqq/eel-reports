@@ -442,8 +442,23 @@ a:hover { text-decoration: underline; }
           <span class="pill">16 PNG full-page</span>
         </div>
         <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 6px"><em>Viewporty:</em> desktop 1440×900 + mobile 390×844</p>
-        <div class="step-comment good">✅ <strong>GOOD:</strong> UNIVERSAL skrypt, mobile-aware, full-page capture. Standardowy format input dla kolejnych kroków.</div>
+        <div class="step-comment good">✅ <strong>GOOD:</strong> UNIVERSAL skrypt, mobile-aware, full-page capture + cookie/overlay dismiss (40+ patterns CSS + 30+ text regex PL/EN). Standardowy format input.</div>
         <div class="step-comment warn">⚠️ <strong>BAD:</strong> Playwright = wtyczka (przykład Tomka resilience MEDIUM). Storage rośnie szybko. Brak compression / WebP fallback.</div>
+
+        <div style="background:#eef2ff;border:1px solid #c7d2fe;border-radius:8px;padding:10px 12px;margin-top:8px">
+          <h6 style="font-size:12px;color:#3730a3;margin-bottom:6px;font-weight:700">🔍 Warianty alternatyw (research 30.05, NIE wdrażamy teraz)</h6>
+          <table style="font-size:11.5px;margin:4px 0">
+            <tr><th style="font-size:11px">Opcja</th><th style="font-size:11px">Resilience</th><th style="font-size:11px">Pros</th><th style="font-size:11px">Cons</th><th style="font-size:11px">Cost</th></tr>
+            <tr><td><strong>A. Playwright</strong> (current)</td><td><span class="resilience-badge r-medium">🟡 MED</span></td><td>multi-browser, mobile OOTB, ~5 lat stable, Microsoft maintained</td><td>1 wtyczka, ~200MB browsers download</td><td>0 (current)</td></tr>
+            <tr><td><strong>B. Selenium WebDriver</strong> (fallback)</td><td><span class="resilience-badge r-medium">🟡 MED</span></td><td>W3C standard, oldest ecosystem, multi-language, massive community</td><td>wolniejszy, więcej boilerplate, mobile emulation extra config</td><td>~1 dzień port + testing</td></tr>
+            <tr><td><strong>C. Puppeteer / pyppeteer</strong></td><td><span class="resilience-badge r-medium">🟡 MED</span></td><td>Google maintained, fastest Chrome-only, lightweight</td><td>Chrome only (no FF/Safari), <strong>pyppeteer Python port ABANDONED</strong></td><td>nie polecane Python-only</td></tr>
+            <tr><td><strong>D. CDP raw</strong> (Chrome DevTools Protocol)</td><td><span class="resilience-badge r-high">🟢 HIGH</span></td><td>direct WebSocket → Chromium, no wrapper, max control, zero dep</td><td>complex impl, manual session mgmt, ~2 tyg dev</td><td>~2 tygodnie · long-term</td></tr>
+            <tr><td><strong>E. Headless Chromium binary</strong></td><td><span class="resilience-badge r-high">🟢 HIGH</span></td><td>raw binary in repo, <code>--screenshot=</code> flag, simplest</td><td>brak JS execution control, brak networkidle wait, brak interaktywności</td><td>~3 dni dla feature parity (niemożliwe — straci capabilities)</td></tr>
+            <tr><td><strong>F. Browserless / SaaS API</strong></td><td><span class="resilience-badge r-low">🔴 LOW</span></td><td>zero infra, auto-scale</td><td>vendor lock, koszt per screenshot, URL klienta wysyłany na zewnątrz</td><td>$$$/miesiąc · NIE POLECANE (privacy)</td></tr>
+            <tr><td><strong>G. Docker headless</strong></td><td><span class="resilience-badge r-medium">🟡 MED</span></td><td>isolated, reproducible, multi-browser</td><td>Docker dep, slower startup, więcej complexity</td><td>~2 dni setup + ongoing maintenance</td></tr>
+          </table>
+          <p style="font-size:11.5px;color:#3730a3;margin-top:8px"><strong>Rekomendacja Opus:</strong> wariant <strong>A + B dual-backend abstrakcja</strong> — <code>scripts/screenshot_engine.py</code> z interface <code>capture(url, viewport)</code>, Playwright primary + Selenium fallback. Resilience: 🟡 MED (lecz <em>fallback workable</em>, nie pojedynczy point of failure). <strong>Cost: ~1-2 dni</strong>. Long-term path do 🟢 HIGH = wariant D (CDP raw, 2 tyg). <strong>Decyzja kiedy wdrożyć:</strong> po pierwszych 3-5 klientach MVP, gdy Playwright update break'uje pipeline.</p>
+        </div>
       </div>
     </li>
 
@@ -463,8 +478,8 @@ a:hover { text-decoration: underline; }
           <span class="pill">x/y/w/h per element + visibility</span>
         </div>
         <div class="step-comment good">✅ <strong>GOOD:</strong> dokładne koordynaty per element (button, a, [onclick], [role=button]). DOM = CO klikalne, BBox = WHERE na obrazku.</div>
-        <div class="step-comment bad">❌ <strong>BAD:</strong> pseudo-CTA (divy bez handler, cursor:pointer bez listener) nie wyłapane. Dead-click frustration source.</div>
-        <div class="step-proposal"><span class="proposal-id">P2.5</span> pseudo_cta_patterns.json — wzorce divów wyglądających klikalnie ale bez handler. <span class="proposal-meta">~1 dzień · expansion (po MVP)</span></div>
+        <div class="step-comment good" style="background:#ecfdf5">✅ <strong>BUILT (30.05 wieczór):</strong> <code>scripts/audit_pseudo_cta.py</code> (453 linijki) + <code>/eel-pseudo-cta</code> skill widoczny w skill list. 4 heuristics, Playwright JS eval, output JSON per view + summary. Cookie/overlay dismiss port z take_screenshots.py. Resilience 🟢 HIGH.</div>
+        <div class="step-proposal" style="border-color:var(--good);background:linear-gradient(135deg,#f0fdf4 0%,#fff 90%)"><span class="proposal-id" style="background:var(--good)">P2.5</span> ✅ <strong>audit_pseudo_cta.py + /eel-pseudo-cta skill</strong> — 4 reguły heuristics (R1 cursor:pointer bez handler / R2 button-like styling div bez listener / R3 saturated bg-color CTA-like / R4 hover transition bez click). Output: <code>{domain}_pseudo_cta/{view}_pseudo_cta.json</code> z BBox + severity + reason per element. <span class="proposal-meta">Built 30.05 · 453 linijki · usage: <code>python3 scripts/audit_pseudo_cta.py --url https://glov.co</code></span></div>
       </div>
     </li>
 
@@ -711,7 +726,7 @@ a:hover { text-decoration: underline; }
   <tr><td><code>P2.2</code></td><td>visual_patterns.json (formalna baza wzorców)</td><td>2.4</td><td>1 dzień</td><td>expansion</td></tr>
   <tr><td><code>P2.3</code></td><td>fold_archetypes.json (typowe foldy %)</td><td>2.4</td><td>1 dzień</td><td>expansion</td></tr>
   <tr><td><code>P2.4</code></td><td>density_baselines.json</td><td>2.4</td><td>1 dzień</td><td>expansion</td></tr>
-  <tr><td><code>P2.5</code></td><td>pseudo_cta_patterns.json (dead clicks)</td><td>2.2</td><td>1 dzień</td><td>expansion</td></tr>
+  <tr style="background:#f0fdf4"><td><code>P2.5</code></td><td><strong>audit_pseudo_cta.py + /eel-pseudo-cta skill (in-build 30.05)</strong></td><td>2.2</td><td>1-2h</td><td><strong>MVP ✅</strong></td></tr>
   <tr style="background:#fef2f2"><td><code>P2.6</code></td><td><strong>⭐ audit_visual.py full (gold standard 4 sekcje)</strong></td><td>2.4</td><td>2-3 dni</td><td><strong>MVP ✅</strong></td></tr>
   <tr><td><code>P2.7</code></td><td>C23 Visual Audit Builder sub-skille</td><td>cross</td><td>3-5 dni</td><td>Sprint 4 Plichta</td></tr>
   <tr><td><code>P2.8</code></td><td>C34 Visual Density Maps (Cortex v2 NEW)</td><td>2.4</td><td>2-3 dni</td><td>Sprint 4 Plichta</td></tr>
