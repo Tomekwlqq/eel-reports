@@ -65,10 +65,58 @@ tr:nth-child(even) { background: #fafafa; }
 <p class="subtitle">HTML scan · Visual mapping · Content mapping · referencja GLOV 21.05.2026 · 2026-05-30</p>
 
 <div class="intro">
-  <h2>Cel analizy</h2>
-  <p>Pytanie Tomka: <em>"Każdy produkt egzekucyjny będzie miał swój skrypt/skill/bazę. Chcę self-learning wszędzie — każdy następny job rozbudowuje wiedzę i bazę. Zanalizuj 3 obecnie istniejące rozwiązania."</em></p>
-  <p style="margin-top: 8px;"><strong>3 warstwy do analizy:</strong> Layer 1 (HTML scan) / Layer 2 (Visual mapping) / Layer 3 (Content mapping) — wszystkie 3 mają już skrypty + skille + bazy JSON w EEL. Referencja egzekucji: GLOV audit 21.05.2026.</p>
+  <h2>Cel analizy (uściślony przez Tomka)</h2>
+  <p><em>"To jest cross check czy te usługi działają i mają jakość już. CEL: powtarzalność na dużej skali!"</em></p>
+  <p style="margin-top: 8px;"><strong>Czyli:</strong> czy każda warstwa może być uruchomiona na 50+ klientach bez manualnej interwencji Tomka i bez utraty jakości? Gdzie są punkty manualne (= NIE powtarzalność)?</p>
+  <p style="margin-top: 8px;"><strong>3 warstwy:</strong> Layer 1 HTML / Layer 2 Visual / Layer 3 Content. Referencja: GLOV 21.05.2026.</p>
 </div>
+
+<h2>🚦 Quick verdict — Powtarzalność na skali</h2>
+
+<table>
+<tr>
+  <th>Warstwa</th>
+  <th>Ready for scale</th>
+  <th>Główny blocker manualny</th>
+  <th>Quick win żeby podnieść do 9/10</th>
+</tr>
+<tr>
+  <td><strong>1. HTML</strong></td>
+  <td><span class="score-badge score-7">7/10</span></td>
+  <td>Tomek aprobuje każdy element w discovery queue (<code>pending→approved</code>) ręcznie</td>
+  <td><strong>Auto-promote ≥0.8 confidence</strong> + tygodniowy batch review pozostałych</td>
+</tr>
+<tr>
+  <td><strong>2. Visual</strong></td>
+  <td><span class="score-badge score-5" style="background:#ef4444">4/10</span></td>
+  <td><strong>Doty placowane RĘCZNIE w HTML</strong> (GLOV: 167 dotów × <code>left:X%;top:Y%</code> pisane palcami). Plus brak density / hierarchy / pseudo-CTA / dead zones automation.</td>
+  <td><strong>dot_generator.py</strong> (PIL/cv2 → detekcja klikalnych z HTML map → auto-dots) + 4 nowe JSON-y patterns</td>
+</tr>
+<tr>
+  <td><strong>3. Content</strong></td>
+  <td><span class="score-badge score-5">5/10</span></td>
+  <td>Category map per klient = interactive. GEO PDP rewrite = manual per produkt. Brak template-driven generation per branża.</td>
+  <td><strong>category_templates.json</strong> per branża (cosmetic / electronics / fashion / safety) + content_patterns.json konsolidacja</td>
+</tr>
+</table>
+
+<h3>Główne blockery powtarzalności (priorytet implementacji)</h3>
+<ol>
+  <li>🔴 <strong>Doty Visual ręczne</strong> — po 10 klientach Tomek tonie w HTML editorze. Skrypt <code>dot_generator.py</code> = pre-condition dla skali.</li>
+  <li>🔴 <strong>Density / hierarchy / pseudo-CTA / dead zones</strong> — brak generatorów. Gold standard warstwy 2 wymaga build'u.</li>
+  <li>🟠 <strong>Element discovery queue</strong> — auto-promote ≥0.8 confidence odciąży.</li>
+  <li>🟠 <strong>Category map manual</strong> — interactive `/eel-category-mapping` nie skali. Templates per branża by zredukowały 80% manualności.</li>
+  <li>🟡 <strong>Brak diff history</strong> — nie wiemy czy nowsza wersja JSON jest lepsza. Nightly snapshot + diff log.</li>
+</ol>
+
+<h3>Rekomendacja architektury powtarzalności</h3>
+<p>Każdy z 130 produktów egzekucyjnych potrzebuje 4 plików (skill + skrypt + JSON + queue) ALE 3 dodatkowe muszą być na poziomie warstwy:</p>
+<ul>
+  <li><code>data/{layer}_patterns.json</code> — formalna baza wzorców (visual_patterns / content_patterns)</li>
+  <li><code>data/{layer}_baselines.json</code> — typowy stan rynkowy do porównywania klienta</li>
+  <li><code>scripts/{layer}_generator.py</code> — automatyzacja kroków manualnych (dot_generator, category_template_picker)</li>
+</ul>
+<p>Bez tych 3 plików na warstwę — <strong>nie ma powtarzalności na skali</strong>.</p>
 
 <h2>📊 Skrót — porównawcza tabela</h2>
 
