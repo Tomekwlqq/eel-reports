@@ -998,7 +998,102 @@ const PRODUKTY = [
   what: "Pełen 4D audit bez category dependency. Dla klientów z 1 kategorią lub mono-product.",
   needs: ["Layer 1+2+4+9"], output: "C4_NO_CATEGORY_<klient>.html",
   tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
-  opusWhy: "4D bez kategorii — dla mono-product klientów." }
+  opusWhy: "4D bez kategorii — dla mono-product klientów." },
+
+// =========== UZUPEŁNIENIE — biznesowo sensowne brakujące ===========
+
+// Ostatnia para
+{ id: "p6-11", layers: [6, 11], type: "para", name: "GSC × Transakcja (organic landing → checkout)",
+  what: "Czy organic landing pages prowadzą do checkout? Per organic landing: conversion rate do dodanie do koszyka.",
+  needs: ["Layer 6", "Layer 11"], output: "ORGANIC_CHECKOUT_<klient>.md",
+  tier: "lite", v: 2, u: 1, opusScore: 3, opusRec: false,
+  opusWhy: "Niska wartość — między organic a checkout jest cała ścieżka shopper. Pokrycie formalne dla kompletności 55/55, w praktyce derive z 4+6 lub 4+11." },
+
+// Brakujące sensowne trójki
+{ id: "t3-4-9", layers: [3, 4, 9], type: "trojka", name: "Content × GA4 × GEO",
+  what: "Content per landing page + engagement + GEO score. Bez category — dla mono-product klientów.",
+  needs: ["Layer 3+4+9"], output: "CCG2_TRIPLE_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Content × analytics × GEO — solidne ale brak kategorii limituje impact." },
+
+{ id: "t5-6-9", layers: [5, 6, 9], type: "trojka", name: "Ads × SEO × GEO (full visibility strategy)",
+  what: "Per query: paid impression + organic position + GEO readiness. Strategic resource allocation across paid/organic/AI.",
+  needs: ["Layer 5+6+9"], output: "VISIBILITY_TRIPLE_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Strategic 3-channel coverage — gdzie inwestować budżet. Przydatne dla agency leadership decyzji." },
+
+{ id: "t5-8-11", layers: [5, 8, 11], type: "trojka", name: "⭐ Ads × Category × Checkout (paid funnel category-aware)",
+  what: "Per kategoria: paid traffic → checkout completion. Identyfikacja kategorii gdzie paid 'oszukuje'.",
+  needs: ["Layer 5+8+11"], output: "PAID_CATEGORY_FUNNEL_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Plichta-style — pokazuje category-specific paid waste. Kluczowy insight dla dilerskich/automotive." },
+
+{ id: "t1-2-9", layers: [1, 2, 9], type: "trojka", name: "⭐ HTML × Visual × GEO (tech-side AI optimization)",
+  what: "Schema + visual hierarchy + AI citability. Tech-driven AI Overview optimization.",
+  needs: ["Layer 1+2+9"], output: "TECH_VISUAL_AI_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Dev-side AI strategy bez kategorii. Praktyczne dla mono-product/SaaS." },
+
+{ id: "t1-2-11", layers: [1, 2, 11], type: "trojka", name: "HTML × Visual × Checkout (dev UX checkout)",
+  what: "Pełna dev-side analiza checkout: HTML + visual + step inspection.",
+  needs: ["Layer 1+2+11"], output: "DEV_UX_CHECKOUT_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Bez analytics dependency — dla klientów z niedopiętym GA4 setup." },
+
+{ id: "t2-3-11", layers: [2, 3, 11], type: "trojka", name: "⭐ Visual × Content × Checkout (trust copy + layout)",
+  what: "Per krok checkout: trust copy + visual placement. Last-mile reassurance.",
+  needs: ["Layer 2+3+11"], output: "TRUST_CHECKOUT_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Praktyczne — większość sklepów ma trust copy ale w złych miejscach. Quick win territory." },
+
+{ id: "t3-8-11", layers: [3, 8, 11], type: "trojka", name: "⭐ Content × Category × Checkout (category-aware reassurance)",
+  what: "Czy Tier-1 specs kategorii są widoczne w trust copy checkout? Per kategoria checkout content audit.",
+  needs: ["Layer 3+8+11"], output: "CATEGORY_TRUST_CHECKOUT_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Niewielu robi tego — checkout copy w 99% nie reflektuje kategorii. Differentiator." },
+
+{ id: "t4-9-10", layers: [4, 9, 10], type: "trojka", name: "GA4 × GEO × Tactics (AI-readiness driven tactics)",
+  what: "Per page z GA4 high traffic: GEO score + ranked taktyki podnoszące AI citability.",
+  needs: ["Layer 4+9+10"], output: "DATA_AI_TACTICS_<klient>.html",
+  tier: "std", v: 4, u: 1, opusScore: 6, opusRec: false,
+  opusWhy: "Praktyczne ale wąskie — pages z highest traffic priority dla AI rewrite." },
+
+// Brakujące sensowne czwórki
+{ id: "c2-3-4-9", layers: [2, 3, 4, 9], type: "czworka", name: "⭐ Visual × Content × GA4 × GEO (no-category master)",
+  what: "Pełen 4D content master bez category dependency. Dla mono-product / 1-2 category sklepów.",
+  needs: ["Layer 2+3+4+9"], output: "C4_CONTENT_MASTER_NC_<klient>.html",
+  tier: "premium", v: 4, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "🏆 Pełen content rewrite blueprint bez category. Dla SaaS/mono-product." },
+
+{ id: "c1-2-8-11", layers: [1, 2, 8, 11], type: "czworka", name: "⭐ HTML × Visual × Category × Checkout (dev premium checkout)",
+  what: "Dev-side + visual + category + checkout. Pełen technical premium checkout audit.",
+  needs: ["Layer 1+2+8+11"], output: "C4_DEV_PREMIUM_CHECKOUT_<klient>.html",
+  tier: "premium", v: 4, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "🏆 Premium dev offering — full technical breakdown checkout z category context." },
+
+{ id: "c2-3-8-11", layers: [2, 3, 8, 11], type: "czworka", name: "⭐ Visual × Content × Category × Checkout (trust master)",
+  what: "Pełen trust + category-aware checkout audit. Visual + copy + category specs + step inspection.",
+  needs: ["Layer 2+3+8+11"], output: "C4_TRUST_MASTER_<klient>.html",
+  tier: "premium", v: 4, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "🏆 Najlepszy reassurance audit — pełen 4D dla checkout-focused klientów." },
+
+{ id: "c2-7-8-9", layers: [2, 7, 8, 9], type: "czworka", name: "⭐ Visual × Clarity × Category × GEO (UX + AI premium)",
+  what: "Behaviour + visual + category + AI readiness. Pełen UX-first AI premium audit.",
+  needs: ["Layer 2+7+8+9"], output: "C4_UX_AI_PREMIUM_<klient>.html",
+  tier: "premium", v: 4, u: 2, opusScore: 8, opusRec: true, flagship: true,
+  opusWhy: "🏆 UX-first + future-proof + category. Premium offering dla forward-thinking klientów." },
+
+{ id: "c5-8-9-10", layers: [5, 8, 9, 10], type: "czworka", name: "Ads × Category × GEO × Tactics (paid future-strategy)",
+  what: "Paid funnel per kategoria + AI readiness + sugerowane taktyki. Forward-thinking ads strategy.",
+  needs: ["Layer 5+8+9+10"], output: "C4_PAID_FUTURE_<klient>.html",
+  tier: "premium", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Paid + future + category + executable. Strategic ads premium dla Plichta-style klientów." },
+
+{ id: "c1-2-3-9", layers: [1, 2, 3, 9], type: "czworka", name: "HTML × Visual × Content × GEO (no-category AI)",
+  what: "Pełen dev + visual + content + AI bez category. Dla mono-product/SaaS.",
+  needs: ["Layer 1+2+3+9"], output: "C4_NC_AI_<klient>.html",
+  tier: "pro", v: 4, u: 2, opusScore: 7, opusRec: true,
+  opusWhy: "Mono-product AI strategy. Solid pro tier dla SaaS." }
 
 ];
 
