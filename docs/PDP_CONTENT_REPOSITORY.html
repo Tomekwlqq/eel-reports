@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDP Content Repository — EEL</title>
+<style>
+:root {
+  --bg: #fafafa; --bg-card: #fff;
+  --text: #1f2937; --muted: #6b7280;
+  --border: #e5e7eb; --accent: #1e3a8a; --accent-bg: #dbeafe;
+  --good: #10b981; --warn: #f59e0b; --bad: #ef4444; --opus: #7c3aed;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-text-size-adjust: 100%; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: 15px; line-height: 1.55; color: var(--text); background: var(--bg);
+  padding: 14px 14px 60px;
+}
+.container { max-width: 1180px; margin: 0 auto; }
+h1 { font-size: 24px; color: var(--accent); margin-bottom: 4px; line-height: 1.25; }
+.subtitle { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+
+h2 {
+  font-size: 18px; color: var(--accent); margin: 28px 0 10px;
+  padding-bottom: 6px; border-bottom: 2px solid var(--accent-bg);
+}
+h3 { font-size: 14px; color: var(--text); margin: 16px 0 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.section-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px; margin-bottom: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 8px 0; background: var(--bg-card); }
+th, td { padding: 7px 9px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+th { background: var(--accent-bg); font-weight: 700; color: var(--accent); font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; }
+tr:nth-child(even) { background: #fafafa; }
+
+.form-cell { font-size: 11.5px; color: #4b5563; font-style: italic; background: #f9fafb; }
+.form-cell strong { color: var(--text); font-style: normal; }
+.form-cell .sub-opt { display: inline-block; padding: 1px 5px; background: #fff; border: 1px solid #e5e7eb; border-radius: 3px; font-style: normal; font-size: 10.5px; margin: 1px 2px 1px 0; color: #374151; }
+
+.code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px; background: #f3f4f6; padding: 1px 5px; border-radius: 3px; }
+
+.checkbox-group { display: flex; gap: 6px; font-size: 11px; }
+.checkbox-group label { background: var(--bg-card); border: 1px solid var(--border); padding: 2px 8px; border-radius: 12px; cursor: pointer; }
+.checkbox-group input[type="checkbox"] { vertical-align: middle; margin-right: 3px; }
+
+.legend { background: #f9fafb; border-left: 4px solid var(--accent); padding: 8px 12px; font-size: 13px; color: var(--muted); margin: 10px 0; }
+.legend strong { color: var(--text); }
+
+.priority-tag { font-size: 10px; padding: 2px 6px; border-radius: 8px; font-weight: 700; letter-spacing: 0.3px; }
+.priority-must { background: var(--bad); color: white; }
+.priority-high { background: var(--warn); color: white; }
+.priority-mid { background: #3b82f6; color: white; }
+.priority-low { background: #94a3b8; color: white; }
+.priority-premium { background: var(--opus); color: white; }
+
+/* Detection method chips */
+.method-auto { background: #d1fae5; color: #065f46; padding: 1px 5px; border-radius: 3px; font-size: 10px; }
+.method-semi { background: #fed7aa; color: #7c2d12; padding: 1px 5px; border-radius: 3px; font-size: 10px; }
+.method-manual { background: #e0e7ff; color: #3730a3; padding: 1px 5px; border-radius: 3px; font-size: 10px; }
+.method-ai { background: #fce7f3; color: #831843; padding: 1px 5px; border-radius: 3px; font-size: 10px; }
+.method-editorial { background: #fef3c7; color: #78350f; padding: 1px 5px; border-radius: 3px; font-size: 10px; font-weight: 700; }
+
+/* Owner badges */
+.owner-brand { background: #fef3c7; color: #78350f; padding: 1px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.2px; }
+.owner-dev { background: #ecfeff; color: #155e75; padding: 1px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.2px; }
+.owner-hybrid { background: #fce7f3; color: #831843; padding: 1px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.2px; }
+.owner-agency { background: #f5f3ff; color: #5b21b6; padding: 1px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.2px; }
+.owner-regulatory { background: #fee2e2; color: #7f1d1d; padding: 1px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.2px; }
+
+/* Type badges */
+.type-graphic { background: #eff6ff; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; }
+.type-textual { background: #f0fdf4; color: #14532d; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; }
+
+.note { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 6px; }
+
+.toc { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 18px; position: sticky; top: 8px; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.toc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 6px; }
+.toc a { padding: 4px 6px; font-size: 12.5px; color: var(--accent); text-decoration: none; border-radius: 4px; }
+.toc a:hover { background: var(--accent-bg); text-decoration: underline; }
+.toc a::before { content: "↓ "; }
+
+.fold-header { background: linear-gradient(90deg, var(--accent-bg) 0%, transparent 100%); padding: 10px 14px; border-left: 5px solid var(--accent); margin: 18px 0 8px; border-radius: 4px; }
+.fold-header h2 { border: none; margin: 0 0 4px 0; padding: 0; }
+.fold-header .journey { font-size: 12px; color: var(--muted); font-style: italic; }
+
+.summary-strip { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0; }
+.summary-card { flex: 1; min-width: 160px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+.summary-card .num { font-size: 22px; font-weight: 700; color: var(--accent); line-height: 1.1; }
+.summary-card .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+
+@media print {
+  .toc { position: static; }
+  body { background: white; padding: 8px; }
+  .section-card { box-shadow: none; page-break-inside: avoid; }
+  .checkbox-group { display: none; }
+}
+
+@media (max-width: 700px) {
+  table { font-size: 11.5px; }
+  th, td { padding: 5px 6px; }
+  .toc-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>📦 PDP Content Repository</h1>
+<p class="subtitle">Element database / wsad · organizacja per fold/scroll position · kolumny Forma + Owner · EEL v1.0 · 2026-05-31</p>
+
+<div class="legend" style="background: #f5f3ff; border-left: 4px solid var(--opus);">
+  <strong>📐 Filozofia organizacji (Tomek 31.05 rano):</strong><br>
+  <strong>Per fold/scroll</strong> (nie per typ) — bo shopper widzi PDP foldem po foldzie, mieszanie graphic + textual razem w jednej tabeli per fold.<br>
+  <strong>Forma</strong> = sub-options inline obok nazwy (tylko tam gdzie znaczące): np Secondary images → count + video y/n, Bullets → count + długość + znaki, Comparison table → interaktywna/stała.<br>
+  <strong>Owner</strong> = osobna kolumna (<span class="owner-brand">brand</span> / <span class="owner-dev">dev</span> / <span class="owner-hybrid">hybrid</span> / <span class="owner-agency">agency editor</span> / <span class="owner-regulatory">regulatory</span>) — łatwe filtrowanie podtabel per zespół.<br>
+  <strong>Post-Clarity:</strong> wymiar fold/scroll wypełni się real heatmap data scroll depth → mismatch (recommended vs real) = trigger taktyki.
+</div>
+
+<div class="summary-strip">
+  <div class="summary-card"><div class="num">45</div><div class="lbl">elementów total</div></div>
+  <div class="summary-card"><div class="num">4</div><div class="lbl">foldy / scroll position</div></div>
+  <div class="summary-card"><div class="num">5</div><div class="lbl">typów ownera</div></div>
+  <div class="summary-card"><div class="num">22 / 23</div><div class="lbl">graphic / textual</div></div>
+  <div class="summary-card"><div class="num">8</div><div class="lbl">kolumn per row</div></div>
+</div>
+
+<div class="toc">
+  <strong style="font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px;">Spis treści</strong>
+  <div class="toc-grid" style="margin-top: 6px;">
+    <a href="#above_fold">Above fold (D) / Scroll 1 (M) — 10 items</a>
+    <a href="#below_fold_1">Below fold 1 / Scroll 2 (M) — 10 items</a>
+    <a href="#below_fold_2">Below fold 2 / Scroll 3 (M) — 11 items</a>
+    <a href="#scroll_4_plus">Scroll 4+ (deep PDP) — 17 items</a>
+    <a href="#legend">Legenda + ownerzy</a>
+    <a href="#excluded">Excluded (engine features)</a>
+  </div>
+</div>
+
+<!-- ════════════════════ LEGENDA ════════════════════ -->
+<h2 id="legend">Legenda — Owner & Detection</h2>
+<div class="section-card">
+  <table>
+    <tr><th width="18%">Owner</th><th>Definicja</th><th width="30%">Charakterystyka rekomendacji</th></tr>
+    <tr><td><span class="owner-brand">brand</span></td><td>Content team / brand owner</td><td>Brief dla content teamu klienta — packshoty, copy, video, treść recenzji</td></tr>
+    <tr><td><span class="owner-dev">dev</span></td><td>Development / platform team</td><td>Funkcjonalności silnika — przeniesione do _excluded_engine_features (osobna tabelka)</td></tr>
+    <tr><td><span class="owner-hybrid">hybrid</span></td><td>Mieszane brand+dev</td><td>Np reviews block — TREŚĆ = brand, MODUŁ filter/sort = dev (dwa briefy równolegle)</td></tr>
+    <tr><td><span class="owner-agency">agency editor</span></td><td>Curated editorial — content team agency-side</td><td>Deep PDP value — premium signal, wyższy effort, większy differentiator</td></tr>
+    <tr><td><span class="owner-regulatory">regulatory</span></td><td>Compliance / legal</td><td>Warnings, disclaimers, age-restricted info — wymaga legal review</td></tr>
+  </table>
+  <p class="note" style="margin-top: 10px;">
+    <strong>Detection methods:</strong>
+    <span class="method-auto">auto</span> = auto-detected w skryptach ·
+    <span class="method-semi">semi</span> = częściowo auto, manual check ·
+    <span class="method-manual">manual</span> = ręczna ocena audytora ·
+    <span class="method-ai">AI</span> = AI image classification ·
+    <span class="method-editorial">editorial ⭐</span> = NIE z silnika sklepu (content team)
+  </p>
+</div>
+
+<!-- ════════════════════ ABOVE FOLD ════════════════════ -->
+<div class="fold-header" id="above_fold">
+  <h2>📍 Above fold (Desktop) / 1st scroll (Mobile)</h2>
+  <p class="journey"><strong>Shopper journey:</strong> pierwsza interakcja — moment decyzji "czytam dalej czy bounce". Najwyższa stawka per element.</p>
+</div>
+
+<div class="section-card">
+  <table>
+    <tr>
+      <th width="3%">#</th>
+      <th width="17%">Element</th>
+      <th width="24%">Forma (sub-options)</th>
+      <th width="7%">Typ</th>
+      <th width="10%">Owner</th>
+      <th width="8%">Detection</th>
+      <th>Opis</th>
+      <th width="8%">Klep</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><strong>Packshot główny</strong></td>
+      <td class="form-cell"><span class="sub-opt">format: PNG/JPG/WebP</span> <span class="sub-opt">BG: white/lifestyle/transp</span> <span class="sub-opt">zoomable y/n</span> <span class="sub-opt">aspect 1:1 / 4:3 / 3:4</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Czysty packshot hero (główne zoomable zdjęcie produktu)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>Enhanced packshot (info-rich)</strong></td>
+      <td class="form-cell"><span class="sub-opt">info layer: pojemność / linia produktu / use case overlay / before-after embedded / liczba szt</span> <span class="sub-opt">AI classifiable y</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-ai">AI</span></td>
+      <td>Nie-czysty packshot z layerem informacji (NIE pieczątki badge z silnika Hit/Promo)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Secondary images on hover</td>
+      <td class="form-cell"><span class="sub-opt">trigger: hover desktop / tap mobile</span> <span class="sub-opt">count: 1-3</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>2. zdjęcie na hover (inny kąt / użycie)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Video packshot</td>
+      <td class="form-cell"><span class="sub-opt">behavior: auto-play / loop / click-to-play</span> <span class="sub-opt">duration: 5-15s</span> <span class="sub-opt">audio y/n (rzadko)</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Wideo produktu w głównej galerii</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>3D / 360° packshot</td>
+      <td class="form-cell"><span class="sub-opt">tech: WebGL / sprite sequence / model 3D</span> <span class="sub-opt">interactive drag y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Interactive 3D model lub 360° rotation viewer</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><strong>Secondary images (galeria)</strong></td>
+      <td class="form-cell"><span class="sub-opt">count: 4-12</span> <span class="sub-opt">includes video y/n</span> <span class="sub-opt">nav: dots / thumbnails / scroll / arrows</span> <span class="sub-opt">aspect: square 1:1 / portrait / mixed</span> <span class="sub-opt">mobile≠desktop y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Galeria thumbnails — sub-opcje krytyczne</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><strong>Tytuł</strong> (z modelem dekompozycji)</td>
+      <td class="form-cell"><span class="sub-opt">9 chipów: kategoria + materiał/tech + przeznaczenie + benefit + marka + wariant + ilość + audience + sezon</span> <span class="sub-opt">min 5/7 podstawowych</span> <span class="sub-opt">chars: 40-90</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Pełny tytuł z modelem 9 chipów (sek 3 KLEPANIA)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Lead / krótki opis (1-2 zdania)</td>
+      <td class="form-cell"><span class="sub-opt">length chars: 80-200</span> <span class="sub-opt">tone: claim / USP / benefit-first</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Pod tytułem — claim, USP, główny benefit</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><strong>Bullets / key features</strong></td>
+      <td class="form-cell"><span class="sub-opt">count: 3-8 rec</span> <span class="sub-opt">avg length: 30-90 chars</span> <span class="sub-opt">special chars: • → ✓ ★ / plain</span> <span class="sub-opt">formula: feature / feature+benefit / full triad</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Kluczowe cechy — sub-opcje krytyczne (count + długość + formula)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>Cena (główna + przekreślona + zniżka)</td>
+      <td class="form-cell"><span class="sub-opt">shown: main / strikethrough / discount % / savings amount</span> <span class="sub-opt">currency: before / after</span> <span class="sub-opt">installments inline y/n</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Cena widoczna od razu — decyzja brandu o komunikacji promo</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+  </table>
+  <p class="note">10 elementów · 5 graphic + 5 textual · wszystkie owner = brand</p>
+</div>
+
+<!-- ════════════════════ BELOW FOLD 1 ════════════════════ -->
+<div class="fold-header" id="below_fold_1">
+  <h2>📍 Below fold 1 (Desktop) / 2nd scroll (Mobile)</h2>
+  <p class="journey"><strong>Shopper journey:</strong> shopper zaintrygowany — chce więcej info. Tu wypadają specs, długie opisy, lifestyle context.</p>
+</div>
+
+<div class="section-card">
+  <table>
+    <tr>
+      <th width="3%">#</th>
+      <th width="17%">Element</th>
+      <th width="24%">Forma (sub-options)</th>
+      <th width="7%">Typ</th>
+      <th width="10%">Owner</th>
+      <th width="8%">Detection</th>
+      <th>Opis</th>
+      <th width="8%">Klep</th>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td><strong>Long description</strong> (opis produktu)</td>
+      <td class="form-cell"><span class="sub-opt">paragraphs: 3+ rec (Cartylabs 2026 min)</span> <span class="sub-opt">total chars: 600-2000</span> <span class="sub-opt">headings h2/h3 y/n</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Pełen opis produktu z akapitami</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td><strong>Specifications table</strong> (Tier 1/2/3)</td>
+      <td class="form-cell"><span class="sub-opt">tier: T1 must / T2 should / T3 nice</span> <span class="sub-opt">rows: 8-25</span> <span class="sub-opt">units consistent y/n</span> <span class="sub-opt">style: key-value / 2-col / accordion</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Specyfikacja techniczna w tabeli</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td>Ingredients / composition (skład)</td>
+      <td class="form-cell"><span class="sub-opt">items: 5-50 (INCI typ 20-40)</span> <span class="sub-opt">format: INCI list / plain / accordion</span> <span class="sub-opt">key actives highlighted y/n</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Skład — osobne pole NIE bullets (cosmetic/food/supplements)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td>Lifestyle pictures (in-use, in-context)</td>
+      <td class="form-cell"><span class="sub-opt">count: 2-6</span> <span class="sub-opt">model present y/n</span> <span class="sub-opt">environment: studio / home / outdoor / event</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-ai">AI</span></td>
+      <td>Model/scena/environment — produkt w kontekście</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td>Product features pictures (cechy z ikonami)</td>
+      <td class="form-cell"><span class="sub-opt">count: 4-8 features</span> <span class="sub-opt">label overlay y/n</span> <span class="sub-opt">icon: outline / filled / illustrated</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-ai">AI</span></td>
+      <td>Zdjęcia z naniesionymi labelami cech</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>Infografika cech</td>
+      <td class="form-cell"><span class="sub-opt">format: single image / multi-panel / animated</span> <span class="sub-opt">data viz y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-ai">AI</span></td>
+      <td>Wizualne podsumowanie cech (1 grafika)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>17</td>
+      <td>Size chart</td>
+      <td class="form-cell"><span class="sub-opt">format: table / interactive size finder</span> <span class="sub-opt">units: EU / US / UK / cm/inch</span> <span class="sub-opt">fit guide y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Tabela rozmiarów — krytyczne dla apparel/obuwie</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>18</td>
+      <td><strong>Comparison table</strong> (warianty / vs konkurencja)</td>
+      <td class="form-cell"><span class="sub-opt"><strong>interaktywna / stała</strong></span> <span class="sub-opt">porównuje: warianty produktu / konkurencję / wcześniejszą wersję</span> <span class="sub-opt">columns: 2-5</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Tabela porównawcza — <strong>forma znacząca</strong> (interaktywna vs stała)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>19</td>
+      <td>How it works (opis działania)</td>
+      <td class="form-cell"><span class="sub-opt">format: paragraph / step-by-step / diagram+text</span> <span class="sub-opt">mechanism y/n</span> <span class="sub-opt">active ingredients called out y/n</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-semi">semi</span></td>
+      <td>Mechanism / active ingredients — jak działa</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>How to use (jak używać)</td>
+      <td class="form-cell"><span class="sub-opt">format: numbered steps / paragraph / video supplement</span> <span class="sub-opt">steps: 2-6</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-semi">semi</span></td>
+      <td>Instrukcja krok po kroku</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+  </table>
+  <p class="note">10 elementów · 4 graphic + 6 textual · wszystkie owner = brand</p>
+</div>
+
+<!-- ════════════════════ BELOW FOLD 2 ════════════════════ -->
+<div class="fold-header" id="below_fold_2">
+  <h2>📍 Below fold 2 (Desktop) / 3rd scroll (Mobile)</h2>
+  <p class="journey"><strong>Shopper journey:</strong> shopper zaawansowany w decyzji — social proof, walidacja, ostatnie obiekcje (rozmiar, dostawa, gwarancja).</p>
+</div>
+
+<div class="section-card">
+  <table>
+    <tr>
+      <th width="3%">#</th>
+      <th width="17%">Element</th>
+      <th width="24%">Forma (sub-options)</th>
+      <th width="7%">Typ</th>
+      <th width="10%">Owner</th>
+      <th width="8%">Detection</th>
+      <th>Opis</th>
+      <th width="8%">Klep</th>
+    </tr>
+    <tr>
+      <td>21</td>
+      <td><strong>FAQ section</strong></td>
+      <td class="form-cell"><span class="sub-opt">questions: 5-15</span> <span class="sub-opt">FAQPage JSON-LD y/n</span> <span class="sub-opt">format: accordion / flat</span> <span class="sub-opt">from real CS y/n</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Pytania i odpowiedzi — TREŚĆ = content (FAQPage schema dla GEO)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>22</td>
+      <td><strong>Reviews block</strong> (hybrid)</td>
+      <td class="form-cell"><span class="sub-opt">count shown initial: 3-10</span> <span class="sub-opt">with photos y/n</span> <span class="sub-opt"><em>filter/sort y/n (engine)</em></span> <span class="sub-opt">verified purchase label y/n</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-hybrid">hybrid</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>TREŚĆ recenzji + foto klientów = brand. MODUŁ wyświetlania (filter/sort/paginate) = dev</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>23</td>
+      <td>Product in use pictures (how-to-use)</td>
+      <td class="form-cell"><span class="sub-opt">count: 3-6</span> <span class="sub-opt">sequence numbered y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-ai">AI</span></td>
+      <td>Sekwencja produktu w użyciu krok po kroku</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>24</td>
+      <td>Dimensions / scale image</td>
+      <td class="form-cell"><span class="sub-opt">scale ref: human / hand / object / ruler</span> <span class="sub-opt">dim labels mm/cm/inch y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-ai">AI</span></td>
+      <td>Wymiary obok produktu — visual content</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>25</td>
+      <td>Before/after image</td>
+      <td class="form-cell"><span class="sub-opt">format: split / slider / sequence</span> <span class="sub-opt">timeframe labeled y/n</span> <span class="sub-opt">disclaimer y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-ai">AI</span></td>
+      <td>Cosmetic/treatment dowód — wymaga disclaimera</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>26</td>
+      <td>Additional video demo</td>
+      <td class="form-cell"><span class="sub-opt">duration: 15-60s</span> <span class="sub-opt">voiceover y/n</span> <span class="sub-opt">subtitles y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Video produktu w użyciu (oddzielne od głównego packshot video)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>27</td>
+      <td>Trust badges (certyfikaty producenta)</td>
+      <td class="form-cell"><span class="sub-opt">badges: Dermatologically tested / ISO / Eco-cert / Vegan / CF</span> <span class="sub-opt">count: 3-8</span> <span class="sub-opt">clickable for info y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Certyfikaty od brandu (NIE logos płatności — to engine checkout)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>28</td>
+      <td>Money-back guarantee badge</td>
+      <td class="form-cell"><span class="sub-opt">days: 30 / 60 / 90 / 365</span> <span class="sub-opt">conditions link y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Gwarancja zwrotu pieniędzy — oferta brandu</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>29</td>
+      <td>Size & fit text (apparel)</td>
+      <td class="form-cell"><span class="sub-opt">format: fit advice / model measurements / CX feedback summary</span> <span class="sub-opt">length chars: 100-300</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Runs small/true to size + model measurements</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>30</td>
+      <td>Warnings / disclaimers</td>
+      <td class="form-cell"><span class="sub-opt">type: chemiczne / alergiczne / age-restricted / medical</span> <span class="sub-opt">regulatory required y/n</span> <span class="sub-opt">position: inline / footer / popup</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-regulatory">regulatory</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Ostrzeżenia — compliance/legal</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>31</td>
+      <td>Shipping & returns info inline</td>
+      <td class="form-cell"><span class="sub-opt">delivery time shown y/n</span> <span class="sub-opt">free shipping threshold y/n</span> <span class="sub-opt">returns policy summary y/n</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Polityka wysyłki i zwrotów inline (copy — nie engine logistyki)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+  </table>
+  <p class="note">11 elementów · 6 graphic + 5 textual · 9 brand + 1 hybrid + 1 regulatory</p>
+</div>
+
+<!-- ════════════════════ SCROLL 4+ ════════════════════ -->
+<div class="fold-header" id="scroll_4_plus">
+  <h2>📍 Scroll 4+ (Desktop bottom / Mobile deep scroll) — Editorial / Curated</h2>
+  <p class="journey"><strong>Shopper journey:</strong> deep PDP — shopper edukuje się, porównuje, buduje świadomość kategorii. Editorial = premium signal, wyższy effort, większy differentiator.</p>
+</div>
+
+<div class="section-card">
+  <table>
+    <tr>
+      <th width="3%">#</th>
+      <th width="17%">Element</th>
+      <th width="24%">Forma (sub-options)</th>
+      <th width="7%">Typ</th>
+      <th width="10%">Owner</th>
+      <th width="8%">Detection</th>
+      <th>Opis</th>
+      <th width="8%">Klep</th>
+    </tr>
+    <tr>
+      <td>32</td>
+      <td>Social proof video (reviews/testimonial)</td>
+      <td class="form-cell"><span class="sub-opt">source: creator / customer / influencer</span> <span class="sub-opt">count: 1-4</span> <span class="sub-opt">verified label y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-semi">semi</span></td>
+      <td>Video reviews / influencer testimonial</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>33</td>
+      <td>UGC video (User-Generated Content)</td>
+      <td class="form-cell"><span class="sub-opt">platform: IG / TikTok / YouTube / custom</span> <span class="sub-opt">count: 3-12 thumbnails</span> <span class="sub-opt">embed / external link</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-semi">semi</span></td>
+      <td>Video od klientów (IG, TikTok)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>34</td>
+      <td>AR / virtual try-on</td>
+      <td class="form-cell"><span class="sub-opt">category: makeup / glasses / furniture / clothing</span> <span class="sub-opt">tech: WebAR / native / model</span> <span class="sub-opt">selfie required y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-auto">auto</span></td>
+      <td>Augmented Reality — AR asset to content brandu</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>35</td>
+      <td>Press mentions / "As seen in"</td>
+      <td class="form-cell"><span class="sub-opt">logos: 3-8</span> <span class="sub-opt">links to articles y/n</span> <span class="sub-opt">quote visible y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-manual">manual</span></td>
+      <td>Logos magazynów/portali — content kuratowany</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>36</td>
+      <td>Expert endorsement</td>
+      <td class="form-cell"><span class="sub-opt">format: foto+cytat / video / write-up</span> <span class="sub-opt">credentials shown y/n (np 'dermatolog, 15 lat')</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-manual">manual</span></td>
+      <td>Polecane przez specjalistę (foto + cytat)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>37</td>
+      <td>Brand story / storyline</td>
+      <td class="form-cell"><span class="sub-opt">length chars: 200-800</span> <span class="sub-opt">founder present y/n</span> <span class="sub-opt">year founded y/n</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-brand">brand</span></td>
+      <td><span class="method-manual">manual</span></td>
+      <td>Krótka historia marki</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>38</td>
+      <td><strong>Comparison table — vs konkurencja</strong></td>
+      <td class="form-cell"><span class="sub-opt">legal review required: y (sensitive)</span> <span class="sub-opt">competitors named / anonymized</span> <span class="sub-opt"><strong>interaktywna / stała</strong></span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-agency">agency editor</span></td>
+      <td><span class="method-editorial">editorial</span></td>
+      <td>Why us vs them — wymaga legal review</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>39</td>
+      <td>Product line presentation</td>
+      <td class="form-cell"><span class="sub-opt">items in line: 3-8</span> <span class="sub-opt">format: horizontal carousel / grid / interactive showcase</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-agency">agency editor</span></td>
+      <td><span class="method-editorial">editorial</span></td>
+      <td>Cała linia marki — editorial showcase</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>40</td>
+      <td>Complementary products (curated)</td>
+      <td class="form-cell"><span class="sub-opt">items: 2-5</span> <span class="sub-opt"><strong>reason shown per item y/n</strong> (krytyczne — różnicuje od auto recommendations)</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-agency">agency editor</span></td>
+      <td><span class="method-editorial">editorial</span></td>
+      <td>Curated z powodem dlaczego pasują (NIE auto recommendations engine)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>41</td>
+      <td>Complete routine / starter kit</td>
+      <td class="form-cell"><span class="sub-opt">format: step 1-2-3 / bundle pricing / kit composition</span> <span class="sub-opt">addtocart kit y/n</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-agency">agency editor</span></td>
+      <td><span class="method-editorial">editorial</span></td>
+      <td>Twoja codzienna rutyna w 3 krokach</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>42</td>
+      <td>Use case scenarios</td>
+      <td class="form-cell"><span class="sub-opt">scenarios: 3-6</span> <span class="sub-opt">format: if-then / persona-based / outcome-based</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-agency">agency editor</span></td>
+      <td><span class="method-editorial">editorial</span></td>
+      <td>Sprawdzi się gdy... / Idealny do...</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>43</td>
+      <td>Editor's pick z reason</td>
+      <td class="form-cell"><span class="sub-opt">editor named y/n</span> <span class="sub-opt">length chars: 100-300</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-agency">agency editor</span></td>
+      <td><span class="method-editorial">editorial</span></td>
+      <td>Wybór editora — dlaczego ten produkt</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>44</td>
+      <td>Ingredient deep-dive (per kluczowy)</td>
+      <td class="form-cell"><span class="sub-opt">ingredients covered: 1-3 hero</span> <span class="sub-opt">format: expandable cards / full sections / sidebar</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-agency">agency editor</span></td>
+      <td><span class="method-editorial">editorial</span></td>
+      <td>Niacynamid — co to, jak działa, dla kogo</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>45</td>
+      <td>Myth busting (prawda vs mit)</td>
+      <td class="form-cell"><span class="sub-opt">myths: 3-7</span> <span class="sub-opt">format: two-column truth vs myth / Q&A</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-agency">agency editor</span></td>
+      <td><span class="method-editorial">editorial</span></td>
+      <td>Mity vs fakty o danej kategorii</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>46</td>
+      <td>Behind the brand</td>
+      <td class="form-cell"><span class="sub-opt">founder quote y/n</span> <span class="sub-opt">manifesto y/n</span> <span class="sub-opt">video supplement y/n</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-agency">agency editor</span></td>
+      <td><span class="method-editorial">editorial</span></td>
+      <td>Manifest, kim są, dlaczego ten produkt powstał</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>47</td>
+      <td>Sustainability credentials</td>
+      <td class="form-cell"><span class="sub-opt">credentials: Eco / Vegan / CF / Recyclable / Carbon-neutral</span> <span class="sub-opt"><strong>explanation per item y/n</strong> (bez tego greenwashing risk)</span></td>
+      <td><span class="type-graphic">graphic</span></td>
+      <td><span class="owner-agency">agency editor</span></td>
+      <td><span class="method-editorial">editorial</span></td>
+      <td>Eco/Vegan/CF + WYJAŚNIENIE (bez tego greenwashing)</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+    <tr>
+      <td>48</td>
+      <td>Scientific studies links</td>
+      <td class="form-cell"><span class="sub-opt">studies: 1-5</span> <span class="sub-opt"><strong>peer reviewed y/n</strong> (krytyczne — inaczej weakness)</span> <span class="sub-opt">external link / inline summary / both</span></td>
+      <td><span class="type-textual">textual</span></td>
+      <td><span class="owner-agency">agency editor</span></td>
+      <td><span class="method-editorial">editorial</span></td>
+      <td>Real peer-reviewed studies — bez tego cred-loss</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">❌</label></div></td>
+    </tr>
+  </table>
+  <p class="note">17 elementów · 8 graphic + 9 textual · 5 brand + 12 agency editor · wszystkie premium signal</p>
+</div>
+
+<!-- ════════════════════ EXCLUDED ════════════════════ -->
+<h2 id="excluded">⚠️ Excluded — funkcjonalności silnika (osobna tabelka)</h2>
+
+<div class="section-card">
+  <p style="font-size: 13px; color: var(--muted); margin-bottom: 10px;">
+    Te elementy <strong>NIE są content</strong> — to funkcjonalności silnika sklepowego (owner = <span class="owner-dev">dev</span>). Tu wymienione dla referencji. W przyszłości osobna tabelka "PDP = Funkcjonalności".
+  </p>
+  <table>
+    <tr><th width="22%">Kategoria</th><th>Items (engine — owner: dev)</th></tr>
+    <tr><td><strong>Conversion (7)</strong></td><td>add_to_cart_main · sticky_atc_mobile · buy_now_express · quantity_selector · variant_selector · subscribe_save · installment_pay_options</td></tr>
+    <tr><td><strong>Engagement (3)</strong></td><td>wishlist_heart · compare_icon · quick_view_modal</td></tr>
+    <tr><td><strong>Listing engine (2)</strong></td><td>color_swatches_engine · badge_engine_hit_promo</td></tr>
+    <tr><td><strong>Interactive 2026 (3)</strong></td><td>ai_chatbot_assistant · live_chat · product_configurator</td></tr>
+    <tr><td><strong>Personalization (4)</strong></td><td>recently_viewed · personalized_recommendations · cross_sell_pdp_auto · related_products_auto</td></tr>
+    <tr><td><strong>Widget aggregators (2)</strong></td><td>aggregate_rating_summary_widget (5/4/3/2/1 breakdown) · rating_stars_render</td></tr>
+    <tr><td><strong>Inventory/logistics inline (2)</strong></td><td>stock_status_inventory · delivery_info_engine_logistics</td></tr>
+  </table>
+  <p class="note">Łącznie 23 funkcjonalności silnika — wycięte z content repository. Pełne mapping w <code class="code">data/pdp_content_repository.json → _excluded_engine_features</code>.</p>
+</div>
+
+<!-- ════════════════════ FOOTER ════════════════════ -->
+<div class="section-card" style="background: #f9fafb; margin-top: 24px;">
+  <p style="font-size: 12px; color: var(--muted);">
+    <strong>EEL PDP Content Repository v1.0</strong> · sesja 31.05.2026 rano · źródło: <code class="code">data/pdp_content_repository.json</code><br>
+    Filozofia: <em>"częścią mappingu jest ustalenie formy danego elementu (nie tylko tak/nie)... To będzie nasze repozytorium. Czyli element bazy danych, wsad!"</em> — Tomek 31.05<br>
+    Powiązane: <a href="KLEPANIE_DECYZJI.html" style="color: var(--accent);">→ KLEPANIE_DECYZJI</a> · <a href="VERDYKTY.html" style="color: var(--accent);">→ VERDYKTY v2</a> · <a href="EEL_HUB.html" style="color: var(--accent);">→ EEL HUB</a>
+  </p>
+</div>
+
+</div>
+</body>
+</html>
