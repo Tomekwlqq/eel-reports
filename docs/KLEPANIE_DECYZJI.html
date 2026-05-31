@@ -165,25 +165,25 @@ tr:nth-child(even) { background: #fafafa; }
     <tr class="row-pending">
       <td>B9</td>
       <td><strong>Bullets vs ingredients separation</strong>: na Hebe wszystkie PDPs zwracały bullets=20 (cap) bo selectory łapały ingredients (48 składników)</td>
-      <td>🟡 partial</td>
-      <td>Wyłączone <code class="code">[class*="ingredient"]</code> z bullets, dorzucone osobne pola <code class="code">ingredients</code> i <code class="code">specifications</code>. ALE Hebe v3 retest nadal pokazuje bullets=20 (cap), oznacza że selectory <code class="code">[class*="features"]</code> łapią inne elementy. Wymaga deep dive co konkretnie matchuje na Hebe.</td>
-      <td><div class="checkbox-group"><label><input type="checkbox">🔄 deep dive</label><label><input type="checkbox">➡️ ack</label></div></td>
+      <td>🟢 fixed</td>
+      <td>Strict selectors (wyrzucone <code class="code">[class*="product-details"]</code> które matchowało 1056 elementów na Hebe). Dorzucone osobne pola <code class="code">ingredients</code> + <code class="code">specifications</code> + nowe <code class="code">bullets.raw_count_before_cap</code> żeby distinguish cap vs real-gap. Hebe v4: bullets count=0, raw_count=0 = real biznesowy gap (Hebe nie ma key features bullets na PDP). Plus ingredients=48 (uwaga: na Hebe to leakage nav-menu, nie real ingredients — out of scope dla B9).</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">🔄</label></div></td>
     </tr>
 
     <tr class="row-pending">
       <td>B10</td>
       <td><strong>P6 sections — generic_carousel 30/61</strong>: prawie połowa sekcji to generic (nie dopasowane do label'a w sections_dictionary)</td>
-      <td>🟡 partial</td>
-      <td>17 typów w dictionary; trzeba dorzucić labels widziane na Hebe (np "Polecane", "Dla Ciebie", "Hit tygodnia") albo zaakceptować że 47% match rate = OK dla v1 (baza rośnie z każdym klientem)</td>
-      <td><div class="checkbox-group"><label><input type="checkbox">📥 dorzuć labels</label><label><input type="checkbox">➡️ ack</label></div></td>
+      <td>🟢 fixed policy</td>
+      <td>Dorzucone <code class="code">summary.gaps_flag</code> (severity high/medium/low based on match_rate) + <code class="code">unmatched_labels_for_dictionary</code> list — automatyczny sygnał do growth bazy. Hebe v4: match_rate=45.8% (severity medium), 26 unique labels w propozycji do <code class="code">sections_dictionary</code> (m.in. "Beauty of Joseon", "Koreańskie", "Hebe sklep internetowy – piękno na co dzień!", "Filtry", "Żelowy olejek do oczyszczania twarzy 2w1").</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">🔄</label></div></td>
     </tr>
 
     <tr class="row-pending">
       <td>B11</td>
       <td><strong>P7 CTA — 16.9% unknown actions</strong>: 138 z 818 CTAs nie zmapowane do action_verbs lexicon</td>
-      <td>🟡 partial</td>
-      <td>11 typów action verbs; brakuje branża-specific (cosmetic: "Wypróbuj sample", "Stwórz routine"). Baza rośnie.</td>
-      <td><div class="checkbox-group"><label><input type="checkbox">📥 dorzuć</label><label><input type="checkbox">➡️ ack</label></div></td>
+      <td>🟢 fixed policy</td>
+      <td>Dorzucone <code class="code">summary.gaps_flag</code> + <code class="code">unmatched_cta_texts_for_lexicon</code> (collect z full ctas, nie tylko top 5, dedup cross-view) + nowy <code class="code">icon_only_unknown_count</code> żeby distinguish: icon-only CTAs nie pomogą lexicon growth. Hebe v4: 130 z 792 CTAs (16.4%) unknown — ALL 130 to icon-only buttons (brak text/aria), 0 tekstowych CTAs do dorzucenia. Real finding: Hebe heavy icon-only UX (hamburger, heart, search icon bez aria). Severity=medium.</td>
+      <td><div class="checkbox-group"><label><input type="checkbox">✅</label><label><input type="checkbox">🔄</label></div></td>
     </tr>
 
     <tr class="row-pending">
