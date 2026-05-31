@@ -81,8 +81,7 @@ tr:nth-child(even) { background: #fafafa; }
 
 <div class="toc">
   <a href="#sec1">1. Bugi MVP P0+P1 — status + decyzja</a>
-  <a href="#sec2a">2A. Content + Funkcjonalności (pełna analiza) — 24 listing + 60 PDP</a>
-  <a href="#sec2b">2B. Tylko Content (uproszczona, per owner) — 13 listing + PDP → dedykowane repository</a>
+  <a href="#sec2">2. Audit Repository — pełna baza (Listing + PDP × pełen audyt + content)</a>
   <a href="#sec3">3. Model tytułu PDP — 9 chipów do potwierdzenia</a>
   <a href="#sec4">4. Propozycje P-x.y — kolejność priorytetów</a>
   <a href="#sec5">5. Pytania strategiczne — klep decyzję</a>
@@ -197,8 +196,24 @@ tr:nth-child(even) { background: #fafafa; }
   </table>
 </div>
 
-<!-- ════════════════════ SEKCJA 2A: PEŁNA ANALIZA (content + funkcjonalności) ════════════════════ -->
-<h2 id="sec2a">2A. Pełna analiza Product Tile + PDP (Content + Funkcjonalności razem)</h2>
+<!-- ════════════════════ SEKCJA 2: AUDIT REPOSITORY (pełen refactor 31.05 rano) ════════════════════ -->
+<h2 id="sec2">2. Audit Repository — pełna baza (Listing + PDP × pełen audyt + content)</h2>
+<div class="section-card">
+  <p>Audit Repository przeniesione do <strong>dedykowanej podstrony</strong> z 2 zakładkami w kolejności: 1) Pełen audyt (całość, 84 items) + 2) Tylko Content (filtr per owner brand, 62 items).</p>
+  <p style="margin-top: 12px;">
+    <a href="AUDIT_REPOSITORY.html" style="display: inline-block; background: var(--opus); color: white; padding: 11px 20px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 14px;">📦 → EEL Audit Repository</a>
+  </p>
+  <p class="note" style="margin-top: 10px;">
+    Struktura: <strong>Listing 24 items + PDP 60 items × 8 kolumn</strong> (Element+Criteria · Typ · Owner · Detection · Position D/M · Opis · Klep). Foldy <strong>elastyczne</strong> per sklep — recommended position desktop/mobile klepiesz ręcznie, różne dla każdego klienta. Po integracji Clarity → real heatmap data wypełni mismatches.
+  </p>
+  <p class="note" style="margin-top: 4px;">
+    Filozofia Tomka 31.05: <em>"Najpierw całość, później z tylko filtrami sam content"</em> — shopper widzi NAJPIERW pełen obraz (jak realny shopper), POTEM zawęzić do contentu (per owner brand).
+  </p>
+</div>
+
+<!-- ════════════════════ STUB: stara sek 2A (przeniesiona, ukryta) ════════════════════ -->
+<div style="display:none;" id="sec2a-archived">
+<h2>2A. Pełna analiza Product Tile + PDP (Content + Funkcjonalności razem)</h2>
 
 <div class="legend" style="background: #fffbeb; border-left: 4px solid var(--warn);">
   <strong>📐 Dwie wersje tabel (Tomek 31.05):</strong><br>
@@ -406,6 +421,9 @@ tr:nth-child(even) { background: #fafafa; }
   <p class="note">Struktura repository: organizacja per fold (Above / Below 1 / Below 2 / Scroll 4+), kolumna <strong>Forma</strong> (sub-options inline obok nazwy), kolumna <strong>Owner</strong> (brand / dev / hybrid / agency editor / regulatory). Filozofia: <em>"To będzie nasze repozytorium. Czyli element bazy danych, wsad!"</em> — Tomek 31.05.</p>
 </div>
 
+</div>
+<!-- /sec2a-archived (sec 2 zastąpione przez AUDIT_REPOSITORY.html — 31.05 rano refactor) -->
+
 
 <!-- ════════════════════ SEKCJA 3: MODEL TYTUŁU ════════════════════ -->
 <h2 id="sec3">3. Model tytułu PDP — 9 chipów do potwierdzenia</h2>
@@ -505,7 +523,7 @@ tr:nth-child(even) { background: #fafafa; }
   </table>
 </div>
 
-<p class="note" style="margin-top: 24px;">Sesja 30.05.2026 noc² · update 31.05 rano: split content vs funkcjonalność + 2 wersje tabel (2A pełna 84 items, 2B content-only 59 items) + nowy item rating_value_numeric (Amazon problem) · <a href="https://tomekwlqq.github.io/eel-reports/VERDYKTY.html">→ VERDYKTY v2</a> · <a href="https://tomekwlqq.github.io/eel-reports/GLOV-raport-test-2026-05-21.html">→ GLOV reference</a></p>
+<p class="note" style="margin-top: 24px;">Sesja 30.05.2026 noc² · update 31.05 rano: pełen refactor sek 2 → <a href="AUDIT_REPOSITORY.html"><strong>Audit Repository</strong></a> (Listing 24 + PDP 60 = 84 items pełen audyt, 62 items content-only filtr). Filozofia: <em>najpierw całość, później filtr per owner brand</em>. · <a href="https://tomekwlqq.github.io/eel-reports/VERDYKTY.html">→ VERDYKTY v2</a> · <a href="https://tomekwlqq.github.io/eel-reports/GLOV-raport-test-2026-05-21.html">→ GLOV reference</a></p>
 
 </div>
 </body>
