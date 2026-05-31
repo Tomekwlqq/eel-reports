@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Listy do klepnięcia — sesja 30.05 noc²</title>
+<title>Listy do klepnięcia — sesja 30.05 noc² + 31.05 split content vs funkcjonalność</title>
 <style>
 :root {
   --bg: #fafafa; --bg-card: #fff;
@@ -77,14 +77,15 @@ tr:nth-child(even) { background: #fafafa; }
 <div class="container">
 
 <h1>🗳 Listy do klepnięcia</h1>
-<p class="subtitle">Sesja 30.05.2026 noc² · 3 listy decyzji · klep ✅/❌/➡️ per row</p>
+<p class="subtitle">Sesja 30.05.2026 noc² · update 31.05 rano (split content vs funkcjonalność) · klep ✅/❌/➡️ per row</p>
 
 <div class="toc">
   <a href="#sec1">1. Bugi MVP P0+P1 — status + decyzja</a>
-  <a href="#sec2">2. Content checklist — 83 items × klep scope</a>
+  <a href="#sec2">2. Content checklist (po split) — 17 listing + ~46 PDP items</a>
   <a href="#sec3">3. Model tytułu PDP — 9 chipów do potwierdzenia</a>
   <a href="#sec4">4. Propozycje P-x.y — kolejność priorytetów</a>
   <a href="#sec5">5. Pytania strategiczne — klep decyzję</a>
+  <a href="#sec6">6. Funkcjonalności silnika sklepowego (TODO)</a>
 </div>
 
 <!-- ════════════════════ SEKCJA 1: BUGI ════════════════════ -->
@@ -197,7 +198,14 @@ tr:nth-child(even) { background: #fafafa; }
 </div>
 
 <!-- ════════════════════ SEKCJA 2: CONTENT CHECKLIST ════════════════════ -->
-<h2 id="sec2">2. Content Checklist — 83 items × klep scope</h2>
+<h2 id="sec2">2. Content Checklist (po split content vs funkcjonalność)</h2>
+
+<div class="legend" style="background: #f5f3ff; border-left: 4px solid var(--opus);">
+  <strong>📐 Content vs Funkcjonalność (filozofia Tomka, 31.05 rano):</strong><br>
+  <strong>Content</strong> = co dostarcza/robi PRODUCENT (obrazki, opisy, video, copy, recenzje treść).<br>
+  <strong>Funkcjonalność</strong> = co dostarcza PLATFORMA SKLEPOWA (silnik: wishlist, compare, swatches, quick view, ATC direct, recommendations engine, checkout flow).<br>
+  Ta lista zawiera TYLKO content. Osobna tabelka "Funkcjonalności silnika" — sekcja 6 niżej (TODO).
+</div>
 
 <div class="legend">
   <strong>Legenda detection_method:</strong>
@@ -209,139 +217,118 @@ tr:nth-child(even) { background: #fafafa; }
   <strong>Klep per item:</strong> ✅ keep · ❌ wyrzuć · ✏️ rename · 📥 dorzuć opcję
 </div>
 
-<h3 id="sec2-1">🛒 Listing Tile (kafelek) — 23 items</h3>
+<h3 id="sec2-1">🛒 Listing Tile (kafelek) — 17 content items (z 23, -6 wyciętych do funkcjonalności)</h3>
 <div class="section-card">
-  <h3 style="margin-top: 0">Graphic elements (11)</h3>
+  <h3 style="margin-top: 0">Graphic elements (6) — content z brandu</h3>
   <table>
     <tr><th width="4%">#</th><th width="28%">Element</th><th width="14%">Method</th><th>Opis</th><th width="14%">Klep</th></tr>
-    <tr><td>1</td><td>Packshot główny</td><td><span class="method-auto">auto</span></td><td>White BG główne zdjęcie</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>2</td><td>Enhanced/power packshot</td><td><span class="method-manual">manual+AI</span></td><td>Packshot z ramkami/ikonami/badges (premium signal)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>3</td><td>Secondary image on hover</td><td><span class="method-auto">auto</span></td><td>2. zdjęcie na hover (inny kąt / użycie)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>4</td><td>Video packshot</td><td><span class="method-auto">auto</span></td><td>Auto-play / loop video na kafelku</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>5</td><td>3D / 360° packshot</td><td><span class="method-auto">auto</span></td><td>Interactive 3D na kafelku (rzadkie)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>6</td><td>Secondary images strip</td><td><span class="method-auto">auto</span></td><td>Pasek thumbnails bez hover</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>7</td><td>Color/variant swatches</td><td><span class="method-auto">auto</span></td><td>Kropki kolorów / wariantów</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>8</td><td>Badge wizualny (Hit/Nowość/Promo)</td><td><span class="method-auto">auto</span></td><td>Ribbon/label nad packshotem</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>9</td><td>Quick view modal trigger</td><td><span class="method-auto">auto</span></td><td>Modal preview bez wchodzenia na PDP</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>10</td><td>Wishlist heart icon</td><td><span class="method-auto">auto</span></td><td>Serduszko (favorites)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>11</td><td>Compare icon</td><td><span class="method-auto">auto</span></td><td>Dodaj do porównywarki (electronics/AGD)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>1</td><td>Packshot główny</td><td><span class="method-auto">auto</span></td><td>Czysty packshot na białym BG</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>2</td><td><strong>Enhanced packshot (info-rich)</strong> ⭐ redefiniowany</td><td><span class="method-ai">AI</span> <span class="method-editorial">editorial</span></td><td>Każdy nie-czysty packshot z dodanym <strong>layerem informacji</strong>: 50ml wkomponowane w grafikę, linia produktowa label, use case overlay, before/after embedded. NIE pieczątki badge z silnika (Hit/Promo) — to funkcjonalność.</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>3</td><td>Secondary image on hover</td><td><span class="method-auto">auto</span></td><td>2. zdjęcie na hover (inny kąt / użycie) — content brandu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>4</td><td>Video packshot</td><td><span class="method-auto">auto</span></td><td>Auto-play / loop video na kafelku — content brandu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>5</td><td>3D / 360° packshot</td><td><span class="method-auto">auto</span></td><td>Asset 3D produktu (rzadkie) — content brandu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>6</td><td>Secondary images strip</td><td><span class="method-auto">auto</span></td><td>Pasek thumbnails bez hover — content brandu (assety)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
   </table>
 
-  <h3>Textual elements (12)</h3>
+  <h3>Textual elements (11) — content z brandu</h3>
   <table>
     <tr><th width="4%">#</th><th width="28%">Element</th><th width="14%">Method</th><th>Opis</th><th width="14%">Klep</th></tr>
-    <tr><td>12</td><td>Tytuł pełny</td><td><span class="method-auto">auto</span></td><td>Pełny tytuł produktu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>13</td><td>Tytuł skrócony</td><td><span class="method-semi">semi</span></td><td>Skrócony dla mobile / gdy &gt;60 chars</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>14</td><td>Krótki opis (1 zdanie)</td><td><span class="method-auto">auto</span></td><td>1-2 zdania pod tytułem (yourkaya.pl style)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>15</td><td>Cena główna</td><td><span class="method-auto">auto</span></td><td>Cena widoczna</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>16</td><td>Cena przekreślona (była)</td><td><span class="method-auto">auto</span></td><td>Cena regularna przekreślona</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>17</td><td>Procent zniżki</td><td><span class="method-auto">auto</span></td><td>-20% / -50% label</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>18</td><td>Kwota oszczędności</td><td><span class="method-auto">auto</span></td><td>"Oszczędzasz X zł" (lepsze dla high-price)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>19</td><td>Gwiazdki ocen</td><td><span class="method-auto">auto</span></td><td>4.8 ★</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>20</td><td>Liczba recenzji</td><td><span class="method-auto">auto</span></td><td>(127 ocen) obok gwiazdek</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>21</td><td>Status dostępności</td><td><span class="method-auto">auto</span></td><td>Dostępny / Ostatnie sztuki / Zarezerwuj</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>22</td><td>Delivery info inline</td><td><span class="method-auto">auto</span></td><td>Dostawa pojutrze / Darmowa wysyłka</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>23</td><td>Add to cart direct</td><td><span class="method-auto">auto</span></td><td>ATC button z kafelka (Amazon style)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>7</td><td>Tytuł pełny</td><td><span class="method-auto">auto</span></td><td>Pełny tytuł produktu (od brandu)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>8</td><td>Tytuł skrócony</td><td><span class="method-semi">semi</span></td><td>Skrócony dla mobile / gdy &gt;60 chars</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>9</td><td>Krótki opis (1 zdanie)</td><td><span class="method-auto">auto</span></td><td>1-2 zdania pod tytułem (yourkaya.pl style) — copy brandu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>10</td><td>Cena główna</td><td><span class="method-auto">auto</span></td><td>Cena widoczna — content (decyzja brandu)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>11</td><td>Cena przekreślona (była)</td><td><span class="method-auto">auto</span></td><td>Cena regularna przekreślona — content promo</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>12</td><td>Procent zniżki</td><td><span class="method-auto">auto</span></td><td>-20% / -50% label — content promo</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>13</td><td>Kwota oszczędności</td><td><span class="method-auto">auto</span></td><td>"Oszczędzasz X zł" (lepsze dla high-price)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>14</td><td>Gwiazdki ocen</td><td><span class="method-auto">auto</span></td><td>4.8 ★ — treść (od klientów)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>15</td><td>Liczba recenzji</td><td><span class="method-auto">auto</span></td><td>(127 ocen) obok gwiazdek — treść</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>16</td><td>Status dostępności</td><td><span class="method-auto">auto</span></td><td>Dostępny / Ostatnie sztuki / Zarezerwuj — content informacyjny</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>17</td><td>Delivery info inline</td><td><span class="method-auto">auto</span></td><td>Dostawa pojutrze / Darmowa wysyłka — copy logistyki</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
   </table>
+
+  <div class="legend" style="background: #fef2f2; border-left: 4px solid var(--bad); margin-top: 14px;">
+    <strong>⚠ Wycięte z content (6 itemów) — to FUNKCJONALNOŚCI platformy sklepowej:</strong><br>
+    color swatches · badge wizualny z silnika (Hit/Promo z product managementu) · quick view modal trigger · wishlist heart · compare icon · ATC direct z kafelka<br>
+    <em>Będą w osobnej tabelce "Product Tile = Funkcjonalności" — patrz sekcja 6 (TODO).</em>
+  </div>
 </div>
 
-<h3 id="sec2-2">📄 PDP Content — 60 items (7 podsekcji)</h3>
+<h3 id="sec2-2">📄 PDP Content — 46 content items (z 60, -14 wyciętych do funkcjonalności)</h3>
 
 <div class="section-card">
-  <h3 style="margin-top: 0">Graphic elements (15)</h3>
+  <h3 style="margin-top: 0">Graphic elements (15) — content z brandu</h3>
   <table>
     <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
-    <tr><td>24</td><td>Key Visual (KV) — hero</td><td><span class="method-auto">auto</span></td><td>Główne zoomable zdjęcie</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>25</td><td><strong>Secondary images (galeria)</strong></td><td><span class="method-auto">auto</span></td><td>Sub-opcje: count, square ratio, includes video, gallery visible below main, navigation type (dots/thumbnails/scroll/arrows), mobile vs desktop diff</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>26</td><td>Lifestyle pictures (in-use, in-context)</td><td><span class="method-ai">AI</span></td><td>Model/scena/environment</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>27</td><td>Product features pictures (cechy z ikonami)</td><td><span class="method-ai">AI</span></td><td>Zdjęcia z naniesionymi labelami</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>28</td><td>Product in use pictures (how-to-use)</td><td><span class="method-ai">AI</span></td><td>Sekwencja krok po kroku</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>29</td><td>Infografika cech</td><td><span class="method-ai">AI</span></td><td>Wizualne podsumowanie cech</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>30</td><td>Size chart</td><td><span class="method-auto">auto</span></td><td>Tabela rozmiarów (apparel/obuwie)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>31</td><td>Dimensions / scale image</td><td><span class="method-ai">AI</span></td><td>Wymiary obok produktu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>32</td><td>Before/after image</td><td><span class="method-ai">AI</span></td><td>Cosmetic/treatment dowód</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>33</td><td>Comparison chart (vs konkurencja / warianty)</td><td><span class="method-auto">auto</span></td><td>Tabela porównawcza</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>34</td><td>Additional video demo</td><td><span class="method-auto">auto</span></td><td>Video produktu w użyciu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>35</td><td>Social proof video (reviews/testimonial)</td><td><span class="method-semi">semi</span></td><td>Video reviews / influencer</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>36</td><td>UGC video (User-Generated Content)</td><td><span class="method-semi">semi</span></td><td>Video od klientów (IG, TikTok)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>37</td><td>3D / 360° rotation viewer</td><td><span class="method-auto">auto</span></td><td>Interactive 3D model</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>38</td><td>AR / virtual try-on</td><td><span class="method-auto">auto</span></td><td>Augmented Reality (makeup/glasses/furniture)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>18</td><td>Key Visual (KV) — hero</td><td><span class="method-auto">auto</span></td><td>Główne zoomable zdjęcie</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>19</td><td><strong>Secondary images (galeria)</strong></td><td><span class="method-auto">auto</span></td><td>Sub-opcje: count, square ratio, includes video, gallery visible below main, navigation type (dots/thumbnails/scroll/arrows), mobile vs desktop diff</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>20</td><td>Lifestyle pictures (in-use, in-context)</td><td><span class="method-ai">AI</span></td><td>Model/scena/environment</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>21</td><td>Product features pictures (cechy z ikonami)</td><td><span class="method-ai">AI</span></td><td>Zdjęcia z naniesionymi labelami</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>22</td><td>Product in use pictures (how-to-use)</td><td><span class="method-ai">AI</span></td><td>Sekwencja krok po kroku</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>23</td><td>Infografika cech</td><td><span class="method-ai">AI</span></td><td>Wizualne podsumowanie cech</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>24</td><td>Size chart</td><td><span class="method-auto">auto</span></td><td>Tabela rozmiarów (apparel/obuwie) — asset brandu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>25</td><td>Dimensions / scale image</td><td><span class="method-ai">AI</span></td><td>Wymiary obok produktu — visual content</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>26</td><td>Before/after image</td><td><span class="method-ai">AI</span></td><td>Cosmetic/treatment dowód — content brandu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>27</td><td>Comparison chart (vs konkurencja / warianty)</td><td><span class="method-auto">auto</span></td><td>Tabela porównawcza — content (treść tabeli)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>28</td><td>Additional video demo</td><td><span class="method-auto">auto</span></td><td>Video produktu w użyciu — asset brandu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>29</td><td>Social proof video (reviews/testimonial)</td><td><span class="method-semi">semi</span></td><td>Video reviews / influencer — content</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>30</td><td>UGC video (User-Generated Content)</td><td><span class="method-semi">semi</span></td><td>Video od klientów (IG, TikTok) — content</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>31</td><td>3D / 360° rotation viewer</td><td><span class="method-auto">auto</span></td><td>Interactive 3D model — asset brandu (3D model = content)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>32</td><td>AR / virtual try-on</td><td><span class="method-auto">auto</span></td><td>Augmented Reality (makeup/glasses/furniture) — content asset (AR model)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
   </table>
 
-  <h3>Textual elements (13)</h3>
+  <h3>Textual elements (13) — copy brandu</h3>
   <table>
     <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
-    <tr><td>39</td><td>Tytuł (z modelem dekompozycji)</td><td><span class="method-auto">auto</span></td><td>9 chipów (sek 3)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>40</td><td>Lead / krótki opis (1-2 zdania)</td><td><span class="method-auto">auto</span></td><td>Pod tytułem (claim, USP)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>41</td><td>Bullets / key features (3-8)</td><td><span class="method-auto">auto</span></td><td>Sub-opcje: count, formula split (feature/feature+benefit/full triad)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>42</td><td>FAQ section</td><td><span class="method-auto">auto</span></td><td>Sub: count, FAQPage schema, from real CS</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>43</td><td>Specifications table (Tier 1/2/3)</td><td><span class="method-auto">auto</span></td><td>Sub: tier 1/2/3 alignment, units consistent</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>44</td><td>Ingredients / composition list (skład)</td><td><span class="method-auto">auto</span></td><td>NIE bullets — osobne pole (cosmetic/food/supplements)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>45</td><td>How it works (opis działania)</td><td><span class="method-semi">semi</span></td><td>Mechanism / active ingredients</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>46</td><td>How to use (jak używać)</td><td><span class="method-semi">semi</span></td><td>Instrukcja krok po kroku</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>47</td><td>Long description (opis produktu)</td><td><span class="method-auto">auto</span></td><td>3+ akapity (Cartylabs 2026 min)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>48</td><td>Brand story / storyline</td><td><span class="method-manual">manual</span></td><td>Krótka historia marki</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>49</td><td>Size & fit text (apparel)</td><td><span class="method-auto">auto</span></td><td>"Runs small", model measurements</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>50</td><td>Warnings / disclaimers</td><td><span class="method-auto">auto</span></td><td>Chemiczne, alergiczne, age-restricted</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>51</td><td>Shipping & returns info inline</td><td><span class="method-auto">auto</span></td><td>Bezpośrednio na PDP</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>33</td><td>Tytuł (z modelem dekompozycji)</td><td><span class="method-auto">auto</span></td><td>9 chipów (sek 3)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>34</td><td>Lead / krótki opis (1-2 zdania)</td><td><span class="method-auto">auto</span></td><td>Pod tytułem (claim, USP)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>35</td><td>Bullets / key features (3-8)</td><td><span class="method-auto">auto</span></td><td>Sub-opcje: count, formula split (feature/feature+benefit/full triad)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>36</td><td>FAQ section</td><td><span class="method-auto">auto</span></td><td>Sub: count, FAQPage schema, from real CS — TREŚĆ pytań/odpowiedzi = content</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>37</td><td>Specifications table (Tier 1/2/3)</td><td><span class="method-auto">auto</span></td><td>Sub: tier 1/2/3 alignment, units consistent</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>38</td><td>Ingredients / composition list (skład)</td><td><span class="method-auto">auto</span></td><td>NIE bullets — osobne pole (cosmetic/food/supplements)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>39</td><td>How it works (opis działania)</td><td><span class="method-semi">semi</span></td><td>Mechanism / active ingredients</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>40</td><td>How to use (jak używać)</td><td><span class="method-semi">semi</span></td><td>Instrukcja krok po kroku</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>41</td><td>Long description (opis produktu)</td><td><span class="method-auto">auto</span></td><td>3+ akapity (Cartylabs 2026 min)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>42</td><td>Brand story / storyline</td><td><span class="method-manual">manual</span></td><td>Krótka historia marki</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>43</td><td>Size & fit text (apparel)</td><td><span class="method-auto">auto</span></td><td>"Runs small", model measurements</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>44</td><td>Warnings / disclaimers</td><td><span class="method-auto">auto</span></td><td>Chemiczne, alergiczne, age-restricted</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>45</td><td>Shipping & returns info inline</td><td><span class="method-auto">auto</span></td><td>Bezpośrednio na PDP — copy polityki</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
   </table>
 
-  <h3>Social proof (6)</h3>
+  <h3>Social proof (5) — content od klientów / brandu</h3>
   <table>
     <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
-    <tr><td>52</td><td>Reviews block (full, z foto)</td><td><span class="method-auto">auto</span></td><td>Sub: count_shown, with_photos, filter/sort, verified badge</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>53</td><td>Aggregate rating summary</td><td><span class="method-auto">auto</span></td><td>4.8 ★ 1247 + breakdown 5/4/3/2/1</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>54</td><td>Trust badges (płatności, certyfikaty)</td><td><span class="method-auto">auto</span></td><td>Logos + dermatologically tested itp.</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>55</td><td>Money-back guarantee badge</td><td><span class="method-auto">auto</span></td><td>30/60/90 days</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>56</td><td>Press mentions / "As seen in"</td><td><span class="method-manual">manual</span></td><td>Logos magazynów/portali</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>57</td><td>Expert endorsement</td><td><span class="method-manual">manual</span></td><td>Polecane przez specjalistę (foto + cytat)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-  </table>
-
-  <h3>Conversion elements (7)</h3>
-  <table>
-    <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
-    <tr><td>58</td><td>Add to cart (main CTA)</td><td><span class="method-auto">auto</span></td><td>Primary button</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>59</td><td>Sticky ATC bar (mobile)</td><td><span class="method-auto">auto</span></td><td>Sticky bottom (+3-7% mobile ATC, VWO 2026)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>60</td><td>Buy Now / Express checkout</td><td><span class="method-auto">auto</span></td><td>Apple Pay / Google Pay / PayPal Express</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>61</td><td>Quantity selector</td><td><span class="method-auto">auto</span></td><td>+ / - lub dropdown</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>62</td><td>Variant selector (color/size/etc.)</td><td><span class="method-auto">auto</span></td><td>Wybór wariantu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>63</td><td>Subscribe & save (auto-replenishment)</td><td><span class="method-auto">auto</span></td><td>Amazon style, dla consumables</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>64</td><td>Installment payment (Klarna/Twisto)</td><td><span class="method-auto">auto</span></td><td>Płatność ratalna widoczna na PDP</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-  </table>
-
-  <h3>Personalization (4)</h3>
-  <table>
-    <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
-    <tr><td>65</td><td>Recently viewed</td><td><span class="method-auto">auto</span></td><td>Z silnika sklepu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>66</td><td>Personalized recommendations</td><td><span class="method-auto">auto</span></td><td>ML-driven (z silnika)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>67</td><td>Cross-sell ("Pasuje do" — auto)</td><td><span class="method-auto">auto</span></td><td>Z silnika sklepu (frequently bought together)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>68</td><td>Related products (same category)</td><td><span class="method-auto">auto</span></td><td>Z silnika</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>46</td><td><strong>Reviews block (treść recenzji)</strong> — hybrid</td><td><span class="method-auto">auto</span></td><td>TREŚĆ recenzji + foto klientów = content. MODUŁ wyświetlania (filter/sort/paginate) = funkcjonalność silnika — w osobnej tabelce</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>47</td><td>Trust badges (certyfikaty producenta)</td><td><span class="method-auto">auto</span></td><td>Dermatologically tested, ISO, eco-cert — content (certyfikaty od brandu). NIE logos płatności (te = funkcjonalność checkout)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>48</td><td>Money-back guarantee badge</td><td><span class="method-auto">auto</span></td><td>30/60/90 days — oferta brandu (content)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>49</td><td>Press mentions / "As seen in"</td><td><span class="method-manual">manual</span></td><td>Logos magazynów/portali — content kuratowany</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>50</td><td>Expert endorsement</td><td><span class="method-manual">manual</span></td><td>Polecane przez specjalistę (foto + cytat) — content kuratowany</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
   </table>
 
   <h3>⭐ Editorial / Curated Content (12) — NIE z silnika sklepu</h3>
   <table>
     <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
-    <tr><td>69</td><td>Comparison table — warianty produktu</td><td><span class="method-editorial">editorial</span></td><td>Tabela porównująca warianty TEGO SAMEGO produktu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>70</td><td>Comparison table — vs konkurencja</td><td><span class="method-editorial">editorial</span></td><td>"Why us vs them" (legal-sensitive)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>71</td><td>Product line presentation</td><td><span class="method-editorial">editorial</span></td><td>Cała linia marki — editorial showcase</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>72</td><td>Complementary products (ręcznie wybrane)</td><td><span class="method-editorial">editorial</span></td><td>Curated z powodem dlaczego pasują</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>73</td><td>Complete routine / starter kit</td><td><span class="method-editorial">editorial</span></td><td>"Twoja codzienna rutyna w 3 krokach"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>74</td><td>Use case scenarios</td><td><span class="method-editorial">editorial</span></td><td>"Sprawdzi się gdy..." / "Idealny do..."</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>75</td><td>Editor's pick z reason</td><td><span class="method-editorial">editorial</span></td><td>"Wybór editora — dlaczego ten produkt"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>76</td><td>Ingredient deep-dive (per kluczowy)</td><td><span class="method-editorial">editorial</span></td><td>"Niacynamid — co to, jak działa, dla kogo"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>77</td><td>Myth busting (prawda vs mit)</td><td><span class="method-editorial">editorial</span></td><td>"Mity vs fakty o SPF"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>78</td><td>Behind the brand</td><td><span class="method-editorial">editorial</span></td><td>Manifest, kim są, dlaczego ten produkt powstał</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>79</td><td>Sustainability credentials</td><td><span class="method-editorial">editorial</span></td><td>Eco/Vegan/Cruelty-free + wyjaśnienie</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>80</td><td>Scientific studies links</td><td><span class="method-editorial">editorial</span></td><td>Real peer-reviewed studies</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>51</td><td>Comparison table — warianty produktu</td><td><span class="method-editorial">editorial</span></td><td>Tabela porównująca warianty TEGO SAMEGO produktu</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>52</td><td>Comparison table — vs konkurencja</td><td><span class="method-editorial">editorial</span></td><td>"Why us vs them" (legal-sensitive)</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>53</td><td>Product line presentation</td><td><span class="method-editorial">editorial</span></td><td>Cała linia marki — editorial showcase</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>54</td><td>Complementary products (ręcznie wybrane)</td><td><span class="method-editorial">editorial</span></td><td>Curated z powodem dlaczego pasują</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>55</td><td>Complete routine / starter kit</td><td><span class="method-editorial">editorial</span></td><td>"Twoja codzienna rutyna w 3 krokach"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>56</td><td>Use case scenarios</td><td><span class="method-editorial">editorial</span></td><td>"Sprawdzi się gdy..." / "Idealny do..."</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>57</td><td>Editor's pick z reason</td><td><span class="method-editorial">editorial</span></td><td>"Wybór editora — dlaczego ten produkt"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>58</td><td>Ingredient deep-dive (per kluczowy)</td><td><span class="method-editorial">editorial</span></td><td>"Niacynamid — co to, jak działa, dla kogo"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>59</td><td>Myth busting (prawda vs mit)</td><td><span class="method-editorial">editorial</span></td><td>"Mity vs fakty o SPF"</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>60</td><td>Behind the brand</td><td><span class="method-editorial">editorial</span></td><td>Manifest, kim są, dlaczego ten produkt powstał</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>61</td><td>Sustainability credentials</td><td><span class="method-editorial">editorial</span></td><td>Eco/Vegan/Cruelty-free + wyjaśnienie</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
+    <tr><td>62</td><td>Scientific studies links</td><td><span class="method-editorial">editorial</span></td><td>Real peer-reviewed studies</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
   </table>
 
-  <h3>Interactive 2026 (3)</h3>
-  <table>
-    <tr><th width="4%">#</th><th width="32%">Element</th><th width="14%">Method</th><th>Opis</th><th width="12%">Klep</th></tr>
-    <tr><td>81</td><td>AI chatbot assistant</td><td><span class="method-auto">auto</span></td><td>"Czy ten krem mi pasuje?" z analizą</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>82</td><td>Live chat</td><td><span class="method-auto">auto</span></td><td>Human support</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-    <tr><td>83</td><td>Product configurator</td><td><span class="method-auto">auto</span></td><td>Gravur, custom engraving, personalized print</td><td><div class="checkbox-group"><label><input type="checkbox" checked>✅</label><label><input type="checkbox">❌</label></div></td></tr>
-  </table>
+  <div class="legend" style="background: #fef2f2; border-left: 4px solid var(--bad); margin-top: 14px;">
+    <strong>⚠ Wycięte z content (15 itemów) — to FUNKCJONALNOŚCI platformy sklepowej:</strong><br>
+    <strong>Conversion (7):</strong> add_to_cart_main, sticky_atc_mobile, buy_now_express, quantity_selector, variant_selector, subscribe_save, installment_pay_options<br>
+    <strong>Personalization z silnika (4):</strong> recently_viewed, personalized_recommendations, cross_sell_pdp (auto), related_products<br>
+    <strong>Interactive 2026 (3):</strong> ai_chatbot_assistant, live_chat, configurator<br>
+    <strong>Widgets z silnika (1):</strong> aggregate_rating_summary (rozkład 5/4/3/2/1 — widget)<br>
+    <em>Będą w osobnej tabelce "PDP = Funkcjonalności" — patrz sekcja 6 (TODO).</em>
+  </div>
 </div>
 
 <p class="note">💡 Items oznaczone <span class="method-editorial">editorial ⭐</span> to NIE z silnika sklepu — wymagają content teamu (premium signal, wyższy effort, większy differentiator).</p>
@@ -444,7 +431,35 @@ tr:nth-child(even) { background: #fafafa; }
   </table>
 </div>
 
-<p class="note" style="margin-top: 24px;">Sesja 30.05.2026 noc² · 9 task'ów completed · 3 listy do klepnięcia · <a href="https://tomekwlqq.github.io/eel-reports/VERDYKTY.html">→ VERDYKTY v2</a> · <a href="https://tomekwlqq.github.io/eel-reports/GLOV-raport-test-2026-05-21.html">→ GLOV reference</a></p>
+<!-- ════════════════════ SEKCJA 6: FUNKCJONALNOŚCI SILNIKA (TODO) ════════════════════ -->
+<h2 id="sec6">6. Następna tabelka (TODO) — Funkcjonalności silnika sklepowego</h2>
+<div class="section-card">
+  <p>Tomek zapowiedział (31.05 rano): <em>"później poproszę o taką samą tabelkę na product tile"</em> — analogiczna lista wyciętych funkcjonalności. Do osobnej dyskusji i osobnego raportu w audycie (inny owner, inny effort, inny budżet).</p>
+
+  <p style="margin-top: 10px;"><strong>Wstępna inwentaryzacja (~21 itemów)</strong> wyciętych z content_checklist:</p>
+
+  <h3 style="margin-top: 10px;">Listing Tile — funkcjonalności (6)</h3>
+  <ul style="padding-left: 20px;">
+    <li><strong>Color/variant swatches</strong> — kropki kolorów widoczne na kafelku (silnik wariantów)</li>
+    <li><strong>Badge wizualny z silnika</strong> — Hit/Promo/Nowość z product managementu (auto-rendered z pola produktu)</li>
+    <li><strong>Quick view modal trigger</strong> — przycisk otwierający preview</li>
+    <li><strong>Wishlist heart icon</strong> — dodaj do ulubionych</li>
+    <li><strong>Compare icon</strong> — dodaj do porównywarki</li>
+    <li><strong>Add to cart direct z kafelka</strong> — Amazon style ATC bez wchodzenia na PDP</li>
+  </ul>
+
+  <h3>PDP — funkcjonalności (~15)</h3>
+  <ul style="padding-left: 20px;">
+    <li><strong>Conversion (7):</strong> Main ATC button · Sticky ATC mobile · Buy Now / Express checkout · Quantity selector · Variant selector · Subscribe &amp; save · Installment payment options (Klarna/Twisto)</li>
+    <li><strong>Personalization z silnika (4):</strong> Recently viewed · Personalized recommendations (ML) · Cross-sell auto ("frequently bought together") · Related products (same category)</li>
+    <li><strong>Interactive 2026 (3):</strong> AI chatbot · Live chat · Product configurator</li>
+    <li><strong>Widgets z silnika (1):</strong> Aggregate rating summary widget (4.8 ★ + breakdown 5/4/3/2/1)</li>
+  </ul>
+
+  <p class="note" style="margin-top: 14px;">📌 Plus do dyskusji: które funkcjonalności mają sub-options analogiczne do content (np quick view modal → "co w środku można pokazać" = content w funkcjonalności). Wtedy w content checklist wraca podsekcja "quick_view_modal_content" dla projekcji jaki content powinien być wbity w tę funkcjonalność. Hybrid case: reviews_block — TREŚĆ recenzji = content (zostaje w sek 2), MODUŁ filtrowania/sortowania = funkcjonalność (zostanie tu).</p>
+</div>
+
+<p class="note" style="margin-top: 24px;">Sesja 30.05.2026 noc² · update 31.05 rano (split content vs funkcjonalność) · 9 task'ów completed · 4 listy do klepnięcia + 1 TODO · <a href="https://tomekwlqq.github.io/eel-reports/VERDYKTY.html">→ VERDYKTY v2</a> · <a href="https://tomekwlqq.github.io/eel-reports/GLOV-raport-test-2026-05-21.html">→ GLOV reference</a></p>
 
 </div>
 </body>
