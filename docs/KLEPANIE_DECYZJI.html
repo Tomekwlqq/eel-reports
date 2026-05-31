@@ -86,7 +86,6 @@ tr:nth-child(even) { background: #fafafa; }
   <a href="#sec3">3. Model tytułu PDP — 9 chipów do potwierdzenia</a>
   <a href="#sec4">4. Propozycje P-x.y — kolejność priorytetów</a>
   <a href="#sec5">5. Pytania strategiczne — klep decyzję</a>
-  <a href="#sec6">6. Funkcjonalności silnika sklepowego (TODO)</a>
 </div>
 
 <!-- ════════════════════ SEKCJA 1: BUGI ════════════════════ -->
@@ -363,7 +362,7 @@ tr:nth-child(even) { background: #fafafa; }
   <strong>📐 Content vs Funkcjonalność (filozofia Tomka, 31.05 rano):</strong><br>
   <strong>Content</strong> = co dostarcza/robi PRODUCENT (obrazki, opisy, video, copy, recenzje treść).<br>
   <strong>Funkcjonalność</strong> = co dostarcza PLATFORMA SKLEPOWA (silnik: wishlist, compare, swatches, quick view, ATC direct, recommendations engine, checkout flow).<br>
-  Ta lista zawiera TYLKO content. Funkcjonalności silnika — sekcja 6 niżej (TODO). Used for: rekomendacje per owner (brand team brief vs dev team brief).
+  Ta lista zawiera TYLKO content. Funkcjonalności silnika = osobna tabelka (do dyskusji). Used for: rekomendacje per owner (brand team brief vs dev team brief).
 </div>
 
 <h3 id="sec2b-1">🛒 Listing Tile (kafelek) — 13 content items (z 23, -6 funkcjonalności, -4 z silnika textual)</h3>
@@ -400,7 +399,7 @@ tr:nth-child(even) { background: #fafafa; }
   </div>
 </div>
 
-<h3 id="sec2b-2">📄 PDP Content — 46 content items (z 60, -14 wyciętych do funkcjonalności)</h3>
+<h3 id="sec2b-2">📝 Listing Tile — Textual content (7 items)</h3>
 <div class="section-card">
   <h3 style="margin-top: 0">Graphic elements (6) — content z brandu</h3>
   <table>
@@ -432,11 +431,11 @@ tr:nth-child(even) { background: #fafafa; }
   <div class="legend" style="background: #fef2f2; border-left: 4px solid var(--bad); margin-top: 14px;">
     <strong>⚠ Wycięte z content (6 itemów) — to FUNKCJONALNOŚCI platformy sklepowej:</strong><br>
     color swatches · badge wizualny z silnika (Hit/Promo z product managementu) · quick view modal trigger · wishlist heart · compare icon · ATC direct z kafelka<br>
-    <em>Będą w osobnej tabelce "Product Tile = Funkcjonalności" — patrz sekcja 6 (TODO).</em>
+    <em>Będą w osobnej tabelce "Product Tile = Funkcjonalności" — osobna tabelka, do dyskusji.</em>
   </div>
 </div>
 
-<h3 id="sec2-2">📄 PDP Content — 46 content items (z 60, -14 wyciętych do funkcjonalności)</h3>
+<h3 id="sec2b-3">📄 PDP — Content (46 items, z 60 oryginalnie)</h3>
 
 <div class="section-card">
   <h3 style="margin-top: 0">Graphic elements (15) — content z brandu</h3>
@@ -510,7 +509,7 @@ tr:nth-child(even) { background: #fafafa; }
     <strong>Personalization z silnika (4):</strong> recently_viewed, personalized_recommendations, cross_sell_pdp (auto), related_products<br>
     <strong>Interactive 2026 (3):</strong> ai_chatbot_assistant, live_chat, configurator<br>
     <strong>Widgets z silnika (1):</strong> aggregate_rating_summary (rozkład 5/4/3/2/1 — widget)<br>
-    <em>Będą w osobnej tabelce "PDP = Funkcjonalności" — patrz sekcja 6 (TODO).</em>
+    <em>Będą w osobnej tabelce "PDP = Funkcjonalności" — osobna tabelka, do dyskusji.</em>
   </div>
 </div>
 
@@ -612,42 +611,6 @@ tr:nth-child(even) { background: #fafafa; }
     <tr><td>S8</td><td><strong>HEBE_CORTEX_AUDIT.html</strong>: budujemy teraz jako pierwszy real deliverable czy najpierw kończymy mapping taktyk?</td>
       <td><div class="checkbox-group"><label><input type="checkbox">A·HEBE first</label><label><input type="checkbox">B·tactics first ✓reko</label></div></td></tr>
   </table>
-</div>
-
-<!-- ════════════════════ SEKCJA 6: FUNKCJONALNOŚCI SILNIKA (TODO) ════════════════════ -->
-<h2 id="sec6">6. Następna tabelka (TODO) — Funkcjonalności silnika sklepowego</h2>
-<div class="section-card">
-  <p>Tomek zapowiedział (31.05 rano): <em>"później poproszę o taką samą tabelkę na product tile"</em> — analogiczna lista wyciętych funkcjonalności. Do osobnej dyskusji i osobnego raportu w audycie (inny owner, inny effort, inny budżet).</p>
-
-  <p style="margin-top: 10px;"><strong>Wstępna inwentaryzacja (~25 itemów)</strong> wyciętych z content_checklist:</p>
-
-  <h3 style="margin-top: 10px;">Listing Tile — funkcjonalności graphic (6)</h3>
-  <ul style="padding-left: 20px;">
-    <li><strong>Color/variant swatches</strong> — kropki kolorów widoczne na kafelku (silnik wariantów)</li>
-    <li><strong>Badge wizualny z silnika</strong> — Hit/Promo/Nowość z product managementu (auto-rendered z pola produktu)</li>
-    <li><strong>Quick view modal trigger</strong> — przycisk otwierający preview</li>
-    <li><strong>Wishlist heart icon</strong> — dodaj do ulubionych</li>
-    <li><strong>Compare icon</strong> — dodaj do porównywarki</li>
-    <li><strong>Add to cart direct z kafelka</strong> — Amazon style ATC bez wchodzenia na PDP</li>
-  </ul>
-
-  <h3>Listing Tile — z textual wycięte 31.05 (4 itemy, trim z 11 do 7)</h3>
-  <p style="margin: 0 0 8px 0; font-size: 12px; color: var(--muted);">Tomek 31.05: <em>"teraz textual elements - zostaje tylko 7-9, reszta to z silnika sklepu, to nie kontent"</em>. Plus z briefa: rozróżnienie rating_stars vs rating_value_numeric (Amazon problem — gwiazdki bez wartości ciężko rozczytać).</p>
-  <ul style="padding-left: 20px;">
-    <li><strong>stock_status</strong> — z silnika inventory (Dostępny / Ostatnie sztuki / Zarezerwuj)</li>
-    <li><strong>delivery_info_inline</strong> — z silnika logistyki (Dostawa pojutrze / Darmowa wysyłka)</li>
-    <li><strong>rating_stars + rating_count + rating_value_numeric (numeric 4.8/5)</strong> — <em>hybrid</em>: silnik renderuje z review modułu, treść (gwiazdki, count) od klientów, ale wartość liczbowa to UX decyzja brandu (czy wyświetlać obok gwiazdek dla czytelności)</li>
-  </ul>
-
-  <h3>PDP — funkcjonalności (~15)</h3>
-  <ul style="padding-left: 20px;">
-    <li><strong>Conversion (7):</strong> Main ATC button · Sticky ATC mobile · Buy Now / Express checkout · Quantity selector · Variant selector · Subscribe &amp; save · Installment payment options (Klarna/Twisto)</li>
-    <li><strong>Personalization z silnika (4):</strong> Recently viewed · Personalized recommendations (ML) · Cross-sell auto ("frequently bought together") · Related products (same category)</li>
-    <li><strong>Interactive 2026 (3):</strong> AI chatbot · Live chat · Product configurator</li>
-    <li><strong>Widgets z silnika (1):</strong> Aggregate rating summary widget (4.8 ★ + breakdown 5/4/3/2/1)</li>
-  </ul>
-
-  <p class="note" style="margin-top: 14px;">📌 Plus do dyskusji: które funkcjonalności mają sub-options analogiczne do content (np quick view modal → "co w środku można pokazać" = content w funkcjonalności). Wtedy w content checklist wraca podsekcja "quick_view_modal_content" dla projekcji jaki content powinien być wbity w tę funkcjonalność. Hybrid case: reviews_block — TREŚĆ recenzji = content (zostaje w sek 2), MODUŁ filtrowania/sortowania = funkcjonalność (zostanie tu).</p>
 </div>
 
 <p class="note" style="margin-top: 24px;">Sesja 30.05.2026 noc² · update 31.05 rano: split content vs funkcjonalność + 2 wersje tabel (2A pełna 84 items, 2B content-only 59 items) + nowy item rating_value_numeric (Amazon problem) · <a href="https://tomekwlqq.github.io/eel-reports/VERDYKTY.html">→ VERDYKTY v2</a> · <a href="https://tomekwlqq.github.io/eel-reports/GLOV-raport-test-2026-05-21.html">→ GLOV reference</a></p>
