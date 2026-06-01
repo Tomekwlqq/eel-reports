@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warsztat: Claude Ads-owiec — Meta + Google przez Claude i MCP</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1d212b; --ink:#e6e9ef; --mut:#9aa3b2;
+    --acc:#e8633a; --meta:#3aa0e8; --goog:#46c771; --warn:#f0b429; --bad:#ef5350;
+    --line:#2a2f3a; --code:#11141a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  header.hero{padding:54px 0 30px;border-bottom:1px solid var(--line)}
+  header.hero h1{font-size:34px;margin:0 0 8px;letter-spacing:-.5px}
+  header.hero .sub{color:var(--mut);font-size:17px;max-width:760px}
+  .kicker{display:inline-block;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:14px}
+  .layout{display:grid;grid-template-columns:230px 1fr;gap:34px;align-items:start}
+  nav.toc{position:sticky;top:18px;font-size:14px;border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--panel)}
+  nav.toc b{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);margin:0 0 10px}
+  nav.toc a{display:block;color:var(--ink);text-decoration:none;padding:5px 8px;border-radius:7px;margin-bottom:2px}
+  nav.toc a:hover{background:var(--panel2);color:#fff}
+  section{padding:40px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:25px;margin:0 0 6px;letter-spacing:-.3px}
+  h2 .n{color:var(--acc);font-weight:800;margin-right:10px}
+  h3{font-size:18px;margin:26px 0 8px;color:#fff}
+  h4{font-size:15px;margin:18px 0 6px;color:var(--meta);text-transform:uppercase;letter-spacing:.5px}
+  p{margin:10px 0}
+  .lead{color:var(--mut);font-size:16px;margin-bottom:18px}
+  ul,ol{margin:10px 0;padding-left:22px}
+  li{margin:5px 0}
+  code{background:var(--code);padding:2px 6px;border-radius:5px;font:13px/1.5 "SF Mono",Menlo,Consolas,monospace;color:#ffd9a8}
+  pre{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;font:13px/1.55 "SF Mono",Menlo,Consolas,monospace;color:#d7e0ee}
+  pre .c{color:#6b7585}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+  tr:hover td{background:var(--panel)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+  .card.meta{border-left:3px solid var(--meta)}
+  .card.goog{border-left:3px solid var(--goog)}
+  .card.warn{border-left:3px solid var(--warn)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:700;letter-spacing:.5px}
+  .pill.meta{background:rgba(58,160,232,.15);color:#7cc2f5}
+  .pill.goog{background:rgba(70,199,113,.15);color:#7ad89a}
+  .pill.have{background:rgba(70,199,113,.15);color:#7ad89a}
+  .pill.gap{background:rgba(240,180,41,.15);color:#f5cd6b}
+  .pill.risk{background:rgba(239,83,80,.15);color:#f19694}
+  .step{display:flex;gap:14px;margin:16px 0;align-items:flex-start}
+  .step .num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+  .step .body{flex:1}
+  .tc{background:linear-gradient(180deg,#1a1410,#171a21);border:1px solid var(--acc);border-radius:14px;padding:24px 26px}
+  .tc h2{color:var(--acc)}
+  .muted{color:var(--mut)}
+  .src{font-size:13px;color:var(--mut)}
+  .src b{color:var(--ink)}
+  blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel);color:var(--mut);border-radius:0 8px 8px 0}
+  @media(max-width:860px){.layout{grid-template-columns:1fr}nav.toc{position:static}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <span class="kicker">Warsztat wewnętrzny · 2026-06-01 · Tomek · seria „podręczniki Claude"</span>
+  <h1>Claude Ads-owiec: Meta + Google przez Claude i MCP</h1>
+  <p class="sub">Bliźniak podręcznika SEO/GEO. Zakres pracy płatnej reklamy robionej <b>Claudem + MCP</b>: research, struktura, kreacja, launch, optymalizacja — językiem naturalnym zamiast klikania w Ads Managerze. Mapa tego, co już masz (MCP Meta+Google, skill <code>/ads</code> 250+ checks, realny klient GLOV) i jak zrobić z tego usługę.</p>
+</div></header>
+
+<div class="wrap"><div class="layout">
+
+<nav class="toc">
+  <b>Spis</b>
+  <a href="#mapa">1 · Meta vs Google — mapa</a>
+  <a href="#pipeline">2 · Pipeline kampanii</a>
+  <a href="#mcp">3 · MCP — Twój silnik</a>
+  <a href="#meta">4 · Warsztat A: Meta</a>
+  <a href="#google">5 · Warsztat B: Google</a>
+  <a href="#procedury">6 · Procedury (recipes)</a>
+  <a href="#stack">7 · Twój stack</a>
+  <a href="#zrodla">8 · Źródła</a>
+  <a href="#usluga">9 · Propozycja usługi</a>
+  <a href="#tc">Truth Checker</a>
+</nav>
+
+<main>
+
+<section id="mapa">
+  <h2><span class="n">1</span>Meta vs Google — dwie maszyny, jeden warsztat</h2>
+  <p class="lead">Obie to płatny ruch, ale łapią klienta w innym momencie. Mylenie ich = przepalony budżet. Claude+MCP pozwala obsłużyć obie z terminala, językiem naturalnym.</p>
+  <div class="grid2">
+    <div class="card meta">
+      <span class="pill meta">META (FB/IG)</span>
+      <h3 style="margin-top:10px">Demand GENERATION — przerywasz scroll</h3>
+      <p class="muted">Klient nie szuka — Ty go zaczepiasz kreacją. Silnik to AI (Andromeda): targeting i tak robi maszyna, Twoja dźwignia #1 to <b>różnorodność kreacji</b>. Pytanie klienta: „czemu przepalam budżet i nie wiem które reklamy działają".</p>
+    </div>
+    <div class="card goog">
+      <span class="pill goog">GOOGLE</span>
+      <h3 style="margin-top:10px">Demand CAPTURE — łapiesz intencję</h3>
+      <p class="muted">Klient już szuka („sejf domowy cena") — Ty stajesz na drodze. Dźwignia: keyword/intent match, struktura konta, Quality Score, GAQL do diagnozy. Pytanie klienta: „płacę za kliki które nie kupują".</p>
+    </div>
+  </div>
+  <h4>Dlaczego Claude + MCP teraz</h4>
+  <p class="muted">Ads Manager to klikanie. MCP daje to samo przez język: „pokaż kampanie z ROAS &lt; 1 z 7 dni i zapauzuj zombie" = jedna komenda zamiast 20 kliknięć. Claude czyta insights, łączy z GA4, proponuje ruch — Ty zatwierdzasz. To jest warsztat: <b>analiza + decyzja</b>, nie ręczna obsługa panelu.</p>
+</section>
+
+<section id="pipeline">
+  <h2><span class="n">2</span>Pipeline kampanii — to JEST warsztat</h2>
+  <p class="lead">Jak biegnie zlecenie od briefu do optymalizacji. Każdy krok ma narzędzie, którym to robisz.</p>
+  <div class="step"><div class="num">0</div><div class="body"><h3 style="margin:0">Brief + dostępy</h3><p class="muted">Cel (sprzedaż/leady/zasięg), budżet, konto Meta (System User token / OAuth) + Google Ads (customer ID, GAQL). GA4 jako prawda o konwersji. Bez GA4 mierzysz kliki, nie przychód.</p></div></div>
+  <div class="step"><div class="num">1</div><div class="body"><h3 style="margin:0">Research odbiorcy / intencji</h3><p class="muted"><b>Meta:</b> MCP <code>search_interests</code> / <code>search_behaviors</code> / <code>search_demographics</code> + <code>estimate_audience_size</code>. <b>Google:</b> Senuto/keyword + GAQL <code>keyword_view</code>. Łączysz z mózgiem (<code>ctx_search</code>).</p></div></div>
+  <div class="step"><div class="num">2</div><div class="body"><h3 style="margin:0">Struktura konta</h3><p class="muted">Kampania → ad sety → ads. Claude proponuje strukturę pod cel (Advantage+ vs manualne). MCP: <code>create_campaign</code> / <code>create_adset</code> — <b>zawsze startują PAUSED</b> (safety default).</p></div></div>
+  <div class="step"><div class="num">3</div><div class="body"><h3 style="margin:0">Kreacja</h3><p class="muted">Brief kreacji wg wzorca <code>creative-director-ai</code> (Audience / Pain / Promise / Proof / CTA). Meta: różnorodność = dźwignia #1 (Andromeda karze podobieństwo &gt;60%). Generacja przez <code>/ads creative</code> + 4 agenty kreatywne. MCP <code>upload_ad_image</code> / <code>create_ad_creative</code>.</p></div></div>
+  <div class="step"><div class="num">4</div><div class="body"><h3 style="margin:0">Launch kontrolowany</h3><p class="muted">Reklamy włączasz świadomie (PAUSED→ACTIVE) po sanity-checku. CAPI/Pixel health zweryfikowane (<code>ads-meta</code> 50 checks) — bez tego Meta optymalizuje na ślepo.</p></div></div>
+  <div class="step"><div class="num">5</div><div class="body"><h3 style="margin:0">Analiza wyników</h3><p class="muted"><b>Meta:</b> <code>get_insights</code> (spend/ROAS/CPA, breakdowny: age/placement/device, creative-asset). <b>Google:</b> GAQL <code>FROM campaign</code> / <code>ad_group_ad</code>. Claude liczy anomalie (±σ), wykrywa zombie ads, łączy z GA4.</p></div></div>
+  <div class="step"><div class="num">6</div><div class="body"><h3 style="margin:0">Optymalizacja regułowa</h3><p class="muted">„ROAS &lt; 0.5 w 7 dniach → pauza", „skaluj budżet +20% gdy ROAS &gt; cel". MCP write: <code>update_campaign</code> / <code>update_adset</code> (budżet, status). <b>Każda zmiana na żywym koncie klienta = Ty zatwierdzasz.</b></p></div></div>
+  <blockquote>Granica MCP V1: zarządza <b>strukturą i budżetem</b>, nie tworzy kreacji od zera. Ad fatigue / refresh = osobny pipeline kreatywny (<code>/ads creative</code> + creative-director).</blockquote>
+</section>
+
+<section id="mcp">
+  <h2><span class="n">3</span>MCP — Twój silnik (jak Senuto w SEO)</h2>
+  <p class="lead">Masz podpięte oba: Meta Ads MCP (read+write) i Google Ads MCP (GAQL). To różnica między „doradzam" a „robię z terminala".</p>
+  <table>
+    <tr><th>Platforma</th><th>Read (raporty)</th><th>Write (zarządzanie)</th></tr>
+    <tr><td><span class="pill meta">Meta Ads MCP</span></td><td>ad accounts, campaigns/adsets/ads, <code>get_insights</code> (spend/ROAS/CPA, breakdowny), audience size, anomaly/zombie</td><td>pauza, budżet, rename, <code>create_*</code> (PAUSED), audiences/lookalike, CAPI <code>upload_conversion_events</code></td></tr>
+    <tr><td><span class="pill goog">Google Ads MCP</span></td><td>GAQL <code>search</code>: campaign, ad_group_ad, keyword_view, metrics. <code>list_accessible_customers</code></td><td>(V1 read-heavy — zmiany planuj, wykonuj świadomie)</td></tr>
+  </table>
+  <h4>GAQL — gotowiec z mózgu (<code>concepts/gaql</code>)</h4>
+<pre><span class="c">-- Kampanie + metryki 30 dni</span>
+SELECT campaign.name, campaign.status, metrics.impressions, metrics.clicks,
+  metrics.cost_micros, metrics.conversions, metrics.conversions_value
+FROM campaign
+WHERE segments.date DURING LAST_30_DAYS AND campaign.status = 'ENABLED'
+ORDER BY metrics.cost_micros DESC</pre>
+  <div class="card warn">
+    <h4 style="margin-top:0">⚠️ Pułapki (z mózgu + memory — oszczędzą Ci godzin)</h4>
+    <ul style="margin:0">
+      <li><b>Token Meta:</b> System User token (Graph API) ≠ OAuth dla mcp.facebook.com — to osobne flow. <b>Stan na dziś: token GLOV zwraca „API access blocked" — wymaga odświeżenia przed live runem.</b></li>
+      <li><code>asset_feed_spec</code> bez zawężenia → „too much data" → używaj <code>asset_feed_spec{link_urls}</code>.</li>
+      <li><code>limit=100</code> z creative fields → błąd → <code>limit=25</code> (paginacja sama działa).</li>
+      <li><code>purchase_roas</code> jest w insights — przychód = spend × ROAS, nie pobieraj osobno.</li>
+      <li>365-dniowe queries = wolne i drogie tokenowo — tnij okna.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="meta">
+  <h2><span class="n">4</span>Warsztat A: Meta (FB/IG)</h2>
+  <p class="lead">Po Andromeda (Meta AI engine, paź 2025) gra się zmieniła: targeting robi maszyna, Ty wygrywasz kreacją i czystością danych.</p>
+  <div class="grid2">
+    <div class="card meta"><b>Creative diversity = dźwignia #1</b><p class="muted">Andromeda filtruje ads 10 000× bardziej złożonym modelem. Reklamy o podobieństwie &gt;60% są tłumione. Wniosek: wiele różnych kątów kreatywnych &gt; jedna „idealna" reklama.</p></div>
+    <div class="card meta"><b>Pixel / CAPI health</b><p class="muted">Jeśli zdarzenia konwersji nie wpływają czysto (Pixel + CAPI), Meta optymalizuje na ślepo. To pierwszy audyt — <code>ads-meta</code> sprawdza 50 punktów. CAPI: <code>upload_conversion_events</code> (PII hashowane).</p></div>
+  </div>
+  <h4>Co robisz Claudem (Meta)</h4>
+  <ul>
+    <li><b>Audyt 50 checks</b> (<code>ads-meta</code>): Pixel/CAPI, creative diversity & fatigue, struktura, targeting, Advantage+.</li>
+    <li><b>Research odbiorcy</b>: <code>search_interests/behaviors/demographics</code> + <code>estimate_audience_size</code> — bez zgadywania.</li>
+    <li><b>Diagnoza wydajności</b>: <code>get_insights</code> z breakdownami (placement, device, age, <b>creative-asset</b> — która grafika/nagłówek ciągnie).</li>
+    <li><b>Optymalizacja</b>: reguły pauza/budżet przez <code>update_*</code>, nowe kampanie jako PAUSED.</li>
+  </ul>
+</section>
+
+<section id="google">
+  <h2><span class="n">5</span>Warsztat B: Google</h2>
+  <p class="lead">Tu wygrywa intencja i struktura. Claude + GAQL = diagnoza konta w sekundy zamiast grzebania w panelu.</p>
+  <h4>Co robisz Claudem (Google)</h4>
+  <ul>
+    <li><b>Audyt konta</b> (<code>/ads google</code>): struktura kampanii, Quality Score, marnotrawstwo budżetu, search terms.</li>
+    <li><b>GAQL diagnostyka</b>: kampanie po koszcie, kreacje z <code>final_urls</code>, <code>keyword_view</code> z <code>match_type</code> — co zżera budżet bez konwersji.</li>
+    <li><b>Keyword/intent</b>: Senuto (PL/CEE) + GAQL — mapa fraz pod intencję transakcyjną.</li>
+    <li><b>Most do GEO/SEO</b>: te same frazy intencyjne karmią podręcznik SEO/GEO — paid waliduje, organic skaluje za darmo.</li>
+  </ul>
+  <div class="card goog"><b>Synergia z poprzednim podręcznikiem</b><p class="muted">Google Ads search terms = realne zapytania, za które ktoś płaci. Wrzuć je do GEO/FAQ (Answer Equity, 1500–1750 słów) — i przestajesz płacić za ruch, który zacznie przychodzić organicznie. To jeden klient, dwa podręczniki.</p></div>
+</section>
+
+<section id="procedury">
+  <h2><span class="n">6</span>Procedury gotowe (recipes — odpalaj jak przepis)</h2>
+  <p class="lead">Sedno podręcznika: powtarzalne sekwencje. Każda procedura = kroki z dokładnym narzędziem. Kopiuj i wykonuj.</p>
+
+  <div class="card meta">
+    <h3 style="margin-top:0">PROC-1 · Audyt konta nowego klienta (Meta + Google)</h3>
+    <p class="muted">Kiedy: onboarding, pierwszy kontakt. Cel: raport „co jest zepsute + gdzie ucieka budżet".</p>
+    <ol>
+      <li><code>ctx_search(["meta ads audyt", "gaql diagnoza"])</code> — najpierw mózg.</li>
+      <li><code>/ads audit meta</code> → 50 checks (Pixel/CAPI, creative diversity, struktura, Advantage+).</li>
+      <li><code>/ads audit google</code> → struktura, Quality Score, marnotrawstwo, search terms.</li>
+      <li>Meta MCP <code>get_insights(level=campaign, time_range=last_30d)</code> + breakdown <code>placement</code>/<code>device</code>.</li>
+      <li>Google MCP GAQL <code>FROM campaign ORDER BY cost_micros DESC</code>.</li>
+      <li>Złóż raport HTML (wzorzec mega-audytu) → publish.</li>
+    </ol>
+  </div>
+
+  <div class="card goog">
+    <h3 style="margin-top:0">PROC-2 · „Gdzie ucieka budżet" (diagnoza marnotrawstwa)</h3>
+    <ol>
+      <li><b>Google:</b> GAQL <code>FROM keyword_view</code> + <code>search_term_view</code> → frazy z wydatkiem i 0 konwersji → lista negatywów.</li>
+      <li><b>Meta:</b> <code>get_insights(breakdown=ad_format_asset / image_asset)</code> → które kreacje palą bez ROAS = zombie.</li>
+      <li>Cross z GA4 (<code>run_report</code>) → czy kliki w ogóle dochodzą do koszyka.</li>
+      <li>Output: lista „zatnij to" + szacowana oszczędność PLN/mies.</li>
+    </ol>
+  </div>
+
+  <div class="card meta">
+    <h3 style="margin-top:0">PROC-3 · Launch kampanii Meta od zera</h3>
+    <ol>
+      <li>Research odbiorcy: <code>search_interests</code> / <code>search_behaviors</code> + <code>estimate_audience_size</code>.</li>
+      <li>Struktura: <code>create_campaign</code> → <code>create_adset</code> (<b>startują PAUSED</b>).</li>
+      <li>Kreacja: brief wg <code>creative-director-ai</code> (Audience/Pain/Promise/Proof/CTA) → <code>/ads creative</code> → <b>min. 3–5 różnych kątów</b> (Andromeda karze podobieństwo).</li>
+      <li><code>upload_ad_image</code> → <code>create_ad_creative</code> → <code>create_ad</code>.</li>
+      <li>Sanity: Pixel/CAPI health (<code>ads-meta</code>) zanim włączysz.</li>
+      <li><code>update_adset(status=ACTIVE)</code> — świadomy launch po sanity-checku.</li>
+    </ol>
+  </div>
+
+  <div class="card warn">
+    <h3 style="margin-top:0">PROC-4 · Optymalizacja tygodniowa (regułowa)</h3>
+    <ol>
+      <li><code>get_insights(time_range=last_7d)</code> Meta + GAQL 7d Google.</li>
+      <li>Reguły: <code>ROAS &lt; 0.5 (7d)</code> → kandydat do pauzy · <code>ROAS &gt; cel</code> → skala budżet +20%.</li>
+      <li><b>Przedstaw Tomkowi listę zmian → ZATWIERDZENIE</b> (żywe konto = realne pieniądze).</li>
+      <li>Po OK: <code>update_campaign</code> / <code>update_adset</code> (status, budżet).</li>
+      <li>Wpis @log do historii klienta (co zmieniono i czemu).</li>
+    </ol>
+  </div>
+
+  <div class="card meta">
+    <h3 style="margin-top:0">PROC-5 · Creative refresh (ad fatigue)</h3>
+    <ol>
+      <li><code>get_insights(breakdown=creative)</code> + frequency → wykryj zmęczone kreacje (CTR spada, freq rośnie).</li>
+      <li><code>/ads creative</code> + 4 agenty kreatywne → nowe kąty z briefu.</li>
+      <li>Podmiana jako nowe ads (PAUSED) → A/B ze starymi → wygrane skaluj.</li>
+    </ol>
+  </div>
+
+  <div class="card goog">
+    <h3 style="margin-top:0">PROC-6 · Raport tygodniowy klientowi</h3>
+    <ol>
+      <li>Meta <code>get_insights</code> + Google GAQL + GA4 <code>run_report</code> (przychód = prawda).</li>
+      <li>WoW delta (spend/ROAS/CPA/konwersje) + anomalie ±σ.</li>
+      <li>HTML (sparklines) → publish → notka Discord. Reuse: metoda dashboardu (<code>memory: reference_meta_ads_dashboard</code>).</li>
+    </ol>
+  </div>
+
+  <p class="src">Każda procedura zaczyna się od <code>ctx_search</code> (mózg) i — gdzie dotyka żywego konta — kończy zatwierdzeniem przez Tomka. To nie autonomia, to warsztat z bezpiecznikiem.</p>
+</section>
+
+<section id="stack">
+  <h2><span class="n">7</span>Twój stack — czym dysponujesz</h2>
+  <div class="grid2">
+    <div class="card">
+      <h4 style="margin-top:0">Skille</h4>
+      <ul style="margin:0">
+        <li><code>/ads</code> — multi-platform (Google/Meta/YT/LinkedIn/TikTok/MS/Apple), <b>250+ checks, 17 sub-skilli + 10 agentów</b> (6 audit + 4 creative), AI creative gen, landing, budget, plan, competitor, dna, photoshoot</li>
+        <li><code>ads-meta</code> — Meta deep, 50 checks, Andromeda/Advantage+</li>
+        <li><code>analytics</code> · <code>cro</code> — domknięcie lejka</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Dane / MCP (moat)</h4>
+      <ul style="margin:0">
+        <li><b>Meta Ads MCP</b> — read+write (token do odświeżenia)</li>
+        <li><b>Google Ads MCP</b> — GAQL</li>
+        <li><b>GA4</b> — prawda o konwersji/przychodzie</li>
+        <li><b>PostHog</b> — produkt/funnel</li>
+        <li>Metoda dashboardu Meta (Graph API + Streamlit) — <code>memory: reference_meta_ads_dashboard</code>, szablon <code>GLOV/meta_ads/dashboard.py</code></li>
+      </ul>
+    </div>
+  </div>
+  <p class="src">Realny klient: <b>GLOV / Phenicoptere PL</b> — konto Meta Ads + Google Ads + GA4 już podłączone. To Twój poligon i pierwszy case.</p>
+</section>
+
+<section id="zrodla">
+  <h2><span class="n">8</span>Źródła (Twoje, nie generyczne)</h2>
+  <table>
+    <tr><th>Źródło</th><th>Co bierzesz</th></tr>
+    <tr><td><b>⭐ Wiki (mózg)</b> <span class="src">ctx_search</span></td><td><code>facebook-ads-mcp</code> (read/write/pułapki), <code>gaql</code> (queries), <code>creative-director-ai</code> (brief kreacji). Odpytuj PRZED robotą.</td></tr>
+    <tr><td><b>memory: reference_meta_ads_dashboard</b></td><td>Graph API endpointy, pułapki (asset_feed_spec, limit=25, purchase_roas), szablon dashboardu</td></tr>
+    <tr><td><b>skill ads-meta</b></td><td>Andromeda AI engine (paź 2025), 50 checks, creative similarity &gt;60% kara</td></tr>
+    <tr><td><b>GLOV / Phenicoptere</b></td><td>Realne konto Meta+Google+GA4 — case i poligon</td></tr>
+    <tr><td><b>Podręcznik SEO/GEO</b> <span class="src">CLAUDE_SEO_GEO_WARSZTAT</span></td><td>Bliźniak — search terms z Google Ads → GEO/FAQ. Jeden klient, dwa podręczniki.</td></tr>
+  </table>
+</section>
+
+<section id="usluga">
+  <h2><span class="n">9</span>Propozycja: usługa</h2>
+  <p class="lead">Ta sama teza co przy SEO/GEO: <b>nie nowy biznes — linia w istniejącym ruchu</b> (GLOV/EEL). Masz realne konto, dane i metodę. Przewaga: większość „chłopaków od reklam" nie łączy ads z GA4/przychodem ani nie zarządza tym z terminala regułowo.</p>
+  <table>
+    <tr><th>Pakiet</th><th>Co zawiera</th><th>Wpięcie</th></tr>
+    <tr><td><b>Ads Audit</b> (lead)</td><td><code>/ads audit</code> Meta+Google + Pixel/CAPI health + marnotrawstwo budżetu → raport HTML</td><td>Free/lead jak GEO Audit</td></tr>
+    <tr><td><b>Setup Sprint</b></td><td>Struktura konta + research odbiorcy/keywordów + kreacje (briefy) + launch kontrolowany</td><td>Jednorazowy, raport jak mega-audyt</td></tr>
+    <tr><td><b>Zarządzanie</b> (retainer)</td><td>Optymalizacja regułowa (pauza/budżet) + raport tygodniowy ROAS + creative refresh</td><td>EEL Base/Super — retencja</td></tr>
+  </table>
+  <h4>Następne 3 ruchy</h4>
+  <ol>
+    <li><b>Odśwież token Meta</b> — bez tego MCP live nie ruszy (dziś „access blocked").</li>
+    <li><b>Demo na GLOV</b> — <code>/ads audit</code> + GAQL na realnym koncie = case do pitchu.</li>
+    <li><b>Jedna strona oferty</b> — „Paid Ads zarządzany Claudem", 3 pakiety, do EEL HUB.</li>
+  </ol>
+</section>
+
+<section id="tc" class="tc">
+  <h2>Truth Checker</h2>
+  <h4>Co wiem</h4>
+  <ul>
+    <li>Masz oba MCP (Meta read+write, Google GAQL), skill <code>/ads</code> (250+ checks) + <code>ads-meta</code>, GA4, realne konto GLOV. Wiki ma <code>facebook-ads-mcp</code>/<code>gaql</code>/<code>creative-director</code>.</li>
+    <li>Token Meta dziś NIE działa („API access blocked", OAuthException 200) — potwierdzone live.</li>
+    <li>Andromeda/creative-diversity i pułapki API to wiedza z mózgu, nie zgadywanie.</li>
+  </ul>
+  <h4>Co zakładam</h4>
+  <ul>
+    <li>Że odświeżenie tokenu Meta to formalność (re-auth), nie martwy connector. Nie zweryfikowałem.</li>
+    <li>Że masz dostęp write do kont klientów — zarządzanie regułowe (pauza/budżet) wymaga ads_management, nie tylko read.</li>
+    <li>Że „klienci chcą" reklamy tak jak SEO/GEO — nie znam liczby ani budżetów.</li>
+  </ul>
+  <h4>Co może być błędne / ryzykowne</h4>
+  <ul>
+    <li><b>Write na żywym koncie klienta = realne pieniądze.</b> Automatyczna pauza/budżet przez MCP to ryzyko — zła reguła = zatrzymana sprzedaż albo przepalony budżet. Każda zmiana musi przejść przez Twoje zatwierdzenie, nie autonomię.</li>
+    <li>Andromeda (paź 2025) i „similarity &gt;60%" to claim ze skilla — zweryfikuj na realnych danych GLOV zanim sprzedasz jako pewnik.</li>
+    <li>MCP V1 nie tworzy kreacji — jeśli problem klienta to ad fatigue, sam MCP nie wystarczy.</li>
+  </ul>
+  <h4>Co zweryfikować zanim ruszysz</h4>
+  <ul>
+    <li>Odśwież token Meta i odpal <code>get_insights</code> na GLOV — potwierdź że dane lecą.</li>
+    <li>Sprawdź zakres tokenu (ads_read vs ads_management) — bez management nie zarządzasz.</li>
+    <li>1 realny case GLOV (przed/po) zanim pakietyzujesz.</li>
+  </ul>
+  <h4>Co poprawiłbym z jednym inputem</h4>
+  <p class="muted">Daj <b>odświeżony token Meta + nazwę konta GLOV</b> — odpalę live <code>get_campaigns</code> + <code>get_insights</code>, wstawię realne liczby (ROAS, CPA, zombie ads) do tego podręcznika i zrobię z sekcji 8 pitch oparty na faktach, nie szablonie.</p>
+</section>
+
+<p class="src" style="padding:24px 0 50px">Plik: <code>CLAUDE_ADS_META_GOOGLE_WARSZTAT_2026-06-01.html</code> · seria „podręczniki Claude" (#2, bliźniak SEO/GEO) · źródła w sekcji 7.</p>
+
+</main>
+</div></div>
+</body>
+</html>

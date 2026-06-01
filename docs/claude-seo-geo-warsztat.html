@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warsztat: Claude SEO + GEO-wiec — zakres pracy i usługa</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1d212b; --ink:#e6e9ef; --mut:#9aa3b2;
+    --acc:#e8633a; --acc2:#3aa0e8; --geo:#7c5cff; --ok:#46c771; --warn:#f0b429; --bad:#ef5350;
+    --line:#2a2f3a; --code:#11141a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  header.hero{padding:54px 0 30px;border-bottom:1px solid var(--line)}
+  header.hero h1{font-size:34px;margin:0 0 8px;letter-spacing:-.5px}
+  header.hero .sub{color:var(--mut);font-size:17px;max-width:760px}
+  .kicker{display:inline-block;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:14px}
+  .layout{display:grid;grid-template-columns:230px 1fr;gap:34px;align-items:start}
+  nav.toc{position:sticky;top:18px;font-size:14px;border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--panel)}
+  nav.toc b{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);margin:0 0 10px}
+  nav.toc a{display:block;color:var(--ink);text-decoration:none;padding:5px 8px;border-radius:7px;margin-bottom:2px}
+  nav.toc a:hover{background:var(--panel2);color:#fff}
+  section{padding:40px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:25px;margin:0 0 6px;letter-spacing:-.3px}
+  h2 .n{color:var(--acc);font-weight:800;margin-right:10px}
+  h3{font-size:18px;margin:26px 0 8px;color:#fff}
+  h4{font-size:15px;margin:18px 0 6px;color:var(--acc2);text-transform:uppercase;letter-spacing:.5px}
+  p{margin:10px 0}
+  .lead{color:var(--mut);font-size:16px;margin-bottom:18px}
+  ul,ol{margin:10px 0;padding-left:22px}
+  li{margin:5px 0}
+  code{background:var(--code);padding:2px 6px;border-radius:5px;font:13px/1.5 "SF Mono",Menlo,Consolas,monospace;color:#ffd9a8}
+  pre{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;font:13px/1.55 "SF Mono",Menlo,Consolas,monospace;color:#d7e0ee}
+  pre .c{color:#6b7585}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+  tr:hover td{background:var(--panel)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+  .card.geo{border-left:3px solid var(--geo)}
+  .card.seo{border-left:3px solid var(--acc2)}
+  .card.warn{border-left:3px solid var(--warn)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:700;letter-spacing:.5px}
+  .pill.seo{background:rgba(58,160,232,.15);color:#7cc2f5}
+  .pill.geo{background:rgba(124,92,255,.16);color:#b6a4ff}
+  .pill.have{background:rgba(70,199,113,.15);color:#7ad89a}
+  .pill.gap{background:rgba(240,180,41,.15);color:#f5cd6b}
+  .step{display:flex;gap:14px;margin:16px 0;align-items:flex-start}
+  .step .num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+  .step.geo .num{background:var(--geo)}
+  .step .body{flex:1}
+  .tc{background:linear-gradient(180deg,#1a1410,#171a21);border:1px solid var(--acc);border-radius:14px;padding:24px 26px}
+  .tc h2{color:var(--acc)}
+  .muted{color:var(--mut)}
+  .src{font-size:13px;color:var(--mut)}
+  .src b{color:var(--ink)}
+  .big{font-size:21px;font-weight:800;color:#fff}
+  blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel);color:var(--mut);border-radius:0 8px 8px 0}
+  @media(max-width:860px){.layout{grid-template-columns:1fr}nav.toc{position:static}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <span class="kicker">Warsztat wewnętrzny · 2026-06-01 · Tomek</span>
+  <h1>Jak zostać Claude SEO + GEO-wcem</h1>
+  <p class="sub">Zakres pracy, warsztat narzędziowy i propozycja jak z tego zrobić usługę dla klientów. Nie kurs „SEO dla każdego" — mapa tego, co <b>już masz w arsenale</b> (29 skilli, Senuto, GA4/Clarity, pipeline GEO) i jak to spiąć w powtarzalną metodę, którą sprzedajesz.</p>
+</div></header>
+
+<div class="wrap"><div class="layout">
+
+<nav class="toc">
+  <b>Spis</b>
+  <a href="#mapa">1 · SEO vs GEO — mapa</a>
+  <a href="#pipeline">2 · Pipeline zlecenia</a>
+  <a href="#senuto">3 · Senuto — Twój silnik</a>
+  <a href="#seo">4 · Warsztat A: Claude SEO</a>
+  <a href="#geo">5 · Warsztat B: GEO</a>
+  <a href="#procedury">6 · Procedury (recipes)</a>
+  <a href="#stack">7 · Twój stack (29 skilli)</a>
+  <a href="#zrodla">8 · Źródła do nauki</a>
+  <a href="#usluga">9 · Propozycja usługi</a>
+  <a href="#tc">Truth Checker</a>
+</nav>
+
+<main>
+
+<section id="mapa">
+  <h2><span class="n">1</span>SEO vs GEO — dwie dyscypliny, jeden warsztat</h2>
+  <p class="lead">SEO klasyczne komodytyzuje się na oczach. GEO (Generative Engine Optimization) to świeża przestrzeń, gdzie nie jesteś jeszcze towarem. Robi się je tym samym ruchem, ale optymalizujesz pod inną maszynę.</p>
+
+  <div class="grid2">
+    <div class="card seo">
+      <span class="pill seo">SEO</span>
+      <h3 style="margin-top:10px">Optymalizacja pod Google (10 niebieskich linków)</h3>
+      <p class="muted">Cel: ranking strony w SERP. Sygnały: linki, autorytet domeny, technika (CWV, indeksacja), słowa kluczowe, E-E-A-T. Klient pyta „dlaczego nie jestem na 1 stronie".</p>
+    </div>
+    <div class="card geo">
+      <span class="pill geo">GEO</span>
+      <h3 style="margin-top:10px">Optymalizacja pod AI (cytat w odpowiedzi)</h3>
+      <p class="muted">Cel: być <b>cytowanym</b> przez AI Overviews / ChatGPT / Perplexity. Sygnały: machine-readable fakty, Answer Equity, schema z parytetem danych, pokrycie „query fan-out". Klient pyta „dlaczego AI poleca konkurencję, nie mnie".</p>
+    </div>
+  </div>
+
+  <h4>Dlaczego teraz (dane — czytaj z atrybucją, nie jako pewnik)</h4>
+  <table>
+    <tr><th>Metryka</th><th>Wartość</th><th>Źródło / data</th></tr>
+    <tr><td>Zasięg AI Overviews</td><td>~1,5 mld użytkowników/mies, 200+ krajów</td><td class="src">Google, cyt. w skillu <b>seo-geo</b> (AgriciDaniel, luty 2026)</td></tr>
+    <tr><td>Pokrycie zapytań przez AIO</td><td>50%+ zapytań</td><td class="src">„industry data", cyt. seo-geo (luty 2026)</td></tr>
+    <tr><td>Wzrost sesji z AI</td><td>+527% (sty–maj 2025)</td><td class="src">SparkToro, cyt. seo-geo</td></tr>
+    <tr><td>ChatGPT WAU / Perplexity</td><td>~900 mln / 500+ mln zapytań mies.</td><td class="src">OpenAI / Perplexity, cyt. seo-geo</td></tr>
+    <tr><td>Próg „zaufania" AI dla produktu</td><td>mediana 156 recenzji</td><td class="src">Blueprint PDP (nblm research, 2025/26) — wymaga walidacji</td></tr>
+    <tr><td>Optymalna długość treści cytowanej przez AI</td><td>1 500–1 750 słów</td><td class="src">Neil Patel, analiza 15 000 promptów ChatGPT+Gemini · <b>nasza wiki</b> <code>concepts/ai-citation-length</code></td></tr>
+  </table>
+  <p class="src">⚠️ To liczby cudze i datowane (luty 2026). Piszemy czerwiec 2026, obszar zmienia się szybko. W materiale dla klienta cytuj je ze źródłem, nie przeklejaj jako „fakt dziś".</p>
+</section>
+
+<section id="pipeline">
+  <h2><span class="n">2</span>Pipeline zlecenia — to JEST warsztat</h2>
+  <p class="lead">„Zakres pracy" to nie lista narzędzi, tylko jak biegnie engagement od briefu do deliverable. Reszta dokumentu wisi na tym szkielecie.</p>
+
+  <div class="step"><div class="num">0</div><div class="body">
+    <h3 style="margin:0">Brief + dostępy</h3>
+    <p class="muted">URL, branża, problem główny (ranking? AI-visibility? leady lokalne?). Dostępy: GA4 (Viewer), GSC, ewentualnie Clarity. Bez danych jesteś zgadywaczem — z danymi jesteś analitykiem. To Twoja przewaga nad „chłopakiem od SEO".</p>
+  </div></div>
+  <div class="step"><div class="num">1</div><div class="body">
+    <h3 style="margin:0">Research — pytania i frazy (Senuto)</h3>
+    <p class="muted">Wyciągasz to, co konsument <b>ma w głowie</b>: pytania (getQuestions), frazy (getKeywords), klastry (getGroups). To wejście i do SEO (content gap), i do GEO (FAQ / answer units). Sekcja 3 pokazuje to na żywo.</p>
+  </div></div>
+  <div class="step"><div class="num">2</div><div class="body">
+    <h3 style="margin:0">Analiza SEO — stan techniczny i treściowy</h3>
+    <p class="muted">Orchestrator <code>/seo audit URL</code> → technika (crawl, indeksacja, CWV/INP, schema), treść (E-E-A-T), linki. Wynik: lista braków z priorytetem. Warsztat A (sekcja 4).</p>
+  </div></div>
+  <div class="step geo"><div class="num">3</div><div class="body">
+    <h3 style="margin:0">Analiza GEO — cytowalność przez AI</h3>
+    <p class="muted"><code>/seo-geo URL</code> dla strony + dla PDP nasz własny <code>geo_check.py</code> (13 pillarów, score/100). Wynik: gdzie AI <b>nie może</b> Cię zacytować i dlaczego. Warsztat B (sekcja 5) — tu jesteś unikatem, nie towarem.</p>
+  </div></div>
+  <div class="step geo"><div class="num">4</div><div class="body">
+    <h3 style="margin:0">Deliverable — CONTENT_DIFF + raport</h3>
+    <p class="muted">Klient nie dostaje teorii, dostaje <b>gotowe do wdrożenia zmiany</b>: przepisane H1, Answer Equity, FAQ z realnych pytań, schema JSON-LD, lista backlink-targetów. Deterministyczny output (ten sam URL = ten sam diff), opcjonalna humanizacja zdań czytanych przez człowieka.</p>
+  </div></div>
+
+  <blockquote>Pętla samoucząca: każda nieznana kategoria → <code>build_category_intel.py</code> dokłada wpis do bazy CS. Po 10 klientach masz własną bazę „jak wygląda dobra kategoria w PL", której konkurencja kupuje od Ahrefs. To moat.</blockquote>
+</section>
+
+<section id="senuto">
+  <h2><span class="n">3</span>Senuto — Twój silnik (z żywym przykładem)</h2>
+  <p class="lead">Masz Senuto podpięte przez MCP. To Twoja realna przewaga: dane keyword/question dla PL + CEE (Czechy, Węgry, Rumunia…), których generyczny US-owy workflow z YouTube nie ma. To nie „kolejny tool" — to wejście całego pipeline.</p>
+
+  <h4>3 endpointy które robią robotę</h4>
+  <table>
+    <tr><th>Endpoint</th><th>Co daje</th><th>Do czego w pracy</th></tr>
+    <tr><td><code>get_questions</code></td><td>Realne pytania konsumenta + wolumen + featured-snippet/PAA</td><td><b>GEO złoto</b>: FAQ, Answer Units, Discovery Questions</td></tr>
+    <tr><td><code>get_keywords</code></td><td>Frazy per seed (wolumen, CPC, SERP features). Limit 50/dzień</td><td>Content gap, mapa intencji, tytuły</td></tr>
+    <tr><td><code>get_groups</code></td><td>Gotowe klastry semantyczne</td><td>Architektura hub-and-spoke, sekcje strony</td></tr>
+    <tr><td><code>get_competitors</code></td><td>Domeny konkurencji, Top 3/10/50, wspólne frazy</td><td>Benchmark widoczności, gap analysis</td></tr>
+  </table>
+
+  <h4>Live pull — „sejf domowy" (uruchomione dziś, PL, country_id=1)</h4>
+  <p>Jeden call <code>get_questions("sejf domowy")</code> zwrócił <b>41 pytań</b>. Top wolumenowo, prosto z maszyny:</p>
+  <table>
+    <tr><th>Pytanie konsumenta</th><th>Wol./mies</th><th>SERP sygnał</th><th>Co z tym robisz</th></tr>
+    <tr><td>ile kosztuje sejf</td><td>210</td><td>featured_answer + PAA</td><td>Answer Equity + FAQ (przedział cen)</td></tr>
+    <tr><td>gdzie zamontować sejf w domu</td><td>50</td><td>featured + video + PAA</td><td>Sekcja „use case" + FAQ + video alt</td></tr>
+    <tr><td>jak zamontować sejf</td><td>40</td><td>featured_answer</td><td>FAQ z instrukcją (answer unit)</td></tr>
+    <tr><td>jaki sejf do domu forum</td><td>40</td><td>PAA</td><td>Sygnał: kupujący szuka rekomendacji → recenzje</td></tr>
+    <tr><td>gdzie kupić sejf domowy</td><td>30</td><td>map + PLA (CPC 3,5 zł)</td><td>Intencja transakcyjna — local/Maps</td></tr>
+    <tr><td>jak ukryć sejf w ścianie / gdzie ukryć</td><td>20+20</td><td>direct_answer</td><td>Sekcja „use case" — buyer scenarios</td></tr>
+  </table>
+  <p class="src">Pełne 41 pytań w cache projektu GEO. <code>get_keywords</code> dziś zwróciło 418 — dzienny limit 50/24h wyczerpany porannymi runami; reset 00:00 UTC.</p>
+
+  <div class="card geo">
+    <h4 style="margin-top:0">Most do GEO (czemu to ważne)</h4>
+    <p class="muted">Te pytania to dokładnie zapytania, które AI rozbija w „query fan-out" (sekcja 5). Strona, która <b>nie odpowiada</b> na „gdzie zamontować" i „ile kosztuje" w czytelnym tekście, wypada z syntezy AI — nawet jeśli ma świetne packshoty. Senuto daje Ci listę tych braków, zanim klient zauważy że go nie ma w ChatGPT.</p>
+  </div>
+</section>
+
+<section id="seo">
+  <h2><span class="n">4</span>Warsztat A: Claude SEO</h2>
+  <p class="lead">Klasyka, ale robiona promptami/skillami zamiast rękami. Połączenie tego co pokazuje rynek (np. masterclass Tima — sekcja 7) z naszymi skillami. Tu marża jest, ale presja cenowa rośnie — traktuj jako bazę, nie wyróżnik.</p>
+
+  <h4>Filary i czym to robisz</h4>
+  <table>
+    <tr><th>Obszar</th><th>Skill / narzędzie</th><th>Status</th></tr>
+    <tr><td>Audyt całościowy</td><td><code>/seo audit URL</code> (orchestrator 24 sub-skille)</td><td><span class="pill have">masz</span></td></tr>
+    <tr><td>Technika (crawl, INP/CWV, indeksacja, JS render)</td><td><code>/seo-technical</code>, <code>/seo-google</code> (CrUX/GSC/GA4)</td><td><span class="pill have">masz</span></td></tr>
+    <tr><td>Backlinki — guest post / competitor</td><td>wzorzec <code>/backlink-research</code> (z filmu Tima) + <code>/seo-backlinks</code></td><td><span class="pill gap">do złożenia</span></td></tr>
+    <tr><td>Local / GBP / Maps</td><td><code>/seo-local</code>, <code>/seo-maps</code> (geo-grid, NAP, recenzje)</td><td><span class="pill have">masz</span></td></tr>
+    <tr><td>Klastrowanie tematów / architektura</td><td><code>/seo-cluster</code> (SERP overlap, hub-and-spoke)</td><td><span class="pill have">masz</span></td></tr>
+    <tr><td>Treść / E-E-A-T / brief</td><td><code>/seo-content</code>, <code>/seo-content-brief</code></td><td><span class="pill have">masz</span></td></tr>
+    <tr><td>Schema / sitemap / hreflang</td><td><code>/seo-schema</code>, <code>/seo-sitemap</code>, <code>/seo-hreflang</code></td><td><span class="pill have">masz</span></td></tr>
+    <tr><td>Programmatic (usługa+miasto LP)</td><td><code>/seo-programmatic</code></td><td><span class="pill have">masz</span></td></tr>
+    <tr><td>E-commerce (product schema, Shopping)</td><td><code>/seo-ecommerce</code></td><td><span class="pill have">masz</span></td></tr>
+  </table>
+
+  <h4>Workflow z masterclass Tima (kopiowalne, nasze odpowiedniki)</h4>
+  <ul>
+    <li><b>GSC „strona 2" gold mine</b> — frazy z pozycji 11–20 (najbliżej top10), Claude priorytetyzuje co dopracować. → <code>/seo-google</code> + Senuto.</li>
+    <li><b>GBP Category Audit</b> — audyt kategorii Google Business Profile pod ranking lokalny. → <code>/seo-local</code> + <code>/seo-maps</code>.</li>
+    <li><b>Competitor review mining</b> — recenzje konkurencji jako język klienta do copy. → mamy <code>review_analyzer.py</code> (Ceneo→CEP).</li>
+    <li><b>backlink-research skill</b> — guest post / „write for us" przez footprint search, bez Ahrefs. Pełny gotowiec: <code>Raw/videos/transkrypty/backlink-research_SKILL_z-filmu-Tim.md</code>.</li>
+    <li><b>ChatGPT citation targets</b> (z naszej wiki <code>chatgpt-citation-strategy</code>) — strony cytujące 2–3 konkurentów = pre-qualified outreach. Workflow: backlinki konkurencji → filtr multi-competitor mentions → export. Łączy SEO i GEO w jednym ruchu.</li>
+    <li><b>Claude Goals Protocol</b> — acceptance criteria w prompcie = wymuszony, audytowalny output. To <i>dokładnie</i> Twój kierunek „checklist→verify" z EEL.</li>
+  </ul>
+</section>
+
+<section id="geo">
+  <h2><span class="n">5</span>Warsztat B: GEO — tu jesteś unikatem</h2>
+  <p class="lead">To nie teoria z bloga — to nasza zwalidowana metoda (GEO Pipeline v1, +20–25 lift na SejfZone). Generyczny SEO-wiec tego nie ma. GEO = budujesz stronę pod to, jak AI <b>czyta i cytuje</b>, nie pod to, jak wygląda.</p>
+
+  <h4>Trzy koncepty, które musisz mieć w krwiobiegu</h4>
+  <div class="grid2">
+    <div class="card geo"><b>Answer Equity</b><p class="muted">Pierwsze <b>30 słów</b> rozwiązują konkretną obawę zakupową („czy zmieści się w szafce?") = TL;DR anchor. AI wyciąga to jako gotową odpowiedź. Całość treści cytowalnej celuj w <b>1 500–1 750 słów</b> (sweet spot cytatu AI wg analizy 15k promptów) i źródła <b>&lt;10 mies.</b> (content-freshness). Bez tego = brak cytatu.</p></div>
+    <div class="card geo"><b>Query Fan-out</b><p class="muted">AI rozbija „najlepszy sejf domowy" na pod-zapytania: montaż, cena, ukrycie, klasa odporności. Strona musi mieć dane na każde (→ Senuto questions).</p></div>
+    <div class="card geo"><b>Data Parity</b><p class="muted">Cena/dostępność/specy w JSON-LD muszą = treść widoczna. Rozjazd = „low trust" = natychmiastowy spadek w AIO. Stale data = zero cytatów.</p></div>
+  </div>
+
+  <h4>Metoda PDP — kolejność sekcji pod cytowalność AI</h4>
+  <p class="muted">Z naszego blueprintu (product-page-aio-geo-blueprint.md):</p>
+  <ol>
+    <li><b>Semantic H1</b> — entity definition (nazwa + model/SKU + kontekst), nie samo keyword.</li>
+    <li><b>Answer Equity (TL;DR)</b> — 2–3 zdania samodzielnego streszczenia.</li>
+    <li><b>Transformation bullets</b> — efekt zamiast cechy („12h pracy" nie „3000mAh").</li>
+    <li><b>Tabela specyfikacji</b> — HTML <code>&lt;table&gt;</code>, nie JPEG/JS.</li>
+    <li><b>Grid porównawczy</b> — disambiguacja względem podobnych.</li>
+    <li><b>Use cases</b> — mapowanie na intencje (PAA / fan-out).</li>
+    <li><b>Recenzje</b> — agregat widoczny (próg zaufania ~156).</li>
+    <li><b>FAQ</b> — z realnych pytań Senuto, każde = answer unit.</li>
+    <li><b>Multimodal</b> — alt-text opisowy dla „wzroku" AI.</li>
+  </ol>
+
+  <h4>Pipeline GEO — 13 pillarów + Atlas (nasze skrypty)</h4>
+<pre><span class="c"># 1. Scrape + score (Playwright render obowiązkowy)</span>
+python3 geo_check.py --mode pdp --render --save URL
+   <span class="c"># → 13 pillarów E1-E13 → score/100; pillar &lt;70% = generuj taktykę</span>
+
+<span class="c"># 2. CS lookup — czy znamy kategorię? brak → zbuduj z Senuto</span>
+build_category_intel.py --category "sejf domowy"   <span class="c"># Senuto→CEP→ścieżki→T1/T2→DQ→GAP</span>
+
+<span class="c"># 3. Rekomendacje Atlas (deterministyczne)</span>
+geo_recommend.py --geo-score audyt/{slug}_DATA.json --h1 "..." --out CONTENT_DIFF.md
+
+<span class="c"># 4. Humanizacja (opcja — tylko sekcje czytane przez człowieka)</span>
+geo_humanize.py --input CONTENT_DIFF.md --backend claude --out CONTENT_DIFF_FINAL.md</pre>
+
+  <table>
+    <tr><th>Warstwa</th><th>Deterministyczna?</th><th>Po co</th></tr>
+    <tr><td>GEO Score (E1–E13)</td><td><span class="pill have">TAK</span></td><td>Powtarzalny audyt, ten sam URL = ten sam score</td></tr>
+    <tr><td>Atlas CONTENT_DIFF</td><td><span class="pill have">TAK</span></td><td>Identyczne reko per URL+wersja CS — sprzedajesz spójność</td></tr>
+    <tr><td>Humanizacja</td><td><span class="pill gap">NIE</span></td><td>Draft zdań do edycji przez klienta/copywritera</td></tr>
+  </table>
+  <p class="src">Forbidden words (AI je filtruje): <i>premium, amazing, innowacyjny, światowej klasy, najlepszy, rewolucyjny…</i> — zamieniasz na język funkcjonalny i mierzalny.</p>
+</section>
+
+<section id="procedury">
+  <h2><span class="n">6</span>Procedury gotowe (recipes — odpalaj jak przepis)</h2>
+  <p class="lead">Sedno podręcznika: powtarzalne sekwencje. Każda = kroki z dokładnym skillem/skryptem. Każda startuje od <code>ctx_search</code> (mózg), zanim pójdziesz w net.</p>
+
+  <div class="card geo">
+    <h3 style="margin-top:0">PROC-1 · Audyt GEO PDP od zera (nasza zwalidowana metoda)</h3>
+    <p class="muted">Kiedy: klient e-commerce, „nie ma mnie w ChatGPT/AI Overviews". Cel: CONTENT_DIFF gotowy do wdrożenia.</p>
+    <ol>
+      <li><code>ctx_search(["geo pdp", "ai citation length", "answer equity"])</code> — mózg najpierw.</li>
+      <li><code>python3 geo_check.py --mode pdp --render --save URL</code> → 13 pillarów E1-E13 → score/100.</li>
+      <li><code>category_intel.read_full_cs(h1, pdp)</code> — brak CS? → <code>build_category_intel.py --category "X"</code> (Senuto→CEP→DQ).</li>
+      <li><code>geo_recommend.py</code> → Atlas taktyki (pillar &lt;70% = generuj) → <code>CONTENT_DIFF.md</code>.</li>
+      <li>Opcja: <code>geo_humanize.py --backend claude</code> dla sekcji czytanych przez człowieka (E1/E3/E7).</li>
+      <li>Cel długości treści cytowalnej: <b>1500–1750 słów</b>, Answer Equity w pierwszych 30 słowach.</li>
+    </ol>
+  </div>
+
+  <div class="card seo">
+    <h3 style="margin-top:0">PROC-2 · Audyt SEO całościowy</h3>
+    <ol>
+      <li><code>/seo audit URL</code> → orchestrator (24 sub-skille): technika, treść, schema, CWV.</li>
+      <li><code>/seo-technical URL</code> — crawl, indeksacja, INP/CWV, JS render.</li>
+      <li><code>/seo-google</code> — CrUX (field data) + GSC (pozycje/CTR) + GA4 (przychód).</li>
+      <li>Złóż raport HTML → publish (wzorzec mega-audytu).</li>
+    </ol>
+  </div>
+
+  <div class="card seo">
+    <h3 style="margin-top:0">PROC-3 · Research słów i pytań (Senuto)</h3>
+    <ol>
+      <li><code>get_questions(seed)</code> — pytania konsumenta + wolumen (GEO złoto → FAQ/Answer Units).</li>
+      <li><code>get_keywords(seed, wide)</code> — frazy + CPC + SERP features (limit 50/dzień!).</li>
+      <li><code>get_groups(seed)</code> — klastry semantyczne → architektura sekcji.</li>
+      <li>Multi-seed (kat + 4-5 składników) → 500-600 fraz coverage. Cache do <code>data/senuto/</code>.</li>
+    </ol>
+  </div>
+
+  <div class="card seo">
+    <h3 style="margin-top:0">PROC-4 · GSC „strona 2" gold mine</h3>
+    <ol>
+      <li><code>/seo-google</code> → GSC frazy z pozycji <b>11–20</b> (najbliżej top10).</li>
+      <li>Filtr: wysokie impresje, niski CTR = okazja. Claude priorytetyzuje co dopracować.</li>
+      <li><code>/seo-content-brief</code> per fraza → brief dopracowania istniejącej strony.</li>
+    </ol>
+  </div>
+
+  <div class="card seo">
+    <h3 style="margin-top:0">PROC-5 · Backlink research (bez Ahrefs)</h3>
+    <ol>
+      <li><code>/backlink-research</code> (skill z filmu Tima) → footprint search „&lt;niche&gt; write for us" itd. → kandydaci.</li>
+      <li>Scoring 0-100, skip <code>junk_domains</code>, próg &lt;40 = PBN ryzyko, ≥80 = pitch pierwszy.</li>
+      <li>Z mózgu <code>chatgpt-citation-strategy</code>: strony cytujące 2-3 konkurentów = pre-qualified targets (łączy SEO+GEO).</li>
+    </ol>
+  </div>
+
+  <div class="card geo">
+    <h3 style="margin-top:0">PROC-6 · Klaster tematyczny + hub-and-spoke</h3>
+    <ol>
+      <li><code>/seo-cluster</code> — SERP overlap → grupy intencji → architektura hub + spokes.</li>
+      <li><code>/seo-content-brief</code> per spoke + <code>/seo-programmatic</code> dla usługa+miasto.</li>
+      <li>Internal link matrix hub↔spokes → autorytet tematyczny.</li>
+    </ol>
+  </div>
+
+  <p class="src">Reguła serii: <code>ctx_search</code> na starcie każdej procedury. Jeśli mózg nie ma — dopiero WebSearch/Senuto, a wynik wraca z markerem <code>@wiki</code>.</p>
+</section>
+
+<section id="stack">
+  <h2><span class="n">7</span>Twój stack — czym naprawdę dysponujesz</h2>
+  <p class="lead">Nie zaczynasz od zera. To inwentarz, który robi z Ciebie operatora, nie ucznia.</p>
+
+  <h4>29 skilli SEO/GEO (zainstalowane)</h4>
+  <p class="muted"><b>Orchestrator:</b> <code>seo</code> · <b>SEO core:</b> seo-technical, seo-google, seo-content, seo-content-brief, seo-cluster, seo-backlinks, seo-schema, seo-sitemap, seo-hreflang, seo-local, seo-maps, seo-programmatic, seo-ecommerce, seo-competitor-pages, seo-dataforseo, seo-drift, seo-firecrawl, seo-flow, seo-page, seo-plan, seo-sxo, seo-image-gen, seo-images, seo-audit · <b>GEO (AI search):</b> seo-geo · <b>Nasze własne GEO/PDP:</b> geo-content-diff, geo-pdp-writer, geo-recommend, geo-review.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h4 style="margin-top:0">Dane (Twój moat)</h4>
+      <ul style="margin:0">
+        <li><b>Senuto</b> MCP — keyword/question PL+CEE</li>
+        <li><b>GA4</b> natywny MCP — lejek, kanały, landing</li>
+        <li><b>GSC</b> — pozycje, CTR, strona-2 mining</li>
+        <li><b>Clarity</b> — heatmapy, nagrania (per klient)</li>
+        <li><b>DataForSEO</b> — SERP, backlinki na żądanie</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Silnik GEO (projekt GEO_PDP_Optimizer)</h4>
+      <ul style="margin:0">
+        <li><code>geo_check.py</code> — 13 pillarów score</li>
+        <li><code>category_intel.py</code> — baza CS kategorii</li>
+        <li><code>geo_recommend.py</code> — Atlas taktyki</li>
+        <li><code>build_category_intel.py</code> — Senuto→CS</li>
+        <li><code>geo_humanize.py</code> — post-processor</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="zrodla">
+  <h2><span class="n">8</span>Źródła do nauki (Twoje, nie generyczne)</h2>
+  <table>
+    <tr><th>Źródło</th><th>Co z tego bierzesz</th></tr>
+    <tr><td><b>Masterclass „Claude SEO" — Tim The SEO Guru</b><br><span class="src">YT 86bRah0t_Ko · 66 min · 2026-05-27 · cache claudetube</span></td><td>backlink-research skill, GBP audit, GSC mining, Goals Protocol. Notatka: <code>Raw/videos/transkrypty/claudetube-86bRah0t_Ko-2026-06-01.md</code></td></tr>
+    <tr><td><b>product-page-aio-geo-blueprint.md</b><br><span class="src">GEO_PDP_Optimizer · nblm research</span></td><td>Pełna metoda PDP pod AIO: kolejność sekcji, szablony tytułów, schema, query fan-out, 2 checklisty (od zera / przepisanie)</td></tr>
+    <tr><td><b>GEO_PIPELINE_ALGORITHM.md</b><br><span class="src">v1.0 · 2026-06-01 · produkcyjny</span></td><td>5-krokowy pipeline, 13 pillarów z wagami, mapa skryptów, end-to-end CLI</td></tr>
+    <tr><td><b>seo-geo SKILL.md</b><br><span class="src">AgriciDaniel v1.9.9 · luty 2026</span></td><td>Statystyki AIO (z atrybucją), citability scoring, llms.txt, platform-specific (Perplexity/ChatGPT)</td></tr>
+    <tr><td><b>SENUTO_API_HOW_TO.md</b><br><span class="src">GEO_PDP_Optimizer</span></td><td>Endpointy, limity (50 kw/dzień), country IDs, cache strategy, multi-seed</td></tr>
+    <tr><td><b>Anthropic blog/docs</b><br><span class="src">memory: reference_anthropic_hub</span></td><td>Claude Skills, Agent SDK, model updates — sprawdzaj przed pisaniem o features</td></tr>
+    <tr><td><b>⭐ Twoja Wiki (mózg AI)</b><br><span class="src">TW_vault/Wiki · 108 concepts · ctx_search</span></td><td>Już zawiera: <code>ai-citation-length</code>, <code>chatgpt-citation-strategy</code>, <code>answer-equity</code>, <code>behavioral-analytics</code> (Hotjar/Contentsquare CRO), <code>geo-generative-engine-optimization</code>. <b>Odpytuj ctx_search PRZED każdą robotą</b> — to retrieval za grosze tokenów, nie ja czytający raw.</td></tr>
+  </table>
+</section>
+
+<section id="usluga">
+  <h2><span class="n">9</span>Propozycja: jak z tego zrobić usługę</h2>
+  <p class="lead">Moja rekomendacja: <b>nie buduj nowego biznesu</b>. Wepnij to jako linię w istniejący ruch EEL — masz już klientów, dane i raporty HTML. SEO/GEO to kolejna „kotwica problemu", nie osobny startup.</p>
+
+  <div class="card warn">
+    <h4 style="margin-top:0">Teza (i dlaczego trzyma)</h4>
+    <p>Generyczne SEO komodytyzuje się — każdy ma teraz „AI do SEO". Trwała przewaga = <b>GEO + Twój data moat</b> (GA4/Clarity/Senuto/historia klienta) + <b>warstwa eksperta</b>. To ta sama teza co Twoje notatki AIcommerce: słaby punkt konkurencji (pagepilot/scalable) = brak danych GA4, brak historii, brak eksperta. Ty to masz.</p>
+  </div>
+
+  <h4>Pakiety (kierunek, do walidacji ceną)</h4>
+  <table>
+    <tr><th>Pakiet</th><th>Co zawiera</th><th>Wpięcie w EEL</th></tr>
+    <tr><td><b>GEO Audit</b> (free/lead)</td><td><code>geo_check.py</code> na 3 PDP + <code>/seo-geo</code> strony → raport „gdzie AI Cię nie widzi"</td><td>Moduł free auditu EEL, generuje lead</td></tr>
+    <tr><td><b>SEO+GEO Sprint</b> (jednorazowy)</td><td>Audyt całościowy + CONTENT_DIFF dla top kategorii + backlink targets + schema</td><td>Raport HTML jak mega-audyt GLOV</td></tr>
+    <tr><td><b>Retainer</b> (miesięczny)</td><td>N kategorii/mies przepisanych + GSC strona-2 + monitoring AIO/widoczności (Senuto rank tracker)</td><td>EEL Base/Super tier — retencja</td></tr>
+  </table>
+
+  <h4>Następne 3 ruchy (konkret)</h4>
+  <ol>
+    <li><b>Złóż <code>/backlink-research</code> jako nasz skill</b> (gotowiec już opisany) — domyka warsztat A, ~1h.</li>
+    <li><b>Demo na SejfZone</b> — masz 41 pytań z Senuto + zwalidowany +20–25 lift. Zrób 1 CONTENT_DIFF end-to-end jako case do pitchu.</li>
+    <li><b>Jedna strona oferty</b> — „SEO+GEO dla e-commerce PL", teza data moat, 3 pakiety. Wepnij w EEL HUB.</li>
+  </ol>
+</section>
+
+<section id="tc" class="tc">
+  <h2>Truth Checker</h2>
+  <p class="muted" style="margin-top:0">Wrapper na propozycję biznesową (sekcja 8). Gryzie założenia, nie laurki.</p>
+
+  <h4>Co wiem (z tego co podałeś + arsenału)</h4>
+  <ul>
+    <li>Masz Senuto podpięte i działające (potwierdzone live: 41 pytań „sejf domowy", country_id=1, limit 50 kw/dzień).</li>
+    <li>Masz 29 skilli SEO/GEO + działający pipeline GEO (geo_check→Atlas→humanize), zwalidowany +20–25 lift na SejfZone.</li>
+    <li>Masz dane klientów (GA4/Clarity GLOV/SejfZone) i ruch raportowy EEL — infrastrukturę pod usługę.</li>
+    <li>Powiedziałeś „klienci chcą".</li>
+  </ul>
+
+  <h4>Co zakładam (a nie zweryfikowałem)</h4>
+  <ul>
+    <li>Że „klienci chcą" = realny popyt z budżetem, nie luźne „byłoby fajnie". Nie znam liczby, branż ani widełek.</li>
+    <li>Że masz capacity dostarczyć to <b>solo</b> obok EEL/GEO/Plichty — usługa retainer to robota cykliczna, nie jednorazowa.</li>
+    <li>Że GEO faktycznie konwertuje na sprzedaż u tych klientów (lift cytowalności ≠ automatycznie lift przychodu — to wciąż heurystyka, nie 3+ zwalidowane runy).</li>
+    <li>Że okno „GEO = nie towar" jest jeszcze otwarte na tyle, by zdążyć je zmonetyzować przed komodytyzacją.</li>
+  </ul>
+
+  <h4>Co może być błędne w mojej analizie</h4>
+  <ul>
+    <li>Statystyki AIO (1,5 mld, 527%, 156 recenzji) są cudze i datowane luty 2026 — mogły się ruszyć. Nie opieraj pitchu na nich jako pewniku.</li>
+    <li>„Wepnij w EEL, nie buduj osobno" zakłada że EEL jest na tyle stabilny, by udźwignąć kolejną linię. Jeśli EEL sam się jeszcze stabilizuje (reset checklist→verify był wczoraj) — może to rozproszenie, nie synergia.</li>
+    <li>backlink-research z footprint search ociera się o ryzyko link-spamu (Tim sprzedaje Arvow) — dla klienta to broń obosieczna, nie cudowny przycisk.</li>
+  </ul>
+
+  <h4>Co musisz zweryfikować zanim ruszysz</h4>
+  <ul>
+    <li><b>Popyt:</b> ilu konkretnych klientów, jaka branża, jakie widełki? 2–3 rozmowy walidacyjne przed pakietyzacją.</li>
+    <li><b>Dowód wartości:</b> 1 pełny case GEO end-to-end z liczbą (przed/po), nie estymacją.</li>
+    <li><b>Twój czas:</b> ile godzin/mies realnie masz na retainer, zanim to obieca więcej niż dowieziesz.</li>
+  </ul>
+
+  <h4>Co poprawiłbym z jednym inputem</h4>
+  <p class="muted">Gdybyś dał mi <b>kto konkretnie pyta o tę usługę (branża + budżet + czy to existing EEL client czy nowy)</b> — przerobiłbym sekcję 8 z generycznych pakietów na realny pitch pod tego klienta, z właściwym pierwszym deliverable i ceną zakotwiczoną w jego problemie.</p>
+</section>
+
+<p class="src" style="padding:24px 0 50px">Plik: <code>CLAUDE_SEO_GEO_WARSZTAT_2026-06-01.html</code> · warsztat wewnętrzny · źródła oznaczone w sekcji 7.</p>
+
+</main>
+</div></div>
+</body>
+</html>
