@@ -208,12 +208,13 @@ pre code { background: transparent; padding: 0; }
 
 <aside class="sidebar">
   <h1>📚 Knowledge Base</h1>
-  <p class="subtitle">Setup Tomka 2026 · v0.1 · 30.05.2026</p>
+  <p class="subtitle">Setup Tomka 2026 · v0.1 · 30.05.2026 · sprawdzone 2026-06-09</p>
 
   <div class="update-protocol">
-    <strong>📅 Aktualizacja: 1×/tydzień</strong><br>
-    Następna: <span id="nextUpdate">06.06.2026</span><br>
-    Nowe artykuły Anthropic + nowe skille + nowe decyzje → dorzucamy do JSON.
+    <strong>📅 Aktualizacja: codziennie (auto)</strong><br>
+    Ostatnio sprawdzone: <span id="lastChecked">2026-06-09</span><br>
+    Automat (kb_daily_update) dopina swieza wiedze, stempluje date, archiwizuje martwe linki.
+  
   </div>
 
   <div class="section-label">Kategorie</div>
@@ -228,6 +229,7 @@ pre code { background: transparent; padding: 0; }
     <button class="cat-btn" data-quick="plichta">🏎️ Plichta</button>
     <button class="cat-btn" data-quick="setup-boy">🎯 Setup Boy</button>
     <button class="cat-btn" data-quick="eel">📊 EEL</button>
+    <button class="cat-btn" data-quick="archived">📦 Archiwum</button>
   </div>
 
   <div class="section-label">Tagi</div>
@@ -398,7 +400,7 @@ claude --remote-control "Name"       # Interactive z RC
 { id: "f-cowork", category: "anthropic", title: "Claude Cowork", tags: ["enterprise", "cowork", "salesforce", "bigquery"], status: "live", hot: true,
   relevance: ["Plichta", "Setup Boy", "Tomek"],
   summary: "Enterprise interface bridge między CLI/Code i Claude.ai. Native integrations: Salesforce/BigQuery/Calendar/Drive.",
-  source: "claude.com/blog/how-an-anthropic-sales-leader-uses-claude-cowork",
+  source: "https://claude.com/blog/how-an-anthropic-sales-leader-uses-claude-cowork-to-run-a-4-000-account-book",
   body: `<h4>Use cases (oficjalne)</h4>
 <ul><li>Scheduled automation (auto-run, call prep, forecasting)</li><li>Overnight processing (case: 4000 accounts scored)</li><li>Multi-source reports (web + CRM data)</li><li>Wide-scale data processing (tysiące rekordów)</li></ul>
 <h4>Native integrations</h4><ul><li>Salesforce</li><li>BigQuery</li><li>Google Calendar</li><li>Google Drive</li><li>Internal docs systems</li></ul>
@@ -2233,7 +2235,7 @@ SPRAWDZENIE PRAWDY
 
 { id: "l-blog-cowork", category: "link", title: "Blog — Cowork sales leader workflow", tags: ["cowork"], status: "ref",
   relevance: ["Setup Boy"], summary: "Cowork case study sales leader.",
-  source: "https://claude.com/blog/how-an-anthropic-sales-leader-uses-claude-cowork" },
+  source: "https://claude.com/blog/how-an-anthropic-sales-leader-uses-claude-cowork-to-run-a-4-000-account-book" },
 
 { id: "l-blog-managed", category: "link", title: "Blog — Managed Agents", tags: ["managed-agents"], status: "ref",
   relevance: ["Cortex"], summary: "Managed Agents launch.",
@@ -2341,7 +2343,84 @@ SPRAWDZENIE PRAWDY
 
 { id: "l-docs-settings", category: "link", title: "Docs — Settings (managed)", tags: ["settings", "enterprise"], status: "ref",
   relevance: ["Plichta"], summary: "Settings documentation w tym managed policy.",
-  source: "https://code.claude.com/docs/en/settings" }
+  source: "https://code.claude.com/docs/en/settings" },
+
+// === auto-dopiete 2026-06-09 (kb_daily_update) ===
+{ id: "kbauto-claude-seo-geo-warsztat", category: "link", title: "📈 Podręcznik Claude SEO+GEO — zakres pracy + pipeline + Senuto + GEO 1", tags: ["auto-dopiete", "2026-06-09"], status: "live", hot: false,
+  relevance: ["Tomek"],
+  summary: "📈 Podręcznik Claude SEO+GEO — zakres pracy + pipeline + Senuto + GEO 13-pillar + 6 procedur (recipes) + propozycja usługi. „Klaudiusz Opus poleca\". (2026-06-01)",
+  source: "https://tomekwlqq.github.io/eel-reports/claude-seo-geo-warsztat.html",
+  body: `<p>Auto-dopiete przez kb_daily_update 2026-06-09. Zrodlo: LINKI.md.</p>` },
+
+// === auto-dopiete 2026-06-09 (kb_daily_update) ===
+{ id: "kbauto-claude-ads-meta-google-warsztat", category: "link", title: "🎯 Podręcznik Claude Ads", tags: ["auto-dopiete", "2026-06-09"], status: "live", hot: false,
+  relevance: ["Tomek"],
+  summary: "🎯 Podręcznik Claude Ads (Meta+Google) — reklama przez Claude+MCP, 6 procedur (audyt/launch/optymalizacja), propozycja usługi. „Klaudiusz Opus poleca\". (2026-06-01)",
+  source: "https://tomekwlqq.github.io/eel-reports/claude-ads-meta-google-warsztat.html",
+  body: `<p>Auto-dopiete przez kb_daily_update 2026-06-09. Zrodlo: LINKI.md.</p>` },
+
+// === auto-dopiete 2026-06-09 (kb_daily_update) ===
+{ id: "kbauto-produkty-egzekucyjne", category: "link", title: "🎯 Produkty Egzekucyjne Cortex v0.5 — 130 wpisów", tags: ["auto-dopiete", "2026-06-09"], status: "live", hot: false,
+  relevance: ["Tomek"],
+  summary: "🎯 Produkty Egzekucyjne Cortex v0.5 — 130 wpisów (12 solo / 55 par komplet / 36 trójek / 27 czwórek) z Opus Score 1-10 + filtr Opus Recommended (81 rec) + 4 presety problemów głównych (Paid/Conversion/SEO+GEO/Content) + execution refs (skill",
+  source: "https://tomekwlqq.github.io/eel-reports/PRODUKTY_EGZEKUCYJNE.html",
+  body: `<p>Auto-dopiete przez kb_daily_update 2026-06-09. Zrodlo: LINKI.md.</p>` },
+
+// === auto-dopiete 2026-06-09 (kb_daily_update) ===
+{ id: "kbauto-verdykty", category: "link", title: "📋 Verdykty sesji 30.05 — mobile-friendly synteza cross-check 3 warstw", tags: ["auto-dopiete", "2026-06-09"], status: "live", hot: false,
+  relevance: ["Tomek"],
+  summary: "📋 Verdykty sesji 30.05 — mobile-friendly synteza cross-check 3 warstw + GLOV verdict 6.5/10 (NIE gold) + 24 propozycji ulepszeń + 5 cross-warstwowych + rekomendowana sekwencja 5 priorytetów (~25 dni). TYLKO DO ROZMOWY. (2026-05-30)",
+  source: "https://tomekwlqq.github.io/eel-reports/VERDYKTY.html",
+  body: `<p>Auto-dopiete przez kb_daily_update 2026-06-09. Zrodlo: LINKI.md.</p>` },
+
+// === auto-dopiete 2026-06-09 (kb_daily_update) ===
+{ id: "kbauto-self-learning-3-warstw", category: "link", title: "🧠 SELF_LEARNING analiza — głębsza ocena warstw HTML/Visual/Content pod", tags: ["auto-dopiete", "2026-06-09"], status: "live", hot: false,
+  relevance: ["Tomek"],
+  summary: "🧠 SELF_LEARNING analiza — głębsza ocena warstw HTML/Visual/Content pod kątem powtarzalności na skali. W1=8/10 zamknięty / W2=4/10 OTWARTY (krytyczny gap) / W3=6/10 częściowy. (2026-05-30)",
+  source: "https://tomekwlqq.github.io/eel-reports/SELF_LEARNING_3_WARSTW.html",
+  body: `<p>Auto-dopiete przez kb_daily_update 2026-06-09. Zrodlo: LINKI.md.</p>` },
+
+// === auto-dopiete 2026-06-09 (kb_daily_update) ===
+{ id: "kbauto-retail-media-hebe-raport", category: "link", title: "Retail Media Networks — Kompendium + Rekomendacja Hebe.pl — definicje", tags: ["auto-dopiete", "2026-06-09"], status: "live", hot: false,
+  relevance: ["Tomek"],
+  summary: "Retail Media Networks — Kompendium + Rekomendacja Hebe.pl — definicje, formaty, technologie, 25+ sieci global/EU/PL, benchmarki CPM/CPC, beauty RMN case studies, 3-fazowy plan wdrożenia (2026-05-25)",
+  source: "https://tomekwlqq.github.io/eel-reports/retail_media_hebe_raport.html",
+  body: `<p>Auto-dopiete przez kb_daily_update 2026-06-09. Zrodlo: LINKI.md.</p>` },
+
+// === auto-dopiete 2026-06-09 (kb_daily_update) ===
+{ id: "kbauto-mapa-percepcji", category: "link", title: "SejfZone — Mapa Percepcji — 2 zakładki: 🔫 Szafy na broń", tags: ["auto-dopiete", "2026-06-09"], status: "live", hot: false,
+  relevance: ["Tomek"],
+  summary: "SejfZone — Mapa Percepcji — 2 zakładki: 🔫 Szafy na broń (230 art.) + 🏠 Sejfy domowe (230 art.), CEP-ścieżki A–G, filtry, checklista (2026-05-25)",
+  source: "https://tomekwlqq.github.io/eel-reports/mapa-percepcji.html",
+  body: `<p>Auto-dopiete przez kb_daily_update 2026-06-09. Zrodlo: LINKI.md.</p>` },
+
+// === auto-dopiete 2026-06-09 (kb_daily_update) ===
+{ id: "kbauto-sejfzone-raport-2026-05-21", category: "link", title: "SejfZone — raport GA4 EEL", tags: ["auto-dopiete", "2026-06-09"], status: "live", hot: false,
+  relevance: ["Tomek"],
+  summary: "SejfZone — raport GA4 EEL (2026-05-21)",
+  source: "https://tomekwlqq.github.io/eel-reports/SEJFZONE-raport-2026-05-21.html",
+  body: `<p>Auto-dopiete przez kb_daily_update 2026-06-09. Zrodlo: LINKI.md.</p>` },
+
+// === auto-dopiete 2026-06-09 (kb_daily_update) ===
+{ id: "kbauto-sejfzone-r04-produkty", category: "link", title: "SejfZone — Ranking Produktów GA4", tags: ["auto-dopiete", "2026-06-09"], status: "live", hot: false,
+  relevance: ["Tomek"],
+  summary: "SejfZone — Ranking Produktów GA4 (2026-05-21)",
+  source: "https://tomekwlqq.github.io/eel-reports/sejfzone-r04-produkty.html",
+  body: `<p>Auto-dopiete przez kb_daily_update 2026-06-09. Zrodlo: LINKI.md.</p>` },
+
+// === auto-dopiete 2026-06-09 (kb_daily_update) ===
+{ id: "kbauto-fera-content-audit-2026-05-22", category: "link", title: "Fera.pl — Content Audit PDP", tags: ["auto-dopiete", "2026-06-09"], status: "live", hot: false,
+  relevance: ["Tomek"],
+  summary: "Fera.pl — Content Audit PDP (5 produktów, benchmark Sephora, 2026-05-22)",
+  source: "https://tomekwlqq.github.io/eel-reports/FERA-content-audit-2026-05-22.html",
+  body: `<p>Auto-dopiete przez kb_daily_update 2026-06-09. Zrodlo: LINKI.md.</p>` },
+
+// === auto-dopiete 2026-06-09 (kb_daily_update) ===
+{ id: "kbauto-geo-check-fera-sephora-2026-05-22", category: "link", title: "GEO Check — Fera.pl", tags: ["auto-dopiete", "2026-06-09"], status: "live", hot: false,
+  relevance: ["Tomek"],
+  summary: "GEO Check — Fera.pl (13/100) vs Sephora (62/100), karma sucha dla psa + Facial Moisturizers, 2026-05-22",
+  source: "https://tomekwlqq.github.io/eel-reports/GEO-check-fera-sephora-2026-05-22.html",
+  body: `<p>Auto-dopiete przez kb_daily_update 2026-06-09. Zrodlo: LINKI.md.</p>` },
 
 ]; // END DATA
 
@@ -2433,6 +2512,7 @@ function renderSidebar() {
       else if (q === "plichta") activeTags = new Set(["__plichta__"]);
       else if (q === "setup-boy") activeTags = new Set(["__setup-boy__"]);
       else if (q === "eel") activeTags = new Set(["__eel__"]);
+      else if (q === "archived") activeTags = new Set(["__archived__"]);
       render();
     });
   });
@@ -2468,6 +2548,7 @@ function filterData() {
         else if (t === "__plichta__") { if (!(d.relevance || []).includes("Plichta")) return false; }
         else if (t === "__setup-boy__") { if (!(d.relevance || []).includes("Setup Boy")) return false; }
         else if (t === "__eel__") { if (!(d.relevance || []).includes("EEL")) return false; }
+        else if (t === "__archived__") { if (d.status !== "archived") return false; }
         else {
           if (!(d.tags || []).includes(t)) return false;
         }
