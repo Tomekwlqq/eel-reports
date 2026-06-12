@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV Reference Audit v2 — Mapping | 2026-05-17</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3350;
+    --text: #e4e6f0;
+    --muted: #8b91b3;
+    --accent: #6c7fff;
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,.12);
+    --red: #f87171;
+    --red-bg: rgba(248,113,113,.12);
+    --yellow: #fbbf24;
+    --yellow-bg: rgba(251,191,36,.12);
+    --grey: #64748b;
+    --grey-bg: rgba(100,116,139,.12);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+
+  /* HEADER */
+  .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; gap: 16px; }
+  .header-logo { font-size: 20px; font-weight: 800; color: var(--text); }
+  .header-meta { color: var(--muted); font-size: 12px; margin-left: auto; text-align: right; }
+  .philosophy-bar { background: linear-gradient(90deg,#1e1440,#1a2040); border-bottom: 1px solid var(--border); padding: 9px 40px; font-size: 12px; color: var(--accent); }
+  .philosophy-bar strong { color: var(--text); }
+
+  /* LAYOUT */
+  .container { max-width: 1400px; margin: 0 auto; padding: 28px 40px; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 2px; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
+  .tab-btn { background: none; border: none; color: var(--muted); padding: 9px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .15s; border-radius: 6px 6px 0 0; }
+  .tab-btn:hover { color: var(--text); background: var(--surface); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--surface); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* CARD */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 18px; }
+  .card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+  /* TECH GRID */
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .tech-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+  .tech-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 3px; }
+  .tech-value { font-size: 13px; font-weight: 600; }
+
+  /* ─── ANNOTATED SHOPPER VIEW ─────────────────────────────────────────── */
+  .annotated-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .annotated-view.mobile-view {
+    grid-template-columns: 280px 1fr;
+  }
+  .av-image-col {
+    position: relative;
+    background: #000;
+    border-right: 1px solid var(--border);
+  }
+  .av-image-col img {
+    width: 100%;
+    display: block;
+    cursor: zoom-in;
+  }
+  .av-image-col .av-label {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    background: rgba(0,0,0,.7);
+    padding: 6px 12px;
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .vp-tag { background: var(--border); padding: 1px 7px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+
+  /* Number dots on image */
+  .av-dots {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .av-dot {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255,255,255,.9);
+    box-shadow: 0 2px 8px rgba(0,0,0,.6);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .av-dot.bad { background: var(--red); }
+  .av-dot.warn { background: var(--yellow); color: #000; }
+
+  /* Annotation list col */
+  .av-annotations {
+    background: var(--surface);
+    padding: 14px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .av-col-label {
+    padding: 0 16px 12px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--accent);
+    font-weight: 700;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+  .av-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(46,51,80,.4);
+  }
+  .av-item:last-child { border-bottom: none; }
+  .av-num {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .av-num.bad { background: var(--red); }
+  .av-num.warn { background: var(--yellow); color: #000; }
+  .av-num.widget { background: #0891b2; color: #fff; font-size: 10px; width: 24px; height: 24px; border-radius: 4px; }
+  .widget-section-label { font-size: 11px; font-weight: 700; color: #0891b2; text-transform: uppercase; letter-spacing: .05em; margin: 16px 0 6px; }
+  .av-text { font-size: 12.5px; color: var(--text); line-height: 1.5; flex: 1; }
+  .av-text .tag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 3px; font-weight: 600; margin-left: 4px; vertical-align: middle; }
+  .av-text .tag-ok { background: var(--green-bg); color: var(--green); }
+  .av-text .tag-fail { background: var(--red-bg); color: var(--red); }
+  .av-text .tag-warn { background: var(--yellow-bg); color: var(--yellow); }
+
+  /* ─── TABLES ─────────────────────────────────────────────────────────── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--border); font-weight: 600; }
+  td { padding: 9px 12px; border-bottom: 1px solid rgba(46,51,80,.4); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(108,127,255,.03); }
+
+  /* STATUS */
+  .ok   { color: var(--green); font-weight: 600; }
+  .warn { color: var(--yellow); font-weight: 600; }
+  .fail { color: var(--red); font-weight: 600; }
+  .unk  { color: var(--grey); font-weight: 600; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-ok   { background: var(--green-bg); color: var(--green); }
+  .badge-warn { background: var(--yellow-bg); color: var(--yellow); }
+  .badge-fail { background: var(--red-bg); color: var(--red); }
+  .badge-grey { background: var(--grey-bg); color: var(--grey); }
+  .badge-blue { background: rgba(108,127,255,.12); color: var(--accent); }
+
+  code { background: var(--surface2); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-family: 'SF Mono', monospace; font-size: 11px; color: #a5b4fc; }
+
+  /* SECTION LABEL */
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; margin: 20px 0 10px; }
+  .section-label:first-child { margin-top: 0; }
+
+  /* NOTE BOXES */
+  .note { padding: 11px 15px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; }
+  .note-warn { background: var(--yellow-bg); border-left: 3px solid var(--yellow); }
+  .note-fail { background: var(--red-bg); border-left: 3px solid var(--red); }
+  .note-ok   { background: var(--green-bg); border-left: 3px solid var(--green); }
+
+  /* CONTENT SCHEMA */
+  .schema-block { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
+  .schema-block pre { font-family: 'SF Mono', monospace; font-size: 12px; color: #a5b4fc; white-space: pre-wrap; margin-bottom: 12px; padding: 10px; background: rgba(0,0,0,.3); border-radius: 6px; border: 1px solid var(--border); }
+  .schema-label { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--accent); font-weight: 700; margin-bottom: 10px; }
+  .schema-note { margin-top: 10px; padding: 10px 14px; background: rgba(251,191,36,.08); border-left: 3px solid var(--yellow); border-radius: 0 6px 6px 0; font-size: 12px; }
+  .schema-note.bad { background: rgba(248,113,113,.08); border-left-color: var(--red); }
+
+  /* SUMMARY */
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 22px; }
+  .summary-col { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+  .summary-col h3 { font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+  .summary-col h3.good { color: var(--green); }
+  .summary-col h3.bad { color: var(--red); }
+  .summary-col h3.warn { color: var(--yellow); }
+  .summary-col ol { padding-left: 16px; }
+  .summary-col ol li { font-size: 12px; padding: 3px 0; line-height: 1.5; }
+
+  /* DUAL TILE */
+  .dual-tile { display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:18px; }
+  .dual-tile .tile-col { background:#000; border-right:1px solid var(--border); position:relative; }
+  .dual-tile .tile-col:last-child { border-right:none; }
+  .dual-tile .tile-col img { width:100%; display:block; cursor:zoom-in; }
+  .dual-tile .tile-label { position:absolute; top:0;left:0;right:0; background:rgba(0,0,0,.7); padding:5px 10px; font-size:11px; color:var(--muted); display:flex; gap:6px; align-items:center; }
+  .dual-tile .tile-dots { position:absolute; inset:0; pointer-events:none; }
+  .dual-tile-annot { background:var(--surface); border:1px solid var(--border); border-radius:0 0 10px 10px; border-top:none; margin-top:-1px; padding:14px 16px; display:grid; grid-template-columns:1fr 1fr; gap:0; margin-bottom:18px; }
+  .dual-tile-annot .annot-col { padding:0 12px; }
+  .dual-tile-annot .annot-col:first-child { border-right:1px solid var(--border); }
+  .annot-col-label { font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); font-weight:700; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+  .annot-item { display:flex; gap:10px; align-items:flex-start; padding:7px 0; border-bottom:1px solid rgba(46,51,80,.3); }
+  .annot-item:last-child { border-bottom:none; }
+  .annot-num { flex-shrink:0; width:20px; height:20px; border-radius:50%; background:var(--accent); color:#fff; font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:1px; }
+  .annot-num.bad { background:var(--red); }
+  .annot-num.warn { background:var(--yellow); color:#000; }
+  .annot-num.ok2 { background:var(--green); }
+  .annot-text { font-size:12px; color:var(--text); line-height:1.5; flex:1; }
+
+  /* FOLD LINE */
+  .av-fold-line { position:absolute; left:0; right:0; height:3px; background: repeating-linear-gradient(90deg,#fbbf24 0,#fbbf24 12px,transparent 12px,transparent 22px); z-index:5; pointer-events:none; }
+  .av-fold-tag { position:absolute; right:8px; background:#fbbf24; color:#000; font-size:10px; font-weight:800; padding:2px 8px; border-radius:4px; z-index:6; pointer-events:none; white-space:nowrap; }
+  .av-fold-num { position:absolute; left:8px; background:rgba(108,127,255,.85); color:#fff; font-size:10px; font-weight:800; padding:2px 8px; border-radius:4px; z-index:6; pointer-events:none; }
+
+  /* LIGHTBOX */
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 1000; align-items: center; justify-content: center; cursor: zoom-out; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 92vw; max-height: 92vh; object-fit: contain; border-radius: 8px; box-shadow: 0 8px 40px rgba(0,0,0,.8); }
+
+  /* ─── LIGHT THEME ──────────────────────────────── */
+  [data-theme="light"] {
+    --bg: #f4f6fb;
+    --surface: #ffffff;
+    --surface2: #edf0f8;
+    --border: #d8ddf0;
+    --text: #1a1d2e;
+    --muted: #5c6280;
+    --accent: #4f5fe8;
+    --green: #16a34a;
+    --green-bg: rgba(22,163,74,.12);
+    --red: #dc2626;
+    --red-bg: rgba(220,38,38,.12);
+    --yellow: #b45309;
+    --yellow-bg: rgba(180,83,9,.12);
+    --grey: #6b7280;
+    --grey-bg: rgba(107,114,128,.12);
+  }
+  [data-theme="light"] .philosophy-bar { background: linear-gradient(90deg,#ede8ff,#e8f0ff); color: var(--accent); }
+  [data-theme="light"] .philosophy-bar strong { color: var(--text); }
+  .theme-btn { margin-left: 8px; background: none; border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all .15s; white-space: nowrap; }
+  .theme-btn:hover { color: var(--text); border-color: var(--muted); }
+</style>
+<script>
+(function(){
+  var s=localStorage.getItem('theme'),sys=window.matchMedia('(prefers-color-scheme:light)').matches;
+  if(s?s==='light':sys) document.documentElement.setAttribute('data-theme','light');
+})();
+function toggleTheme(){
+  var light=document.documentElement.getAttribute('data-theme')==='light';
+  if(light){document.documentElement.removeAttribute('data-theme');localStorage.setItem('theme','dark');}
+  else{document.documentElement.setAttribute('data-theme','light');localStorage.setItem('theme','light');}
+  var btn=document.getElementById('theme-toggle');
+  if(btn) btn.textContent=light?'☀️ Jasny':'🌙 Ciemny';
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var btn=document.getElementById('theme-toggle');
+  var light=document.documentElement.getAttribute('data-theme')==='light';
+  if(btn) btn.textContent=light?'🌙 Ciemny':'☀️ Jasny';
+});
+</script>
+</head>
+<body><a href="GLOV_HUB.html" style="position:fixed;top:12px;left:12px;z-index:9999;background:#7c5cff;color:#fff;text-decoration:none;padding:7px 13px;border-radius:8px;font:600 12px sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.3)">← HUB</a>
+
+<div class="header">
+  <div class="header-logo">GLOV Reference Audit <span style="font-size:13px;font-weight:400;color:var(--accent);margin-left:8px">v2 — Mapping</span></div>
+  <div style="display:flex;gap:6px;align-items:center">
+    <span class="badge badge-blue">glov.co</span>
+    <span class="badge badge-grey">Shopify</span>
+    <span class="badge badge-grey">PL</span>
+    <span class="badge badge-grey">8 widoków</span>
+    <span class="badge badge-grey">Shopper View + Action Map</span>
+  </div>
+  <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()">☀️ Jasny</button>
+  <div class="header-meta">2026-05-17 | HP · Listing · Tile · PDP · Blog · Nav</div>
+</div>
+
+<div class="philosophy-bar">
+  <strong>Fundament:</strong> E-commerce to NIE strona. To zbiór akcji i ich stymulatorów. Shopper kupuje <strong>OCZAMI</strong>. Każdy widok = <strong>Shopper View</strong> (screen + anotacje) + <strong>Action Map</strong> + <strong>Content Schema</strong>.
+</div>
+
+<div class="container">
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('overview',this)">Przegląd</button>
+  <button class="tab-btn" onclick="showTab('hp',this)">1. Home Page</button>
+  <button class="tab-btn" onclick="showTab('nav',this)">2. Nav</button>
+  <button class="tab-btn" onclick="showTab('listing',this)">3. Listing Kategoria</button>
+  <button class="tab-btn" onclick="showTab('search',this)">4. Open Search</button>
+  <button class="tab-btn" onclick="showTab('tile',this)">5. Kafelek / Product Tile</button>
+  <button class="tab-btn" onclick="showTab('pdp',this)">6. PDP</button>
+  <button class="tab-btn" onclick="showTab('cart',this)">7. Koszyk</button>
+  <button class="tab-btn" onclick="showTab('checkout',this)">8. Checkout</button>
+  <button class="tab-btn" onclick="showTab('blog',this)">9. Blog</button>
+  <button class="tab-btn" onclick="showTab('contentmap',this)">Content Map</button>
+  <button class="tab-btn" onclick="showTab('summary',this)">Summary</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ OVERVIEW ═══ -->
+<div id="tab-overview" class="tab-panel active">
+
+  <div class="card">
+    <div class="card-title">⚙️ Tech Stack</div>
+    <div class="tech-grid">
+      <div class="tech-item"><div class="tech-label">Platform</div><div class="tech-value">Shopify</div></div>
+      <div class="tech-item"><div class="tech-label">Język</div><div class="tech-value">PL (selector)</div></div>
+      <div class="tech-item"><div class="tech-label">Waluta</div><div class="tech-value">PLN</div></div>
+      <div class="tech-item"><div class="tech-label">Trust badge</div><div class="tech-value">Trusted Shops 4,69★</div></div>
+      <div class="tech-item"><div class="tech-label">Wishlist</div><div class="tech-value">Growave</div></div>
+      <div class="tech-item"><div class="tech-label">Ratingi</div><div class="tech-value">Growave Reviews</div></div>
+      <div class="tech-item"><div class="tech-label">Cookie</div><div class="tech-value">CookieBot</div></div>
+      <div class="tech-item"><div class="tech-label">Checkout</div><div class="tech-value">Native Shopify</div></div>
+      <div class="tech-item"><div class="tech-label">Promo aktywna</div><div class="tech-value">MAMA25 -25%</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗺 Mapa auditu — pokrycie widoków</div>
+    <div class="table-wrap"><table>
+      <tr><th>Widok</th><th>URL / kontekst</th><th>Shopper View</th><th>Action Map</th><th>Content Schema</th><th>Screenshoty</th></tr>
+      <tr><td><strong>Nav</strong></td><td>Header (sticky)</td><td>✅ desktop + mobile hamburger</td><td>✅</td><td>—</td><td>glov_nav_dropdown_desktop · glov_nav_hamburger_mobile</td></tr>
+      <tr><td><strong>Homepage</strong></td><td>glov.co</td><td>✅ desktop full + mobile full</td><td>✅</td><td>—</td><td>glov_hp_desktop_full · glov_hp_mobile_full</td></tr>
+      <tr><td><strong>Listing Kategoria</strong></td><td>/collections/glov-led-therapy</td><td>✅ desktop + mobile</td><td>✅</td><td>—</td><td>listing_desktop · listing_mobile</td></tr>
+      <tr><td><strong>Kafelek / Product Tile</strong></td><td>Pumeks Nano Szkło</td><td>✅ default + hover state</td><td>✅</td><td>T1–T8 anatomia</td><td>glov_tile_pumeks_default · glov_tile_pumeks_hover</td></tr>
+      <tr><td><strong>PDP</strong></td><td>/products/platki-led-luna-eye…</td><td>✅ desktop full-page + mobile full-page</td><td>✅</td><td>✅ tytuł, opis, bullets, FAQ</td><td>pdp_desktop · pdp_mobile</td></tr>
+      <tr><td><strong>Blog</strong></td><td>glov.co/blogs/pl</td><td>✅ desktop full + mobile full</td><td>✅</td><td>Struktura artykułów i tagów</td><td>glov_blog_desktop_full · glov_blog_mobile_full</td></tr>
+      <tr><td><strong>Content Map</strong></td><td>5 PDPów cross-product</td><td>✅ kafelek + PDP 2-fold desktop + 3-fold mobile</td><td>—</td><td>✅ model tytułu, anatomia ATF/BTF/galeria</td><td>glov_pdp_luna_2fold_desktop · glov_pdp_luna_3fold_mobile</td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════ NAV ═══ -->
+<div id="tab-nav" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Nawigacja desktop</div>
+
+    <div class="section-label">Desktop — 1440px (dropdown RUTYNY GLOV otwarty)</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Nav Desktop — dropdown open <span class="vp-tag">1440px</span></div>
+        <img src="GLOV_audit_screenshots/glov_nav_dropdown_desktop.jpeg" alt="Nav Desktop dropdown" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:50%;top:5%">1</div>
+          <div class="av-dot" style="left:10%;top:14%">2</div>
+          <div class="av-dot" style="left:50%;top:14%">3</div>
+          <div class="av-dot" style="left:88%;top:14%">4</div>
+          <div class="av-dot" style="left:35%;top:24%">5</div>
+          <div class="av-dot" style="left:80%;top:24%">6</div>
+          <div class="av-dot" style="left:80%;top:38%">7</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Anatomia nawigacji — od góry</div>
+        <div class="av-item">
+          <div class="av-num">1</div>
+          <div class="av-text"><strong>Promo bar (sticky)</strong> — "🔥 -25% NA WSZYSTKO Z KODEM: MAMA25 🔥" — klikalny link do kolekcji /collections/sklep</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">2</div>
+          <div class="av-text"><strong>Lewa strona header:</strong> hamburger (☰) + ikonka wyszukiwarki (lupa)</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">3</div>
+          <div class="av-text"><strong>Logo GLOV</strong> — wycentrowane, linkuje do HP</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">4</div>
+          <div class="av-text"><strong>Prawa strona header:</strong> selektor języka PL | ikona konta | ikona wishlist (Growave) | ikona koszyka z licznikiem</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">5</div>
+          <div class="av-text"><strong>Secondary nav — Row 1 (6 kategorii):</strong> RĘKAWICZKA GLOV · PROMIENNA CERA · PIĘKNE WŁOSY · GŁADKIE CIAŁO · ZESTAWY PREZENTOWE · BESTSELLERY — flat linki bez dropdown</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">6</div>
+          <div class="av-text"><strong>Secondary nav — Row 2 (3 kategorie):</strong> LAKIERY COOLNAILS · GLOV LED THERAPY · <strong>RUTYNY GLOV -25%</strong> (wyróżniony różowym kolorem) — jedyna z dropdown</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">7</div>
+          <div class="av-text"><strong>Dropdown RUTYNY GLOV -25%</strong> — 3 sub-linki: ZDROWY MANICURE COOLNAILS · WIECZORNA RUTYNA Z GLOV · GŁADKIE CIAŁO I STOPY. Flat lista bez obrazków</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — hamburger menu (otwarty)</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">Nav Mobile — hamburger open <span class="vp-tag">390px</span></div>
+        <img src="GLOV_audit_screenshots/glov_nav_hamburger_mobile.jpeg" alt="Nav Mobile Hamburger" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:10%;top:5%">1</div>
+          <div class="av-dot" style="left:50%;top:13%">2</div>
+          <div class="av-dot" style="left:50%;top:22%">3</div>
+          <div class="av-dot" style="left:92%;top:55%">4</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Mobile hamburger — elementy menu</div>
+        <div class="av-item">
+          <div class="av-num">1</div>
+          <div class="av-text"><strong>Header slide-in:</strong> ikona konta (lewy) + X (zamknij, prawy)</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">2</div>
+          <div class="av-text"><strong>Search bar</strong> — pole "Szukaj..." z ikoną lupy. Wyszukiwarka dostępna wewnątrz hamburger menu</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">3</div>
+          <div class="av-text"><strong>Pozycje główne:</strong> BESTSELLERY · KOLEKCJE (→ sub-menu) · RĘKAWICZKA GLOV · PROMIENNA CERA · GŁADKIE CIAŁO · PIĘKNE WŁOSY · RUTYNY GLOV -20% · ZESTAWY PREZENTOWE · BLOG · GLOV CLUB · KONTAKT</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">4</div>
+          <div class="av-text"><strong>KOLEKCJE</strong> — jedyna pozycja ze strzałką → otwierającą sub-menu. Pozostałe pozycje: flat linki bez rozwijania</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗺 Pełna struktura nawigacji</div>
+    <div class="schema-block">
+      <div class="schema-label">Desktop secondary nav — Row 1 (6 flat linków)</div>
+      <div class="table-wrap"><table>
+        <tr><th>#</th><th>Etykieta</th><th>Typ</th><th>Dropdown</th></tr>
+        <tr><td>1</td><td>RĘKAWICZKA GLOV</td><td>flat link</td><td>—</td></tr>
+        <tr><td>2</td><td>PROMIENNA CERA</td><td>flat link</td><td>—</td></tr>
+        <tr><td>3</td><td>PIĘKNE WŁOSY</td><td>flat link</td><td>—</td></tr>
+        <tr><td>4</td><td>GŁADKIE CIAŁO</td><td>flat link</td><td>—</td></tr>
+        <tr><td>5</td><td>ZESTAWY PREZENTOWE</td><td>flat link</td><td>—</td></tr>
+        <tr><td>6</td><td>BESTSELLERY</td><td>flat link</td><td>—</td></tr>
+      </table></div>
+    </div>
+    <div class="schema-block" style="margin-top:12px">
+      <div class="schema-label">Desktop secondary nav — Row 2 (3 linki, różowy wyróżnik)</div>
+      <div class="table-wrap"><table>
+        <tr><th>#</th><th>Etykieta</th><th>Typ</th><th>Dropdown / sub-linki</th></tr>
+        <tr><td>7</td><td>LAKIERY COOLNAILS</td><td>flat link</td><td>—</td></tr>
+        <tr><td>8</td><td>GLOV LED THERAPY</td><td>flat link</td><td>—</td></tr>
+        <tr><td>9</td><td><strong>RUTYNY GLOV -25%</strong> <span style="color:var(--accent);font-size:11px">(różowy)</span></td><td>.menu__item.parent</td><td>3 sub-linki: ZDROWY MANICURE COOLNAILS · WIECZORNA RUTYNA Z GLOV · GŁADKIE CIAŁO I STOPY</td></tr>
+      </table></div>
+    </div>
+    <div class="schema-block" style="margin-top:12px">
+      <div class="schema-label">Mobile hamburger menu — pozycje</div>
+      <div class="table-wrap"><table>
+        <tr><th>Pozycja</th><th>Typ</th><th>Sub-menu</th></tr>
+        <tr><td>BESTSELLERY</td><td>flat link</td><td>—</td></tr>
+        <tr><td>KOLEKCJE</td><td>parent link (→)</td><td>otwiera sub-menu</td></tr>
+        <tr><td>RĘKAWICZKA GLOV</td><td>flat link</td><td>—</td></tr>
+        <tr><td>PROMIENNA CERA</td><td>flat link</td><td>—</td></tr>
+        <tr><td>GŁADKIE CIAŁO</td><td>flat link</td><td>—</td></tr>
+        <tr><td>PIĘKNE WŁOSY</td><td>flat link</td><td>—</td></tr>
+        <tr><td>RUTYNY GLOV -20%</td><td>flat link</td><td>—</td></tr>
+        <tr><td>ZESTAWY PREZENTOWE</td><td>flat link</td><td>—</td></tr>
+        <tr><td>BLOG</td><td>flat link</td><td>—</td></tr>
+        <tr><td>GLOV CLUB</td><td>flat link</td><td>—</td></tr>
+        <tr><td>KONTAKT</td><td>flat link</td><td>—</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Action Map — Nawigacja</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja shopperki</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Flat nav link (kategorię)</td><td>Klik w kategorię</td><td><code>navigate</code> / brak</td><td><span class="fail">❌ brak custom event</span></td></tr>
+      <tr><td>RUTYNY dropdown</td><td>Hover → otwiera → klik sub-link</td><td>—</td><td><span class="fail">❌ interakcja nie trackowana</span></td></tr>
+      <tr><td>Hamburger (mobile)</td><td>Tap → otwiera menu</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Logo</td><td>Klik → HP</td><td>—</td><td><span class="fail">❌ brak</span></td></tr>
+      <tr><td>Wyszukiwarka (lupa)</td><td>Klik → otwiera search bar</td><td><code>search_open</code></td><td><span class="warn">⚠️ niepewne</span></td></tr>
+      <tr><td>Koszyk (ikonka)</td><td>Klik → mini cart lub cart page</td><td><code>view_cart</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+    </table></div>
+  </div>
+
+
+</div>
+
+<!-- ════════════════════════════════════════════════════ HOMEPAGE ═══ -->
+<div id="tab-hp" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Homepage</div>
+
+    <div class="section-label">Desktop — 1440px (full page)</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">HP Desktop full page <span class="vp-tag">1440px</span></div>
+        <img src="GLOV_audit_screenshots/glov_hp_desktop_full.jpeg" alt="HP Desktop full" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:50%;top:1%">1</div>
+          <div class="av-dot" style="left:50%;top:3%">2</div>
+          <div class="av-dot" style="left:50%;top:5%">3</div>
+          <div class="av-dot" style="left:50%;top:12%">4</div>
+          <div class="av-dot" style="left:50%;top:24%">5</div>
+          <div class="av-dot" style="left:50%;top:36%">6</div>
+          <div class="av-dot" style="left:50%;top:46%">7</div>
+          <div class="av-dot" style="left:50%;top:55%">8</div>
+          <div class="av-dot" style="left:50%;top:63%">9</div>
+          <div class="av-dot" style="left:50%;top:70%">10</div>
+          <div class="av-dot" style="left:50%;top:77%">11</div>
+          <div class="av-dot" style="left:50%;top:83%">12</div>
+          <div class="av-dot" style="left:50%;top:88%">13</div>
+          <div class="av-dot" style="left:50%;top:93%">14</div>
+          <div class="av-dot" style="left:50%;top:96%">15</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Sekcje HP od góry (desktop, pełna strona) — źródło: HTML scan</div>
+        <div class="av-item">
+          <div class="av-num">1</div>
+          <div class="av-text"><strong>Promo bar</strong> [announcement] — "🔥 -25% na wszystko z kodem: MAMA25 🔥" — klikalny link do /collections/sklep</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">2</div>
+          <div class="av-text"><strong>Header</strong> [header, sticky]: hamburger (button.header__mobile__button, aria="Otwórz menu"), logo GLOV (a.header__logo__link), ikona wyszukiwarki, selektor języka PL, ikona konta, ikona wishlist (Growave), ikona koszyka z licznikiem</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">3</div>
+          <div class="av-text"><strong>Secondary nav</strong> [header] — 9 linków (navlink--toplevel): Rękawiczka GLOV · Promienna cera · Piękne włosy · Gładkie ciało · ZESTAWY PREZENTOWE · Bestsellery · Lakiery COOLNAILS · GLOV LED THERAPY · RUTYNY GLOV -25% (jedyna z dropdown)</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">4</div>
+          <div class="av-text"><strong>Hero banner</strong> [slideshow / homepage-slideshow] — carousel kampanii Dzień Matki, CTA button, wskaźniki slajdów (4 dots), przyciski prev/next</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">5</div>
+          <div class="av-text"><strong>Bestsellery</strong> [product-listing] — H2 + paragraf copy + carousel produktów, horizontal scroll</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">6</div>
+          <div class="av-text"><strong>Nowości</strong> [product-listing] — H2 + paragraf copy + carousel produktów, horizontal scroll</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">7</div>
+          <div class="av-text"><strong>Nasze bestsellery w akcji</strong> [app-wrapper / Spotlight carousel] — H2 + UGC carousel z postami klientek (zdjęcia + video)</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">8</div>
+          <div class="av-text"><strong>Oferty specjalne</strong> [homepage-collection-grid] — H2 + paragraf copy + grid kolekcji ze zdjęciami i CTA</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">9</div>
+          <div class="av-text"><strong>Newsletter</strong> [newsletter] — H2 "NEWSLETTER" + copy (-20% na pierwsze zamówienie + prezent niespodzianka) + pole email + button</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">10</div>
+          <div class="av-text"><strong>SoMe</strong> [app-wrapper] — H2 "SoMe" + embed social media (Instagram/TikTok)</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">11</div>
+          <div class="av-text"><strong>Social proof / Reviews</strong> [featured-reviews] — H2 "GLOV dziękuje za zaufanie już 50 000 klientów!" + widget z recenzjami/opiniami</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">12</div>
+          <div class="av-text"><strong>Mówią o nas</strong> [homepage-logos] — H2 + poziomy rząd logotypów mediów (Vogue, Elle, Forbes itp.)</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">13</div>
+          <div class="av-text"><strong>Nasza misja</strong> [custom-content / section-double] — 2-kolumnowy layout: obraz + tekst z copy marki</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">14</div>
+          <div class="av-text"><strong>Recenzja miesiąca</strong> [double-custom] — H2 "Recenzja miesiąca - wygraj 1000 zł na zakupy w GLOV!" + zdjęcie produktu + cytat klientki</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">15</div>
+          <div class="av-text"><strong>Footer</strong> [footer / site-footer-wrapper] — logo, kolumny linków, selektor waluty</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — 390px (full page)</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">HP Mobile full page <span class="vp-tag">390px</span></div>
+        <img src="GLOV_audit_screenshots/glov_hp_mobile_full.jpeg" alt="HP Mobile full" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:50%;top:1%">1</div>
+          <div class="av-dot" style="left:50%;top:3%">2</div>
+          <div class="av-dot" style="left:50%;top:10%">3</div>
+          <div class="av-dot" style="left:50%;top:22%">4</div>
+          <div class="av-dot" style="left:50%;top:36%">5</div>
+          <div class="av-dot" style="left:50%;top:50%">6</div>
+          <div class="av-dot" style="left:50%;top:62%">7</div>
+          <div class="av-dot" style="left:50%;top:73%">8</div>
+          <div class="av-dot" style="left:50%;top:83%">9</div>
+          <div class="av-dot" style="left:50%;top:91%">10</div>
+          <div class="av-dot" style="left:50%;top:96%">11</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Sekcje HP od góry (mobile 390px)</div>
+        <div class="av-item">
+          <div class="av-num">1</div>
+          <div class="av-text"><strong>Promo bar</strong> [announcement] — "🔥 -25% na wszystko z kodem: MAMA25 🔥"</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">2</div>
+          <div class="av-text"><strong>Header mobile</strong> [header, sticky] — hamburger (ikona), logo GLOV (środek), ikona koszyka z licznikiem. Secondary nav niedostępna w headerze — tylko przez hamburger</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">3</div>
+          <div class="av-text"><strong>Hero banner</strong> [homepage-slideshow] — full-width carousel, CTA button, dots</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">4</div>
+          <div class="av-text"><strong>Bestsellery</strong> [product-listing] — H2 + 2-kolumnowy carousel kafelków, horizontal scroll</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">5</div>
+          <div class="av-text"><strong>Nowości</strong> [product-listing] — H2 + carousel kafelków</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">6</div>
+          <div class="av-text"><strong>Nasze bestsellery w akcji</strong> [app-wrapper / Spotlight] — H2 + UGC carousel</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">7</div>
+          <div class="av-text"><strong>Oferty specjalne</strong> [homepage-collection-grid] — H2 + grid kolekcji, 1 kolumna mobile</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">8</div>
+          <div class="av-text"><strong>Newsletter</strong> [newsletter] — H2 + pole email + button</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">9</div>
+          <div class="av-text"><strong>Social proof + SoMe + Mówią o nas</strong> [featured-reviews + app-wrapper + homepage-logos] — recenzje, social feed, loga mediów</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">10</div>
+          <div class="av-text"><strong>Nasza misja + Recenzja miesiąca</strong> [custom-content + double-custom] — sekcje brand story, 1-kolumnowe na mobile</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">11</div>
+          <div class="av-text"><strong>Footer</strong> [footer] — logo, linki, selektor waluty</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧩 Widgety — elementy nakładkowe</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Widgety to elementy UI działające niezależnie od sekcji Shopify — sticky, floating lub overlay. Opisujemy je raz (tutaj, w HP) i nie powtarzamy w innych zakładkach.</p>
+    <div class="av-annotations" style="max-width:700px">
+      <div class="widget-section-label">Widgety aktywne na glov.co</div>
+      <div class="av-item">
+        <div class="av-num widget">W1</div>
+        <div class="av-text"><strong>Cookiebot</strong> [button.Open cookie settings widget] — ikona/przycisk cookie settings, pozycja: lewy dolny róg (floating, sticky)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num widget">W2</div>
+        <div class="av-text"><strong>Trusted Shops</strong> [button, iframe] — "Znak jakości Trusted Shops / Ochrona Kupującego / 4,64 Doskonały" — pozycja: prawy dolny róg (floating, sticky). Na mobile nakłada się na tytuł H1 (PDP)</div>
+      </div>
+      <div class="av-item">
+        <div class="av-num widget">W3</div>
+        <div class="av-text"><strong>Growave Wishlist Tab</strong> [button.Growave wishlist tab] — pionowy tab "Wishlist" przyklejony do lewej krawędzi ekranu (sticky side tab)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Action Map — HP</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja sklepu</th><th>Event GA4/PostHog</th><th>Status</th></tr>
+      <tr><td>Promo bar</td><td>Klik → kolekcja/promo</td><td><code>select_promotion</code></td><td><span class="warn">⚠️ niezweryfikowany</span></td></tr>
+      <tr><td>Hamburger menu</td><td>Otwórz nawigację</td><td>—</td><td><span class="warn">⚠️ niezweryfikowany</span></td></tr>
+      <tr><td>Wyszukiwarka</td><td>Search</td><td><code>search</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>Nav link (kategoria)</td><td>Klik → listing</td><td><code>select_content</code></td><td><span class="warn">⚠️ niezweryfikowany</span></td></tr>
+      <tr><td>Nav "RUTYNY GLOV -25%"</td><td>Klik → landing</td><td><code>select_promotion</code></td><td><span class="warn">⚠️ niezweryfikowany</span></td></tr>
+      <tr><td>Hero banner CTA</td><td>Klik → kolekcja</td><td><code>select_promotion</code></td><td><span class="warn">⚠️ niezweryfikowany</span></td></tr>
+      <tr><td>Koszyk ikona</td><td>Klik → cart</td><td>—</td><td><span class="fail">❌ brak</span></td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ LISTING ════ -->
+<div id="tab-listing" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Listing (LED Therapy)</div>
+
+    <div class="section-label">Desktop — 1440px (pełna filtracja + produkty)</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">LED Listing Desktop <span class="vp-tag">1440px</span></div>
+        <img src="GLOV_audit_screenshots/listing_desktop.jpeg" alt="Listing Desktop" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:50%;top:8%">1</div>
+          <div class="av-dot" style="left:50%;top:24%">2</div>
+          <div class="av-dot" style="left:10%;top:38%">3</div>
+          <div class="av-dot" style="left:55%;top:38%">4</div>
+          <div class="av-dot" style="left:10%;top:82%">5</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Listing /collections/glov-led-therapy — od góry — źródło: HTML scan</div>
+        <div class="av-item" style="background:rgba(108,127,255,.04);border-left:3px solid var(--accent);">
+          <div class="av-num" style="background:var(--surface2);">i</div>
+          <div class="av-text"><strong>Typ listingu:</strong> statyczny — 4 produkty, brak paginacji, brak load-more, brak infinite scroll</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">1</div>
+          <div class="av-text"><strong>Hero banner kolekcji</strong> [hero] — duże zdjęcie urządzeń LED, napis "GLOV LED THERAPY", tagline "Pielęgnacja twarzy światłem", CTA button "KUP TERAZ"</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">2</div>
+          <div class="av-text"><strong>Subcollections</strong> [hero / __subcollections] — sekcja podkolekcji (JS-rendered; w HTML scan brak widocznej treści)</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">3</div>
+          <div class="av-text"><strong>Sidebar nawigacyjny</strong> [aside.collection__filters__wrapper, drawer--visible] — toggle "UKRYJ FILTRY / FILTER". Zawartość: 12 linków nawigacyjnych do kolekcji (typ: <em>div.sidebar__item</em>, nie checkboxy): Urządzenia LED (aktywna), Pumeksy i depilatory, Rękawiczki do demakijażu, Szczotki do włosów, Lokówki do włosów, Turbany do włosów, Wielorazowe płatki, Włosy, Ciało, Makijaż, Zestawy prezentowe, Bestsellery + CENA (zwijany filtr cenowy)</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">4</div>
+          <div class="av-text"><strong>Collection nav bar</strong> [collection__nav] — toggle filtrów + SORTUJ (popout) + ikony widoku siatki (2 / 3 / 4 kolumny)</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">5</div>
+          <div class="av-text"><strong>Siatka produktów</strong> [product-grid-item] — 4 produkty, grid 4-kolumnowy desktop (1 rząd). Badge: NOWOŚĆ na wszystkich 4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — 390px (min. 2 rzędy listingu właściwego)</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">Listing Mobile <span class="vp-tag">390px</span></div>
+        <img src="GLOV_audit_screenshots/listing_mobile.jpeg" alt="Listing Mobile" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:50%;top:4%">1</div>
+          <div class="av-dot" style="left:35%;top:18%">2</div>
+          <div class="av-dot" style="left:50%;top:55%">3</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Mobile — screenshot: 2 rzędy listingu właściwego (390px)</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Filter + Sort bar</strong> [collection__nav] — "FILTR" button + "SORTUJ" button (pełna szerokość, sticky top)</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Siatka produktów</strong> [product-grid-item] — 2-kolumnowy grid mobile, 2 rzędy (4 produkty). Badge NOWOŚĆ widoczny na każdym kafelku</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Kafelek produktu</strong> — zdjęcie + tytuł + rating (gwiazdki + liczba) + cena (regularna / promo) + CTA: "DODAJ DO KOSZYKA" lub "POWIADOM MNIE"</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Action Map — Listing</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja sklepu</th><th>Event GA4/PostHog</th><th>Status</th></tr>
+      <tr><td>Hero "KUP TERAZ"</td><td>Scroll do produktów / ATC</td><td><code>select_promotion</code></td><td><span class="warn">⚠️ niezweryfikowany</span></td></tr>
+      <tr><td>Sidebar nav item klik</td><td>Przejście do innej kolekcji</td><td><code>page_view</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>Produkt tile — klik</td><td>Przejście na PDP</td><td><code>select_item</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>"Dodaj do koszyka" na tile</td><td>add_to_cart</td><td><code>add_to_cart</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>Widok kafelka w viewport</td><td>Wyświetlenie produktu</td><td><code>view_item_list</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>"Powiadom mnie" (OOS)</td><td>Back-in-stock signup</td><td>—</td><td><span class="fail">❌ brak custom event</span></td></tr>
+      <tr><td>Sort zmiana</td><td>Sortowanie listingu</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Wishlist na tile</td><td>add_to_wishlist</td><td>—</td><td><span class="warn">⚠️ Growave event (nie GA4)</span></td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔽 Filtry i sortowanie — dostępne opcje (źródło: HTML scan)</div>
+    <div class="table-wrap"><table>
+      <tr><th>Typ</th><th>Mechanizm</th><th>Opcje</th></tr>
+      <tr><td><strong>Sidebar nawigacyjny</strong></td><td>Linki do kolekcji (div.sidebar__item, NIE checkboxy Shopify filter)</td><td>Urządzenia LED · Pumeksy i depilatory · Rękawiczki do demakijażu · Szczotki do włosów · Lokówki do włosów · Turbany do włosów · Wielorazowe płatki · Włosy · Ciało · Makijaż · Zestawy prezentowe · Bestsellery</td></tr>
+      <tr><td><strong>Filtr — Cena</strong></td><td>Zwijany element w sidebar (widoczny w PL locale; brak w HTML scan EN-EU — prawdopodobnie lazy-load)</td><td>—</td></tr>
+      <tr><td><strong>Sortowanie</strong></td><td>SORTUJ popout (.popout-list__option)</td><td>Polecane · Najtrafniejsze · Bestsellery · A–Z · Z–A · Cena rosnąco · Cena malejąco · Data rosnąco · Data malejąco</td></tr>
+      <tr><td><strong>Widok siatki</strong></td><td>Ikony toggle w collection nav</td><td>2 kolumny / 3 kolumny / 4 kolumny</td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ PDP ════════ -->
+<div id="tab-pdp" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — PDP (Luna Eye)</div>
+
+    <div class="section-label">Desktop — 1440px (pełny long screenshot, cała strona od góry do dołu)</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">PDP Desktop — full long <span class="vp-tag">1440px</span></div>
+        <img src="GLOV_audit_screenshots/pdp_desktop.jpeg" alt="PDP Desktop" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:50%;top:2%">1</div>
+          <div class="av-dot" style="left:18%;top:12%">2</div>
+          <div class="av-dot" style="left:70%;top:12%">3</div>
+          <div class="av-dot" style="left:70%;top:22%">4</div>
+          <div class="av-dot" style="left:70%;top:30%">5</div>
+          <div class="av-dot" style="left:70%;top:38%">6</div>
+          <div class="av-dot" style="left:70%;top:48%">7</div>
+          <div class="av-dot" style="left:70%;top:57%">8</div>
+          <div class="av-dot" style="left:50%;top:65%">9</div>
+          <div class="av-dot" style="left:50%;top:75%">10</div>
+          <div class="av-dot" style="left:50%;top:85%">11</div>
+          <div class="av-dot" style="left:50%;top:92%">12</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">PDP od góry do dołu (desktop) — źródło: HTML scan</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Breadcrumb</strong> — "Strona główna ›" + nazwa produktu</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Gallery</strong> [product__media] — 14 assetów: thumbnails boczne (klikalne) + główne zdjęcie. Wideo: niewidoczne przy JS-scan (może lazy)</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Tytuł H1</strong> — "Płatki LED LUNA EYE pielęgnacyjne dla rozświetlonej i odświeżonej okolicy oczu"</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Rating</strong> — gwiazdki + liczba recenzji (Growave)</div></div>
+        <div class="av-item"><div class="av-num">5</div><div class="av-text"><strong>Cena</strong> — PLN (z kodem MAMA25: 84,90 zł; cena regularna: 299 PLN)</div></div>
+        <div class="av-item"><div class="av-num">6</div><div class="av-text"><strong>Opcje pakowania</strong> — "Wariant z opakowaniem" / "Wariant ekologiczny" + "Subskrypcja" widget</div></div>
+        <div class="av-item"><div class="av-num">7</div><div class="av-text"><strong>DODAJ DO KOSZYKA</strong> — button [name="add"]</div></div>
+        <div class="av-item"><div class="av-num">8</div><div class="av-text"><strong>Opis produktu</strong> — heading "Dlaczego warto?" + "Odkryj radość stosowania" + inline rich text (Poznaj Luna Eye...)</div></div>
+        <div class="av-item"><div class="av-num">9</div><div class="av-text"><strong>Accordiony</strong> [custom theme component] — Kluczowe Korzyści · Jak Używać? · FAQ · Dane Techniczne</div></div>
+        <div class="av-item"><div class="av-num">10</div><div class="av-text"><strong>Kupisz także na</strong> [custom section] — linki do INIZIO + AMORA (zewnętrzne marketplace)</div></div>
+        <div class="av-item"><div class="av-num">11</div><div class="av-text"><strong>Recenzje klientów</strong> [app-wrapper / Growave] — widget z ocenami i recenzjami tekstowymi</div></div>
+        <div class="av-item"><div class="av-num">12</div><div class="av-text"><strong>Może Ci się spodobać</strong> [collection-row] + <strong>Ostanio oglądane</strong> [collection-row] — cross-sell + recently viewed</div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — 390px (pełny long screenshot, cała strona od góry do dołu)</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">PDP Mobile — full long <span class="vp-tag">390px</span></div>
+        <img src="GLOV_audit_screenshots/pdp_mobile.jpeg" alt="PDP Mobile" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:50%;top:3%">1</div>
+          <div class="av-dot" style="left:50%;top:14%">2</div>
+          <div class="av-dot" style="left:50%;top:25%">3</div>
+          <div class="av-dot" style="left:50%;top:33%">4</div>
+          <div class="av-dot" style="left:50%;top:41%">5</div>
+          <div class="av-dot" style="left:50%;top:52%">6</div>
+          <div class="av-dot" style="left:50%;top:63%">7</div>
+          <div class="av-dot" style="left:50%;top:74%">8</div>
+          <div class="av-dot" style="left:50%;top:84%">9</div>
+          <div class="av-dot" style="left:50%;top:93%">10</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">PDP od góry do dołu (mobile 390px)</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Gallery carousel</strong> — full-width, dots pagination</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Tytuł H1</strong> — wrap na 3–4 linie mobile</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Rating + cena</strong></div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Opcje pakowania</strong> + <strong>Subskrypcja</strong></div></div>
+        <div class="av-item"><div class="av-num">5</div><div class="av-text"><strong>Sticky DODAJ DO KOSZYKA</strong> — button sticky na dole ekranu (Shopify native)</div></div>
+        <div class="av-item"><div class="av-num">6</div><div class="av-text"><strong>Opis</strong> — "Dlaczego warto?" + "Odkryj radość stosowania" + inline rich text</div></div>
+        <div class="av-item"><div class="av-num">7</div><div class="av-text"><strong>Accordiony</strong> — Kluczowe Korzyści · Jak Używać? · FAQ · Dane Techniczne</div></div>
+        <div class="av-item"><div class="av-num">8</div><div class="av-text"><strong>Kupisz także na</strong> — INIZIO + AMORA</div></div>
+        <div class="av-item"><div class="av-num">9</div><div class="av-text"><strong>Recenzje klientów</strong> [Growave] — oceny + teksty recenzji</div></div>
+        <div class="av-item"><div class="av-num">10</div><div class="av-text"><strong>Może Ci się spodobać</strong> + <strong>Ostanio oglądane</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📝 Content Schema — LUNA EYE</div>
+
+    <div class="section-label">Tytuł produktu</div>
+    <div class="schema-block">
+      <div class="schema-label">Obecny</div>
+      <pre>"Płatki LED LUNA EYE pielęgnacyjne dla rozświetlonej i odświeżonej okolicy oczu"</pre>
+      <div class="table-wrap"><table>
+        <tr><th>Komponent</th><th>Status</th><th>Uwaga</th></tr>
+        <tr><td>Brand (GLOV)</td><td><span class="fail">❌</span></td><td>Brak marki w tytule — SEO i brand recall</td></tr>
+        <tr><td>Nazwa (LUNA EYE)</td><td><span class="ok">✅</span></td><td>Obecna</td></tr>
+        <tr><td>Typ (Płatki LED)</td><td><span class="ok">✅</span></td><td>Na początku</td></tr>
+        <tr><td>Główna korzyść</td><td><span class="ok">✅</span></td><td>"rozświetlonej i odświeżonej okolicy oczu"</td></tr>
+        <tr><td>Wariant</td><td><span class="fail">❌</span></td><td>Jeden wariant — nie dotyczy</td></tr>
+      </table></div>
+      <div class="schema-note"><strong>Model:</strong> Typ + Nazwa + Benefit-phrase — angażujący, ale brak brand GLOV to problem dla wyszukiwania i rozpoznawalności marki.</div>
+    </div>
+
+    <div class="section-label">Krótki opis (Short desc)</div>
+    <div class="schema-block">
+      <div class="schema-label">Obecny opener</div>
+      <pre>"Poznaj Luna Eye – innowacyjne płatki LED do kompleksowej pielęgnacji okolicy oczu.
+Technologia LED (630nm – światło czerwone, 830nm – bliskie podczerwieni) stymuluje produkcję kolagenu..."</pre>
+      <div class="table-wrap"><table>
+        <tr><th>Komponent</th><th>Status</th></tr>
+        <tr><td>CEP-first (odpowiada na "dlaczego TERAZ")</td><td><span class="fail">❌ Nie — zaczyna od technologii</span></td></tr>
+        <tr><td>Primary concern shopperki</td><td><span class="fail">❌ Brak — zamiast problemu → spec</span></td></tr>
+        <tr><td>Czytelność w 3 sekundy</td><td><span class="warn">⚠️ Zbyt techniczny</span></td></tr>
+      </table></div>
+      <div class="schema-note bad"><strong>Powinno być:</strong> "Opuchlizna i zmarszczki wokół oczu? Luna Eye redukuje je światłem LED już po 10 minutach — w domu, bez gabinetu."</div>
+    </div>
+
+    <div class="section-label">Bullet points (10 obecnych)</div>
+    <div class="schema-block">
+      <pre>1. Technologia 630nm + 830nm – stymulacja produkcji kolagenu   ← Tier-2 (spec)
+2. Płatki wielorazowego użytku (600+ godzin pracy)             ← Tier-2 (value)
+3. Łagodzi opuchliznę i cienie pod oczami                      ← Tier-1 ✓
+4. Komfortowe użytkowanie – miękki silikon                     ← Tier-2
+5. 3 programy (Rejuvenation / Relaxation / Repair)             ← Tier-2
+6. Ładowanie USB-C                                             ← Tier-3
+7. Bezprzewodowe, przenośne                                    ← Tier-2
+8. Certyfikat CE                                               ← Tier-3 ← za wysoko
+9. Dermatologicznie testowane                                  ← Tier-3 ← za wysoko
+10. Mogą być używane razem z kosmetykami                       ← Tier-1 ✓</pre>
+      <div class="schema-note"><strong>Problem:</strong> 10 bulletów (max 7), Tier-1 benefity na pozycjach 3 i 10 zamiast na 1-2. Certyfikaty (Tier-3) powinny być na końcu.<br><strong>Rekomendacja:</strong> "Łagodzi opuchliznę i cienie pod oczami — natychmiast po pierwszej sesji." jako opener.</div>
+    </div>
+
+    <div class="section-label">FAQ + Specyfikacja + Gallery</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Status</th><th>Ocena</th></tr>
+      <tr><td>FAQ (7 pytań)</td><td><span class="ok">✅</span></td><td>Z realnych obiekcji CS: skóra wrażliwa, podróż, kosmetyki — ŚWIETNE</td></tr>
+      <tr><td>Brak w FAQ: "Kiedy zobaczę efekty?"</td><td><span class="fail">❌</span></td><td>Kluczowe pytanie kupującego — brakuje</td></tr>
+      <tr><td>Specs table</td><td><span class="fail">❌</span></td><td>KRYTYCZNE — tylko PDF. Produkt 299 PLN musi mieć tabelę danych</td></tr>
+      <tr><td>Gallery (7+ zdjęć + video)</td><td><span class="ok">✅</span></td><td>white BG, lifestyle, close-up, infografika, wideo</td></tr>
+      <tr><td>Before/After</td><td><span class="fail">❌</span></td><td>Brak — bardzo ważne dla urządzenia kosmetycznego</td></tr>
+      <tr><td>UGC zdjęcia w recenzjach</td><td><span class="fail">❌</span></td><td>Brak</td></tr>
+      <tr><td>14 recenzji dla produktu 299 PLN</td><td><span class="warn">⚠️</span></td><td>Za mało. Min 30-50 dla takiej ceny</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Action Map — PDP</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja</th><th>Event GA4</th><th>Status</th></tr>
+      <tr><td>Wejście na PDP</td><td>view_item</td><td><code>view_item</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>DODAJ DO KOSZYKA</td><td>add_to_cart</td><td><code>add_to_cart</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>Galeria — swipe/klik</td><td>Gallery view</td><td>—</td><td><span class="fail">❌ blind spot</span></td></tr>
+      <tr><td>Video — play</td><td>Video engagement</td><td>—</td><td><span class="fail">❌ blind spot</span></td></tr>
+      <tr><td>Accordion otwarcie</td><td>Content engagement</td><td>—</td><td><span class="fail">❌ nie wiesz czy FAQ czytane</span></td></tr>
+      <tr><td>PDF download</td><td>Download instrukcji</td><td>—</td><td><span class="fail">❌ brak</span></td></tr>
+      <tr><td style="color:var(--red);font-weight:600">"Kupisz także na" (INIZIO/AMORA)</td><td>Exit do konkurencji</td><td>—</td><td><span class="fail">❌ KRYTYCZNY — niewidoczny odpływ</span></td></tr>
+      <tr><td>Scroll depth</td><td>Content exposure</td><td>—</td><td><span class="fail">❌ blind spot</span></td></tr>
+      <tr><td>Wishlist serce</td><td>add_to_wishlist</td><td>—</td><td><span class="warn">⚠️ Growave</span></td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════════ PRODUCT TILE ═══ -->
+<div id="tab-tile" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Kafelek produktowy</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Kafelek to <strong>pierwsza interakcja</strong> shopperki z produktem. Decyzja "wchodzę na PDP czy nie" zapada w 1–2 sekundy skanowania wzrokiem. To osobny element auditu — niezależny od strony listingu.</p>
+
+    <div class="section-label" style="margin-bottom:10px">Pumeks Nano Szkło — default state vs. hover state (live screenshot)</div>
+
+    <div class="dual-tile">
+      <!-- DEFAULT STATE -->
+      <div class="tile-col">
+        <div class="tile-label">Default state <span class="vp-tag">bez hover</span></div>
+        <img src="GLOV_audit_screenshots/glov_tile_pumeks_default.png" alt="Kafelek default" onclick="zoom(this)">
+        <div class="tile-dots">
+          <div class="av-dot ok2" style="left:18%;top:4%">T6</div>
+          <div class="av-dot" style="left:82%;top:6%">T8</div>
+          <div class="av-dot" style="left:50%;top:40%">T1</div>
+          <div class="av-dot" style="left:50%;top:67%">T3</div>
+          <div class="av-dot ok2" style="left:50%;top:77%">T5</div>
+          <div class="av-dot" style="left:20%;top:85%">T4a</div>
+          <div class="av-dot warn" style="left:48%;top:85%">T4b</div>
+          <div class="av-dot" style="left:50%;top:95%">T7</div>
+        </div>
+      </div>
+      <!-- HOVER STATE -->
+      <div class="tile-col">
+        <div class="tile-label">Hover state <span class="vp-tag">po najechaniu myszką</span></div>
+        <img src="GLOV_audit_screenshots/glov_tile_pumeks_hover.png" alt="Kafelek hover" onclick="zoom(this)">
+        <div class="tile-dots">
+          <div class="av-dot ok2" style="left:18%;top:4%">T6</div>
+          <div class="av-dot" style="left:82%;top:6%">T8</div>
+          <div class="av-dot" style="left:50%;top:40%">T2</div>
+          <div class="av-dot" style="left:50%;top:67%">T3</div>
+          <div class="av-dot ok2" style="left:50%;top:77%">T5</div>
+          <div class="av-dot" style="left:20%;top:85%">T4a</div>
+          <div class="av-dot warn" style="left:48%;top:85%">T4b</div>
+          <div class="av-dot" style="left:50%;top:95%">T7</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dual-tile-annot">
+      <div class="annot-col">
+        <div class="annot-col-label">Default state — wszystkie elementy kafelka</div>
+        <div class="annot-item">
+          <div class="annot-num">T1</div>
+          <div class="annot-text"><strong>Packshot</strong> — białe tło, ratio ~3:4</div>
+        </div>
+        <div class="annot-item">
+          <div class="annot-num">T2</div>
+          <div class="annot-text"><strong>Badge:</strong> Bestseller, Nowość — pill lewy górny róg</div>
+        </div>
+        <div class="annot-item">
+          <div class="annot-num">T3</div>
+          <div class="annot-text"><strong>Wishlist (serce)</strong> — Growave, prawy górny róg</div>
+        </div>
+        <div class="annot-item">
+          <div class="annot-num">T4</div>
+          <div class="annot-text"><strong>Tytuł produktu</strong> — "Tarka-pumeks do stóp z nano szkła GLOV®"</div>
+        </div>
+        <div class="annot-item">
+          <div class="annot-num">T5</div>
+          <div class="annot-text"><strong>Rating</strong> — 5.0 ★ (506), widoczny bez hover</div>
+        </div>
+        <div class="annot-item">
+          <div class="annot-num">T6</div>
+          <div class="annot-text"><strong>Cena</strong> — przekreślona 49,90 zł + promo 39,90 zł</div>
+        </div>
+        <div class="annot-item">
+          <div class="annot-num">T7</div>
+          <div class="annot-text"><strong>DODAJ DO KOSZYKA</strong> — widoczny bez hover (1-wariantowe). Wielowariantowe: redirect PDP</div>
+        </div>
+      </div>
+      <div class="annot-col">
+        <div class="annot-col-label">Hover state</div>
+        <div class="annot-item">
+          <div class="annot-num ok2">→</div>
+          <div class="annot-text"><strong>Image swap</strong> — zamiana na 2. zdjęcie z galerii (lifestyle)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Action Map — Kafelek produktowy</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja shopperki</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Klik w zdjęcie / nazwę</td><td>Przejście na PDP</td><td><code>select_item</code> → <code>view_item</code></td><td><span class="ok">✅ Shopify e-commerce</span></td></tr>
+      <tr><td>Hover na kafelek</td><td>Zmiana zdjęcia (image swap)</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>"Quick add" button</td><td>Klik → add_to_cart lub redirect PDP</td><td><code>add_to_cart</code></td><td><span class="warn">⚠️ tylko 1-wariantowe</span></td></tr>
+      <tr><td>Ikonka wishlist (serce)</td><td>Dodanie do wishlisty</td><td>—</td><td><span class="fail">❌ Growave nie wysyła do GA4</span></td></tr>
+      <tr><td>Klik gwiazdki ratingu</td><td>Scroll do recenzji na PDP</td><td>—</td><td><span class="fail">❌ brak</span></td></tr>
+      <tr><td>Widok kafelka w viewporcie</td><td>Wyświetlenie produktu</td><td><code>view_item_list</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>Klik badge (NOWOŚĆ / cena przekr.)</td><td>Przejście do PDP</td><td><code>select_item</code></td><td><span class="ok">✅</span></td></tr>
+    </table></div>
+  </div>
+
+
+</div>
+
+<!-- ══════════════════════════════════════════════ OPEN SEARCH ══════ -->
+<div id="tab-search" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Open Search</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Stan gdy shopper aktywuje search bar i zaczyna wpisywać. Desktop 1440px + Mobile 390px.</p>
+
+    <div class="note note-warn">Screenshoty do uzupełnienia — wymagają manualnego wykonania (aktywacja search baru + wpisanie tekstu).</div>
+
+    <div class="section-label">Desktop — 1440px (search aktywny)</div>
+    <div class="card" style="background:var(--surface2);border-style:dashed;">
+      <div style="color:var(--muted);font-size:13px;padding:24px;text-align:center;">[ screenshot: search_desktop.jpeg ]</div>
+    </div>
+
+    <div class="section-label">Mobile — 390px (search aktywny)</div>
+    <div class="card" style="background:var(--surface2);border-style:dashed;">
+      <div style="color:var(--muted);font-size:13px;padding:24px;text-align:center;">[ screenshot: search_mobile.jpeg ]</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Action Map — Open Search</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja shopperki</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Aktywacja search baru</td><td>Klik/tap w ikonę lupy</td><td><code>search_open</code></td><td><span class="unk">— do weryfikacji</span></td></tr>
+      <tr><td>Wpisanie frazy</td><td>Typing</td><td><code>search</code></td><td><span class="unk">— do weryfikacji</span></td></tr>
+      <tr><td>Klik w sugestię autocomplete</td><td>Wybór sugestii</td><td>—</td><td><span class="unk">— do weryfikacji</span></td></tr>
+      <tr><td>Klik w wynik produktowy</td><td>Przejście na PDP</td><td><code>select_item</code></td><td><span class="unk">— do weryfikacji</span></td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════ KOSZYK ══════ -->
+<div id="tab-cart" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Koszyk</div>
+
+    <div class="note note-info" style="background:rgba(8,145,178,.08);border-left:3px solid #0891b2;padding:10px 14px;font-size:12px;margin-bottom:16px;">
+      <strong>Typ koszyka: TYLKO DRAWER</strong> — brak osobnej strony koszyka. /cart/ przekierowuje bezpośrednio do checkoutu.
+    </div>
+
+    <div class="section-label">Desktop — Drawer koszyka <span class="vp-tag">1440px</span></div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Cart Drawer Desktop</div>
+        <img src="GLOV_audit_screenshots/cart_drawer_desktop.jpeg" alt="Cart Drawer Desktop" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:75%;top:3%">1</div>
+          <div class="av-dot" style="left:75%;top:14%">2</div>
+          <div class="av-dot" style="left:75%;top:28%">3</div>
+          <div class="av-dot" style="left:75%;top:45%">4</div>
+          <div class="av-dot" style="left:75%;top:57%">5</div>
+          <div class="av-dot" style="left:75%;top:68%">6</div>
+          <div class="av-dot" style="left:75%;top:80%">7</div>
+          <div class="av-dot" style="left:75%;top:92%">8</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Drawer koszyka — od góry — źródło: screenshot</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Header drawera</strong> — ikona koszyka + "TWÓJ KOSZYK" + X (zamknij)</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Free shipping bar</strong> — "Darmowa wysyłka przyznana!" + progress bar (pełny) + karuzela cross-sell: thumbnail + nazwa + cena (69,90 zł) + CTA "Dobierz" + strzałki &lt; &gt;</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Produkt w koszyku</strong> — thumbnail + tytuł "Płatki LED LUNA EYE pielęgnacyjne dla rozświetlonej i odświeżonej okolicy oczu" + 299,00 zł + quantity selector (− 1 +) + ikona kosza (usuń)</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Wiadomość dla sprzedającego</strong> — accordion "WIADOMOŚĆ DLA SPRZEDAJĄCEGO (OPCJONALNIE)" z ikoną strzałki &gt;</div></div>
+        <div class="av-item"><div class="av-num">5</div><div class="av-text"><strong>Promo banner</strong> — "Do zamówienia od 120 zł prezent TUTAJ" (link)</div></div>
+        <div class="av-item"><div class="av-num">6</div><div class="av-text"><strong>Bundle upsell</strong> — "Dobierz idealne etui do płatków LED z silikonowymi płatkami pod oczy Infinity Patches w zestawie teraz tylko 19,55 zł (-50%)" + licznik "1" + toggle ∧</div></div>
+        <div class="av-item"><div class="av-num">7</div><div class="av-text"><strong>CTA checkout</strong> — "PRZEJDŹ DO KASY — 299,00ZŁ" (pełna szerokość, ciemnoszary button)</div></div>
+        <div class="av-item"><div class="av-num">8</div><div class="av-text"><strong>Kontynuuj zakupy</strong> — "← KONTYNUUJ ZAKUPY" (link, poniżej CTA)</div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — Drawer koszyka <span class="vp-tag">390px</span></div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">Cart Drawer Mobile</div>
+        <img src="GLOV_audit_screenshots/cart_drawer_mobile.jpeg" alt="Cart Drawer Mobile" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:50%;top:4%">1</div>
+          <div class="av-dot" style="left:50%;top:18%">2</div>
+          <div class="av-dot" style="left:50%;top:38%">3</div>
+          <div class="av-dot" style="left:50%;top:58%">4</div>
+          <div class="av-dot" style="left:50%;top:72%">5</div>
+          <div class="av-dot" style="left:50%;top:84%">6</div>
+          <div class="av-dot" style="left:50%;top:93%">7</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Mobile — identyczna struktura drawera, pełna szerokość ekranu</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Header</strong> — ikona koszyka + "TWÓJ KOSZYK" + X</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Free shipping bar</strong> — "Darmowa wysyłka przyznana!" + progress bar + cross-sell: Moon Pads Set 69,90 zł + "Dobierz"</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Produkt</strong> — thumbnail + tytuł + 299,00 zł + quantity selector (− 1 +) + usuń</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Wiadomość dla sprzedającego</strong> — accordion (opcjonalnie)</div></div>
+        <div class="av-item"><div class="av-num">5</div><div class="av-text"><strong>Promo banner</strong> — "Do zamówienia od 120 zł prezent TUTAJ"</div></div>
+        <div class="av-item"><div class="av-num">6</div><div class="av-text"><strong>Bundle upsell</strong> — etui do płatków LED 19,55 zł (-50%) + licznik + toggle</div></div>
+        <div class="av-item"><div class="av-num">7</div><div class="av-text"><strong>CTA</strong> — "PRZEJDŹ DO KASY — 299,00ZŁ" + "← KONTYNUUJ ZAKUPY"</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Action Map — Koszyk</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja sklepu</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Otwarcie drawera</td><td>view_cart</td><td><code>view_cart</code></td><td><span class="unk">— do weryfikacji</span></td></tr>
+      <tr><td>Quantity +/−</td><td>Zmiana ilości produktu</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Ikona kosza (usuń)</td><td>Usunięcie produktu</td><td><code>remove_from_cart</code></td><td><span class="unk">— do weryfikacji</span></td></tr>
+      <tr><td>Cross-sell "Dobierz"</td><td>Add cross-sell do koszyka</td><td><code>add_to_cart</code></td><td><span class="unk">— do weryfikacji</span></td></tr>
+      <tr><td>Bundle upsell klik</td><td>Add bundle do koszyka</td><td><code>add_to_cart</code></td><td><span class="unk">— do weryfikacji</span></td></tr>
+      <tr><td>Promo banner "TUTAJ"</td><td>Klik → strona prezentu</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>"PRZEJDŹ DO KASY"</td><td>Begin checkout</td><td><code>begin_checkout</code></td><td><span class="unk">— do weryfikacji</span></td></tr>
+      <tr><td>"KONTYNUUJ ZAKUPY"</td><td>Zamknięcie drawera / powrót</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════ CHECKOUT ══════ -->
+<div id="tab-checkout" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Checkout</div>
+
+    <div class="note note-info" style="background:rgba(8,145,178,.08);border-left:3px solid #0891b2;padding:10px 14px;font-size:12px;margin-bottom:16px;">
+      <strong>Shopify native checkout</strong> — 1-page checkout. Ścieżka: Drawer CTA → checkout (kontakt + dostawa + płatność na jednej stronie).
+    </div>
+
+    <div class="section-label">Desktop — Checkout (kontakt + dostawa) <span class="vp-tag">1440px</span></div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Checkout Desktop — krok 1</div>
+        <img src="GLOV_audit_screenshots/cart_page_desktop.jpeg" alt="Checkout Desktop" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:32%;top:5%">1</div>
+          <div class="av-dot" style="left:32%;top:14%">2</div>
+          <div class="av-dot" style="left:32%;top:27%">3</div>
+          <div class="av-dot" style="left:32%;top:44%">4</div>
+          <div class="av-dot" style="left:32%;top:68%">5</div>
+          <div class="av-dot" style="left:75%;top:18%">6</div>
+          <div class="av-dot" style="left:75%;top:50%">7</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Checkout — od góry — źródło: screenshot (Shopify native)</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Header checkoutu</strong> — logo GLOV + "-25% na wszystko! KOD: MAMA25" + ikona koszyka</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Ekspresowa realizacja zakupu</strong> — Shop Pay (fioletowy) / PayPal (żółty) / Google Pay (czarny) + separator "LUB"</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Kontakt</strong> — "Zaloguj się" link + pole E-mail</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Dostawa</strong> — Kraj/region (Polska), Imię, Nazwisko, Adres, Mieszkanie (opcjonalnie), Kod pocztowy, Miasto, Telefon</div></div>
+        <div class="av-item"><div class="av-num">5</div><div class="av-text"><strong>Metoda wysyłki</strong> — sekcja do wyboru opcji dostawy (poniżej pól adresowych)</div></div>
+        <div class="av-item"><div class="av-num">6</div><div class="av-text"><strong>Order summary (prawa kolumna)</strong> — thumbnail produktu + nazwa + cena + pole kodu rabatowego "Zastosuj"</div></div>
+        <div class="av-item"><div class="av-num">7</div><div class="av-text"><strong>Podsumowanie ceny</strong> — Suma częściowa 299,00 zł + Wysyłka (wpisz adres) + <strong>Suma: 299,00 zł</strong> + "W tym podatki: 55,91 zł"</div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — Checkout <span class="vp-tag">390px</span></div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">Checkout Mobile</div>
+        <img src="GLOV_audit_screenshots/cart_mobile.jpeg" alt="Checkout Mobile" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:50%;top:5%">1</div>
+          <div class="av-dot" style="left:50%;top:15%">2</div>
+          <div class="av-dot" style="left:50%;top:28%">3</div>
+          <div class="av-dot" style="left:50%;top:42%">4</div>
+          <div class="av-dot" style="left:50%;top:65%">5</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Mobile — ta sama struktura, order summary jako zwijany accordion na górze</div>
+        <div class="av-item"><div class="av-num">1</div><div class="av-text"><strong>Header</strong> — logo + "KOD: MAMA25" + ikona koszyka</div></div>
+        <div class="av-item"><div class="av-num">2</div><div class="av-text"><strong>Podsumowanie zamówienia ∨</strong> — accordion (zwijany) + kwota 299,00 zł</div></div>
+        <div class="av-item"><div class="av-num">3</div><div class="av-text"><strong>Ekspresowa realizacja</strong> — Shop Pay / PayPal / Google Pay</div></div>
+        <div class="av-item"><div class="av-num">4</div><div class="av-text"><strong>Kontakt</strong> — "Zaloguj się" + E-mail</div></div>
+        <div class="av-item"><div class="av-num">5</div><div class="av-text"><strong>Dostawa</strong> — pola adresowe (Kraj, Imię, Nazwisko, Adres, Kod, Miasto)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Action Map — Checkout</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja sklepu</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Wejście w checkout</td><td>Begin checkout</td><td><code>begin_checkout</code></td><td><span class="unk">— do weryfikacji</span></td></tr>
+      <tr><td>Shop Pay / PayPal / Google Pay</td><td>Express checkout</td><td><code>add_payment_info</code></td><td><span class="unk">— do weryfikacji</span></td></tr>
+      <tr><td>Pole E-mail (Kontakt)</td><td>Identyfikacja klienta</td><td>—</td><td><span class="unk">— do weryfikacji</span></td></tr>
+      <tr><td>Kod rabatowy "Zastosuj"</td><td>Zastosowanie kodu</td><td>—</td><td><span class="fail">❌ brak custom event</span></td></tr>
+      <tr><td>Wybór metody dostawy</td><td>Wybór opcji wysyłki</td><td><code>add_shipping_info</code></td><td><span class="unk">— do weryfikacji</span></td></tr>
+      <tr><td>Wybór płatności</td><td>Wybór metody płatności</td><td><code>add_payment_info</code></td><td><span class="unk">— do weryfikacji</span></td></tr>
+      <tr><td>Złożenie zamówienia</td><td>Klik "Zamów"</td><td><code>purchase</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ BLOG ═══════ -->
+<div id="tab-blog" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">👁 Shopper View — Blog (glov.co/blogs/pl)</div>
+
+    <div class="section-label">Desktop — 1440px (full page)</div>
+    <div class="annotated-view">
+      <div class="av-image-col">
+        <div class="av-label">Blog Desktop full page <span class="vp-tag">1440px</span></div>
+        <img src="GLOV_audit_screenshots/glov_blog_desktop_full.jpeg" alt="Blog Desktop" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:50%;top:10%">1</div>
+          <div class="av-dot" style="left:50%;top:20%">2</div>
+          <div class="av-dot" style="left:50%;top:50%">3</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Blog listing — elementy od góry</div>
+        <div class="av-item">
+          <div class="av-num">1</div>
+          <div class="av-text"><strong>H1 bloga</strong> — "GLOV's world"</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">2</div>
+          <div class="av-text"><strong>Tag cloud / filtry</strong> — poziomy rząd tagów kategorii: ekologia · gąbki do demakijażu · gwiazdy · koreańska pielęgnacja · loki · makeup remover glove · makijaż</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">3</div>
+          <div class="av-text"><strong>Grid artykułów</strong> — 3 kolumny desktop. Każdy artykuł: zdjęcie + tytuł</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Mobile — 390px (full page)</div>
+    <div class="annotated-view mobile-view">
+      <div class="av-image-col">
+        <div class="av-label">Blog Mobile full page <span class="vp-tag">390px</span></div>
+        <img src="GLOV_audit_screenshots/glov_blog_mobile_full.jpeg" alt="Blog Mobile" onclick="zoom(this)" style="margin-top:30px">
+        <div class="av-dots">
+          <div class="av-dot" style="left:50%;top:12%">1</div>
+          <div class="av-dot" style="left:50%;top:40%">2</div>
+        </div>
+      </div>
+      <div class="av-annotations">
+        <div class="av-col-label">Blog mobile — od góry</div>
+        <div class="av-item">
+          <div class="av-num">1</div>
+          <div class="av-text"><strong>Tag cloud</strong> — horizontal scroll na mobile. Tagi widoczne bez scrollu pionowego</div>
+        </div>
+        <div class="av-item">
+          <div class="av-num">2</div>
+          <div class="av-text"><strong>Grid artykułów</strong> — 1 kolumna mobile. Miniaturka + tytuł artykułu</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📰 Blog GLOV — dane strukturalne (glov.co/blogs/pl)</div>
+
+    <div class="section-label">Blog Listing — dane z JS extraction + live screenshot</div>
+    <div class="schema-block">
+      <div class="schema-label">Metadane bloga</div>
+      <div class="table-wrap"><table>
+        <tr><th>Element</th><th>Wartość</th></tr>
+        <tr><td>URL bloga</td><td><code>/blogs/pl</code></td></tr>
+        <tr><td>H1 nagłówek</td><td>"GLOV's world"</td></tr>
+        <tr><td>Liczba artykułów (widocznych)</td><td>10+</td></tr>
+        <tr><td>Linki do produktów w listingu</td><td>0 — brak CTAs do PDP</td></tr>
+        <tr><td>Tag cloud / filtry</td><td>7 tagów kategorialnych</td></tr>
+        <tr><td>Search w blogu</td><td>nie wykryto</td></tr>
+        <tr><td>Paginacja</td><td>nieznana (brak widoku na screenshotach)</td></tr>
+      </table></div>
+    </div>
+
+    <div class="section-label">Artykuły wykryte (10+)</div>
+    <div class="schema-block">
+      <div class="schema-label">Tytuły artykułów — JS extraction</div>
+      <div class="table-wrap"><table>
+        <tr><th>#</th><th>Tytuł artykułu</th><th>Potencjał e-commerce</th></tr>
+        <tr><td>1</td><td>Marka GLOV® w konkursie...</td><td><span class="badge badge-grey">PR / brand</span></td></tr>
+        <tr><td>2</td><td>Kolejna ławka z rękawiczek GLOV...</td><td><span class="badge badge-grey">CSR / brand</span></td></tr>
+        <tr><td>3</td><td>Jak przeprowadzić poprawną wieczorną pielęgnację twarzy?</td><td><span class="badge badge-blue">💡 how-to → PDP link</span></td></tr>
+        <tr><td>4</td><td>Jak zrobić loki bez użycia ciepła?</td><td><span class="badge badge-blue">💡 how-to → hair products</span></td></tr>
+        <tr><td>5</td><td>Masaż Gua Sha</td><td><span class="badge badge-blue">💡 edukacja → pielęgnacja twarzy</span></td></tr>
+        <tr><td>6</td><td>Roller do twarzy</td><td><span class="badge badge-blue">💡 how-to → direct product</span></td></tr>
+        <tr><td colspan="3" style="color:var(--muted);font-size:12px">+ kolejne artykuły (10+ łącznie)</td></tr>
+      </table></div>
+    </div>
+
+    <div class="section-label">Tagi kategorii (wykryte)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
+      <span class="badge badge-blue">ekologia</span>
+      <span class="badge badge-blue">gąbki do demakijażu</span>
+      <span class="badge badge-blue">gwiazdy</span>
+      <span class="badge badge-blue">koreańska pielęgnacja</span>
+      <span class="badge badge-blue">loki</span>
+      <span class="badge badge-blue">makeup remover glove</span>
+      <span class="badge badge-blue">makijaż</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Action Map — Blog</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Akcja shopperki</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Klik artykuł z listingu</td><td>Przejście do artykułu</td><td><code>page_view</code></td><td><span class="ok">✅ podstawowe</span></td></tr>
+      <tr><td>Scroll artykułu</td><td>Czytanie treści</td><td><code>scroll</code></td><td><span class="warn">⚠️ jeśli ustawione</span></td></tr>
+      <tr><td>Klik tagu kategorii</td><td>Filtrowanie artykułów</td><td>—</td><td><span class="fail">❌ brak event</span></td></tr>
+      <tr><td>Klik CTA "kup produkt" w artykule</td><td>Przejście na PDP</td><td>—</td><td><span class="fail">❌ brak CTA, brak trackingu</span></td></tr>
+      <tr><td>Share artykułu</td><td>Udostępnienie</td><td>—</td><td><span class="unk">❓ nieznany</span></td></tr>
+      <tr><td>Czas na stronie artykułu</td><td>Engagement</td><td><code>user_engagement</code></td><td><span class="warn">⚠️ GA4 auto, ale brak milestones</span></td></tr>
+    </table></div>
+  </div>
+
+
+</div>
+
+<!-- ══════════════════════════════════════════════════ CONTENT MAP ════ -->
+<div id="tab-contentmap" class="tab-panel">
+
+  <div class="note note-ok">
+    <strong>Baza danych:</strong> Analiza 5 PDPów — GLOV On The Go (rękawica, 91 rec.), Pumeks Nano Szkło, Gua Sha Face Trainer, COOLNAILS Click Pen, SUPERNOVA LED + Luna Eye (z poprzedniego auditu). Zebrane przez JS extraction + live browsing.
+  </div>
+
+  <!-- ─── TITLE MODEL ─── -->
+  <div class="card">
+    <div class="card-title">📐 Model tytułu produktowego — schemat SEO + brand</div>
+    <div class="schema-block">
+      <div class="schema-label">Wzorzec optymalnego tytułu</div>
+      <pre style="font-size:13px;line-height:2">[Kategoria] + [Materiał/Technologia] + [Przeznaczenie] + [Kluczowy Benefit] + [Marka] + [Wariant] + [Ilość]</pre>
+      <div class="schema-note">Kolejność: od generycznego do szczegółowego. Marka powinna być na końcu (long-tail) lub na początku (brand awareness). Wariant i ilość — zawsze na końcu.</div>
+    </div>
+
+    <div class="section-label" style="margin-top:16px">Audit tytułów — 6 produktów GLOV</div>
+    <div class="table-wrap"><table>
+      <tr><th>Produkt</th><th>Tytuł obecny</th><th colspan="7" style="text-align:center;background:rgba(108,127,255,.06)">Dekompozycja na elementy modelu</th></tr>
+      <tr style="font-size:11px;color:var(--muted)">
+        <th></th><th></th>
+        <th style="background:rgba(108,127,255,.06)">Kategoria</th>
+        <th style="background:rgba(108,127,255,.06)">Materiał</th>
+        <th style="background:rgba(108,127,255,.06)">Przeznaczenie</th>
+        <th style="background:rgba(108,127,255,.06)">Benefit 1</th>
+        <th style="background:rgba(108,127,255,.06)">Marka</th>
+        <th style="background:rgba(108,127,255,.06)">Wariant</th>
+        <th style="background:rgba(108,127,255,.06)">Ilość</th>
+        <th></th>
+      </tr>
+      <tr>
+        <td><strong>Rękawica On The Go</strong></td>
+        <td style="color:var(--muted);font-size:12px">"Rękawiczka do demakijażu i oczyszczania twarzy tylko przy użyciu wody GLOV®"</td>
+        <td><span class="badge badge-ok">Rękawiczka</span></td>
+        <td><span class="badge badge-fail">❌ brak</span><br><small style="color:var(--muted)">powinna być: z mikrofibry</small></td>
+        <td><span class="badge badge-ok">do demakijażu</span></td>
+        <td><span class="badge badge-ok">tylko przy użyciu wody</span></td>
+        <td><span class="badge badge-ok">GLOV®</span></td>
+        <td><span class="badge badge-fail">❌ brak</span><br><small style="color:var(--muted)">Baby Banana</small></td>
+        <td><span class="badge badge-fail">❌ brak</span><br><small style="color:var(--muted)">1 sztuka</small></td>
+      </tr>
+      <tr>
+        <td><strong>Pumeks Nano Szkło</strong></td>
+        <td style="color:var(--muted);font-size:12px">"Tarka-pumeks do stóp z nano szkła GLOV®"</td>
+        <td><span class="badge badge-ok">Tarka-pumeks</span></td>
+        <td><span class="badge badge-ok">z nano szkła</span></td>
+        <td><span class="badge badge-ok">do stóp</span></td>
+        <td><span class="badge badge-fail">❌ brak</span><br><small style="color:var(--muted)">usuwa zrogowacenia bez podrażnień</small></td>
+        <td><span class="badge badge-ok">GLOV®</span></td>
+        <td><span class="badge badge-fail">❌ brak</span><br><small style="color:var(--muted)">Czarna</small></td>
+        <td><span class="badge badge-fail">❌ brak</span></td>
+      </tr>
+      <tr>
+        <td><strong>Gua Sha Face Trainer</strong></td>
+        <td style="color:var(--muted);font-size:12px">"Nowoczesny Masażer Gua Sha Face Trainer GLOV"</td>
+        <td><span class="badge badge-warn">⚠️ Masażer Gua Sha</span><br><small style="color:var(--muted)">"Nowoczesny" = puste słowo</small></td>
+        <td><span class="badge badge-fail">❌ brak</span><br><small style="color:var(--muted)">ze stopu cynku</small></td>
+        <td><span class="badge badge-fail">❌ brak</span><br><small style="color:var(--muted)">do konturowania twarzy</small></td>
+        <td><span class="badge badge-fail">❌ brak</span><br><small style="color:var(--muted)">liftinguje, modeluje</small></td>
+        <td><span class="badge badge-ok">GLOV</span></td>
+        <td><span class="badge badge-ok">brak (1 wariant)</span></td>
+        <td><span class="badge badge-ok">—</span></td>
+      </tr>
+      <tr>
+        <td><strong>COOLNAILS Click Pen</strong></td>
+        <td style="color:var(--muted);font-size:12px">"Klasyczny lakier Royal Red – ponadczasowy, mocny odcień czerwieni" <span class="badge badge-fail">❌ brak GLOV!</span></td>
+        <td><span class="badge badge-warn">⚠️ "Klasyczny lakier"</span><br><small style="color:var(--muted)">powinno być: Lakier do paznokci</small></td>
+        <td><span class="badge badge-fail">❌ brak</span><br><small style="color:var(--muted)">formuła peel-off, click-pen</small></td>
+        <td><span class="badge badge-fail">❌ brak</span><br><small style="color:var(--muted)">do paznokci</small></td>
+        <td><span class="badge badge-fail">❌ brak</span><br><small style="color:var(--muted)">bez zmywacza, bez acetonu</small></td>
+        <td><span class="badge badge-fail">❌ BRAK GLOV + COOLNAILS</span></td>
+        <td><span class="badge badge-ok">Royal Red</span></td>
+        <td><span class="badge badge-fail">❌ brak</span></td>
+      </tr>
+      <tr>
+        <td><strong>SUPERNOVA LED</strong></td>
+        <td style="color:var(--muted);font-size:12px">"Kuracja punktowa LED na niedoskonałości SUPERNOVA GLOV"</td>
+        <td><span class="badge badge-ok">Kuracja LED</span></td>
+        <td><span class="badge badge-fail">❌ brak</span><br><small style="color:var(--muted)">415nm+630nm</small></td>
+        <td><span class="badge badge-ok">na niedoskonałości</span></td>
+        <td><span class="badge badge-warn">⚠️ "punktowa"</span><br><small style="color:var(--muted)">dodać: "bez igieł"</small></td>
+        <td><span class="badge badge-ok">GLOV SUPERNOVA</span></td>
+        <td><span class="badge badge-ok">—</span></td>
+        <td><span class="badge badge-ok">—</span></td>
+      </tr>
+      <tr>
+        <td><strong>Luna Eye (299 PLN)</strong></td>
+        <td style="color:var(--muted);font-size:12px">"LUNA EYE™ plaster LED na puffiness" <span class="badge badge-fail">❌ EN słowo, brak GLOV!</span></td>
+        <td><span class="badge badge-ok">Plaster LED</span></td>
+        <td><span class="badge badge-fail">❌ brak</span></td>
+        <td><span class="badge badge-ok">na okolice oczu</span></td>
+        <td><span class="badge badge-fail">❌ "puffiness" = EN</span><br><small style="color:var(--muted)">opuchliznę i sińce pod oczami</small></td>
+        <td><span class="badge badge-fail">❌ BRAK GLOV</span></td>
+        <td><span class="badge badge-ok">—</span></td>
+        <td><span class="badge badge-ok">—</span></td>
+      </tr>
+    </table></div>
+
+    <div class="note note-ok" style="margin-top:14px">
+      <strong>Wzorce z auditu tytułów:</strong> Brand GLOV w tytule: 4/6 produktów. Materiał/technologia w tytule: 3/6. Wariant w tytule: 2/6 (Pumeks: kolor; Rękawica: wariant w URL nie w title).
+    </div>
+  </div>
+
+  <!-- ─── SCREEN 1: KAFELEK — DEFAULT + HOVER ─── -->
+  <div class="section-label" style="font-size:13px;color:var(--accent);margin:24px 0 12px">👁 1. KAFELEK PRODUKTOWY — default state vs. hover state (Pumeks Nano Szkło)</div>
+
+  <div class="dual-tile">
+    <!-- DEFAULT STATE -->
+    <div class="tile-col">
+      <div class="tile-label">Default state <span class="vp-tag">bez hover</span></div>
+      <img src="GLOV_audit_screenshots/glov_tile_pumeks_default.png" alt="Kafelek default" onclick="zoom(this)">
+      <div class="tile-dots">
+        <div class="av-dot" style="left:50%;top:40%">T1</div>
+        <div class="av-dot" style="left:50%;top:67%">T3</div>
+        <div class="av-dot ok2" style="left:50%;top:77%">T5</div>
+        <div class="av-dot" style="left:20%;top:85%">T4a</div>
+        <div class="av-dot warn" style="left:45%;top:85%">T4b</div>
+        <div class="av-dot" style="left:50%;top:95%">T7</div>
+      </div>
+    </div>
+    <!-- HOVER STATE -->
+    <div class="tile-col">
+      <div class="tile-label">Hover state <span class="vp-tag">po najechaniu myszką</span></div>
+      <img src="GLOV_audit_screenshots/glov_tile_pumeks_hover.png" alt="Kafelek hover" onclick="zoom(this)">
+      <div class="tile-dots">
+        <div class="av-dot" style="left:50%;top:40%">T2</div>
+        <div class="av-dot" style="left:50%;top:67%">T3</div>
+        <div class="av-dot ok2" style="left:50%;top:77%">T5</div>
+        <div class="av-dot" style="left:20%;top:85%">T4a</div>
+        <div class="av-dot warn" style="left:45%;top:85%">T4b</div>
+        <div class="av-dot" style="left:50%;top:95%">T7</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Annotations below dual tile -->
+  <div class="dual-tile-annot">
+    <div class="annot-col">
+      <div class="annot-col-label">Default state — elementy kafelka</div>
+      <div class="annot-item">
+        <div class="annot-num">T1</div>
+        <div class="annot-text"><strong>Packshot</strong> — białe tło, ratio ~3:4</div>
+      </div>
+      <div class="annot-item">
+        <div class="annot-num">T2</div>
+        <div class="annot-text"><strong>Badge:</strong> Bestseller — pill lewy górny róg</div>
+      </div>
+      <div class="annot-item">
+        <div class="annot-num">T3</div>
+        <div class="annot-text"><strong>Tytuł produktu</strong> — "Tarka-pumeks do stóp z nano szkła GLOV®", 2 linie</div>
+      </div>
+      <div class="annot-item">
+        <div class="annot-num">T4</div>
+        <div class="annot-text"><strong>Rating</strong> — 5.0 ★ (506), widoczny bez hover</div>
+      </div>
+      <div class="annot-item">
+        <div class="annot-num">T5</div>
+        <div class="annot-text"><strong>Cena</strong> — przekreślona 49,90 zł + promo 39,90 zł</div>
+      </div>
+      <div class="annot-item">
+        <div class="annot-num">T6</div>
+        <div class="annot-text"><strong>DODAJ DO KOSZYKA</strong> — widoczny bez hover (1-wariantowe). Wielowariantowe: redirect PDP</div>
+      </div>
+    </div>
+    <div class="annot-col">
+      <div class="annot-col-label">Hover state</div>
+      <div class="annot-item">
+        <div class="annot-num ok2">→</div>
+        <div class="annot-text"><strong>Image swap</strong> — zamiana na 2. zdjęcie z galerii (lifestyle)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SCREEN 2: PDP DESKTOP 2-FOLD ─── -->
+  <div class="section-label" style="font-size:13px;color:var(--accent);margin:24px 0 12px">👁 2. PDP DESKTOP — 2 foldy (Luna Eye, 1440px)</div>
+  <div class="annotated-view">
+    <div class="av-image-col">
+      <div class="av-label">PDP Luna Eye — Fold 1 + Fold 2 <span class="vp-tag">1440 × 1800px</span></div>
+      <img src="GLOV_audit_screenshots/glov_pdp_luna_2fold_desktop.jpeg" alt="PDP Desktop 2-fold" onclick="zoom(this)" style="margin-top:30px">
+      <div class="av-dots">
+        <!-- FOLD 1 -->
+        <div class="av-fold-num" style="top:2%">FOLD 1</div>
+        <div class="av-dot" style="left:25%;top:25%">GAL</div>
+        <div class="av-dot" style="left:25%;top:82%">THB</div>
+        <div class="av-dot" style="left:72%;top:13%">P1</div>
+        <div class="av-dot bad" style="left:72%;top:19%">P2</div>
+        <div class="av-dot" style="left:72%;top:24%">P3</div>
+        <div class="av-dot" style="left:80%;top:30%">P5</div>
+        <!-- FOLD LINE at 50% (900/1800) -->
+        <div class="av-fold-line" style="top:50%"></div>
+        <div class="av-fold-tag" style="top:calc(50% - 18px)">FOLD 1 → FOLD 2</div>
+        <!-- FOLD 2 -->
+        <div class="av-fold-num" style="top:52%">FOLD 2</div>
+        <div class="av-dot" style="left:72%;top:56%">P7</div>
+        <div class="av-dot" style="left:72%;top:71%">P10a</div>
+        <div class="av-dot" style="left:72%;top:77%">P10b</div>
+        <div class="av-dot" style="left:72%;top:82%">P8</div>
+        <div class="av-dot warn" style="left:72%;top:87%">P9</div>
+        <div class="av-dot bad" style="left:72%;top:93%">EXIT</div>
+      </div>
+    </div>
+    <div class="av-annotations">
+      <div class="av-col-label">Fold 1 (ATF) → Fold 2 (BTF)</div>
+      <div class="av-item"><div class="av-num">GAL</div><div class="av-text"><strong>Galeria lewa</strong> — carousel. Luna Eye: 7 assetów + video. Rękawica: 24, Pumeks: 32. Format: JPG/MP4 <span class="tag tag-ok">✅ video 6/6</span></div></div>
+      <div class="av-item"><div class="av-num">THB</div><div class="av-text"><strong>Thumbnails</strong> — horizontal strip, klikalne. 7 miniaturek widocznych <span class="tag tag-ok">✅</span></div></div>
+      <div class="av-item"><div class="av-num">P1</div><div class="av-text"><strong>Tytuł H1</strong> — "Płatki LED LUNA EYE pielęgnacyjne dla rozświetlonej i odświeżonej okolicy oczu" — tytuł zaktualizowany (PL ✅, GLOV w nazwie pośrednio). Format: text, max 70 zn. SEO <span class="tag tag-ok">✅ zaktualizowany</span></div></div>
+      <div class="av-item"><div class="av-num bad">P2</div><div class="av-text"><strong>Short description</strong> — <strong>BRAK</strong> jako osobny element. Nie ma pola "1-2 zdań pod tytułem". 0/6 PDPów. CEP-first copy = zero persuasion ATF <span class="tag tag-fail">❌ critical gap</span></div></div>
+      <div class="av-item"><div class="av-num">P3</div><div class="av-text"><strong>Cena 299 PLN</strong> + rating 4,9★ (14) + "Darmowa dostawa od 150 zł". ATC: <strong>DODAJ DO KOSZYKA</strong>. Trusted Shops widget sticky w prawym dolnym rogu <span class="tag tag-ok">✅</span></div></div>
+      <div class="av-item"><div class="av-num">P5</div><div class="av-text"><strong>ATC button</strong> — duży, ciemnoczerwony. Brak "KUP TERAZ" (Buy Now) = friction dla zdecydowanych <span class="tag tag-fail">❌ brak Buy Now</span></div></div>
+      <div style="padding:8px 16px;font-size:11px;color:var(--accent);font-weight:700;border-top:1px solid var(--border);letter-spacing:.06em">— FOLD 2 —</div>
+      <div class="av-item"><div class="av-num">P7</div><div class="av-text"><strong>"Dlaczego Warto?" → paragraf</strong> — opis LED therapy, inline rich text. Wzorzec: heading + paragraf intro <span class="tag tag-ok">✅</span></div></div>
+      <div class="av-item"><div class="av-num">P10a</div><div class="av-text"><strong>Kluczowe Korzyści accordion</strong> — zamknięty. Luna Eye MA accordiony! Kluczowe Korzyści + Jak Używać? + FAQ + Dane Techniczne <span class="tag tag-ok">✅ Luna Eye standard</span></div></div>
+      <div class="av-item"><div class="av-num">P10b</div><div class="av-text"><strong>Jak Używać? accordion</strong> — zamknięty. Format: &lt;details&gt;&lt;summary&gt; lub theme component. Brak na pozostałych 5 PDPach <span class="tag tag-warn">⚠️ tylko Luna Eye</span></div></div>
+      <div class="av-item"><div class="av-num">P8</div><div class="av-text"><strong>FAQ accordion</strong> — 7 pytań z realnych obiekcji CS. Luna Eye = wzorzec do skopiowania na wszystkich PDPach <span class="tag tag-ok">✅ wzorzec</span></div></div>
+      <div class="av-item"><div class="av-num warn">P9</div><div class="av-text"><strong>"Dane Techniczne" accordion</strong> — istnieje! Specs jako accordion. Niestety inne 5 PDPów: brak. Dla urządzeń LED (nm, czas, sesje) to krytyczne <span class="tag tag-warn">⚠️ tylko Luna Eye</span></div></div>
+      <div class="av-item"><div class="av-num bad">EXIT</div><div class="av-text"><strong>"Kupisz także na"</strong> — linki do INIZIO + AMORA (zewnętrzne marketplace). Exit bez trackowania = blind spot w GA4 <span class="tag tag-fail">❌ exit nietrackowany</span></div></div>
+    </div>
+  </div>
+
+  <!-- ─── SCREEN 3: PDP MOBILE 3-FOLD ─── -->
+  <div class="section-label" style="font-size:13px;color:var(--accent);margin:24px 0 12px">👁 3. PDP MOBILE — 3 foldy (Luna Eye, 390px)</div>
+  <div class="annotated-view mobile-view">
+    <div class="av-image-col">
+      <div class="av-label">PDP Luna Eye — mobile 3 foldy <span class="vp-tag">390 × 2700px</span></div>
+      <img src="GLOV_audit_screenshots/glov_pdp_luna_3fold_mobile.jpeg" alt="PDP Mobile 3-fold" onclick="zoom(this)" style="margin-top:30px">
+      <div class="av-dots">
+        <!-- FOLD 1: 0-33% -->
+        <div class="av-fold-num" style="top:1%">FOLD 1</div>
+        <div class="av-dot" style="left:50%;top:15%">GAL</div>
+        <div class="av-dot bad" style="left:12%;top:30%">TS!</div>
+        <div class="av-dot" style="left:50%;top:35%">P1</div>
+        <div class="av-dot" style="left:50%;top:42%">P5</div>
+        <!-- Fold 1 line at 33.3% -->
+        <div class="av-fold-line" style="top:33.3%"></div>
+        <div class="av-fold-tag" style="top:calc(33.3% - 18px)">FOLD 1 END</div>
+        <!-- FOLD 2: 33-67% -->
+        <div class="av-fold-num" style="top:34.5%">FOLD 2</div>
+        <div class="av-dot" style="left:50%;top:37%">P7</div>
+        <div class="av-dot" style="left:50%;top:54%">P10a</div>
+        <div class="av-dot" style="left:50%;top:59%">P10b</div>
+        <div class="av-dot" style="left:50%;top:63%">P8</div>
+        <!-- Fold 2 line at 66.6% -->
+        <div class="av-fold-line" style="top:66.6%"></div>
+        <div class="av-fold-tag" style="top:calc(66.6% - 18px)">FOLD 2 END</div>
+        <!-- FOLD 3: 67-100% -->
+        <div class="av-fold-num" style="top:67.5%">FOLD 3</div>
+        <div class="av-dot warn" style="left:50%;top:69%">P9</div>
+        <div class="av-dot bad" style="left:50%;top:74%">EXIT</div>
+        <div class="av-dot" style="left:50%;top:83%">UGC</div>
+        <div class="av-dot" style="left:50%;top:91%">P11</div>
+      </div>
+    </div>
+    <div class="av-annotations">
+      <div class="av-col-label">Mobile — 3 foldy (każdy fold = 900px viewport)</div>
+      <div class="av-item"><div class="av-num">GAL</div><div class="av-text"><strong>Galeria full-width</strong> — carousel, dots pagination (nie thumb strip jak desktop). Swipe gesture. 6 dots widocznych <span class="tag tag-ok">✅</span></div></div>
+      <div class="av-item"><div class="av-num bad">TS!</div><div class="av-text"><strong>Trusted Shops widget nakłada się na tytuł</strong> — bug CSS, widoczny na screenie: widget zachodzi na tekst H1. Confirm visual ❌ <span class="tag tag-fail">❌ CSS bug</span></div></div>
+      <div class="av-item"><div class="av-num">P1</div><div class="av-text"><strong>Tytuł H1</strong> — wrap 3 linie na mobile. "Płatki LED LUNA EYE..." — 4+ linii dla dłuższych tytułów (rękawica). Tytuły za długie na mobile <span class="tag tag-warn">⚠️</span></div></div>
+      <div class="av-item"><div class="av-num">P5</div><div class="av-text"><strong>DODAJ DO KOSZYKA</strong> — sticky button u dołu ekranu na mobile (Shopify native). Brak Buy Now <span class="tag tag-fail">❌ brak Buy Now</span></div></div>
+      <div style="padding:8px 16px;font-size:11px;color:var(--accent);font-weight:700;border-top:1px solid var(--border);letter-spacing:.06em">— FOLD 2 —</div>
+      <div class="av-item"><div class="av-num">P7</div><div class="av-text"><strong>"Dlaczego Warto?" + tekst</strong> — accordion otwarty, tekst o LED therapy widoczny w fold 2 <span class="tag tag-ok">✅</span></div></div>
+      <div class="av-item"><div class="av-num">P10a</div><div class="av-text"><strong>Kluczowe Korzyści accordion</strong> — zamknięty, chevron →. Tap otwiera <span class="tag tag-ok">✅ accordion</span></div></div>
+      <div class="av-item"><div class="av-num">P10b</div><div class="av-text"><strong>Jak Używać? accordion</strong> — zamknięty <span class="tag tag-ok">✅</span></div></div>
+      <div class="av-item"><div class="av-num">P8</div><div class="av-text"><strong>FAQ accordion</strong> — zamknięty, dostępny w fold 2. 7 pytań po otwarciu <span class="tag tag-ok">✅</span></div></div>
+      <div style="padding:8px 16px;font-size:11px;color:var(--accent);font-weight:700;border-top:1px solid var(--border);letter-spacing:.06em">— FOLD 3 —</div>
+      <div class="av-item"><div class="av-num warn">P9</div><div class="av-text"><strong>Dane Techniczne accordion</strong> — specs w fold 3. Shopper musi scrollować przez 2700px żeby zobaczyć specyfikację <span class="tag tag-warn">⚠️ zbyt głęboko</span></div></div>
+      <div class="av-item"><div class="av-num bad">EXIT</div><div class="av-text"><strong>Kupisz także na</strong> — INIZIO + AMORA, fold 3. Exit nietrackowany w GA4 <span class="tag tag-fail">❌</span></div></div>
+      <div class="av-item"><div class="av-num">UGC</div><div class="av-text"><strong>UGC / Social photos grid</strong> — zdjęcia klientek, 2 kolumny. Play button na video <span class="tag tag-ok">✅ social proof</span></div></div>
+      <div class="av-item"><div class="av-num">P11</div><div class="av-text"><strong>Recenzje klientów</strong> — 4,93★ / 5 (14 recenzji). Growave widget. Widoczne dopiero w fold 3 → shopper musi scrollować bardzo długo <span class="tag tag-warn">⚠️ fold 3 = za głęboko</span></div></div>
+    </div>
+  </div>
+
+  <!-- ─── PRODUCT TILE CONTENT ─── -->
+  <div class="section-label" style="font-size:13px;color:var(--accent);margin-bottom:16px">🔲 KAFELEK PRODUKTOWY — mapa elementów contentowych</div>
+
+  <div class="card">
+    <div class="card-title">Anatomia kafelka — elementy z kontentem</div>
+    <div class="table-wrap"><table>
+      <tr><th>#</th><th>Element</th><th>Format</th><th>Ograniczenia / zakres</th><th>GLOV status</th><th>Edytowalne w</th></tr>
+      <tr>
+        <td><strong>T1</strong></td>
+        <td><strong>Zdjęcie główne kafelka</strong></td>
+        <td>JPEG/PNG, 1:1 lub 3:4, białe tło</td>
+        <td>1 asset — zmiana na hover (T2). Ratio: 1:1 rekomendowane. Min 800×800px</td>
+        <td><span class="ok">✅ białe tło, wyraźny produkt</span></td>
+        <td><code>Shopify Media</code></td>
+      </tr>
+      <tr>
+        <td><strong>T2</strong></td>
+        <td><strong>Zdjęcie hover (swap)</strong></td>
+        <td>JPEG/PNG — 2. asset z galerii</td>
+        <td>Automatycznie = 2. zdjęcie z galerii produktu. Brak osobnego pola</td>
+        <td><span class="ok">✅ lifestyle lub wariant</span></td>
+        <td><code>Shopify Media</code> (pozycja 2)</td>
+      </tr>
+      <tr>
+        <td><strong>T3</strong></td>
+        <td><strong>Nazwa produktu</strong></td>
+        <td>Tekst, 1-2 linie, truncated</td>
+        <td>Max ~60 znaków widocznych bez truncate (zależy od szerokości kafelka). Pełna nazwa z H1</td>
+        <td><span class="warn">⚠️ brak brand "GLOV" na początku tytułów</span></td>
+        <td><code>Shopify Admin → Title</code></td>
+      </tr>
+      <tr>
+        <td><strong>T4</strong></td>
+        <td><strong>Cena + promo</strong></td>
+        <td>Tekst: cena PLN + przekreślona oryginalna</td>
+        <td>Automatyczne z Shopify: compare_at_price → przekreślona. % rabatu: brak (nie obliczany automatycznie)</td>
+        <td><span class="warn">⚠️ brak % rabatu na kafelku. Tylko przekreślona cena</span></td>
+        <td><code>Shopify Admin → Pricing</code></td>
+      </tr>
+      <tr>
+        <td><strong>T5</strong></td>
+        <td><strong>Rating gwiazdki</strong></td>
+        <td>Growave widget — ★★★★★ (float)</td>
+        <td>Automatyczne z Growave. Wyświetla się jeśli są jakiekolwiek recenzje</td>
+        <td><span class="fail">❌ brak liczby recenzji "(91)" obok gwiazdek</span></td>
+        <td><code>Growave settings</code> / <code>Liquid theme</code></td>
+      </tr>
+      <tr>
+        <td><strong>T6</strong></td>
+        <td><strong>Badge statusu</strong></td>
+        <td>Tag-based badge: NOWOŚĆ / BESTSELLER / WYPRZEDAŻ / OOS</td>
+        <td>NOWOŚĆ = Shopify tag "new". BESTSELLER = tag "bestseller". OOS = automatic. Tylko jeden badge naraz</td>
+        <td><span class="warn">⚠️ jest NOWOŚĆ, brak BESTSELLER/TOP. OOS: "Powiadom mnie" ✅</span></td>
+        <td><code>Shopify Tags</code></td>
+      </tr>
+      <tr>
+        <td><strong>T7</strong></td>
+        <td><strong>Quick-add / ATC button</strong></td>
+        <td>Button pojawia się on-hover</td>
+        <td>Produkty 1-wariantowe: bezpośredni ATC. Wielowariantowe: redirect na PDP. Tekst: "Dodaj do koszyka"</td>
+        <td><span class="warn">⚠️ działa tylko dla 1-wariantowych. Rękawica (5 kolorów) → redirect</span></td>
+        <td><code>Theme Liquid</code></td>
+      </tr>
+      <tr>
+        <td><strong>T8</strong></td>
+        <td><strong>Wishlist icon</strong></td>
+        <td>Growave serce — binary toggle</td>
+        <td>Wymaga konta lub session. Widoczne zawsze, active po kliknięciu</td>
+        <td><span class="ok">✅ widoczne, działa</span></td>
+        <td><code>Growave</code></td>
+      </tr>
+    </table></div>
+  </div>
+
+  <!-- ─── PDP CONTENT MAP ─── -->
+  <div class="section-label" style="font-size:13px;color:var(--accent);margin:24px 0 16px">📄 PDP — pełna mapa elementów contentowych (dane z 5 produktów)</div>
+
+  <div class="card">
+    <div class="card-title">Anatomia PDP — sekcja ATF (Above The Fold, widoczna bez scrollu)</div>
+    <div class="table-wrap"><table>
+      <tr><th>#</th><th>Element</th><th>Format</th><th>Zakres / ograniczenia</th><th>GLOV (5 PDP)</th><th>Taktyki contentowe</th></tr>
+      <tr>
+        <td><strong>P1</strong></td>
+        <td><strong>Tytuł (H1)</strong></td>
+        <td>Tekst, 1 linia na desktop, wrap na mobile. SEO title</td>
+        <td>Max 70 znaków dla SEO. Rekomendowany format: <em>Brand + Nazwa + Główny Atrybut</em></td>
+        <td><span class="warn">⚠️ Wzorzec różny: rękawica ma brand GLOV® na końcu ✅, pumeks ✅, COOLNAILS — brak GLOV ❌, Luna Eye — brak GLOV ❌</span></td>
+        <td>Brand recall: GLOV na początku lub końcu każdego tytułu</td>
+      </tr>
+      <tr>
+        <td><strong>P2</strong></td>
+        <td><strong>Krótki opis (shortdesc)</strong></td>
+        <td>Tekst, 1-3 zdania, under title</td>
+        <td>Shopify: osobne pole <code>product.description</code> — to co się wyświetla w featured snippet, AMP, compare. Max 160 znaków rekomendowane</td>
+        <td><span class="fail">❌ Nie istnieje jako osobny element. "Co warto wiedzieć?" / "Dlaczego warto?" = headingi, nie opisy. 0/5 produktów ma prawdziwy short desc</span></td>
+        <td>CEP-first opening: "Jeśli [problem] — GLOV [rozwiązanie] w [czas]"</td>
+      </tr>
+      <tr>
+        <td><strong>P3</strong></td>
+        <td><strong>Cena</strong></td>
+        <td>PLN, aktualna + przekreślona (promo), badge promo</td>
+        <td>Automatyczne z Shopify pricing. Compare-at-price = linia przekreślona</td>
+        <td><span class="ok">✅ standardowe wyświetlanie, promo bar -25% aktywny</span></td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><strong>P4</strong></td>
+        <td><strong>Warianty (kolor/rozmiar)</strong></td>
+        <td>Visual swatches (kolor) lub dropdown (rozmiar)</td>
+        <td>Shopify variants: maks. 3 opcje × 100 wariantów. Swatch = kolor. Dropdown = size/type</td>
+        <td><span class="ok">✅ Rękawica: 5 kolorów jako visual swatches (Growave SSW). Pumeks: 2 kolory. Gua Sha, Supernova: brak wariantów</span></td>
+        <td>Nazwy wariantów powinny być deskryptywne (Baby Banana ✅) nie "Color1"</td>
+      </tr>
+      <tr>
+        <td><strong>P5</strong></td>
+        <td><strong>ATC button</strong></td>
+        <td>Full-width button, sticky na mobile</td>
+        <td>Tekst konfigurowalny. Sticky ATC mobile = best practice. "Kup Teraz" (Buy Now) to opcjonalny drugi button</td>
+        <td><span class="warn">⚠️ "Dodaj do koszyka" ✅ ale brak "Kup Teraz" button na wszystkich PDPach ❌</span></td>
+        <td>Dodaj "Kup Teraz" → skip cart → checkout dla zdecydowanych</td>
+      </tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Anatomia PDP — Galeria (najważniejszy element vizualny)</div>
+    <div class="table-wrap"><table>
+      <tr><th>Atrybut</th><th>Format / specyfikacja</th><th>GLOV w praktyce (5 PDP)</th><th>Benchmark / zalecenie</th></tr>
+      <tr>
+        <td><strong>Liczba assetów</strong></td>
+        <td>Shopify Media: nieograniczone (praktycznie max ~30)</td>
+        <td>12–32 assetów (avg ~18). Pumeks: 32 !, Rękawica: 24, Gua Sha: 14, COOLNAILS: 12, Supernova: 12</td>
+        <td>8–15 optimum. Powyżej 20 → "gallery fatigue". GLOV ma tendencję do przesady</td>
+      </tr>
+      <tr>
+        <td><strong>Wideo</strong></td>
+        <td>MP4 w Shopify Media lub YouTube/Vimeo embed</td>
+        <td><span class="ok">✅ 5/5 produktów ma wideo</span></td>
+        <td>Wideo = +85% konwersji wg benchmarków. GLOV tu exceluje</td>
+      </tr>
+      <tr>
+        <td><strong>Miniaturki (thumbs)</strong></td>
+        <td>Poziomy strip pod głównym zdjęciem, klikalne</td>
+        <td>8–18 miniaturek (zależy od liczby assetów). Widoczne bez scrollu na desktop</td>
+        <td>Max 6–8 miniaturek widocznych jednocześnie — reszta za "→"</td>
+      </tr>
+      <tr>
+        <td><strong>Typy zdjęć</strong></td>
+        <td>White BG | Lifestyle | Detal | Infografika | On-model | Wymiary | Before/After</td>
+        <td>Głównie: white BG ✅ + lifestyle ✅ + infografika ✅. Brak: wymiary/tabela rozmiarów, before/after (brak dla beauty devices)</td>
+        <td>Sekwencja: white BG → lifestyle → detal/closeup → infografika → przed/po → wideo</td>
+      </tr>
+      <tr>
+        <td><strong>Aspect ratio</strong></td>
+        <td>1:1 (square) lub 3:4 (portrait)</td>
+        <td>Głównie 1:1. Część lifestyle może być 3:4</td>
+        <td>Konsistencja ratio w galerii — mieszanie 1:1 i 3:4 → jumping layout</td>
+      </tr>
+      <tr>
+        <td><strong>Zoom</strong></td>
+        <td>On hover (desktop) / pinch (mobile)</td>
+        <td>Obecny (Shopify native)</td>
+        <td>Zoom krytyczny dla beauty products (detal tekstury)</td>
+      </tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Anatomia PDP — sekcja BTF (Below The Fold, po scrollu)</div>
+    <div class="table-wrap"><table>
+      <tr><th>#</th><th>Element</th><th>Format GLOV</th><th>Zakres / ograniczenia</th><th>Status (5 PDP)</th><th>Taktyki</th></tr>
+      <tr>
+        <td><strong>P6</strong></td>
+        <td><strong>Bullets / kluczowe cechy</strong></td>
+        <td>Lista <code>&lt;ul&gt;&lt;li&gt;</code>, inline w rich text description</td>
+        <td>6–12 items (GLOV: avg 9). Brak osobnego dedykowanego pola — to część <code>description</code> HTML</td>
+        <td><span class="warn">⚠️ Rękawica: 9 benefit-first ✅. Pumeks: 12 ale ostatnie 4 = instrukcja użycia (nie benefit) ⚠️. COOLNAILS: 12, mix benefits + how-to ⚠️</span></td>
+        <td>Oddziel "Korzyści" od "Jak używać" — to dwa różne bloki, różna intencja</td>
+      </tr>
+      <tr>
+        <td><strong>P7</strong></td>
+        <td><strong>Opis długi (body text)</strong></td>
+        <td>Rich text: H2/H3 headings + paragrafy. Inline w <code>description</code></td>
+        <td>Shopify <code>product.description</code> = jeden HTML field. Sekcje jako headings: "Dlaczego warto?", "Kluczowe korzyści", "Jak używać?", "Skład"</td>
+        <td><span class="ok">✅ Konsistentna struktura na 4/5 produktów: Dlaczego warto? → Kluczowe korzyści → Jak używać? → Skład/Składniki</span></td>
+        <td>Dodaj CEP do "Dlaczego warto?" — zamiast generycznego opisu</td>
+      </tr>
+      <tr>
+        <td><strong>P8</strong></td>
+        <td><strong>Sekcja FAQ</strong></td>
+        <td>Accordion (<code>&lt;details&gt;&lt;summary&gt;</code>), każde pytanie = osobny element</td>
+        <td>Brak dedykowanego pola Shopify — FAQ to HTML w description lub osobna sekcja theme. Zwykle 5–10 pytań</td>
+        <td><span class="fail">❌ Tylko Luna Eye ma FAQ (7 pytań). 4/5 produktów = BRAK FAQ entirely</span></td>
+        <td>FAQ to Tier-3 content (obiekcje pre-purchase). Luna Eye standard → wdrożyć na wszystkich PDPach</td>
+      </tr>
+      <tr>
+        <td><strong>P9</strong></td>
+        <td><strong>Specs table / tabela danych</strong></td>
+        <td>HTML table lub definition list (<code>&lt;dl&gt;&lt;dt&gt;&lt;dd&gt;</code>)</td>
+        <td>Brak pola Shopify → custom metafield lub HTML w description. Typowe atrybuty: wymiary, waga, materiał, bateria, certyfikaty</td>
+        <td><span class="fail">❌ 0/5 produktów ma specs table. Supernova LED (urządzenie tech!) = brak specyfikacji. Pumeks = brak wymiarów</span></td>
+        <td>Krytyczne dla urządzeń elektronicznych (Luna Eye, Supernova). Pozwala indexować w Google Shopping filters</td>
+      </tr>
+      <tr>
+        <td><strong>P10</strong></td>
+        <td><strong>Accordiony na treść ("O produkcie", składniki)</strong></td>
+        <td>Theme accordion component — każda sekcja otwiera się</td>
+        <td>Techniczne możliwe. GLOV tego NIE używa — zamiast tego inline rich text z headingami</td>
+        <td><span class="fail">❌ Brak accordion na treść produktu. Tylko accordion na "Wiadomość dla sprzedającego" (notes field) i "Recenzje"</span></td>
+        <td>Accordiony skracają perceived content length — shopper widzi przejrzysty PDP, nie ścianę tekstu</td>
+      </tr>
+      <tr>
+        <td><strong>P11</strong></td>
+        <td><strong>Sekcja recenzji</strong></td>
+        <td>Growave Reviews widget: rating summary + lista recenzji z tekstem</td>
+        <td>Automatyczny widget pod opisem. Sortowanie: najnowsze / najwyżej oceniane. Zdjęcia w recenzjach: Growave umożliwia</td>
+        <td><span class="warn">⚠️ Rękawica: 91 recenzji ✅. Luna Eye: 14 ❌ za mało dla 299 PLN. Recenzje ze zdjęciami: nieznane</span></td>
+        <td>Email post-purchase +14 dni → zbieraj recenzje. 50+ recenzji = social proof threshold</td>
+      </tr>
+      <tr>
+        <td><strong>P12</strong></td>
+        <td><strong>Cross-sell / "Dobierz"</strong></td>
+        <td>Carousel z produktami rekomendowanymi</td>
+        <td>Shopify "related products" (automatyczne) lub manual cross-sell block. Na PDP rzadkie — głównie w koszyku</td>
+        <td><span class="warn">⚠️ W koszyku: ✅ "free_shipping_products" carousel. Na PDP: brak dedicated cross-sell block</span></td>
+        <td>Cross-sell na PDP (nie tylko koszyk): "Użyj razem z..." → wyższy AOV</td>
+      </tr>
+    </table></div>
+  </div>
+
+  <!-- ─── CROSS-PRODUCT MATRIX ─── -->
+  <div class="card">
+    <div class="card-title">📊 Cross-product matrix — 5 PDPów × kluczowe elementy contentowe</div>
+    <div class="table-wrap"><table>
+      <tr>
+        <th>Element</th>
+        <th>Rękawica On The Go</th>
+        <th>Pumeks Nano</th>
+        <th>Gua Sha</th>
+        <th>COOLNAILS Pen</th>
+        <th>SUPERNOVA LED</th>
+        <th>Luna Eye (299 PLN)</th>
+      </tr>
+      <tr>
+        <td><strong>Brand w tytule</strong></td>
+        <td><span class="ok">GLOV® ✅</span></td>
+        <td><span class="ok">GLOV® ✅</span></td>
+        <td><span class="ok">GLOV ✅</span></td>
+        <td><span class="fail">❌ brak GLOV</span></td>
+        <td><span class="ok">GLOV ✅</span></td>
+        <td><span class="fail">❌ brak GLOV</span></td>
+      </tr>
+      <tr>
+        <td><strong>Galeria assetów</strong></td>
+        <td><span class="ok">24 ✅</span></td>
+        <td><span class="ok">32 ✅</span></td>
+        <td><span class="ok">14 ✅</span></td>
+        <td><span class="ok">12 ✅</span></td>
+        <td><span class="ok">12 ✅</span></td>
+        <td><span class="warn">7 ⚠️</span></td>
+      </tr>
+      <tr>
+        <td><strong>Wideo w galerii</strong></td>
+        <td><span class="ok">✅</span></td>
+        <td><span class="ok">✅</span></td>
+        <td><span class="ok">✅</span></td>
+        <td><span class="ok">✅</span></td>
+        <td><span class="ok">✅</span></td>
+        <td><span class="ok">✅</span></td>
+      </tr>
+      <tr>
+        <td><strong>Short desc (prawdziwy)</strong></td>
+        <td><span class="fail">❌ "Co warto wiedzieć?"</span></td>
+        <td><span class="fail">❌ brak</span></td>
+        <td><span class="warn">⚠️ heading+para</span></td>
+        <td><span class="warn">⚠️ heading+para</span></td>
+        <td><span class="warn">⚠️ heading+para</span></td>
+        <td><span class="fail">❌ tech-first</span></td>
+      </tr>
+      <tr>
+        <td><strong>Bullets</strong></td>
+        <td><span class="ok">9 benefit-first ✅</span></td>
+        <td><span class="warn">12 mix⚠️</span></td>
+        <td><span class="warn">12 mix⚠️</span></td>
+        <td><span class="warn">12 mix⚠️</span></td>
+        <td><span class="warn">6 how-to⚠️</span></td>
+        <td><span class="warn">⚠️ znane</span></td>
+      </tr>
+      <tr>
+        <td><strong>Struktura opisu</strong></td>
+        <td><span class="warn">⚠️ brak H2</span></td>
+        <td><span class="ok">✅ H2 sekcje</span></td>
+        <td><span class="ok">✅ Dlaczego warto → Jak używać → Skład</span></td>
+        <td><span class="ok">✅ Dlaczego warto → Korzyści</span></td>
+        <td><span class="ok">✅ Dlaczego warto → Korzyści → Jak używać</span></td>
+        <td><span class="warn">⚠️ tech-first</span></td>
+      </tr>
+      <tr>
+        <td><strong>Accordiony (treść)</strong></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="ok">✅ FAQ</span></td>
+      </tr>
+      <tr>
+        <td><strong>FAQ</strong></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="ok">✅ 7 pytań</span></td>
+      </tr>
+      <tr>
+        <td><strong>Specs table</strong></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌ (urządzenie LED!)</span></td>
+        <td><span class="fail">❌ (299 PLN!)</span></td>
+      </tr>
+      <tr>
+        <td><strong>Warianty</strong></td>
+        <td><span class="ok">5 kolorów swatches ✅</span></td>
+        <td><span class="ok">2 kolory ✅</span></td>
+        <td><span class="ok">brak (1 wariant) ✅</span></td>
+        <td><span class="warn">⚠️ kolory per URL</span></td>
+        <td><span class="ok">brak (1 wariant) ✅</span></td>
+        <td><span class="ok">1 wariant ✅</span></td>
+      </tr>
+      <tr>
+        <td><strong>Reviews (liczba)</strong></td>
+        <td><span class="ok">91 ✅✅</span></td>
+        <td><span class="warn">⚠️ nieznane</span></td>
+        <td><span class="warn">⚠️ nieznane</span></td>
+        <td><span class="warn">⚠️ nieznane</span></td>
+        <td><span class="warn">⚠️ nieznane</span></td>
+        <td><span class="fail">14 ❌ (299 PLN)</span></td>
+      </tr>
+      <tr>
+        <td><strong>Kup Teraz button</strong></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+        <td><span class="fail">❌</span></td>
+      </tr>
+    </table></div>
+  </div>
+
+  <!-- ─── WZORZEC OPISU ─── -->
+  <div class="card">
+    <div class="card-title">📐 Wzorzec struktury opisu PDP — GLOV (4/5 produktów)</div>
+    <div class="schema-block">
+      <div class="schema-label">Schemat HTML opisu produktu</div>
+      <pre>H2: "Dlaczego warto?"
+  → 1 paragraf intro (benefit summary, 50-150 słów)
+H2: "Kluczowe korzyści"
+  → lista &lt;ul&gt;&lt;li&gt; (benefit-first lub mixed)
+H2: "Jak używać?"
+  → lista &lt;ul&gt;&lt;li&gt; kroki
+H2: "Skład" / "Składniki"  (opcjonalne — tylko beauty)
+  → tekst lub lista INCI
+
+UWAGA: Na 3/5 produktów "korzyści" i "jak używać?" mieszane w jednej liście</pre>
+    </div>
+    <div class="schema-block" style="margin-top:12px">
+      <div class="schema-label">Galeria — liczba assetów GLOV vs. benchmark</div>
+      <pre>GLOV: 12–32 assetów (Pumeks: 32, Rękawica: 24, Luna Eye: 7)
+Amazon A+ standard: ~9 assetów
+Sephora PDP: 8–12 assetów
+
+Typy zdjęć obecne: white BG ✓ · lifestyle ✓ · infografika ✓
+Typy nieobecne: before/after · wymiary · porównanie wariantów</pre>
+    </div>
+  </div>
+
+  <!-- ─── CONTENT REFERENCE MODEL ─── -->
+  <div class="card">
+    <div class="card-title">📋 Idealny model kontentu produktowego</div>
+    <div class="note note-ok" style="margin-bottom:14px">Model agencji — niezależny od sklepu. Przy audycie: dodaj kolumnę "Co ma sklep X" → GAP analysis gotowy → pretekst do taktyk.</div>
+    <div class="table-wrap"><table>
+      <tr><th>Element</th><th>Idealny standard</th></tr>
+      <tr>
+        <td><strong>Tytuł produktu</strong></td>
+        <td>[Kategoria] + [Materiał] + [Przeznaczenie] + [Benefit] + [Marka] + [Wariant] + [Ilość] · max 70 zn. SEO · ~60 zn widocznych na kafelku (truncate po 2 liniach)</td>
+      </tr>
+      <tr>
+        <td><strong>Short description</strong></td>
+        <td>1–3 zdania · CEP-first: "Jeśli [problem] → [rozwiązanie] w [czas]" · max 160 zn · pod H1, przed ceną · osobne pole (nie heading)</td>
+      </tr>
+      <tr>
+        <td><strong>Packshot</strong></td>
+        <td>Białe tło · ratio 1:1 lub 3:4 (konsistentny w całej galerii) · min 800×800px · asset #1 w galerii</td>
+      </tr>
+      <tr>
+        <td><strong>Hover image</strong></td>
+        <td>Lifestyle lub wariant koloru · automatycznie = asset #2 w galerii · brak dodatkowej konfiguracji</td>
+      </tr>
+      <tr>
+        <td><strong>Galeria</strong></td>
+        <td>8–15 assetów · JPEG/PNG + video · sekwencja: packshot → lifestyle → detal → infografika → video · desktop: thumbnail strip · mobile: dots pagination (thumby znikają)</td>
+      </tr>
+      <tr>
+        <td><strong>Bullets / cechy</strong></td>
+        <td>6–12 pozycji · benefit-first: [Cecha] → [Korzyść] → [Kontekst] · osobny blok od "Jak używać?"</td>
+      </tr>
+      <tr>
+        <td><strong>Opis body</strong></td>
+        <td>Struktura H2: Dlaczego warto? → Kluczowe korzyści → Jak używać? → Skład · accordiony skracają perceived length</td>
+      </tr>
+      <tr>
+        <td><strong>FAQ accordion</strong></td>
+        <td>5–10 pytań · z realnych obiekcji CS · format pytanie / odpowiedź · każde w osobnym accordion</td>
+      </tr>
+      <tr>
+        <td><strong>Specs / Dane techniczne</strong></td>
+        <td>Tabela atrybutów kategorii: wymiary / waga / materiał / parametry tech · krytyczne dla urządzeń elektronicznych i produktów premium</td>
+      </tr>
+    </table></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SUMMARY ════ -->
+<div id="tab-summary" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title">📊 Mapa pokrycia auditu — widoki × metody</div>
+    <div class="table-wrap"><table>
+      <tr><th>Widok</th><th>Shopper View</th><th>Action Map</th><th>Content Schema</th><th>Narzędzia</th></tr>
+      <tr><td><strong>Nav</strong></td><td>✅ desktop dropdown + mobile hamburger</td><td>✅</td><td>Struktura linków</td><td>Playwright live screenshot</td></tr>
+      <tr><td><strong>Homepage</strong></td><td>✅ desktop full + mobile full</td><td>✅</td><td>—</td><td>Playwright full page</td></tr>
+      <tr><td><strong>Listing (LED Therapy)</strong></td><td>✅ desktop + tiles + mobile</td><td>✅</td><td>Filtry i sort</td><td>Playwright live screenshot</td></tr>
+      <tr><td><strong>Kafelek (Pumeks Nano)</strong></td><td>✅ default + hover state</td><td>✅</td><td>T1–T8 elementy</td><td>Playwright + CSS hover</td></tr>
+      <tr><td><strong>PDP Luna Eye</strong></td><td>✅ desktop ATF + BTF + mobile</td><td>✅</td><td>Tytuł + bullets + FAQ</td><td>Playwright + Shopify MCP</td></tr>
+      <tr><td><strong>Blog</strong></td><td>✅ desktop full + mobile full</td><td>✅</td><td>Artykuły + tagi</td><td>Playwright full page + JS extraction</td></tr>
+      <tr><td><strong>Cross-product (5 PDP)</strong></td><td>✅ fold maps desktop + mobile</td><td>—</td><td>Matrix 5 PDPów</td><td>Shopify MCP + JS extraction</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Analytics Coverage Map — co jest trackowane</div>
+    <div class="table-wrap"><table>
+      <tr><th>Akcja</th><th>Widok</th><th>GA4 Event</th><th>Status</th></tr>
+      <tr><td>Wejście na PDP</td><td>PDP</td><td><code>view_item</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>Dodaj do koszyka</td><td>PDP / Tile / Listing</td><td><code>add_to_cart</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>Klik produktu w listingu</td><td>Listing</td><td><code>select_item</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>Widok produktu w viewport</td><td>Listing</td><td><code>view_item_list</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>Przejście do kasy</td><td>Koszyk</td><td><code>begin_checkout</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>Zakup</td><td>Checkout</td><td><code>purchase</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>Wyszukiwanie</td><td>Global</td><td><code>search</code></td><td><span class="ok">✅ Shopify native</span></td></tr>
+      <tr><td>Klik w promo bar</td><td>Global (sticky)</td><td><code>select_promotion</code></td><td><span class="warn">⚠️ niezweryfikowany</span></td></tr>
+      <tr><td>Klik w nav kategorię</td><td>Nav</td><td>—</td><td><span class="fail">❌ brak custom event</span></td></tr>
+      <tr><td>Otwarcie hamburger menu</td><td>Nav mobile</td><td>—</td><td><span class="fail">❌ brak</span></td></tr>
+      <tr><td>Klik w dropdown sub-link</td><td>Nav</td><td>—</td><td><span class="fail">❌ brak</span></td></tr>
+      <tr><td>Gallery swipe / klik</td><td>PDP</td><td>—</td><td><span class="fail">❌ brak</span></td></tr>
+      <tr><td>Video play</td><td>PDP</td><td>—</td><td><span class="fail">❌ brak</span></td></tr>
+      <tr><td>Accordion otwarcie (FAQ / Korzyści)</td><td>PDP</td><td>—</td><td><span class="fail">❌ brak</span></td></tr>
+      <tr><td>Klik "Kupisz także na" (INIZIO/AMORA)</td><td>PDP</td><td>—</td><td><span class="fail">❌ brak — exit nietrackowany</span></td></tr>
+      <tr><td>Filter / Sort w listingu</td><td>Listing</td><td>—</td><td><span class="fail">❌ brak</span></td></tr>
+      <tr><td>Scroll depth</td><td>PDP</td><td>—</td><td><span class="fail">❌ brak milestones</span></td></tr>
+      <tr><td>Wishlist dodanie</td><td>Tile / PDP</td><td>—</td><td><span class="warn">⚠️ Growave event (nie GA4)</span></td></tr>
+    </table></div>
+  </div>
+
+  <div class="card" style="font-size:12px;color:var(--muted)">
+    Audit v2 — mapping only. Wykonany przez <strong style="color:var(--text)">Claude Code</strong> z użyciem <strong style="color:var(--text)">Playwright MCP</strong> (live screenshots 1440px + 390px) + <strong style="color:var(--text)">Shopify MCP</strong> (product data) + <strong style="color:var(--text)">JS extraction</strong> (accordion content). Polska wersja sklepu glov.co. Screenshoty: <code>GLOV_audit_screenshots/</code> · Data: 2026-05-17
+  </div>
+
+</div>
+</div><!-- /container -->
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+function zoom(img) {
+  document.getElementById('lightbox-img').src = img.src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
+</script>
+</body>
+</html>
