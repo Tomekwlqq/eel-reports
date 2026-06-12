@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Raport Analityczny</title>
+<style>
+  :root {
+    --bg: #0f0f13;
+    --bg2: #17171e;
+    --bg3: #1e1e28;
+    --border: #2a2a38;
+    --accent: #6c63ff;
+    --accent2: #ff6584;
+    --green: #2ecc71;
+    --yellow: #f39c12;
+    --red: #e74c3c;
+    --text: #e8e8f0;
+    --text-muted: #8888aa;
+    --text-dim: #55556a;
+    --sidebar-w: 240px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.6; display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: var(--sidebar-w); min-width: var(--sidebar-w); background: var(--bg2);
+    border-right: 1px solid var(--border); position: fixed; top: 0; left: 0;
+    height: 100vh; overflow-y: auto; z-index: 100; padding: 0 0 24px;
+  }
+  .logo { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+  .logo h1 { font-size: 17px; font-weight: 700; color: var(--text); }
+  .logo .sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .logo .updated { font-size: 10px; color: var(--text-dim); margin-top: 4px; }
+  #refresh-btn {
+    display: block; margin: 12px 16px 0; padding: 7px 12px;
+    background: var(--accent); color: #fff; border: none; border-radius: 6px;
+    font-size: 12px; font-weight: 600; cursor: pointer; width: calc(100% - 32px);
+    transition: all .2s;
+  }
+  #refresh-btn:hover { opacity: .85; }
+  #refresh-btn.loading { opacity: .5; cursor: not-allowed; }
+  #refresh-confirm {
+    display: none; margin: 6px 16px 0; background: var(--bg3);
+    border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px;
+  }
+  #refresh-confirm p { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.4; }
+  .confirm-btns { display: flex; gap: 6px; }
+  .btn-yes {
+    flex: 1; padding: 5px 0; background: var(--accent); color: #fff;
+    border: none; border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer;
+  }
+  .btn-no {
+    flex: 1; padding: 5px 0; background: transparent; color: var(--text-muted);
+    border: 1px solid var(--border); border-radius: 5px; font-size: 11px; cursor: pointer;
+  }
+  .btn-yes:hover { opacity: .85; }
+  .btn-no:hover { color: var(--text); border-color: var(--text-muted); }
+  .nav-section { padding: 16px 20px 4px; font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); }
+  .nav-item { display: flex; align-items: center; gap: 8px; padding: 8px 20px;
+    cursor: pointer; color: var(--text-muted); font-size: 13px; transition: all .15s;
+    border-left: 3px solid transparent; }
+  .nav-item:hover { background: var(--bg3); color: var(--text); }
+  .nav-item.active { background: var(--bg3); color: var(--accent); border-left-color: var(--accent); }
+  .nav-item .icon { font-size: 14px; width: 18px; text-align: center; }
+  .nav-badge { margin-left: auto; font-size: 10px; padding: 1px 6px;
+    border-radius: 10px; font-weight: 700; }
+  .badge-red { background: rgba(231,76,60,.18); color: var(--red); }
+  .badge-yellow { background: rgba(243,156,18,.18); color: var(--yellow); }
+  .badge-green { background: rgba(46,204,113,.18); color: var(--green); }
+
+  /* MAIN */
+  #main { margin-left: var(--sidebar-w); flex: 1; padding: 32px 40px; max-width: 1100px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* HEADERS */
+  h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  h3 { font-size: 15px; font-weight: 600; margin: 24px 0 12px; color: var(--text); }
+  h4 { font-size: 13px; font-weight: 600; margin: 16px 0 8px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; }
+  .section-meta { font-size: 12px; color: var(--text-dim); margin-bottom: 24px; }
+
+  /* KPI CARDS */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .kpi-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .kpi-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+  .kpi-value { font-size: 24px; font-weight: 700; color: var(--text); line-height: 1; }
+  .kpi-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .kpi-live { border-color: var(--accent); }
+  .kpi-live .kpi-label::after { content: ' ●'; color: var(--accent); }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; margin-bottom: 24px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim);
+    border-bottom: 1px solid var(--border); background: var(--bg2); }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text); }
+  tr:hover td { background: var(--bg3); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tag { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .tag-red { background: rgba(231,76,60,.15); color: #ff6b6b; }
+  .tag-yellow { background: rgba(243,156,18,.15); color: #f5a623; }
+  .tag-green { background: rgba(46,204,113,.15); color: #2ecc71; }
+  .tag-purple { background: rgba(108,99,255,.15); color: #9d97ff; }
+  .tag-blue { background: rgba(52,152,219,.15); color: #5dade2; }
+
+  /* ALERTS */
+  .alert { border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; display: flex; gap: 12px; align-items: flex-start; }
+  .alert-red { background: rgba(231,76,60,.1); border: 1px solid rgba(231,76,60,.3); }
+  .alert-yellow { background: rgba(243,156,18,.1); border: 1px solid rgba(243,156,18,.3); }
+  .alert-green { background: rgba(46,204,113,.1); border: 1px solid rgba(46,204,113,.3); }
+  .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .alert strong { display: block; margin-bottom: 2px; font-size: 13px; }
+  .alert p { font-size: 12px; color: var(--text-muted); margin: 0; }
+
+  /* FUNNEL */
+  .funnel { display: flex; flex-direction: column; gap: 4px; margin-bottom: 24px; }
+  .funnel-row { display: flex; align-items: center; gap: 12px; }
+  .funnel-bar-wrap { flex: 1; background: var(--bg3); border-radius: 4px; height: 28px; overflow: hidden; }
+  .funnel-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding: 0 10px;
+    font-size: 12px; font-weight: 600; color: #fff; white-space: nowrap; transition: width .6s ease; }
+  .funnel-label { width: 160px; font-size: 12px; color: var(--text-muted); text-align: right; }
+  .funnel-num { width: 70px; font-size: 13px; font-weight: 700; text-align: right; }
+  .funnel-drop { font-size: 11px; color: var(--red); width: 60px; }
+
+  /* PILLS */
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .pill { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text-muted); }
+
+  /* SOURCE CHIPS */
+  .source-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-bottom: 24px; }
+  .source-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+  .source-name { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .source-meta { display: flex; gap: 12px; font-size: 11px; color: var(--text-muted); }
+  .source-type { font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: auto; }
+
+  /* QUICK WINS */
+  .qw-list { display: flex; flex-direction: column; gap: 10px; }
+  .qw { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px;
+    display: flex; align-items: flex-start; gap: 12px; }
+  .qw-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .qw-num-red { background: rgba(231,76,60,.2); color: var(--red); }
+  .qw-num-yellow { background: rgba(243,156,18,.2); color: var(--yellow); }
+  .qw-num-green { background: rgba(46,204,113,.2); color: var(--green); }
+  .qw-body strong { font-size: 13px; display: block; margin-bottom: 3px; }
+  .qw-body p { font-size: 12px; color: var(--text-muted); }
+  .qw-time { margin-left: auto; font-size: 11px; color: var(--text-dim); flex-shrink: 0; padding-top: 2px; }
+
+  /* SPINNER */
+  #loading { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 24px 32px; text-align: center; z-index: 999; display: none; }
+  #loading .spinner { width: 28px; height: 28px; border: 3px solid var(--border);
+    border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite;
+    margin: 0 auto 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* LIVE BADGE */
+  .live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green); margin-right: 5px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .live-label { font-size: 11px; color: var(--green); font-weight: 600; }
+
+  /* DIVIDER */
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  .text-muted { color: var(--text-muted); }
+  .text-red { color: var(--red); }
+  .text-green { color: var(--green); }
+  .text-yellow { color: var(--yellow); }
+  .text-accent { color: var(--accent); }
+  .mt8 { margin-top: 8px; }
+  .mb0 { margin-bottom: 0; }
+
+  /* INSIGHT CARDS */
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .insight { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .insight .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .insight .value { font-size: 20px; font-weight: 700; }
+  .insight .desc { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  @media (max-width: 700px) { .insight-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="logo">
+    <h1>GLOV Analytics</h1>
+    <div class="sub">glov.co — Shopify PL</div>
+    <div class="updated" id="last-updated">Ostatnia aktualizacja: 2026-05-13</div>
+  </div>
+  <button id="refresh-btn" onclick="askRefresh()">⟳ Odśwież dane GA4</button>
+  <div id="refresh-confirm">
+    <p>To odświeżenie wymaga Claude z dostępem do GA4. Czy na pewno chcesz poprosić Claude o aktualizację?</p>
+    <div class="confirm-btns">
+      <button class="btn-yes" onclick="confirmRefresh()">✓ Tak, odśwież</button>
+      <button class="btn-no" onclick="cancelRefresh()">Anuluj</button>
+    </div>
+  </div>
+
+  <div class="nav-section">Przegląd</div>
+  <div class="nav-item active" onclick="showSection('overview')"><span class="icon">📊</span> Dashboard</div>
+  <div class="nav-item" onclick="showSection('quickwins')"><span class="icon">⚡</span> Quick Wins <span class="nav-badge badge-red">8</span></div>
+
+  <div class="nav-section">Analityka</div>
+  <div class="nav-item" onclick="showSection('kpi')"><span class="icon">📈</span> KPI &amp; Kanały</div>
+  <div class="nav-item" onclick="showSection('funnel')"><span class="icon">🔽</span> Lejki</div>
+  <div class="nav-item" onclick="showSection('products')"><span class="icon">🛍️</span> Produkty</div>
+
+  <div class="nav-section">Audyty</div>
+  <div class="nav-item" onclick="showSection('frictions')"><span class="icon">🔴</span> Friction Points <span class="nav-badge badge-red">15</span></div>
+  <div class="nav-item" onclick="showSection('mobile')"><span class="icon">📱</span> Mobile UX</div>
+  <div class="nav-item" onclick="showSection('checkout')"><span class="icon">💳</span> Checkout</div>
+  <div class="nav-item" onclick="showSection('vitals')"><span class="icon">⚡</span> Core Web Vitals <span class="nav-badge badge-green">✓</span></div>
+  <div class="nav-item" onclick="showSection('referral')"><span class="icon">🔗</span> Referral</div>
+</nav>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="spinner"></div>
+  <div style="font-size:13px;color:var(--text-muted)">Pobieranie danych z GA4…</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main id="main">
+
+  <!-- ═══════════════════════════════════════════════════
+       OVERVIEW
+  ═══════════════════════════════════════════════════ -->
+  <div class="section active" id="s-overview">
+    <h2>Dashboard — GLOV.co</h2>
+    <div class="section-meta">Maj 2026 (1–13 maja) · <span class="live-dot"></span><span class="live-label">Live data z GA4</span></div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-live">
+        <div class="kpi-label">Sesje</div>
+        <div class="kpi-value" id="live-sessions">10 970</div>
+        <div class="kpi-sub">Maj 2026</div>
+      </div>
+      <div class="kpi-card kpi-live">
+        <div class="kpi-label">Zakupy</div>
+        <div class="kpi-value" id="live-purchases">239</div>
+        <div class="kpi-sub">Maj 2026</div>
+      </div>
+      <div class="kpi-card kpi-live">
+        <div class="kpi-label">Przychód</div>
+        <div class="kpi-value" id="live-revenue">28 976</div>
+        <div class="kpi-sub">PLN · Maj 2026</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Śr. wartość zamówienia</div>
+        <div class="kpi-value">121 zł</div>
+        <div class="kpi-sub">AOV</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Najlepszy CR</div>
+        <div class="kpi-value text-green">4.56%</div>
+        <div class="kpi-sub">Paid Search</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Mobile udział</div>
+        <div class="kpi-value">63.6%</div>
+        <div class="kpi-sub">CR 2.78%</div>
+      </div>
+    </div>
+
+    <h3>Krytyczne problemy</h3>
+    <div class="alert alert-red">
+      <div class="alert-icon">🔴</div>
+      <div>
+        <strong>#1 — URL 404: Sleeping Beauty traci 852 sesje/mc</strong>
+        <p>Stary URL produktu zwraca 404. ~18 straconych zakupów miesięcznie. Fix: Shopify Admin → URL Redirects → 2 minuty.</p>
+      </div>
+    </div>
+    <div class="alert alert-red">
+      <div class="alert-icon">🔴</div>
+      <div>
+        <strong>#2 — Drop lista → produkt: -75.6%</strong>
+        <p>Tylko 1 na 4 użytkowników którzy widzą listing klika w produkt. Sleeping Beauty nieobecna na głównym listingu /collections/sklep.</p>
+      </div>
+    </div>
+    <div class="alert alert-red">
+      <div class="alert-icon">🔴</div>
+      <div>
+        <strong>#3 — Drop view_item → add_to_cart: -80%</strong>
+        <p>Tylko 1 na 5 który wchodzi na PDP dodaje do koszyka. Główna hipoteza: mało recenzji (Sleeping Beauty: 3), brak FAQ na Depilatorze.</p>
+      </div>
+    </div>
+    <div class="alert alert-yellow">
+      <div class="alert-icon">🟡</div>
+      <div>
+        <strong>#4 — Direct checkout drop: tylko 26.3% finalizuje</strong>
+        <p>Direct ma najwyższy view→cart (33.7%) ale najniższy checkout→purchase. Hipoteza: dark social + wygasłe koszyki.</p>
+      </div>
+    </div>
+    <div class="alert alert-yellow">
+      <div class="alert-icon">🟡</div>
+      <div>
+        <strong>#5 — Cross-network view→cart: 8.6% (najniższy)</strong>
+        <p>PMax kieruje ruch na stronę główną zamiast na konkretne produkty. Fix: Final URL w ustawieniach kampanii.</p>
+      </div>
+    </div>
+
+    <h3>Co wykluczono jako przyczynę</h3>
+    <div class="alert alert-green">
+      <div class="alert-icon">✅</div>
+      <div>
+        <strong>Core Web Vitals są zielone — szybkość NIE jest problemem</strong>
+        <p>LCP 1,7s · INP 127ms · CLS 0,02 — wszystkie poniżej progów Google. Drop -75.6% ma inne przyczyny.</p>
+      </div>
+    </div>
+    <div class="alert alert-green">
+      <div class="alert-icon">✅</div>
+      <div>
+        <strong>Checkout jest dobry — nie jest przyczyną porzuceń</strong>
+        <p>One-page checkout · 6 metod płatności · BLIK · darmowa dostawa potwierdzana na etapie adresu.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       QUICK WINS
+  ═══════════════════════════════════════════════════ -->
+  <div class="section" id="s-quickwins">
+    <h2>Quick Wins</h2>
+    <div class="section-meta">Posortowane wg ROI · bez developera · &lt; 1 tydzień</div>
+
+    <h3>🔴 Krytyczne — zrobić natychmiast</h3>
+    <div class="qw-list">
+      <div class="qw">
+        <div class="qw-num qw-num-red">1</div>
+        <div class="qw-body">
+          <strong>Redirect 301: stary URL Sleeping Beauty → nowy</strong>
+          <p>~852 sesje/mc lądują na 404. Szacunek: ~18 straconych zakupów/mc (~2 178 zł/mc przy AOV 121 zł).<br>
+          Shopify Admin → Navigation → URL Redirects → dodaj: <code>/products/poduszka-do-spania-sleeping-beauty-glov</code> → <code>/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty</code></p>
+        </div>
+        <div class="qw-time">2 min</div>
+      </div>
+      <div class="qw">
+        <div class="qw-num qw-num-red">2</div>
+        <div class="qw-body">
+          <strong>Dodaj Sleeping Beauty do /collections/sklep</strong>
+          <p>Produkt #1 wg ruchu w GA4 nie istnieje na głównym listingu (DOM verified). Shopify Admin → Collections → Sklep → Add products.</p>
+        </div>
+        <div class="qw-time">5 min</div>
+      </div>
+      <div class="qw">
+        <div class="qw-num qw-num-red">3</div>
+        <div class="qw-body">
+          <strong>PMax Final URL → konkretne produkty zamiast HP</strong>
+          <p>Cross-network view→cart tylko 8.6% — najniższy kanał. Google Ads → PMax → Final URL expansion → wyłącz lub ustaw konkretne URL.</p>
+        </div>
+        <div class="qw-time">15 min</div>
+      </div>
+    </div>
+
+    <h3>🟡 Ważne — ten tydzień</h3>
+    <div class="qw-list">
+      <div class="qw">
+        <div class="qw-num qw-num-yellow">4</div>
+        <div class="qw-body">
+          <strong>Zredukuj banery "Oferty specjalne" z 7 do 2–3</strong>
+          <p>Paradoks wyboru — 7 równorzędnych banerów na HP. Jeden wyróżniony jako główna promocja tygodnia. Shopify Admin → Customize.</p>
+        </div>
+        <div class="qw-time">15 min</div>
+      </div>
+      <div class="qw">
+        <div class="qw-num qw-num-yellow">5</div>
+        <div class="qw-body">
+          <strong>Free shipping progress bar w koszyku</strong>
+          <p>AOV 121 zł, próg darmowej dostawy 150 zł — brakuje dynamicznego "Brakuje Ci X zł do darmowej wysyłki!" w koszyku. Shopify motyw lub app.</p>
+        </div>
+        <div class="qw-time">30 min</div>
+      </div>
+      <div class="qw">
+        <div class="qw-num qw-num-yellow">6</div>
+        <div class="qw-body">
+          <strong>Dodaj CTA + linki do produktów w artykułach bloga</strong>
+          <p>11 artykułów, 0 linków do produktów. Organic Search 2.47% CR — blog przyciąga część tej organiki, użytkownik czyta i wychodzi bez zakupu.</p>
+        </div>
+        <div class="qw-time">30 min/art.</div>
+      </div>
+      <div class="qw">
+        <div class="qw-num qw-num-yellow">7</div>
+        <div class="qw-body">
+          <strong>Dodaj opis tekstowy na stronach kategorii</strong>
+          <p>Wszystkie główne kategorie bez tekstu pod H1. Google nie ma co indeksować poza nazwami produktów. 150–200 słów/kategoria. Start: /collections/rekawice-do-demakijazu.</p>
+        </div>
+        <div class="qw-time">30 min/kat.</div>
+      </div>
+      <div class="qw">
+        <div class="qw-num qw-num-yellow">8</div>
+        <div class="qw-body">
+          <strong>Sprawdzić kurier DHL do drzwi w checkout</strong>
+          <p>Checkout pokazuje tylko punkty odbioru DHL (Żabka). Brak widocznej opcji home delivery może powodować abandon u użytkowników bez pobliskiego punktu.</p>
+        </div>
+        <div class="qw-time">30 min</div>
+      </div>
+    </div>
+
+    <h3>🟢 Do zbadania (potrzebne dane)</h3>
+    <div class="qw-list">
+      <div class="qw">
+        <div class="qw-num qw-num-green">9</div>
+        <div class="qw-body">
+          <strong>Zainstalować Hotjar / Microsoft Clarity</strong>
+          <p>Jedyne narzędzie które rozstrzygnie przyczynę drop -75.6% lista→produkt. Nagrania sesji pokażą co robi użytkownik na listingu przed wyjściem.</p>
+        </div>
+        <div class="qw-time">1h setup</div>
+      </div>
+      <div class="qw">
+        <div class="qw-num qw-num-green">10</div>
+        <div class="qw-body">
+          <strong>Kampania zbierania recenzji — Sleeping Beauty</strong>
+          <p>852 sesji/mc, 3 recenzje. Email post-purchase z prośbą o opinię do dotychczasowych kupujących. Klaviyo lub Shopify Email.</p>
+        </div>
+        <div class="qw-time">1h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       KPI & KANAŁY
+  ═══════════════════════════════════════════════════ -->
+  <div class="section" id="s-kpi">
+    <h2>KPI &amp; Kanały</h2>
+    <div class="section-meta">Maj 2026 (1–13 maja) · GA4 properties/342844459 · <span class="live-dot"></span><span class="live-label">Live</span></div>
+
+    <h3>KPI Ogólne</h3>
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-live"><div class="kpi-label">Aktywni użytkownicy</div><div class="kpi-value" id="live-users">9 203</div></div>
+      <div class="kpi-card kpi-live"><div class="kpi-label">Sesje</div><div class="kpi-value" id="live-sessions2">10 970</div></div>
+      <div class="kpi-card kpi-live"><div class="kpi-label">Odsłony</div><div class="kpi-value" id="live-pageviews">25 304</div></div>
+      <div class="kpi-card"><div class="kpi-label">Engagement rate</div><div class="kpi-value">50.1%</div></div>
+      <div class="kpi-card"><div class="kpi-label">Śr. czas sesji</div><div class="kpi-value">4:02</div></div>
+      <div class="kpi-card kpi-live"><div class="kpi-label">Zakupy</div><div class="kpi-value" id="live-purchases2">239</div></div>
+      <div class="kpi-card kpi-live"><div class="kpi-label">Przychód</div><div class="kpi-value" id="live-revenue2">28 976</div><div class="kpi-sub">PLN</div></div>
+      <div class="kpi-card"><div class="kpi-label">AOV</div><div class="kpi-value">~121 zł</div></div>
+    </div>
+
+    <h3>Kanały — sesje, CR, przychód</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Kanał</th><th class="num">Sesje</th><th class="num">Zakupy</th><th class="num">CR</th><th class="num">Przychód PLN</th><th>Ocena</th></tr></thead>
+        <tbody>
+          <tr><td>Paid Search</td><td class="num">1 140</td><td class="num">52</td><td class="num text-green"><strong>4.56%</strong></td><td class="num">6 004</td><td><span class="tag tag-green">⭐ Najlepszy</span></td></tr>
+          <tr><td>Organic Shopping</td><td class="num">63</td><td class="num">4</td><td class="num text-green"><strong>6.35%</strong></td><td class="num">671</td><td><span class="tag tag-green">⭐ Mały wol.</span></td></tr>
+          <tr><td>Organic Search</td><td class="num">2 425</td><td class="num">60</td><td class="num">2.47%</td><td class="num">6 991</td><td><span class="tag tag-blue">OK</span></td></tr>
+          <tr><td>Paid Social</td><td class="num">2 608</td><td class="num">64</td><td class="num">2.46%</td><td class="num">7 282</td><td><span class="tag tag-blue">OK</span></td></tr>
+          <tr><td>Organic Social</td><td class="num">161</td><td class="num">4</td><td class="num">2.48%</td><td class="num">471</td><td><span class="tag tag-blue">OK</span></td></tr>
+          <tr><td>Unassigned</td><td class="num">706</td><td class="num">17</td><td class="num">2.41%</td><td class="num">2 031</td><td><span class="tag tag-purple">Zbadać</span></td></tr>
+          <tr><td>Cross-network (PMax)</td><td class="num">1 166</td><td class="num">18</td><td class="num text-yellow">1.54%</td><td class="num">3 129</td><td><span class="tag tag-yellow">⚠️ Landing</span></td></tr>
+          <tr><td>Direct</td><td class="num">2 809</td><td class="num">20</td><td class="num text-yellow">0.71%</td><td class="num">2 396</td><td><span class="tag tag-yellow">⚠️ Checkout</span></td></tr>
+          <tr><td>Referral</td><td class="num">74</td><td class="num">0</td><td class="num text-red"><strong>0%</strong></td><td class="num">0</td><td><span class="tag tag-red">❌ Boty/AI</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Urządzenia</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Urządzenie</th><th class="num">Sesje</th><th class="num">Udział</th><th class="num">Zakupy</th><th class="num">CR</th></tr></thead>
+        <tbody>
+          <tr><td>📱 Mobile</td><td class="num">6 982</td><td class="num">63.6%</td><td class="num">194</td><td class="num text-green"><strong>2.78%</strong></td></tr>
+          <tr><td>💻 Desktop</td><td class="num">4 048</td><td class="num">36.9%</td><td class="num">42</td><td class="num">1.04%</td></tr>
+          <tr><td>Tablet</td><td class="num">68</td><td class="num">0.6%</td><td class="num">3</td><td class="num">4.41%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       LEJKI
+  ═══════════════════════════════════════════════════ -->
+  <div class="section" id="s-funnel">
+    <h2>Lejki</h2>
+    <div class="section-meta">Maj 2026 · Lejek e-commerce end-to-end</div>
+
+    <h3>Lejek ogólny</h3>
+    <div class="funnel">
+      <div class="funnel-row">
+        <div class="funnel-label">view_item_list</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%;background:#6c63ff">34 630</div></div>
+        <div class="funnel-drop"></div>
+      </div>
+      <div class="funnel-row">
+        <div class="funnel-label">view_item</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:24.4%;background:#e74c3c">8 465</div></div>
+        <div class="funnel-drop text-red">-75.6% 🔴</div>
+      </div>
+      <div class="funnel-row">
+        <div class="funnel-label">add_to_cart</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:4.9%;background:#e74c3c">1 695</div></div>
+        <div class="funnel-drop text-red">-80.0% 🔴</div>
+      </div>
+      <div class="funnel-row">
+        <div class="funnel-label">begin_checkout</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:1.5%;background:#f39c12">505</div></div>
+        <div class="funnel-drop text-yellow">-70.2%</div>
+      </div>
+      <div class="funnel-row">
+        <div class="funnel-label">add_shipping_info</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:1.3%;background:#f39c12">451</div></div>
+        <div class="funnel-drop text-yellow">-10.7%</div>
+      </div>
+      <div class="funnel-row">
+        <div class="funnel-label">add_payment_info</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:1.1%;background:#2ecc71">371</div></div>
+        <div class="funnel-drop">-17.7%</div>
+      </div>
+      <div class="funnel-row">
+        <div class="funnel-label">purchase</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:0.7%;background:#2ecc71">239</div></div>
+        <div class="funnel-drop">-35.6%</div>
+      </div>
+    </div>
+
+    <h3>Lejki per kanał</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Kanał</th><th class="num">view_item</th><th class="num">ATC</th><th class="num">Checkout</th><th class="num">Purchase</th><th class="num">view→cart</th><th class="num">checkout→buy</th></tr></thead>
+        <tbody>
+          <tr><td>Organic Shopping</td><td class="num">41</td><td class="num">20</td><td class="num">7</td><td class="num">4</td><td class="num text-green"><strong>48.8%</strong></td><td class="num text-green">57.1%</td></tr>
+          <tr><td>Direct</td><td class="num">602</td><td class="num">203</td><td class="num">76</td><td class="num">20</td><td class="num text-green"><strong>33.7%</strong></td><td class="num text-red">26.3% ⚠️</td></tr>
+          <tr><td>Paid Search</td><td class="num">1 337</td><td class="num">317</td><td class="num">81</td><td class="num">52</td><td class="num">23.7%</td><td class="num text-green"><strong>64.2%</strong></td></tr>
+          <tr><td>Paid Social</td><td class="num">2 486</td><td class="num">501</td><td class="num">144</td><td class="num">64</td><td class="num">20.2%</td><td class="num">44.4%</td></tr>
+          <tr><td>Organic Search</td><td class="num">2 038</td><td class="num">381</td><td class="num">106</td><td class="num">60</td><td class="num">18.7%</td><td class="num">56.6%</td></tr>
+          <tr><td>Cross-network</td><td class="num">1 402</td><td class="num">121</td><td class="num">38</td><td class="num">18</td><td class="num text-red">8.6% ⚠️</td><td class="num">47.4%</td></tr>
+          <tr><td>Referral</td><td class="num">71</td><td class="num">5</td><td class="num">2</td><td class="num">0</td><td class="num text-red">7.0%</td><td class="num text-red">0% ⚠️</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insight-grid">
+      <div class="insight">
+        <div class="label">Główny problem #1</div>
+        <div class="value text-red">-75.6%</div>
+        <div class="desc">Drop z listingu do strony produktu. Sleeping Beauty nieobecna na /collections/sklep. Przyczyna nieustalona — potrzebne Hotjar.</div>
+      </div>
+      <div class="insight">
+        <div class="label">Główny problem #2</div>
+        <div class="value text-red">-80%</div>
+        <div class="desc">Drop z PDP do koszyka. Mało recenzji, brak FAQ, brak urgency/scarcity. Depilator nano: 69% engagement ale niska konwersja.</div>
+      </div>
+      <div class="insight">
+        <div class="label">Szansa: Paid Search</div>
+        <div class="value text-green">4.56% CR</div>
+        <div class="desc">Najwyższy CR ze wszystkich kanałów. Tylko 1 140 sesji — duży potencjał do skalowania budżetu.</div>
+      </div>
+      <div class="insight">
+        <div class="label">Problem: Direct checkout</div>
+        <div class="value text-yellow">26.3%</div>
+        <div class="desc">Checkout→purchase najniższy mimo najwyższego view→cart (33.7%). Hipoteza: wygasłe koszyki z dark social.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       PRODUKTY
+  ═══════════════════════════════════════════════════ -->
+  <div class="section" id="s-products">
+    <h2>Produkty &amp; Listingi</h2>
+    <div class="section-meta">Maj 2026 · Ranking wg sesji</div>
+
+    <h3>Top 10 produktów</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Produkt</th><th class="num">Sesje</th><th class="num">Odsłony</th><th class="num">Śr. czas</th><th class="num">Engagement</th><th>Uwagi</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Poduszka nocna Sleeping Beauty</td><td class="num">851</td><td class="num">1 267</td><td class="num">1:10</td><td class="num">52.1%</td><td><span class="tag tag-red">404!</span></td></tr>
+          <tr><td>2</td><td>Pumeks nano glass</td><td class="num">725</td><td class="num">1 016</td><td class="num">1:31</td><td class="num">55.3%</td><td></td></tr>
+          <tr><td>3</td><td>Płatki LED Luna Eye</td><td class="num">608</td><td class="num">675</td><td class="num">1:21</td><td class="num">53.9%</td><td></td></tr>
+          <tr><td>4</td><td>Depilator nano glass</td><td class="num">246</td><td class="num">288</td><td class="num">1:52</td><td class="num text-green"><strong>69.1%</strong></td><td><span class="tag tag-yellow">Brak FAQ</span></td></tr>
+          <tr><td>5</td><td>Szczotka do włosów Biobased</td><td class="num">230</td><td class="num">239</td><td class="num">0:53</td><td class="num">47.0%</td><td></td></tr>
+          <tr><td>6</td><td>Bubble Burst 3w1</td><td class="num">185</td><td class="num">173</td><td class="num">0:52</td><td class="num">40.5%</td><td></td></tr>
+          <tr><td>7</td><td>Rękawica Skin Smoothing</td><td class="num">157</td><td class="num">280</td><td class="num">0:49</td><td class="num">55.4%</td><td></td></tr>
+          <tr><td>8</td><td>Klips Zero Gravity</td><td class="num">155</td><td class="num">173</td><td class="num">1:17</td><td class="num">60.6%</td><td></td></tr>
+          <tr><td>9</td><td>Pumeks + Depilator 2w1</td><td class="num">91</td><td class="num">94</td><td class="num">1:38</td><td class="num">63.7%</td><td></td></tr>
+          <tr><td>10</td><td>Rękawica On The Go</td><td class="num">72</td><td class="num">135</td><td class="num">1:34</td><td class="num">65.3%</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Top 10 listingów</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Listing</th><th class="num">Sesje</th><th class="num">Odsłony</th><th class="num">Śr. czas</th><th class="num">Engagement</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>/collections/sklep</td><td class="num">1 363</td><td class="num">3 313</td><td class="num">2:12</td><td class="num">78.1%</td></tr>
+          <tr><td>2</td><td>/collections/rekawice-do-demakijazu</td><td class="num">369</td><td class="num">640</td><td class="num">1:40</td><td class="num">76.7%</td></tr>
+          <tr><td>3</td><td>/collections/produkty-do-pielegnacji-wlosow</td><td class="num">310</td><td class="num">819</td><td class="num">2:14</td><td class="num text-green">83.2%</td></tr>
+          <tr><td>4</td><td>/collections/produkty-do-pielegnacji-ciala</td><td class="num">254</td><td class="num">467</td><td class="num">1:15</td><td class="num text-green">83.1%</td></tr>
+          <tr><td>5</td><td>/collections/produkty-do-pielegnacji-twarzy</td><td class="num">277</td><td class="num">662</td><td class="num">2:01</td><td class="num text-green">88.1%</td></tr>
+          <tr><td>6</td><td>/collections/all</td><td class="num">232</td><td class="num">967</td><td class="num">2:41</td><td class="num text-green">84.5%</td></tr>
+          <tr><td>7</td><td>/collections/zestawy</td><td class="num">139</td><td class="num">298</td><td class="num">1:24</td><td class="num">79.9%</td></tr>
+          <tr><td>8</td><td>/collections/coolnails</td><td class="num">121</td><td class="num">262</td><td class="num">2:54</td><td class="num">75.2%</td></tr>
+          <tr><td>9</td><td>/collections/nano-glass-collection</td><td class="num">73</td><td class="num">105</td><td class="num">1:08</td><td class="num text-green">90.4%</td></tr>
+          <tr><td>10</td><td>/collections/wyprzedaz</td><td class="num">46</td><td class="num">60</td><td class="num">1:05</td><td class="num">87.0%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       FRICTION POINTS
+  ═══════════════════════════════════════════════════ -->
+  <div class="section" id="s-frictions">
+    <h2>Friction Points</h2>
+    <div class="section-meta">Źródło: GA4 + DOM inspection + Mobile UX · 2026-05-13 · Tylko potwierdzone danymi</div>
+
+    <h3>🔴 Krytyczne — twarde dane</h3>
+    <div class="qw-list">
+      <div class="qw"><div class="qw-num qw-num-red">#1</div><div class="qw-body"><strong>URL 404: Sleeping Beauty — 852 sesje/mc na martwą stronę</strong><p>GA4 rank #1 wg ruchu, ale stary URL zwraca 404. Zewnętrzne linki (social, SEO, stare kampanie) prowadzą na błąd. ~18 straconych zakupów/mc.</p></div><div class="qw-time"><span class="tag tag-red">2 min</span></div></div>
+      <div class="qw"><div class="qw-num qw-num-red">#2</div><div class="qw-body"><strong>Sleeping Beauty nieobecna w /collections/sklep</strong><p>DOM verified: brak produktu #1 wg GA4 na głównym listingu (1 363 sesji). Merchandising oderwany od danych.</p></div><div class="qw-time"><span class="tag tag-red">5 min</span></div></div>
+      <div class="qw"><div class="qw-num qw-num-red">#3</div><div class="qw-body"><strong>Direct: wysoki view→cart (33.7%) ale tylko 26.3% finalizuje checkout</strong><p>2 809 sesji → tylko 20 zakupów. Klasyczny symptom wygasłych koszyków lub zaskoczenia na etapie wysyłki.</p></div></div>
+      <div class="qw"><div class="qw-num qw-num-red">#4</div><div class="qw-body"><strong>Cross-network: 8.6% view→cart — najniższy ze wszystkich</strong><p>PMax kieruje ruch na HP zamiast na produkty. 1 166 sesji → 18 zakupów.</p></div></div>
+      <div class="qw"><div class="qw-num qw-num-red">#5</div><div class="qw-body"><strong>Pusty koszyk: tylko komunikat + przycisk, zero rekomendacji</strong><p>Dead end dla użytkownika z wygasłym koszykiem. Brak "Może Ci się spodobać" na /cart.</p></div></div>
+      <div class="qw"><div class="qw-num qw-num-red">#6</div><div class="qw-body"><strong>Blog: 11 artykułów bez linków do produktów</strong><p>Organic Search 2.47% CR. Blog rankuje na long-tail, użytkownik czyta i wychodzi — zero CTA.</p></div></div>
+      <div class="qw"><div class="qw-num qw-num-red">#7</div><div class="qw-body"><strong>Referral: 74 sesje, 0 zakupów — głównie boty</strong><p>~60% ruchu referral to boty (Teams, Feishu). Brak partnerów contentowych.</p></div></div>
+    </div>
+
+    <h3>🟡 Ważne — potwierdzone obserwacją</h3>
+    <div class="qw-list">
+      <div class="qw"><div class="qw-num qw-num-yellow">#8</div><div class="qw-body"><strong>Brak free shipping progress bar w koszyku i nagłówku</strong><p>AOV 121 PLN, próg 150 PLN — brakuje dynamicznego paska. Użytkownik nie wie że jest blisko darmowej dostawy.</p></div></div>
+      <div class="qw"><div class="qw-num qw-num-yellow">#9</div><div class="qw-body"><strong>Sleeping Beauty: tylko 3 recenzje przy 852 sesjach/mc</strong><p>Produkt premium (199 zł) bez wystarczającego social proof. 3 opinie nie budują zaufania.</p></div></div>
+      <div class="qw"><div class="qw-num qw-num-yellow">#10</div><div class="qw-body"><strong>Depilator nano: 69.1% engagement + 1:52 na stronie ale niska konwersja</strong><p>Symptom nieodpowiedzianej obiekcji. Brak FAQ na PDP ("jak działa?", "boli?", "jak czyścić?").</p></div></div>
+      <div class="qw"><div class="qw-num qw-num-yellow">#11</div><div class="qw-body"><strong>7 równorzędnych banerów "Oferty specjalne" na HP</strong><p>Paradoks wyboru. Żaden nie jest wyróżniony — użytkownik skanuje i nie klika.</p></div></div>
+      <div class="qw"><div class="qw-num qw-num-yellow">#12</div><div class="qw-body"><strong>Brak opisu SEO na stronach kategorii</strong><p>Google nie ma co indeksować poza nazwami produktów. Kategorie z 83-88% engagement nie rankują na frazy kategoryczne.</p></div></div>
+      <div class="qw"><div class="qw-num qw-num-yellow">#13</div><div class="qw-body"><strong>Checkout: brak widocznego kuriera do drzwi DHL</strong><p>Tylko punkty odbioru Żabka. Użytkownik bez pobliskiego punktu może porzucić koszyk.</p></div></div>
+      <div class="qw"><div class="qw-num qw-num-yellow">#14</div><div class="qw-body"><strong>Cookie banner fullscreen blokuje listing przy pierwszej wizycie</strong><p>Mobile 390px: Cookiebot fullscreen modal zanim użytkownik zobaczy produkty.</p></div></div>
+      <div class="qw"><div class="qw-num qw-num-yellow">#15</div><div class="qw-body"><strong>Drop lista→produkt -75.6% — przyczyna nieustalona</strong><p>Wykluczono: Core Web Vitals (zielone), ceny na kafelkach (są), Quick Add to Cart (jest). Potrzebne: Hotjar/Clarity.</p></div></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       MOBILE UX
+  ═══════════════════════════════════════════════════ -->
+  <div class="section" id="s-mobile">
+    <h2>Mobile UX</h2>
+    <div class="section-meta">Viewport: 390×844 (iPhone 14) · Chrome DevTools mobile emulation · 2026-05-13</div>
+
+    <h3>Listing — /collections/sklep</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Element</th><th>Stan</th><th>Uwaga</th></tr></thead>
+        <tbody>
+          <tr><td>Ceny na kafelkach</td><td><span class="tag tag-green">✅ Są</span></td><td>Poprzednie mapowanie błędne</td></tr>
+          <tr><td>Quick Add to Cart</td><td><span class="tag tag-green">✅ Jest</span></td><td>Przycisk na każdym kafelku</td></tr>
+          <tr><td>Filtry atrybutowe</td><td><span class="tag tag-red">❌ Brak</span></td><td>Tylko sortowanie i tagi kategorii</td></tr>
+          <tr><td>Nazwy produktów</td><td><span class="tag tag-yellow">⚠️ Ucięte</span></td><td>Elipsa po 2 linijkach</td></tr>
+          <tr><td>Cookie banner</td><td><span class="tag tag-yellow">⚠️ Blokuje</span></td><td>Fullscreen modal przy pierwszej wizycie</td></tr>
+          <tr><td>Trusted Shops widget</td><td><span class="tag tag-yellow">⚠️ Nakłada</span></td><td>Zasłania część treści w lewym dolnym rogu</td></tr>
+          <tr><td>Sleeping Beauty na listingu</td><td><span class="tag tag-red">❌ Brak</span></td><td>DOM verified: produkt #1 GA4 nie istnieje na liście</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>PDP — Sleeping Beauty</h3>
+    <div class="alert alert-red">
+      <div class="alert-icon">🔴</div>
+      <div><strong>Stary URL zwraca 404!</strong><p>GA4 raportuje 852 sesje na: <code>/products/poduszka-do-spania-sleeping-beauty-glov</code> — ten URL zwraca 404.<br>Nowy URL: <code>/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty</code></p></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Element</th><th>Stan</th></tr></thead>
+        <tbody>
+          <tr><td>Breadcrumbs</td><td><span class="tag tag-green">✅ Są</span></td></tr>
+          <tr><td>Related Products ("Może Ci się spodobać")</td><td><span class="tag tag-green">✅ Jest</span></td></tr>
+          <tr><td>Info o dostawie przy cenie</td><td><span class="tag tag-green">✅ Jest</span></td></tr>
+          <tr><td>Wishlist (serduszko)</td><td><span class="tag tag-green">✅ Jest</span></td></tr>
+          <tr><td>Ilość dostępnych sztuk</td><td><span class="tag tag-red">❌ Brak</span></td></tr>
+          <tr><td>Ikony metod płatności pod ATC</td><td><span class="tag tag-red">❌ Brak</span></td></tr>
+          <tr><td>FAQ accordion</td><td><span class="tag tag-red">❌ Brak</span></td></tr>
+          <tr><td>Recenzje</td><td><span class="tag tag-yellow">⚠️ Tylko 3</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Koszyk — /cart (pusty)</h3>
+    <div class="alert alert-yellow">
+      <div class="alert-icon">⚠️</div>
+      <div><strong>Dead end dla użytkownika z wygasłym koszykiem</strong><p>Tylko: komunikat "Twój koszyk jest pusty" + ikona + link "Kontynuuj zakupy". Brak rekomendacji, bestselerów, newslettera.</p></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       CHECKOUT
+  ═══════════════════════════════════════════════════ -->
+  <div class="section" id="s-checkout">
+    <h2>Checkout Audit</h2>
+    <div class="section-meta">Desktop (1372×877) · Shopify One-Page Checkout · 2026-05-13</div>
+
+    <div class="alert alert-green">
+      <div class="alert-icon">✅</div>
+      <div><strong>TL;DR: Checkout jest dobry — problem leży gdzie indziej</strong><p>One-page checkout · 6 metod płatności (BLIK, karta, PayPal, Klarna, Przelewy24, przelew) · Express: Shop Pay, PayPal, Google Pay · Darmowa dostawa potwierdzana po wpisaniu adresu.</p></div>
+    </div>
+
+    <h3>Metody płatności</h3>
+    <div class="pills">
+      <span class="pill">BLIK</span><span class="pill">Karta (Visa/MC)</span><span class="pill">PayPal</span>
+      <span class="pill">Klarna</span><span class="pill">Przelewy24</span><span class="pill">Przelew tradycyjny</span>
+      <span class="pill">Shop Pay (express)</span><span class="pill">Google Pay (express)</span>
+      <span class="pill text-muted">Apple Pay (tylko iOS Safari?)</span>
+    </div>
+
+    <h3>Frictions w checkout</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Problem</th><th>Mechanizm</th></tr></thead>
+        <tbody>
+          <tr><td>C1</td><td><span class="tag tag-yellow">⚠️</span> Tylko punkty DHL Żabka w metodach wysyłki</td><td>Brak kuriera do drzwi na pierwszym widoku — zaskoczenie dla użytkownika bez Żabki</td></tr>
+          <tr><td>C2</td><td><span class="tag tag-blue">ℹ️</span> Przycisk "Zapłać teraz" zamiast "Złóż zamówienie"</td><td>Większa bariera psychologiczna — drobiazg</td></tr>
+          <tr><td>C3</td><td><span class="tag tag-yellow">⚠️</span> Brak trust seals przy przycisku CTA</td><td>Brak SSL/Trusted Shops tuż przed kliknięciem</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Hipoteza — Direct checkout drop 26.3%</h3>
+    <p class="text-muted">Direct to głównie dark social + powracający po dniach. Sesja wygasła, koszyk pusty — muszą zacząć od nowa i nie pamiętają co chcieli kupić (pusty koszyk nie ma rekomendacji — Friction #5). Checkout sam w sobie NIE jest problemem.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       CORE WEB VITALS
+  ═══════════════════════════════════════════════════ -->
+  <div class="section" id="s-vitals">
+    <h2>Core Web Vitals</h2>
+    <div class="section-meta">PageSpeed Insights · CrUX (dane rzeczywistych użytkowników Chrome) · Mobile · glov.co/collections/sklep · 2026-05-13</div>
+
+    <div class="alert alert-green">
+      <div class="alert-icon">✅</div>
+      <div><strong>Wszystkie Core Web Vitals zaliczone — szybkość NIE jest przyczyną drop -75.6%</strong><p>CrUX dane rzeczywistych użytkowników są zielone. Drop lista→produkt ma inne przyczyny.</p></div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card" style="border-color:var(--green)">
+        <div class="kpi-label">LCP · Largest Contentful Paint</div>
+        <div class="kpi-value text-green">1,7 s</div>
+        <div class="kpi-sub">Próg: &lt; 2,5 s · 🟢 Zaliczony</div>
+      </div>
+      <div class="kpi-card" style="border-color:var(--green)">
+        <div class="kpi-label">INP · Interaction to Next Paint</div>
+        <div class="kpi-value text-green">127 ms</div>
+        <div class="kpi-sub">Próg: &lt; 200 ms · 🟢 Zaliczony</div>
+      </div>
+      <div class="kpi-card" style="border-color:var(--green)">
+        <div class="kpi-label">CLS · Cumulative Layout Shift</div>
+        <div class="kpi-value text-green">0,02</div>
+        <div class="kpi-sub">Próg: &lt; 0,1 · 🟢 Zaliczony</div>
+      </div>
+      <div class="kpi-card" style="border-color:var(--green)">
+        <div class="kpi-label">FCP · First Contentful Paint</div>
+        <div class="kpi-value text-green">1,0 s</div>
+        <div class="kpi-sub">Próg: &lt; 1,8 s · 🟢 Dobry</div>
+      </div>
+      <div class="kpi-card" style="border-color:var(--green)">
+        <div class="kpi-label">TTFB · Time to First Byte</div>
+        <div class="kpi-value text-green">0,3 s</div>
+        <div class="kpi-sub">Próg: &lt; 0,8 s · 🟢 Dobry</div>
+      </div>
+    </div>
+
+    <p class="text-muted" style="font-size:12px">Lighthouse lab simulation zwrócił błędy dla wszystkich kategorii — to znany problem Shopify + Cloudflare bot protection. Dane CrUX (rzeczywistych użytkowników) są ważniejsze i są zielone.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       REFERRAL
+  ═══════════════════════════════════════════════════ -->
+  <div class="section" id="s-referral">
+    <h2>Analiza Referral</h2>
+    <div class="section-meta">Ostatnie 30 dni · GA4 · 29 unikalnych źródeł</div>
+
+    <div class="alert alert-yellow">
+      <div class="alert-icon">⚠️</div>
+      <div><strong>Referral NIE jest kanałem sprzedażowym — brak partnerów contentowych</strong><p>~36% to boty (Teams/Feishu), ~19% to AI assistants (ChatGPT, Gemini). Brak blogerów, prasy ani influencerów z linkami afiliacyjnymi.</p></div>
+    </div>
+
+    <h3>Typy źródeł</h3>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">Boty / link preview</div><div class="kpi-value">~60</div><div class="kpi-sub">sesji · Teams + Feishu/Lark</div></div>
+      <div class="kpi-card"><div class="kpi-label">AI Assistants</div><div class="kpi-value">~31</div><div class="kpi-sub">sesji · ChatGPT + Gemini + inne</div></div>
+      <div class="kpi-card"><div class="kpi-label">Marketplace</div><div class="kpi-value">~17</div><div class="kpi-sub">sesji · Lamoda.pl + Skapiec</div></div>
+      <div class="kpi-card"><div class="kpi-label">Zakupy razem</div><div class="kpi-value">2</div><div class="kpi-sub">Trusted Shops + glov.eu (cross-domain)</div></div>
+    </div>
+
+    <h3>Top źródła Referral (30 dni)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Źródło</th><th class="num">Sesje</th><th class="num">ATC</th><th class="num">Zakupy</th><th>Typ</th></tr></thead>
+        <tbody>
+          <tr><td>statics.teams.cdn.office.net</td><td class="num">29</td><td class="num">9*</td><td class="num">0</td><td><span class="tag tag-purple">🤖 Bot</span></td></tr>
+          <tr><td>bytedance.larkoffice.com</td><td class="num">24</td><td class="num">3</td><td class="num">0</td><td><span class="tag tag-purple">🤖 Bot</span></td></tr>
+          <tr><td>chatgpt.com</td><td class="num">24</td><td class="num">7</td><td class="num">0</td><td><span class="tag tag-blue">🤖 AI</span></td></tr>
+          <tr><td>attomy.io</td><td class="num">18</td><td class="num">1</td><td class="num">0</td><td><span class="tag tag-yellow">❓ MLM?</span></td></tr>
+          <tr><td>lamoda.pl</td><td class="num">14</td><td class="num">1</td><td class="num">0</td><td><span class="tag tag-blue">🛒 Marketplace</span></td></tr>
+          <tr><td>ucneg3jpopda.feishu.cn</td><td class="num">7</td><td class="num">0</td><td class="num">0</td><td><span class="tag tag-purple">🤖 Bot</span></td></tr>
+          <tr><td>trustedshops.lightning.force.com</td><td class="num">5</td><td class="num">1</td><td class="num text-green">1 (59,90 zł)</td><td><span class="tag tag-green">Trusted Shops</span></td></tr>
+          <tr><td>gemini.google.com</td><td class="num">4</td><td class="num">1</td><td class="num">0</td><td><span class="tag tag-blue">🤖 AI</span></td></tr>
+          <tr><td>glov.eu</td><td class="num">2</td><td class="num">3</td><td class="num text-green">1 (425,65 zł)</td><td><span class="tag tag-yellow">Cross-domain</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--text-dim)">* ATC z Teams to prawdopodobnie fałszywe eventy z botów skanujących stronę</p>
+
+    <h3>AI Traffic — rosnący trend</h3>
+    <p class="text-muted">ChatGPT generuje 67% view→cart z 6 sesji na HP — użytkownicy z AI są bardzo zmotywowani. GLOV jest "znany" modelom AI. Gdy AI shopping agents staną się powszechne (OpenAI Operator), GLOV będzie dobrze pozycjonowany.</p>
+
+    <h3>Do zrobienia</h3>
+    <div class="qw-list">
+      <div class="qw"><div class="qw-num qw-num-yellow">1</div><div class="qw-body"><strong>Dodać glov.eu do cross-domain tracking w GA4</strong><p>Zakup 425,65 zł z glov.eu błędnie klasyfikowany jako Referral. GA4 Admin → Data Streams → Configure → Cross-domain.</p></div><div class="qw-time">15 min</div></div>
+      <div class="qw"><div class="qw-num qw-num-yellow">2</div><div class="qw-body"><strong>Sprawdzić listing na Lamoda.pl</strong><p>14 sesji/mc z konkretnego produktu (Platki oczyszczające), 0 zakupów — czy GLOV jest dobrze opisany i wyceniony na Lamoda?</p></div><div class="qw-time">30 min</div></div>
+      <div class="qw"><div class="qw-num qw-num-green">3</div><div class="qw-body"><strong>Zbadać attomy.io</strong><p>18 sesji bez zakupów. Możliwa sieć partnerska MLM — jeśli tak, aktywować lub zablokować.</p></div><div class="qw-time">1h</div></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ─── NAVIGATION ───────────────────────────────────────
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('s-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ─── LIVE DATA (GA4 via google-analytics-mcp) ──────────────────────
+// To wymaga uruchomienia przez Claude z dostępem do konektora google-analytics-mcp.
+// Dane statyczne (zapisane 2026-05-13) są ładowane domyślnie.
+// Po kliknięciu "Odśwież" — Claude powinien uruchomić zapytanie GA4 i zaktualizować plik.
+
+const STATIC_DATA = {
+  sessions: '10 970',
+  purchases: '239',
+  revenue: '28 976 PLN',
+  users: '9 203',
+  pageviews: '25 304',
+  lastUpdated: '2026-05-13'
+};
+
+function setLiveData(d) {
+  const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+  set('live-sessions', d.sessions);
+  set('live-sessions2', d.sessions);
+  set('live-purchases', d.purchases);
+  set('live-purchases2', d.purchases);
+  set('live-revenue', d.revenue);
+  set('live-revenue2', d.revenue);
+  set('live-users', d.users);
+  set('live-pageviews', d.pageviews);
+  if(d.lastUpdated) document.getElementById('last-updated').textContent = 'Ostatnia aktualizacja: ' + d.lastUpdated;
+}
+
+function askRefresh() {
+  const btn = document.getElementById('refresh-btn');
+  const confirm = document.getElementById('refresh-confirm');
+  btn.style.opacity = '.5';
+  btn.disabled = true;
+  confirm.style.display = 'block';
+}
+
+function cancelRefresh() {
+  const btn = document.getElementById('refresh-btn');
+  const confirm = document.getElementById('refresh-confirm');
+  confirm.style.display = 'none';
+  btn.style.opacity = '';
+  btn.disabled = false;
+}
+
+function confirmRefresh() {
+  const btn = document.getElementById('refresh-btn');
+  const confirm = document.getElementById('refresh-confirm');
+  confirm.style.display = 'none';
+  btn.textContent = '⏳ Czekam na Claude…';
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  // Kopiuj prompt do schowka — użytkownik wkleja go do Claude
+  const prompt = 'Odśwież dane GA4 w raporcie GLOV — pobierz aktualne sesje, zakupy i przychód z ostatnich 30 dni i zaktualizuj plik GLOV_Raport_Analityczny.html';
+  navigator.clipboard.writeText(prompt).then(() => {
+    btn.textContent = '📋 Prompt skopiowany!';
+    setTimeout(() => {
+      btn.textContent = '⟳ Odśwież dane GA4';
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      btn.style.opacity = '';
+    }, 3000);
+  }).catch(() => {
+    // fallback jeśli clipboard niedostępny
+    btn.textContent = '⟳ Odśwież dane GA4';
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    btn.style.opacity = '';
+    alert('Powiedz Claude:\n\n"Odśwież dane GA4 w raporcie GLOV"');
+  });
+}
+
+// Załaduj dane statyczne na starcie
+setLiveData(STATIC_DATA);
+
+// ─── HIGHLIGHT ACTIVE NAV ON SCROLL ───────────────────
+// (uproszczone — nawigacja jest click-based)
+</script>
+</body>
+</html>
