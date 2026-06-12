@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — HP Developer View | 2026-05-24</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface2: #1e2333;
+    --border: #2a2f42;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,.1);
+    --amber: #f59e0b;
+    --amber-bg: rgba(245,158,11,.1);
+    --red: #ef4444;
+    --red-bg: rgba(239,68,68,.1);
+    --blue: #3b82f6;
+    --blue-bg: rgba(59,130,246,.1);
+    --purple: #a78bfa;
+    --purple-bg: rgba(167,139,250,.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-size: 13px; line-height: 1.6; }
+
+  /* HEADER */
+  .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 28px; display: flex; align-items: center; gap: 16px; }
+  .header-logo { font-size: 18px; font-weight: 700; color: var(--text); }
+  .header-meta { color: var(--muted); font-size: 12px; }
+  .header-badge { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue); border-radius: 4px; padding: 2px 10px; font-size: 11px; font-weight: 600; margin-left: auto; }
+
+  /* TABS */
+  .tabs { background: var(--surface); border-bottom: 1px solid var(--border); display: flex; padding: 0 28px; gap: 4px; overflow-x: auto; }
+  .tab { padding: 10px 16px; font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all .15s; }
+  .tab.active { color: var(--text); border-bottom-color: var(--blue); }
+  .tab:hover:not(.active) { color: var(--text); }
+
+  /* CONTENT */
+  .content { padding: 24px 28px; max-width: 1280px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* BLOCK */
+  .block { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 16px; overflow: hidden; }
+  .block-title { padding: 12px 16px; font-weight: 600; font-size: 13px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .block-body { padding: 16px; }
+  .block.bg-warm { background: var(--surface2); }
+
+  /* BADGE / COUNT */
+  .count-badge { background: var(--surface2); color: var(--muted); border-radius: 4px; padding: 1px 8px; font-size: 11px; font-weight: 600; margin-left: auto; }
+  .badge { border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
+  .badge-green { background: var(--green-bg); color: var(--green); }
+  .badge-amber { background: var(--amber-bg); color: var(--amber); }
+  .badge-red { background: var(--red-bg); color: var(--red); }
+  .badge-blue { background: var(--blue-bg); color: var(--blue); }
+  .badge-purple { background: var(--purple-bg); color: var(--purple); }
+  .badge-grey { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; padding: 8px 10px; color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); }
+  td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,.02); }
+  .td-muted { color: var(--muted); }
+  .td-mono { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--blue); }
+  .td-warn { background: var(--red-bg) !important; }
+
+  /* GAP CARD */
+  .gap-card { border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; margin-bottom: 10px; }
+  .gap-card.critical { border-left: 3px solid var(--red); }
+  .gap-card.important { border-left: 3px solid var(--amber); }
+  .gap-card.info { border-left: 3px solid var(--blue); }
+  .gap-title { font-weight: 600; font-size: 13px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .gap-body { color: var(--muted); font-size: 12px; line-height: 1.7; }
+  .gap-selector { font-family: monospace; font-size: 11px; color: var(--blue); background: var(--blue-bg); padding: 2px 6px; border-radius: 3px; }
+
+  /* KPI ROW */
+  .kpi-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .kpi-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 12px 16px; min-width: 120px; flex: 1; }
+  .kpi-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+  .kpi-value { font-size: 22px; font-weight: 700; margin-top: 2px; }
+  .kpi-value.red { color: var(--red); }
+  .kpi-value.amber { color: var(--amber); }
+  .kpi-value.green { color: var(--green); }
+  .kpi-value.blue { color: var(--blue); }
+
+  /* TOOL GRID */
+  .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+  .tool-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; }
+  .tool-item.confirmed { border-left: 2px solid var(--green); }
+  .tool-item.absent { opacity: .5; }
+  .tool-item.warning { border-left: 2px solid var(--red); }
+  .tool-name { font-weight: 600; font-size: 12px; }
+  .tool-cat { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .tool-signal { font-family: monospace; font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+  /* NAV TREE */
+  .nav-tree { font-size: 12px; }
+  .nav-item { padding: 6px 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .nav-item:last-child { border-bottom: none; }
+  .nav-num { color: var(--muted); font-size: 11px; width: 20px; }
+  .nav-url { font-family: monospace; font-size: 11px; color: var(--blue); margin-left: auto; }
+  .nav-sub { padding-left: 30px; background: var(--surface2); }
+
+  /* SECTION DOM */
+  .dom-row { display: flex; gap: 8px; padding: 7px 10px; border-bottom: 1px solid var(--border); font-size: 12px; align-items: flex-start; }
+  .dom-row:last-child { border-bottom: none; }
+  .dom-pos { color: var(--muted); width: 24px; flex-shrink: 0; font-size: 11px; padding-top: 1px; }
+  .dom-type { font-family: monospace; color: var(--blue); width: 160px; flex-shrink: 0; }
+  .dom-class { font-family: monospace; color: var(--muted); font-size: 11px; flex: 1; }
+  .dom-label { color: var(--text); }
+
+  code { font-family: 'JetBrains Mono', monospace; font-size: 11px; background: var(--surface2); padding: 1px 5px; border-radius: 3px; color: var(--blue); }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+  .section-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px dashed var(--border); }
+
+  /* LIGHT THEME */
+  [data-theme="light"] {
+    --bg: #f4f6fb;
+    --surface: #ffffff;
+    --surface2: #edf0f8;
+    --border: #d8ddf0;
+    --text: #1a1d2e;
+    --muted: #5c6280;
+    --green: #16a34a;
+    --green-bg: rgba(22,163,74,.12);
+    --amber: #b45309;
+    --amber-bg: rgba(180,83,9,.12);
+    --red: #dc2626;
+    --red-bg: rgba(220,38,38,.12);
+    --blue: #3b6bdc;
+    --blue-bg: rgba(59,107,220,.12);
+    --purple: #7c3aed;
+    --purple-bg: rgba(124,58,237,.12);
+  }
+  [data-theme="light"] .td-warn { background: rgba(220,38,38,.08) !important; }
+
+  .theme-btn { background: none; border: 1px solid var(--border); color: var(--muted); padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all .15s; margin-left: auto; }
+  .theme-btn:hover { color: var(--text); border-color: var(--muted); }
+
+  /* VISUAL MAPPING */
+  .vm-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .vm-col { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .vm-col-header { padding: 10px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .vm-col-header.before { color: var(--muted); }
+  .vm-col-header.after { color: var(--blue); }
+  .vm-img-wrap { position: relative; background: #000; }
+  .vm-img-wrap img { width: 100%; display: block; }
+  .vm-dot { position: absolute; transform: translate(-50%,-50%); width: 20px; height: 20px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,.85); box-shadow: 0 2px 6px rgba(0,0,0,.7); pointer-events: none; }
+  .vm-dot.new { background: var(--amber); color: #000; border-color: rgba(255,255,255,.9); }
+  .vm-dot.changed { background: var(--green); }
+  .vm-legend { padding: 10px 0; }
+  .vm-row { display: flex; gap: 10px; align-items: flex-start; padding: 6px 12px; border-bottom: 1px solid var(--border); font-size: 11px; }
+  .vm-row:last-child { border-bottom: none; }
+  .vm-num { flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 9px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .vm-num.new { background: var(--amber); color: #000; }
+  .vm-num.changed { background: var(--green); }
+  .vm-text { flex: 1; color: var(--text); line-height: 1.5; }
+  .vm-text .sub { color: var(--muted); font-size: 10px; }
+  .vm-legend-key { display: flex; gap: 16px; padding: 10px 14px; font-size: 11px; border-top: 1px solid var(--border); background: var(--surface2); }
+  .vm-legend-key span { display: flex; align-items: center; gap: 5px; color: var(--muted); }
+  .dot-key { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+</style>
+<script>
+(function(){
+  var s = localStorage.getItem('devview-theme');
+  if (s === 'light') document.documentElement.setAttribute('data-theme','light');
+})();
+function toggleTheme(){
+  var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('devview-theme','dark');
+    document.getElementById('theme-btn').textContent = '☀️ Jasny';
+  } else {
+    document.documentElement.setAttribute('data-theme','light');
+    localStorage.setItem('devview-theme','light');
+    document.getElementById('theme-btn').textContent = '🌙 Ciemny';
+  }
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  document.getElementById('theme-btn').textContent = isLight ? '🌙 Ciemny' : '☀️ Jasny';
+});
+</script>
+</head>
+<body><a href="GLOV_HUB.html" style="position:fixed;top:12px;left:12px;z-index:99999;background:#7c5cff;color:#fff;text-decoration:none;padding:7px 13px;border-radius:8px;font:600 12px sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.3)">← HUB</a>
+
+<div class="header">
+  <div>
+    <div class="header-logo">GLOV — HP Developer View</div>
+    <div class="header-meta">glov.co · Shopify OS 2.0 · Theme Ritual 37 · Scan 2026-05-24</div>
+  </div>
+  <div class="header-badge">DEVELOPER VIEW</div>
+  <button id="theme-btn" class="theme-btn" onclick="toggleTheme()">☀️ Jasny</button>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('overview')">Przegląd</div>
+  <div class="tab" onclick="showTab('dom')">Struktura DOM</div>
+  <div class="tab" onclick="showTab('techstack')">Tech Stack</div>
+  <div class="tab" onclick="showTab('nav')">Nawigacja</div>
+  <div class="tab" onclick="showTab('gaps')">Gap Analysis</div>
+  <div class="tab" onclick="showTab('visual-przed')">Visual — PRZED</div>
+  <div class="tab" onclick="showTab('visual-po')">Visual — PO</div>
+  <div class="tab" onclick="showTab('ref-mapping')">Mapping — Referencja</div>
+  <div class="tab" onclick="showTab('new-mapping')">Mapping — Zaktualizowany</div>
+</div>
+
+<div class="content">
+
+<!-- ═══════════ TAB: OVERVIEW ═══════════ -->
+<div id="tab-overview" class="tab-panel active">
+
+  <div class="kpi-row">
+    <div class="kpi-box">
+      <div class="kpi-label">Sekcje DOM</div>
+      <div class="kpi-value blue">16</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-label">Narzędzia wykryte</div>
+      <div class="kpi-value green">13</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-label">Skrypty zewnętrzne</div>
+      <div class="kpi-value blue">17</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-label">Luki w mappingu</div>
+      <div class="kpi-value amber">10</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-label">Duplikaty analytics</div>
+      <div class="kpi-value red">3</div>
+    </div>
+  </div>
+
+  <div class="block bg-warm">
+    <div class="block-title">Szybki przegląd — co wykryto na HP</div>
+    <div class="block-body">
+      <table>
+        <thead><tr><th>Obszar</th><th>Wykryto</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Platforma</td><td>Shopify OS 2.0 · Theme Ritual 37 · <code>window.Shopify</code></td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td>Email / Chat</td><td>GetResponse (chat + analytics) — NIE Klaviyo</td><td><span class="badge badge-amber">uwaga</span></td></tr>
+          <tr><td>Reviews</td><td>Judge.me (preview badges) — NIE Yotpo</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td>Cookie consent</td><td>Cookiebot (2 instancje!)</td><td><span class="badge badge-red">duplikat</span></td></tr>
+          <tr><td>Heatmaps</td><td>Hotjar × 2 (ID: 5026693 + 2026668) + Clarity × 2</td><td><span class="badge badge-red">duplikat</span></td></tr>
+          <tr><td>Analytics</td><td>GA4 (G-R1PCKKHLGV) + GTM (GTM-PQ9JFT2) + Display 360 + Google Ads</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td>Trust badge</td><td>Trusted Shops (Shadow DOM — niewidoczny przez CSS)</td><td><span class="badge badge-amber">shadow dom</span></td></tr>
+          <tr><td>Wishlist</td><td>Growave (floating tab — nie window.Growave)</td><td><span class="badge badge-amber">wykryty pośrednio</span></td></tr>
+          <tr><td>Karuzele</td><td>Colibrius Essential Products Slider (Glide.js)</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td>UGC wideo</td><td>Tolstoy carousel (CSS Modules hash)</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td>Instagram feed</td><td>SSW / NF Cube Instafeed</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td>Subskrypcje</td><td>Bold Subscriptions</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td>Post-purchase upsell</td><td>ReConvert (globalnie załadowany)</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td>Reklamy PL</td><td>Onet DlApi (RTB display)</td><td><span class="badge badge-blue">nowe</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">⚠️ Krytyczne znaleziska</div>
+    <div class="block-body">
+      <div class="gap-card critical" style="margin-bottom:8px">
+        <div class="gap-title"><span class="badge badge-red">DUPLIKAT</span> Hotjar × 2 + Clarity × 2 + Cookiebot × 2</div>
+        <div class="gap-body">Trzy narzędzia analytics załadowane dwukrotnie. Efekt: zdublowane eventy heatmap, potencjalnie zawyżone dane sesji, zbędny load page. Hotjar IDs: <code>5026693</code> i <code>2026668</code>. Clarity: <code>scripts.clarity.ms</code> + <code>www.clarity.ms/tag/wu1nvuvh9y</code>.</div>
+      </div>
+      <div class="gap-card critical">
+        <div class="gap-title"><span class="badge badge-amber">MAPPING GAP</span> Countdown timer, Sliderule, Colibrius selector, Growave tab</div>
+        <div class="gap-body">4 elementy na HP nieobecne lub źle opisane w obecnym mappingu. Szczegóły w zakładce Gap Analysis.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: DOM ═══════════ -->
+<div id="tab-dom" class="tab-panel">
+
+  <div class="block">
+    <div class="block-title">Scan A — sekcje HTML (data-section-type) <span class="count-badge">16 pozycji</span></div>
+    <div class="block-body" style="padding:0">
+      <div class="dom-row" style="background:var(--surface2); font-size:11px; color:var(--muted); font-weight:600;">
+        <div class="dom-pos">#</div>
+        <div class="dom-type">data-section-type</div>
+        <div class="dom-class">CSS firstChild</div>
+        <div class="dom-label" style="min-width:180px">Opis</div>
+      </div>
+      <div class="dom-row"><div class="dom-pos">1</div><div class="dom-type">announcement</div><div class="dom-class">DIV.announcement__wrapper</div><div class="dom-label">Promo bar z ticker + <span class="badge badge-amber">countdown timer</span></div></div>
+      <div class="dom-row"><div class="dom-pos">2</div><div class="dom-type">header</div><div class="dom-class">HEADER.theme__header</div><div class="dom-label">Sticky header</div></div>
+      <div class="dom-row"><div class="dom-pos">3</div><div class="dom-type">slideshow</div><div class="dom-class">DIV.slideshow__wrapper</div><div class="dom-label">Hero carousel (Flickity)</div></div>
+      <div class="dom-row"><div class="dom-pos">4</div><div class="dom-type">product-listing</div><div class="dom-class">DIV.product-listing</div><div class="dom-label">Bestsellery — <span class="badge badge-blue">Colibrius carousel</span></div></div>
+      <div class="dom-row"><div class="dom-pos">5</div><div class="dom-type">product-listing</div><div class="dom-class">DIV.product-listing</div><div class="dom-label">Nowości — <span class="badge badge-blue">Colibrius carousel</span></div></div>
+      <div class="dom-row"><div class="dom-pos">6</div><div class="dom-type">section (brak)</div><div class="dom-class">undefined (firstChild)</div><div class="dom-label"><span class="badge badge-purple">Tolstoy Spotlight</span> — ładowany asynchronicznie</div></div>
+      <div class="dom-row"><div class="dom-pos">7</div><div class="dom-type">section (brak)</div><div class="dom-class">SECTION.app-wrapper</div><div class="dom-label"><span class="badge badge-purple">SSW Instagram feed</span></div></div>
+      <div class="dom-row"><div class="dom-pos">8</div><div class="dom-type">section (brak)</div><div class="dom-class">DIV.homepage-collection-grid</div><div class="dom-label">Oferty specjalne (grid kolekcji)</div></div>
+      <div class="dom-row"><div class="dom-pos">9</div><div class="dom-type">section (brak)</div><div class="dom-class">DIV.newsletter</div><div class="dom-label">Formularz newsletter</div></div>
+      <div class="dom-row"><div class="dom-pos">10</div><div class="dom-type">section (brak)</div><div class="dom-class">SECTION.app-wrapper</div><div class="dom-label">app-wrapper #2 (SoMe — GetResponse?)</div></div>
+      <div class="dom-row"><div class="dom-pos">11</div><div class="dom-type">section (brak)</div><div class="dom-class">DIV.featured-reviews</div><div class="dom-label">Recenzje — <span class="badge badge-blue">Judge.me</span></div></div>
+      <div class="dom-row"><div class="dom-pos">12</div><div class="dom-type">section (brak)</div><div class="dom-class">DIV.homepage-logos</div><div class="dom-label">Mówią o nas (loga mediów)</div></div>
+      <div class="dom-row"><div class="dom-pos">13</div><div class="dom-type">custom-content</div><div class="dom-class">DIV.brick__block</div><div class="dom-label">Nasza misja (double brick)</div></div>
+      <div class="dom-row"><div class="dom-pos">14</div><div class="dom-type">double-custom</div><div class="dom-class">DIV.container</div><div class="dom-label">Recenzja miesiąca</div></div>
+      <div class="dom-row"><div class="dom-pos">15</div><div class="dom-type">custom-content</div><div class="dom-class">DIV.brick__block</div><div class="dom-label">Blok custom #2 (double)</div></div>
+      <div class="dom-row"><div class="dom-pos">16</div><div class="dom-type">footer</div><div class="dom-class">DIV.footer-logo-wrapper</div><div class="dom-label">Stopka</div></div>
+    </div>
+  </div>
+
+  <div class="block bg-warm">
+    <div class="block-title">Scan B — elementy semantyczne (top wyniki)</div>
+    <div class="block-body" style="padding:0">
+      <table>
+        <thead><tr><th>Selektor</th><th>Count</th><th>firstClass</th><th>Interpretacja</th></tr></thead>
+        <tbody>
+          <tr><td><code>[class*="hero"]</code></td><td>82</td><td class="td-mono">hero__content__wrapper align--middle-center</td><td>Hero banner + zagnieżdżone elementy</td></tr>
+          <tr><td><code>[class*="carousel"]</code></td><td>157</td><td class="td-mono">essential_product_slider_glide glide--swipeable</td><td><span class="badge badge-blue">Colibrius Essential</span> — nie natywny Shopify</td></tr>
+          <tr><td><code>[class*="slider"]</code></td><td>99</td><td class="td-mono">sliderule__wrapper</td><td><span class="badge badge-amber">sliderule</span> = scrollujące linki kategorii (nie slider produktów!)</td></tr>
+          <tr><td><code>[class*="video"]</code></td><td>14</td><td class="td-mono">_spotlightVideosContainer_zvvi2_235 ...</td><td><span class="badge badge-purple">Tolstoy</span> — CSS Modules hash (niestabilny)</td></tr>
+          <tr><td><code>[class*="instagram"]</code></td><td>39</td><td class="td-mono">ssw-instagram-content</td><td><span class="badge badge-purple">SSW / NF Cube Instafeed</span></td></tr>
+          <tr><td><code>[class*="review"]</code></td><td>33</td><td class="td-mono">jdgm-widget jdgm-preview-badge</td><td>Judge.me preview badges na kartach produktów</td></tr>
+          <tr><td><code>[class*="announcement"]</code></td><td>10</td><td class="td-mono">announcement__wrapper</td><td>Promo bar (wrapper, bar, message, ticker)</td></tr>
+          <tr><td><code>[class*="ticker"]</code></td><td>1</td><td class="td-mono">announcement__text ticker__comparitor</td><td>Scrollujący ticker w announcement bar</td></tr>
+          <tr><td><code>[class*="collection"]</code></td><td>51</td><td class="td-mono">fade-in collection__image__top lazyloaded</td><td>Kafelki kolekcji w grid ofert specjalnych</td></tr>
+          <tr><td><code>[class*="badge"]</code></td><td>97</td><td class="td-mono">slideshow__wrapper flickity-badge-dots</td><td>Flickity dots badges w hero slideshow</td></tr>
+          <tr><td><code>[class*="widget"]</code></td><td>16</td><td class="td-mono">jdgm-widget jdgm-preview-badge</td><td>Judge.me widżety</td></tr>
+          <tr><td><code>[class*="newsletter"]</code></td><td>8</td><td class="td-mono">newsletter</td><td>Formularz newsletter</td></tr>
+          <tr><td><code>[class*="feature"]</code></td><td>14</td><td class="td-mono">featured-reviews</td><td>Sekcja recenzji Judge.me</td></tr>
+          <tr><td><code>[class*="social"]</code></td><td>1</td><td class="td-mono">footer-social social-icons grid__item</td><td>Social icons w stopce</td></tr>
+          <tr><td class="td-muted"><code>banner, promo, marquee, usp, swiper, testimonial, trust, popup, chat, sticky</code></td><td class="td-muted">0</td><td class="td-muted">—</td><td class="td-muted">Nie wykryto</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: TECH STACK ═══════════ -->
+<div id="tab-techstack" class="tab-panel">
+
+  <div class="kpi-row">
+    <div class="kpi-box"><div class="kpi-label">Wykryte narzędzia</div><div class="kpi-value green">13</div></div>
+    <div class="kpi-box"><div class="kpi-label">Nieobecne (sprawdzone)</div><div class="kpi-value" style="color:var(--muted)">4</div></div>
+    <div class="kpi-box"><div class="kpi-label">Duplikaty (błąd konfiguracji)</div><div class="kpi-value red">3</div></div>
+    <div class="kpi-box"><div class="kpi-label">Nowe (nie było w mappingu)</div><div class="kpi-value amber">3</div></div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Wykryte narzędzia</div>
+    <div class="block-body">
+      <div class="tool-grid">
+        <div class="tool-item confirmed"><div class="tool-name">GA4</div><div class="tool-cat">Analytics</div><div class="tool-signal">window.gtag · G-R1PCKKHLGV</div></div>
+        <div class="tool-item warning"><div class="tool-name">Hotjar <span class="badge badge-red">×2</span></div><div class="tool-cat">Heatmaps</div><div class="tool-signal">window.hj · ID 5026693 + 2026668</div></div>
+        <div class="tool-item warning"><div class="tool-name">Microsoft Clarity <span class="badge badge-red">×2</span></div><div class="tool-cat">Session recording</div><div class="tool-signal">window.clarity · scripts.clarity.ms + www.clarity.ms</div></div>
+        <div class="tool-item warning"><div class="tool-name">Cookiebot <span class="badge badge-red">×2</span></div><div class="tool-cat">Cookie consent</div><div class="tool-signal">window.Cookiebot · direct + via GTM</div></div>
+        <div class="tool-item confirmed"><div class="tool-name">Google Tag Manager</div><div class="tool-cat">Tag management</div><div class="tool-signal">dataLayer · GTM-PQ9JFT2</div></div>
+        <div class="tool-item confirmed"><div class="tool-name">Judge.me</div><div class="tool-cat">Reviews</div><div class="tool-signal">[class*="jdgm"] · preview badges</div></div>
+        <div class="tool-item confirmed"><div class="tool-name">Tolstoy</div><div class="tool-cat">UGC video</div><div class="tool-signal">.tolstoy-carousel · CSS Modules hash</div></div>
+        <div class="tool-item confirmed"><div class="tool-name">Colibrius</div><div class="tool-cat">Product slider / bundle</div><div class="tool-signal">essential_product_slider_glide · cdn-bundler.nice-team.net</div></div>
+        <div class="tool-item confirmed"><div class="tool-name">SSW / NF Cube Instafeed</div><div class="tool-cat">Social feed</div><div class="tool-signal">[class*="ssw-instagram"] · cdn.nfcube.com</div></div>
+        <div class="tool-item confirmed"><div class="tool-name">GetResponse</div><div class="tool-cat">Email + Chat</div><div class="tool-signal">i.gr.chat + ga.getresponse.com</div></div>
+        <div class="tool-item confirmed"><div class="tool-name">FastBundle</div><div class="tool-cat">Product bundles</div><div class="tool-signal">api.fastbundle.co (2 pliki)</div></div>
+        <div class="tool-item confirmed"><div class="tool-name">ReConvert</div><div class="tool-cat">Post-purchase upsell</div><div class="tool-signal">reconvert-cdn.com (global load)</div></div>
+        <div class="tool-item confirmed"><div class="tool-name">Bold Subscriptions</div><div class="tool-cat">Subscriptions</div><div class="tool-signal">sub.boldapps.net</div></div>
+        <div class="tool-item confirmed"><div class="tool-name">Trusted Shops</div><div class="tool-cat">Trust badge</div><div class="tool-signal">script: tseish-app.connect.trustedshops.com · Shadow DOM</div></div>
+        <div class="tool-item confirmed"><div class="tool-name">Growave</div><div class="tool-cat">Wishlist (floating tab)</div><div class="tool-signal">button[aria-label*="Growave"] · NIE window.Growave</div></div>
+        <div class="tool-item confirmed"><div class="tool-name">Onet DlApi</div><div class="tool-cat">PL Ad network (RTB)</div><div class="tool-signal">lib.onet.pl · <span class="badge badge-blue">nowe</span></div></div>
+        <div class="tool-item absent"><div class="tool-name">Klaviyo</div><div class="tool-cat">Email (NIE wykryto)</div><div class="tool-signal">brak window._learnq → GetResponse zamiast</div></div>
+        <div class="tool-item absent"><div class="tool-name">Yotpo</div><div class="tool-cat">Reviews (NIE wykryto)</div><div class="tool-signal">brak → Judge.me zamiast</div></div>
+        <div class="tool-item absent"><div class="tool-name">Rebuy / Nosto</div><div class="tool-cat">Reco engine (NIE)</div><div class="tool-signal">brak → Colibrius zamiast</div></div>
+        <div class="tool-item absent"><div class="tool-name">Searchanise / Boost</div><div class="tool-cat">Search (NIE)</div><div class="tool-signal">brak → Shopify native search</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block bg-warm">
+    <div class="block-title">Scan C — załadowane skrypty zewnętrzne <span class="count-badge">17 dostawców</span></div>
+    <div class="block-body" style="padding:0">
+      <table>
+        <thead><tr><th>Narzędzie / Dostawca</th><th>URL fragment</th><th>Cel</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Google APIs</td><td class="td-mono">apis.google.com/_/scs/abc-static</td><td>Google identity/login</td><td></td></tr>
+          <tr class="td-warn"><td><b>Cookiebot</b></td><td class="td-mono">consentcdn.cookiebot.com + consent.cookiebot.com</td><td>Cookie consent</td><td><span class="badge badge-red">2 skrypty!</span></td></tr>
+          <tr><td>Trusted Shops</td><td class="td-mono">tseish-app.connect.trustedshops.com/esc.js</td><td>Badge zaufania</td><td></td></tr>
+          <tr><td>Colibrius</td><td class="td-mono">cdn-bundler.nice-team.net + d26ky332...cloudfront.net</td><td>Product slider / bundle</td><td></td></tr>
+          <tr><td>NF Cube Instafeed</td><td class="td-mono">cdn.nfcube.com/instafeed-*.js</td><td>Instagram feed embed</td><td></td></tr>
+          <tr><td>FastBundle</td><td class="td-mono">api.fastbundle.co/scripts (×2)</td><td>Zestawy/bundle</td><td></td></tr>
+          <tr><td>ReConvert</td><td class="td-mono">reconvert-cdn.com/assets/js/store_reconvert_node.js</td><td>Post-purchase upsell</td><td></td></tr>
+          <tr class="td-warn"><td><b>Microsoft Clarity</b></td><td class="td-mono">scripts.clarity.ms/0.8.64/clarity.js + www.clarity.ms/tag/wu1nvuvh9y</td><td>Session recording</td><td><span class="badge badge-red">2 instancje!</span></td></tr>
+          <tr><td>Google Tag Manager</td><td class="td-mono">googletagmanager.com/gtm.js?id=GTM-PQ9JFT2</td><td>Tag manager</td><td></td></tr>
+          <tr><td>GA4 + Google Ads</td><td class="td-mono">gtag/js?id=G-R1PCKKHLGV · DC-13431446 · AW-985371563</td><td>GA4 + Display360 + Ads</td><td></td></tr>
+          <tr><td>Cookiebot (GTM)</td><td class="td-mono">consent.cookiebot.com/uc.js?...&implementation=gtm</td><td>Cookiebot via GTM</td><td></td></tr>
+          <tr><td>GetResponse Chat</td><td class="td-mono">i.gr.chat/embedded_chat.js</td><td>Live chat</td><td></td></tr>
+          <tr><td>GetResponse GA</td><td class="td-mono">ga.getresponse.com/script/1e15db8a.../ga.js</td><td>GetResponse analytics</td><td></td></tr>
+          <tr><td><b>Onet DlApi</b></td><td class="td-mono">lib.onet.pl/s.csr/build/dlApi/minit.boot.min.js</td><td>PL RTB/display</td><td><span class="badge badge-blue">nowe w mappingu</span></td></tr>
+          <tr class="td-warn"><td><b>Hotjar</b></td><td class="td-mono">static.hotjar.com/c/hotjar-5026693.js + hotjar-2026668.js</td><td>Heatmaps</td><td><span class="badge badge-red">2 instancje!</span></td></tr>
+          <tr><td>Bold Subscriptions</td><td class="td-mono">sub.boldapps.net/static/customer_portal.*.js</td><td>Subskrypcje produktowe</td><td></td></tr>
+          <tr><td>Shopify theme assets</td><td class="td-mono">lazysizes.js, vendor.js, theme.js, rituals.js</td><td>Motyw (Theme 37)</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: NAWIGACJA ═══════════ -->
+<div id="tab-nav" class="tab-panel">
+
+  <div class="block">
+    <div class="block-title">Top nav — level 1 (navlink--toplevel) <span class="count-badge">9 pozycji</span></div>
+    <div class="block-body" style="padding:0">
+      <div class="nav-tree">
+        <div class="nav-item"><div class="nav-num">1</div><div>Rękawiczka GLOV</div><div class="nav-url">/collections/rekawice-do-demakijazu</div></div>
+        <div class="nav-item"><div class="nav-num">2</div><div>Promienna cera</div><div class="nav-url">/collections/produkty-do-pielegnacji-twarzy</div></div>
+        <div class="nav-item"><div class="nav-num">3</div><div>Piękne włosy</div><div class="nav-url">/collections/produkty-do-pielegnacji-wlosow</div></div>
+        <div class="nav-item"><div class="nav-num">4</div><div>Gładkie ciało</div><div class="nav-url">/collections/produkty-do-pielegnacji-ciala</div></div>
+        <div class="nav-item"><div class="nav-num">5</div><div><b>ZESTAWY PREZENTOWE</b></div><div class="nav-url">/collections/zestawy</div></div>
+        <div class="nav-item"><div class="nav-num">6</div><div>Bestsellery</div><div class="nav-url">/collections/sklep</div></div>
+        <div class="nav-item"><div class="nav-num">7</div><div>Lakiery COOLNAILS</div><div class="nav-url">/collections/coolnails</div></div>
+        <div class="nav-item"><div class="nav-num">8</div><div>GLOV LED THERAPY</div><div class="nav-url">/pages/terapia-swiatlem-led</div></div>
+        <div class="nav-item"><div class="nav-num">9</div><div><b>RUTYNY GLOV -25%</b> <span class="badge badge-blue">dropdown</span></div><div class="nav-url">/pages/rutyna-coolnails</div></div>
+        <div class="nav-item nav-sub"><div class="nav-num">↳</div><div>Zdrowy manicure COOLNAILS</div><div class="nav-url">/pages/rutyna-coolnails</div></div>
+        <div class="nav-item nav-sub"><div class="nav-num">↳</div><div>Wieczorna rutyna z GLOV</div><div class="nav-url">/pages/rutyna-wieczorna-pielegnacja-z-glov</div></div>
+        <div class="nav-item nav-sub"><div class="nav-num">↳</div><div>Gładkie ciało i stopy</div><div class="nav-url">/pages/rutyna-gladkie-cialo</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block bg-warm">
+    <div class="block-title">Subnavigation (collections browse / sliderule)</div>
+    <div class="block-body">
+      <p style="color:var(--muted); font-size:12px; margin-bottom:8px">Poziomy scroll linków kategorii — klasa <code>.sliderule__wrapper</code> → <code>.sliderow</code> → <code>a.sliderow__title</code></p>
+      <div style="display:flex; flex-wrap:wrap; gap:6px;">
+        <span class="badge badge-grey">Kultowa Rękawiczka GLOV</span>
+        <span class="badge badge-grey">Pumeksy depilatory nano szkło</span>
+        <span class="badge badge-grey">Led Therapy</span>
+        <span class="badge badge-grey">Lakiery COOLNAILS</span>
+        <span class="badge badge-grey">Silikon Bath &amp; Shower</span>
+        <span class="badge badge-grey">Wałki COOLCURL</span>
+        <span class="badge badge-grey">Szczotki do włosów</span>
+        <span class="badge badge-grey">Turbany do suszenia</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Footer nav</div>
+    <div class="block-body" style="padding:0">
+      <div class="nav-tree">
+        <div class="nav-item"><div class="nav-num">–</div><div>Blog</div><div class="nav-url">/blogs/pl</div></div>
+        <div class="nav-item"><div class="nav-num">–</div><div>GLOV Club</div><div class="nav-url">/pages/glov-club-1</div></div>
+        <div class="nav-item"><div class="nav-num">–</div><div>Kontakt</div><div class="nav-url">/pages/contact</div></div>
+        <div class="nav-item"><div class="nav-num">–</div><div>O nas</div><div class="nav-url">/pages/o-nas</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block bg-warm">
+    <div class="block-title">Niestandardowe linki — rekomendator inline</div>
+    <div class="block-body">
+      <p style="color:var(--muted); font-size:12px">4× <code>href="javascript:void(0);"</code> — przyciski "Dobierz" w sekcjach Bestsellery/Nowości. Trigger rekomendatora Colibrius inline (nie standardowy link URL).</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: GAP ANALYSIS ═══════════ -->
+<div id="tab-gaps" class="tab-panel">
+
+  <div class="kpi-row">
+    <div class="kpi-box"><div class="kpi-label">Krytyczne</div><div class="kpi-value red">2</div></div>
+    <div class="kpi-box"><div class="kpi-label">Ważne</div><div class="kpi-value amber">6</div></div>
+    <div class="kpi-box"><div class="kpi-label">Informacyjne</div><div class="kpi-value blue">2</div></div>
+    <div class="kpi-box"><div class="kpi-label">Nowe selektory do dodania</div><div class="kpi-value green">12</div></div>
+  </div>
+
+  <div class="section-label">Krytyczne</div>
+
+  <div class="gap-card critical">
+    <div class="gap-title"><span class="badge badge-red">GAP-01</span> Countdown timer w Announcement Bar</div>
+    <div class="gap-body">
+      Mapping opisuje announcement bar tylko jako "Promo bar — tekst + link". W rzeczywistości na GLOV sekcja zawiera <b>dwa elementy</b>: (1) ticker + (2) oddzielna aplikacja countdown timer <i>"Prezenty dla MAMY 25% taniej!"</i> z odliczaniem (02:12:35:55 — dni/godziny/minuty/sekundy) i kodem promo.<br><br>
+      Nowe selektory: <span class="gap-selector">[class*="essential_countdown_annoucement_bar"]</span> <span class="gap-selector">[class*="countdown_annoucement_bar_wrapper"]</span><br>
+      Aplikacja: Colibrius Essential Countdown
+    </div>
+  </div>
+
+  <div class="gap-card critical">
+    <div class="gap-title"><span class="badge badge-red">GAP-08</span> Podwójne instancje analytics</div>
+    <div class="gap-body">
+      <b>Hotjar × 2</b> (ID: 5026693 + 2026668) · <b>Clarity × 2</b> (scripts.clarity.ms + www.clarity.ms/tag) · <b>Cookiebot × 2</b> (direct + via GTM).<br><br>
+      Efekt: zdublowane eventy heatmap/session recording, potencjalnie zawyżone dane, zbędny load. To błąd konfiguracji — wymaga natychmiastowej naprawy przez klienta.<br><br>
+      Mapping HP powinien mieć warstwę <b>analytics stack check</b> (script count per tool).
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:16px">Ważne</div>
+
+  <div class="gap-card important">
+    <div class="gap-title"><span class="badge badge-amber">GAP-02</span> Sliderule — scrollujący pasek kategorii</div>
+    <div class="gap-body">
+      <code>sliderule__wrapper</code> zawiera <code>DIV.sliderow</code> z poziomymi linkami kategorii. Scan B zwrócił 99 elementów z <code>[class*="slider"]</code> — <b>większość to sliderule, nie slider produktów</b>. Obecny mapping nie odróżnia tych dwóch typów.<br><br>
+      Selektory: <span class="gap-selector">.sliderule__wrapper</span> <span class="gap-selector">.sliderow</span> <span class="gap-selector">a.sliderow__title</span>
+    </div>
+  </div>
+
+  <div class="gap-card important">
+    <div class="gap-title"><span class="badge badge-amber">GAP-03</span> Colibrius Essential Products Slider</div>
+    <div class="gap-body">
+      Sekcje Bestsellery i Nowości są opisane w mappingu jako <code>[product-listing]</code> / <code>DIV.product-listing</code>. Faktycznie carousel renderowany jest przez <b>Colibrius (Glide.js)</b> z własnymi klasami. Przyciski "Dobierz" (<code>javascript:void(0)</code>) to trigger rekomendatora Colibrius inline — nie standardowe linki.<br><br>
+      Selektory: <span class="gap-selector">[class*="essential_product_slider"]</span> <span class="gap-selector">.glide--carousel</span>
+    </div>
+  </div>
+
+  <div class="gap-card important">
+    <div class="gap-title"><span class="badge badge-amber">GAP-04</span> Tolstoy Video Carousel — CSS Modules hash</div>
+    <div class="gap-body">
+      Klasy Tolstoy zawierają React CSS Modules hash: <code>_spotlightVideosContainer_zvvi2_235</code> — niestabilne, zmienią się przy każdym deployu. Mapping opisuje sekcję jako <code>[app-wrapper / Spotlight]</code> bez selektora.<br><br>
+      Stabilny selektor: <span class="gap-selector">.tolstoy-carousel</span> <span class="gap-selector">[class*="tolstoy-carousel"]</span> — używaj tego, NIE hashy.
+    </div>
+  </div>
+
+  <div class="gap-card important">
+    <div class="gap-title"><span class="badge badge-amber">GAP-05</span> Growave Wishlist Tab — floating element</div>
+    <div class="gap-body">
+      Snapshot ujawnia <code>button "Growave wishlist tab"</code> — boczna floating zakładka wishlisty na każdej stronie. Jednak <code>window.Growave = false</code> i brak klasy <code>[class*="growave"]</code>. Mapping opisuje wishlist jako ikonę w headerze — to <b>inny element</b>.<br><br>
+      Selektor: <span class="gap-selector">button[aria-label*="Growave"]</span> lub <span class="gap-selector">button[aria-label*="wishlist"]</span> (wymaga weryfikacji dokładnego aria-label)
+    </div>
+  </div>
+
+  <div class="gap-card important">
+    <div class="gap-title"><span class="badge badge-amber">GAP-06</span> SSW Instagram Feed — dostawca inny niż opisany</div>
+    <div class="gap-body">
+      Klasy: <code>ssw-instagram-content</code>, <code>ssw-share-faves</code>, <code>ssw-icon-star</code>. Script: <code>cdn.nfcube.com/instafeed-*.js</code> — może być NF Cube Instafeed, nie Social Snowball. Mapping opisuje jako <code>[app-wrapper]</code> "embed social media" bez identyfikacji dostawcy.<br><br>
+      Selektory: <span class="gap-selector">[class*="ssw-instagram"]</span> <span class="gap-selector">.ssw-instagram-content</span>
+    </div>
+  </div>
+
+  <div class="gap-card important">
+    <div class="gap-title"><span class="badge badge-amber">GAP-07</span> Trusted Shops Badge — Shadow DOM</div>
+    <div class="gap-body">
+      Script załadowany, w snapshrocie widoczny button <i>"Znak jakości Trusted Shops Ochrona Kupującego 4,65 Doskonały"</i>. Jednak <code>[class*="trustedshops"]</code> i <code>[class*="tse"]</code> zwracają null — badge renderowany w <b>Shadow DOM lub iframe</b>, niedostępny przez standardowy CSS selector.<br><br>
+      Detekcja: <span class="gap-selector">script[src*="trustedshops"]</span> (przez script src, nie DOM)
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:16px">Informacyjne</div>
+
+  <div class="gap-card info">
+    <div class="gap-title"><span class="badge badge-blue">GAP-09</span> GetResponse jako Email + Chat (nie Klaviyo)</div>
+    <div class="gap-body">
+      GLOV używa GetResponse (<code>i.gr.chat</code> + <code>ga.getresponse.com</code>) zamiast Klaviyo (standard Shopify). <code>window._learnq</code> = undefined. <code>elements_dictionary.json</code> / <code>platform_patterns.json</code> mogą zakładać Klaviyo dla sklepów Shopify — co jest nieprawidłowe dla GLOV.
+    </div>
+  </div>
+
+  <div class="gap-card info">
+    <div class="gap-title"><span class="badge badge-blue">GAP-10</span> Onet DlApi — PL-specyficzne narzędzie reklamowe</div>
+    <div class="gap-body">
+      <code>lib.onet.pl/s.csr/build/dlApi/minit.boot.min.js</code> — Onet Display API, polskie RTB/display advertising. Brak kategorii "PL-specific ad networks" w <code>platform_patterns.json</code>. Pierwsze wykrycie — dodać jako nową kategorię dla rynku PL.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="block bg-warm">
+    <div class="block-title">Nowe selektory do dodania — elements_dictionary.json</div>
+    <div class="block-body" style="padding:0">
+      <table>
+        <thead><tr><th>Element ID</th><th>Stable selector</th><th>Aplikacja</th><th>Uwaga</th></tr></thead>
+        <tbody>
+          <tr><td>countdown_timer_bar</td><td class="td-mono">[class*="essential_countdown_annoucement_bar"]</td><td>Colibrius Essential</td><td>Prefix match — klasa zawiera session hash</td></tr>
+          <tr><td>sliderule_category_bar</td><td class="td-mono">.sliderule__wrapper · .sliderow · a.sliderow__title</td><td>Theme native</td><td>Scrollowalny pasek linków kategorii</td></tr>
+          <tr><td>colibrius_product_slider</td><td class="td-mono">[class*="essential_product_slider_glide"]</td><td>Colibrius / Glide.js</td><td>Zastępuje natywny product-listing carousel</td></tr>
+          <tr><td>tolstoy_ugc_carousel</td><td class="td-mono">.tolstoy-carousel · [class*="tolstoy-carousel"]</td><td>Tolstoy</td><td>NIE używaj klas z CSS Modules hash!</td></tr>
+          <tr><td>ssw_instagram_feed</td><td class="td-mono">[class*="ssw-instagram"] · .ssw-instagram-content</td><td>NF Cube / SSW</td><td>Weryfikuj dostawcę przez script src</td></tr>
+          <tr><td>growave_wishlist_tab</td><td class="td-mono">button[aria-label*="Growave"]</td><td>Growave</td><td>Floating tab — nie ikona w headerze</td></tr>
+          <tr><td>trusted_shops_badge</td><td class="td-mono">script[src*="trustedshops"]</td><td>Trusted Shops</td><td>Shadow DOM — detekcja tylko przez script src</td></tr>
+          <tr><td>pl_ad_network_onet</td><td class="td-mono">script[src*="lib.onet.pl"]</td><td>Onet DlApi</td><td>PL-specific RTB/display — nowa kategoria</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════ TAB: VISUAL — PRZED ═══════════ -->
+<div id="tab-visual-przed" class="tab-panel">
+
+  <div class="block bg-warm" style="margin-bottom:16px">
+    <div class="block-title">Visual Mapping HP — PRZED <span class="count-badge">Referencja 2026-05-17</span></div>
+    <div class="block-body" style="font-size:12px;color:var(--muted)">Kopiowane 1:1 z GLOV_REFERENCE_AUDIT.html. Oryginalne anotacje bez żadnych zmian.</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 400px;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px">
+    <div style="position:relative;background:#000;border-right:1px solid var(--border)">
+      <div style="background:rgba(0,0,0,.7);padding:6px 12px;font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center">
+        HP Desktop full page <span style="background:var(--surface2);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600">1440px</span>
+      </div>
+      <img src="glov_hp_desktop_full.jpeg" alt="HP Desktop — referencja" style="width:100%;display:block">
+      <!-- oryginalne pozycje z GLOV_REFERENCE_AUDIT.html -->
+      <div class="vm-dot" style="left:50%;top:1%">1</div>
+      <div class="vm-dot" style="left:50%;top:3%">2</div>
+      <div class="vm-dot" style="left:50%;top:5%">3</div>
+      <div class="vm-dot" style="left:50%;top:12%">4</div>
+      <div class="vm-dot" style="left:50%;top:24%">5</div>
+      <div class="vm-dot" style="left:50%;top:36%">6</div>
+      <div class="vm-dot" style="left:50%;top:46%">7</div>
+      <div class="vm-dot" style="left:50%;top:55%">8</div>
+      <div class="vm-dot" style="left:50%;top:63%">9</div>
+      <div class="vm-dot" style="left:50%;top:70%">10</div>
+      <div class="vm-dot" style="left:50%;top:77%">11</div>
+      <div class="vm-dot" style="left:50%;top:83%">12</div>
+      <div class="vm-dot" style="left:50%;top:88%">13</div>
+      <div class="vm-dot" style="left:50%;top:93%">14</div>
+      <div class="vm-dot" style="left:50%;top:96%">15</div>
+    </div>
+    <div style="background:var(--surface)">
+      <div style="padding:8px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--blue);border-bottom:1px solid var(--border)">Sekcje HP od góry — źródło: HTML scan</div>
+      <div class="vm-row"><div class="vm-num">1</div><div class="vm-text"><b>Promo bar</b><br><span class="sub">[announcement] — "🔥 -25% z kodem MAMA25 🔥" — klikalny → /collections/sklep</span></div></div>
+      <div class="vm-row"><div class="vm-num">2</div><div class="vm-text"><b>Header (sticky)</b><br><span class="sub">[header] — hamburger + logo + wyszukiwarka + PL + konto + wishlist (Growave) + koszyk</span></div></div>
+      <div class="vm-row"><div class="vm-num">3</div><div class="vm-text"><b>Secondary nav</b><br><span class="sub">[header] — 9 linków navlink--toplevel · jedyna z dropdown: RUTYNY GLOV -25%</span></div></div>
+      <div class="vm-row"><div class="vm-num">4</div><div class="vm-text"><b>Hero banner</b><br><span class="sub">[slideshow / homepage-slideshow] — carousel + CTA + 4 dots + prev/next</span></div></div>
+      <div class="vm-row"><div class="vm-num">5</div><div class="vm-text"><b>Bestsellery</b><br><span class="sub">[product-listing] — H2 + carousel produktów, horizontal scroll</span></div></div>
+      <div class="vm-row"><div class="vm-num">6</div><div class="vm-text"><b>Nowości</b><br><span class="sub">[product-listing] — H2 + carousel produktów, horizontal scroll</span></div></div>
+      <div class="vm-row"><div class="vm-num">7</div><div class="vm-text"><b>Nasze bestsellery w akcji</b><br><span class="sub">[app-wrapper / Spotlight carousel] — H2 + UGC carousel klientek</span></div></div>
+      <div class="vm-row"><div class="vm-num">8</div><div class="vm-text"><b>Oferty specjalne</b><br><span class="sub">[homepage-collection-grid] — H2 + grid kolekcji + CTA</span></div></div>
+      <div class="vm-row"><div class="vm-num">9</div><div class="vm-text"><b>Newsletter</b><br><span class="sub">[newsletter] — H2 + -20% na pierwsze zamówienie + pole email + button</span></div></div>
+      <div class="vm-row"><div class="vm-num">10</div><div class="vm-text"><b>SoMe</b><br><span class="sub">[app-wrapper] — H2 "SoMe" + embed social media</span></div></div>
+      <div class="vm-row"><div class="vm-num">11</div><div class="vm-text"><b>Social proof / Reviews</b><br><span class="sub">[featured-reviews] — "50 000 klientów!" + widget recenzji/opinii</span></div></div>
+      <div class="vm-row"><div class="vm-num">12</div><div class="vm-text"><b>Mówią o nas</b><br><span class="sub">[homepage-logos] — loga mediów: Vogue, Elle, Forbes itp.</span></div></div>
+      <div class="vm-row"><div class="vm-num">13</div><div class="vm-text"><b>Nasza misja</b><br><span class="sub">[custom-content / section-double] — obraz + tekst copy marki</span></div></div>
+      <div class="vm-row"><div class="vm-num">14</div><div class="vm-text"><b>Recenzja miesiąca</b><br><span class="sub">[double-custom] — "wygraj 1000 zł" + zdjęcie + cytat klientki</span></div></div>
+      <div class="vm-row"><div class="vm-num">15</div><div class="vm-text"><b>Footer</b><br><span class="sub">[footer / site-footer-wrapper] — logo + kolumny linków + selektor waluty</span></div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: VISUAL — PO ═══════════ -->
+<div id="tab-visual-po" class="tab-panel">
+
+  <div class="block bg-warm" style="margin-bottom:16px">
+    <div class="block-title">Visual Mapping HP — PO <span class="count-badge">Scan 2026-05-24</span></div>
+    <div class="block-body" style="font-size:12px;color:var(--muted)">
+      Ten sam screen, anotacje od nowa po pełnym scanie DOM.
+      <span style="display:inline-flex;align-items:center;gap:4px;margin-left:12px"><span style="width:10px;height:10px;border-radius:50%;background:#3b82f6;display:inline-block"></span> bez zmian</span>
+      <span style="display:inline-flex;align-items:center;gap:4px;margin-left:8px"><span style="width:10px;height:10px;border-radius:50%;background:#f59e0b;display:inline-block"></span> NOWE — nie było w referencji</span>
+      <span style="display:inline-flex;align-items:center;gap:4px;margin-left:8px"><span style="width:10px;height:10px;border-radius:50%;background:#22c55e;display:inline-block"></span> ZMIANA opisu lub selektora</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 420px;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px">
+    <div style="position:relative;background:#000;border-right:1px solid var(--border)">
+      <div style="background:rgba(0,0,0,.7);padding:6px 12px;font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center">
+        HP Desktop full page <span style="background:var(--surface2);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600">1440px</span>
+        <span style="margin-left:auto;color:var(--amber);font-size:10px">⚠️ screen z 2026-05-17 — anotacje z 2026-05-24</span>
+      </div>
+      <img src="glov_hp_desktop_full.jpeg" alt="HP Desktop — PO scanie" style="width:100%;display:block">
+      <!-- bez zmian — niebieski -->
+      <div class="vm-dot" style="left:30%;top:1%">1a</div>
+      <div class="vm-dot" style="left:50%;top:3%">2</div>
+      <div class="vm-dot" style="left:50%;top:5%">3</div>
+      <div class="vm-dot" style="left:50%;top:12%">4</div>
+      <div class="vm-dot" style="left:50%;top:55%">8</div>
+      <div class="vm-dot" style="left:50%;top:63%">9</div>
+      <div class="vm-dot" style="left:50%;top:83%">12</div>
+      <div class="vm-dot" style="left:50%;top:88%">13</div>
+      <div class="vm-dot" style="left:50%;top:93%">14</div>
+      <div class="vm-dot" style="left:50%;top:96%">15</div>
+      <!-- NOWE — żółty -->
+      <div class="vm-dot new" style="left:72%;top:1%">1b</div>
+      <div class="vm-dot new" style="left:15%;top:7%">3b</div>
+      <!-- ZMIENIONE — zielony -->
+      <div class="vm-dot changed" style="left:50%;top:24%">5</div>
+      <div class="vm-dot changed" style="left:50%;top:36%">6</div>
+      <div class="vm-dot changed" style="left:50%;top:46%">7</div>
+      <div class="vm-dot changed" style="left:50%;top:70%">10</div>
+      <div class="vm-dot changed" style="left:50%;top:77%">11</div>
+    </div>
+    <div style="background:var(--surface);overflow-y:auto;max-height:900px">
+      <div style="padding:8px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--blue);border-bottom:1px solid var(--border)">Zaktualizowane anotacje — scan DOM 2026-05-24</div>
+
+      <div class="vm-row"><div class="vm-num">1a</div><div class="vm-text"><b>Promo bar</b><br><span class="sub">announcement__wrapper → ticker__comparitor — scrollujący tekst z MAMA25</span></div></div>
+      <div class="vm-row"><div class="vm-num new">1b</div><div class="vm-text"><b>Countdown Timer</b><br><span class="sub">Colibrius Essential Countdown · [class*="essential_countdown_annoucement_bar"] · odliczanie dni/godz/min/sek · kod promo „Prezenty dla MAMY 25% taniej!" · nie było w referencji</span></div></div>
+      <div class="vm-row"><div class="vm-num">2</div><div class="vm-text"><b>Header</b><br><span class="sub">HEADER.theme__header (sticky) — hamburger + logo + wyszukiwarka + PL + konto + wishlist + koszyk</span></div></div>
+      <div class="vm-row"><div class="vm-num">3</div><div class="vm-text"><b>Secondary nav</b><br><span class="sub">a.navlink--toplevel — 9 linków — bez zmian</span></div></div>
+      <div class="vm-row"><div class="vm-num new">3b</div><div class="vm-text"><b>Sliderule</b><br><span class="sub">.sliderule__wrapper → .sliderow → a.sliderow__title · 8 linków kategorii (poziomy scroll) · nie było w referencji · uwaga: 99 DOM nodes z [class*="slider"] to głównie ten element, nie carousel produktów</span></div></div>
+      <div class="vm-row"><div class="vm-num">4</div><div class="vm-text"><b>Hero banner</b><br><span class="sub">DIV.slideshow__wrapper (Flickity) — carousel kampanii + CTA + 4 dots + prev/next</span></div></div>
+      <div class="vm-row"><div class="vm-num changed">5</div><div class="vm-text"><b>Bestsellery</b><br><span class="sub">Renderer: Colibrius Essential Products Slider (Glide.js) · [class*="essential_product_slider_glide"] · NIE natywny [product-listing] Shopify · przyciski „Dobierz" = javascript:void(0) → Colibrius inline trigger</span></div></div>
+      <div class="vm-row"><div class="vm-num changed">6</div><div class="vm-text"><b>Nowości</b><br><span class="sub">Renderer: Colibrius Essential Products Slider (Glide.js) · identyczna struktura jak sek. 5</span></div></div>
+      <div class="vm-row"><div class="vm-num changed">7</div><div class="vm-text"><b>UGC carousel</b><br><span class="sub">Dostawca: Tolstoy · selektor stabilny: .tolstoy-carousel · CSS Modules hash (_spotlightVideosContainer_zvvi2_235) NIESTABILNY — zmienia się przy każdym deployu</span></div></div>
+      <div class="vm-row"><div class="vm-num">8</div><div class="vm-text"><b>Oferty specjalne</b><br><span class="sub">DIV.homepage-collection-grid — H2 + grid kolekcji + CTA</span></div></div>
+      <div class="vm-row"><div class="vm-num">9</div><div class="vm-text"><b>Newsletter</b><br><span class="sub">DIV.newsletter · platforma email: GetResponse (NIE Klaviyo) · -20% na pierwsze zamówienie</span></div></div>
+      <div class="vm-row"><div class="vm-num changed">10</div><div class="vm-text"><b>Instagram feed</b><br><span class="sub">Dostawca: NF Cube · [class*="ssw-instagram"] · script: cdn.nfcube.com/instafeed-*.js · referencja zakładała generic embed</span></div></div>
+      <div class="vm-row"><div class="vm-num changed">11</div><div class="vm-text"><b>Reviews widget</b><br><span class="sub">Dostawca: Judge.me · selektor: .jdgm-widget.jdgm-preview-badge · referencja zakładała Growave Reviews</span></div></div>
+      <div class="vm-row"><div class="vm-num">12</div><div class="vm-text"><b>Mówią o nas</b><br><span class="sub">DIV.homepage-logos — poziomy rząd logotypów mediów (Vogue, Elle, Forbes)</span></div></div>
+      <div class="vm-row"><div class="vm-num">13</div><div class="vm-text"><b>Nasza misja</b><br><span class="sub">DIV.brick__block — 2-kolumnowy layout: obraz + copy marki</span></div></div>
+      <div class="vm-row"><div class="vm-num">14</div><div class="vm-text"><b>Recenzja miesiąca</b><br><span class="sub">DIV.container (double-custom) — H2 + zdjęcie produktu + cytat klientki</span></div></div>
+      <div class="vm-row"><div class="vm-num">15</div><div class="vm-text"><b>Footer</b><br><span class="sub">DIV.footer-logo-wrapper — logo + kolumny linków + selektor waluty</span></div></div>
+    </div>
+  </div>
+
+  <div class="block bg-warm">
+    <div class="block-title">Widgety nakładkowe (floating) — delta wiedzy</div>
+    <div class="block-body" style="padding:0">
+      <table>
+        <thead><tr><th>Widget</th><th>Referencja mówiła</th><th>Scan 2026-05-24 wykrył</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><b>W1 Cookiebot</b></td><td>floating lewy dolny róg</td><td><span class="badge badge-red">×2</span> direct + via GTM — zdublowany</td><td><span class="badge badge-red">FIX REQUIRED</span></td></tr>
+          <tr><td><b>W2 Trusted Shops</b></td><td>button/iframe prawy dolny róg</td><td>Shadow DOM — CSS selector null · detekcja tylko przez script src</td><td><span class="badge badge-amber">selektor zmieniony</span></td></tr>
+          <tr><td><b>W3 Growave tab</b></td><td>button.Growave wishlist tab · lewa krawędź</td><td>button[aria-label*="Growave"] · window.Growave=false · ≠ ikona wishlist w header</td><td><span class="badge badge-green">potwierdzony</span></td></tr>
+          <tr><td><b>Hotjar</b></td><td>(tech stack, brak w widgetach)</td><td><span class="badge badge-red">×2</span> ID 5026693 + 2026668</td><td><span class="badge badge-red">FIX REQUIRED</span></td></tr>
+          <tr><td><b>MS Clarity</b></td><td>(tech stack, brak w widgetach)</td><td><span class="badge badge-red">×2</span> scripts.clarity.ms + www.clarity.ms/tag</td><td><span class="badge badge-red">FIX REQUIRED</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: MAPPING — REFERENCJA ═══════════ -->
+<div id="tab-ref-mapping" class="tab-panel">
+
+  <div class="block bg-warm">
+    <div class="block-title">Źródło: GLOV_REFERENCE_AUDIT.html — tab "1. Home Page" <span class="count-badge">stan: 2026-05-17</span></div>
+    <div class="block-body" style="color:var(--muted);font-size:12px">Mapping referencyjny — punkt wyjścia przed nowym scanem. Luki widoczne przez porównanie z zakładką "Mapping — Zaktualizowany".</div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Sekcje HP — kolejność od góry <span class="count-badge">15 sekcji</span></div>
+    <div class="block-body" style="padding:0">
+      <table>
+        <thead><tr><th>#</th><th>Nazwa sekcji</th><th>data-section-type / klasa</th><th>Opis (referencja)</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Promo bar</td><td><code>announcement</code></td><td>„🔥 -25% na wszystko z kodem: MAMA25 🔥" — klikalny link do /collections/sklep</td></tr>
+          <tr><td>2</td><td>Header (sticky)</td><td><code>header</code></td><td>hamburger + logo GLOV + ikona wyszukiwarki + selektor języka PL + ikona konta + ikona wishlist (Growave) + ikona koszyka z licznikiem</td></tr>
+          <tr><td>3</td><td>Secondary nav</td><td><code>header</code> (zagnieżdżony)</td><td>9 linków <code>navlink--toplevel</code>: Rękawiczka GLOV · Promienna cera · Piękne włosy · Gładkie ciało · ZESTAWY PREZENTOWE · Bestsellery · Lakiery COOLNAILS · GLOV LED THERAPY · RUTYNY GLOV -25% (jedyna z dropdown — 3 sub-linki)</td></tr>
+          <tr><td>4</td><td>Hero banner</td><td><code>slideshow</code> / <code>homepage-slideshow</code></td><td>Carousel kampanii Dzień Matki — CTA button + 4 dots + prev/next</td></tr>
+          <tr><td>5</td><td>Bestsellery</td><td><code>product-listing</code></td><td>H2 + paragraf copy + carousel produktów, horizontal scroll</td></tr>
+          <tr><td>6</td><td>Nowości</td><td><code>product-listing</code></td><td>H2 + paragraf copy + carousel produktów, horizontal scroll</td></tr>
+          <tr><td>7</td><td>Nasze bestsellery w akcji</td><td><code>app-wrapper</code> / Spotlight carousel</td><td>H2 + UGC carousel z postami klientek (zdjęcia + video)</td></tr>
+          <tr><td>8</td><td>Oferty specjalne</td><td><code>homepage-collection-grid</code></td><td>H2 + paragraf copy + grid kolekcji ze zdjęciami i CTA</td></tr>
+          <tr><td>9</td><td>Newsletter</td><td><code>newsletter</code></td><td>H2 "NEWSLETTER" + copy (-20% na pierwsze zamówienie + prezent) + pole email + button</td></tr>
+          <tr><td>10</td><td>SoMe</td><td><code>app-wrapper</code></td><td>H2 "SoMe" + embed social media (Instagram/TikTok)</td></tr>
+          <tr><td>11</td><td>Social proof / Reviews</td><td><code>featured-reviews</code></td><td>H2 "GLOV dziękuje za zaufanie już 50 000 klientów!" + widget recenzji</td></tr>
+          <tr><td>12</td><td>Mówią o nas</td><td><code>homepage-logos</code></td><td>H2 + poziomy rząd logotypów mediów (Vogue, Elle, Forbes itp.)</td></tr>
+          <tr><td>13</td><td>Nasza misja</td><td><code>custom-content</code> / section-double</td><td>2-kolumnowy layout: obraz + tekst z copy marki</td></tr>
+          <tr><td>14</td><td>Recenzja miesiąca</td><td><code>double-custom</code></td><td>H2 "Recenzja miesiąca - wygraj 1000 zł..." + zdjęcie produktu + cytat klientki</td></tr>
+          <tr><td>15</td><td>Footer</td><td><code>footer</code> / site-footer-wrapper</td><td>Logo, kolumny linków, selektor waluty</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="block bg-warm">
+    <div class="block-title">Widgety nakładkowe (aktywne na całym glov.co)</div>
+    <div class="block-body" style="padding:0">
+      <table>
+        <thead><tr><th>ID</th><th>Narzędzie</th><th>Selektor (referencja)</th><th>Pozycja</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-blue">W1</span></td><td>Cookiebot</td><td><code>button.Open cookie settings widget</code></td><td>Lewy dolny róg (floating, sticky)</td></tr>
+          <tr><td><span class="badge badge-blue">W2</span></td><td>Trusted Shops</td><td><code>button, iframe</code></td><td>Prawy dolny róg (floating, sticky). Na mobile nakłada się na H1 (PDP)</td></tr>
+          <tr><td><span class="badge badge-blue">W3</span></td><td>Growave Wishlist Tab</td><td><code>button.Growave wishlist tab</code></td><td>Pionowy tab przyklejony do lewej krawędzi ekranu (sticky side tab)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Action Map HP — referencja</div>
+    <div class="block-body" style="padding:0">
+      <table>
+        <thead><tr><th>Element</th><th>Akcja sklepu</th><th>Event GA4/PostHog</th><th>Status (referencja)</th></tr></thead>
+        <tbody>
+          <tr><td>Promo bar</td><td>Klik → kolekcja/promo</td><td><code>select_promotion</code></td><td><span class="badge badge-amber">niezweryfikowany</span></td></tr>
+          <tr><td>Hamburger menu</td><td>Otwórz nawigację</td><td>—</td><td><span class="badge badge-amber">niezweryfikowany</span></td></tr>
+          <tr><td>Wyszukiwarka</td><td>Search</td><td><code>search</code></td><td><span class="badge badge-green">Shopify native</span></td></tr>
+          <tr><td>Nav link (kategoria)</td><td>Klik → listing</td><td><code>select_content</code></td><td><span class="badge badge-amber">niezweryfikowany</span></td></tr>
+          <tr><td>Nav "RUTYNY GLOV -25%"</td><td>Klik → landing</td><td><code>select_promotion</code></td><td><span class="badge badge-amber">niezweryfikowany</span></td></tr>
+          <tr><td>Hero banner CTA</td><td>Klik → kolekcja</td><td><code>select_promotion</code></td><td><span class="badge badge-amber">niezweryfikowany</span></td></tr>
+          <tr><td>Koszyk ikona</td><td>Klik → cart</td><td>—</td><td><span class="badge badge-red">brak</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ TAB: MAPPING — ZAKTUALIZOWANY ═══════════ -->
+<div id="tab-new-mapping" class="tab-panel">
+
+  <div class="block bg-warm">
+    <div class="block-title">Mapping zaktualizowany po scanie 2026-05-24 <span class="count-badge">+10 korekt GAP-01–GAP-10</span></div>
+    <div class="block-body" style="color:var(--muted);font-size:12px">Poprawki względem referencji oznaczone <span class="badge badge-amber">ZMIANA</span>. Nowe pozycje nieobecne w referencji: <span class="badge badge-blue">NOWE</span>. Bez zmian: <span class="badge badge-green">OK</span>.</div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Sekcje HP — zaktualizowany mapping <span class="count-badge">16 pozycji +1 ukryta</span></div>
+    <div class="block-body" style="padding:0">
+      <table>
+        <thead><tr><th>#</th><th>Nazwa sekcji</th><th>Stabilny selektor</th><th>Opis zaktualizowany</th><th>Delta</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>1a</td><td>Ticker / Promo bar</td>
+            <td><code>announcement__wrapper</code> → <code>announcement__text ticker__comparitor</code></td>
+            <td>Scrollujący ticker z komunikatem promo + kodem MAMA25. Klikalny link do /collections/sklep</td>
+            <td><span class="badge badge-green">OK</span></td>
+          </tr>
+          <tr style="background:rgba(245,158,11,.04)">
+            <td>1b</td><td><b>Countdown Timer</b></td>
+            <td><code>[class*="essential_countdown_annoucement_bar"]</code></td>
+            <td>Osobna aplikacja Colibrius Essential Countdown w announcement bar — odliczanie dni/godziny/minuty/sekundy + kod promo „Prezenty dla MAMY 25% taniej!". NIE jest częścią tickera.</td>
+            <td><span class="badge badge-amber">NOWE w sekcji 1</span></td>
+          </tr>
+          <tr><td>2</td><td>Header (sticky)</td><td><code>HEADER.theme__header</code></td><td>Hamburger + logo GLOV + wyszukiwarka + selektor języka PL + konto + wishlist Growave + koszyk z licznikiem</td><td><span class="badge badge-green">OK</span></td></tr>
+          <tr><td>3</td><td>Secondary nav</td><td><code>a.navlink--toplevel</code></td><td>9 flat linków jak w referencji. Jedyna z dropdown: RUTYNY GLOV -25% (3 sub-linki)</td><td><span class="badge badge-green">OK</span></td></tr>
+          <tr style="background:rgba(245,158,11,.04)">
+            <td>3b</td><td><b>Sliderule — pasek kategorii</b></td>
+            <td><code>.sliderule__wrapper</code> → <code>.sliderow</code> → <code>a.sliderow__title</code></td>
+            <td>Poziomy scroll linków kategorii (8 pozycji): Kultowa Rękawiczka GLOV · Pumeksy · LED · COOLNAILS · Silikon · COOLCURL · Szczotki · Turbany. NIE jest sliderem produktów — wyniki <code>[class*="slider"]</code> (99 elementów) to głównie ten element.</td>
+            <td><span class="badge badge-amber">NOWE</span></td>
+          </tr>
+          <tr><td>4</td><td>Hero banner</td><td><code>DIV.slideshow__wrapper</code> (Flickity)</td><td>Carousel kampanii — CTA + 4 dots + prev/next. Flickity badge-dots jako wskaźniki slajdów.</td><td><span class="badge badge-green">OK</span></td></tr>
+          <tr style="background:rgba(245,158,11,.04)">
+            <td>5</td><td><b>Bestsellery</b></td>
+            <td><code>[class*="essential_product_slider_glide"]</code> · <code>.glide--carousel</code></td>
+            <td>H2 + paragraf copy + carousel renderowany przez <b>Colibrius Essential Products Slider (Glide.js)</b> — NIE natywny product-listing Shopify. Przyciski „Dobierz" (<code>javascript:void(0)</code>) = trigger rekomendatora Colibrius inline.</td>
+            <td><span class="badge badge-amber">ZMIANA selektora</span></td>
+          </tr>
+          <tr style="background:rgba(245,158,11,.04)">
+            <td>6</td><td><b>Nowości</b></td>
+            <td><code>[class*="essential_product_slider_glide"]</code> · <code>.glide--carousel</code></td>
+            <td>Identycznie jak Bestsellery — Colibrius carousel. Obie sekcje <code>data-section-type="product-listing"</code> ale renderer zewnętrzny.</td>
+            <td><span class="badge badge-amber">ZMIANA selektora</span></td>
+          </tr>
+          <tr style="background:rgba(245,158,11,.04)">
+            <td>7</td><td><b>Nasze bestsellery w akcji (Tolstoy)</b></td>
+            <td><code>.tolstoy-carousel</code> · <code>[class*="tolstoy-carousel"]</code></td>
+            <td>UGC video carousel — Tolstoy Spotlight, ładowany async. Klasy CSS Modules (np. <code>_spotlightVideosContainer_zvvi2_235</code>) są niestabilne i zmienią się przy deployu. Używaj wyłącznie stabilnego selektora <code>.tolstoy-carousel</code>.</td>
+            <td><span class="badge badge-amber">ZMIANA selektora</span></td>
+          </tr>
+          <tr style="background:rgba(245,158,11,.04)">
+            <td>10</td><td><b>SoMe — Instagram feed (SSW / NF Cube)</b></td>
+            <td><code>[class*="ssw-instagram"]</code> · <code>.ssw-instagram-content</code></td>
+            <td>Embed Instagram feed — dostawca: NF Cube Instafeed (<code>cdn.nfcube.com/instafeed-*.js</code>) / prefix klas „ssw". NIE Social Snowball. Weryfikacja dostawcy przez script src, nie klasę DOM.</td>
+            <td><span class="badge badge-amber">ZMIANA dostawcy</span></td>
+          </tr>
+          <tr><td>8</td><td>Oferty specjalne</td><td><code>DIV.homepage-collection-grid</code></td><td>H2 + grid kolekcji ze zdjęciami i CTA — bez zmian</td><td><span class="badge badge-green">OK</span></td></tr>
+          <tr><td>9</td><td>Newsletter</td><td><code>DIV.newsletter</code></td><td>H2 + pole email + button. Email platform: <b>GetResponse</b> (nie Klaviyo — <code>window._learnq</code> = undefined)</td><td><span class="badge badge-green">OK</span></td></tr>
+          <tr><td>11</td><td>Social proof / Reviews</td><td><code>DIV.featured-reviews</code> · <code>[class*="jdgm"]</code></td><td>Judge.me preview badges — NIE Growave Reviews (jak zakładała referencja). Selector: <code>jdgm-widget jdgm-preview-badge</code></td><td><span class="badge badge-amber">ZMIANA dostawcy</span></td></tr>
+          <tr><td>12</td><td>Mówią o nas</td><td><code>DIV.homepage-logos</code></td><td>Loga mediów — bez zmian</td><td><span class="badge badge-green">OK</span></td></tr>
+          <tr><td>13</td><td>Nasza misja</td><td><code>DIV.brick__block</code> (custom-content)</td><td>2-kolumnowy — bez zmian</td><td><span class="badge badge-green">OK</span></td></tr>
+          <tr><td>14</td><td>Recenzja miesiąca</td><td><code>DIV.container</code> (double-custom)</td><td>Bez zmian</td><td><span class="badge badge-green">OK</span></td></tr>
+          <tr><td>15</td><td>Footer</td><td><code>DIV.footer-logo-wrapper</code></td><td>Logo, linki (Blog, GLOV Club, Kontakt, O nas), social icons</td><td><span class="badge badge-green">OK</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="block bg-warm">
+    <div class="block-title">Widgety nakładkowe — zaktualizowane</div>
+    <div class="block-body" style="padding:0">
+      <table>
+        <thead><tr><th>ID</th><th>Narzędzie</th><th>Stabilny selektor</th><th>Uwaga po scanie</th><th>Delta</th></tr></thead>
+        <tbody>
+          <tr style="background:rgba(245,158,11,.04)">
+            <td><span class="badge badge-blue">W1</span></td><td><b>Cookiebot</b></td>
+            <td><code>script[src*="cookiebot"]</code> · <code>window.Cookiebot</code></td>
+            <td><span class="badge badge-red">DUPLIKAT</span> — załadowany 2×: bezpośrednio + via GTM. Wymaga naprawy — jedno z wdrożeń do usunięcia.</td>
+            <td><span class="badge badge-amber">DUPLIKAT</span></td>
+          </tr>
+          <tr style="background:rgba(245,158,11,.04)">
+            <td><span class="badge badge-blue">W2</span></td><td><b>Trusted Shops</b></td>
+            <td><code>script[src*="trustedshops"]</code> (detekcja przez script src!)</td>
+            <td>Badge renderowany w Shadow DOM — <code>[class*="trustedshops"]</code> zwraca null. Jedyna pewna detekcja: obecność tagu script. Na mobile nakłada się na H1 (PDP).</td>
+            <td><span class="badge badge-amber">ZMIANA selektora</span></td>
+          </tr>
+          <tr><td><span class="badge badge-blue">W3</span></td><td>Growave Wishlist Tab</td>
+            <td><code>button[aria-label*="Growave"]</code> · <code>button[aria-label*="wishlist"]</code></td>
+            <td>Floating side tab — po lewej krawędzi. <code>window.Growave = false</code> i brak <code>[class*="growave"]</code>. Tylko aria-label. Ikona wishlist w headerze to INNY element.</td>
+            <td><span class="badge badge-green">OK (selektor poprawiony)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Analytics Stack — zaktualizowany</div>
+    <div class="block-body" style="padding:0">
+      <table>
+        <thead><tr><th>Narzędzie</th><th>Selektor / sygnał</th><th>Stan</th><th>Uwaga</th></tr></thead>
+        <tbody>
+          <tr><td>GA4</td><td><code>window.gtag</code> · G-R1PCKKHLGV</td><td><span class="badge badge-green">OK</span></td><td>Jedyna instancja, prawidłowe</td></tr>
+          <tr><td>GTM</td><td><code>dataLayer</code> · GTM-PQ9JFT2</td><td><span class="badge badge-green">OK</span></td><td>Jedyna instancja</td></tr>
+          <tr><td>Google Ads + Display 360</td><td><code>DC-13431446</code> · <code>AW-985371563</code></td><td><span class="badge badge-green">OK</span></td><td>Via GTM</td></tr>
+          <tr style="background:rgba(239,68,68,.06)"><td><b>Hotjar</b></td><td><code>window.hj</code> · hotjar-5026693 + hotjar-2026668</td><td><span class="badge badge-red">DUPLIKAT ×2</span></td><td>Dwa ID — prawdopodobnie stary kod bezpośredni + GTM. Wymaga usunięcia jednej instancji.</td></tr>
+          <tr style="background:rgba(239,68,68,.06)"><td><b>Microsoft Clarity</b></td><td><code>window.clarity</code> · scripts.clarity.ms + www.clarity.ms/tag/wu1nvuvh9y</td><td><span class="badge badge-red">DUPLIKAT ×2</span></td><td>Dwa źródła załadowania — ta sama sesja trackowana dwukrotnie.</td></tr>
+          <tr style="background:rgba(245,158,11,.04)"><td>Email / Chat</td><td><code>i.gr.chat</code> · <code>ga.getresponse.com</code></td><td><span class="badge badge-amber">GetResponse</span></td><td>NIE Klaviyo — <code>window._learnq = undefined</code>. Niezgodność z domyślnym Shopify assumptions.</td></tr>
+          <tr style="background:rgba(59,130,246,.04)"><td><b>Onet DlApi</b></td><td><code>script[src*="lib.onet.pl"]</code></td><td><span class="badge badge-blue">NOWE</span></td><td>PL-specyficzne RTB/display — nowa kategoria w platform_patterns.json. Brak w referencji.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="block bg-warm">
+    <div class="block-title">Action Map HP — zaktualizowany</div>
+    <div class="block-body" style="padding:0">
+      <table>
+        <thead><tr><th>Element</th><th>Akcja sklepu</th><th>Event GA4/PostHog</th><th>Status</th><th>Delta</th></tr></thead>
+        <tbody>
+          <tr><td>Countdown timer (Colibrius)</td><td>Wyświetlenie odliczania + klik promo</td><td><code>select_promotion</code></td><td><span class="badge badge-amber">niezweryfikowany</span></td><td><span class="badge badge-blue">NOWY element</span></td></tr>
+          <tr><td>Ticker / Promo bar</td><td>Klik → kolekcja/promo</td><td><code>select_promotion</code></td><td><span class="badge badge-amber">niezweryfikowany</span></td><td><span class="badge badge-green">bez zmian</span></td></tr>
+          <tr><td>Sliderule link (kategoria)</td><td>Klik → kolekcja</td><td>—</td><td><span class="badge badge-red">brak event</span></td><td><span class="badge badge-blue">NOWY element</span></td></tr>
+          <tr><td>Hamburger menu</td><td>Otwórz nawigację</td><td>—</td><td><span class="badge badge-amber">niezweryfikowany</span></td><td><span class="badge badge-green">bez zmian</span></td></tr>
+          <tr><td>Wyszukiwarka</td><td>Search</td><td><code>search</code></td><td><span class="badge badge-green">Shopify native</span></td><td><span class="badge badge-green">bez zmian</span></td></tr>
+          <tr><td>Hero banner CTA</td><td>Klik → kolekcja</td><td><code>select_promotion</code></td><td><span class="badge badge-amber">niezweryfikowany</span></td><td><span class="badge badge-green">bez zmian</span></td></tr>
+          <tr><td>Colibrius carousel — klik produktu</td><td>Przejście na PDP</td><td><code>select_item</code></td><td><span class="badge badge-green">Shopify native (ecom)</span></td><td><span class="badge badge-amber">selektor poprawiony</span></td></tr>
+          <tr><td>Colibrius carousel — „Dobierz"</td><td>Trigger rekomendatora inline</td><td>—</td><td><span class="badge badge-red">brak event</span></td><td><span class="badge badge-blue">NOWY element</span></td></tr>
+          <tr><td>Tolstoy UGC — klik video</td><td>Odtworzenie wideo / przejście</td><td>—</td><td><span class="badge badge-red">brak event</span></td><td><span class="badge badge-amber">selektor poprawiony</span></td></tr>
+          <tr><td>Growave Wishlist Tab (floating)</td><td>Klik → otwiera wishlist panel</td><td>—</td><td><span class="badge badge-amber">Growave internal</span></td><td><span class="badge badge-amber">selektor poprawiony</span></td></tr>
+          <tr><td>Koszyk ikona</td><td>Klik → cart</td><td>—</td><td><span class="badge badge-red">brak</span></td><td><span class="badge badge-green">bez zmian</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+</div><!-- /content -->
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+<script>
+(function(){
+  function open(){
+    var hsh=decodeURIComponent(location.hash.replace('#','')).toLowerCase();
+    if(!hsh) return;
+    // znajdz element .tab z onclick showTab('hsh')
+    var tabs=document.querySelectorAll('.tab');
+    for(var i=0;i<tabs.length;i++){
+      var oc=tabs[i].getAttribute('onclick')||'';
+      if(oc.indexOf("showTab('"+hsh+"')")>-1){ tabs[i].click(); return; }
+    }
+  }
+  window.addEventListener('DOMContentLoaded',open);
+  window.addEventListener('hashchange',open);
+})();
+</script>
+</body>
+</html>
