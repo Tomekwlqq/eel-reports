@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "meta-ads-glov": {
+      "command": "/opt/homebrew/bin/meta-ads-mcp",
+      "env": {
+        "META_ACCESS_TOKEN": "EAAXuY9NJh2MBRjyi1EBHE3140u0cffw8DAZAUsFx8MmkZAiaE4adTR1Fz37UIeX9KjZAKjUuarnWP3slRevoPTbRFOZCmKzFsmOKNedAF5UMwqJeZBpiZBOcPtmZChDZBRE7n2XZADLKzyANeQN8ANn5iKJZBrEStRdLw1sQCSfOlZAxfPBn5MkcPwRuKNTlir8n0sYbgZDZD",
+        "META_APP_ID": "1669487397537635",
+        "META_ACCOUNT_ID": "act_414505328896049",
+        "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+      }
+    },
+    "clarity-glov": {
+      "command": "/opt/homebrew/bin/node",
+      "args": [
+        "/opt/homebrew/lib/node_modules/@microsoft/clarity-mcp-server/dist/index.js",
+        "--clarity_api_token=eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ4M0FCMDhFNUYwRDMxNjdEOTRFMTQ3M0FEQTk2RTcyRDkwRUYwRkYiLCJ0eXAiOiJKV1QifQ.eyJqdGkiOiI2YmYyNGRkNi0zMzM4LTQzYTAtOGQ3Ny0wNjhlMWVlODc4ZTkiLCJzdWIiOiIzMzM0NjgyMjY3MDc5NDc4Iiwic2NvcGUiOiJEYXRhLkV4cG9ydCIsIm5iZiI6MTc3OTgwNDI3MSwiZXhwIjo0OTMzNDA0MjcxLCJpYXQiOjE3Nzk4MDQyNzEsImlzcyI6ImNsYXJpdHkiLCJhdWQiOiJjbGFyaXR5LmRhdGEtZXhwb3J0ZXIifQ.aDQHyPH9PQrd5Y60PVZEB6G8HPT2PyYBBx4RgKGRGZdIl5zEVcET-zJx6xsAyRrQktKIqwnGywzEsJBzLghM017XwY00JqakxdaZWl6utqGM1kQjFOH0UFdthKX8nGsCZw2Vy8qSBOXKKKQXfmv1XDXfPJQuTLS8d3vJ2jwWILda7BlOTUcKYyGX6lIfcQlzKGMhCIOfycbG12F7PCd4POqxsPTGmvkXVb__PWQgzbTdxZVVD_5EBhTa1W3jGC1PlsP3qJyN4K8P8iQ0TkuBz5bd06KUShsj5XvnKABI0XIRtEy9XcrnbegYd6iOlVXT6e6borGv8NeS9ftztXGSsQ"
+      ],
+      "env": {
+        "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+      }
+    }
+  }
+}
