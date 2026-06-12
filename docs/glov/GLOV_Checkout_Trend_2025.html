@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Trend Checkout CR | Styczeń–Maj 2025</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: #1a1a1a; line-height: 1.6; background: #fff; }
+
+.cover { background: #1a1a1a; color: #fff; padding: 52px 60px; }
+.cover .label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #666; margin-bottom: 14px; }
+.cover h1 { font-size: 40px; font-weight: 700; line-height: 1.1; margin-bottom: 14px; }
+.cover .sub { font-size: 15px; color: #aaa; max-width: 560px; line-height: 1.5; margin-bottom: 28px; }
+.cover .meta { font-size: 11px; color: #555; }
+.cover .meta span { margin-right: 24px; }
+
+.page { padding: 48px 60px; max-width: 900px; }
+.page + .page { border-top: 1px solid #eee; }
+
+h2 { font-size: 20px; font-weight: 700; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 3px solid #1a1a1a; }
+h3 { font-size: 12px; font-weight: 700; margin: 24px 0 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #555; }
+
+.verdict { background: #1a1a1a; color: #fff; border-radius: 8px; padding: 24px 28px; margin: 20px 0; }
+.verdict .v-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 8px; }
+.verdict p { font-size: 15px; line-height: 1.6; color: #eee; }
+
+/* Monthly summary grid */
+.month-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; margin: 20px 0; }
+.month-card { border: 1px solid #e5e7eb; padding: 16px 12px; position: relative; }
+.month-card.highlight { background: #fff5f5; border-color: #fca5a5; }
+.month-card.promo { background: #fefce8; border-color: #fde68a; }
+.month-card .m-name { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #888; margin-bottom: 10px; }
+.month-card .m-cr { font-size: 28px; font-weight: 700; color: #1a1a1a; }
+.month-card .m-cr.down { color: #dc2626; }
+.month-card .m-cr.up { color: #16a34a; }
+.month-card .m-label { font-size: 10px; color: #888; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.3px; }
+.month-card .m-arrow { font-size: 18px; position: absolute; top: 12px; right: 12px; }
+.month-card .m-detail { font-size: 11px; color: #666; margin-top: 10px; border-top: 1px solid #f0f0f0; padding-top: 8px; line-height: 1.6; }
+.month-card .m-promo-tag { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; background: #fef3c7; color: #92400e; border: 1px solid #fde68a; border-radius: 3px; padding: 1px 6px; display: inline-block; margin-bottom: 6px; }
+
+/* Funnel table */
+.funnel-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 12px; }
+.funnel-table th { background: #1a1a1a; color: #fff; padding: 10px 12px; text-align: right; font-size: 10px; letter-spacing: 0.3px; font-weight: 600; }
+.funnel-table th:first-child { text-align: left; }
+.funnel-table td { padding: 11px 12px; border-bottom: 1px solid #f0f0f0; text-align: right; }
+.funnel-table td:first-child { text-align: left; font-weight: 700; }
+.funnel-table tr:last-child td { border-bottom: none; }
+.funnel-table .cr-good { color: #16a34a; font-weight: 700; }
+.funnel-table .cr-bad { color: #dc2626; font-weight: 700; }
+.funnel-table .cr-mid { color: #d97706; font-weight: 700; }
+.funnel-table tr.promo-row { background: #fefce8; }
+.funnel-table tr.promo-row td:first-child::after { content: " ⚡"; font-size: 10px; }
+
+/* Bar chart */
+.bar-chart { margin: 20px 0; }
+.bar-row { display: flex; align-items: center; gap: 12px; margin: 6px 0; }
+.bar-label { width: 60px; font-size: 11px; font-weight: 700; color: #555; text-align: right; flex-shrink: 0; }
+.bar-wrap { flex: 1; background: #f3f4f6; border-radius: 3px; height: 28px; position: relative; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding: 0 10px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; transition: width 0.5s; }
+.bar-fill.good { background: #16a34a; }
+.bar-fill.mid { background: #d97706; }
+.bar-fill.bad { background: #dc2626; }
+.bar-fill.promo { background: #ca8a04; opacity: 0.7; }
+.bar-note { font-size: 10px; color: #aaa; width: 80px; flex-shrink: 0; }
+
+/* Channel table */
+.channel-section { margin: 24px 0; }
+.ch-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ch-table th { background: #f9fafb; padding: 8px 12px; text-align: right; font-size: 10px; letter-spacing: 0.3px; color: #666; font-weight: 700; border-bottom: 2px solid #e5e7eb; }
+.ch-table th:first-child { text-align: left; }
+.ch-table td { padding: 10px 12px; border-bottom: 1px solid #f5f5f5; text-align: right; }
+.ch-table td:first-child { text-align: left; font-weight: 600; }
+.ch-table .trend-up { color: #16a34a; }
+.ch-table .trend-down { color: #dc2626; }
+.ch-table .trend-flat { color: #888; }
+
+/* Finding cards */
+.finding { border-left: 4px solid #1a1a1a; padding: 16px 20px; margin: 14px 0; background: #f9fafb; border-radius: 0 6px 6px 0; }
+.finding.red { border-color: #dc2626; background: #fff5f5; }
+.finding.amber { border-color: #d97706; background: #fffbeb; }
+.finding.green { border-color: #16a34a; background: #f0fdf4; }
+.finding .f-title { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+.finding .f-body { font-size: 12px; color: #555; line-height: 1.6; }
+
+.pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; margin: 2px; }
+.pill-red { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.pill-green { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+.pill-amber { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+.pill-gray { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+
+.footer { padding: 28px 60px; border-top: 1px solid #eee; font-size: 11px; color: #999; }
+
+.note { font-size: 11px; color: #888; font-style: italic; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="label">Analiza historyczna — GA4 glov.co (PLN)</div>
+  <h1>GLOV Checkout:<br>trend od początku 2025</h1>
+  <div class="sub">Styczeń–maj 2025 (bez promo outlierów). CR sesja→zakup, funnel ATC→Checkout→Purchase, breakdown kanałowy. Dane: GA4 property 342844459.</div>
+  <div class="meta">
+    <span>Data analizy: 27 maja 2025</span>
+    <span>Źródło: GA4 via MCP</span>
+    <span>Waluta: PLN</span>
+  </div>
+</div>
+
+<!-- SEKCJA 1: VERDICT -->
+<div class="page">
+  <div class="label" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin-bottom:8px;">Główny wniosek</div>
+  <h2>Problem nie jest nowy — i się pogłębia</h2>
+
+  <div class="verdict">
+    <div class="v-label">Werdykt</div>
+    <p>Checkout→Purchase CR był <strong>stabilny i dobry (39–44%) przez styczeń–kwiecień</strong>. Problem NIE leży w kroku checkout→purchase — ten krok działa. Prawdziwy problem to <strong>dramatyczny spadek CR sesja→zakup w maju (11,2%)</strong> przy rosnącym ATC→Checkout (34%). Użytkownicy dodają do koszyka i inicjują checkout chętniej niż kiedykolwiek — ale finalizacja spada. To może oznaczać: wzrost ruchu niskiej jakości z kampanii Meta, albo nowe problemy techniczne pojawiające się właśnie teraz (maj 2025).</p>
+  </div>
+
+  <!-- MONTHLY CR GRID -->
+  <h3>CR sesja→zakup — miesięcznie</h3>
+  <div class="month-grid">
+    <div class="month-card">
+      <div class="m-name">Sty '25</div>
+      <div class="m-cr">9,6%</div>
+      <div class="m-label">CR sesja→zakup</div>
+      <div class="m-detail">
+        Sesje: 46 865<br>
+        Zakupy: 1 132<br>
+        Przychód: 113 661 zł<br>
+        AOV: ~100 zł
+      </div>
+    </div>
+    <div class="month-card promo">
+      <div class="m-promo-tag">⚡ Promo — Walentynki</div>
+      <div class="m-name">Lut '25</div>
+      <div class="m-cr up">19,8%</div>
+      <div class="m-label">CR sesja→zakup</div>
+      <div class="m-detail">
+        Sesje: 34 121<br>
+        Zakupy: 886<br>
+        Przychód: 84 993 zł<br>
+        AOV: ~96 zł
+      </div>
+    </div>
+    <div class="month-card promo">
+      <div class="m-promo-tag">⚡ Promo — Dzień Kobiet</div>
+      <div class="m-name">Mar '25</div>
+      <div class="m-cr up">17,8%</div>
+      <div class="m-label">CR sesja→zakup</div>
+      <div class="m-detail">
+        Sesje: 64 236<br>
+        Zakupy: 1 761<br>
+        Przychód: 170 993 zł<br>
+        AOV: ~97 zł
+      </div>
+    </div>
+    <div class="month-card">
+      <div class="m-name">Kwi '25</div>
+      <div class="m-cr mid">12,1%</div>
+      <div class="m-label">CR sesja→zakup</div>
+      <div class="m-detail">
+        Sesje: 42 535<br>
+        Zakupy: 1 324<br>
+        Przychód: 134 064 zł<br>
+        AOV: ~101 zł
+      </div>
+    </div>
+    <div class="month-card highlight">
+      <div class="m-promo-tag" style="background:#fee2e2;color:#991b1b;border-color:#fca5a5;">⚡ Promo — Dzień Matki</div>
+      <div class="m-name">Maj '25</div>
+      <div class="m-cr down">11,2%</div>
+      <div class="m-label">CR sesja→zakup</div>
+      <div class="m-arrow">↓</div>
+      <div class="m-detail">
+        Sesje: 55 130<br>
+        Zakupy: 2 012<br>
+        Przychód: 196 410 zł<br>
+        AOV: ~98 zł
+      </div>
+    </div>
+  </div>
+  <p class="note">⚡ = miesiące z silnymi kampaniami promocyjnymi — CR podwyższony przez targetowany ruch, traktować jako outlier przy porównaniu baseline.</p>
+</div>
+
+<!-- SEKCJA 2: FUNNEL BREAKDOWN -->
+<div class="page">
+  <h2>Funnel ATC → Checkout → Purchase</h2>
+
+  <table class="funnel-table">
+    <tr>
+      <th>Miesiąc</th>
+      <th>Sesje</th>
+      <th>ATC</th>
+      <th>BeginCheckout</th>
+      <th>Purchase</th>
+      <th>ATC→Checkout</th>
+      <th>Checkout→Purchase</th>
+      <th>Sesja→Zakup</th>
+    </tr>
+    <tr>
+      <td>Sty '25</td>
+      <td>46 865</td>
+      <td>10 589</td>
+      <td>2 843</td>
+      <td>1 132</td>
+      <td class="cr-mid">26,8%</td>
+      <td class="cr-good">39,8%</td>
+      <td class="cr-bad">9,6%</td>
+    </tr>
+    <tr class="promo-row">
+      <td>Lut '25</td>
+      <td>34 121</td>
+      <td>10 289</td>
+      <td>2 305</td>
+      <td>886</td>
+      <td class="cr-bad">22,4%</td>
+      <td class="cr-good">38,4%</td>
+      <td class="cr-good">19,8%</td>
+    </tr>
+    <tr class="promo-row">
+      <td>Mar '25</td>
+      <td>64 236</td>
+      <td>17 117</td>
+      <td>4 011</td>
+      <td>1 761</td>
+      <td class="cr-bad">23,4%</td>
+      <td class="cr-good">43,9%</td>
+      <td class="cr-good">17,8%</td>
+    </tr>
+    <tr>
+      <td>Kwi '25</td>
+      <td>42 535</td>
+      <td>9 695</td>
+      <td>3 115</td>
+      <td>1 324</td>
+      <td class="cr-mid">32,1%</td>
+      <td class="cr-good">42,5%</td>
+      <td class="cr-mid">12,1%</td>
+    </tr>
+    <tr style="background:#fff5f5;">
+      <td>Maj '25 ⬇</td>
+      <td>55 130</td>
+      <td>12 701</td>
+      <td>4 362</td>
+      <td>2 012</td>
+      <td class="cr-good">34,3%</td>
+      <td class="cr-good">46,1%</td>
+      <td class="cr-bad">11,2%</td>
+    </tr>
+  </table>
+  <p class="note">Żółte wiersze = promo miesiące (zaburzone przez kampanie targetowane). Czerwone tło = alarmujące.</p>
+
+  <h3>Checkout→Purchase CR (bar)</h3>
+  <div class="bar-chart">
+    <div class="bar-row">
+      <div class="bar-label">Sty '25</div>
+      <div class="bar-wrap"><div class="bar-fill mid" style="width:52%;">39,8%</div></div>
+      <div class="bar-note">baseline</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Lut '25</div>
+      <div class="bar-wrap"><div class="bar-fill promo" style="width:50%;">38,4% ⚡</div></div>
+      <div class="bar-note">promo</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Mar '25</div>
+      <div class="bar-wrap"><div class="bar-fill promo" style="width:57%;">43,9% ⚡</div></div>
+      <div class="bar-note">promo</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Kwi '25</div>
+      <div class="bar-wrap"><div class="bar-fill good" style="width:55%;">42,5%</div></div>
+      <div class="bar-note">dobry</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Maj '25</div>
+      <div class="bar-wrap"><div class="bar-fill good" style="width:60%;">46,1%</div></div>
+      <div class="bar-note">⬆ rośnie!</div>
+    </div>
+  </div>
+
+  <h3>ATC→BeginCheckout CR (bar)</h3>
+  <div class="bar-chart">
+    <div class="bar-row">
+      <div class="bar-label">Sty '25</div>
+      <div class="bar-wrap"><div class="bar-fill mid" style="width:35%;">26,8%</div></div>
+      <div class="bar-note">słaby</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Lut '25</div>
+      <div class="bar-wrap"><div class="bar-fill promo" style="width:29%;">22,4% ⚡</div></div>
+      <div class="bar-note">promo</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Mar '25</div>
+      <div class="bar-wrap"><div class="bar-fill promo" style="width:31%;">23,4% ⚡</div></div>
+      <div class="bar-note">promo</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Kwi '25</div>
+      <div class="bar-wrap"><div class="bar-fill mid" style="width:42%;">32,1%</div></div>
+      <div class="bar-note">poprawa</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Maj '25</div>
+      <div class="bar-wrap"><div class="bar-fill good" style="width:45%;">34,3%</div></div>
+      <div class="bar-note">⬆ rośnie!</div>
+    </div>
+  </div>
+
+  <div class="finding red" style="margin-top:20px;">
+    <div class="f-title">🔴 Paradoks maja: checkout kroczy dobrze — ale sesja→zakup spada</div>
+    <div class="f-body">ATC→Checkout rośnie (26,8% sty → 34,3% maj). Checkout→Purchase rośnie (39,8% → 46,1%). A mimo to CR sesja→zakup <em>spada</em> (9,6% sty → 11,2% maj = pozornie rośnie, ale przy masowym ruchu promo to złudne). Prawdziwy problem: <strong>ogromna ilość sesji które w ogóle nie docierają do ATC</strong> — szczególnie nowy ruch z Meta. 55 130 sesji, 12 701 ATC = tylko 23% dodaje do koszyka. To niski "intent rate", nie problem z checkoutem jako takim.</div>
+  </div>
+</div>
+
+<!-- SEKCJA 3: KANAŁY -->
+<div class="page">
+  <h2>Breakdown kanałowy — gdzie leży problem</h2>
+
+  <h3>Maj 2025 — CR per kanał (główne)</h3>
+  <table class="ch-table">
+    <tr>
+      <th>Kanał</th>
+      <th>Sesje</th>
+      <th>Zakupy</th>
+      <th>CR sesja→zakup</th>
+      <th>Przychód</th>
+      <th>Zmiana vs sty</th>
+    </tr>
+    <tr>
+      <td>Paid Social (Meta)</td>
+      <td>29 767</td>
+      <td>770</td>
+      <td class="cr-bad">2,59%</td>
+      <td>69 714 zł</td>
+      <td class="trend-down">↓ vs 9,0% sty</td>
+    </tr>
+    <tr>
+      <td>Direct</td>
+      <td>3 414</td>
+      <td>150</td>
+      <td class="cr-good">4,40%</td>
+      <td>15 635 zł</td>
+      <td class="trend-flat">≈ stabilny</td>
+    </tr>
+    <tr>
+      <td>Paid Search (Google)</td>
+      <td>5 789</td>
+      <td>356</td>
+      <td class="cr-good">6,15%</td>
+      <td>36 330 zł</td>
+      <td class="trend-flat">≈ stabilny</td>
+    </tr>
+    <tr>
+      <td>Organic Search</td>
+      <td>4 446</td>
+      <td>104</td>
+      <td class="cr-mid">2,34%</td>
+      <td>9 836 zł</td>
+      <td class="trend-flat">≈ stabilny</td>
+    </tr>
+    <tr>
+      <td>Unassigned</td>
+      <td>7 925</td>
+      <td>416</td>
+      <td class="cr-good">5,25%</td>
+      <td>43 194 zł</td>
+      <td class="trend-up">⬆ dobry</td>
+    </tr>
+    <tr>
+      <td>Organic Social</td>
+      <td>1 951</td>
+      <td>94</td>
+      <td class="cr-mid">4,82%</td>
+      <td>8 639 zł</td>
+      <td class="trend-flat">≈ stabilny</td>
+    </tr>
+    <tr>
+      <td>Cross-network</td>
+      <td>2 194</td>
+      <td>109</td>
+      <td class="cr-mid">4,97%</td>
+      <td>11 634 zł</td>
+      <td class="trend-flat">≈ stabilny</td>
+    </tr>
+  </table>
+
+  <h3>Paid Social (Meta) — trend miesięczny CR</h3>
+  <div class="bar-chart">
+    <div class="bar-row">
+      <div class="bar-label">Sty '25</div>
+      <div class="bar-wrap"><div class="bar-fill mid" style="width:45%;">9,0%</div></div>
+      <div class="bar-note"></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Lut '25</div>
+      <div class="bar-wrap"><div class="bar-fill promo" style="width:50%;">10,0% ⚡</div></div>
+      <div class="bar-note">promo</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Mar '25</div>
+      <div class="bar-wrap"><div class="bar-fill promo" style="width:63%;">12,5% ⚡</div></div>
+      <div class="bar-note">promo</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Kwi '25</div>
+      <div class="bar-wrap"><div class="bar-fill mid" style="width:53%;">10,6%</div></div>
+      <div class="bar-note"></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Maj '25</div>
+      <div class="bar-wrap"><div class="bar-fill bad" style="width:13%;">2,6% ⬇</div></div>
+      <div class="bar-note">ALARM</div>
+    </div>
+  </div>
+
+  <div class="finding red">
+    <div class="f-title">🔴 Meta Paid Social — katastrofalny spadek CR w maju: 10,6% → 2,6%</div>
+    <div class="f-body">W janeiro–kwiecień Meta dawało CR 9–12,5%. W maju — 2,59% przy 29 767 sesjach (54% całego ruchu). To <strong>główna dźwignia</strong> całego problemu. Może oznaczać: kampania Dzień Matki przyciągnęła cold audience (niski intent), zmienił się targeting/algorytm, albo landing page nie konwertuje nowego segmentu odbiorców. <strong>Mimo niskiego CR — przychód z Meta to 69 714 zł z 29 767 sesji, czyli 2,34 zł/sesja. Dla porównania Paid Search: 6,27 zł/sesja.</strong></div>
+  </div>
+
+  <div class="finding amber">
+    <div class="f-title">🟠 Direct CR spadł ze stycznia: 6,0% → 4,4%</div>
+    <div class="f-body">Direct to zwykle powracający klienci — spadek z 6,0% (sty) → 4,4% (maj) może sygnalizować malejącą retencję lub problemy które dotykają też lojalnych użytkowników (JS error checkout!).</div>
+  </div>
+
+  <div class="finding green">
+    <div class="f-title">🟢 Paid Search (Google) — stabilny 13,1–15,6%, najwyższy ROAS</div>
+    <div class="f-body">Google Ads daje najwyższy jakościowy ruch. CR 13,1–15,6% przez całe 5 miesięcy, AOV wysoki. W maju: 356 zakupów z 5 789 sesji. Gdyby GLOV przesuął budżet z Meta na Google — efekt byłby prawdopodobnie lepszy.</div>
+  </div>
+</div>
+
+<!-- SEKCJA 4: WNIOSKI -->
+<div class="page">
+  <h2>Wnioski — co to wszystko znaczy</h2>
+
+  <div class="finding red">
+    <div class="f-title">1. Problem checkout→purchase NIE istnieje historycznie — Clarity go uwidoczniła</div>
+    <div class="f-body">CR checkout→purchase był stabilny 39–46% przez cały okres. Clarity pokazała w sesji <code>1epgc3p/fu6dw6</code> że JS error <em>"unexpected to..."</em> blokuje checkout — ale GA4 to <em>widzi jako purchase</em> jeśli użytkownik finalnie przebił się przez błąd. Problem techniczny może być stary, ale liczba przypadków rośnie — albo błąd jest nowy (jakaś instalacja apki w 2025).</div>
+  </div>
+
+  <div class="finding red">
+    <div class="f-title">2. Prawdziwy problem: Meta Paid Social — ruch bez konwersji w maju</div>
+    <div class="f-body">Maj = 29 767 sesji z Meta przy CR 2,6%. To ściąga całościowy CR w dół. Hipotezy: (a) kampania Dzień Matki targetuje szeroko → cold audience nie kupuje, (b) zmiana algorytmu Meta → inny profil użytkownika, (c) landing page nie pasuje do creative'u. <strong>To jest do zbadania w Meta Ads — nie w Shopify ani Clarity.</strong></div>
+  </div>
+
+  <div class="finding amber">
+    <div class="f-title">3. ATC→Checkout rośnie — użytkownicy chcą kupować coraz bardziej</div>
+    <div class="f-body">Z 26,8% (sty) do 34,3% (maj). Ci, którzy decydują się wejść do koszyka — robią to chętniej. Optymalizacja koszyka i PDP przynosi efekty. Problem to górna część lejka (sesja→ATC = tylko 23% w maju).</div>
+  </div>
+
+  <div class="finding green">
+    <div class="f-title">4. Checkout→Purchase 46% w maju — najlepszy wynik w historii</div>
+    <div class="f-body">Ten krok działa. Jeśli użytkownik trafi na /cart i kliknie "Przejdź do kasy" — 46% kończy zakup. JS error z sesji Clarity to realny problem dla <em>konkretnych</em> użytkowników, ale statystycznie checkout nie blokuje masowo. <strong>Naprawienie JS error to optymalizacja, nie ratowanie biznesu.</strong></div>
+  </div>
+
+  <h3>Co robić w pierwszej kolejności</h3>
+
+  <table class="funnel-table" style="margin-top:16px;">
+    <tr>
+      <th style="text-align:left;">Akcja</th>
+      <th style="text-align:left;">Dlaczego</th>
+      <th>Impact</th>
+    </tr>
+    <tr>
+      <td><strong>Audit kampanii Meta Maj 2025</strong> — sprawdź jakie creative i audience dają ten 2,6% CR</td>
+      <td>54% ruchu przy 2,6% CR to główna strata. Porównaj audience maj vs marzec (12,5% CR).</td>
+      <td class="cr-bad">KRYTYCZNY</td>
+    </tr>
+    <tr>
+      <td><strong>Napraw JS error "unexpected to..."</strong> — DevTools przy kliknięciu checkout</td>
+      <td>Blokuje checkout dla segmentu użytkowników. Potwierdzony wizualnie w Clarity.</td>
+      <td class="cr-bad">WYSOKI</td>
+    </tr>
+    <tr>
+      <td><strong>Zlikwiduj free gift link z koszyka</strong> — zmień "TUTAJ" na popup</td>
+      <td>Odrywa użytkowników gotowych do płatności od ścieżki checkout.</td>
+      <td class="cr-mid">WYSOKI</td>
+    </tr>
+    <tr>
+      <td><strong>Przesuń budżet z Meta → Google</strong> — test na 20% budżetu</td>
+      <td>Google: 6,27 zł/sesja. Meta maj: 2,34 zł/sesja. Różnica 2,7× w efektywności.</td>
+      <td class="cr-good">STRATEGICZNY</td>
+    </tr>
+    <tr>
+      <td><strong>Luna Eye — restock lub cross-sell</strong></td>
+      <td>Produkt z największym zainteresowaniem, 0% możliwości konwersji. Każda sesja Luna Eye = utracona sprzedaż.</td>
+      <td class="cr-mid">ŚREDNI</td>
+    </tr>
+  </table>
+</div>
+
+<div class="footer">
+  GLOV_Checkout_Trend_2025.html &nbsp;·&nbsp; Źródło: GA4 property 342844459 (glov.co, PLN) via MCP, 27.05.2025 &nbsp;·&nbsp; Przygotował: Claude (Cowork) dla Tomasz Waligóra
+</div>
+
+</body>
+</html>
