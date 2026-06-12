@@ -1,0 +1,306 @@
+<!DOCTYPE html><html lang="pl" data-theme="light"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV HUB — centrum analiz</title>
+<style>
+/* ===== STYL SKILLTA: jasny minimalizm + toggle dark ===== */
+[data-theme="light"]{
+  --bg:#ffffff; --bg2:#f7f7f8; --card:#ffffff; --line:#e6e6e9; --line2:#ededf0;
+  --txt:#0a0a0a; --txt2:#6b6b76; --muted:#9a9aa5;
+  --accent:#7c5cff; --black:#0a0a0a; --green:#16a34a; --star:#f5a623;
+  --shadow:0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-h:0 8px 24px rgba(0,0,0,.10);
+}
+[data-theme="dark"]{
+  --bg:#0f1115; --bg2:#181b22; --card:#181b22; --line:#2a2f3a; --line2:#23272f;
+  --txt:#e8eaed; --txt2:#9aa0aa; --muted:#6b7280;
+  --accent:#7c5cff; --black:#e8eaed; --green:#3ecf8e; --star:#f5a623;
+  --shadow:0 1px 3px rgba(0,0,0,.3); --shadow-h:0 8px 24px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,sans-serif;line-height:1.5;transition:background .3s,color .3s}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px 70px}
+
+/* top bar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:20}
+.logo{font-size:21px;font-weight:800;letter-spacing:-.5px}
+.logo span{color:var(--accent)}
+.topnav{display:flex;align-items:center;gap:20px;font-size:13.5px;color:var(--txt2)}
+.topnav a{color:var(--txt2);text-decoration:none}.topnav a:hover{color:var(--txt)}
+.theme-btn{background:var(--bg2);border:1px solid var(--line);border-radius:10px;width:38px;height:38px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.15s}
+.theme-btn:hover{border-color:var(--accent)}
+
+/* hero */
+.hero{text-align:center;padding:56px 0 30px}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--txt2);background:var(--bg2);border:1px solid var(--line);padding:5px 13px;border-radius:30px;margin-bottom:22px}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+h1{font-size:54px;font-weight:800;letter-spacing:-2px;line-height:1.05}
+@media(max-width:640px){h1{font-size:36px}}
+.hero p{font-size:16.5px;color:var(--txt2);max-width:560px;margin:18px auto 0;line-height:1.55}
+.hero .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.pill{font-size:12px;padding:5px 13px;border-radius:30px;background:var(--bg2);color:var(--txt2);border:1px solid var(--line)}
+
+/* sekcje */
+.sechead{display:flex;align-items:baseline;gap:10px;margin:42px 0 18px}
+.sechead h2{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.sechead .cnt{font-size:13px;color:var(--muted)}
+
+/* karty grid */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:860px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;text-decoration:none;color:var(--txt);display:flex;flex-direction:column;box-shadow:var(--shadow);transition:.18s;position:relative}
+.card:hover{border-color:var(--accent);box-shadow:var(--shadow-h);transform:translateY(-3px)}
+.card .ico{width:42px;height:42px;border-radius:11px;background:var(--bg2);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
+.card h3{font-size:15.5px;font-weight:700;margin-bottom:7px;letter-spacing:-.2px}
+.card p{font-size:13px;color:var(--txt2);line-height:1.55;flex:1}
+.card .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;padding-top:13px;border-top:1px solid var(--line2)}
+.t{font-size:10.5px;padding:3px 9px;border-radius:6px;font-weight:600;background:var(--bg2);color:var(--txt2);border:1px solid var(--line2)}
+.t.acc{background:rgba(124,92,255,.1);color:var(--accent);border-color:transparent}
+.t.grn{background:rgba(22,163,74,.1);color:var(--green);border-color:transparent}
+
+/* big featured */
+.big{grid-column:1/-1;background:linear-gradient(110deg,var(--bg2),var(--card));border:1px solid var(--line);border-radius:18px;padding:26px;display:flex;gap:22px;align-items:center;text-decoration:none;color:var(--txt);box-shadow:var(--shadow);transition:.18s}
+.big:hover{border-color:var(--accent);box-shadow:var(--shadow-h);transform:translateY(-2px)}
+.big .ico{width:56px;height:56px;border-radius:14px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.big h3{font-size:19px;font-weight:800;margin-bottom:6px;letter-spacing:-.4px}
+.big p{font-size:13.5px;color:var(--txt2);line-height:1.5}
+.big .go{margin-left:auto;font-size:22px;color:var(--accent);flex-shrink:0}
+
+/* małe karty (instrukcje/mapy/archiwum) */
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:860px){.sgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.sgrid{grid-template-columns:1fr}}
+.scard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px;text-decoration:none;color:var(--txt);transition:.15s;box-shadow:var(--shadow)}
+.scard:hover{border-color:var(--accent);transform:translateY(-2px)}
+.scard h4{font-size:13.5px;font-weight:600;margin-bottom:4px}
+.scard p{font-size:11.5px;color:var(--txt2);line-height:1.45}
+
+.foot{margin-top:48px;padding-top:22px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);text-align:center;line-height:1.8}
+</style></head>
+<body>
+<div class="topbar wrap" style="max-width:none;padding-left:max(22px,calc((100vw - 1080px)/2));padding-right:max(22px,calc((100vw - 1080px)/2))">
+  <div class="logo">glov<span>.</span>hub</div>
+  <div class="topnav">
+    <a href="GLOV_Mega_Audit_4zakladki.html">Mega Audit</a>
+    <a href="GLOV_GA4_R01-R09_Miesieczny.html">GA4</a>
+    <a href="GLOV_Sciezki_Miesieczny.html">Ścieżki</a>
+    <a href="GLOV_Clarity_Analiza.html">Clarity</a>
+    <button class="theme-btn" id="themeBtn" title="Przełącz tryb jasny/ciemny">🌙</button>
+  </div>
+</div>
+
+<div class="wrap">
+<div class="hero">
+  <div class="badge"><span class="dot"></span> Centrum analiz glov.co</div>
+  <h1>Wszystko o GLOV<br>w jednym miejscu.</h1>
+  <p>GA4, Shopify i Clarity — segmenty, ścieżki, ruch płatny i behawior, w spójnych raportach. Klikaj kafelki, wracaj tutaj.</p>
+  <div class="meta">
+    <span class="pill">property 342844459</span>
+    <span class="pill">GA4 + Shopify + Clarity</span>
+    <span class="pill">11.06.2026</span>
+    <span class="pill">INTERNAL</span>
+  </div>
+</div>
+
+<!-- REFERENCE -->
+<div class="sechead"><h2>⭐ Master / Reference</h2></div>
+<a class="big" href="GLOV_Mega_Audit_4zakladki.html">
+  <div class="ico">🏆</div>
+  <div>
+    <h3>Mega Audit — 4 kluczowe zakładki</h3>
+    <p>Najważniejsze analizy. Kliknij kafelek poniżej, by wejść wprost na konkretną zakładkę.</p>
+  </div>
+  <div class="go">→</div>
+</a>
+<div class="grid" style="margin-top:14px">
+  <a class="card" href="GLOV_Mega_Audit_4zakladki.html#ga4">
+    <div class="ico">📈</div><h3>GA4 Analiza Startowa</h3>
+    <p>Złoty standard — pełna analiza startowa GA4. Wejście wprost na tę zakładkę.</p>
+    <div class="tags"><span class="t acc">złoty standard</span></div>
+  </a>
+  <a class="card" href="GLOV_Mega_Audit_4zakladki.html#live">
+    <div class="ico">⚡</div><h3>Live Daily</h3>
+    <p>Dzienne dane na żywo — bieżący stan sklepu.</p>
+    <div class="tags"><span class="t">live</span></div>
+  </a>
+  <a class="card" href="GLOV_Mega_Audit_4zakladki.html#wizualny">
+    <div class="ico">📸</div><h3>Wizualny × GA4</h3>
+    <p>Połączenie warstwy wizualnej (screenshoty) z danymi GA4.</p>
+    <div class="tags"><span class="t">wizualny + dane</span></div>
+  </a>
+  <a class="card" href="GLOV_Mega_Audit_4zakladki.html#suma">
+    <div class="ico">💰</div><h3>SUMA STRAT</h3>
+    <p>Ile sklep traci na każdym ślepym/słabym punkcie — wycena strat.</p>
+    <div class="tags"><span class="t acc">straty w zł</span></div>
+  </a>
+</div>
+
+<!-- LIVE -->
+<div class="sechead"><h2>🟢 Live</h2></div>
+<a class="big" href="GLOV_Live.html">
+  <div class="ico">📡</div>
+  <div>
+    <h3>Live Dashboard — sprzedaż na żywo</h3>
+    <p>Gross · sesje · transakcje · CR w układzie miesiąc / tydzień / dziś + wykres sprzedaży dzień po dniu bieżącego miesiąca. Dane Shopify, odświeżane snapshotem.</p>
+  </div>
+  <div class="go">→</div>
+</a>
+
+<!-- LISTA NAPRAW -->
+<div class="sechead"><h2>✅ Do zrobienia</h2></div>
+<a class="big" href="GLOV_Lista_Napraw.html">
+  <div class="ico">🔧</div>
+  <div>
+    <h3>Master lista napraw — 70 problemów</h3>
+    <p>Wszystko ze wszystkich audytów + 22 z listy uzgodnionej z agencją (🤝), zdeduplikowane. Interaktywna tabela: priorytet, obszar, status agencji, ✓ checkbox + komentarz. Stan w przeglądarce, eksport/import.</p>
+  </div>
+  <div class="go">→</div>
+</a>
+
+<!-- ANALIZY -->
+<div class="sechead"><h2>📊 Analizy GA4</h2><span class="cnt">5 raportów · miesięczne</span></div>
+<div class="grid">
+  <a class="card" href="GLOV_GA4_R01-R09_Miesieczny.html">
+    <div class="ico">📈</div>
+    <h3>R01–R09 miesięczny</h3>
+    <p>9 raportów GA4 (KPI, urządzenia, kanały, landing, produkty, nowi/wracający, lejek, dni tygodnia) z przełącznikiem Sty–Cze + Σ90 dni.</p>
+    <div class="tags"><span class="t grn">przełącznik miesięcy</span><span class="t acc">twarde GA4</span></div>
+  </a>
+  <a class="card" href="GLOV_Sciezki_Miesieczny.html">
+    <div class="ico">🛤️</div>
+    <h3>Ścieżki zakupowe</h3>
+    <p>Typy ścieżek (Listing / PDP / Homepage / Search / Landing) wg wejścia → zakup, stała kolejność, przełącznik miesięcy.</p>
+    <div class="tags"><span class="t grn">przełącznik miesięcy</span><span class="t acc">twarde GA4</span></div>
+  </a>
+  <a class="card" href="GLOV_Ekstrakcja_Ruchu_LP.html">
+    <div class="ico">🎯</div>
+    <h3>Ekstrakcja ruchu płatnego</h3>
+    <p>Gdzie ląduje ruch reklamowy per landing × typ × miesiąc. Filtr: Wszystko / Płatny / Paid Search / Paid Social / Bezpłatny. 3 widoki.</p>
+    <div class="tags"><span class="t grn">filtr ruchu płatnego</span><span class="t acc">wzór Audi</span></div>
+  </a>
+  <a class="card" href="GLOV_Clarity_Analiza.html">
+    <div class="ico">🎬</div>
+    <h3>Analiza Clarity</h3>
+    <p>1000 nagrań + agregaty. Bug „▫" na cenach (832 kliki), drop PDP→koszyk 9:1, 78% instant-bounce z Meta, CLS 18%, Luna Eye = król PDP.</p>
+    <div class="tags"><span class="t acc">nagrania</span><span class="t">behawior</span></div>
+  </a>
+  <a class="card" href="GLOV_Segmenty_Sciezki_Maj_Marzec.html">
+    <div class="ico">🧩</div>
+    <h3>10 segmentów (maj vs marzec)</h3>
+    <p>Behawioralne, zakupowe, kanałowe + ścieżki wejścia. Walidacja GA4 × Shopify. Średnie interakcji per kanał i produkt.</p>
+    <div class="tags"><span class="t acc">10 segmentów</span><span class="t">maj vs marzec</span></div>
+  </a>
+</div>
+
+<!-- INSTRUKCJE -->
+<div class="sechead"><h2>🛠️ Instrukcje i dokumenty</h2></div>
+<div class="sgrid">
+  <a class="scard" href="GLOV_Instrukcja_GTM_Eventy.md"><h4>📋 Instrukcja GTM</h4><p>Naprawa eventów: ATC-source, gubiony landing, filtry. GTM-PQ9JFT2.</p></a>
+  <a class="scard" href="scenariusze.md"><h4>📝 Scenariusze → standardy</h4><p>Markery @ga4/@event/@ski. Standard „Architektura + Eventy".</p></a>
+  <a class="scard" href="ga4_findings.md"><h4>🔍 GA4 findings</h4><p>Audyt oeventowania, ślepe pola, custom dimensions.</p></a>
+  <a class="scard" href="sciezki_szkielet.md"><h4>🗂️ Szkielet ścieżek</h4><p>Definicje: segmenty, wejścia, modelowe ścieżki.</p></a>
+</div>
+
+<!-- MAPY -->
+<div class="sechead"><h2>🗺️ Mapping sklepu</h2><span class="cnt">właściwy mapping HP i sekcji</span></div>
+<div class="grid">
+  <a class="card" href="GLOV_Vision_Scan_HP.html">
+    <div class="ico">✨</div>
+    <h3>Vision Scan — HP <span class="t grn" style="vertical-align:middle">NOWA METODA</span></h3>
+    <p>Najnowsza wersja mappingu strony głównej — nowa metoda (Vision Scan), tą idziemy. Self-contained ze screenshotami.</p>
+    <div class="tags"><span class="t acc">najnowsze</span><span class="t">mapping HP</span></div>
+  </a>
+  <a class="card" href="GLOV_Reference_Audit_Mapping.html">
+    <div class="ico">🗺️</div>
+    <h3>Reference Audit — mapping v2</h3>
+    <p>Właściwy mapping sklepu: HP + sekcje (nawigacja, listing, PDP, koszyk, checkout, blog) ze screenshotami desktop+mobile. 17.05.2026.</p>
+    <div class="tags"><span class="t acc">mapping pełny</span><span class="t">20 screenshotów</span></div>
+  </a>
+  <a class="card" href="GLOV_HP_Developer_View.html#techstack">
+    <div class="ico">⚙️</div>
+    <h3>HP Dev — Tech Stack</h3>
+    <p>Co siedzi pod spodem HP: technologie, skrypty, biblioteki. Wejście wprost na zakładkę.</p>
+    <div class="tags"><span class="t acc">tech stack</span></div>
+  </a>
+  <a class="card" href="GLOV_HP_Developer_View.html#dom">
+    <div class="ico">🧬</div>
+    <h3>HP Dev — Struktura DOM</h3>
+    <p>Struktura DOM strony głównej — jak zbudowany jest kod HP.</p>
+    <div class="tags"><span class="t acc">DOM</span></div>
+  </a>
+  <a class="card" href="GLOV_HP_Developer_View.html#nav">
+    <div class="ico">🧭</div>
+    <h3>HP Dev — Nawigacja</h3>
+    <p>Analiza nawigacji strony głównej — menu, linki, struktura.</p>
+    <div class="tags"><span class="t acc">nawigacja</span></div>
+  </a>
+  <a class="card" href="glov-full-store-mapping.html">
+    <div class="ico">🏬</div>
+    <h3>Full store mapping</h3>
+    <p>Architektura sklepu: HP, kolekcje, PDP, koszyk, blog — tekstowa mapa struktury.</p>
+    <div class="tags"><span class="t">struktura</span></div>
+  </a>
+</div>
+<div class="sgrid" style="margin-top:14px">
+  <a class="scard" href="glov-homepage-mapping.html"><h4>🏠 Homepage mapping (stary)</h4><p>Wcześniejsza mapa HP — zastąpiona przez Vision Scan.</p></a>
+  <a class="scard" href="GLOV_Connections_Matrix.html"><h4>🔌 Connections matrix</h4><p>Integracje: GA4, Clarity, Meta, Shopify.</p></a>
+</div>
+
+<!-- CHECKOUT & UX (maj) -->
+<div class="sechead"><h2>🛒 Checkout, UX i frictions</h2><span class="cnt">analizy z maja</span></div>
+<div class="sgrid">
+  <a class="scard" href="GLOV_Checkout_Diagnoza_Kompletna.html"><h4>🛒 Diagnoza checkout (pełna)</h4><p>Kompletna diagnoza checkout i frictions koszyka.</p></a>
+  <a class="scard" href="GLOV_Diagnoza_Checkout_2026-05-27.html"><h4>🛒 Diagnoza checkout 27.05</h4><p>Wcześniejsza wersja diagnozy.</p></a>
+  <a class="scard" href="GLOV_Checkout_Trend_2025.html"><h4>📉 Checkout trend 2025</h4><p>Trend checkout w czasie.</p></a>
+  <a class="scard" href="GLOV_Checkout_Audit.md"><h4>📋 Checkout audit</h4><p>One-page checkout, płatności, wysyłka, frictions.</p></a>
+  <a class="scard" href="GLOV_UX_Audit_2026-05-06.html"><h4>🎨 UX Audit</h4><p>Audyt UX/UI 06.05.2026.</p></a>
+  <a class="scard" href="GLOV_Mobile_UX_Analiza.md"><h4>📱 Mobile UX</h4><p>Listing, PDP, koszyk na 390×844.</p></a>
+  <a class="scard" href="GLOV_20_Frictions.md"><h4>⚠️ 20 frictions</h4><p>Lista friction points (zaktualizowana 13.05).</p></a>
+  <a class="scard" href="GLOV_Core_Web_Vitals.md"><h4>⚡ Core Web Vitals</h4><p>Lighthouse: LCP 1,7s, INP 127ms, CLS 0,02.</p></a>
+  <a class="scard" href="GLOV_Referral_Analiza.md"><h4>🔗 Referral</h4><p>Boty, AI assistants, brak partnerów contentowych.</p></a>
+</div>
+
+<!-- WIEDZA BAZOWA -->
+<div class="sechead"><h2>📚 Wiedza bazowa i konfiguracja</h2></div>
+<div class="sgrid">
+  <a class="scard" href="GLOV_GA4_Analizy_Maj2026.md"><h4>📊 GA4 analizy maj</h4><p>KPI maja, lejki per kanał, ranking produktów.</p></a>
+  <a class="scard" href="GLOV_Zakres_Analiz_GA4.md"><h4>🗂️ Zakres analiz GA4</h4><p>Framework 32 analiz GA4 z priorytetami.</p></a>
+  <a class="scard" href="ecommerce-ai-blueprint.md"><h4>🧭 E-commerce AI blueprint</h4><p>Mapa możliwości Claude+Shopify, 10 błędów, workflow.</p></a>
+  <a class="scard" href="claude-marketing-integrations-blueprint.md"><h4>📈 Marketing integrations</h4><p>GA4 / Meta / Google Ads setup + ryzyka.</p></a>
+  <a class="scard" href="Claude_Shopify_Zagrozenia_i_Dobre_Praktyki.md"><h4>⚠️ Zagrożenia i praktyki</h4><p>Ryzyka, złote zasady, co bezpieczne na żywym sklepie.</p></a>
+  <a class="scard" href="GLOV_MCP_Connections_Guide.md"><h4>🔌 MCP connections guide</h4><p>Jak podłączać konektory (Meta, Google Ads, Clarity, GSC).</p></a>
+  <a class="scard" href="GLOV_Connections_Agencja.md"><h4>🤝 Connections agencja</h4><p>Stan integracji agencyjnych.</p></a>
+  <a class="scard" href="GLOV_UXUI_MVP_PROJECT.md"><h4>🎯 UX/UI MVP project</h4><p>Projekt MVP redesign.</p></a>
+</div>
+
+<!-- ARCHIWUM -->
+<div class="sechead"><h2>📦 Archiwum</h2><span class="cnt">wcześniejsze analizy</span></div>
+<div class="sgrid">
+  <a class="scard" href="Glov_ga4_referencja_r1-r9.html"><h4>📊 GA4 referencja (maj)</h4><p>Pierwsza pełna R01–R09, 90 dni lut–maj.</p></a>
+  <a class="scard" href="glov-reference-master-11-06-2026.html"><h4>🏆 Reference master (pełny)</h4><p>Pełny mega-audyt 6 zakładek (4 ważne wycięte osobno).</p></a>
+  <a class="scard" href="GLOV_Raport_Analityczny.html"><h4>📑 Raport scalony</h4><p>GA4 + frictions + mobile + checkout + CWV.</p></a>
+  <a class="scard" href="GLOV_LTV_Retencja_2024_2026.html"><h4>💰 LTV i retencja</h4><p>LTV, retencja, AOV, top klienci.</p></a>
+  <a class="scard" href="GLOV_Kohorty_2024_2026.html"><h4>📅 Kohorty</h4><p>24 kohorty, heatmap, decay.</p></a>
+  <a class="scard" href="GLOV_SEO_Raport_2026-05.html"><h4>🔎 SEO raport</h4><p>Audyt SEO maj 2026.</p></a>
+  <a class="scard" href="GLOV_Sciezki_Interaktywny.html"><h4>⚠️ Eksplorator (stary)</h4><p>Zawiera estymacje — zastąpiony.</p></a>
+</div>
+
+<div class="foot">
+  <b>glov.hub</b> — jeden punkt wejścia do analiz glov.co · wszystkie raporty INTERNAL<br>
+  GA4 342844459 (proton.me) · Shopify ShopifyQL · Microsoft Clarity · GTM-PQ9JFT2 · Phenicoptere Sp. z o.o.
+</div>
+</div>
+
+<script>
+const root=document.documentElement, btn=document.getElementById('themeBtn');
+const saved=localStorage.getItem('glov-theme')||'light';
+root.setAttribute('data-theme',saved);
+btn.textContent = saved==='light'?'🌙':'☀️';
+btn.onclick=()=>{
+  const next=root.getAttribute('data-theme')==='light'?'dark':'light';
+  root.setAttribute('data-theme',next);
+  localStorage.setItem('glov-theme',next);
+  btn.textContent = next==='light'?'🌙':'☀️';
+};
+</script>
+</body></html>
