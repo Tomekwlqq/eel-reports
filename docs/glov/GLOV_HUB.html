@@ -66,6 +66,19 @@ h1{font-size:54px;font-weight:800;letter-spacing:-2px;line-height:1.05}
 .big p{font-size:13.5px;color:var(--txt2);line-height:1.5}
 .big .go{margin-left:auto;font-size:22px;color:var(--accent);flex-shrink:0}
 
+/* wyróżnione kafle operacyjne (Live + Lista napraw) — 2 w rzędzie, kolorowe */
+.hero-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px}
+@media(max-width:720px){.hero-row{grid-template-columns:1fr}}
+.feat{border-radius:18px;padding:22px;text-decoration:none;display:flex;flex-direction:column;gap:4px;position:relative;overflow:hidden;color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.12);transition:.18s;min-height:150px}
+.feat:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.2)}
+.feat.live{background:linear-gradient(135deg,#16a34a,#0d8a3e)}
+.feat.fix{background:linear-gradient(135deg,#f5751a,#e0560a)}
+.feat .ico{width:46px;height:46px;border-radius:13px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:8px}
+.feat h3{font-size:18px;font-weight:800;letter-spacing:-.3px}
+.feat p{font-size:12.5px;color:rgba(255,255,255,.92);line-height:1.5;flex:1}
+.feat .badge2{position:absolute;top:16px;right:16px;font-size:10.5px;font-weight:700;background:rgba(255,255,255,.22);padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px}
+.feat .go{font-size:20px;align-self:flex-end}
+
 /* małe karty (instrukcje/mapy/archiwum) */
 .sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 @media(max-width:860px){.sgrid{grid-template-columns:repeat(2,1fr)}}
@@ -135,27 +148,24 @@ h1{font-size:54px;font-weight:800;letter-spacing:-2px;line-height:1.05}
   </a>
 </div>
 
-<!-- LIVE -->
-<div class="sechead"><h2>🟢 Live</h2></div>
-<a class="big" href="GLOV_Live.html">
-  <div class="ico">📡</div>
-  <div>
-    <h3>Live Dashboard — sprzedaż na żywo</h3>
-    <p>Gross · sesje · transakcje · CR w układzie miesiąc / tydzień / dziś + wykres sprzedaży dzień po dniu bieżącego miesiąca. Dane Shopify, odświeżane snapshotem.</p>
-  </div>
-  <div class="go">→</div>
-</a>
-
-<!-- LISTA NAPRAW -->
-<div class="sechead"><h2>✅ Do zrobienia</h2></div>
-<a class="big" href="GLOV_Lista_Napraw.html">
-  <div class="ico">🔧</div>
-  <div>
-    <h3>Master lista napraw — 70 problemów</h3>
-    <p>Wszystko ze wszystkich audytów + 22 z listy uzgodnionej z agencją (🤝), zdeduplikowane. Interaktywna tabela: priorytet, obszar, status agencji, ✓ checkbox + komentarz. Stan w przeglądarce, eksport/import.</p>
-  </div>
-  <div class="go">→</div>
-</a>
+<!-- WYRÓŻNIONE: LIVE + LISTA NAPRAW (2 w rzędzie, kolorowe) -->
+<div class="sechead"><h2>⚡ Operacyjne</h2><span class="cnt">żywe narzędzia robocze</span></div>
+<div class="hero-row">
+  <a class="feat live" href="GLOV_Live.html">
+    <span class="badge2">🟢 Live</span>
+    <div class="ico">📡</div>
+    <h3>Live Dashboard</h3>
+    <p>Sprzedaż na żywo — gross · sesje · transakcje · CR w układzie miesiąc / tydzień / dziś + wykres dzień po dniu. Dane Shopify.</p>
+    <div class="go">→</div>
+  </a>
+  <a class="feat fix" href="GLOV_Lista_Napraw.html">
+    <span class="badge2">70 problemów</span>
+    <div class="ico">🔧</div>
+    <h3>Master lista napraw</h3>
+    <p>Wszystkie audyty + 22 z listy agencji (🤝), zdeduplikowane. Checkbox ✓ + komentarz, filtry, eksport. Twoje narzędzie do działania.</p>
+    <div class="go">→</div>
+  </a>
+</div>
 
 <!-- ANALIZY -->
 <div class="sechead"><h2>📊 Analizy GA4</h2><span class="cnt">5 raportów · miesięczne</span></div>
