@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Segmenty konsumentów i ścieżki · maj vs marzec 2026</title>
+<style>
+  :root{
+    --bg:#0f1115; --card:#181b22; --card2:#1f232c; --line:#2a2f3a;
+    --txt:#e8eaed; --muted:#9aa0aa; --accent:#7c5cff; --good:#3ecf8e;
+    --warn:#f5a623; --bad:#ff5c7c; --maj:#7c5cff; --mar:#5b8def;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.5;padding:32px 20px;max-width:1180px;margin:0 auto}
+  h1{font-size:26px;font-weight:700;margin-bottom:6px}
+  h2{font-size:19px;font-weight:650;margin:34px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px}
+  h3{font-size:15px;font-weight:600;margin:18px 0 8px;color:var(--muted)}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:4px}
+  .pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;background:var(--card2);color:var(--muted);margin-right:6px}
+  .grid{display:grid;gap:14px}
+  .k4{grid-template-columns:repeat(4,1fr)}
+  .k3{grid-template-columns:repeat(3,1fr)}
+  .k2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:780px){.k4,.k3,.k2{grid-template-columns:1fr 1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .kpi{font-size:28px;font-weight:700;letter-spacing:-.5px}
+  .kpi small{font-size:14px;color:var(--muted);font-weight:500}
+  .klabel{font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+  .delta{font-size:12px;font-weight:600}
+  .up{color:var(--good)} .down{color:var(--bad)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+  th,td{text-align:right;padding:9px 11px;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.3px}
+  tr:hover td{background:var(--card2)}
+  .bar{height:7px;border-radius:6px;background:var(--card2);overflow:hidden;margin-top:5px}
+  .bar span{display:block;height:100%}
+  .funnel{display:flex;flex-direction:column;gap:8px}
+  .frow{display:flex;align-items:center;gap:12px}
+  .fname{width:170px;font-size:13px;flex-shrink:0}
+  .ftrack{flex:1;background:var(--card2);border-radius:7px;height:30px;position:relative;overflow:hidden}
+  .ffill{height:100%;border-radius:7px;display:flex;align-items:center;padding-left:10px;font-size:12px;font-weight:600;color:#fff;white-space:nowrap}
+  .note{background:var(--card2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 15px;font-size:13.5px;margin:12px 0;color:#d4d7dd}
+  .note.warn{border-color:var(--warn)} .note.good{border-color:var(--good)} .note.bad{border-color:var(--bad)}
+  .tag{font-size:11px;padding:1px 7px;border-radius:5px;font-weight:600}
+  .t-good{background:rgba(62,207,142,.15);color:var(--good)}
+  .t-warn{background:rgba(245,166,35,.15);color:var(--warn)}
+  .t-bad{background:rgba(255,92,124,.15);color:var(--bad)}
+  .src{font-size:12px;color:var(--muted);margin-top:24px;padding-top:14px;border-top:1px solid var(--line)}
+  .legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin:4px 0 10px}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+</style>
+</head>
+<body><a href="GLOV_HUB.html" style="position:fixed;top:12px;left:12px;z-index:999;background:#7c5cff;color:#fff;text-decoration:none;padding:7px 13px;border-radius:8px;font:600 12px -apple-system,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.4)">← HUB</a>
+
+<h1>GLOV — Segmenty konsumentów &amp; ścieżki</h1>
+<div class="sub">glov.co (PL) · GA4 property 342844459 + Shopify · <b>maj 2026 vs marzec 2026</b> · waluta PLN</div>
+<div style="margin:10px 0 4px">
+  <span class="pill">10 segmentów</span>
+  <span class="pill">segmenty NIE rozłączne (nakładają się)</span>
+  <span class="pill">walidacja GA4 × Shopify</span>
+  <span class="pill">+ 650 nagrań Clarity</span>
+</div>
+
+<!-- ====== WYNIKI CAŁOŚCIOWE ====== -->
+<h2>🎯 Wyniki całościowe</h2>
+<div class="legend"><span><i style="background:var(--maj)"></i>maj 2026</span><span><i style="background:var(--mar)"></i>marzec 2026</span></div>
+<div class="grid k4">
+  <div class="card"><div class="klabel">Sesje (session_start users)</div><div class="kpi">29 293 <small>/ 21 399</small></div><div class="delta up">+37% maj</div></div>
+  <div class="card"><div class="klabel">Zamówienia (Shopify)</div><div class="kpi">832 <small>/ 490</small></div><div class="delta up">+70% maj</div></div>
+  <div class="card"><div class="klabel">Konwersja sesji (Shopify)</div><div class="kpi">1,56% <small>maj</small></div><div class="sub" style="margin-top:4px">46 592 sesji → 726 zakupów</div></div>
+  <div class="card"><div class="klabel">Returning customer rate</div><div class="kpi">32,4% <small>/ 33,5%</small></div><div class="delta">stabilny</div></div>
+</div>
+
+<!-- ====== ŚREDNIE ====== -->
+<h2>📐 Średnie i wskaźniki</h2>
+<div class="grid k4">
+  <div class="card"><div class="klabel">view_item → add_to_cart</div><div class="kpi">33% <small>/ 15%</small></div><div class="delta down">marzec o połowę gorszy</div><div class="sub" style="margin-top:4px;font-size:11px">% oglądających PDP, którzy dodali do koszyka (ATC/view_item). NIE źródło dodania — to ślepe pole.</div></div>
+  <div class="card"><div class="klabel">Multi-item share</div><div class="kpi">64% <small>/ 68%</small></div><div class="sub" style="margin-top:4px">koszyki 2+ pozycje</div></div>
+  <div class="card"><div class="klabel">First-purchase share</div><div class="kpi">69% <small>/ 67%</small></div><div class="sub" style="margin-top:4px">⅓ to wracający</div></div>
+  <div class="card"><div class="klabel">„Tylko PDP" (nie dodał)</div><div class="kpi">66% <small>/ 85%</small></div><div class="delta down">marzec: PDP-bounce</div></div>
+</div>
+
+<!-- ====== SEGMENTY BEHAWIORALNE 1-4 ====== -->
+<h2>① Segmenty behawioralne (lejek zaangażowania)</h2>
+<div class="sub">Per użytkownik GA4. Warstwy rozłączne (odejmowanie lejka). Liczone z view_item / add_to_cart / begin_checkout / purchase.</div>
+
+<h3>MAJ — z 11 779 oglądających produkt</h3>
+<div class="funnel">
+  <div class="frow"><div class="fname">4. Tylko PDP <span class="tag t-warn">66%</span></div><div class="ftrack"><div class="ffill" style="width:100%;background:var(--warn)">7 839</div></div></div>
+  <div class="frow"><div class="fname">3. ATC bez checkout <span class="tag">17%</span></div><div class="ftrack"><div class="ffill" style="width:25%;background:var(--mar)">1 995</div></div></div>
+  <div class="frow"><div class="fname">2. Checkout bez zakupu <span class="tag">10%</span></div><div class="ftrack"><div class="ffill" style="width:14%;background:var(--accent)">1 126</div></div></div>
+  <div class="frow"><div class="fname">1. Kupił <span class="tag t-good">7,0%</span></div><div class="ftrack"><div class="ffill" style="width:10%;background:var(--good)">819</div></div></div>
+</div>
+
+<h3>MARZEC — z 10 217 oglądających produkt</h3>
+<div class="funnel">
+  <div class="frow"><div class="fname">4. Tylko PDP <span class="tag t-bad">85%</span></div><div class="ftrack"><div class="ffill" style="width:100%;background:var(--bad)">8 659</div></div></div>
+  <div class="frow"><div class="fname">3. ATC bez checkout <span class="tag">6%</span></div><div class="ftrack"><div class="ffill" style="width:9%;background:var(--mar)">615</div></div></div>
+  <div class="frow"><div class="fname">2. Checkout bez zakupu <span class="tag">5%</span></div><div class="ftrack"><div class="ffill" style="width:7%;background:var(--accent)">460</div></div></div>
+  <div class="frow"><div class="fname">1. Kupił <span class="tag t-good">4,7%</span></div><div class="ftrack"><div class="ffill" style="width:7%;background:var(--good)">483</div></div></div>
+</div>
+
+<div class="note bad"><b>Rozjazd „tylko PDP" 66% → 85% jest REALNY.</b> Marzec nie miał mniej ruchu (21k vs 29k sesji — ten sam rząd), miał ruch <b>gorszej intencji</b>: ludzie pomijali przeglądanie sklepu (view_item_list 4 519 vs 8 713, −48%; select_item 1 937 vs 4 474, −57%) przy prawie identycznym view_item (~10k). Wzorzec marca = <b>„one-page PDP bounce"</b> — user wpada wprost na kartę produktu, ogląda jeden produkt, nie przegląda, nie dodaje, wychodzi.</div>
+
+<!-- ====== SEGMENTY ZAKUPOWE 5-8 ====== -->
+<h2>② Segmenty zakupowe (typ zakupu)</h2>
+<div class="grid k2">
+  <div class="card">
+    <h3 style="margin-top:0">5–6 · Pierwszy vs ponowny <span class="tag t-good">źródło: Shopify (twarde)</span></h3>
+    <table>
+      <tr><th></th><th>Maj</th><th>Marzec</th></tr>
+      <tr><td>Pierwszy zakup</td><td>574 <small>(69%)</small></td><td>329 <small>(67%)</small></td></tr>
+      <tr><td>Ponowny</td><td>258 <small>(31%)</small></td><td>161 <small>(33%)</small></td></tr>
+      <tr><td>Zamówienia</td><td>832</td><td>490</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">7–8 · 1-item vs multi-item <span class="tag">GA4</span></h3>
+    <table>
+      <tr><th></th><th>Maj</th><th>Marzec</th></tr>
+      <tr><td>1-item</td><td>300 <small>(36%)</small></td><td>158 <small>(32%)</small></td></tr>
+      <tr><td>Multi-item (2+)</td><td>531 <small>(64%)</small></td><td>331 <small>(68%)</small></td></tr>
+      <tr><td>Najdłuższy koszyk</td><td>12 szt</td><td>32 szt</td></tr>
+    </table>
+  </div>
+</div>
+<div class="note good"><b>GLOV = sklep zestawów, nie jednego produktu.</b> ⅔ koszyków to 2+ pozycje → argument za bundlami i cross-sellem. ⅓ klientów wraca (rate stabilny 32–34%).</div>
+<div class="note warn"><b>Pułapka walidacji:</b> GA4 <code>newVsReturning</code> pokazał 209 wracających w maju, Shopify twardo <b>258</b> (+23%). GA4 gubi wracających po cookies → dla „1st vs repeat" ZAWSZE Shopify, nie GA4. Transakcje GA4 (831) vs Shopify (832) zgodne ±1.</div>
+
+<!-- ====== SEGMENTY KANAŁOWE 9-10 ====== -->
+<h2>③ Segmenty kanałowe (źródło ruchu)</h2>
+<div class="sub">GA4 sessionDefaultChannelGroup. Nakładają się z pozostałymi (channel = per sesja, behawior = per user).</div>
+<table>
+  <tr><th>Kanał</th><th>Maj sesje</th><th>Maj CR</th><th>Marzec sesje</th><th>Marzec CR</th><th>Ocena</th></tr>
+  <tr><td><b>Paid Search</b></td><td>2 762</td><td><b>5,2%</b></td><td>2 555</td><td><b>5,6%</b></td><td><span class="tag t-good">mistrz CR</span></td></tr>
+  <tr><td>Organic Search</td><td>7 673</td><td>2,5%</td><td>5 748</td><td>1,1%</td><td><span class="tag">solidny</span></td></tr>
+  <tr><td>Cross-network</td><td>2 893</td><td>2,4%</td><td>3 304</td><td>2,8%</td><td><span class="tag">ok</span></td></tr>
+  <tr><td><b>Paid Social</b></td><td>14 015</td><td>1,7%</td><td>5 910</td><td>0,9%</td><td><span class="tag t-warn">wolumen, nie jakość</span></td></tr>
+  <tr><td>Organic Social</td><td>669</td><td>1,9%</td><td>1 005</td><td>3,5%</td><td><span class="tag">mały</span></td></tr>
+  <tr><td>Direct</td><td>6 146</td><td>1,5%</td><td>6 862</td><td>0,8%</td><td><span class="tag t-bad">słaby w marcu</span></td></tr>
+</table>
+<div class="note"><b>Paid Search to ukryty mistrz konwersji.</b> 5× mniej ruchu niż Paid Social (2 762 vs 14 015 sesji), ale CR 3× wyższy (5,2% vs 1,7%) — i niemal tyle samo transakcji (144 vs 244). W marcu: Paid Search 142 trans vs Paid Social 51. Paid Social leje ogromny wolumen niskiej intencji. <b>Rekomendacja: przesunąć budżet ku Paid Search / zbadać jakość ruchu Paid Social.</b></div>
+
+<!-- ====== ŚCIEŻKI NAWIGACJI ====== -->
+<h2>④ Ścieżki — wchodzę → chodzę → wychodzę</h2>
+<div class="sub">Pełna ścieżka per typ wejścia (maj 2026): czym wszedł · ile stron odwiedził (= ile „chodził") · ile czasu · czy kupił. PVperSession to twardy wskaźnik „chodzenia".</div>
+
+<div class="note good"><b>Główny wzorzec: ścieżka kupującego = „wejdź przez SKLEP → przeglądaj dużo → kup". Ścieżka odpadającego = „wejdź wprost na PDP z reklamy → obejrzyj 1-2 strony → wyjdź".</b> PVperSession (ile stron) rozstrzyga: wejścia na listing generują 2,7–7,4 strony i sprzedaż; wejścia na PDP 1,7–2,3 strony i prawie zero.</div>
+
+<table>
+  <tr><th>Ścieżka wejścia</th><th>Kanał</th><th>Sesje</th><th>Stron/sesja</th><th>Czas</th><th>Trans.</th><th>Typ ścieżki</th></tr>
+  <tr><td>/collections/sklep</td><td>Paid Search</td><td>1 280</td><td><b>7,4</b></td><td>13:36</td><td>95</td><td><span class="tag t-good">zwiedza → kupuje</span></td></tr>
+  <tr><td>/collections/sklep</td><td>Paid Social</td><td>6 028</td><td>2,7</td><td>5:55</td><td>47</td><td><span class="tag t-good">przegląda</span></td></tr>
+  <tr><td>/products/skin-smoothing</td><td>Paid Social</td><td>535</td><td>4,2</td><td>6:23</td><td>22</td><td><span class="tag">PDP→eksploruje</span></td></tr>
+  <tr><td>/products/luna-eye</td><td>Cross-network</td><td>704</td><td>2,6</td><td>11:26</td><td>19</td><td><span class="tag">PDP, trochę chodzi</span></td></tr>
+  <tr><td>/products/pumeks</td><td>Organic Search</td><td>678</td><td>2,0</td><td>3:54</td><td>22</td><td><span class="tag t-warn">PDP, mało chodzi</span></td></tr>
+  <tr><td>/products/sleeping-beauty</td><td>Paid Social</td><td>786</td><td>2,3</td><td>5:17</td><td><b>2</b></td><td><span class="tag t-bad">PDP-bounce</span></td></tr>
+  <tr><td>/products/luna-eye</td><td>Paid Social</td><td>602</td><td>1,7</td><td>2:05</td><td>6</td><td><span class="tag t-bad">PDP-bounce</span></td></tr>
+</table>
+
+<div class="note bad"><b>Dowód „wchodzę-wychodzę" bez „chodzę":</b> Sleeping Beauty z Paid Social — 786 sesji, 2,3 strony, 5 min, ale <b>tylko 2 zakupy</b>. Luna Eye Paid Social — 1,7 strony, 2 min, 6 zakupów z 602 sesji. Ten ruch wchodzi na kartę, ogląda 1-2 ekrany, wychodzi. Kontrast: Paid Search na /collections/sklep — <b>7,4 strony, 13,5 min, 95 zakupów</b> z 1280 sesji. Ta sama witryna, inna ścieżka = inny wynik.</div>
+
+<h3>Realne sekwencje z nagrań Clarity (jak naprawdę chodzą)</h3>
+<table>
+  <tr><th>Segment</th><th>Realna ścieżka (URL→URL)</th></tr>
+  <tr><td><span class="tag t-bad">PDP-bounce</span></td><td>reklama Meta/Google → <b>/products/X</b> → (0 klików, ~350ms) → <b>wyjście</b></td></tr>
+  <tr><td><span class="tag">engaged</span></td><td>/collections/sklep → „Załaduj więcej"×N → PDP → PDP → <b>/cart</b> → (urywa przed kasą)</td></tr>
+  <tr><td><span class="tag t-good">kupujący</span></td><td>kolekcja tematyczna (Gładkie ciało/Włosy) → PDP → /cart → „darmowy prezent" → <b>„Przejdź do kasy"</b></td></tr>
+  <tr><td><span class="tag t-warn">błądzący</span></td><td>/collections/sklep?page=2 → page=9 → kilka PDP → 850 pustych klików → wyjście bez koszyka</td></tr>
+</table>
+<div class="note"><b>Koszyk = wspólny punkt zwrotny.</b> /cart miał 1 158 wyświetleń (maj). Engaged dochodzą do koszyka, ale wielu urywa przed „Przejdź do kasy" — i tu właśnie siedzi bug z nieczytelną ceną na przycisku (sekcja ⑤). Ścieżka „kolekcja → PDP → koszyk → kasa" to ścieżka udana; „PDP z reklamy → wyjście" to ścieżka stracona.</div>
+
+<!-- ===== ŚREDNIE INTERAKCJI ===== -->
+<h2>④c Średnie interakcji per kanał (głębokość ścieżki)</h2>
+<div class="sub">Ile stron, ile czasu, ile eventów, jak zaangażowani — średnio na sesję. To pokazuje „jak głęboko chodzą" zanim kupią/wyjdą.</div>
+<table>
+  <tr><th>Kanał</th><th>Stron/sesja</th><th>Czas (śr.)</th><th>Eventy/sesja</th><th>Engagement</th><th>Bounce</th></tr>
+  <tr><td><b>Paid Search</b></td><td><b>5,2</b></td><td>8:08</td><td><b>26,9</b></td><td>69%</td><td>31%</td></tr>
+  <tr><td>Cross-network</td><td>3,1</td><td>8:15</td><td>14,5</td><td>59%</td><td>41%</td></tr>
+  <tr><td>Organic Social</td><td>3,0</td><td>4:19</td><td>16,6</td><td>69%</td><td>31%</td></tr>
+  <tr><td>Paid Social</td><td>2,2</td><td>4:36</td><td>13,0</td><td>63%</td><td>37%</td></tr>
+  <tr><td>Organic Search</td><td>2,0</td><td>4:06</td><td>9,8</td><td>60%</td><td>40%</td></tr>
+  <tr><td>Direct</td><td>1,4</td><td>3:22</td><td>7,0</td><td>48%</td><td>52%</td></tr>
+</table>
+<div class="note good"><b>Paid Search „chodzi" 2,5× głębiej niż Direct.</b> 5,2 strony/sesja i 27 eventów vs Direct 1,4 strony / 7 eventów. Im głębsza ścieżka, tym wyższa konwersja — Paid Search łączy najgłębsze chodzenie z najwyższym CR (5,2%). Direct = płytki, wysoki bounce (52%), słaby. To samo widać w danych: zaangażowanie ścieżki ≈ szansa zakupu.</div>
+
+<!-- ===== ŚREDNIE PER PRODUKT ===== -->
+<h2>④d Średnie per produkt — siła dodawania do koszyka (maj)</h2>
+<div class="sub">Ile razy oglądany (odwiedzone PDP) → ile dodań → ile zakupów. view→ATC rate ujawnia które produkty „sprzedają się same", a które tylko zbierają ruch.</div>
+<table>
+  <tr><th>Produkt</th><th>Odsłon PDP</th><th>ATC</th><th>view→ATC</th><th>Kupiono</th><th>Sygnał</th></tr>
+  <tr><td><b>Infinity Eye Patches</b></td><td>708</td><td>487</td><td><b>69%</b></td><td>96</td><td><span class="tag t-good">sprzedaje się sam</span></td></tr>
+  <tr><td><b>Tarka-pumeks nano</b></td><td>1 873</td><td>1 098</td><td><b>59%</b></td><td>321</td><td><span class="tag t-good">top sprzedaż</span></td></tr>
+  <tr><td>Rękawica demakijaż</td><td>375</td><td>203</td><td>54%</td><td>55</td><td><span class="tag t-good">silny</span></td></tr>
+  <tr><td>Biobased Brush</td><td>479</td><td>246</td><td>51%</td><td>67</td><td><span class="tag t-good">silny</span></td></tr>
+  <tr><td>Rękawica peeling ciała</td><td>740</td><td>330</td><td>45%</td><td>82</td><td><span class="tag">ok</span></td></tr>
+  <tr><td>Depilator nano</td><td>1 489</td><td>492</td><td>33%</td><td>165</td><td><span class="tag">ok</span></td></tr>
+  <tr><td><b>Luna Eye (płatki)</b></td><td><b>5 272</b></td><td>1 367</td><td>26%</td><td>229</td><td><span class="tag t-warn">duży ruch, średni ATC</span></td></tr>
+  <tr><td>CoolCurl lokówka</td><td>393</td><td>59</td><td>15%</td><td>9</td><td><span class="tag t-warn">słaby ATC</span></td></tr>
+  <tr><td><b>Sleeping Beauty</b></td><td>1 706</td><td>107</td><td><b>6%</b></td><td>26</td><td><span class="tag t-bad">magnes ruchu, nie sprzedaje</span></td></tr>
+  <tr><td><b>Luna Eye z etui</b></td><td>955</td><td><b>0</b></td><td><b>0%</b></td><td>0</td><td><span class="tag t-bad">🔴 zepsuty wariant</span></td></tr>
+</table>
+<div class="note bad"><b>🔴 „Luna Eye z etui ładującym" — 955 odsłon, 0 dodań, 0 zakupów.</b> Produkt zbiera spory ruch, ale dodanie do koszyka nie działa wcale (0%). To albo niedostępny wariant, albo zepsuty przycisk ATC na tej karcie. Do pilnego sprawdzenia — czysta strata 955 odsłon/mc.</div>
+<div class="note warn"><b>Sleeping Beauty &amp; Luna Eye = magnesy ruchu, nie sprzedaży.</b> Sleeping Beauty: 1 706 odsłon, ale tylko 6% dodaje (26 zakupów). Luna Eye: największy ruch (5 272 odsłony!) ale tylko 26% ATC. To produkty, na które reklama ściąga tłumy, ale karta nie domyka. Kontrast: Pumeks (59%) i Infinity (69%) sprzedają się prawie same przy mniejszym ruchu. <b>Rekomendacja: audyt PDP Sleeping Beauty i Luna Eye (cena? zdjęcia? opis? dostępność?) — tam jest największy ukryty potencjał.</b></div>
+
+<h2>④b Punkty wejścia (landing × kanał)</h2>
+<div class="sub">Skąd zaczynają się ścieżki. Potwierdza: na karty produktu wpadają głównie reklamy produktowe.</div>
+
+<h3>Top wejścia (landing page)</h3>
+<table>
+  <tr><th>Landing</th><th>Maj sesje</th><th>Marzec sesje</th><th>Typ</th></tr>
+  <tr><td>/collections/sklep</td><td>1 638</td><td>1 399</td><td><span class="tag t-good">przeglądanie</span></td></tr>
+  <tr><td>/ (strona główna)</td><td>1 153</td><td>884</td><td><span class="tag t-good">przeglądanie</span></td></tr>
+  <tr><td>/products/pumeks-...nano-szkla</td><td>876</td><td>617</td><td><span class="tag t-warn">PDP wprost</span></td></tr>
+  <tr><td>/products/...luna-eye</td><td>702</td><td>509*</td><td><span class="tag t-warn">PDP wprost</span></td></tr>
+  <tr><td>/products/...sleeping-beauty</td><td>403</td><td>257</td><td><span class="tag t-warn">PDP wprost</span></td></tr>
+</table>
+
+<h3>Kto kieruje na PDP (kanał × karta produktu)</h3>
+<table>
+  <tr><th>Kanał → PDP</th><th>Produkt</th><th>Sesje</th></tr>
+  <tr><td>Cross-network</td><td>Luna Eye / Sleeping Beauty</td><td>649 / 377 (maj)</td></tr>
+  <tr><td>Paid Search</td><td>Pumeks nano-szkła</td><td>382 (maj) / 270 (mar)</td></tr>
+  <tr><td>Organic Search</td><td>Pumeks nano-szkła</td><td>340 (maj) / 138 (mar)</td></tr>
+  <tr><td>Paid Social</td><td>Luna Eye</td><td>205 (maj)</td></tr>
+</table>
+<div class="note warn"><b>Ścieżka „PDP-first" napędzana reklamą.</b> Wejścia wprost na kartę produktu pochodzą z Cross-network (Meta katalog) i Paid Search (Google produktowe) — Luna Eye, Pumeks, Sleeping Beauty. Ci ludzie NIE przechodzą przez listing → trafiają do segmentu „tylko PDP". W marcu udział tego ruchu rośnie, stąd 85% PDP-bounce. Kontrast: wejścia przez /collections/sklep i / (przeglądanie) konwertują dużo lepiej (sklep: 108/94 transakcji).</div>
+
+<!-- ====== CLARITY ====== -->
+<h2>⑤ Clarity — co realnie robią (650 nagrań, 3–9.06.2026)</h2>
+<div class="sub">Próbka: 150 bounce + 250 engaged + 250 najdłuższych. Pokazuje „dlaczego", którego GA4 nie widzi.</div>
+
+<div class="grid k3">
+  <div class="card"><div class="klabel">PDP-bounce: kliki</div><div class="kpi">3 <small>/ 150 sesji</small></div><div class="sub" style="margin-top:4px">bierne odbicie, mediana ~350 ms</div></div>
+  <div class="card"><div class="klabel">Engaged: ATC → kasa</div><div class="kpi">38% → 20%</div><div class="sub" style="margin-top:4px">drop koszyk→kasa</div></div>
+  <div class="card"><div class="klabel">Ruch reklamowy w bounce</div><div class="kpi">~90%</div><div class="sub" style="margin-top:4px">Meta Advantage+ / Google Shopping</div></div>
+</div>
+
+<div class="note bad"><b>🔴 BUG KRYTYCZNY — cena nie renderuje się na przycisku „Przejdź do kasy".</b> W nagraniach CTA pokazuje się jako <code>„Przejdź do kasy - ▫▫▫,▫▫▪"</code> — cyfry ceny jako puste boxy (brakujący glif fontu). To samo na banerze rabatu <code>„-▫▫% na WSZYSTKO"</code>. Klient nie widzi kwoty na najważniejszym przycisku konwersji. <b>#1 priorytet.</b> (Do weryfikacji wizualnej — Clarity maskuje część PII, ale wzorzec ▫ na cenach w wielu sesjach to nie maska.)</div>
+
+<div class="note warn"><b>🟠 „Załaduj więcej" zamiast scrolla.</b> 178–235 klików, jeden user 20+ razy z rzędu — listing i recenzje wymagają mozolnego ręcznego doładowywania. Plus ~850 pustych klików + 150 klików w zepsute ikony (▫ swatche) — ludzie klikają w nieklikalne elementy szukając reakcji.</div>
+
+<div class="note warn"><b>🟠 Core Web Vitals (field) dużo gorsze niż Lighthouse.</b> Realne sesje: LCP≥2s w 231 przypadkach, do 100–130s na PDP pielęgnacji włosów (czepek satynowy, frotka HydroWeave, CoolCurl, Magnet Cleanser). CLS do 0,9. Field ≠ lab — kolekcja włosów wymaga optymalizacji mimo „zielonego" audytu z maja.</div>
+
+<div class="note"><b>Wzorzec PDP-bounce vs engaged:</b> bounce = ruch reklamowy (Meta in-app browser, Google Shopping) ląduje wprost na kartę, nie klika, wychodzi w &lt;1s — problem JAKOŚCI AKWIZYCJI, nie UX. Engaged = nawigacja tematyczna przez kolekcje (Gładkie ciało, Piękne włosy, Bestsellery), dochodzą do koszyka, ale urywają przed kasą. ~11% ruchu to mismatch geo/język (/en-eu, /de-eu na PL domenie z PLN).</div>
+
+<div class="note"><b>⚠️ Ograniczenia metody:</b> Clarity NIE nagrywa checkout.shopify (osobna domena) → „0 sesji checkout" to artefakt, lejek checkout liczyć z GA4. Najdłuższe sesje (5-6h) to porzucone karty w tle, nie zaangażowanie — sortować po klikach, nie czasie.</div>
+
+<div class="src">
+<b>Źródła:</b> GA4 property 342844459 (run_report: eventName×totalUsers, transactionId×itemsPurchased, sessionDefaultChannelGroup, landingPagePlusQueryString) · Shopify ShopifyQL (FROM sales / sessions / customers) · okna: maj 2026 (01–31.05), marzec 2026 (01–31.03). Walidacja GA4×Shopify na transakcjach (±1) i returning customers. Segmenty nie są rozłączne — nakładają się. * marzec Luna Eye = wariant z etui (inny URL).
+</div>
+
+</body>
+</html>
