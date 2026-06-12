@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Visual Mapping Strony Głównej | Maj 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f7; color: #1d1d1f; }
+
+  .header { background: linear-gradient(135deg, #1d1d1f, #3a3a3c); color: white; padding: 32px 40px; }
+  .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .header p { opacity: 0.7; font-size: 14px; }
+  .header .badges { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+  .badge { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 20px; font-size: 12px; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+  .section { background: white; border-radius: 16px; padding: 28px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .section-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .section-title .icon { font-size: 22px; }
+
+  /* KPI row */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+  .kpi { background: #f5f5f7; border-radius: 12px; padding: 18px; text-align: center; }
+  .kpi .value { font-size: 28px; font-weight: 700; color: #1d1d1f; }
+  .kpi .label { font-size: 12px; color: #6e6e73; margin-top: 4px; }
+  .kpi.green .value { color: #28a745; }
+  .kpi.red .value { color: #dc3545; }
+  .kpi.blue .value { color: #007aff; }
+
+  /* Alert boxes */
+  .alert { border-radius: 10px; padding: 14px 18px; margin-bottom: 12px; font-size: 14px; line-height: 1.5; }
+  .alert.red { background: #fff5f5; border-left: 4px solid #dc3545; }
+  .alert.yellow { background: #fffbf0; border-left: 4px solid #ffc107; }
+  .alert.green { background: #f0fff4; border-left: 4px solid #28a745; }
+  .alert strong { display: block; margin-bottom: 4px; font-size: 13px; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #f5f5f7; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 12px; color: #6e6e73; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafafa; }
+
+  .rank { font-weight: 700; color: #6e6e73; width: 32px; }
+  .rank.top3 { color: #ff6b35; }
+
+  .tag { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+  .tag.on-page { background: #d4edda; color: #155724; }
+  .tag.not-on-page { background: #f8d7da; color: #721c24; }
+  .tag.bestseller { background: #fff3cd; color: #856404; }
+  .tag.nowosci { background: #d1ecf1; color: #0c5460; }
+  .tag.gap { background: #f8d7da; color: #721c24; font-size: 11px; }
+
+  .bar-wrap { background: #f0f0f0; border-radius: 4px; height: 6px; width: 100px; display: inline-block; vertical-align: middle; }
+  .bar { background: #007aff; border-radius: 4px; height: 6px; }
+  .bar.orange { background: #ff6b35; }
+
+  /* Sekcje strony */
+  .page-map { display: flex; flex-direction: column; gap: 8px; }
+  .page-section { border: 1px solid #e5e5e7; border-radius: 10px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; }
+  .page-section .sec-name { font-weight: 600; font-size: 14px; }
+  .page-section .sec-desc { font-size: 12px; color: #6e6e73; margin-top: 2px; }
+  .page-section.hero { border-color: #007aff; background: #f0f6ff; }
+  .page-section.products { border-color: #28a745; background: #f0fff4; }
+  .page-section.promo { border-color: #ffc107; background: #fffbf0; }
+  .page-section.info { border-color: #e5e5e7; background: #fafafa; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+
+  .screenshot-link { display: inline-flex; align-items: center; gap: 8px; background: #007aff; color: white; padding: 10px 18px; border-radius: 10px; text-decoration: none; font-size: 13px; font-weight: 600; margin-bottom: 20px; }
+  .screenshot-link:hover { background: #0066d6; }
+
+  .priority-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .priority-list li { display: flex; gap: 14px; align-items: flex-start; padding: 14px; border-radius: 10px; font-size: 14px; line-height: 1.5; }
+  .priority-list li .num { min-width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+  .p1 { background: #fff5f5; } .p1 .num { background: #dc3545; color: white; }
+  .p2 { background: #fffbf0; } .p2 .num { background: #ffc107; color: #1d1d1f; }
+  .p3 { background: #f0fff4; } .p3 .num { background: #28a745; color: white; }
+
+  .footer { text-align: center; padding: 24px; color: #6e6e73; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🗺️ GLOV — Visual Mapping Strony Głównej</h1>
+  <p>glov.co | Dane: GA4 Maj 2026 (1–13 maja) | Wygenerowano: 2026-05-13</p>
+  <div class="badges">
+    <span class="badge">📊 GA4: properties/342844459</span>
+    <span class="badge">🛒 Shopify</span>
+    <span class="badge">🇵🇱 glov.co (PLN)</span>
+    <span class="badge">⏱️ Sesje: 10 970</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- KPI -->
+  <div class="section">
+    <div class="section-title"><span class="icon">📈</span> KPI Maja 2026 (1–13 maja)</div>
+    <div class="kpi-grid">
+      <div class="kpi blue"><div class="value">10 970</div><div class="label">Sesje</div></div>
+      <div class="kpi blue"><div class="value">9 203</div><div class="label">Aktywni użytkownicy</div></div>
+      <div class="kpi green"><div class="value">239</div><div class="label">Zakupy</div></div>
+      <div class="kpi green"><div class="value">28 976 PLN</div><div class="label">Przychód</div></div>
+      <div class="kpi"><div class="value">2.18%</div><div class="label">Ogólny CR</div></div>
+      <div class="kpi"><div class="value">~121 PLN</div><div class="label">Śr. wartość zamówienia</div></div>
+      <div class="kpi"><div class="value">50.1%</div><div class="label">Engagement rate</div></div>
+      <div class="kpi"><div class="value">4:02</div><div class="label">Śr. czas sesji</div></div>
+    </div>
+  </div>
+
+  <!-- MAPA STRONY GŁÓWNEJ -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🏠</span> Struktura strony głównej glov.co</div>
+    <div class="page-map">
+      <div class="page-section hero">
+        <div>
+          <div class="sec-name">🎬 Hero Slideshow (3 slajdy)</div>
+          <div class="sec-desc">Animowany baner pełnoekranowy z CTA — 3 slajdy rotate</div>
+        </div>
+        <span class="tag nowosci">HERO</span>
+      </div>
+      <div class="page-section products">
+        <div>
+          <div class="sec-name">⭐ Sekcja "Bestsellery"</div>
+          <div class="sec-desc">Slider produktów oznaczonych jako bestseller: Pumeks, Płatki LED, Szczotka Biobased, Rękawica On The Go, Rękawica Skin Smoothing, Depilator</div>
+        </div>
+        <span class="tag bestseller">PRODUKTY</span>
+      </div>
+      <div class="page-section products">
+        <div>
+          <div class="sec-name">✨ Sekcja "Nowości"</div>
+          <div class="sec-desc">Pumeks 2w1 velvet, Pumeks 2w1, Supernova LED, Gua Sha, Coolnails lakiery, Utwardzacz paznokci, Top coat, Olejek do skórek, Pilnik</div>
+        </div>
+        <span class="tag nowosci">NOWOŚCI</span>
+      </div>
+      <div class="page-section promo">
+        <div>
+          <div class="sec-name">🎥 "Nasze bestsellery w akcji"</div>
+          <div class="sec-desc">Sekcja video/UGC z produktami w użyciu</div>
+        </div>
+        <span class="tag">CONTENT</span>
+      </div>
+      <div class="page-section promo">
+        <div>
+          <div class="sec-name">🏷️ "Oferty specjalne" + bannery promocyjne</div>
+          <div class="sec-desc">GŁADKIE CIAŁO I STOPY / WŁOSOWY MUST HAVE + PREZENT / GLOV SCRUBEX GRATIS / KOLEKCJA NANO SZKŁO / SILICONE BATH / KOLEKCJA CHEETAH / RĘKAWICZKA WIELOPAKI</div>
+        </div>
+        <span class="tag bestseller">PROMO</span>
+      </div>
+      <div class="page-section info">
+        <div>
+          <div class="sec-name">📧 Newsletter + Social Media</div>
+          <div class="sec-desc">Zapis na newsletter, linki do SM</div>
+        </div>
+        <span class="tag">INFO</span>
+      </div>
+      <div class="page-section info">
+        <div>
+          <div class="sec-name">🌟 Social proof — "50 000 klientów" + "Mówią o nas"</div>
+          <div class="sec-desc">Recenzje, misja marki, konkurs recenzji (nagroda 1000 zł)</div>
+        </div>
+        <span class="tag">TRUST</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RANKING PRODUKTÓW vs EKSPOZYCJA -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🏆</span> Ranking produktów GA4 vs ekspozycja na stronie głównej</div>
+
+    <div class="alert red">
+      <strong>⚠️ Kluczowe odkrycie: #1 produkt wg ruchu NIE jest na stronie głównej!</strong>
+      Poduszka nocna Sleeping Beauty (852 sesje — #1 w GA4) nie pojawia się ani w sekcji Bestsellery, ani w Nowościach na HP. To największy ruch produktowy bez ekspozycji.
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Produkt</th>
+          <th>Sesje (maj)</th>
+          <th>Udział</th>
+          <th>Ekspozycja HP</th>
+          <th>Etykieta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rank top3">1</td>
+          <td><strong>Poduszka nocna Sleeping Beauty</strong></td>
+          <td>852</td>
+          <td><span class="bar-wrap"><span class="bar orange" style="width:100%"></span></span> 100%</td>
+          <td><span class="tag not-on-page">❌ Brak na HP</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td class="rank top3">2</td>
+          <td><strong>Pumeks nano glass</strong></td>
+          <td>725</td>
+          <td><span class="bar-wrap"><span class="bar orange" style="width:85%"></span></span> 85%</td>
+          <td><span class="tag on-page">✅ Bestsellery</span></td>
+          <td><span class="tag bestseller">Bestseller</span></td>
+        </tr>
+        <tr>
+          <td class="rank top3">3</td>
+          <td><strong>Płatki LED Luna Eye</strong></td>
+          <td>608</td>
+          <td><span class="bar-wrap"><span class="bar orange" style="width:71%"></span></span> 71%</td>
+          <td><span class="tag on-page">✅ Bestsellery</span></td>
+          <td><span class="tag bestseller">Bestseller</span></td>
+        </tr>
+        <tr>
+          <td class="rank">4</td>
+          <td>Depilator nano glass</td>
+          <td>246</td>
+          <td><span class="bar-wrap"><span class="bar" style="width:29%"></span></span> 29%</td>
+          <td><span class="tag on-page">✅ Bestsellery</span></td>
+          <td><span class="tag bestseller">Bestseller</span></td>
+        </tr>
+        <tr>
+          <td class="rank">5</td>
+          <td>Szczotka Biobased</td>
+          <td>230</td>
+          <td><span class="bar-wrap"><span class="bar" style="width:27%"></span></span> 27%</td>
+          <td><span class="tag on-page">✅ Bestsellery</span></td>
+          <td><span class="tag bestseller">Bestseller</span></td>
+        </tr>
+        <tr>
+          <td class="rank">6</td>
+          <td>Bubble Burst 3w1</td>
+          <td>185</td>
+          <td><span class="bar-wrap"><span class="bar" style="width:22%"></span></span> 22%</td>
+          <td><span class="tag not-on-page">❌ Brak na HP</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td class="rank">7</td>
+          <td>Rękawica Skin Smoothing</td>
+          <td>157</td>
+          <td><span class="bar-wrap"><span class="bar" style="width:18%"></span></span> 18%</td>
+          <td><span class="tag on-page">✅ Bestsellery</span></td>
+          <td><span class="tag bestseller">Bestseller</span></td>
+        </tr>
+        <tr>
+          <td class="rank">8</td>
+          <td>Klips Zero Gravity</td>
+          <td>155</td>
+          <td><span class="bar-wrap"><span class="bar" style="width:18%"></span></span> 18%</td>
+          <td><span class="tag not-on-page">❌ Brak na HP</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td class="rank">9</td>
+          <td>Pumeks + Depilator 2w1</td>
+          <td>91</td>
+          <td><span class="bar-wrap"><span class="bar" style="width:11%"></span></span> 11%</td>
+          <td><span class="tag on-page">✅ Nowości</span></td>
+          <td><span class="tag nowosci">NOWOŚĆ</span></td>
+        </tr>
+        <tr>
+          <td class="rank">10</td>
+          <td>Rękawica On The Go</td>
+          <td>72</td>
+          <td><span class="bar-wrap"><span class="bar" style="width:8%"></span></span> 8%</td>
+          <td><span class="tag on-page">✅ Bestsellery</span></td>
+          <td><span class="tag bestseller">Bestseller</span></td>
+        </tr>
+        <tr>
+          <td class="rank">11</td>
+          <td>Płatki LED Luna Eye z etui</td>
+          <td>64</td>
+          <td><span class="bar-wrap"><span class="bar" style="width:7%"></span></span> 7%</td>
+          <td><span class="tag not-on-page">❌ Brak na HP</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td class="rank">12</td>
+          <td>Ręcznik Soft Hair Wrap</td>
+          <td>62</td>
+          <td><span class="bar-wrap"><span class="bar" style="width:7%"></span></span> 7%</td>
+          <td><span class="tag not-on-page">❌ Brak na HP</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td class="rank">13</td>
+          <td>Plastry pod oczy Infinity Eye</td>
+          <td>58</td>
+          <td><span class="bar-wrap"><span class="bar" style="width:7%"></span></span> 7%</td>
+          <td><span class="tag not-on-page">❌ Brak na HP</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td class="rank">14</td>
+          <td>Pumeks 2w1 Velvet Nano Touch</td>
+          <td>52</td>
+          <td><span class="bar-wrap"><span class="bar" style="width:6%"></span></span> 6%</td>
+          <td><span class="tag on-page">✅ Nowości</span></td>
+          <td><span class="tag nowosci">NOWOŚĆ</span></td>
+        </tr>
+        <tr>
+          <td class="rank">15</td>
+          <td>Supernova LED kuracja</td>
+          <td>52</td>
+          <td><span class="bar-wrap"><span class="bar" style="width:6%"></span></span> 6%</td>
+          <td><span class="tag on-page">✅ Nowości</span></td>
+          <td><span class="tag nowosci">NOWOŚĆ</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- NIEDOPASOWANIA -->
+  <div class="section">
+    <div class="section-title"><span class="icon">⚡</span> Kluczowe niedopasowania — ruch vs ekspozycja</div>
+    <div class="two-col">
+      <div>
+        <h3 style="font-size:14px; font-weight:700; margin-bottom:12px; color:#dc3545;">❌ Wysoki ruch — brak na HP</h3>
+        <div class="alert red">
+          <strong>#1 Poduszka nocna Sleeping Beauty — 852 sesje</strong>
+          Największy ruch spośród wszystkich produktów. Nie ma go ani w "Bestsellery" ani w "Nowości". Prawdopodobnie klienci trafiają z reklam lub organiki, ale HP ich nie wspiera.
+        </div>
+        <div class="alert red">
+          <strong>#6 Bubble Burst 3w1 — 185 sesji</strong>
+          Top 10 ruchu, brak na stronie głównej. Silikon bath collection widoczny jako kategoria w promo, ale bez konkretnego produktu.
+        </div>
+        <div class="alert red">
+          <strong>#8 Klips Zero Gravity — 155 sesji</strong>
+          Wysoki ruch produktu do włosów, brak na HP mimo że kategoria "Piękne Włosy" jest w menu.
+        </div>
+        <div class="alert yellow">
+          <strong>#11–#13: Płatki LED z etui, Hair Wrap, Infinity Eye — 58–64 sesje</strong>
+          Produkty pielęgnacyjne z solidnym ruchem, niewidoczne na HP.
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:14px; font-weight:700; margin-bottom:12px; color:#28a745;">✅ Dobrze dopasowane</h3>
+        <div class="alert green">
+          <strong>#2 Pumeks nano glass — 725 sesji ✅ Bestsellery</strong>
+          Właściwie wyeksponowany — drugi produkt pod względem ruchu, obecny w sekcji Bestsellery.
+        </div>
+        <div class="alert green">
+          <strong>#3 Płatki LED Luna Eye — 608 sesji ✅ Bestsellery</strong>
+          Trzeci najchętniej odwiedzany, widoczny jako Bestseller. OK.
+        </div>
+        <div class="alert green">
+          <strong>#9 Pumeks 2w1, #14 Velvet Nano Touch, #15 Supernova ✅ Nowości</strong>
+          Nowości słusznie w sekcji Nowości — zgodność intencji.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEJEK PER KANAŁ -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🔄</span> Lejki per kanał (maj 2026)</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Kanał</th>
+          <th>Sesje</th>
+          <th>view_item</th>
+          <th>add_to_cart</th>
+          <th>begin_checkout</th>
+          <th>purchase</th>
+          <th>view→cart</th>
+          <th>checkout→purchase</th>
+          <th>CR końcowy</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#f0fff4">
+          <td><strong>Paid Search ⭐</strong></td>
+          <td>1 140</td>
+          <td>1 337</td>
+          <td>317</td>
+          <td>81</td>
+          <td>52</td>
+          <td>23.7%</td>
+          <td>64.2%</td>
+          <td><strong>4.56%</strong></td>
+        </tr>
+        <tr style="background:#f0fff4">
+          <td><strong>Organic Shopping ⭐</strong></td>
+          <td>63</td>
+          <td>41</td>
+          <td>20</td>
+          <td>7</td>
+          <td>4</td>
+          <td>48.8%</td>
+          <td>57.1%</td>
+          <td><strong>6.35%</strong></td>
+        </tr>
+        <tr>
+          <td>Paid Social</td>
+          <td>2 608</td>
+          <td>2 486</td>
+          <td>501</td>
+          <td>144</td>
+          <td>64</td>
+          <td>20.2%</td>
+          <td>44.4%</td>
+          <td>2.46%</td>
+        </tr>
+        <tr>
+          <td>Organic Search</td>
+          <td>2 425</td>
+          <td>2 038</td>
+          <td>381</td>
+          <td>106</td>
+          <td>60</td>
+          <td>18.7%</td>
+          <td>56.6%</td>
+          <td>2.47%</td>
+        </tr>
+        <tr>
+          <td>Cross-network</td>
+          <td>1 166</td>
+          <td>1 402</td>
+          <td>121</td>
+          <td>38</td>
+          <td>18</td>
+          <td><span style="color:#dc3545"><strong>8.6% ⚠️</strong></span></td>
+          <td>47.4%</td>
+          <td>1.54%</td>
+        </tr>
+        <tr style="background:#fff5f5">
+          <td>Direct ⚠️</td>
+          <td>2 809</td>
+          <td>602</td>
+          <td>203</td>
+          <td>76</td>
+          <td>20</td>
+          <td>33.7%</td>
+          <td><span style="color:#dc3545"><strong>26.3% ⚠️</strong></span></td>
+          <td>0.71%</td>
+        </tr>
+        <tr style="background:#fff5f5">
+          <td>Referral ⚠️</td>
+          <td>74</td>
+          <td>71</td>
+          <td>5</td>
+          <td>2</td>
+          <td>0</td>
+          <td>7.0%</td>
+          <td><span style="color:#dc3545"><strong>0% ⚠️</strong></span></td>
+          <td>0%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SCREENSHOT -->
+  <div class="section">
+    <div class="section-title"><span class="icon">📸</span> Screenshot strony głównej</div>
+    <a class="screenshot-link" href="screenshots/glov-homepage-desktop.png" target="_blank">📸 Otwórz pełny screenshot (desktop full-page)</a>
+    <p style="font-size:13px; color:#6e6e73;">Screenshot zrobiony 2026-05-13 | Desktop viewport | Wersja PL (glov.co)</p>
+  </div>
+
+  <!-- REKOMENDACJE -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🎯</span> Rekomendacje</div>
+    <ul class="priority-list">
+      <li class="p1">
+        <div class="num">1</div>
+        <div><strong>Dodaj Poduszkę nocna Sleeping Beauty do sekcji "Bestsellery"</strong> — #1 produkt wg ruchu (852 sesje), nieobecny na HP. Zamień jeden z mniej popularnych slotów lub dodaj go na pierwszą pozycję. To najszybsza wygrana.</div>
+      </li>
+      <li class="p1">
+        <div class="num">2</div>
+        <div><strong>Zbadaj problem Direct → checkout drop (26.3%)</strong> — Direct ma 2 809 sesji ale tylko 20 zakupów i 0.71% CR. Wysoki view→cart (33.7%) ale odpada na finalizacji. Sprawdź czy klienci Direct trafiają na niespodziewane koszty dostawy lub wymaganą rejestrację.</div>
+      </li>
+      <li class="p1">
+        <div class="num">3</div>
+        <div><strong>Napraw cross-network view→cart (8.6%)</strong> — kampanie PMax/DSA prawdopodobnie kierują na HP zamiast na konkretne PDP. Przy 1 166 sesjach i tylko 121 add_to_cart to duża strata. Sprawdź landing pages w Google Ads.</div>
+      </li>
+      <li class="p2">
+        <div class="num">4</div>
+        <div><strong>Skaluj Paid Search</strong> — najwyższy CR (4.56%) ale tylko 1 140 sesji. Przy podobnym ROAS zwiększenie budżetu może przynieść proporcjonalny wzrost zakupów. Paid Social ma 2.3x więcej sesji ale 2x niższy CR.</div>
+      </li>
+      <li class="p2">
+        <div class="num">5</div>
+        <div><strong>Dodaj Bubble Burst (#6, 185 sesji) i Klips Zero Gravity (#8, 155 sesji) do HP</strong> — obydwa w top 10 ruchu, niewidoczne na stronie głównej. Klips pasuje do sekcji włosowej, Bubble Burst do Bath Collection.</div>
+      </li>
+      <li class="p3">
+        <div class="num">6</div>
+        <div><strong>Zbadaj Referral (0 zakupów, 74 sesje)</strong> — sprawdź w GA4 które konkretne domeny odsyłają ruch (dimension: sessionSource filter: Referral). Może to fora, blogi lub porównywarki kierujące nieodpowiednią grupę.</div>
+      </li>
+      <li class="p3">
+        <div class="num">7</div>
+        <div><strong>Lista→Produkt drop -75.6%</strong> — ze 34 630 view_item_list tylko 8 465 trafia na PDP. Rozważ lepszy podgląd produktu w kafelku (cena, opinie, warianty), lazy scroll z quick-add lub ulepszenie zdjęć miniaturek.</div>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="footer">
+  Raport wygenerowany przez Claude + <code>google-analytics-mcp</code> + Chrome DevTools | Projekt Shopify GLOV | 2026-05-13<br>
+  Dane: Google Analytics 4 — properties/342844459 (glov.co PL)
+</div>
+
+</body>
+</html>
