@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="pl" data-theme="light"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Live Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+<style>
+[data-theme="light"]{--bg:#fff;--bg2:#f7f7f8;--card:#fff;--line:#e6e6e9;--line2:#ededf0;--txt:#0a0a0a;--txt2:#6b6b76;--muted:#9a9aa5;--accent:#7c5cff;--green:#16a34a;--shadow:0 1px 3px rgba(0,0,0,.06)}
+[data-theme="dark"]{--bg:#0f1115;--bg2:#181b22;--card:#181b22;--line:#2a2f3a;--line2:#23272f;--txt:#e8eaed;--txt2:#9aa0aa;--muted:#6b7280;--accent:#7c5cff;--green:#3ecf8e;--shadow:0 1px 3px rgba(0,0,0,.3)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;line-height:1.5;transition:.3s}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:20}
+.logo{font-size:18px;font-weight:800;letter-spacing:-.5px}.logo span{color:var(--accent)}
+.tnav{display:flex;gap:12px;align-items:center}
+.tnav a{color:var(--txt2);text-decoration:none;font-size:13px}.tnav a:hover{color:var(--txt)}
+.theme-btn{background:var(--bg2);border:1px solid var(--line);border-radius:9px;width:36px;height:36px;cursor:pointer;font-size:15px}
+.wrap{max-width:1000px;margin:0 auto;padding:26px 22px 60px}
+.head{display:flex;align-items:center;gap:12px;margin-bottom:4px;flex-wrap:wrap}
+h1{font-size:30px;font-weight:800;letter-spacing:-1px}
+.live{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--green);background:rgba(22,163,74,.1);padding:4px 12px;border-radius:30px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:p 1.6s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+.sub{color:var(--txt2);font-size:13px;margin:6px 0 24px}
+.period{margin-bottom:20px}
+.ptitle{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);margin-bottom:11px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:640px){.cards{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px;box-shadow:var(--shadow)}
+.card .l{font-size:10.5px;color:var(--txt2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:5px}
+.card .v{font-size:24px;font-weight:800;letter-spacing:-.5px}
+.card.gross .v{color:var(--green)}
+.chartbox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:10px;box-shadow:var(--shadow)}
+.chartbox h3{font-size:15px;font-weight:700;margin-bottom:2px}
+.chartbox .cs{font-size:12px;color:var(--txt2);margin-bottom:14px}
+.cwrap{height:260px;position:relative}
+.foot{font-size:11px;color:var(--muted);margin-top:22px;text-align:center;line-height:1.7}
+.err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:10px;padding:12px;font-size:13px;margin:10px 0}
+</style></head><body>
+<div class="topbar">
+  <div class="logo">glov<span>.</span>live</div>
+  <div class="tnav"><a href="GLOV_HUB.html">← HUB</a><button class="theme-btn" id="themeBtn">🌙</button></div>
+</div>
+<div class="wrap">
+<div class="head"><h1>Live Dashboard</h1><span class="live"><span class="dot"></span>LIVE</span></div>
+<div class="sub">Sprzedaż glov.co · gross / sesje / transakcje / CR · <span id="ts">ładowanie…</span></div>
+
+<div class="period"><div class="ptitle">📅 Ten miesiąc</div><div class="cards" id="m"></div></div>
+<div class="period"><div class="ptitle">📆 Ostatnie 7 dni</div><div class="cards" id="w"></div></div>
+<div class="period"><div class="ptitle">⏱️ Dziś</div><div class="cards" id="d"></div></div>
+
+<div class="chartbox">
+  <h3>Sprzedaż dzień po dniu — bieżący miesiąc</h3>
+  <div class="cs">gross (zł) + transakcje · <span id="msum"></span></div>
+  <div class="cwrap"><canvas id="chart"></canvas></div>
+</div>
+<div id="errbox"></div>
+<div class="foot">Źródło: Shopify (glov-dev) · dane odświeżane automatycznie przez zaplanowane zadanie (snapshot w live_data.json). Wersja publikowalna. INTERNAL.</div>
+</div>
+<script>
+const root=document.documentElement,tb=document.getElementById('themeBtn');
+const th=localStorage.getItem('glov-theme')||'light';root.setAttribute('data-theme',th);tb.textContent=th==='light'?'🌙':'☀️';
+tb.onclick=()=>{const n=root.getAttribute('data-theme')==='light'?'dark':'light';root.setAttribute('data-theme',n);localStorage.setItem('glov-theme',n);tb.textContent=n==='light'?'🌙':'☀️';if(window._ch)draw(window._data);};
+const PLN=n=>Math.round(n).toLocaleString('pl-PL')+' zł';
+const NUM=n=>Math.round(n).toLocaleString('pl-PL');
+const PCT=n=>(n*100).toFixed(2)+'%';
+function cards(id,o){document.getElementById(id).innerHTML=
+  '<div class="card gross"><div class="l">Gross</div><div class="v">'+PLN(o.gross)+'</div></div>'+
+  '<div class="card"><div class="l">Sesje</div><div class="v">'+NUM(o.sessions)+'</div></div>'+
+  '<div class="card"><div class="l">Transakcje</div><div class="v">'+NUM(o.orders)+'</div></div>'+
+  '<div class="card"><div class="l">CR</div><div class="v">'+PCT(o.cr)+'</div></div>';}
+function draw(d){
+  cards('m',d.month);cards('w',d.week);cards('d',d.day);
+  const upd=new Date(d.updated);
+  document.getElementById('ts').textContent='aktualizacja: '+upd.toLocaleString('pl-PL');
+  const labels=d.timeseries.map(r=>r[0].slice(8,10));
+  const gross=d.timeseries.map(r=>r[1]);const orders=d.timeseries.map(r=>r[2]);
+  document.getElementById('msum').textContent='suma '+PLN(gross.reduce((a,b)=>a+b,0))+' · '+orders.reduce((a,b)=>a+b,0)+' transakcji';
+  const cs=getComputedStyle(root);
+  const ctx=document.getElementById('chart');if(window._ch)window._ch.destroy();
+  window._ch=new Chart(ctx,{data:{labels,datasets:[
+    {type:'bar',label:'Gross (zł)',data:gross,backgroundColor:'rgba(124,92,255,.55)',borderRadius:5,yAxisID:'y'},
+    {type:'line',label:'Transakcje',data:orders,borderColor:cs.getPropertyValue('--green'),backgroundColor:cs.getPropertyValue('--green'),tension:.3,yAxisID:'y1',pointRadius:3}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11},color:cs.getPropertyValue('--txt2')}}},
+    scales:{y:{position:'left',grid:{color:cs.getPropertyValue('--line2')},ticks:{color:cs.getPropertyValue('--txt2')}},
+      y1:{position:'right',grid:{display:false},ticks:{color:cs.getPropertyValue('--txt2')}},
+      x:{grid:{display:false},ticks:{color:cs.getPropertyValue('--txt2')}}}}});
+}
+fetch('live_data.json?t='+Date.now()).then(r=>r.json()).then(d=>{window._data=d;draw(d);})
+.catch(e=>{document.getElementById('errbox').innerHTML='<div class="err">Nie udało się wczytać live_data.json — sprawdź czy plik jest opublikowany obok strony.</div>';});
+</script>
+</body></html>
