@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Typy ścieżek i najlepsze konkrety (maj 2026)</title>
+<style>
+  :root{--bg:#0f1115;--card:#181b22;--card2:#1f232c;--line:#2a2f3a;--txt:#e8eaed;--muted:#9aa0aa;--accent:#7c5cff;--good:#3ecf8e;--warn:#f5a623;--bad:#ff5c7c;--blue:#5b8def;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.5;padding:28px 22px;max-width:1180px;margin:0 auto}
+  h1{font-size:24px;font-weight:700;margin-bottom:4px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:20px}
+  h2{font-size:18px;font-weight:650;margin:30px 0 6px}
+  .h2sub{color:var(--muted);font-size:12.5px;margin-bottom:14px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-bottom:8px}
+  th,td{text-align:right;padding:10px 11px;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  th{color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.3px}
+  tr:hover td{background:var(--card2)}
+  .tag{font-size:10.5px;padding:1px 7px;border-radius:5px;font-weight:600;white-space:nowrap}
+  .t-good{background:rgba(62,207,142,.16);color:var(--good)}
+  .t-warn{background:rgba(245,166,35,.16);color:var(--warn)}
+  .t-bad{background:rgba(255,92,124,.16);color:var(--bad)}
+  .t-blue{background:rgba(91,141,239,.16);color:var(--blue)}
+  .badge{font-size:14px;margin-left:3px}
+  .bar{height:6px;border-radius:5px;background:var(--card2);overflow:hidden;margin-top:4px;min-width:40px}
+  .bar span{display:block;height:100%;border-radius:5px}
+  .note{background:var(--card2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:11px 14px;font-size:13px;margin:12px 0;color:#d4d7dd}
+  .note.warn{border-color:var(--warn)} .note.good{border-color:var(--good)} .note.bad{border-color:var(--bad)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:6px 0 10px}
+  .typecard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px 16px 10px;margin-bottom:18px}
+  .src{font-size:11.5px;color:#6b7280;margin-top:24px;padding-top:13px;border-top:1px solid var(--line)}
+  .win{font-weight:700}
+  .small{font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+<h1>GLOV — Typy ścieżek &amp; najlepsze konkrety</h1>
+<div class="sub">maj 2026 · GA4 342844459 · <b>tylko twarde dane</b> (landingPage × sessions/ATC/transakcje/przychód). CR = transakcje/sesje. ATC% = dodania/sesje.</div>
+
+<!-- ============ WIDOK 1: TYPY ============ -->
+<h2>① Typy ścieżek (archetypy) — suma z twardych danych</h2>
+<div class="h2sub">Każdy typ = suma wszystkich swoich konkretów. Porównujesz MECHANIKĘ ścieżki, nie pojedyncze produkty.</div>
+<div class="legend"><span>🟢 najwyższy CR</span><span>💰 najwyższy przychód</span><span>🔥 największy potencjał (dużo ruchu, słaby CR)</span></div>
+<table>
+  <thead><tr><th>Typ ścieżki</th><th>Sesje</th><th>ATC</th><th>ATC%</th><th>Trans.</th><th>CR%</th><th>Przychód</th></tr></thead>
+  <tbody>
+    <tr><td>Listing (wejście na kolekcję) <span class="tag t-blue">Ś-A/H</span> 💰🔥</td><td>~10 100</td><td>1 900</td><td>19%</td><td>210</td><td><span class="tag t-warn">2,1%</span></td><td>32 100 zł</td></tr>
+    <tr><td>PDP wprost (z reklamy) <span class="tag t-blue">Ś-B</span> 🔥</td><td>~8 500</td><td>1 500</td><td>18%</td><td>175</td><td><span class="tag t-warn">2,1%</span></td><td>23 100 zł</td></tr>
+    <tr><td>Homepage <span class="tag t-blue">Ś-D</span></td><td>887</td><td>297</td><td>33%</td><td>40</td><td><span class="tag t-blue">4,5%</span></td><td>6 388 zł</td></tr>
+    <tr><td>Search → wyniki → PDP <span class="tag t-blue">Ś-C</span></td><td>611</td><td>90</td><td>15%</td><td>11</td><td><span class="tag t-warn">1,8%</span></td><td>1 650 zł</td></tr>
+    <tr><td>Landing /pages/* <span class="tag t-blue">Ś-E</span></td><td>~330</td><td>23</td><td>7%</td><td>3</td><td><span class="tag t-bad">0,9%</span></td><td>643 zł</td></tr>
+  </tbody>
+</table>
+<div class="note warn"><b>Typy „Listing" i „PDP wprost" są wolumenowo dominujące (~10k i ~8,5k sesji), ale oba konwertują słabo (2,1%).</b> Homepage konwertuje najlepiej (4,5%) — bo trafia tam ruch znający markę. <b>Landing /pages/* to martwy kanał wejścia</b> (~330 sesji, 3 transakcje) — GLOV praktycznie nie kieruje ruchu na dedykowane landingi, mimo że je ma. To duża, niewykorzystana przestrzeń.</div>
+
+<!-- ============ WIDOK 2: KONKRETY ============ -->
+<h2>② Najlepsze konkrety w ramach typu</h2>
+<div class="h2sub">Drill-down: w obrębie KAŻDEGO typu porównujesz instancje (które kolekcje / produkty / landingi). Tu szukasz „co dokładnie sprzedaje".</div>
+
+<!-- LISTING -->
+<div class="typecard">
+<h2 style="font-size:15px;margin:12px 0 2px">📋 LISTING — konkretne kolekcje</h2>
+<div class="h2sub">Wejście na stronę kolekcji. Quick-add + nawigacja do PDP.</div>
+<table>
+  <thead><tr><th>Kolekcja</th><th>Sesje</th><th>ATC</th><th>ATC%</th><th>Trans.</th><th>CR%</th><th>Przychód</th></tr></thead>
+  <tbody>
+    <tr><td>/collections/sklep (Bestsellery) <span class="badge">💰</span></td><td>8 194</td><td>1 478</td><td>18%</td><td>159</td><td><span class="tag t-warn">1,9%</span></td><td>26 510 zł</td></tr>
+    <tr><td>rękawice-do-demakijazu <span class="badge">🟢</span></td><td>475</td><td>124</td><td>26%</td><td>17</td><td><span class="tag t-good">3,6%</span></td><td>2 166 zł</td></tr>
+    <tr><td>wlosy</td><td>263</td><td>12</td><td>5%</td><td>1</td><td><span class="tag t-bad">0,4%</span></td><td>145 zł</td></tr>
+    <tr><td>coolnails</td><td>193</td><td>8</td><td>4%</td><td>1</td><td><span class="tag t-bad">0,5%</span></td><td>254 zł</td></tr>
+    <tr><td>ciało</td><td>151</td><td>11</td><td>7%</td><td>4</td><td><span class="tag t-blue">2,6%</span></td><td>358 zł</td></tr>
+  </tbody>
+</table>
+<div class="small">→ Najlepszy konkret: <b>rękawice-do-demakijazu (CR 3,6%)</b>. /sklep robi 90% wolumenu, ale konwertuje słabiej (1,9%) — bo to wrzutka „wszystko".</div>
+</div>
+
+<!-- PDP -->
+<div class="typecard">
+<h2 style="font-size:15px;margin:12px 0 2px">🛍️ PDP WPROST — konkretne produkty (wejście z reklamy)</h2>
+<div class="h2sub">Wejście wprost na kartę produktu. Tu CR mówi która karta domyka, a która jest tylko magnesem ruchu.</div>
+<table>
+  <thead><tr><th>Produkt (landing)</th><th>Sesje</th><th>ATC</th><th>ATC%</th><th>Trans.</th><th>CR%</th><th>Przychód</th></tr></thead>
+  <tbody>
+    <tr><td>Pumeks nano-szkła <span class="badge">🟢💰</span></td><td>1 460</td><td>308</td><td>21%</td><td>56</td><td><span class="tag t-good">3,8%</span></td><td>4 534 zł</td></tr>
+    <tr><td>Luna Eye (płatki LED)</td><td>1 660</td><td>201</td><td>12%</td><td>31</td><td><span class="tag t-blue">1,9%</span></td><td>7 800 zł</td></tr>
+    <tr><td>Skin Smoothing (rękawica) <span class="badge">🟢</span></td><td>606</td><td>236</td><td>39%</td><td>24</td><td><span class="tag t-good">4,0%</span></td><td>2 948 zł</td></tr>
+    <tr><td>Depilator nano</td><td>606</td><td>65</td><td>11%</td><td>10</td><td><span class="tag t-blue">1,7%</span></td><td>609 zł</td></tr>
+    <tr><td>Sleeping Beauty <span class="badge">🔥</span></td><td>1 760</td><td>79</td><td>4%</td><td>12</td><td><span class="tag t-bad">0,7%</span></td><td>2 345 zł</td></tr>
+    <tr><td>Biobased Brush</td><td>366</td><td>64</td><td>17%</td><td>11</td><td><span class="tag t-good">3,0%</span></td><td>1 242 zł</td></tr>
+  </tbody>
+</table>
+<div class="small">→ Najlepszy konkret: <b>Pumeks (CR 3,8%, najwięcej zakupów)</b> i <b>Skin Smoothing (4,0%, ATC 39%!)</b>. <b>Sleeping Beauty 🔥</b> = największy ruch (1 760), ale CR 0,7% — magnes który nie sprzedaje, top kandydat do audytu PDP.</div>
+</div>
+
+<!-- LP -->
+<div class="typecard">
+<h2 style="font-size:15px;margin:12px 0 2px">📄 LANDING /pages/* — konkretne landingi</h2>
+<div class="h2sub">Dedykowane strony kampanijne. UWAGA: wolumen znikomy — GLOV prawie nie kieruje tu ruchu.</div>
+<table>
+  <thead><tr><th>Landing</th><th>Sesje</th><th>ATC</th><th>Trans.</th><th>CR%</th><th>Przychód</th></tr></thead>
+  <tbody>
+    <tr><td>terapia-swiatlem-led</td><td>84</td><td>4</td><td>1</td><td><span class="tag t-blue">1,2%</span></td><td>449 zł</td></tr>
+    <tr><td>rutyna-coolnails</td><td>73</td><td>8</td><td>1</td><td><span class="tag t-blue">1,4%</span></td><td>97 zł</td></tr>
+    <tr><td>o-nas</td><td>58</td><td>6</td><td>1</td><td><span class="tag t-blue">1,7%</span></td><td>97 zł</td></tr>
+    <tr><td>rutyna-gladkie-cialo</td><td>13</td><td>5</td><td>0</td><td><span class="tag t-bad">0%</span></td><td>0 zł</td></tr>
+    <tr><td>rutyna-wieczorna</td><td>11</td><td>0</td><td>0</td><td><span class="tag t-bad">0%</span></td><td>0 zł</td></tr>
+  </tbody>
+</table>
+<div class="small">→ Wszystkie landingi razem: ~330 sesji, 3 transakcje. <b>Konkrety nieistotne statystycznie</b> — wniosek jest na poziomie typu: landingi istnieją, ale nie dostają ruchu. (manage-subscriptions 326 sesji pominięte — to strona techniczna, nie landing kampanijny.)</div>
+</div>
+
+<div class="note good"><b>Co z tego wynika — najlepsze konkrety do skalowania:</b> w PDP — <b>Pumeks</b> i <b>Skin Smoothing</b> (domykają 3,8–4,0%, warto dosypać im ruchu). W Listing — <b>rękawice</b> (3,6%). Do naprawy: <b>Sleeping Beauty</b> (1 760 sesji, CR 0,7% — ogromny ruch marnowany). Do aktywacji: <b>landingi /pages/*</b> (gotowe, ale puste — można na nie kierować kampanie).</div>
+
+<div class="src">
+<b>Źródła:</b> GA4 342844459, maj 2026. landingPage × sessions/addToCarts/transactions/purchaseRevenue, filtrowane po /collections/, /products/, /pages/. Typy = sumy konkretów (Listing/PDP zaokrąglone do ~ bo zawierają długi ogon małych stron + warianty URL). Konkrety = surowe wiersze GA4. CR=transakcje/sesje (sesja=landing). PDP-wprost agreguje główne karty produktu jako landing. Ślepe pole: ATC bez ścieżki strony (GTM) → quick-add vs przez-PDP nie rozdzielone na poziomie eventu, tylko po typie wejścia.
+</div>
+</body>
+</html>
