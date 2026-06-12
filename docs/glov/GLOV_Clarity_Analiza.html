@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="pl"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Analiza Microsoft Clarity</title>
+<style>
+:root{--bg:#0f1115;--card:#181b22;--card2:#1f232c;--line:#2a2f3a;--txt:#e8eaed;--muted:#9aa0aa;--accent:#7c5cff;--good:#3ecf8e;--warn:#f5a623;--bad:#ff5c7c;--blue:#5b8def;--pink:#ec4899;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.55;padding:28px 20px;max-width:1120px;margin:0 auto}
+h1{font-size:23px;font-weight:700;margin-bottom:3px}
+.sub{color:var(--muted);font-size:13px;margin-bottom:20px}
+h2{font-size:17px;font-weight:650;margin:30px 0 6px;display:flex;align-items:center;gap:8px}
+.h2sub{color:var(--muted);font-size:12px;margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:8px}
+@media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kpi .l{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+.kpi .v{font-size:24px;font-weight:700}
+.kpi .d{font-size:11px;color:var(--muted);margin-top:3px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:4px}
+th,td{text-align:right;padding:9px 11px;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.3px}
+tr:hover td{background:var(--card2)}
+.finding{background:var(--card);border:1px solid var(--line);border-left-width:4px;border-radius:0 10px 10px 0;padding:14px 16px;margin:12px 0}
+.finding.crit{border-left-color:var(--bad)}
+.finding.warn{border-left-color:var(--warn)}
+.finding.info{border-left-color:var(--blue)}
+.finding.good{border-left-color:var(--good)}
+.finding .ft{font-size:14.5px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.finding .fb{font-size:13px;color:#d4d7dd}
+.pct{font-size:20px;font-weight:800;color:var(--bad)}
+.pct.g{color:var(--good)}.pct.w{color:var(--warn)}.pct.b{color:var(--blue)}
+.pr{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;text-transform:uppercase}
+.pr-crit{background:rgba(255,92,124,.16);color:var(--bad)}
+.pr-high{background:rgba(245,166,35,.16);color:var(--warn)}
+.pr-info{background:rgba(91,141,239,.16);color:var(--blue)}
+.src{font-size:11px;color:#6b7280;margin-top:26px;padding-top:13px;border-top:1px solid var(--line)}
+</style></head><body><a href="GLOV_HUB.html" style="position:fixed;top:12px;left:12px;z-index:999;background:#7c5cff;color:#fff;text-decoration:none;padding:7px 13px;border-radius:8px;font:600 12px -apple-system,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.4)">← HUB</a>
+<h1>🎬 GLOV — Analiza Microsoft Clarity</h1>
+<div class="sub">glov.co · nagrania sesji + heatmapy (metryki) · okno 9–11 czerwca 2026 · <b>1000 nagrań przeanalizowanych</b> (4 przekroje × 250) + agregaty całości</div>
+
+<h2>📊 Skala analizy</h2>
+<div class="kpis">
+  <div class="kpi"><div class="l">Sesje (3 dni, non-bot)</div><div class="v">4 136</div><div class="d">~1 380/dzień</div></div>
+  <div class="kpi"><div class="l">Nagrań obejrzanych</div><div class="v">1 000</div><div class="d">4 przekroje po 250</div></div>
+  <div class="kpi"><div class="l">Polska</div><div class="v">75%</div><div class="d">3 106 sesji · reszta zagranica/proxy</div></div>
+  <div class="kpi"><div class="l">Quick-backs</div><div class="v">803</div><div class="d">19% — szybkie odbicia</div></div>
+</div>
+
+<h2>🔴 Główne wnioski (z procentami)</h2>
+<div class="h2sub">Twarde liczby z nagrań i agregatów Clarity. Priorytet wg wpływu na konwersję.</div>
+
+<div class="finding crit">
+  <div class="ft"><span class="pr pr-crit">Krytyczny</span> 🐛 Bug „▫" — ceny i warianty renderują się jako puste kwadraty</div>
+  <div class="fb"><span class="pct">832</span> kliknięć w nieczytelne glify (▪▫▫▫) w samej próbie zaangażowanych sesji. Warianty produktów i ceny na przyciskach wyświetlają się jako UUID/tofu zamiast tekstu. Ludzie <b>klikają selektor wariantu, ale nie widzą co wybierają</b> — i nie widzą kwoty na „Przejdź do kasy". Bezpośrednio blokuje ATC i checkout. <b>#1 priorytet, najtańsza naprawa (font/glify).</b></div>
+</div>
+
+<div class="finding crit">
+  <div class="ft"><span class="pr pr-crit">Krytyczny</span> 📉 Drop PDP → koszyk = 9:1</div>
+  <div class="fb">Na każde <span class="pct">9</span> wizyt karty produktu tylko <b>1</b> dociera do koszyka (284 PDP page-views vs 31 /cart w przekroju długich sesji). 91% oglądających PDP nie dochodzi do koszyka — częściowo przez bug glifów powyżej.</div>
+</div>
+
+<div class="finding warn">
+  <div class="ft"><span class="pr pr-high">Wysoki</span> 👻 78% bounce = 0 sekund (instant, nie wolna strona)</div>
+  <div class="fb"><span class="pct w">78%</span> najkrótszych sesji ma totalDuration „0 sekund" — wychodzą zanim strona cokolwiek pokaże. To NIE timeout (strona ładuje się OK). Główne źródło: <b>Meta Ads</b> — fbclid widoczne w 36% bounce sesji, kampania advantage generuje fałszywe/przypadkowe kliknięcia. Problem jakości ruchu, nie UX.</div>
+</div>
+
+<div class="finding warn">
+  <div class="ft"><span class="pr pr-high">Wysoki</span> 📐 CLS ≥ 0,1 w 18% realnych sesji (Lighthouse pokazywał 0,02!)</div>
+  <div class="fb"><span class="pct w">18%</span> page-views ma realny layout shift powyżej progu „needs improvement". Field data dużo gorsze niż lab — winowajca: dynamiczne ładowanie wariantów / galeria / sticky header. LCP ≥ 2s w ~16% (reszta OK).</div>
+</div>
+
+<div class="finding info">
+  <div class="ft"><span class="pr pr-info">Sygnał</span> 🖱️ ~60% kliknięć w puste elementy (galeria/swipe)</div>
+  <div class="fb"><span class="pct b">60%</span> wszystkich kliknięć trafia w elementy bez tekstu (" ") — głównie karuzela/galeria zdjęć i swipe. Ludzie eksplorują wizualnie. „Dodaj do koszyka" = 4,3% kliknięć, „Przejdź do kasy" = 2,6%. Z klikających ATC <b>~60% klika też „Przejdź do kasy"</b> (drop ~40% na tym kroku).</div>
+</div>
+
+<div class="finding info">
+  <div class="ft"><span class="pr pr-info">Sygnał</span> 🌍 6–9% ruchu obcojęzyczny — i siedzą DŁUŻEJ</div>
+  <div class="fb">Page-views na /en-eu/ /de-eu/ /fr-eu/ = 6–9%. Co ciekawe, w najdłuższych sesjach odsetek obcojęzycznych jest WYŻSZY — zagraniczni są zdeterminowani, ale UI/język ich spowalnia. Lądują na PL domenie z PLN. Top produkt zagraniczny: tarka do stóp.</div>
+</div>
+
+<div class="finding good">
+  <div class="ft"><span class="pr pr-info">Szansa</span> 👁️ Luna Eye = król PDP, ale brak na HP</div>
+  <div class="fb">Luna Eye (płatki LED) — <b>najczęściej oglądany</b> produkt w nagraniach (63 hits w 250 najdłuższych sesjach), więcej niż jakikolwiek inny. Potwierdza dane GA4. A jednocześnie słabo eksponowany na stronie głównej. Rekomendacja: hero/pierwszy slot HP.</div>
+</div>
+
+<h2>🖱️ Top klikane elementy (próba zaangażowanych, 250 sesji)</h2>
+<table>
+  <tr><th>Element</th><th>Kliknięć</th><th>% klików</th><th>Sygnał</th></tr>
+  <tr><td>Puste " " (galeria/swipe)</td><td>2 083</td><td>~60%</td><td>eksploracja wizualna</td></tr>
+  <tr><td>▪▫▫▫ (bug glify — warianty/ceny)</td><td>335</td><td>~10%</td><td style="color:var(--bad)">🐛 bug</td></tr>
+  <tr><td>„Dodaj do koszyka"</td><td>149</td><td>~4,3%</td><td>ATC</td></tr>
+  <tr><td>„Przejdź do kasy"</td><td>89</td><td>~2,6%</td><td>checkout (drop 40% od ATC)</td></tr>
+  <tr><td>„Załaduj więcej"</td><td>61</td><td>~1,8%</td><td>paginacja listingu</td></tr>
+</table>
+
+<h2>🌍 Geografia (3 dni)</h2>
+<table>
+  <tr><th>Kraj</th><th>Sesje</th><th>Quick-backs</th></tr>
+  <tr><td>Polska</td><td>3 106</td><td>737</td></tr>
+  <tr><td>Malezja</td><td>294</td><td>0</td></tr>
+  <tr><td>Kolumbia</td><td>159</td><td>0</td></tr>
+  <tr><td>USA</td><td>97</td><td>5</td></tr>
+  <tr><td>Wielka Brytania</td><td>70</td><td>8</td></tr>
+  <tr><td>Niemcy</td><td>53</td><td>7</td></tr>
+</table>
+<div class="h2sub" style="margin-top:8px">Malezja/Kolumbia z 0 quick-backs = prawdopodobnie ruch botowy/proxy (warto wykluczyć z analiz konwersji).</div>
+
+<div class="src">
+<b>Źródła:</b> Microsoft Clarity (konektor clarity-glov) — list-session-recordings (1000 nagrań, 4 przekroje: bounce/engaged/długie/wieloklikowe) + query-analytics-dashboard (agregaty: sesje, quick-backs, dead/rage clicks per kraj/device). Okno 9–11.06.2026. Liczby kliknięć/CWV z próby nagrań (page-view level), procenty orientacyjne. Clarity NIE nagrywa checkout.shopify (osobna domena) → drop PDP→koszyk liczony z /cart, nie /checkout. INTERNAL.
+</div>
+</body></html>
