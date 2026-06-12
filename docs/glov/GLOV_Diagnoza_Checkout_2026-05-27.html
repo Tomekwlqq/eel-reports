@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Diagnoza Checkout | 27 maja 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: #1a1a1a; line-height: 1.7; background: #fff; }
+
+  .cover { background: #1a1a1a; color: #fff; padding: 60px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+  .cover .label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #666; margin-bottom: 20px; }
+  .cover h1 { font-size: 48px; font-weight: 700; line-height: 1.05; margin-bottom: 20px; }
+  .cover .sub { font-size: 17px; color: #aaa; margin-bottom: 48px; max-width: 520px; line-height: 1.5; }
+  .cover .meta { font-size: 11px; color: #555; }
+  .cover .meta span { margin-right: 28px; }
+
+  .page { padding: 56px 60px; max-width: 860px; }
+  .page + .page { border-top: 1px solid #eee; }
+
+  h2 { font-size: 22px; font-weight: 700; margin-bottom: 24px; padding-bottom: 10px; border-bottom: 3px solid #1a1a1a; }
+  h3 { font-size: 14px; font-weight: 700; margin: 28px 0 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #444; }
+
+  .section-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #aaa; margin-bottom: 8px; }
+
+  .verdict { background: #1a1a1a; color: #fff; border-radius: 8px; padding: 28px 32px; margin: 24px 0; }
+  .verdict .v-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+  .verdict p { font-size: 16px; line-height: 1.6; color: #eee; }
+
+  .problem { border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px 24px; margin: 14px 0; position: relative; }
+  .problem.critical { border-left: 4px solid #dc2626; }
+  .problem.medium { border-left: 4px solid #ea580c; }
+  .problem.low { border-left: 4px solid #ca8a04; }
+
+  .problem-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 10px; }
+  .problem-num { font-size: 22px; font-weight: 700; color: #ddd; line-height: 1; flex-shrink: 0; width: 32px; }
+  .problem-title { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+  .problem-source { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #999; margin-top: 3px; }
+
+  .problem-body { color: #444; font-size: 13px; }
+  .problem-body strong { color: #1a1a1a; }
+
+  .data-pill { display: inline-block; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 700; color: #374151; margin: 3px 4px 3px 0; }
+  .data-pill.red { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+  .data-pill.orange { background: #ffedd5; border-color: #fdba74; color: #9a3412; }
+
+  .funnel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin: 20px 0; }
+  .funnel-step { background: #f9fafb; border: 1px solid #e5e7eb; padding: 18px 16px; text-align: center; position: relative; }
+  .funnel-step:first-child { border-radius: 8px 0 0 8px; }
+  .funnel-step:last-child { border-radius: 0 8px 8px 0; background: #fff5f5; border-color: #fca5a5; }
+  .funnel-step .f-num { font-size: 24px; font-weight: 700; color: #1a1a1a; }
+  .funnel-step .f-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #888; margin-top: 4px; }
+  .funnel-step .f-cr { font-size: 11px; color: #dc2626; font-weight: 700; margin-top: 6px; }
+
+  .source-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 3px; }
+  .source-clarity { background: #dbeafe; color: #1e40af; }
+  .source-ux { background: #f3e8ff; color: #6b21a8; }
+  .source-both { background: #d1fae5; color: #065f46; }
+  .source-new { background: #fee2e2; color: #991b1b; }
+
+  .action-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  .action-table th { background: #1a1a1a; color: #fff; padding: 10px 14px; text-align: left; font-size: 11px; letter-spacing: 0.5px; font-weight: 600; }
+  .action-table td { padding: 12px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: top; font-size: 12px; }
+  .action-table tr:last-child td { border-bottom: none; }
+  .action-table .action-name { font-weight: 700; font-size: 13px; color: #1a1a1a; }
+  .action-table .action-why { color: #666; margin-top: 3px; font-size: 12px; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-orange { background: #ffedd5; color: #9a3412; }
+  .badge-green { background: #d1fae5; color: #065f46; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+  .col-box { border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; }
+  .col-box h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #888; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f0f0f0; }
+  .col-box ul { list-style: none; }
+  .col-box li { padding: 5px 0; font-size: 12px; color: #444; border-bottom: 1px solid #f9f9f9; display: flex; gap: 8px; }
+  .col-box li:last-child { border-bottom: none; }
+
+  .summary-row { display: flex; gap: 2px; margin: 20px 0; }
+  .summary-cell { flex: 1; background: #f9fafb; border: 1px solid #e5e7eb; padding: 16px; text-align: center; }
+  .summary-cell .s-num { font-size: 28px; font-weight: 700; }
+  .summary-cell .s-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #888; margin-top: 4px; }
+  .summary-cell.alert { background: #fff5f5; border-color: #fca5a5; }
+  .summary-cell.alert .s-num { color: #dc2626; }
+
+  .footer { padding: 32px 60px; border-top: 1px solid #eee; font-size: 11px; color: #999; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="label">Diagnoza syntetyczna — e-commerce</div>
+  <h1>GLOV<br>Dlaczego checkout<br>nie konwertuje</h1>
+  <div class="sub">Synteza audytu UX (maj 2026) i danych behawioralnych Microsoft Clarity (13–27 maja 2026). 250 sesji checkout przeanalizowanych.</div>
+  <div class="meta">
+    <span>Data: 27 maja 2026</span>
+    <span>Źródła: Clarity MCP + UX Audit 06.05.2026</span>
+    <span>Sesje checkout: 250</span>
+  </div>
+</div>
+
+<!-- SEKCJA 1: VERDICT -->
+<div class="page">
+  <div class="section-label">Werdykt</div>
+  <h2>Co się dzieje</h2>
+
+  <div class="verdict">
+    <div class="v-label">Główna diagnoza</div>
+    <p>Użytkownicy GLOV chcą kupować — docierają do koszyka i klikają "Przejdź do kasy". Problem w tym, że <strong>interfejs im na to nie pozwala</strong>: przyciski nie reagują, banery są martwe, selektor prezentu się nie otwiera. Checkout Shopify jest poza domeną, więc Clarity nie widzi co się dzieje po kliknięciu kasy — ale dead clicki mówią same za siebie. To nie jest problem z produktem ani ceną. To technika i UX.</p>
+  </div>
+
+  <!-- FUNNEL -->
+  <h3>Funnel — gdzie są przecieki</h3>
+  <div class="funnel">
+    <div class="funnel-step">
+      <div class="f-num">12 461</div>
+      <div class="f-label">Sesje / 7 dni</div>
+    </div>
+    <div class="funnel-step">
+      <div class="f-num">1 044</div>
+      <div class="f-label">AddToCart</div>
+      <div class="f-cr">8,4% z sesji</div>
+    </div>
+    <div class="funnel-step">
+      <div class="f-num">276</div>
+      <div class="f-label">Checkout</div>
+      <div class="f-cr">26% z ATC</div>
+    </div>
+    <div class="funnel-step">
+      <div class="f-num">~13</div>
+      <div class="f-label">Zakup (est.)</div>
+      <div class="f-cr">5% z Checkout</div>
+    </div>
+  </div>
+
+  <p style="font-size:12px; color:#888; margin-top:-8px;">* Clarity nie widzi zakupów (checkout na subdomain Shopify) — zakupy szacowane z thank-you URL w referrerach sesji.</p>
+
+  <!-- SUMMARY ROW -->
+  <div class="summary-row" style="margin-top:28px;">
+    <div class="summary-cell alert">
+      <div class="s-num">424</div>
+      <div class="s-label">Porzucone checkouty (14 dni)</div>
+    </div>
+    <div class="summary-cell alert">
+      <div class="s-num">42</div>
+      <div class="s-label">Dead clicks "Dodaj do koszyka"</div>
+    </div>
+    <div class="summary-cell alert">
+      <div class="s-num">20</div>
+      <div class="s-label">Dead clicks baner kodu</div>
+    </div>
+    <div class="summary-cell alert">
+      <div class="s-num">27%</div>
+      <div class="s-label">Avg scroll depth na PDP</div>
+    </div>
+  </div>
+</div>
+
+<!-- SEKCJA 2: PROBLEMY -->
+<div class="page">
+  <div class="section-label">Diagnoza</div>
+  <h2>8 problemów — potwierdzonych danymi</h2>
+
+  <!-- P1 -->
+  <div class="problem critical">
+    <div class="problem-header">
+      <div class="problem-num">1</div>
+      <div>
+        <div class="problem-title">Baner kodu zniżkowego w koszyku — martwy element</div>
+        <div class="problem-source"><span class="source-badge source-new">NOWE — Clarity</span></div>
+      </div>
+    </div>
+    <div class="problem-body">
+      Użytkownicy widzą baner <em>"-XX% na WSZYSTKO z kodem:"</em> tuż nad przyciskiem "Przejdź do kasy" i klikają żeby skopiować lub aktywować kod. Baner jest statyczny — <strong>nic się nie dzieje</strong>. <span class="data-pill red">20 dead clicków tylko w /cart</span> — to największy pojedynczy problem w całym koszyku. Frustracja tuż przed finalizacją zakupu.
+      <br><br>
+      <strong>Fix:</strong> Button kopiujący kod do schowka + toast "Skopiowano!" albo auto-aplikacja kodu w koszyku po kliknięciu.
+    </div>
+  </div>
+
+  <!-- P2 -->
+  <div class="problem critical">
+    <div class="problem-header">
+      <div class="problem-num">2</div>
+      <div>
+        <div class="problem-title">"Dodaj do koszyka" nie reaguje — 42 dead clicks na PDP</div>
+        <div class="problem-source"><span class="source-badge source-both">UX Audit + Clarity</span></div>
+      </div>
+    </div>
+    <div class="problem-body">
+      <span class="data-pill red">Pumeks: 25 dead clicks</span> <span class="data-pill red">Luna Eye: 8</span> <span class="data-pill red">Depilator: 4</span> <span class="data-pill orange">Strona rutyny: 12</span><br><br>
+      Użytkownicy klikają ATC i button nie reaguje lub reaguje z opóźnieniem. Prawdopodobna przyczyna: <strong>aplikacja GFG (gift-with-purchase)</strong> modyfikuje właściwości linii koszyka i spowalnia lub blokuje ATC request. Raport UX z maja to diagnozował jako bug duplikatów — Clarity pokazuje że skala jest większa: button czasem w ogóle nie działa.
+      <br><br>
+      <strong>Fix:</strong> Wyłącz GFG tymczasowo i zmierz czy dead clicki znikają. Jeśli tak — kontakt z supportem GFG.
+    </div>
+  </div>
+
+  <!-- P3 -->
+  <div class="problem critical">
+    <div class="problem-header">
+      <div class="problem-num">3</div>
+      <div>
+        <div class="problem-title">Floating element 270× przechwytuje kliknięcia bez reakcji</div>
+        <div class="problem-source"><span class="source-badge source-new">NOWE — Clarity</span></div>
+      </div>
+    </div>
+    <div class="problem-body">
+      <span class="data-pill red">270 dead clicks na " " (pusty element)</span> na stronach HP i PDP. Niewidzialny element w DOM przechwytuje kliknięcia użytkowników — prawdopodobnie <strong>Trusted Shops widget lub cookie banner overlay</strong> z błędnym z-index. Raport UX wskazywał Trusted Shops jako problem na desktop — Clarity pokazuje że problem jest wszędzie i na dużą skalę.
+      <br><br>
+      <strong>Fix:</strong> Inspect w DevTools na mobile — znaleźć element z pustym textContent który ma pointer-events: all i naprawić z-index lub pointer-events: none.
+    </div>
+  </div>
+
+  <!-- P4 -->
+  <div class="problem critical">
+    <div class="problem-header">
+      <div class="problem-num">4</div>
+      <div>
+        <div class="problem-title">Gift picker w koszyku — 18 dead clicks, nie otwiera się</div>
+        <div class="problem-source"><span class="source-badge source-both">UX Audit + Clarity</span></div>
+      </div>
+    </div>
+    <div class="problem-body">
+      <span class="data-pill red">"Wybierz": 12 dead clicks</span> <span class="data-pill red">"Darmowy prezent do wyboru": 6 dead clicks</span><br><br>
+      Drawer prezentu albo nie otwiera się na mobile albo otwiera się z dużym opóźnieniem. Użytkownicy klikają wielokrotnie zanim cokolwiek się stanie. Raport UX pisał o niespójności między drawerem a /cart — Clarity potwierdza że to aktywny friction point, nie tylko wizualna niespójność.
+      <br><br>
+      <strong>Fix:</strong> Sprawdź czas ładowania drawera prezentu na mobile 4G. Jeśli >300ms — lazy load jest problemem. Rozważ inline select zamiast drawer.
+    </div>
+  </div>
+
+  <!-- P5 -->
+  <div class="problem medium">
+    <div class="problem-header">
+      <div class="problem-num">5</div>
+      <div>
+        <div class="problem-title">Scroll depth PDP tylko 27% — użytkownicy nie docierają do recenzji</div>
+        <div class="problem-source"><span class="source-badge source-new">NOWE — Clarity</span></div>
+      </div>
+    </div>
+    <div class="problem-body">
+      <span class="data-pill orange">PDP: 27% scroll</span> <span class="data-pill orange">HP: 24% scroll</span> <span class="data-pill orange">/cart: 48% scroll</span><br><br>
+      Użytkownicy widzą tylko górną ćwiartkę strony produktu — zdjęcia i cenę. Opisy, recenzje, cross-sell, sekcja "Dlaczego warto?" są niewidoczne. Co gorsza: <span class="data-pill red">"Dlaczego warto?": 11 dead clicks</span> — sekcja FAQ/accordion na PDP nie otwiera się, więc użytkownicy rezygnują ze scrollowania zamiast próbować dalej.
+      <br><br>
+      <strong>Fix:</strong> Napraw accordion "Dlaczego warto?" na mobile. Rozważ przeniesienie kluczowych argumentów (recenzje, USP) wyżej na stronę.
+    </div>
+  </div>
+
+  <!-- P6 -->
+  <div class="problem medium">
+    <div class="problem-header">
+      <div class="problem-num">6</div>
+      <div>
+        <div class="problem-title">COOLCURL en-global — 81 dead clicks, uszkodzony produkt</div>
+        <div class="problem-source"><span class="source-badge source-new">NOWE — Clarity</span></div>
+      </div>
+    </div>
+    <div class="problem-body">
+      Strona <code>glov.co/en-global/products/copy-coolcurl...</code> generuje <span class="data-pill red">81 dead clicks na nazwę produktu</span>. URL zawiera "copy-" — prawdopodobnie zduplikowany produkt ze złym slugiem który jest niedostępny lub ma błąd. Użytkownicy klikają i nic się nie dzieje.
+      <br><br>
+      <strong>Fix:</strong> Sprawdź w Shopify Admin czy produkt "copy-coolcurl" jest aktywny. Jeśli nie — usuń lub przekieruj URL.
+    </div>
+  </div>
+
+  <!-- P7 -->
+  <div class="problem medium">
+    <div class="problem-header">
+      <div class="problem-num">7</div>
+      <div>
+        <div class="problem-title">Loop językowy — 725 sesji trafia na wersję EN</div>
+        <div class="problem-source"><span class="source-badge source-both">UX Audit + Clarity</span></div>
+      </div>
+    </div>
+    <div class="problem-body">
+      <span class="data-pill orange">725 sesji na /en-eu (14 dni)</span> <span class="data-pill orange">26 sesji /en-global</span> <span class="data-pill orange">16 sesji /pl-global</span><br><br>
+      Raport UX szczegółowo diagnozował mechanizm: cookie <code>ssw_customer_locale=0_en</code> z Hextom override'uje domyślny rynek polski, a Cookiebot blokuje zapisanie powrotu do PL. Clarity potwierdza skalę — ~5–6% ruchu trafia na angielskie wersje co tydzień. Dla polskiego sklepu to realny wyciek konwersji.
+      <br><br>
+      <strong>Fix:</strong> Przenieść preferencję języka do kategorii "Necessary" w Cookiebot — godzina roboty, wysoki impact.
+    </div>
+  </div>
+
+  <!-- P8 -->
+  <div class="problem low">
+    <div class="problem-header">
+      <div class="problem-num">8</div>
+      <div>
+        <div class="problem-title">Luna Eye niedostępna — formularz "Powiadom mnie" bez potwierdzenia</div>
+        <div class="problem-source"><span class="source-badge source-clarity">Clarity</span></div>
+      </div>
+    </div>
+    <div class="problem-body">
+      Luna Eye to drugi najczęściej odwiedzany produkt w sesjach checkout-intent (po pumeksie). <span class="data-pill orange">15 sesji RemoveFromCart z Luna Eye</span> — użytkownicy dodają, oglądają cenę/dostępność i usuwają. W nagraniach: jeden użytkownik kliknął "Powiadom mnie" 4×, "Join Waiting List" 2× — formularz backorder nie daje żadnego potwierdzenia sukcesu.
+      <br><br>
+      <strong>Fix:</strong> Dodaj toast/potwierdzenie po zapisie. Rozważ priorytet restocku — produkt generuje duże zainteresowanie bez możliwości zakupu.
+    </div>
+  </div>
+</div>
+
+<!-- SEKCJA 3: CO OBALONE -->
+<div class="page">
+  <div class="section-label">Weryfikacja</div>
+  <h2>Co raport UX miał rację, co nie</h2>
+
+  <div class="two-col">
+    <div class="col-box">
+      <h4>✅ Potwierdzone przez Clarity</h4>
+      <ul>
+        <li><span>✅</span> Dwa koszyki = dezorientacja (dead clicks w /cart)</li>
+        <li><span>✅</span> Bug GFG / ATC (42 dead clicks)</li>
+        <li><span>✅</span> Trusted Shops z-index problem (270 dead clicks)</li>
+        <li><span>✅</span> Mobile dominuje (78% sesji checkout)</li>
+        <li><span>✅</span> Gift picker friction (18 dead clicks)</li>
+        <li><span>✅</span> Loop językowy w EN (725 sesji)</li>
+      </ul>
+    </div>
+    <div class="col-box">
+      <h4>⚠️ Skorygowane lub nowe</h4>
+      <ul>
+        <li><span>⚠️</span> Mobile 90% → Clarity: 78% checkout, PC 22%</li>
+        <li><span>⚠️</span> Trusted Shops = tylko desktop → problem jest też na mobile</li>
+        <li><span>🆕</span> Baner kodu zniżkowego (20 dead clicks) — raport tego nie widział</li>
+        <li><span>🆕</span> Scroll depth 27% PDP — raport nie mierzył</li>
+        <li><span>🆕</span> COOLCURL en-global 81 dead clicks</li>
+        <li><span>🆕</span> Luna Eye backorder UX problem</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SEKCJA 4: PLAN -->
+<div class="page">
+  <div class="section-label">Plan działań</div>
+  <h2>Co zrobić i w jakiej kolejności</h2>
+
+  <h3>🔴 Natychmiast — bez developera lub 1h CSS</h3>
+  <table class="action-table">
+    <tr>
+      <th style="width:40px">#</th>
+      <th>Działanie</th>
+      <th style="width:80px">Trudność</th>
+      <th style="width:80px">Impact</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>
+        <div class="action-name">Baner kodu — zrób klikalny (kopiuj do schowka)</div>
+        <div class="action-why">20 dead clicks tuż przed kasą. Największy pojedynczy problem w /cart.</div>
+      </td>
+      <td><span class="badge badge-green">JS / 1h</span></td>
+      <td><span class="badge badge-red">Krytyczny</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>
+        <div class="action-name">Cookiebot — przenieś język do "Necessary"</div>
+        <div class="action-why">Loop EN/PL dla 725 sesji/2tyg. Ustawienie w panelu Cookiebot — bez kodu.</div>
+      </td>
+      <td><span class="badge badge-green">Config / 30min</span></td>
+      <td><span class="badge badge-red">Wysoki</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>
+        <div class="action-name">COOLCURL "copy-" — usuń lub przekieruj produkt</div>
+        <div class="action-why">81 dead clicks. Shopify Admin → sprawdź produkt, ustaw redirect.</div>
+      </td>
+      <td><span class="badge badge-green">Admin / 15min</span></td>
+      <td><span class="badge badge-orange">Średni</span></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>
+        <div class="action-name">Luna Eye — dodaj toast po zapisie "Powiadom mnie"</div>
+        <div class="action-why">Użytkownicy klikają 4× bo nie wiedzą czy zapis działa.</div>
+      </td>
+      <td><span class="badge badge-green">Theme / 1h</span></td>
+      <td><span class="badge badge-orange">Średni</span></td>
+    </tr>
+  </table>
+
+  <h3>🟠 Tydzień 1–2 — developer potrzebny</h3>
+  <table class="action-table">
+    <tr>
+      <th style="width:40px">#</th>
+      <th>Działanie</th>
+      <th style="width:80px">Trudność</th>
+      <th style="width:80px">Impact</th>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>
+        <div class="action-name">Floating element 270 dead clicks — znajdź i napraw z-index</div>
+        <div class="action-why">DevTools mobile → element z pustym text, pointer-events: all. Prawdopodobnie Trusted Shops lub cookie overlay.</div>
+      </td>
+      <td><span class="badge badge-green">CSS / 2h</span></td>
+      <td><span class="badge badge-red">Krytyczny</span></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>
+        <div class="action-name">GFG app — wyłącz tymczasowo i zmierz ATC dead clicks</div>
+        <div class="action-why">42 dead clicks na "Dodaj do koszyka". Jeśli znikają po wyłączeniu GFG — kontakt z supportem.</div>
+      </td>
+      <td><span class="badge badge-orange">Test / 1 dzień</span></td>
+      <td><span class="badge badge-red">Krytyczny</span></td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>
+        <div class="action-name">Gift picker drawer — zbadaj czas ładowania na mobile</div>
+        <div class="action-why">18 dead clicks. Jeśli ładuje >300ms — zastąp lazy load inline select.</div>
+      </td>
+      <td><span class="badge badge-orange">Dev / 4h</span></td>
+      <td><span class="badge badge-red">Wysoki</span></td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>
+        <div class="action-name">Accordion "Dlaczego warto?" — napraw na mobile</div>
+        <div class="action-why">11 dead clicks. Użytkownicy próbują rozwinąć sekcję i rezygnują — scroll depth PDP pozostaje na 27%.</div>
+      </td>
+      <td><span class="badge badge-orange">JS / 2h</span></td>
+      <td><span class="badge badge-orange">Średni</span></td>
+    </tr>
+  </table>
+
+  <h3>🟡 Miesiąc 1 — strategiczne</h3>
+  <table class="action-table">
+    <tr>
+      <th style="width:40px">#</th>
+      <th>Działanie</th>
+      <th style="width:80px">Trudność</th>
+      <th style="width:80px">Impact</th>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>
+        <div class="action-name">Ujednolicić drawer ↔ /cart (layout, elementy, trust signals)</div>
+        <div class="action-why">Dwa różne doświadczenia na tej samej ścieżce = utrata zaufania.</div>
+      </td>
+      <td><span class="badge badge-red">Dev / 2 dni</span></td>
+      <td><span class="badge badge-orange">Średni</span></td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>
+        <div class="action-name">Restocking Luna Eye lub alternatywny produkt na jej miejscu</div>
+        <div class="action-why">Duże zainteresowanie, 0 możliwości zakupu. Albo restock albo agresywny cross-sell na dostępny produkt.</div>
+      </td>
+      <td><span class="badge badge-orange">Operacyjne</span></td>
+      <td><span class="badge badge-red">Wysoki</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- SEKCJA 4: DOWÓD Z NAGRANIA -->
+<div class="page">
+  <div class="section-label">Nagranie sesji — Clarity player</div>
+  <h2>Dowód: anatomia porzuconego checkout</h2>
+
+  <div class="verdict">
+    <div class="v-label">Sesja referencyjna — ID: 1epgc3p/fu6dw6</div>
+    <p>Użytkownik z Bydgoszczy, Firefox/Windows 10, wejście z Google Ads (/collections/sklep). 56 minut, 148 kliknięć, 52 strony, wyjście na /cart — <strong>bez zakupu</strong>. Ta sesja to podręcznikowy przykład wszystkich problemów naraz.</p>
+  </div>
+
+  <h3>Chronologia — co dokładnie się wydarzyło</h3>
+
+  <div style="position:relative; padding-left:28px; margin:20px 0;">
+    <div style="position:absolute; left:8px; top:0; bottom:0; width:2px; background:#e5e7eb;"></div>
+
+    <div style="position:relative; margin-bottom:22px;">
+      <div style="position:absolute; left:-24px; top:3px; width:12px; height:12px; border-radius:50%; background:#6b7280;"></div>
+      <div style="font-size:11px; color:#888; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">00:01 — wejście</div>
+      <div style="font-size:13px; color:#333; margin-top:4px;">Google Ads → /collections/sklep. Natychmiastowy <strong>JavaScript error "MutationObserver"</strong> — pojawia się na każdej nowej stronie przez całą sesję.</div>
+    </div>
+
+    <div style="position:relative; margin-bottom:22px;">
+      <div style="position:absolute; left:-24px; top:3px; width:12px; height:12px; border-radius:50%; background:#6b7280;"></div>
+      <div style="font-size:11px; color:#888; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">00:56 — triple click ATC (Infinity Eye Patches)</div>
+      <div style="font-size:13px; color:#333; margin-top:4px;">Użytkownik klika "Dodaj do koszyka" <strong>3 razy w ciągu 1 sekundy</strong> — button nie daje żadnego wizualnego feedbacku. Smart event Add to cart odpalił 3× → prawdopodobne duplikaty w koszyku.</div>
+    </div>
+
+    <div style="position:relative; margin-bottom:22px;">
+      <div style="position:absolute; left:-24px; top:3px; width:12px; height:12px; border-radius:50%; background:#6b7280;"></div>
+      <div style="font-size:11px; color:#888; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">32:06 — 45:05 — przeglądanie &amp; wyszukiwanie</div>
+      <div style="font-size:13px; color:#333; margin-top:4px;">9 stron katalogu /collections/sklep, kilka kolekcji tematycznych, następnie przejście do wyszukiwarki. Przez 13 minut szuka dodatkowych produktów — wysoka intencja zakupowa.</div>
+    </div>
+
+    <div style="position:relative; margin-bottom:22px;">
+      <div style="position:absolute; left:-24px; top:3px; width:12px; height:12px; border-radius:50%; background:#dc2626;"></div>
+      <div style="font-size:11px; color:#dc2626; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">46:03 — Luna Eye × 2 kliknięcia, brak reakcji</div>
+      <div style="font-size:13px; color:#333; margin-top:4px;">Szuka "Płatki LED LUNA EYE" — klika dwa razy, brak ATC (backorder). Frustracja.</div>
+    </div>
+
+    <div style="position:relative; margin-bottom:22px;">
+      <div style="position:absolute; left:-24px; top:3px; width:12px; height:12px; border-radius:50%; background:#dc2626;"></div>
+      <div style="font-size:11px; color:#dc2626; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">46:30 — 1. próba checkout → zablokowana</div>
+      <div style="font-size:13px; color:#333; margin-top:4px;">Klik "Przejdź do kasy" na /collections/all z otwartą szufladą koszyka. Kursor jedzie prosto do przycisku. Koszyk: Gua Sha + Infinity Eye Patches. Brak przejścia do checkout — użytkownik zostaje na stronie.</div>
+    </div>
+
+    <div style="position:relative; margin-bottom:22px;">
+      <div style="position:absolute; left:-24px; top:3px; width:12px; height:12px; border-radius:50%; background:#ea580c;"></div>
+      <div style="font-size:11px; color:#ea580c; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">47:01 — pułapka prezentu</div>
+      <div style="font-size:13px; color:#333; margin-top:4px;">Zamiast checkout, otwiera się /cart. Użytkownik widzi baner <em>"Do zamówienia od *** zł prezent TUTAJ"</em> i klika. Przechodzi do Tab 9: <strong>/products/free-gift-zestaw-gabek-do-makijazu-glov-mango-sponge-set</strong> — przegląda stronę prezentu zamiast płacić.</div>
+    </div>
+
+    <div style="position:relative; margin-bottom:22px;">
+      <div style="position:absolute; left:-24px; top:3px; width:12px; height:12px; border-radius:50%; background:#ea580c;"></div>
+      <div style="font-size:11px; color:#ea580c; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">48:42 — Luna Eye backorder loop</div>
+      <div style="font-size:13px; color:#333; margin-top:4px;">Wchodzi na stronę Luna Eye z etui. Klika <strong>"Powiadom mnie"</strong> (backorder form). JS error w momencie kliknięcia. Wielokrotnie zaznacza tekst (sprawdza cenę?). 10 minut w pętli Luna Eye.</div>
+    </div>
+
+    <div style="position:relative; margin-bottom:22px;">
+      <div style="position:absolute; left:-24px; top:3px; width:12px; height:12px; border-radius:50%; background:#dc2626;"></div>
+      <div style="font-size:11px; color:#dc2626; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">51:27 — 2. próba checkout → JS error</div>
+      <div style="font-size:13px; color:#333; margin-top:4px;">Ponowny klik "Przejdź do kasy". Natychmiastowy <strong>JavaScript error: "unexpected to..."</strong> — błąd w momencie kliknięcia checkout. Otwiera się Tab 11: kolejna strona free-gift (satynowa maska).</div>
+    </div>
+
+    <div style="position:relative; margin-bottom:22px;">
+      <div style="position:absolute; left:-24px; top:3px; width:12px; height:12px; border-radius:50%; background:#dc2626;"></div>
+      <div style="font-size:11px; color:#dc2626; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">52:34 — 3. próba checkout → JS error + Usuń</div>
+      <div style="font-size:13px; color:#333; margin-top:4px;">/cart otwiera się znowu. Smart event Checkout odpalony. Dwa JS errory (52:34 + 52:36). Użytkownik klika <strong>"Usuń"</strong> (52:39) — Remove from cart (52:40) — potem jeszcze raz "Przejdź do kasy" (52:45) — znowu JS error "unexpected to..." (52:45) — i Smart event Add to cart (52:46). <strong>Prawdopodobnie wpadł w pętlę dodawania/usuwania prezentu.</strong></div>
+    </div>
+
+    <div style="position:relative; margin-bottom:22px;">
+      <div style="position:absolute; left:-24px; top:3px; width:12px; height:12px; border-radius:50%; background:#6b7280;"></div>
+      <div style="font-size:11px; color:#888; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">54:16 — 56:44 — rezygnacja</div>
+      <div style="font-size:13px; color:#333; margin-top:4px;">Dodaje free-gift satin mask (54:16). Wraca na Luna Eye PDP (55:44). Sesja kończy się na /cart o 56:44. Brak zakupu mimo 56 minut i wysokiej intencji.</div>
+    </div>
+  </div>
+
+  <h3>Wnioski z nagrania — co to zmienia w diagnozie</h3>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0;">
+    <div class="problem critical" style="margin:0;">
+      <div class="problem-body">
+        <strong>🚨 NOWE — JS error "unexpected to..." blokuje checkout</strong><br><br>
+        Błąd pojawia się w momencie kliknięcia "Przejdź do kasy" — dokładnie przy próbie 2 i 3. To nie jest tylko MutationObserver (który pojawia się wszędzie). Ten konkretny błąd koreluje z niedziałającym przejściem do Shopify checkout. <strong>Może dotyczyć dziesiątek sesji miesięcznie.</strong>
+        <br><br><span class="data-pill red">Potwierdzony w sesji — priorytet 0</span>
+      </div>
+    </div>
+    <div class="problem critical" style="margin:0;">
+      <div class="problem-body">
+        <strong>🚨 NOWE — Free gift "TUTAJ" link odrywa od checkout</strong><br><br>
+        Baner "Do zamówienia od *** zł prezent TUTAJ" jest klikalny i prowadzi do strony produktowej free-giftu — otwiera nową kartę lub zastępuje widok koszyka. Użytkownik gotowy do zakupu ląduje na stronie produktu zamiast w Shopify checkout. Efekt: checkout porzucony, użytkownik wraca do przeglądania.
+        <br><br><span class="data-pill red">Potwierdzony wizualnie w nagraniu</span>
+      </div>
+    </div>
+    <div class="problem medium" style="margin:0;">
+      <div class="problem-body">
+        <strong>🟠 Trusted Shops widget blokuje koszyk</strong><br><br>
+        Widget widoczny w prawym dolnym rogu koszyka — w nagraniu częściowo nakłada się na "PRZEJDŹ DO KASY". Na węższych urządzeniach może blokować kliknięcie. Koreluje z 270 dead clickami na pustym elemencie z dashboardu.
+        <br><br><span class="data-pill orange">Potwierdzony wizualnie</span>
+      </div>
+    </div>
+    <div class="problem medium" style="margin:0;">
+      <div class="problem-body">
+        <strong>🟠 Triple-click ATC = brak feedbacku wizualnego</strong><br><br>
+        Button "Dodaj do koszyka" nie zmienia stanu podczas ładowania — użytkownik nie wie czy kliknięcie zadziałało. 3 kliknięcia w 1 sekundę to znak paniki, nie niecierpliwości. Efekt: duplikaty w koszyku lub pominięte ATC.
+        <br><br><span class="data-pill orange">Widziane na Infinity Eye Patches</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Zaktualizowany priorytet napraw</h3>
+  <table class="action-table">
+    <tr>
+      <th style="width:40px">#</th>
+      <th>Działanie</th>
+      <th style="width:100px">Pilność</th>
+    </tr>
+    <tr>
+      <td><strong>0</strong></td>
+      <td>
+        <div class="action-name">Zidentyfikować JS error "unexpected to..." przy kliknięciu checkout</div>
+        <div class="action-why">Pojawia się przy każdej próbie checkout w tej sesji. DevTools → Console przy kliknięciu "Przejdź do kasy" na /cart. Podejrzane: GFG app, Hextom currency switcher, Trusted Shops script.</div>
+      </td>
+      <td><span class="badge badge-red">Dziś — priorytet 0</span></td>
+    </tr>
+    <tr>
+      <td><strong>0</strong></td>
+      <td>
+        <div class="action-name">Free gift "TUTAJ" — zmień link żeby nie wychodził z koszyka</div>
+        <div class="action-why">Zamiast prowadzić do strony produktu (nowa karta/override), pokaż popup lub tooltip z opisem prezentu. Nie przerywaj ścieżki checkout.</div>
+      </td>
+      <td><span class="badge badge-red">Dziś — priorytet 0</span></td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>
+        <div class="action-name">ATC button — dodaj spinner/disabled state podczas ładowania</div>
+        <div class="action-why">Brak feedbacku = triple-click = duplikaty w koszyku. 200ms disabled state po kliknięciu eliminuje problem.</div>
+      </td>
+      <td><span class="badge badge-orange">Ten tydzień</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>
+        <div class="action-name">Luna Eye — wyczyść backorder i przekieruj ruch</div>
+        <div class="action-why">Użytkownik spędził 10+ minut na stronie niedostępnego produktu. Albo restock, albo agresywny cross-sell do podobnego dostępnego produktu.</div>
+      </td>
+      <td><span class="badge badge-orange">Ten tydzień</span></td>
+    </tr>
+  </table>
+</div>
+
+<div class="footer">
+  Dokument: GLOV_Diagnoza_Checkout_2026-05-27.html &nbsp;·&nbsp; Źródła: Microsoft Clarity MCP (13–27.05.2026, 250 sesji Checkout) + Raport UX Audit 06.05.2026 (Playwright, DOM inspection) + Nagranie sesji Clarity (ID: 1epgc3p/fu6dw6, 56 min, 148 kliknięć) &nbsp;·&nbsp; Przygotował: Claude (Cowork) dla Tomasz Waligóra
+</div>
+
+</body>
+</html>
