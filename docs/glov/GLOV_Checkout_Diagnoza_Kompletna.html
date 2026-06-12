@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Diagnoza Checkout | Raport Zbiorczy | Maj 2025</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: #1a1a1a; line-height: 1.7; background: #fff; }
+
+/* ===== COVER ===== */
+.cover { background: #0f0f0f; color: #fff; padding: 72px 64px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+.cover .eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #444; margin-bottom: 24px; }
+.cover h1 { font-size: 52px; font-weight: 800; line-height: 1.0; margin-bottom: 24px; letter-spacing: -1px; }
+.cover h1 span { color: #dc2626; }
+.cover .sub { font-size: 16px; color: #888; max-width: 540px; line-height: 1.6; margin-bottom: 48px; }
+.cover .toc { border-top: 1px solid #222; padding-top: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 40px; }
+.cover .toc-item { font-size: 12px; color: #555; display: flex; gap: 12px; align-items: baseline; }
+.cover .toc-num { font-size: 10px; color: #333; font-weight: 700; letter-spacing: 1px; flex-shrink: 0; }
+.cover .toc-title { color: #888; }
+.cover .meta-row { margin-top: 48px; padding-top: 24px; border-top: 1px solid #1a1a1a; display: flex; gap: 32px; }
+.cover .meta-item { font-size: 10px; color: #444; letter-spacing: 0.5px; text-transform: uppercase; }
+.cover .meta-item strong { display: block; color: #666; font-size: 12px; letter-spacing: 0; text-transform: none; margin-bottom: 2px; }
+
+/* ===== LAYOUT ===== */
+.section { padding: 56px 64px; max-width: 920px; }
+.section + .section { border-top: 1px solid #efefef; }
+.section-eyebrow { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #bbb; margin-bottom: 10px; }
+h2 { font-size: 26px; font-weight: 800; margin-bottom: 28px; letter-spacing: -0.5px; }
+h2 .accent { color: #dc2626; }
+h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #888; margin: 32px 0 12px; }
+
+/* ===== VERDICT BOX ===== */
+.verdict { background: #0f0f0f; color: #fff; border-radius: 10px; padding: 28px 32px; margin: 24px 0; }
+.verdict .v-eyebrow { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #444; margin-bottom: 10px; }
+.verdict p { font-size: 15px; line-height: 1.7; color: #ccc; }
+.verdict p strong { color: #fff; }
+.verdict.red { background: #450a0a; }
+.verdict.amber { background: #1c1008; }
+
+/* ===== KPI ROW ===== */
+.kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; margin: 24px 0; }
+.kpi { background: #f9fafb; border: 1px solid #e5e7eb; padding: 20px 16px; text-align: center; position: relative; }
+.kpi.alert { background: #fff5f5; border-color: #fca5a5; }
+.kpi.good { background: #f0fdf4; border-color: #86efac; }
+.kpi.promo { background: #fefce8; border-color: #fde68a; }
+.kpi .k-val { font-size: 26px; font-weight: 800; color: #0f0f0f; letter-spacing: -0.5px; }
+.kpi .k-val.red { color: #dc2626; }
+.kpi .k-val.green { color: #16a34a; }
+.kpi .k-val.amber { color: #d97706; }
+.kpi .k-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #888; margin-top: 5px; }
+.kpi .k-sub { font-size: 10px; color: #bbb; margin-top: 4px; }
+.kpi .promo-tag { position: absolute; top: -1px; left: -1px; right: -1px; font-size: 8px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; background: #fde68a; color: #92400e; padding: 2px 0; text-align: center; }
+
+/* ===== FUNNEL ===== */
+.funnel-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 12px; }
+.funnel-table th { background: #0f0f0f; color: #fff; padding: 11px 14px; text-align: right; font-size: 10px; letter-spacing: 0.5px; font-weight: 600; }
+.funnel-table th:first-child { text-align: left; }
+.funnel-table td { padding: 12px 14px; border-bottom: 1px solid #f3f3f3; text-align: right; }
+.funnel-table td:first-child { text-align: left; font-weight: 700; }
+.funnel-table tr:last-child td { border-bottom: none; }
+.funnel-table .g { color: #16a34a; font-weight: 700; }
+.funnel-table .r { color: #dc2626; font-weight: 700; }
+.funnel-table .a { color: #d97706; font-weight: 700; }
+.funnel-table .promo-row { background: #fefce8; }
+.funnel-table .alert-row { background: #fff8f8; }
+
+/* ===== BAR CHART ===== */
+.bars { margin: 12px 0 20px; }
+.bar-row { display: flex; align-items: center; gap: 12px; margin: 5px 0; }
+.bar-lbl { width: 56px; font-size: 11px; font-weight: 700; color: #666; text-align: right; flex-shrink: 0; }
+.bar-track { flex: 1; background: #f3f4f6; border-radius: 3px; height: 26px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 10px; font-size: 11px; font-weight: 700; color: #fff; }
+.bar-fill.g { background: #16a34a; }
+.bar-fill.a { background: #d97706; }
+.bar-fill.r { background: #dc2626; }
+.bar-fill.p { background: #a16207; opacity:.75; }
+.bar-note { width: 72px; font-size: 10px; color: #bbb; flex-shrink: 0; }
+
+/* ===== CHANNEL TABLE ===== */
+.ch-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 12px 0; }
+.ch-table th { background: #f5f5f5; padding: 9px 12px; text-align: right; font-size: 10px; color: #666; font-weight: 700; border-bottom: 2px solid #e5e7eb; }
+.ch-table th:first-child { text-align: left; }
+.ch-table td { padding: 11px 12px; border-bottom: 1px solid #f5f5f5; text-align: right; font-size: 12px; }
+.ch-table td:first-child { font-weight: 700; text-align: left; }
+.ch-table .up { color: #16a34a; font-weight: 700; }
+.ch-table .dn { color: #dc2626; font-weight: 700; }
+.ch-table .fl { color: #888; }
+
+/* ===== PROBLEM CARDS ===== */
+.problem { border-left: 4px solid #e5e7eb; border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 12px 0; background: #fafafa; }
+.problem.p0 { border-color: #7c3aed; background: #faf5ff; }
+.problem.crit { border-color: #dc2626; background: #fff8f8; }
+.problem.med { border-color: #d97706; background: #fffcf0; }
+.problem.low { border-color: #6b7280; }
+.problem-hd { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 8px; }
+.problem-num { font-size: 20px; font-weight: 800; color: #e5e7eb; line-height: 1; width: 28px; flex-shrink: 0; }
+.problem-title { font-size: 14px; font-weight: 700; line-height: 1.3; }
+.problem-badges { margin-top: 4px; display: flex; gap: 6px; flex-wrap: wrap; }
+.problem-body { font-size: 12px; color: #555; line-height: 1.7; margin-top: 8px; }
+.problem-body strong { color: #0f0f0f; }
+
+/* ===== TIMELINE ===== */
+.timeline { position: relative; padding-left: 28px; margin: 16px 0; }
+.timeline::before { content: ''; position: absolute; left: 8px; top: 6px; bottom: 0; width: 2px; background: #e5e7eb; }
+.tl-item { position: relative; margin-bottom: 20px; }
+.tl-dot { position: absolute; left: -24px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: #9ca3af; border: 2px solid #fff; box-shadow: 0 0 0 2px #d1d5db; }
+.tl-dot.red { background: #dc2626; box-shadow: 0 0 0 2px #fca5a5; }
+.tl-dot.amber { background: #d97706; box-shadow: 0 0 0 2px #fde68a; }
+.tl-dot.green { background: #16a34a; box-shadow: 0 0 0 2px #86efac; }
+.tl-time { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #9ca3af; margin-bottom: 3px; }
+.tl-time.red { color: #dc2626; }
+.tl-time.amber { color: #d97706; }
+.tl-body { font-size: 12px; color: #444; line-height: 1.6; }
+.tl-body strong { color: #0f0f0f; }
+
+/* ===== BADGES ===== */
+.badge { display: inline-block; padding: 2px 9px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; }
+.badge-p0 { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+.badge-crit { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.badge-med { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+.badge-src { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+.badge-src-both { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+.badge-src-new { background: #fce7f3; color: #9d174d; border: 1px solid #f9a8d4; }
+
+/* ===== ACTION TABLE ===== */
+.action-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.action-table th { background: #0f0f0f; color: #fff; padding: 10px 14px; text-align: left; font-size: 10px; letter-spacing: 0.5px; font-weight: 600; }
+.action-table td { padding: 13px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+.action-table tr:last-child td { border-bottom: none; }
+.action-table .a-name { font-weight: 700; font-size: 13px; color: #0f0f0f; margin-bottom: 3px; }
+.action-table .a-why { font-size: 11px; color: #777; line-height: 1.5; }
+
+/* ===== INSIGHT CARDS (2-col) ===== */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+
+/* ===== SUMMARY STRIP ===== */
+.strip { display: flex; gap: 2px; margin: 24px 0; }
+.strip-cell { flex: 1; padding: 18px 14px; text-align: center; background: #f9fafb; border: 1px solid #e5e7eb; }
+.strip-cell.alert { background: #fff5f5; border-color: #fca5a5; }
+.strip-cell.good { background: #f0fdf4; border-color: #86efac; }
+.strip-cell .s-val { font-size: 28px; font-weight: 800; letter-spacing: -1px; color: #0f0f0f; }
+.strip-cell.alert .s-val { color: #dc2626; }
+.strip-cell.good .s-val { color: #16a34a; }
+.strip-cell .s-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #888; margin-top: 5px; }
+
+.note { font-size: 11px; color: #aaa; font-style: italic; margin-top: 8px; }
+
+/* ===== FOOTER ===== */
+.footer { padding: 28px 64px; border-top: 1px solid #efefef; font-size: 11px; color: #bbb; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ COVER -->
+<div class="cover">
+  <div class="eyebrow">GLOV e-commerce · Raport diagnostyczny · Zbiorczy</div>
+  <h1>Dlaczego checkout<br><span>nie konwertuje</span></h1>
+  <div class="sub">Synteza GA4 (styczeń–maj 2025), Microsoft Clarity (250 sesji checkout, 13–27 maja), nagrania sesji i audytu UX. Jeden dokument — pełna diagnoza.</div>
+
+  <div class="toc">
+    <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">Werdykt — co się naprawdę dzieje</span></div>
+    <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">Trend historyczny — styczeń–maj 2025</span></div>
+    <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">Funnel miesiąc po miesiącu</span></div>
+    <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">Breakdown kanałowy</span></div>
+    <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">Dane Clarity — dead clicks i agregaty</span></div>
+    <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">Nagranie sesji — anatomia porzucenia</span></div>
+    <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">Problemy — ranking potwierdzony danymi</span></div>
+    <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">Plan działań — priorytety i właściciele</span></div>
+  </div>
+
+  <div class="meta-row">
+    <div class="meta-item"><strong>27 maja 2025</strong>Data analizy</div>
+    <div class="meta-item"><strong>GA4 + Clarity + UX Audit</strong>Źródła danych</div>
+    <div class="meta-item"><strong>342844459</strong>GA4 Property (glov.co, PLN)</div>
+    <div class="meta-item"><strong>250 sesji checkout</strong>Clarity (14 dni)</div>
+  </div>
+</div>
+
+<!-- ============================================================ 01 WERDYKT -->
+<div class="section">
+  <div class="section-eyebrow">01 — Werdykt</div>
+  <h2>Co się <span class="accent">naprawdę</span> dzieje</h2>
+
+  <div class="verdict red">
+    <div class="v-eyebrow">Główna diagnoza</div>
+    <p><strong>Problem nie jest jeden — są dwa, niezależne.</strong> Pierwsze: Meta Paid Social w maju 2025 generuje 54% ruchu przy CR 2,6% zamiast normalnych 9–12% — to ściąga cały ogólny wynik w dół i tworzy złudzenie że "checkout nie działa". Drugie: realny bug techniczny (JS error "unexpected to...") blokuje część użytkowników dokładnie w momencie kliknięcia "Przejdź do kasy" — widoczny w nagraniach Clarity. Checkout→Purchase historycznie 39–46% — dobry wynik. Problem leży <em>przed</em> koszykiem i <em>wewnątrz</em> techniki checkout.</p>
+  </div>
+
+  <div class="strip">
+    <div class="strip-cell alert">
+      <div class="s-val">2,6%</div>
+      <div class="s-lbl">Meta CR maj (vs 10,6% kwi)</div>
+    </div>
+    <div class="strip-cell alert">
+      <div class="s-val">54%</div>
+      <div class="s-lbl">Udział Meta w ruchu maj</div>
+    </div>
+    <div class="strip-cell good">
+      <div class="s-val">46,1%</div>
+      <div class="s-lbl">Checkout→Purchase maj (najlepszy!)</div>
+    </div>
+    <div class="strip-cell alert">
+      <div class="s-val">3×</div>
+      <div class="s-lbl">Blokady checkout w 1 sesji Clarity</div>
+    </div>
+    <div class="strip-cell alert">
+      <div class="s-val">270</div>
+      <div class="s-lbl">Dead clicks niewidoczny element</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ 02 TREND HISTORYCZNY -->
+<div class="section">
+  <div class="section-eyebrow">02 — Trend historyczny</div>
+  <h2>Styczeń–maj 2025 — co mówią liczby</h2>
+
+  <h3>CR sesja → zakup — miesięcznie</h3>
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="k-val amber">9,6%</div>
+      <div class="k-label">Sty '25</div>
+      <div class="k-sub">46 865 sesji · 1 132 zakupów<br>113 661 zł</div>
+    </div>
+    <div class="kpi promo">
+      <div class="promo-tag">⚡ Walentynki</div>
+      <div class="k-val green">19,8%</div>
+      <div class="k-label">Lut '25</div>
+      <div class="k-sub">34 121 sesji · 886 zakupów<br>84 993 zł</div>
+    </div>
+    <div class="kpi promo">
+      <div class="promo-tag">⚡ Dzień Kobiet</div>
+      <div class="k-val green">17,8%</div>
+      <div class="k-label">Mar '25</div>
+      <div class="k-sub">64 236 sesji · 1 761 zakupów<br>170 993 zł</div>
+    </div>
+    <div class="kpi">
+      <div class="k-val amber">12,1%</div>
+      <div class="k-label">Kwi '25</div>
+      <div class="k-sub">42 535 sesji · 1 324 zakupów<br>134 064 zł</div>
+    </div>
+    <div class="kpi alert">
+      <div class="promo-tag" style="background:#fee2e2;color:#991b1b;">⚡ Dzień Matki</div>
+      <div class="k-val red">11,2%</div>
+      <div class="k-label">Maj '25</div>
+      <div class="k-sub">55 130 sesji · 2 012 zakupów<br>196 410 zł</div>
+    </div>
+  </div>
+  <p class="note">⚡ = miesiące promo — CR zawyżony przez targetowany ruch powracających klientów. Baseline: styczeń i kwiecień.</p>
+
+  <h3>CR sesja→zakup (pasek)</h3>
+  <div class="bars">
+    <div class="bar-row"><div class="bar-lbl">Sty '25</div><div class="bar-track"><div class="bar-fill a" style="width:48%;">9,6%</div></div><div class="bar-note">baseline</div></div>
+    <div class="bar-row"><div class="bar-lbl">Lut '25</div><div class="bar-track"><div class="bar-fill p" style="width:99%;">19,8% ⚡</div></div><div class="bar-note">promo</div></div>
+    <div class="bar-row"><div class="bar-lbl">Mar '25</div><div class="bar-track"><div class="bar-fill p" style="width:89%;">17,8% ⚡</div></div><div class="bar-note">promo</div></div>
+    <div class="bar-row"><div class="bar-lbl">Kwi '25</div><div class="bar-track"><div class="bar-fill a" style="width:60%;">12,1%</div></div><div class="bar-note"></div></div>
+    <div class="bar-row"><div class="bar-lbl">Maj '25</div><div class="bar-track"><div class="bar-fill r" style="width:56%;">11,2% ↓</div></div><div class="bar-note">Meta ciągnie</div></div>
+  </div>
+</div>
+
+<!-- ============================================================ 03 FUNNEL -->
+<div class="section">
+  <div class="section-eyebrow">03 — Funnel</div>
+  <h2>ATC → Checkout → Purchase — miesiąc po miesiącu</h2>
+
+  <table class="funnel-table">
+    <tr>
+      <th>Miesiąc</th>
+      <th>Sesje</th>
+      <th>AddToCart</th>
+      <th>BeginCheckout</th>
+      <th>Purchase</th>
+      <th>ATC→Checkout</th>
+      <th>Checkout→Purchase</th>
+      <th>Sesja→Zakup</th>
+    </tr>
+    <tr>
+      <td>Sty '25</td>
+      <td>46 865</td><td>10 589</td><td>2 843</td><td>1 132</td>
+      <td class="a">26,8%</td><td class="g">39,8%</td><td class="a">9,6%</td>
+    </tr>
+    <tr class="promo-row">
+      <td>Lut '25 ⚡</td>
+      <td>34 121</td><td>10 289</td><td>2 305</td><td>886</td>
+      <td class="r">22,4%</td><td class="g">38,4%</td><td class="g">19,8%</td>
+    </tr>
+    <tr class="promo-row">
+      <td>Mar '25 ⚡</td>
+      <td>64 236</td><td>17 117</td><td>4 011</td><td>1 761</td>
+      <td class="r">23,4%</td><td class="g">43,9%</td><td class="g">17,8%</td>
+    </tr>
+    <tr>
+      <td>Kwi '25</td>
+      <td>42 535</td><td>9 695</td><td>3 115</td><td>1 324</td>
+      <td class="a">32,1%</td><td class="g">42,5%</td><td class="a">12,1%</td>
+    </tr>
+    <tr class="alert-row">
+      <td><strong>Maj '25 ⬇</strong></td>
+      <td>55 130</td><td>12 701</td><td>4 362</td><td>2 012</td>
+      <td class="g">34,3%</td><td class="g">46,1%</td><td class="r">11,2%</td>
+    </tr>
+  </table>
+  <p class="note">Żółte = promo miesiące (outlier). Różowe = alarm. Checkout→Purchase rośnie konsekwentnie — krok ten nie jest problemem.</p>
+
+  <div class="verdict amber">
+    <div class="v-eyebrow">Paradoks maja</div>
+    <p>ATC→Checkout rośnie (26,8% → 34,3%). Checkout→Purchase rośnie (39,8% → 46,1%). A mimo to ogólny CR spada — bo <strong>23% sesji to jedyny ATC intent rate</strong> przy 55 130 sesjach. Masowy cold traffic z Meta nie dodaje do koszyka. Problem leży przed lejkiem, nie w nim.</p>
+  </div>
+</div>
+
+<!-- ============================================================ 04 KANAŁY -->
+<div class="section">
+  <div class="section-eyebrow">04 — Kanały</div>
+  <h2>Breakdown kanałowy — gdzie leży wina</h2>
+
+  <h3>Maj 2025 — CR per kanał</h3>
+  <table class="ch-table">
+    <tr>
+      <th>Kanał</th><th>Sesje</th><th>Zakupy</th><th>CR</th><th>Przychód</th><th>Trend vs sty</th>
+    </tr>
+    <tr>
+      <td>Paid Social (Meta)</td><td>29 767</td><td>770</td><td class="dn">2,59% 🔴</td><td>69 714 zł</td><td class="dn">↓↓ (vs 9,0% sty)</td>
+    </tr>
+    <tr>
+      <td>Paid Search (Google)</td><td>5 789</td><td>356</td><td class="up">6,15%</td><td>36 330 zł</td><td class="fl">≈ stabilny</td>
+    </tr>
+    <tr>
+      <td>Organic Search</td><td>4 446</td><td>104</td><td class="fl">2,34%</td><td>9 836 zł</td><td class="fl">≈ stabilny</td>
+    </tr>
+    <tr>
+      <td>Unassigned</td><td>7 925</td><td>416</td><td class="up">5,25%</td><td>43 194 zł</td><td class="up">↑ dobry</td>
+    </tr>
+    <tr>
+      <td>Direct</td><td>3 414</td><td>150</td><td class="fl">4,40%</td><td>15 635 zł</td><td class="dn">↓ (vs 6,0% sty)</td>
+    </tr>
+    <tr>
+      <td>Cross-network</td><td>2 194</td><td>109</td><td class="fl">4,97%</td><td>11 634 zł</td><td class="fl">≈ stabilny</td>
+    </tr>
+    <tr>
+      <td>Organic Social</td><td>1 951</td><td>94</td><td class="fl">4,82%</td><td>8 639 zł</td><td class="fl">≈ stabilny</td>
+    </tr>
+  </table>
+
+  <h3>Meta Paid Social — CR trend</h3>
+  <div class="bars">
+    <div class="bar-row"><div class="bar-lbl">Sty '25</div><div class="bar-track"><div class="bar-fill g" style="width:45%;">9,0%</div></div><div class="bar-note"></div></div>
+    <div class="bar-row"><div class="bar-lbl">Lut '25</div><div class="bar-track"><div class="bar-fill p" style="width:50%;">10,0% ⚡</div></div><div class="bar-note">promo</div></div>
+    <div class="bar-row"><div class="bar-lbl">Mar '25</div><div class="bar-track"><div class="bar-fill p" style="width:63%;">12,5% ⚡</div></div><div class="bar-note">promo</div></div>
+    <div class="bar-row"><div class="bar-lbl">Kwi '25</div><div class="bar-track"><div class="bar-fill g" style="width:53%;">10,6%</div></div><div class="bar-note"></div></div>
+    <div class="bar-row"><div class="bar-lbl">Maj '25</div><div class="bar-track"><div class="bar-fill r" style="width:13%;">2,6% ⬇</div></div><div class="bar-note">ALARM 🔴</div></div>
+  </div>
+
+  <div class="verdict red">
+    <div class="v-eyebrow">Meta — główna dźwignia całego problemu</div>
+    <p>Meta → Google ROAS porównanie: Google 6,27 zł/sesja vs Meta maj 2,34 zł/sesja — <strong>różnica 2,7×</strong>. Kampania Dzień Matki prawdopodobnie trafiła w cold audience z niską intencją zakupową. Gdyby Meta utrzymała CR z kwi (10,6%) przy tych samych sesjach — maj dałby ~3 150 zakupów zamiast 2 012. <strong>To 1 138 utraconych transakcji.</strong></p>
+  </div>
+</div>
+
+<!-- ============================================================ 05 CLARITY AGREGATY -->
+<div class="section">
+  <div class="section-eyebrow">05 — Microsoft Clarity</div>
+  <h2>Dead clicks i zachowanie użytkowników</h2>
+  <p style="color:#666;font-size:13px;margin-bottom:20px;">Dane z dashboardu Clarity (250 sesji checkout, 13–27 maja 2025). Clarity nie widzi zakupów — checkout na subdomain Shopify poza glov.co.</p>
+
+  <h3>Funnel Clarity (7 dni)</h3>
+  <div class="strip">
+    <div class="strip-cell"><div class="s-val">12 461</div><div class="s-lbl">Sesje / 7 dni</div></div>
+    <div class="strip-cell"><div class="s-val">1 044</div><div class="s-lbl">AddToCart (8,4%)</div></div>
+    <div class="strip-cell alert"><div class="s-val">276</div><div class="s-lbl">Checkout (26% z ATC)</div></div>
+    <div class="strip-cell alert"><div class="s-val">~13</div><div class="s-lbl">Zakup est. (5% z Checkout)</div></div>
+    <div class="strip-cell alert"><div class="s-val">424</div><div class="s-lbl">Porzucone checkouty (14 dni)</div></div>
+  </div>
+
+  <h3>Dead clicks — top problematyczne elementy</h3>
+  <table class="ch-table">
+    <tr><th>Element</th><th>Dead clicks</th><th>Lokalizacja</th><th>Diagnoza</th></tr>
+    <tr><td>Pusty element " "</td><td class="dn">270</td><td>Cały sklep</td><td>Trusted Shops / cookie overlay — zły z-index</td></tr>
+    <tr><td>"Dodaj do koszyka"</td><td class="dn">42</td><td>PDP (pumeks 25, Luna Eye 8)</td><td>GFG app delay / brak visual feedback</td></tr>
+    <tr><td>Baner kodu zniżkowego</td><td class="dn">20</td><td>/cart</td><td>Statyczny baner, brak copy-to-clipboard</td></tr>
+    <tr><td>Selektor "Wybierz" (gift)</td><td class="dn">18</td><td>GFG drawer</td><td>Drawer nie otwiera się lub opóźnienie &gt;300ms</td></tr>
+    <tr><td>COOLCURL "copy-" URL</td><td class="dn">81</td><td>Listings</td><td>Duplikat/draft produktu z broken URL</td></tr>
+    <tr><td>"Dlaczego warto?" accordion</td><td class="dn">11</td><td>PDP</td><td>Nie otwiera się na mobile</td></tr>
+    <tr><td>"Przejdź do kasy"</td><td class="dn">6</td><td>/cart</td><td>Główny CTA — nie zawsze reaguje</td></tr>
+  </table>
+</div>
+
+<!-- ============================================================ 06 NAGRANIE SESJI -->
+<div class="section">
+  <div class="section-eyebrow">06 — Nagranie sesji Clarity</div>
+  <h2>Anatomia porzuconego checkout</h2>
+
+  <div class="verdict">
+    <div class="v-eyebrow">Sesja referencyjna — ID: 1epgc3p/fu6dw6</div>
+    <p>Bydgoszcz · Firefox/Windows 10 · wejście z Google Ads · 56 minut · 148 kliknięć · 52 strony · wyjście na /cart — <strong>bez zakupu mimo wysokiej intencji.</strong> 3 próby checkout. Wszystkie zablokowane.</p>
+  </div>
+
+  <h3>Chronologia — co dokładnie się stało</h3>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">00:01 — wejście</div>
+      <div class="tl-body">Google Ads → /collections/sklep. Natychmiastowy <strong>JavaScript error "MutationObserver"</strong> — pojawia się na każdej nowej stronie przez całą sesję. Cookie consent "Zezwól na wszystkie".</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-time red">00:56 — triple click ATC (Infinity Eye Patches)</div>
+      <div class="tl-body"><strong>3 kliknięcia "Dodaj do koszyka" w ciągu 1 sekundy</strong> — zero visual feedback. Smart event ATC odpalił 3×. Znak paniki: użytkownik nie wie czy kliknięcie zadziałało.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">00:01 – 45:05 — przegląda 9+ stron katalogu, kategorii, wyszukuje</div>
+      <div class="tl-body">Wysoka intencja: szuka "tarka", przegląda /collections/sklep strony 1–9, kolekcje tematyczne, włącza wyszukiwarkę. Dodaje kilka produktów do koszyka, jeden usuwa po 14 sekundach.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-time red">46:03 — Luna Eye × 2 kliknięcia — brak reakcji (backorder)</div>
+      <div class="tl-body">Szuka "Płatki LED LUNA EYE" — klika dwa razy. Produkt niedostępny — brak ATC. Frustracja prowadzi do rezygnacji z tego produktu.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-time red">46:30 — 1. próba checkout → ZABLOKOWANA</div>
+      <div class="tl-body">Klik "Przejdź do kasy" z otwartą szufladą koszyka (Gua Sha + Infinity Eye Patches). Kursor jedzie prosto do przycisku. <strong>Checkout nie odpala</strong> — użytkownik zostaje na stronie.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot amber"></div>
+      <div class="tl-time amber">47:01 — PUŁAPKA prezentu</div>
+      <div class="tl-body">Otwiera się /cart. Baner <em>"Do zamówienia od *** zł prezent TUTAJ"</em> — użytkownik klika. <strong>Nowa karta: /products/free-gift-zestaw-gabek...</strong> — porzuca ścieżkę checkout, zaczyna przeglądać stronę prezentu.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">48:42 — Luna Eye backorder loop (10 minut)</div>
+      <div class="tl-body">Wchodzi na stronę Luna Eye z etui. Klika <strong>"Powiadom mnie"</strong> — JS error. Wielokrotnie zaznacza tekst, sprawdza warianty. 10 minut na niedostępnym produkcie.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-time red">51:27 — 2. próba checkout → JS error "unexpected to..."</div>
+      <div class="tl-body">Ponowny klik "Przejdź do kasy". Natychmiastowy <strong>JavaScript error: "unexpected to..."</strong> — błąd dokładnie przy kliknięciu. Otwiera się kolejna strona free-gift zamiast Shopify checkout.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-time red">52:34 — 3. próba checkout → 2× JS error + Usuń + znowu blokada</div>
+      <div class="tl-body">/cart otwiera się znowu. Smart event Checkout. <strong>Dwa JS errory w 2 sekundy</strong> (52:34 + 52:36). Klik "Usuń" (52:39), Remove from cart (52:40), ponownie "Przejdź do kasy" (52:45) — znowu "unexpected to..." — Add to cart (52:46). Pętla dodawania/usuwania.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">54:16 – 56:44 — rezygnacja</div>
+      <div class="tl-body">Dodaje free-gift satin mask. Wraca na Luna Eye PDP. Sesja kończy się na /cart. <strong>Brak zakupu mimo 56 minut i wyraźnej chęci kupowania.</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ 07 PROBLEMY -->
+<div class="section">
+  <div class="section-eyebrow">07 — Diagnoza</div>
+  <h2>10 problemów — ranking wg priorytetu</h2>
+
+  <!-- P0 -->
+  <div class="problem p0">
+    <div class="problem-hd">
+      <div class="problem-num">P0</div>
+      <div>
+        <div class="problem-title">Meta Paid Social — CR 2,6% zamiast 10%+ w maju</div>
+        <div class="problem-badges">
+          <span class="badge badge-p0">Priorytet 0</span>
+          <span class="badge badge-src">GA4 Kanały</span>
+        </div>
+      </div>
+    </div>
+    <div class="problem-body">54% ruchu w maju pochodzi z Meta przy CR 4× niższym niż w poprzednich miesiącach. To <strong>1 138 utraconych zakupów</strong> względem kwi. Hipotezy: cold audience kampanii Dzień Matki, zmiana algorytmu Meta, niedopasowanie kreacji do landing page. <strong>Fix: audit kampanii Meta — porównaj audience maj vs marzec, kreacje, docelowe strony produktowe.</strong></div>
+  </div>
+
+  <!-- P0 tech -->
+  <div class="problem p0">
+    <div class="problem-hd">
+      <div class="problem-num">P0</div>
+      <div>
+        <div class="problem-title">JS error "unexpected to..." — blokuje checkout przy kliknięciu przycisku</div>
+        <div class="problem-badges">
+          <span class="badge badge-p0">Priorytet 0</span>
+          <span class="badge badge-src-new">Nowe — Clarity nagranie</span>
+        </div>
+      </div>
+    </div>
+    <div class="problem-body">Błąd pojawia się <em>dokładnie</em> przy kliknięciu "Przejdź do kasy" — potwierdzony 3× w jednej sesji. Checkout nie przechodzi do Shopify. Podejrzane: GFG app, Hextom currency switcher, Trusted Shops script. <strong>Fix: DevTools → Console, kliknij przycisk kasy na /cart i przeczytaj stack trace.</strong></div>
+  </div>
+
+  <!-- P0 free gift -->
+  <div class="problem p0">
+    <div class="problem-hd">
+      <div class="problem-num">P0</div>
+      <div>
+        <div class="problem-title">Free gift "TUTAJ" link odrywa od checkout — prowadzi do strony produktowej</div>
+        <div class="problem-badges">
+          <span class="badge badge-p0">Priorytet 0</span>
+          <span class="badge badge-src-new">Nowe — Clarity nagranie</span>
+        </div>
+      </div>
+    </div>
+    <div class="problem-body">Baner "Do zamówienia od *** zł prezent TUTAJ" w koszyku prowadzi do strony produktowej free-giftu zamiast pokazywać popup. Użytkownik gotowy do płatności wychodzi z lejka i zaczyna przeglądać. Widziane w sesji: checkout → klik TUTAJ → 10 minut poza lejkiem. <strong>Fix: zmień link na modal/tooltip z opisem prezentu, bez wychodzenia z koszyka.</strong></div>
+  </div>
+
+  <!-- P1 -->
+  <div class="problem crit">
+    <div class="problem-hd">
+      <div class="problem-num">1</div>
+      <div>
+        <div class="problem-title">270 dead clicks — niewidoczny element blokuje kliknięcia</div>
+        <div class="problem-badges">
+          <span class="badge badge-crit">Krytyczny</span>
+          <span class="badge badge-src">Clarity dashboard</span>
+        </div>
+      </div>
+    </div>
+    <div class="problem-body">Element z pustym tekstem " " zbiera 270 dead clicków w całym sklepie. Prawdopodobnie Trusted Shops widget lub cookie overlay z pointer-events:all i złym z-index. Widoczny w nagraniu (widget w prawym dolnym rogu koszyka). <strong>Fix: DevTools → "Inspect element" przy dead clickach na mobile. Dodaj pointer-events:none lub popraw z-index.</strong></div>
+  </div>
+
+  <!-- P2 -->
+  <div class="problem crit">
+    <div class="problem-hd">
+      <div class="problem-num">2</div>
+      <div>
+        <div class="problem-title">42 dead clicks "Dodaj do koszyka" na PDP — brak feedback wizualnego</div>
+        <div class="problem-badges">
+          <span class="badge badge-crit">Krytyczny</span>
+          <span class="badge badge-src-both">UX Audit + Clarity</span>
+        </div>
+      </div>
+    </div>
+    <div class="problem-body">Pumeks: 25, Luna Eye: 8, depilator: 4. Button nie zmienia stanu podczas ładowania. W nagraniu: triple-click w 1 sekundę = 3× Add to cart event = duplikaty w koszyku. GFG app prawdopodobną przyczyną. <strong>Fix: disabled state + spinner 200ms po kliknięciu ATC. Potem audit GFG.</strong></div>
+  </div>
+
+  <!-- P3 -->
+  <div class="problem crit">
+    <div class="problem-hd">
+      <div class="problem-num">3</div>
+      <div>
+        <div class="problem-title">Baner kodu zniżkowego w koszyku — 20 dead clicks, brak funkcji</div>
+        <div class="problem-badges">
+          <span class="badge badge-crit">Krytyczny</span>
+          <span class="badge badge-src-new">Clarity dashboard</span>
+        </div>
+      </div>
+    </div>
+    <div class="problem-body">Statyczny baner "-XX% z kodem: ●●●●" tuż nad CTA checkout. Użytkownicy klikają żeby skopiować kod — nic się nie dzieje. 20 dead clicków = 20 sfrustrowanych użytkowników tuż przed płatnością. <strong>Fix: button kopiujący kod + toast "Skopiowano!" albo auto-aplikacja przy kliknięciu.</strong></div>
+  </div>
+
+  <!-- P4 -->
+  <div class="problem med">
+    <div class="problem-hd">
+      <div class="problem-num">4</div>
+      <div>
+        <div class="problem-title">Luna Eye — backorder bez alternatywy, 10+ min per sesja</div>
+        <div class="problem-badges">
+          <span class="badge badge-med">Średni</span>
+          <span class="badge badge-src-both">Clarity nagranie + GA4</span>
+        </div>
+      </div>
+    </div>
+    <div class="problem-body">Użytkownik spędził 10+ minut na niedostępnym produkcie. "Powiadom mnie" nie daje potwierdzenia (JS error przy kliknięciu). Brak cross-sella do dostępnego alternatywy. <strong>Fix: restock lub agresywny cross-sell "Podobny dostępny teraz: [produkt X]".</strong></div>
+  </div>
+
+  <!-- P5 -->
+  <div class="problem med">
+    <div class="problem-hd">
+      <div class="problem-num">5</div>
+      <div>
+        <div class="problem-title">81 dead clicks COOLCURL "copy-" — broken URL produktu</div>
+        <div class="problem-badges">
+          <span class="badge badge-med">Średni</span>
+          <span class="badge badge-src">Clarity dashboard</span>
+        </div>
+      </div>
+    </div>
+    <div class="problem-body">URL produktu zawiera "copy-" — prawdopodobnie draft/duplikat opublikowany omyłkowo. Użytkownicy klikają, lądują na broken lub empty page. <strong>Fix: znajdź produkt z "copy-" w URL w Shopify Admin → archiwizuj lub napraw URL.</strong></div>
+  </div>
+
+  <!-- P6 -->
+  <div class="problem med">
+    <div class="problem-hd">
+      <div class="problem-num">6</div>
+      <div>
+        <div class="problem-title">Redirect Sleeping Beauty 404 — ~852 sesje/mc tracone</div>
+        <div class="problem-badges">
+          <span class="badge badge-med">Średni</span>
+          <span class="badge badge-src">GA4 + UX Audit</span>
+        </div>
+      </div>
+    </div>
+    <div class="problem-body">Stary URL produktu zwraca 404. Shopify Admin → Navigation → URL Redirects. <strong>Fix: /products/poduszka-do-spania-sleeping-beauty-glov → /products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty</strong></div>
+  </div>
+
+  <!-- P7 -->
+  <div class="problem low">
+    <div class="problem-hd">
+      <div class="problem-num">7</div>
+      <div>
+        <div class="problem-title">Accordion "Dlaczego warto?" — 11 dead clicks, 27% scroll depth na PDP</div>
+        <div class="problem-badges">
+          <span class="badge" style="background:#f3f4f6;color:#374151;border:1px solid #d1d5db;">Niski</span>
+          <span class="badge badge-src">Clarity dashboard</span>
+        </div>
+      </div>
+    </div>
+    <div class="problem-body">Użytkownicy próbują rozwinąć sekcję z argumentami zakupu i rezygnują. Wpływa na decyzję zakupową przed ATC. <strong>Fix: napraw JS accordion na mobile lub zastąp statyczną wersją.</strong></div>
+  </div>
+</div>
+
+<!-- ============================================================ 08 PLAN DZIAŁAŃ -->
+<div class="section">
+  <div class="section-eyebrow">08 — Plan działań</div>
+  <h2>Co robić i w jakiej kolejności</h2>
+
+  <h3>🔴 Priorytet 0 — dziś / ten tydzień</h3>
+  <table class="action-table">
+    <tr>
+      <th style="width:36px;">#</th>
+      <th>Działanie</th>
+      <th style="width:100px;">Kto</th>
+      <th style="width:90px;">Impact</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>
+        <div class="a-name">Audit kampanii Meta maj 2025 — znajdź co daje 2,6% CR</div>
+        <div class="a-why">Porównaj audience, kreacje i landing pages kampanii maj vs marzec (12,5% CR). Wyłącz lub przebuduj ad sety z CR &lt;3%.</div>
+      </td>
+      <td><span class="badge badge-crit">Media buyer</span></td>
+      <td><span class="badge badge-p0">+1 138 sprzedaży</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>
+        <div class="a-name">Zidentyfikuj JS error "unexpected to..." przy kliknięciu checkout</div>
+        <div class="a-why">DevTools → Console na /cart → kliknij "Przejdź do kasy" → przeczytaj stack trace. Podejrzane: GFG, Hextom, Trusted Shops.</div>
+      </td>
+      <td><span class="badge badge-crit">Developer</span></td>
+      <td><span class="badge badge-crit">Blokada checkout</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>
+        <div class="a-name">Free gift "TUTAJ" — zmień na modal, nie link do strony produktowej</div>
+        <div class="a-why">Użytkownicy gotowi do płatności wychodzą z lejka przez ten link. Popup z opisem prezentu eliminuje problem.</div>
+      </td>
+      <td><span class="badge badge-crit">Developer</span></td>
+      <td><span class="badge badge-crit">Wysoki</span></td>
+    </tr>
+  </table>
+
+  <h3>🟠 Tydzień 1–2</h3>
+  <table class="action-table">
+    <tr>
+      <th style="width:36px;">#</th>
+      <th>Działanie</th>
+      <th style="width:100px;">Kto</th>
+      <th style="width:90px;">Trudność</th>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>
+        <div class="a-name">Napraw redirect Sleeping Beauty 404</div>
+        <div class="a-why">Shopify Admin → URL Redirects. 2 minuty roboty, ~852 sesje/mc odratowane.</div>
+      </td>
+      <td><span class="badge badge-med">Tomek / Admin</span></td>
+      <td><span class="badge badge-med">2 min</span></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>
+        <div class="a-name">Floating element 270 dead clicks — znajdź i napraw z-index</div>
+        <div class="a-why">DevTools mobile → element z pustym text, pointer-events: all. Prawdopodobnie Trusted Shops lub cookie overlay.</div>
+      </td>
+      <td><span class="badge badge-crit">Developer</span></td>
+      <td><span class="badge badge-med">CSS / 2h</span></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>
+        <div class="a-name">ATC button — dodaj spinner/disabled state podczas ładowania</div>
+        <div class="a-why">Brak feedbacku = triple-click = duplikaty. 200ms disabled state eliminuje problem. Potem sprawdź GFG.</div>
+      </td>
+      <td><span class="badge badge-crit">Developer</span></td>
+      <td><span class="badge badge-med">JS / 1h</span></td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>
+        <div class="a-name">Baner kodu — dodaj copy-to-clipboard + toast</div>
+        <div class="a-why">20 dead clicks tuż przed kasą. Jedno zdarzenie JS eliminuje frustrację.</div>
+      </td>
+      <td><span class="badge badge-crit">Developer</span></td>
+      <td><span class="badge badge-med">JS / 1h</span></td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>
+        <div class="a-name">COOLCURL "copy-" — znajdź i archiwizuj lub napraw URL</div>
+        <div class="a-why">Shopify Admin → Products → szukaj "copy". 81 dead clicks znika.</div>
+      </td>
+      <td><span class="badge badge-med">Tomek / Admin</span></td>
+      <td><span class="badge badge-med">5 min</span></td>
+    </tr>
+  </table>
+
+  <h3>🟡 Miesiąc 1 — strategiczne</h3>
+  <table class="action-table">
+    <tr>
+      <th style="width:36px;">#</th>
+      <th>Działanie</th>
+      <th style="width:100px;">Impact</th>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>
+        <div class="a-name">Przesuń 20% budżetu Meta → Google Ads — test efektywności</div>
+        <div class="a-why">Google: 6,27 zł/sesja. Meta maj: 2,34 zł/sesja. Różnica 2,7×. Google Ads jest nasycony — ale mały shift może dać proporcjonalnie lepszy wynik.</div>
+      </td>
+      <td><span class="badge badge-p0">Strategiczny</span></td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>
+        <div class="a-name">Luna Eye — restock lub agresywny cross-sell</div>
+        <div class="a-why">Duże zainteresowanie (8 dead clicks ATC, 10+ min per sesja), 0% konwersji. Każda sesja Luna Eye = utracona sprzedaż.</div>
+      </td>
+      <td><span class="badge badge-crit">Wysoki</span></td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>
+        <div class="a-name">glov.eu cross-domain tracking — zakupy błędnie w Referral</div>
+        <div class="a-why">Część transakcji EU klasyfikowana jako Referral zamiast właściwego kanału. Zaburza dane kanałowe.</div>
+      </td>
+      <td><span class="badge badge-med">Dane</span></td>
+    </tr>
+  </table>
+</div>
+
+<div class="footer">
+  GLOV_Checkout_Diagnoza_Kompletna.html &nbsp;·&nbsp;
+  Źródła: GA4 property 342844459 (glov.co, PLN) · Microsoft Clarity MCP (250 sesji checkout, 13–27.05.2025) · Nagranie sesji Clarity ID: 1epgc3p/fu6dw6 (56 min) · UX Audit 06.05.2025 (Playwright, DOM inspection) &nbsp;·&nbsp;
+  Przygotował: Claude (Cowork) dla Tomasz Waligóra · 27 maja 2025
+</div>
+
+</body>
+</html>
