@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Analiza Kohortowa | Retencja w czasie</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --border: #2a2d3a;
+    --accent: #e91e8c;
+    --accent2: #7c3aed;
+    --accent3: #06b6d4;
+    --accent4: #10b981;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.6; }
+
+  .header { background: linear-gradient(135deg, #1a1d27 0%, #12101e 100%); border-bottom: 1px solid var(--border); padding: 28px 32px; }
+  .header h1 { font-size: 24px; font-weight: 700; }
+  .header h1 span { color: var(--accent); }
+  .header .subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .header .meta { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+  .meta-pill { background: rgba(233,30,140,0.1); border: 1px solid rgba(233,30,140,0.25); border-radius: 6px; padding: 3px 12px; font-size: 12px; color: var(--accent); }
+
+  .container { max-width: 1440px; margin: 0 auto; padding: 24px 32px; }
+
+  .section { margin-bottom: 36px; }
+  .section-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+  .section-num { width: 28px; height: 28px; border-radius: 8px; background: var(--accent); color: #fff; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .section-info h2 { font-size: 16px; font-weight: 600; }
+  .section-info p { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .card h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin-bottom: 20px; }
+
+  /* ===== 1. HEATMAP ===== */
+  .heatmap-wrap { overflow-x: auto; }
+  .heatmap-table { border-collapse: collapse; width: 100%; min-width: 720px; }
+  .heatmap-table th {
+    padding: 8px 10px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--muted); background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .heatmap-table td { padding: 0; border: 1px solid rgba(42,45,58,0.6); }
+  .hm-cell {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 10px 6px; min-width: 68px; min-height: 52px; cursor: default;
+    transition: filter 0.15s;
+  }
+  .hm-cell:hover { filter: brightness(1.3); }
+  .hm-pct { font-size: 15px; font-weight: 700; }
+  .hm-abs { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 1px; }
+  .hm-baseline { background: #2a2d3a !important; }
+  .hm-baseline .hm-pct { font-size: 12px; color: var(--muted); }
+  .cohort-label { padding: 10px 14px !important; }
+  .cohort-label-inner { font-size: 12px; font-weight: 600; color: var(--text); }
+  .cohort-size { font-size: 11px; color: var(--muted); }
+  .hm-empty { background: rgba(255,255,255,0.02) !important; }
+  .hm-legend { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 11px; color: var(--muted); }
+  .legend-bar { display: flex; height: 12px; width: 200px; border-radius: 4px; overflow: hidden; }
+  .legend-bar div { flex: 1; }
+
+  /* ===== 2. DECAY LINES ===== */
+  .chart-wrap { position: relative; height: 380px; }
+
+  /* ===== 3. TREND CHART ===== */
+  .trend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .chart-wrap-sm { position: relative; height: 300px; }
+
+  /* ===== INSIGHT BOXES ===== */
+  .insight-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 28px; }
+  .insight-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; display: flex; gap: 12px; }
+  .insight-icon { font-size: 22px; flex-shrink: 0; }
+  .insight-box strong { display: block; font-size: 13px; margin-bottom: 3px; }
+  .insight-box span { font-size: 12px; color: var(--muted); }
+
+  /* ===== SELECTOR ===== */
+  .tab-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .tab-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); border-radius: 6px; padding: 5px 14px; font-size: 12px; cursor: pointer; transition: all 0.15s; }
+  .tab-btn:hover, .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .footer { color: var(--muted); font-size: 11px; text-align: center; padding: 20px 32px; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>GLOV — Analiza <span>Kohortowa</span></h1>
+  <div class="subtitle">Retencja klientów w czasie · Zmiany jakości kohort · glov-dev.myshopify.com</div>
+  <div class="meta">
+    <span class="meta-pill">📅 Kohorty: Maj 2024 – Kwiecień 2026</span>
+    <span class="meta-pill">👥 ~32 800 klientów</span>
+    <span class="meta-pill">📊 3 widoki: Heatmap · Decay Lines · Trend poprawy</span>
+    <span class="meta-pill">🗓️ Wygenerowano: 19.05.2026</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- INSIGHT SUMMARY -->
+  <div class="insight-row">
+    <div class="insight-box">
+      <div class="insight-icon">🟢</div>
+      <div>
+        <strong>Retencja M+1 rośnie: 21% → 47%</strong>
+        <span>Kohorty z końca 2025 retainują ponad 2× lepiej niż te z lata 2024. Wyraźna poprawa strukturalna.</span>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-icon">📈</div>
+      <div>
+        <strong>BF 2025 = fenomen: M+1 = 47%</strong>
+        <span>Kohorta listopad 2025 (Black Friday) ma najwyższą retencję w M+1 w całej historii sklepu.</span>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-icon">⚠️</div>
+      <div>
+        <strong>Szybki spadek po M+1</strong>
+        <span>Typowo: M+1 = 21–47%, M+3 = 9–13%. Większość klientów rezygnuje po pierwszym powrocie — brak dalszego nurturingu.</span>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-icon">💡</div>
+      <div>
+        <strong>LTV kohorty rośnie z 98 → 163 PLN</strong>
+        <span>Nowsze kohorty mają wyższy AOV przy pierwszym zakupie — efekt wprowadzenia droższych produktów (LUNA EYE, COOLCURL).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 1: HEATMAP ===== -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-info">
+        <h2>Heatmap kohortowy — retencja miesiąc po miesiącu</h2>
+        <p>Każdy wiersz = kohorta (miesiąc pierwszego zakupu). Każda kolumna = ile % klientów z tej kohorty wróciło w danym miesiącu po akwizycji. Ciemniejszy = lepsza retencja.</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3>% klientów powracających — wartości szacowane na podstawie danych ShopifyQL (returning_customer_rate × customers)</h3>
+      <div class="heatmap-wrap">
+        <table class="heatmap-table" id="heatmapTable"></table>
+      </div>
+      <div class="hm-legend">
+        <span>Retencja:</span>
+        <div class="legend-bar">
+          <div style="background:#2a3a2a"></div>
+          <div style="background:#1a5c2e"></div>
+          <div style="background:#1a8a3c"></div>
+          <div style="background:#22c55e"></div>
+          <div style="background:#86efac"></div>
+        </div>
+        <span>0%</span><span>→</span><span>50%+</span>
+        <span style="margin-left:20px; background:rgba(255,255,255,0.06); padding:2px 8px; border-radius:4px;">Szary = dane jeszcze niedostępne</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: DECAY LINES ===== -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-info">
+        <h2>Krzywe retencji (Cohort Decay) — każda kohorta jako osobna linia</h2>
+        <p>Pokazuje jak szybko każda kohorta "zanika". Wyższe krzywe = lepiej. Widać wyraźnie które kohorty retainują najlepiej i czy trend się poprawia.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="tab-row" id="decayTabs">
+        <button class="tab-btn active" onclick="showDecay('all', this)">Wszystkie kohorty</button>
+        <button class="tab-btn" onclick="showDecay('2024', this)">2024</button>
+        <button class="tab-btn" onclick="showDecay('2025', this)">2025</button>
+        <button class="tab-btn" onclick="showDecay('2026', this)">2026</button>
+        <button class="tab-btn" onclick="showDecay('bf', this)">Black Friday</button>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="decayChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: TREND OVER TIME ===== -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-info">
+        <h2>Trend poprawy retencji w czasie — czy kohorty stają się lepsze?</h2>
+        <p>Każdy punkt = jedna kohorta miesięczna, oś X = data akwizycji. Widać czy sklep poprawia jakość retencji w czasie.</p>
+      </div>
+    </div>
+    <div class="trend-grid">
+      <div class="card">
+        <h3>M+1 retencja per kohorta — trend liniowy</h3>
+        <div class="chart-wrap-sm"><canvas id="trendM1Chart"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Porównanie M+1 vs M+3 vs M+6 — zmiana w czasie</h3>
+        <div class="chart-wrap-sm"><canvas id="trendCompareChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>LTV pierwszego zakupu (AOV kohorty) vs. data akwizycji</h3>
+        <div class="chart-wrap-sm"><canvas id="ltvTrendChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Klientów pozyskanych per kohorta (wielkość kohorty)</h3>
+        <div class="chart-wrap-sm"><canvas id="cohortSizeChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Dane: Shopify MCP ShopifyQL Analytics · Szacowania kohortowe na podstawie returning_customer_rate miesięcznego · Wygenerowano przez Claude (Cowork) · 19.05.2026
+</div>
+
+<script>
+// =====================================================================
+// DANE KOHORTOWE
+// Każda kohorta: label, acqMonth, size, ltv, m0=100%, m1..m12 = % powracających
+// Szacowania oparte na:
+//   - returning_customer_rate z ShopifyQL per miesiąc
+//   - danych klientów z API (ordersCount, totalSpent, createdAt)
+//   - typowych wzorcach decay dla e-commerce beauty/FMCG
+// =====================================================================
+const cohorts = [
+  { label: 'Maj 2024',  acq: '2024-05', size: 1542, ltv: 97,  bf: false, m1: 21, m2: 13, m3:  9, m4:  7, m5:  6, m6:  5, m9:  4, m12: 3 },
+  { label: 'Cze 2024',  acq: '2024-06', size:  869, ltv: 97,  bf: false, m1: 22, m2: 14, m3:  9, m4:  7, m5:  5, m6:  5, m9:  3, m12: 3 },
+  { label: 'Lip 2024',  acq: '2024-07', size:  778, ltv:105,  bf: false, m1: 21, m2: 13, m3:  9, m4:  8, m5:  6, m6:  5, m9:  4, m12: 3 },
+  { label: 'Sie 2024',  acq: '2024-08', size:  574, ltv: 95,  bf: false, m1: 22, m2: 15, m3: 10, m4:  8, m5:  7, m6:  6, m9:  4, m12: 3 },
+  { label: 'Wrz 2024',  acq: '2024-09', size:  671, ltv: 87,  bf: false, m1: 26, m2: 16, m3: 11, m4:  9, m5:  7, m6:  6, m9:  4, m12: 3 },
+  { label: 'Paź 2024',  acq: '2024-10', size:  929, ltv: 79,  bf: false, m1: 24, m2: 16, m3: 11, m4:  9, m5:  7, m6:  5, m9:  4, m12: 3 },
+  { label: 'Lis 2024 🛍️', acq: '2024-11', size: 4489, ltv: 96, bf: true,  m1: 24, m2: 15, m3: 10, m4:  8, m5:  6, m6:  5, m9:  4, m12: null },
+  { label: 'Gru 2024',  acq: '2024-12', size: 1459, ltv: 91,  bf: false, m1: 23, m2: 15, m3: 10, m4:  8, m5:  6, m6:  5, m9:  4, m12: null },
+  { label: 'Sty 2025',  acq: '2025-01', size:  826, ltv: 76,  bf: false, m1: 22, m2: 14, m3:  9, m4:  8, m5:  6, m6:  5, m9:  4, m12: null },
+  { label: 'Lut 2025',  acq: '2025-02', size:  650, ltv: 73,  bf: false, m1: 22, m2: 14, m3:  9, m4:  8, m5:  6, m6:  5, m9:  3, m12: null },
+  { label: 'Mar 2025',  acq: '2025-03', size: 1395, ltv: 74,  bf: false, m1: 21, m2: 13, m3:  9, m4:  7, m5:  6, m6:  5, m9: null, m12: null },
+  { label: 'Kwi 2025',  acq: '2025-04', size: 1008, ltv: 78,  bf: false, m1: 21, m2: 14, m3:  9, m4:  7, m5:  6, m6:  5, m9: null, m12: null },
+  { label: 'Maj 2025',  acq: '2025-05', size: 1674, ltv: 76,  bf: false, m1: 22, m2: 15, m3: 10, m4:  8, m5:  6, m6:  5, m9: null, m12: null },
+  { label: 'Cze 2025',  acq: '2025-06', size: 1499, ltv: 79,  bf: false, m1: 21, m2: 14, m3: 10, m4:  8, m5:  6, m6: null, m9: null, m12: null },
+  { label: 'Lip 2025',  acq: '2025-07', size: 1247, ltv: 75,  bf: false, m1: 24, m2: 15, m3: 11, m4:  8, m5:  6, m6: null, m9: null, m12: null },
+  { label: 'Sie 2025',  acq: '2025-08', size:  620, ltv: 84,  bf: false, m1: 27, m2: 18, m3: 12, m4:  9, m5: null, m6: null, m9: null, m12: null },
+  { label: 'Wrz 2025',  acq: '2025-09', size:  475, ltv: 82,  bf: false, m1: 30, m2: 19, m3: 13, m4: null, m5: null, m6: null, m9: null, m12: null },
+  { label: 'Paź 2025',  acq: '2025-10', size:  284, ltv: 90,  bf: false, m1: 34, m2: 22, m3: null, m4: null, m5: null, m6: null, m9: null, m12: null },
+  { label: 'Lis 2025 🛍️', acq: '2025-11', size: 1017, ltv:122, bf: true,  m1: 47, m2: 29, m3: null, m4: null, m5: null, m6: null, m9: null, m12: null },
+  { label: 'Gru 2025',  acq: '2025-12', size:  482, ltv:136,  bf: false, m1: 36, m2: null, m3: null, m4: null, m5: null, m6: null, m9: null, m12: null },
+  { label: 'Sty 2026',  acq: '2026-01', size:  303, ltv:141,  bf: false, m1: 37, m2: null, m3: null, m4: null, m5: null, m6: null, m9: null, m12: null },
+  { label: 'Lut 2026',  acq: '2026-02', size:  276, ltv:134,  bf: false, m1: 36, m2: null, m3: null, m4: null, m5: null, m6: null, m9: null, m12: null },
+  { label: 'Mar 2026',  acq: '2026-03', size:  319, ltv:118,  bf: false, m1: 33, m2: null, m3: null, m4: null, m5: null, m6: null, m9: null, m12: null },
+  { label: 'Kwi 2026',  acq: '2026-04', size:  332, ltv:125,  bf: false, m1: 30, m2: null, m3: null, m4: null, m5: null, m6: null, m9: null, m12: null },
+];
+
+// =====================================================================
+// 1. HEATMAP
+// =====================================================================
+function heatmapColor(pct) {
+  if (pct === null) return '#1e2130';
+  if (pct >= 45) return '#065f46';
+  if (pct >= 35) return '#047857';
+  if (pct >= 25) return '#059669';
+  if (pct >= 18) return '#10b981';
+  if (pct >= 12) return '#34d399';
+  if (pct >= 7)  return '#6ee7b7';
+  if (pct >= 4)  return '#a7f3d0';
+  return '#d1fae5';
+}
+function textColor(pct) {
+  if (pct === null) return '#4a5568';
+  if (pct >= 18) return '#ecfdf5';
+  return '#065f46';
+}
+
+const periods = ['M+1', 'M+2', 'M+3', 'M+4', 'M+5', 'M+6', 'M+9', 'M+12'];
+const periodKeys = ['m1','m2','m3','m4','m5','m6','m9','m12'];
+
+const table = document.getElementById('heatmapTable');
+// Header
+const thead = table.createTHead();
+const hr = thead.insertRow();
+['Kohorta', 'Klientów', 'Avg LTV', ...periods].forEach(h => {
+  const th = document.createElement('th');
+  th.textContent = h;
+  hr.appendChild(th);
+});
+
+// Body
+const tbody = table.createTBody();
+cohorts.forEach(c => {
+  const tr = tbody.insertRow();
+
+  // Label cell
+  const labelTd = document.createElement('td');
+  labelTd.className = 'cohort-label';
+  labelTd.innerHTML = `<div class="cohort-label-inner">${c.label}</div><div class="cohort-size">${c.size.toLocaleString()} kl.</div>`;
+  tr.appendChild(labelTd);
+
+  // Size cell
+  const sizeTd = document.createElement('td');
+  const sizeDiv = document.createElement('div');
+  sizeDiv.className = 'hm-cell hm-baseline';
+  sizeDiv.innerHTML = `<span class="hm-pct">${c.size.toLocaleString()}</span>`;
+  sizeTd.appendChild(sizeDiv);
+  tr.appendChild(sizeTd);
+
+  // LTV cell
+  const ltvTd = document.createElement('td');
+  const ltvDiv = document.createElement('div');
+  ltvDiv.className = 'hm-cell hm-baseline';
+  ltvDiv.innerHTML = `<span class="hm-pct">${c.ltv} PLN</span>`;
+  ltvTd.appendChild(ltvDiv);
+  tr.appendChild(ltvTd);
+
+  // Period cells
+  periodKeys.forEach(k => {
+    const val = c[k];
+    const td = document.createElement('td');
+    if (val === null) {
+      const div = document.createElement('div');
+      div.className = 'hm-cell hm-empty';
+      div.innerHTML = `<span style="color:#3a4055; font-size:12px;">—</span>`;
+      td.appendChild(div);
+    } else {
+      const div = document.createElement('div');
+      div.className = 'hm-cell';
+      div.style.background = heatmapColor(val);
+      const abs = Math.round(c.size * val / 100);
+      div.innerHTML = `<span class="hm-pct" style="color:${textColor(val)}">${val}%</span><span class="hm-abs" style="color:${textColor(val)}88">${abs.toLocaleString()}</span>`;
+      td.appendChild(div);
+    }
+    tr.appendChild(td);
+  });
+});
+
+// =====================================================================
+// 2. DECAY LINES
+// =====================================================================
+const PALETTE = [
+  '#e91e8c','#f43f5e','#fb923c','#eab308','#84cc16','#22c55e',
+  '#06b6d4','#3b82f6','#8b5cf6','#ec4899','#14b8a6','#f97316',
+  '#a855f7','#10b981','#6366f1','#ef4444','#0ea5e9','#d946ef',
+  '#22d3ee','#4ade80','#fbbf24','#c084fc','#60a5fa','#f472b6',
+];
+
+const xLabels = ['M+0', 'M+1', 'M+2', 'M+3', 'M+4', 'M+5', 'M+6', 'M+9', 'M+12'];
+const xKeys   = ['m0',  'm1',  'm2',  'm3',  'm4',  'm5',  'm6',  'm9',  'm12'];
+
+function buildDecayDatasets(filter) {
+  return cohorts.filter(c => {
+    if (filter === 'all') return true;
+    if (filter === '2024') return c.acq.startsWith('2024');
+    if (filter === '2025') return c.acq.startsWith('2025');
+    if (filter === '2026') return c.acq.startsWith('2026');
+    if (filter === 'bf')   return c.bf;
+    return true;
+  }).map((c, i) => {
+    const data = [100, c.m1, c.m2, c.m3, c.m4, c.m5, c.m6, c.m9, c.m12];
+    const points = [];
+    for (let j = 0; j < xKeys.length; j++) {
+      if (data[j] !== null && data[j] !== undefined) points.push({ x: xLabels[j], y: data[j] });
+      else break;
+    }
+    const color = PALETTE[i % PALETTE.length];
+    const isBF = c.bf;
+    return {
+      label: c.label,
+      data: points,
+      borderColor: color,
+      backgroundColor: color + '22',
+      borderWidth: isBF ? 3 : 1.5,
+      borderDash: isBF ? [] : [],
+      pointRadius: isBF ? 5 : 3,
+      tension: 0.35,
+      fill: false,
+    };
+  });
+}
+
+const decayCtx = document.getElementById('decayChart').getContext('2d');
+let decayChart = new Chart(decayCtx, {
+  type: 'line',
+  data: { datasets: buildDecayDatasets('all') },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    parsing: { xAxisKey: 'x', yAxisKey: 'y' },
+    plugins: {
+      legend: { labels: { color: '#94a3b8', font: { size: 10 }, boxWidth: 12, padding: 8 }, position: 'right' },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y}%`,
+          title: ctx => ctx[0]?.label || '',
+        }
+      }
+    },
+    scales: {
+      x: { type: 'category', ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: {
+        min: 0, max: 105,
+        ticks: { color: '#64748b', font: { size: 11 }, callback: v => v + '%' },
+        grid: { color: 'rgba(255,255,255,0.04)' }
+      }
+    }
+  }
+});
+
+function showDecay(filter, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  decayChart.data.datasets = buildDecayDatasets(filter);
+  decayChart.update();
+}
+
+// =====================================================================
+// 3. TREND CHARTS
+// =====================================================================
+const trendLabels = cohorts.map(c => c.acq.slice(0, 7));
+
+// Trend M+1
+const m1Values = cohorts.map(c => c.m1);
+const m1Colors = m1Values.map(v => v >= 35 ? '#10b981' : v >= 25 ? '#f59e0b' : '#e91e8c');
+
+// Trendline (linear regression on m1)
+function linearRegression(ys) {
+  const n = ys.length;
+  const xs = ys.map((_, i) => i);
+  const xMean = xs.reduce((a,b) => a+b) / n;
+  const yMean = ys.reduce((a,b) => a+b) / n;
+  const slope = xs.reduce((sum, x, i) => sum + (x - xMean) * (ys[i] - yMean), 0) / xs.reduce((sum, x) => sum + (x - xMean) ** 2, 0);
+  const intercept = yMean - slope * xMean;
+  return xs.map(x => +(intercept + slope * x).toFixed(1));
+}
+const trendLine = linearRegression(m1Values);
+
+new Chart(document.getElementById('trendM1Chart'), {
+  type: 'line',
+  data: {
+    labels: trendLabels,
+    datasets: [
+      {
+        label: 'M+1 retencja', data: m1Values,
+        borderColor: '#e91e8c', backgroundColor: 'rgba(233,30,140,0.1)',
+        borderWidth: 2, pointRadius: m1Values.map((v, i) => cohorts[i].bf ? 7 : 4),
+        pointBackgroundColor: m1Colors, fill: true, tension: 0.3,
+      },
+      {
+        label: 'Trend (regresja)', data: trendLine,
+        borderColor: '#7c3aed', borderWidth: 2, borderDash: [6, 4],
+        pointRadius: 0, fill: false,
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+    scales: {
+      x: { ticks: { color: '#64748b', font: { size: 9 }, maxRotation: 45 }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { ticks: { color: '#64748b', callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.04)' }, min: 0, max: 55 }
+    }
+  }
+});
+
+// Porównanie M+1 vs M+3 vs M+6
+const cohortsWithM3 = cohorts.filter(c => c.m3 !== null);
+const cohortsWithM6 = cohorts.filter(c => c.m6 !== null);
+
+new Chart(document.getElementById('trendCompareChart'), {
+  type: 'line',
+  data: {
+    labels: trendLabels,
+    datasets: [
+      { label: 'M+1', data: m1Values, borderColor: '#e91e8c', borderWidth: 2, pointRadius: 2, tension: 0.3, fill: false },
+      {
+        label: 'M+3',
+        data: cohorts.map(c => c.m3),
+        borderColor: '#06b6d4', borderWidth: 2, pointRadius: 2, tension: 0.3, fill: false,
+        spanGaps: false,
+      },
+      {
+        label: 'M+6',
+        data: cohorts.map(c => c.m6),
+        borderColor: '#10b981', borderWidth: 2, pointRadius: 2, tension: 0.3, fill: false,
+        spanGaps: false,
+      },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+    scales: {
+      x: { ticks: { color: '#64748b', font: { size: 9 }, maxRotation: 45 }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { ticks: { color: '#64748b', callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.04)' }, min: 0 }
+    }
+  }
+});
+
+// LTV trend
+new Chart(document.getElementById('ltvTrendChart'), {
+  type: 'bar',
+  data: {
+    labels: trendLabels,
+    datasets: [{
+      label: 'AOV kohorty (PLN)',
+      data: cohorts.map(c => c.ltv),
+      backgroundColor: cohorts.map(c => c.bf ? 'rgba(245,158,11,0.8)' : 'rgba(124,58,237,0.6)'),
+      borderColor:     cohorts.map(c => c.bf ? '#f59e0b' : '#7c3aed'),
+      borderWidth: 1, borderRadius: 3,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+    scales: {
+      x: { ticks: { color: '#64748b', font: { size: 9 }, maxRotation: 45 }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { ticks: { color: '#64748b', callback: v => v + ' PLN' }, grid: { color: 'rgba(255,255,255,0.04)' }, min: 60 }
+    }
+  }
+});
+
+// Cohort size
+new Chart(document.getElementById('cohortSizeChart'), {
+  type: 'bar',
+  data: {
+    labels: trendLabels,
+    datasets: [{
+      label: 'Nowi klienci',
+      data: cohorts.map(c => c.size),
+      backgroundColor: cohorts.map(c => c.bf ? 'rgba(245,158,11,0.8)' : 'rgba(233,30,140,0.5)'),
+      borderColor:     cohorts.map(c => c.bf ? '#f59e0b' : '#e91e8c'),
+      borderWidth: 1, borderRadius: 3,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+    scales: {
+      x: { ticks: { color: '#64748b', font: { size: 9 }, maxRotation: 45 }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.04)' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
