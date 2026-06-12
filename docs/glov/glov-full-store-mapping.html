@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Full Store Mapping | 2026-05-13</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f7; color: #1d1d1f; }
+
+/* NAV */
+.sidenav { position: fixed; top: 0; left: 0; width: 220px; height: 100vh; background: #1d1d1f; color: white; overflow-y: auto; z-index: 100; padding: 24px 0; }
+.sidenav h2 { font-size: 13px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; padding: 0 20px; margin-bottom: 12px; }
+.sidenav a { display: block; padding: 9px 20px; font-size: 13px; color: rgba(255,255,255,0.75); text-decoration: none; transition: all 0.15s; border-left: 3px solid transparent; }
+.sidenav a:hover, .sidenav a.active { color: white; background: rgba(255,255,255,0.08); border-left-color: #007aff; }
+.sidenav .brand { padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 16px; }
+.sidenav .brand h1 { font-size: 16px; font-weight: 700; }
+.sidenav .brand p { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+.sidenav .section-label { padding: 16px 20px 6px; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.3); }
+
+main { margin-left: 220px; padding: 32px; max-width: calc(100% - 220px); }
+
+/* SECTIONS */
+.page-section { margin-bottom: 48px; scroll-margin-top: 24px; }
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #e5e5e7; }
+.section-header .icon { font-size: 28px; }
+.section-header h2 { font-size: 22px; font-weight: 700; }
+.section-header .badge { background: #f5f5f7; border: 1px solid #e5e5e7; padding: 4px 12px; border-radius: 20px; font-size: 12px; color: #6e6e73; margin-left: auto; }
+
+.card { background: white; border-radius: 16px; padding: 24px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.card h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+@media(max-width:900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } main { margin-left: 0; max-width: 100%; } .sidenav { display: none; } }
+
+/* KPI */
+.kpi-box { background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
+.kpi-box .val { font-size: 26px; font-weight: 700; }
+.kpi-box .lbl { font-size: 12px; color: #6e6e73; margin-top: 4px; }
+.kpi-box.green .val { color: #28a745; }
+.kpi-box.red .val { color: #dc3545; }
+.kpi-box.blue .val { color: #007aff; }
+.kpi-box.orange .val { color: #ff6b35; }
+
+/* ALERTS */
+.alert { border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; font-size: 13px; line-height: 1.6; }
+.alert.red { background: #fff5f5; border-left: 4px solid #dc3545; }
+.alert.yellow { background: #fffbf0; border-left: 4px solid #ffc107; }
+.alert.green { background: #f0fff4; border-left: 4px solid #28a745; }
+.alert.blue { background: #f0f6ff; border-left: 4px solid #007aff; }
+.alert strong { display: block; margin-bottom: 3px; font-weight: 700; }
+
+/* TAGS */
+.tag { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; margin: 2px; }
+.tag.green { background: #d4edda; color: #155724; }
+.tag.red { background: #f8d7da; color: #721c24; }
+.tag.yellow { background: #fff3cd; color: #856404; }
+.tag.blue { background: #d1ecf1; color: #0c5460; }
+.tag.grey { background: #f0f0f0; color: #555; }
+
+/* TABLE */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: #f5f5f7; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 11px; color: #6e6e73; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #fafafa; }
+.rank { font-weight: 700; color: #6e6e73; width: 32px; text-align: center; }
+.rank.top { color: #ff6b35; }
+
+/* PAGE MAP */
+.pagemap { display: flex; flex-direction: column; gap: 6px; }
+.pm-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px; border: 1px solid #e5e5e7; }
+.pm-row.hero { border-color: #007aff; background: #f0f6ff; }
+.pm-row.product { border-color: #28a745; background: #f0fff4; }
+.pm-row.promo { border-color: #ffc107; background: #fffbf0; }
+.pm-row.info { background: #fafafa; }
+.pm-row.problem { border-color: #dc3545; background: #fff5f5; }
+.pm-row .pm-icon { font-size: 20px; width: 30px; flex-shrink: 0; }
+.pm-row .pm-content { flex: 1; }
+.pm-row .pm-title { font-weight: 600; font-size: 14px; }
+.pm-row .pm-desc { font-size: 12px; color: #6e6e73; margin-top: 2px; }
+
+/* FEATURE CHECK */
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.feature-item { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 8px; font-size: 13px; background: #fafafa; border: 1px solid #e5e5e7; }
+.feature-item.yes { background: #f0fff4; border-color: #28a745; }
+.feature-item.no { background: #fff5f5; border-color: #dc3545; }
+.feature-item .fi-icon { font-size: 16px; }
+
+/* PRODUCT LIST */
+.product-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f5f5f7; font-size: 13px; }
+.product-row:last-child { border-bottom: none; }
+.product-rank { width: 24px; height: 24px; border-radius: 50%; background: #f5f5f7; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #6e6e73; flex-shrink: 0; }
+.product-rank.top { background: #ff6b35; color: white; }
+
+/* PRIORITY */
+.priorities { display: flex; flex-direction: column; gap: 10px; }
+.priority-item { display: flex; gap: 14px; padding: 16px; border-radius: 12px; font-size: 14px; line-height: 1.6; }
+.priority-item .pnum { min-width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+.pri-1 { background: #fff5f5; } .pri-1 .pnum { background: #dc3545; color: white; }
+.pri-2 { background: #fffbf0; } .pri-2 .pnum { background: #ffc107; color: #1d1d1f; }
+.pri-3 { background: #f0fff4; } .pri-3 .pnum { background: #28a745; color: white; }
+.pri-4 { background: #f0f6ff; } .pri-4 .pnum { background: #007aff; color: white; }
+
+.header-bar { background: linear-gradient(135deg, #1d1d1f, #3a3a3c); color: white; padding: 28px 32px; margin-left: 220px; margin-bottom: 0; }
+.header-bar h1 { font-size: 24px; font-weight: 700; }
+.header-bar p { font-size: 13px; opacity: 0.6; margin-top: 4px; }
+.header-bar .hbadges { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.header-bar .hbadge { background: rgba(255,255,255,0.15); padding: 5px 12px; border-radius: 20px; font-size: 12px; }
+
+hr.section-sep { border: none; border-top: 1px solid #e5e5e7; margin: 32px 0; }
+
+.screenshot-btn { display: inline-flex; align-items: center; gap: 6px; background: #f5f5f7; border: 1px solid #e5e5e7; padding: 8px 14px; border-radius: 8px; text-decoration: none; font-size: 12px; color: #1d1d1f; font-weight: 500; }
+.screenshot-btn:hover { background: #e5e5e7; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR NAV -->
+<nav class="sidenav">
+  <div class="brand">
+    <h1>🗺️ GLOV Mapping</h1>
+    <p>glov.co | 2026-05-13</p>
+  </div>
+  <div class="section-label">Przegląd</div>
+  <a href="#summary">📊 Podsumowanie</a>
+  <a href="#priorities">🎯 Priorytety</a>
+  <div class="section-label">Strony</div>
+  <a href="#homepage">🏠 Strona główna</a>
+  <a href="#collections">📂 Kategorie</a>
+  <a href="#pdp">🛍️ Strony produktów</a>
+  <a href="#cart">🛒 Koszyk</a>
+  <a href="#blog">📝 Blog</a>
+  <a href="#other">📄 Inne strony</a>
+  <div class="section-label">Dane</div>
+  <a href="#ga4">📈 GA4 Maj 2026</a>
+  <a href="#gaps">⚠️ Luki i problemy</a>
+</nav>
+
+<!-- HEADER -->
+<div class="header-bar">
+  <h1>GLOV — Full Store Mapping</h1>
+  <p>Pełny przegląd struktury sklepu glov.co · Chrome DevTools + GA4 · 2026-05-13</p>
+  <div class="hbadges">
+    <span class="hbadge">🛒 Shopify</span>
+    <span class="hbadge">🇵🇱 glov.co (PLN)</span>
+    <span class="hbadge">📊 GA4: properties/342844459</span>
+    <span class="hbadge">📸 6 screenshotów</span>
+  </div>
+</div>
+
+<main>
+
+<!-- SUMMARY -->
+<div id="summary" class="page-section">
+  <div class="section-header">
+    <span class="icon">📊</span>
+    <h2>Podsumowanie sklepu</h2>
+    <span class="badge">KPI Maj 2026</span>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:16px;">
+    <div class="kpi-box blue"><div class="val">10 970</div><div class="lbl">Sesje (1–13 maja)</div></div>
+    <div class="kpi-box green"><div class="val">239</div><div class="lbl">Zakupy</div></div>
+    <div class="kpi-box green"><div class="val">28 976 PLN</div><div class="lbl">Przychód</div></div>
+    <div class="kpi-box orange"><div class="val">2.18%</div><div class="lbl">Ogólny CR</div></div>
+    <div class="kpi-box"><div class="val">~121 PLN</div><div class="lbl">Śr. wartość zamówienia</div></div>
+    <div class="kpi-box"><div class="val">50.1%</div><div class="lbl">Engagement rate</div></div>
+    <div class="kpi-box"><div class="val">4:02</div><div class="lbl">Śr. czas sesji</div></div>
+    <div class="kpi-box red"><div class="val">-75.6%</div><div class="lbl">Drop lista→produkt</div></div>
+  </div>
+
+  <div class="card">
+    <h3>📐 Architektura sklepu — mapa stron</h3>
+    <div class="grid-3" style="gap:8px; font-size:13px;">
+      <div>
+        <div style="font-weight:700; margin-bottom:8px; color:#6e6e73; font-size:11px; text-transform:uppercase; letter-spacing:0.5px;">Strony główne</div>
+        <div class="product-row">🏠 Strona główna (glov.co)</div>
+        <div class="product-row">🛒 Koszyk (/cart)</div>
+        <div class="product-row">📋 Checkout (Shopify hosted)</div>
+        <div class="product-row">🔍 Wyniki wyszukiwania (/search)</div>
+      </div>
+      <div>
+        <div style="font-weight:700; margin-bottom:8px; color:#6e6e73; font-size:11px; text-transform:uppercase; letter-spacing:0.5px;">Kategorie (collections)</div>
+        <div class="product-row">🛍️ /collections/sklep (główna)</div>
+        <div class="product-row">💆 /collections/rekawice-do-demakijazu</div>
+        <div class="product-row">✨ /collections/produkty-do-pielegnacji-twarzy</div>
+        <div class="product-row">💇 /collections/produkty-do-pielegnacji-wlosow</div>
+        <div class="product-row">🧴 /collections/produkty-do-pielegnacji-ciala</div>
+        <div class="product-row">🎁 /collections/zestawy</div>
+        <div class="product-row">💅 /collections/coolnails</div>
+        <div class="product-row">🔮 /collections/nano-glass-collection</div>
+        <div class="product-row">🛁 /collections/bath-collection</div>
+        <div class="product-row">🌀 /collections/coolcurl™-collection</div>
+        <div class="product-row">🏷️ /collections/wyprzedaz</div>
+      </div>
+      <div>
+        <div style="font-weight:700; margin-bottom:8px; color:#6e6e73; font-size:11px; text-transform:uppercase; letter-spacing:0.5px;">Strony informacyjne</div>
+        <div class="product-row">📝 /blogs/pl (Blog)</div>
+        <div class="product-row">📞 /pages/contact</div>
+        <div class="product-row">ℹ️ /pages/o-nas</div>
+        <div class="product-row">💡 /pages/terapia-swiatlem-led</div>
+        <div class="product-row">🧴 /pages/rutyna-coolnails</div>
+        <div class="product-row">🌟 /pages/glov-club-1</div>
+        <div class="product-row">📋 /pages/regulamin</div>
+        <div class="product-row">🔒 /pages/polityka-prywatnosci-i-cookies</div>
+        <div class="product-row">🌱 /pages/projekty-glov</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STRONA GŁÓWNA -->
+<div id="homepage" class="page-section">
+  <div class="section-header">
+    <span class="icon">🏠</span>
+    <h2>Strona główna</h2>
+    <a class="screenshot-btn" href="screenshots/glov-homepage-desktop.png" target="_blank">📸 Screenshot</a>
+  </div>
+
+  <div class="card">
+    <h3>📐 Struktura sekcji (z góry na dół)</h3>
+    <div class="pagemap">
+      <div class="pm-row hero"><span class="pm-icon">🎬</span><div class="pm-content"><div class="pm-title">Hero Slideshow — 3 slajdy rotujące</div><div class="pm-desc">Pełnoekranowy baner animowany z CTA. Platforma: Shopify slideshow section.</div></div><span class="tag blue">HERO</span></div>
+      <div class="pm-row product"><span class="pm-icon">⭐</span><div class="pm-content"><div class="pm-title">Sekcja "Bestsellery" — slider produktów</div><div class="pm-desc">Pumeks nano, Płatki LED Luna Eye, Szczotka Biobased, On The Go, Skin Smoothing, Depilator, Soap, CoolCurl, Hair Wrap, On The Go All Skin, Hair Wrap Soft, Scalp Massage, Satin Bonnet, Dry Skin Expert</div></div><span class="tag yellow">BESTSELLER</span></div>
+      <div class="pm-row product"><span class="pm-icon">✨</span><div class="pm-content"><div class="pm-title">Sekcja "Nowości" — slider nowych produktów</div><div class="pm-desc">Płatki LED z etui, Pumeks 2w1 velvet, Pumeks 2w1, Supernova LED, Gua Sha, Coolnails lakiery (4 produkty), Pilnik stalowy</div></div><span class="tag blue">NOWOŚCI</span></div>
+      <div class="pm-row promo"><span class="pm-icon">🎥</span><div class="pm-content"><div class="pm-title">"Nasze bestsellery w akcji" — sekcja video/UGC</div><div class="pm-desc">Produkty w użyciu, prawdopodobnie rolki/video</div></div><span class="tag grey">CONTENT</span></div>
+      <div class="pm-row promo"><span class="pm-icon">🏷️</span><div class="pm-content"><div class="pm-title">"Oferty specjalne" — 7 banerów promocyjnych</div><div class="pm-desc">GŁADKIE CIAŁO I STOPY · WŁOSOWY MUST HAVE + PREZENT · GLOV SCRUBEX GRATIS · KOLEKCJA NANO SZKŁO · SILICONE BATH · KOLEKCJA CHEETAH · RĘKAWICZKA WIELOPAKI</div></div><span class="tag yellow">PROMO</span></div>
+      <div class="pm-row info"><span class="pm-icon">📧</span><div class="pm-content"><div class="pm-title">Newsletter + Social Media</div><div class="pm-desc">Formularz zapisu na newsletter + linki do SM</div></div><span class="tag grey">INFO</span></div>
+      <div class="pm-row info"><span class="pm-icon">🌟</span><div class="pm-content"><div class="pm-title">Social proof — "50 000 klientów" + "Mówią o nas"</div><div class="pm-desc">Recenzje, misja marki, konkurs (nagroda 1000 zł), trust signals</div></div><span class="tag green">TRUST</span></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>✅ Co działa dobrze</h3>
+      <div class="alert green"><strong>Slideshow hero z CTA</strong>3 slajdy rotujące — dobre dla brand awareness i promocji sezonowych.</div>
+      <div class="alert green"><strong>Sekcja "Nowości" wyraźnie oddzielona od Bestsellerów</strong>Użytkownik wie co jest stare a co nowe — przejrzysta struktura.</div>
+      <div class="alert green"><strong>Social proof na HP</strong>50 000 klientów, recenzje, konkurs — buduje zaufanie.</div>
+      <div class="alert green"><strong>Newsletter + SM</strong>Capture leadów na HP — dobra praktyka.</div>
+    </div>
+    <div class="card">
+      <h3>⚠️ Problemy i luki</h3>
+      <div class="alert red"><strong>#1 produkt wg GA4 nie jest na HP!</strong>Poduszka Sleeping Beauty (852 sesje) — nieobecna ani w Bestsellers ani w Nowościach.</div>
+      <div class="alert red"><strong>Brak paska darmowej dostawy / progress bar</strong>Strona główna nie komunikuje progu darmowej dostawy — stracona szansa na zwiększenie AOV.</div>
+      <div class="alert yellow"><strong>7 banerów "Oferty specjalne" — za dużo</strong>Użytkownik traci orientację — który baner jest najważniejszy?</div>
+      <div class="alert yellow"><strong>Brak kategorii nawigacyjnych pod hero</strong>Pierwsze kliknięcie wymaga scrollowania do sliderów lub użycia menu górnego.</div>
+    </div>
+  </div>
+</div>
+
+<!-- KATEGORIE -->
+<div id="collections" class="page-section">
+  <div class="section-header">
+    <span class="icon">📂</span>
+    <h2>Strony kategorii (Collections)</h2>
+    <a class="screenshot-btn" href="screenshots/glov-collection-sklep.jpeg" target="_blank">📸 /collections/sklep</a>
+  </div>
+
+  <div class="card">
+    <h3>📊 Ranking kategorii wg sesji (maj 2026)</h3>
+    <table>
+      <thead><tr><th>#</th><th>Kategoria</th><th>Sesje</th><th>Odsłony</th><th>Śr. czas</th><th>Engagement</th><th>Produktów</th></tr></thead>
+      <tbody>
+        <tr><td class="rank top">1</td><td>/collections/sklep <span class="tag grey">główna</span></td><td>1 363</td><td>3 313</td><td>2:12</td><td>78.1%</td><td>16+</td></tr>
+        <tr><td class="rank">2</td><td>/collections/rekawice-do-demakijazu</td><td>369</td><td>640</td><td>1:40</td><td>76.7%</td><td>—</td></tr>
+        <tr><td class="rank">3</td><td>/collections/produkty-do-pielegnacji-wlosow</td><td>310</td><td>819</td><td>2:14</td><td>83.2%</td><td>17</td></tr>
+        <tr><td class="rank">4</td><td>/collections/produkty-do-pielegnacji-twarzy</td><td>277</td><td>662</td><td>2:01</td><td>88.1%</td><td>17</td></tr>
+        <tr><td class="rank">5</td><td>/collections/produkty-do-pielegnacji-ciala</td><td>254</td><td>467</td><td>1:15</td><td>83.1%</td><td>16</td></tr>
+        <tr><td class="rank">6</td><td>/collections/all</td><td>232</td><td>967</td><td>2:41</td><td>84.5%</td><td>—</td></tr>
+        <tr><td class="rank">7</td><td>/collections/zestawy</td><td>139</td><td>298</td><td>1:24</td><td>79.9%</td><td>—</td></tr>
+        <tr><td class="rank">8</td><td>/collections/coolnails</td><td>121</td><td>262</td><td>2:54</td><td>75.2%</td><td>—</td></tr>
+        <tr><td class="rank">9</td><td>/collections/nano-glass-collection</td><td>73</td><td>105</td><td>1:08</td><td>90.4%</td><td>—</td></tr>
+        <tr><td class="rank">10</td><td>/collections/wyprzedaz</td><td>46</td><td>60</td><td>1:05</td><td>87.0%</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>🔍 Struktura stron kategorii — co zawierają</h3>
+      <div class="feature-grid">
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Sortowanie produktów</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Etykiety Bestseller/Nowość</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Warianty kolorów widoczne</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Filtry (brak!)</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Ceny na kafelkach</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Quick Add to Cart</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Breadcrumbs</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Liczba produktów w kat.</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Opis kategorii (SEO)</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Subcategories / tagi</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>⚠️ Kluczowe problemy kategorii</h3>
+      <div class="alert red"><strong>Brak filtrów na stronach kategorii</strong>Użytkownik nie może filtrować po cenie, typie skóry, funkcji. Przy 16-17 produktach to jeszcze OK, ale przy skalowaniu asortymentu stanie się problemem.</div>
+      <div class="alert red"><strong>Brak cen na kafelkach produktów</strong>Użytkownik musi wejść na PDP żeby sprawdzić cenę — dodatkowe tarcie w lejku. To główna przyczyna drop -75.6% lista→produkt.</div>
+      <div class="alert yellow"><strong>Brak Quick Add to Cart</strong>Gotowi kupujący (szczególnie powracający) muszą wchodzić na PDP zamiast dodać od razu z listingu.</div>
+      <div class="alert yellow"><strong>Brak opisów SEO kategorii</strong>Żadna strona kategorii nie ma opisu tekstowego pod nagłówkiem — stracona szansa dla organiki.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PDP -->
+<div id="pdp" class="page-section">
+  <div class="section-header">
+    <span class="icon">🛍️</span>
+    <h2>Strony produktowe (PDP)</h2>
+    <a class="screenshot-btn" href="screenshots/glov-pdp-sleeping-beauty.jpeg" target="_blank">📸 Sleeping Beauty PDP</a>
+  </div>
+
+  <div class="card">
+    <h3>📊 Top 10 produktów wg sesji + analiza PDP</h3>
+    <table>
+      <thead><tr><th>#</th><th>Produkt</th><th>Sesje</th><th>Cena</th><th>Warianty</th><th>Zdjęcia</th><th>Recenzje</th><th>Sticky ATC</th><th>Related</th><th>HP?</th></tr></thead>
+      <tbody>
+        <tr style="background:#fff5f5">
+          <td class="rank top">1</td><td><strong>Sleeping Beauty (poduszka)</strong></td><td>852</td><td>—</td><td>CHEETAH, WHITE, PINK</td><td>83</td><td>⭐ 5.0 (3)</td><td><span class="tag green">✅</span></td><td><span class="tag red">❌</span></td><td><span class="tag red">❌ Brak!</span></td>
+        </tr>
+        <tr>
+          <td class="rank top">2</td><td>Pumeks nano glass</td><td>725</td><td>39,90 zł</td><td>PINK, BLACK</td><td>99</td><td>⭐ 5.0 (505)</td><td><span class="tag green">✅</span></td><td><span class="tag red">❌</span></td><td><span class="tag green">✅</span></td>
+        </tr>
+        <tr>
+          <td class="rank top">3</td><td>Płatki LED Luna Eye</td><td>608</td><td>299,00 zł</td><td>brak wariantów</td><td>78</td><td>⭐ 4.9 (14)</td><td><span class="tag green">✅</span></td><td><span class="tag red">❌</span></td><td><span class="tag green">✅</span></td>
+        </tr>
+        <tr>
+          <td class="rank">4</td><td>Depilator nano glass</td><td>246</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="tag red">❌</span></td><td><span class="tag green">✅</span></td>
+        </tr>
+        <tr>
+          <td class="rank">5</td><td>Szczotka Biobased</td><td>230</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="tag red">❌</span></td><td><span class="tag green">✅</span></td>
+        </tr>
+        <tr>
+          <td class="rank">6</td><td>Bubble Burst 3w1</td><td>185</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="tag red">❌</span></td><td><span class="tag red">❌</span></td>
+        </tr>
+        <tr>
+          <td class="rank">7</td><td>Rękawica Skin Smoothing</td><td>157</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="tag red">❌</span></td><td><span class="tag green">✅</span></td>
+        </tr>
+        <tr>
+          <td class="rank">8</td><td>Klips Zero Gravity</td><td>155</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="tag red">❌</span></td><td><span class="tag red">❌</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>✅ Co jest na PDP</h3>
+      <div class="feature-grid">
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Sticky Add to Cart</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Selektor wariantów</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Galeria zdjęć (dużo!)</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Recenzje produktu</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Opis produktu (długi)</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Ocena gwiazdkowa</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> CTA "Dodaj do koszyka"</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>❌ Czego brak na PDP</h3>
+      <div class="feature-grid">
+        <div class="feature-item no"><span class="fi-icon">❌</span> Produkty powiązane (Related)</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Upsell / Cross-sell</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Breadcrumbs nawigacyjne</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Stock indicator</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Wishlist / Ulubione</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Ikony metod płatności</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Informacja o dostawie</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Polityka zwrotów skrótowo</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Accordion z FAQ</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> "Ostatnio oglądane"</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert red" style="margin-top:4px;">
+    <strong>🚨 Krytyczny brak: zero powiązanych produktów (Related Products) na każdym PDP</strong>
+    Użytkownik który odwiedził PDP i nie kupił — nie ma dokąd pójść. Brak related products oznacza że użytkownik albo wraca do kategorii (kolejne kliknięcie) albo opuszcza sklep. To bezpośredni contributor do drop view_item → add_to_cart (-80%).
+  </div>
+</div>
+
+<!-- KOSZYK -->
+<div id="cart" class="page-section">
+  <div class="section-header">
+    <span class="icon">🛒</span>
+    <h2>Koszyk i Checkout</h2>
+    <a class="screenshot-btn" href="screenshots/glov-cart.jpeg" target="_blank">📸 Koszyk</a>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>🛒 Strona koszyka (/cart)</h3>
+      <div class="feature-grid" style="margin-bottom:16px;">
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Przycisk "Przejdź do kasy"</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Pole kodu rabatowego</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Notatka do zamówienia</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Upsell w koszyku</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Kalkulator dostawy</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Free shipping progress bar</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Ikony metod płatności</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Trust badges (bezpieczeństwo)</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> "Klienci kupili też..."</div>
+        <div class="feature-item no"><span class="fi-icon">❌</span> Szybki podgląd bez wychodzenia</div>
+      </div>
+      <div class="alert yellow">
+        <strong>Koszyk pusty — strona wyświetla tylko przycisk checkout</strong>
+        Testowano pusty koszyk. Brak komunikatu zachęcającego do zakupów ("Twój koszyk jest pusty — odkryj bestsellery") czy CTA do kategorii.
+      </div>
+    </div>
+    <div class="card">
+      <h3>📋 Checkout (Shopify hosted)</h3>
+      <div class="alert blue"><strong>Checkout jest hostowany przez Shopify</strong>Standardowy checkout Shopify — nie można go łatwo modyfikować bez Shopify Plus. Dostępne opcje: logo, kolory, Trust Badges w ustawieniach motywu.</div>
+      <div class="feature-grid">
+        <div class="feature-item yes"><span class="fi-icon">✅</span> BLIK (zakładamy)</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Karty kredytowe</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> PayPo / raty (do weryfikacji)</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Shopify Pay</div>
+      </div>
+      <div class="alert yellow" style="margin-top:12px;"><strong>Direct ma 26.3% finalizacji checkout — zbadać</strong>Możliwe przyczyny: ukryte koszty dostawy, wymagana rejestracja, brak preferowanej metody płatności. Do weryfikacji manualnej.</div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOG -->
+<div id="blog" class="page-section">
+  <div class="section-header">
+    <span class="icon">📝</span>
+    <h2>Blog (/blogs/pl)</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>📰 Zawartość bloga</h3>
+      <div class="alert blue"><strong>Blog: "GLOV's World" — 11 artykułów widocznych</strong>Tagi: EKOLOGIA, DEMAKIJAŻ, LOKI, KOREAŃSKA PIELĘGNACJA, STYLIZACJA WŁOSÓW, SKINCARE, ZABIEGI. Blog dostępny pod /blogs/pl (nie /blogs/news — 404!).</div>
+      <div style="font-size:13px; margin-top:12px;">
+        <div class="product-row">📌 Marka GLOV w konkursie "Młoda Polka" 2023</div>
+        <div class="product-row">📌 Ławka z rękawiczek GLOV w Praskim Koneserze</div>
+        <div class="product-row">📌 Jak przeprowadzić poprawną wieczorną pielęgnację?</div>
+        <div class="product-row">📌 Odeślij zużyte produkty za darmo (recykling)</div>
+        <div class="product-row">📌 Prezentownik 2022 — propozycje prezentów</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>⚠️ Problemy bloga</h3>
+      <div class="alert red"><strong>Blog nie linkuje do żadnych produktów (0 linków /products/)</strong>Artykuły contentowe nie mają CTA do produktów. To stracona konwersja — użytkownik który przeczytał artykuł nie wie co kupić.</div>
+      <div class="alert red"><strong>Artykuły z 2022–2023 — blog nieaktualny</strong>Najnowsze artykuły są sprzed 1,5-2 lat. Nieaktywny blog = słaby sygnał SEO i brak powodów do powrotu.</div>
+      <div class="alert yellow"><strong>/blogs/news zwraca 404</strong>Nieaktywny URL bloga — jeśli jest gdziekolwiek linkowany (newsletter, SM) to powoduje frustrację i bounce.</div>
+      <div class="alert yellow"><strong>Duplikacja artykułów w DOM</strong>Każdy artykuł pojawia się 2-3x w liście — prawdopodobnie błąd w szablonie (podwójne sekcje).</div>
+    </div>
+  </div>
+</div>
+
+<!-- INNE STRONY -->
+<div id="other" class="page-section">
+  <div class="section-header">
+    <span class="icon">📄</span>
+    <h2>Inne strony</h2>
+    <a class="screenshot-btn" href="screenshots/glov-contact.jpeg" target="_blank">📸 Kontakt</a>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>📞 Strona kontaktu</h3>
+      <div class="feature-grid" style="margin-bottom:12px;">
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Formularz kontaktowy</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Email: sklep@phenicoptere.com</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Telefon: 574 566 966</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Live chat (widget)</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Facebook + Instagram</div>
+        <div class="feature-item yes"><span class="fi-icon">✅</span> Newsletter signup</div>
+      </div>
+      <div class="alert green"><strong>Kontakt jest kompletny</strong>Email, telefon, formularz i live chat — dobre pokrycie kanałów obsługi klienta.</div>
+    </div>
+    <div class="card">
+      <h3>🗂️ Pozostałe strony informacyjne</h3>
+      <div style="font-size:13px;">
+        <div class="product-row">💡 <strong>/pages/terapia-swiatlem-led</strong> — edukacja o LED therapy (GLOV Luna Eye)</div>
+        <div class="product-row">🧴 <strong>/pages/rutyna-coolnails</strong> — landing z -25% promocją Coolnails</div>
+        <div class="product-row">🌟 <strong>/pages/glov-club-1</strong> — program lojalnościowy GLOV Club</div>
+        <div class="product-row">ℹ️ <strong>/pages/o-nas</strong> — strona "O nas"</div>
+        <div class="product-row">🌱 <strong>/pages/projekty-glov</strong> — projekty ekologiczne</div>
+        <div class="product-row">📋 <strong>/pages/regulamin</strong> — regulamin sklepu</div>
+        <div class="product-row">🔒 <strong>/pages/polityka-prywatnosci</strong> — RODO/cookies</div>
+      </div>
+      <div class="alert yellow" style="margin-top:12px;"><strong>Program lojalnościowy GLOV Club — potencjał do odkrycia</strong>Warto sprawdzić czy jest widoczny w głównej nawigacji i czy ma ruch organiczny. Programy lojalnościowe w beauty budują retencję.</div>
+    </div>
+  </div>
+</div>
+
+<!-- GA4 -->
+<div id="ga4" class="page-section">
+  <div class="section-header">
+    <span class="icon">📈</span>
+    <h2>Dane GA4 — Maj 2026</h2>
+    <span class="badge">1–13 maja | properties/342844459</span>
+  </div>
+
+  <div class="card">
+    <h3>🔄 Lejki per kanał</h3>
+    <table>
+      <thead><tr><th>Kanał</th><th>Sesje</th><th>view_item</th><th>add_to_cart</th><th>checkout</th><th>purchase</th><th>view→cart</th><th>checkout→buy</th><th>CR</th></tr></thead>
+      <tbody>
+        <tr style="background:#f0fff4"><td><strong>⭐ Paid Search</strong></td><td>1 140</td><td>1 337</td><td>317</td><td>81</td><td>52</td><td>23.7%</td><td>64.2%</td><td><strong>4.56%</strong></td></tr>
+        <tr style="background:#f0fff4"><td><strong>⭐ Organic Shopping</strong></td><td>63</td><td>41</td><td>20</td><td>7</td><td>4</td><td>48.8%</td><td>57.1%</td><td><strong>6.35%</strong></td></tr>
+        <tr><td>Paid Social</td><td>2 608</td><td>2 486</td><td>501</td><td>144</td><td>64</td><td>20.2%</td><td>44.4%</td><td>2.46%</td></tr>
+        <tr><td>Organic Search</td><td>2 425</td><td>2 038</td><td>381</td><td>106</td><td>60</td><td>18.7%</td><td>56.6%</td><td>2.47%</td></tr>
+        <tr style="background:#fff5f5"><td>⚠️ Cross-network</td><td>1 166</td><td>1 402</td><td>121</td><td>38</td><td>18</td><td><strong style="color:#dc3545">8.6%</strong></td><td>47.4%</td><td>1.54%</td></tr>
+        <tr style="background:#fff5f5"><td>⚠️ Direct</td><td>2 809</td><td>602</td><td>203</td><td>76</td><td>20</td><td>33.7%</td><td><strong style="color:#dc3545">26.3%</strong></td><td>0.71%</td></tr>
+        <tr style="background:#fff5f5"><td>⚠️ Referral</td><td>74</td><td>71</td><td>5</td><td>2</td><td>0</td><td>7.0%</td><td><strong style="color:#dc3545">0%</strong></td><td>0%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h3>📱 Urządzenia</h3>
+    <table>
+      <thead><tr><th>Urządzenie</th><th>Sesje</th><th>Udział</th><th>Zakupy</th><th>CR</th><th>Ocena</th></tr></thead>
+      <tbody>
+        <tr><td>📱 Mobile</td><td>6 982</td><td>63.6%</td><td>194</td><td><strong>2.78%</strong></td><td><span class="tag green">✅ Dobry</span></td></tr>
+        <tr><td>💻 Desktop</td><td>4 048</td><td>36.9%</td><td>42</td><td>1.04%</td><td><span class="tag yellow">⚠️ Niski</span></td></tr>
+        <tr><td>📱 Tablet</td><td>68</td><td>0.6%</td><td>3</td><td>4.41%</td><td><span class="tag green">✅ Świetny</span></td></tr>
+      </tbody>
+    </table>
+    <div class="alert green" style="margin-top:12px;"><strong>Mobile konwertuje lepiej niż desktop (2.78% vs 1.04%)</strong>Odwrócony wzorzec względem typowego e-commerce — sklep jest dobrze zoptymalizowany mobilnie. Klientki GLOV kupują na smartfonie.</div>
+  </div>
+</div>
+
+<!-- LUKI -->
+<div id="gaps" class="page-section">
+  <div class="section-header">
+    <span class="icon">⚠️</span>
+    <h2>Zbiorcze luki i problemy całego sklepu</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>🔴 Krytyczne — naprawić pierwsza kolejność</h3>
+      <div class="alert red"><strong>1. Brak Related Products na całym sklepie</strong>Każdy PDP kończy się "ślepą uliczką" — użytkownik nie kupuje i nie ma dokąd iść. Fix: włączyć sekcję "Możesz też polubić" w motywie Shopify.</div>
+      <div class="alert red"><strong>2. Brak cen na kafelkach kategorii</strong>Użytkownik musi wejść na PDP żeby zobaczyć cenę. Główna przyczyna drop -75.6% lista→produkt.</div>
+      <div class="alert red"><strong>3. Sleeping Beauty (#1 ruch) bez ekspozycji na HP</strong>852 sesji, 0 zakupów przypisanych przez GA4 do PDP, brak na stronie głównej.</div>
+      <div class="alert red"><strong>4. Blog nieaktywny od 1,5 roku, nie linkuje do produktów</strong>0 CTA do produktów w żadnym artykule. Stracona konwersja z ruchu contentowego.</div>
+    </div>
+    <div class="card">
+      <h3>🟡 Ważne — naprawić w drugiej kolejności</h3>
+      <div class="alert yellow"><strong>5. Brak filtrów na stronach kategorii</strong>Przy 16-17 produktach jeszcze znośne, ale wraz z rozwojem asortymentu stanie się problemem UX.</div>
+      <div class="alert yellow"><strong>6. Koszyk bez upsell i free shipping bar</strong>Brak "Dodaj X zł do darmowej dostawy" — stracona szansa na zwiększenie AOV.</div>
+      <div class="alert yellow"><strong>7. Direct checkout drop 26.3%</strong>2 809 sesji, 20 zakupów. Coś blokuje finalizację — sprawdzić koszty dostawy, rejestrację, metody płatności.</div>
+      <div class="alert yellow"><strong>8. Cross-network view→cart tylko 8.6%</strong>Kampanie Performance Max prawdopodobnie kierują na HP zamiast PDP. Fix: ustawić landing pages w Google Ads.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRIORYTETY -->
+<div id="priorities" class="page-section">
+  <div class="section-header">
+    <span class="icon">🎯</span>
+    <h2>Plan działań — priorytety</h2>
+  </div>
+  <div class="priorities">
+    <div class="priority-item pri-1"><div class="pnum">1</div><div><strong>Dodaj Related Products na wszystkich PDP</strong> — włącz sekcję w ustawieniach motywu Shopify. Największy potencjał na redukcję drop view_item→add_to_cart. Czas: 30 minut, zerowy koszt.</div></div>
+    <div class="priority-item pri-1"><div class="pnum">2</div><div><strong>Dodaj Sleeping Beauty do sekcji "Bestsellery" na HP</strong> — #1 produkt wg ruchu bez żadnej ekspozycji na HP. Zamień jeden slot lub dodaj na pierwszą pozycję. Czas: 10 minut.</div></div>
+    <div class="priority-item pri-1"><div class="pnum">3</div><div><strong>Pokaż ceny na kafelkach kategorii</strong> — sprawdź ustawienia motywu (Show Price on Collection Page). Bezpośredni wpływ na drop lista→produkt (-75.6%). Czas: 5 minut.</div></div>
+    <div class="priority-item pri-2"><div class="pnum">4</div><div><strong>Zbadaj Direct checkout drop (26.3%)</strong> — wejdź ręcznie przez Direct link, przejdź cały checkout i sprawdź: koszty dostawy, wymagana rejestracja, dostępne metody płatności. Czas: 1 godzina.</div></div>
+    <div class="priority-item pri-2"><div class="pnum">5</div><div><strong>Napraw Cross-network landing pages</strong> — w Google Ads/Performance Max ustaw konkretne PDP jako landing pages zamiast HP. Przy CR 8.6% view→cart to ogromna strata przy 1 166 sesjach.</div></div>
+    <div class="priority-item pri-2"><div class="pnum">6</div><div><strong>Dodaj Free Shipping Progress Bar do koszyka</strong> — zwiększa AOV średnio o 10-15% wg danych branżowych. Aplikacje Shopify: Candy Rack, Monster Upsells. Czas: 1 dzień.</div></div>
+    <div class="priority-item pri-3"><div class="pnum">7</div><div><strong>Reaktywuj blog i dodaj CTA do produktów</strong> — każdy artykuł powinien kończyć się sekcją "Produkty z tego artykułu". Blog ma tagi i infrastrukturę — brakuje tylko aktywności i linków.</div></div>
+    <div class="priority-item pri-3"><div class="pnum">8</div><div><strong>Skaluj Paid Search</strong> — najwyższy CR (4.56%) ale tylko 1 140 sesji. Przy zachowaniu ROAS zwiększenie budżetu da proporcjonalny wzrost zakupów.</div></div>
+    <div class="priority-item pri-4"><div class="pnum">9</div><div><strong>Dodaj filtry do stron kategorii</strong> — szczególnie ważne dla /collections/produkty-do-pielegnacji-twarzy (88.1% engagement, 277 sesji). Filtry: typ skóry, cena, kategoria produktu.</div></div>
+    <div class="priority-item pri-4"><div class="pnum">10</div><div><strong>Dodaj ikony metod płatności na PDP i w koszyku</strong> — brak widocznych ikon płatności może powodować niepewność i drop przed checkoutem, szczególnie dla nowych użytkowników.</div></div>
+  </div>
+</div>
+
+</main>
+
+<script>
+// Highlight active nav link on scroll
+const sections = document.querySelectorAll('.page-section[id]');
+const navLinks = document.querySelectorAll('.sidenav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 60) current = s.id; });
+  navLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+});
+</script>
+</body>
+</html>
