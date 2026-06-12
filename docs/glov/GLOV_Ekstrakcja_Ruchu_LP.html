@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INTERNAL — Ekstrakcja ruchu wg landing pages · glov.co</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--red:#7c5cff;--dark:#1a1a1a;--bg:#f5f5f5;--card:#fff;--border:#e0e0e0;--text:#1a1a1a;--text2:#6b6b6b;--green:#0F6E56;--blue:#2563eb;}
+*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding:0 0 60px;}
+.ribbon{background:var(--red);color:#fff;text-align:center;padding:8px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+header{background:var(--dark);color:#fff;padding:24px 32px;}header h1{font-size:21px;font-weight:700;}header .sub{color:#aaa;font-size:14px;margin-top:4px;}
+.stickybar{position:sticky;top:0;z-index:20;background:#fff;border-bottom:2px solid var(--dark);padding:12px 32px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.tlabel{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;}
+.tbtn{padding:7px 15px;border:2px solid var(--border);background:#fff;border-radius:20px;cursor:pointer;font-size:13px;font-weight:700;color:#6b6b6b;}
+.tbtn.on{border-color:var(--dark);background:var(--dark);color:#fff;}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 32px;}
+.section{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:24px;}
+.section h2{font-size:18px;font-weight:700;margin-bottom:4px;}.section .lead{font-size:13px;color:var(--text2);margin-bottom:14px;}
+.monthnav{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0;}
+.mbtn{padding:7px 13px;border:2px solid var(--border);background:#fff;border-radius:10px;cursor:pointer;font-size:12.5px;font-weight:700;color:#6b6b6b;}
+.mbtn.selA{border-color:var(--red);background:var(--red);color:#fff;}.mbtn.selB{border-color:var(--blue);background:var(--blue);color:#fff;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:var(--bg);text-align:right;padding:7px;font-size:10px;text-transform:uppercase;color:var(--text2);position:sticky;top:0;}
+th:first-child,td:first-child{text-align:left;}
+td{padding:6px 7px;border-bottom:1px solid var(--border);text-align:right;}
+.url{font-size:11px;text-align:left;word-break:break-all;}a{color:var(--blue);text-decoration:none;}a:hover{text-decoration:underline;}
+.win{background:#f0fdf4;}.lose{background:#fef6f6;}
+.scroll{max-height:520px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+.h2h{display:grid;grid-template-columns:1fr 1fr;gap:18px;}@media(max-width:820px){.h2h{grid-template-columns:1fr;}}
+.col h3{font-size:15px;font-weight:700;margin-bottom:8px;padding:6px 10px;border-radius:6px;}
+.colA h3{background:#f3f0ff;color:var(--red);}.colB h3{background:#eff6ff;color:var(--blue);}
+.kpibar{display:flex;gap:8px;margin-bottom:8px;}.kpi{flex:1;background:var(--bg);border-radius:6px;padding:7px 9px;}
+.kpi .l{font-size:10px;color:var(--text2);text-transform:uppercase;}.kpi .v{font-size:16px;font-weight:700;}
+.heat0{color:#bbb;}.heat1{color:#16a34a;}.heat2{color:#15803d;font-weight:700;}
+.badge{display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;}
+.b-pdp{background:#e0f2fe;color:#075985;}
+.b-listing{background:#f0fdf4;color:#15803d;}
+.b-landing{background:#fef9c3;color:#854d0e;}
+.b-home{background:#f3f4f6;color:#374151;}
+.b-search{background:#ecfccb;color:#3f6212;}
+.b-blog{background:#fce7f3;color:#9d174d;}
+.b-inne{background:#faf5e6;color:#92724e;}
+.chart-box{position:relative;height:300px;}.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}@media(max-width:820px){.cgrid{grid-template-columns:1fr;}}
+footer{text-align:center;color:var(--text2);font-size:12px;padding:20px;}
+#loadError{display:none;background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:20px 24px;margin:24px 0;}
+#loadError h3{color:#856404;margin-bottom:8px;}
+#loadError code{background:#f8f9fa;padding:3px 8px;border-radius:4px;font-family:monospace;font-size:13px;}
+</style></head><body>
+<a href="GLOV_HUB.html" style="position:fixed;top:12px;left:12px;z-index:999;background:#7c5cff;color:#fff;text-decoration:none;padding:7px 13px;border-radius:8px;font:600 12px sans-serif">← HUB</a>
+<div class="ribbon">⚠ Dokument wewnętrzny — INTERNAL — nie wysyłać klientowi</div>
+<header><h1>Ekstrakcja ruchu wg landing pages</h1><div class="sub">glov.co · sty–cze 2026 · filtr ruchu działa WSZĘDZIE (per URL) · GA4 342844459</div></header>
+<div class="stickybar"><span class="tlabel">Typ ruchu:</span>
+<button class="tbtn on" data-t="all">Wszystko</button>
+<button class="tbtn" data-t="paid">Płatny</button>
+<button class="tbtn" data-t="psearch">Paid Search</button>
+<button class="tbtn" data-t="psocial">Paid Social</button>
+<button class="tbtn" data-t="notpaid">Bezpłatny</button>
+<span id="tinfo" style="font-size:12px;color:var(--text2);margin-left:8px;"></span></div>
+<div class="wrap">
+
+<div id="loadError">
+  <h3>⚠ Dane nie zostały wczytane</h3>
+  <p>Plik <code>ekstrakcja_lp_data.json</code> nie istnieje lub nie można go wczytać (CORS w przeglądarce).</p>
+  <p style="margin-top:8px;">Uruchom skrypt parsujący, a następnie otwórz raport przez lokalny serwer HTTP:</p>
+  <p style="margin-top:6px;"><code>python3 parse_ga4_final.py</code></p>
+  <p style="margin-top:6px;"><code>python3 -m http.server 8000</code> → otwórz <a href="http://localhost:8000/GLOV_Ekstrakcja_Ruchu_LP.html">localhost:8000/GLOV_Ekstrakcja_Ruchu_LP.html</a></p>
+</div>
+
+<div class="section">
+<h2>1. Długi okres — trend sesji i CR</h2><div class="lead">6 miesięcy (sty–cze 2026) · filtr ruchu przelicza wykres.</div>
+<div class="chart-box"><canvas id="chTrend"></canvas></div>
+</div>
+
+<div class="section">
+<h2>2. Dystrybucja per typ strony × miesiąc</h2><div class="lead">Komórka: sesje (góra) + CR% (dół, ciemniejszy = wyższy). Filtr ruchu przelicza wszystko.</div>
+<div class="scroll"><table id="distTab"></table></div>
+</div>
+
+<div class="section">
+<h2>3. Miesiąc-do-miesiąca (head-to-head)</h2>
+<div class="monthnav" id="nav"></div>
+<div class="lead">Pierwszy klik = kolumna A (fioletowa), drugi = B (niebieska). URL klikalne. Filtr ruchu działa na KAŻDYM URL.</div>
+<div class="h2h">
+  <div class="col colA"><h3 id="hA">—</h3><div class="kpibar" id="kA"></div><div class="scroll"><table><thead><tr><th>URL</th><th>typ</th><th>ses</th><th>kon</th><th>CR</th></tr></thead><tbody id="tA"></tbody></table></div></div>
+  <div class="col colB"><h3 id="hB">—</h3><div class="kpibar" id="kB"></div><div class="scroll"><table><thead><tr><th>URL</th><th>typ</th><th>ses</th><th>kon</th><th>CR</th></tr></thead><tbody id="tB"></tbody></table></div></div>
+</div>
+<div class="cgrid" style="margin-top:18px;">
+  <div><div style="font-size:13px;color:var(--text2);margin-bottom:6px;">Sesje per URL (top 8)</div><div class="chart-box"><canvas id="chSes"></canvas></div></div>
+  <div><div style="font-size:13px;color:var(--text2);margin-bottom:6px;">Konwersje per URL (top 8)</div><div class="chart-box"><canvas id="chKon"></canvas></div></div>
+</div>
+</div>
+
+</div>
+<footer>Dokument wewnętrzny · GA4 sty–cze 2026 · glov.co · INTERNAL</footer>
+<script>
+const DATA={"2026-01":[["/collections/coolnails","psocial",3802,2],["(not set)","notpaid",3649,62],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","psocial",2020,24],["/collections/sklep","psocial",1901,30],["/products/kuracja-punktowa-led-na-tradzik-supernova-glov","psocial",1694,4],["/collections/sklep","psearch",1535,56],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","paidother",1477,12],["(not set)","psocial",1171,4],["/","notpaid",983,38],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","psocial",721,3],["/","psocial",670,8],["/en-eu","notpaid",455,2],["/en-eu/collections/store","notpaid",414,0],["(not set)","paidother",405,0],["/collections/rekawice-do-demakijazu","psearch",364,13],["/en-eu/collections/glov-cheetah-collection","notpaid",353,0],["(not set)","psearch",336,0],["/en-eu/collections/bath-collection","notpaid",334,0],["/en-eu/collections/glov-led-therapy","notpaid",322,0],["/en-eu/collections/nano-glass-collection","notpaid",307,0],["/en-eu/collections/coolnails","notpaid",303,0],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","notpaid",268,5],["/","paidother",260,9],["/en-global","notpaid",260,0],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","paidother",227,12],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","notpaid",222,3],["/products/luksusowy-zestaw-dream-on-gorgeous-glov","psocial",199,1],["/products/kuracja-punktowa-led-na-tradzik-supernova-glov","paidother",174,3],["/products/luksusowy-zestaw-glov-the-lazy-luxe-duo","psocial",171,1],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","psearch",165,13],["/collections/sklep","paidother",162,4],["/products/przyssawkowy-podnozek-prysznicowy-sole-mate","notpaid",161,0],["/collections/sklep","notpaid",159,2],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","notpaid",156,0],["/products/przyssawkowy-podnozek-prysznicowy-sole-mate","psocial",140,0],["/products/overnight-blowout-set-zestaw-do-stylizacji-wlosow-na-zimno","notpaid",132,0],["/products/overnight-blowout-set-zestaw-do-stylizacji-wlosow-na-zimno","psocial",131,0],["/collections/coolnails","notpaid",128,0],["/","psearch",114,5],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","paidother",104,0],["/blogs/pl/pielegnacja-wlosow-a-fazy-ksiezyca","notpaid",98,0],["/collections/coolnails/products/klasyczny-lakier-do-paznokci-w-nowoczesnej-formie-click-pen-coolnails-classic-nail-polish-pen","psocial",93,0],["/fr-eu","notpaid",91,1],["/products/3w1-silikonowa-myjka-i-masazer-do-ciala-skory-glowy-i-plecow-bubble-burst","psocial",89,1]],"2026-02":[["/collections/sklep","psocial",2809,15],["/pages/rutyna-coolnails","psocial",2575,1],["(not set)","notpaid",2444,51],["/collections/sklep","psearch",1072,58],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","psocial",1069,6],["/","notpaid",810,19],["(not set)","psocial",796,4],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","psocial",776,8],["/products/kuracja-punktowa-led-na-tradzik-supernova-glov","psocial",565,0],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","notpaid",517,5],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","paidother",516,2],["/collections/glov-led-therapy","psocial",454,6],["/en-eu","notpaid",433,2],["(not set)","paidother",423,0],["/collections/coolnails","psocial",414,0],["/products/utwardzacz-do-paznokci-w-formie-pisaka-coolnails-marshmallow-nail-hardener-pen","notpaid",404,5],["/pages/iconic-mitt-glov-wielopaki","psocial",382,10],["/products/platki-led-luna-eye-z-etui-ladujacym-dla-rozswietlonej-i-odswiezonej-okolicy-oczu","paidother",380,10],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","paidother",363,1],["/en-eu/collections/coolnails","notpaid",352,0],["/en-eu/collections/nano-glass-collection","notpaid",350,0],["/en-eu/collections/bath-collection","notpaid",335,0],["/en-eu/collections/glov-cheetah-collection","notpaid",316,0],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","notpaid",313,6],["/collections/sklep","paidother",304,11],["/en-eu/collections/glov-led-therapy","notpaid",288,0],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","notpaid",285,3],["/collections/sklep","notpaid",248,1],["/en-eu/collections/store","notpaid",243,0],["(not set)","psearch",232,0],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","paidother",230,11],["/","psocial",225,8],["/en-global","notpaid",224,0],["/collections/rekawice-do-demakijazu","psearch",223,9],["/products/depilator-z-nano-szkla-glov","notpaid",195,1],["/products/przyssawkowy-podnozek-prysznicowy-sole-mate","psocial",185,0],["/products/klips-unoszacy-wlosy-u-nasady-zero-gravity","psocial",183,5],["/","paidother",164,7],["/products/klips-unoszacy-wlosy-u-nasady-zero-gravity","notpaid",157,0],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","psearch",153,8],["/products/przyssawkowy-podnozek-prysznicowy-sole-mate","notpaid",126,1],["/products/luksusowy-zestaw-dream-on-gorgeous-glov","psocial",125,2],["/pages/rutyna-coolnails","notpaid",122,0],["/products/wielopak-8-sztuk-rekawiczka-do-demakijazu-i-oczyszczania-twarzy-glov","paidother",101,5]],"2026-03":[["(not set)","notpaid",2758,89],["/pages/rutyna-coolnails","psocial",1559,2],["/collections/sklep","psearch",1055,75],["/","notpaid",991,45],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","psocial",785,3],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","psocial",562,2],["(not set)","psocial",547,0],["/products/platki-led-luna-eye-z-etui-ladujacym-dla-rozswietlonej-i-odswiezonej-okolicy-oczu","paidother",545,16],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","paidother",516,2],["/en-eu","notpaid",456,2],["/en-eu/collections/store","notpaid",404,1],["/collections/sklep","notpaid",393,11],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","psocial",379,9],["(not set)","paidother",371,0],["/products/klips-unoszacy-wlosy-u-nasady-zero-gravity","psocial",335,5],["/en-eu/collections/nano-glass-collection","notpaid",327,0],["/en-eu/collections/coolnails","notpaid",319,0],["/en-eu/collections/glov-led-therapy","notpaid",317,0],["/en-eu/collections/glov-cheetah-collection","notpaid",314,0],["/en-eu/collections/bath-collection","notpaid",313,0],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","notpaid",304,1],["(not set)","psearch",301,1],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","notpaid",297,8],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","psearch",287,22],["/collections/sklep","psocial",267,4],["/products/utwardzacz-do-paznokci-w-formie-pisaka-coolnails-marshmallow-nail-hardener-pen","notpaid",253,1],["/collections/rekawice-do-demakijazu","psearch",219,9],["/en-global","notpaid",209,0],["/products/depilator-z-nano-szkla-glov","notpaid",209,0],["/collections/sklep","paidother",190,7],["/collections/glov-led-therapy","psocial",169,1],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","paidother",152,6],["/","psocial",149,3],["/products/klips-unoszacy-wlosy-u-nasady-zero-gravity","notpaid",149,3],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","notpaid",137,0],["/en-global/pages/manage-subscriptions","notpaid",125,0],["/products/ultrachlonny-turban-do-wlosow-glov-hydroweave-twister","paidother",119,6],["/products/przyssawkowy-podnozek-prysznicowy-sole-mate","psocial",118,1],["/collections/rekawice-do-demakijazu/products/glov-on-the-go-all-skin-types","psearch",117,5],["/","paidother",102,4],["/products/rekawica-do-mycia-twarzy-i-demakijazu-cery-mieszanej-glov-on-the-go","paidother",93,4],["/products/depilator-z-nano-szkla-glov","paidother",92,1],["/","psearch",82,6]],"2026-04":[["(not set)","notpaid",2615,83],["/collections/sklep","psocial",1669,37],["/collections/sklep","psearch",1148,53],["/","notpaid",852,24],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","paidother",791,10],["/en-eu","notpaid",608,2],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","psocial",548,11],["/en-eu/collections/coolnails","notpaid",547,0],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","notpaid",451,9],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","paidother",446,20],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","psearch",443,27],["/collections/sklep","notpaid",435,7],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","psocial",434,7],["/en-eu/collections/store","notpaid",423,0],["/en-eu/collections/glov-cheetah-collection","notpaid",378,0],["(not set)","psocial",375,2],["/en-eu/collections/glov-led-therapy","notpaid",347,0],["/en-gb/pages/manage-subscriptions","notpaid",344,0],["/en-eu/collections/bath-collection","notpaid",342,0],["(not set)","psearch",327,0],["(not set)","paidother",322,0],["/en-eu/collections/nano-glass-collection","notpaid",301,0],["/collections/rekawice-do-demakijazu","psearch",240,6],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","psocial",186,18],["/products/depilator-z-nano-szkla-glov","notpaid",165,2],["/products/platki-led-luna-eye-z-etui-ladujacym-dla-rozswietlonej-i-odswiezonej-okolicy-oczu","paidother",158,5],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","notpaid",152,3],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","notpaid",150,2],["/","psocial",138,3],["/collections/sklep","paidother",135,4],["/products/klips-unoszacy-wlosy-u-nasady-zero-gravity","psocial",135,1],["/collections/sklep/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","psocial",132,1],["/","paidother",109,1],["/products/przyssawkowy-podnozek-prysznicowy-sole-mate","psocial",108,0],["/collections/oczyszczanie-twarzy/products/rekawica-do-mycia-twarzy-i-demakijazu-cery-mieszanej-glov-on-the-go","notpaid",98,0],["/products/klips-unoszacy-wlosy-u-nasady-zero-gravity","notpaid",97,1],["/","psearch",87,6],["/collections/coolnails","notpaid",85,1],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","paidother",83,8],["/products/wielopak-8-sztuk-rekawiczka-do-demakijazu-i-oczyszczania-twarzy-glov","paidother",76,5],["/products/3w1-silikonowa-myjka-i-masazer-do-ciala-skory-glowy-i-plecow-bubble-burst","psocial",70,1],["/fr-eu","notpaid",67,0],["/pl-global/collections/glov-led-therapy","psocial",67,0]],"2026-05":[["/collections/sklep","psocial",6028,47],["(not set)","notpaid",5226,232],["(not set)","psocial",2550,84],["/collections/sklep","psearch",1280,95],["/","notpaid",971,41],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","psocial",786,2],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","paidother",704,19],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","notpaid",678,22],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","paidother",654,8],["/collections/produkty-do-pielegnacji-ciala/products/depilator-z-nano-szkla-glov","psocial",638,23],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","psocial",602,6],["/collections/sklep","notpaid",573,9],["/products/rekawica-do-peelingu-i-mycia-ciala-glov-skin-smoothing","psocial",535,22],["/en-eu","notpaid",500,1],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","psearch",406,16],["/collections/sklep/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","psocial",386,2],["/products/depilator-z-nano-szkla-glov","notpaid",369,7],["(not set)","psearch",335,0],["/products/biodegradowalna-szczotka-do-wlosow-glov-biobased-brush","psocial",310,10],["/en-gb/pages/manage-subscriptions","notpaid",307,0],["/en-eu/collections/store","notpaid",297,0],["(not set)","paidother",295,0],["/en-eu/collections/coolnails","notpaid",272,0],["/collections/rekawice-do-demakijazu","psearch",256,13],["/products/silikonowe-nawilzajace-platki-pod-oczy-glov-infinity-eye-patches","psocial",248,4],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","notpaid",215,1],["/products/3w1-silikonowa-myjka-i-masazer-do-ciala-skory-glowy-i-plecow-bubble-burst","psocial",204,3],["/","psocial",198,9],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","notpaid",194,5],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","psocial",187,10],["/collections/sklep","paidother",184,7],["/products/klips-unoszacy-wlosy-u-nasady-zero-gravity","notpaid",160,2],["/products/depilator-z-nano-szkla-glov","psocial",158,2],["/en-eu/collections/glov-cheetah-collection","notpaid",143,0],["/products/klips-unoszacy-wlosy-u-nasady-zero-gravity","psocial",142,0],["/en-eu/collections/nano-glass-collection","notpaid",139,0],["/en-eu/collections/glov-led-therapy","notpaid",138,0],["/products/platki-led-luna-eye-z-etui-ladujacym-dla-rozswietlonej-i-odswiezonej-okolicy-oczu","notpaid",125,0],["/en-eu/collections/bath-collection","notpaid",123,0],["/collections/produkty-do-pielegnacji-wlosow/products/klips-unoszacy-wlosy-u-nasady-zero-gravity","psocial",117,3]],"2026-06":[["(not set)","notpaid",3619,31],["(not set)","psocial",646,0],["/collections/sklep","psocial",465,3],["/products/rekawica-do-peelingu-i-mycia-ciala-glov-skin-smoothing","psocial",330,9],["/collections/sklep","psearch",324,17],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","psocial",317,1],["/","notpaid",287,8],["/collections/produkty-do-pielegnacji-wlosow/products/klips-unoszacy-wlosy-u-nasady-zero-gravity","psocial",268,12],["(not set)","paidother",265,0],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","notpaid",209,12],["/collections/produkty-do-pielegnacji-ciala/products/depilator-z-nano-szkla-glov","psocial",204,1],["(not set)","psearch",202,0],["/en-eu","notpaid",188,1],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","paidother",166,6],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","paidother",151,1],["/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye","psocial",145,1],["/products/depilator-z-nano-szkla-glov","notpaid",124,2],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","psearch",110,6],["/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","psocial",108,6],["/products/depilator-z-nano-szkla-glov","psocial",103,2],["/en-eu/collections/coolnails","notpaid",101,0],["/en-eu/collections/store","notpaid",94,0],["/collections/sklep","notpaid",86,0],["/products/klips-unoszacy-wlosy-u-nasady-zero-gravity","psocial",80,1],["/collections/rekawice-do-demakijazu","psearch",77,3],["/","psocial",65,1],["/products/utwardzacz-do-paznokci-w-formie-pisaka-coolnails-marshmallow-nail-hardener-pen","notpaid",60,1],["/en-gb/pages/manage-subscriptions","notpaid",59,0],["/products/glov-coolcurltm-innowacyjna-lokowka-do-krecenia-wlosow-bez-uzycia-ciepla","notpaid",56,0],["/collections/sklep","paidother",43,0],["/","paidother",42,2],["/en-eu/collections/glov-led-therapy","notpaid",42,0],["/products/coolcurl-ribbon-rollers-walki-do-krecenia-wlosow-na-zimno-glov","notpaid",42,0],["/en-eu/collections/nano-glass-collection","notpaid",41,0],["/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","notpaid",40,0],["/en-gb","notpaid",38,0],["/products/klips-unoszacy-wlosy-u-nasady-zero-gravity","notpaid",38,0]]};
+const LBL={"2026-01":"Sty 2026","2026-02":"Lut 2026","2026-03":"Mar 2026","2026-04":"Kwi 2026","2026-05":"Maj 2026","2026-06":"Cze 2026"};
+
+const MONTHS_ORDER = ["2026-01","2026-02","2026-03","2026-04","2026-05","2026-06"];
+const GROUPS={all:['psearch','psocial','paidother','notpaid'],paid:['psearch','psocial','paidother'],psearch:['psearch'],psocial:['psocial'],notpaid:['notpaid']};
+const TINFO={all:'wszystkie kanały',paid:'Paid Search+Social+inne płatne',psearch:'tylko Google Ads',psocial:'tylko Meta',notpaid:'Organic, Direct, Referral...'};
+let TT='all', selA='', selB='', last='B', chTrend,chSes,chKon;
+let MONTHS = [];
+
+function inT(g){return GROUPS[TT].includes(g);}
+function cr(s,k){return s?(100*k/s).toFixed(2)+'%':'—';}
+
+function typ(u){
+  u = u.toLowerCase();
+  if(u === '/') return ['Home','b-home'];
+  if(u === '(not set)') return ['Inne','b-inne'];
+  if(u.includes('/products/')) return ['PDP','b-pdp'];
+  if(u.includes('/collections/')) return ['Listing','b-listing'];
+  if(u.includes('/search')) return ['Search','b-search'];
+  if(u.includes('/pages/')) return ['Landing','b-landing'];
+  if(u.includes('/blogs/')) return ['Blog','b-blog'];
+  return ['Inne','b-inne'];
+}
+
+function urlsFor(mo){const m={};(DATA[mo]||[]).forEach(r=>{if(!inT(r[1]))return;if(!m[r[0]])m[r[0]]=[0,0];m[r[0]][0]+=r[2];m[r[0]][1]+=r[3];});return Object.entries(m).map(([u,v])=>[u,v[0],v[1]]).sort((a,b)=>b[1]-a[1]);}
+
+const TYPES=['PDP','Listing','Landing','Home','Search','Blog','Inne'];
+
+function distFor(mo){const d={};TYPES.forEach(t=>d[t]=[0,0]);(DATA[mo]||[]).forEach(r=>{if(!inT(r[1]))return;const[t]=typ(r[0]);if(!d[t])d[t]=[0,0];d[t][0]+=r[2];d[t][1]+=r[3];});return d;}
+
+function renderDist(){let h='<thead><tr><th>Typ strony</th>'+MONTHS.map(m=>'<th>'+LBL[m]+'</th>').join('')+'</tr></thead><tbody>';
+ const dd=MONTHS.map(distFor);
+ TYPES.forEach((t)=>{h+='<tr><td><b>'+t+'</b></td>';dd.forEach(d=>{const sv=d[t]||[0,0];const s=sv[0],k=sv[1];const c=s?100*k/s:0;const cls=c>=2?'heat2':c>=0.5?'heat1':'heat0';h+='<td><div>'+(s?s.toLocaleString('pl'):'·')+'</div><div class="'+cls+'">'+(s?cr(s,k):'')+'</div></td>';});h+='</tr>';});
+ h+='<tr style="border-top:2px solid var(--dark);font-weight:700;"><td>RAZEM</td>';dd.forEach(d=>{let s=0,k=0;TYPES.forEach(t=>{s+=(d[t]||[0,0])[0];k+=(d[t]||[0,0])[1];});h+='<td><div>'+s.toLocaleString('pl')+'</div><div class="heat1">'+(s?cr(s,k):'')+'</div></td>';});h+='</tr></tbody>';
+ document.getElementById('distTab').innerHTML=h;}
+
+function renderTrend(){const ses=[],crs=[];MONTHS.forEach(mo=>{let s=0,k=0;(DATA[mo]||[]).forEach(r=>{if(inT(r[1])){s+=r[2];k+=r[3];}});ses.push(s);crs.push(s?+(100*k/s).toFixed(2):0);});
+ if(chTrend)chTrend.destroy();chTrend=new Chart(document.getElementById('chTrend'),{data:{labels:MONTHS.map(m=>LBL[m]),datasets:[{type:'bar',label:'sesje',data:ses,backgroundColor:'#d3d1c7',yAxisID:'y',order:2},{type:'line',label:'CR %',data:crs,borderColor:'#7c5cff',backgroundColor:'#7c5cff',yAxisID:'y1',tension:.3,order:1,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{position:'left',beginAtZero:true,title:{display:true,text:'sesje'}},y1:{position:'right',beginAtZero:true,grid:{drawOnChartArea:false},title:{display:true,text:'CR %'}}}}});}
+
+function col(mo,tb,hh,kk){const rows=urlsFor(mo);document.getElementById(hh).textContent=LBL[mo]||mo;
+ const s=rows.reduce((x,r)=>x+r[1],0),k=rows.reduce((x,r)=>x+r[2],0);
+ document.getElementById(kk).innerHTML='<div class="kpi"><div class="l">sesje</div><div class="v">'+s.toLocaleString('pl')+'</div></div><div class="kpi"><div class="l">konw</div><div class="v">'+k+'</div></div><div class="kpi"><div class="l">CR</div><div class="v">'+cr(s,k)+'</div></div>';
+ document.getElementById(tb).innerHTML=rows.map(r=>{const[t,c]=typ(r[0]);const cls=r[2]>=3?'win':(r[2]===0?'lose':'');return '<tr class="'+cls+'"><td class="url"><a href="https://glov.co'+r[0]+'" target="_blank">'+r[0]+'</a></td><td><span class="badge '+c+'">'+t+'</span></td><td>'+r[1].toLocaleString('pl')+'</td><td>'+r[2]+'</td><td><b>'+cr(r[1],r[2])+'</b></td></tr>';}).join('');}
+
+function renderH2H(){if(!selA||!selB)return;col(selA,'tA','hA','kA');col(selB,'tB','hB','kB');
+ const ua=urlsFor(selA),ub=urlsFor(selB);const m={};[...ua,...ub].forEach(r=>m[r[0]]=(m[r[0]]||0)+r[1]);const L=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,8).map(e=>e[0]);
+ const va=(u,i)=>{const r=ua.find(x=>x[0]===u);return r?r[i]:0;},vb=(u,i)=>{const r=ub.find(x=>x[0]===u);return r?r[i]:0;};
+ const sl=L.map(u=>u.replace('/collections/','col/').replace('/products/','pdp/').replace('/pages/','pg/').slice(0,22));
+ if(chSes)chSes.destroy();if(chKon)chKon.destroy();const o={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{x:{ticks:{font:{size:9},maxRotation:60}}}};
+ chSes=new Chart(document.getElementById('chSes'),{type:'bar',data:{labels:sl,datasets:[{label:LBL[selA],data:L.map(u=>va(u,1)),backgroundColor:'#7c5cff'},{label:LBL[selB],data:L.map(u=>vb(u,1)),backgroundColor:'#2563eb'}]},options:o});
+ chKon=new Chart(document.getElementById('chKon'),{type:'bar',data:{labels:sl,datasets:[{label:LBL[selA],data:L.map(u=>va(u,2)),backgroundColor:'#7c5cff'},{label:LBL[selB],data:L.map(u=>vb(u,2)),backgroundColor:'#2563eb'}]},options:o});
+ document.querySelectorAll('.mbtn').forEach(b=>{b.classList.remove('selA','selB');if(b.dataset.m===selA)b.classList.add('selA');if(b.dataset.m===selB)b.classList.add('selB');});}
+
+function renderAll(){document.getElementById('tinfo').textContent='— '+TINFO[TT];renderTrend();renderDist();renderH2H();}
+
+document.querySelectorAll('.tbtn').forEach(b=>b.onclick=()=>{TT=b.dataset.t;document.querySelectorAll('.tbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderAll();});
+
+function initWithData(data, lbl){
+  DATA = data;
+  LBL = lbl;
+  MONTHS.length = 0;
+  MONTHS_ORDER.forEach(m=>{ if(DATA[m]) MONTHS.push(m); });
+  if(MONTHS.length === 0){
+    // fallback: use all keys from DATA sorted
+    Object.keys(DATA).sort().forEach(m=>MONTHS.push(m));
+  }
+  selA = MONTHS[MONTHS.length-2] || MONTHS[0];
+  selB = MONTHS[MONTHS.length-1] || MONTHS[0];
+  document.getElementById('nav').innerHTML=MONTHS.map(m=>'<button class="mbtn" data-m="'+m+'">'+LBL[m]+'</button>').join('');
+  document.querySelectorAll('.mbtn').forEach(b=>b.onclick=()=>{const m=b.dataset.m;if(last==='B'){selA=m;last='A';}else{selB=m;last='B';}if(selA!==selB)renderH2H();});
+  renderAll();
+}
+
+// Data embedded inline — no fetch() needed
+document.getElementById('loadError').style.display='none';
+initWithData(DATA, LBL);
+</script>
+</body></html>
