@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Połączenia źródeł danych z Claude</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; background: #f8f7f4; color: #1a1a1a; line-height: 1.6; }
+
+.header { background: #fff; border-bottom: 1px solid #e5e3dc; padding: 2rem 2.5rem; }
+.header h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+.header p { color: #666; font-size: 14px; }
+
+.tab-bar { background: #fff; border-bottom: 1px solid #e5e3dc; padding: 0 2.5rem; display: flex; gap: 0; }
+.tab { padding: 12px 20px; font-size: 14px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; color: #666; transition: all 0.15s; white-space: nowrap; }
+.tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+.tab:hover:not(.active) { color: #333; }
+
+.content { padding: 2rem 2.5rem; max-width: 1100px; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* WARIANTY */
+.variant-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 2rem; }
+.variant-card { background: #fff; border-radius: 12px; border: 1.5px solid #e5e3dc; padding: 1.5rem; cursor: pointer; transition: all 0.15s; }
+.variant-card:hover { border-color: #aaa; }
+.variant-card.best { border-color: #1a1a1a; }
+.variant-card .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.badge-best { background: #1a1a1a; color: #fff; }
+.badge-ok { background: #e8f5e9; color: #2e7d32; }
+.badge-hard { background: #fff3e0; color: #e65100; }
+.variant-card h3 { font-size: 16px; font-weight: 500; margin-bottom: 6px; }
+.variant-card .desc { font-size: 13px; color: #555; margin-bottom: 14px; }
+
+.pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.pill { font-size: 12px; padding: 3px 10px; border-radius: 20px; border: 1px solid; }
+.pill-ga4 { background: #e8f0fe; border-color: #4285f4; color: #1a56d0; }
+.pill-sc { background: #e6f4ea; border-color: #34a853; color: #1e7e34; }
+.pill-gads { background: #fce8e6; border-color: #ea4335; color: #c62828; }
+.pill-meta { background: #e8f0fe; border-color: #1877f2; color: #0d47a1; }
+.pill-clarity { background: #ede7f6; border-color: #7b1fa2; color: #6a1b9a; }
+.pill-shopify { background: #e8f5e9; border-color: #95bf47; color: #33691e; }
+
+.what-you-get { background: #f8f7f4; border-radius: 8px; padding: 12px 14px; }
+.what-you-get h4 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #888; margin-bottom: 8px; }
+.get-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: #333; margin-bottom: 4px; }
+.get-item .check { color: #2e7d32; font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+.get-item .cross { color: #999; font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+/* INSTRUKCJE */
+.instructions { background: #fff; border-radius: 12px; border: 1px solid #e5e3dc; padding: 1.75rem; margin-top: 1.5rem; }
+.instructions h2 { font-size: 18px; font-weight: 500; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 10px; }
+.step { display: flex; gap: 14px; margin-bottom: 1.25rem; align-items: flex-start; }
+.step-num { width: 28px; height: 28px; border-radius: 50%; background: #1a1a1a; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; flex-shrink: 0; margin-top: 2px; }
+.step-body h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+.step-body p { font-size: 13px; color: #555; }
+.step-body code { background: #f0ede8; border-radius: 4px; padding: 2px 6px; font-family: 'SF Mono', monospace; font-size: 12px; color: #1a1a1a; }
+.code-block { background: #1e1e1e; color: #d4d4d4; border-radius: 8px; padding: 14px 16px; font-family: 'SF Mono', monospace; font-size: 12px; line-height: 1.7; overflow-x: auto; margin: 8px 0; }
+.code-block .comment { color: #6a9955; }
+.code-block .key { color: #9cdcfe; }
+.code-block .val { color: #ce9178; }
+
+.note { background: #fff8e1; border-left: 3px solid #f59f00; border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 13px; color: #555; margin: 10px 0; }
+.note-info { background: #e8f0fe; border-left-color: #4285f4; }
+.note-success { background: #e8f5e9; border-left-color: #34a853; }
+.note strong { color: #1a1a1a; }
+
+/* MATRIX */
+.matrix-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #e5e3dc; }
+.matrix-table th { background: #f4f3ef; padding: 10px 14px; text-align: left; font-size: 13px; font-weight: 500; color: #555; border-bottom: 1px solid #e5e3dc; }
+.matrix-table td { padding: 10px 14px; border-bottom: 0.5px solid #f0ede8; font-size: 13px; }
+.matrix-table tr:last-child td { border-bottom: none; }
+.matrix-table .yes { color: #2e7d32; font-weight: 500; }
+.matrix-table .no { color: #bbb; }
+.matrix-table .partial { color: #e65100; }
+.highlight-row { background: #fafffe; }
+
+.section-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #888; margin: 2rem 0 1rem; }
+
+.combo-hero { background: linear-gradient(135deg, #f8f7f4, #fff); border: 2px dashed #ddd; border-radius: 12px; padding: 1.75rem; margin-bottom: 1.5rem; }
+.combo-hero h2 { font-size: 18px; font-weight: 500; margin-bottom: 8px; }
+.combo-hero .tagline { font-size: 14px; color: #555; margin-bottom: 1rem; }
+.sources-chain { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.source-chip { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 6px 12px; font-size: 13px; font-weight: 500; }
+.arrow { color: #999; font-size: 18px; }
+.login-badge { background: #1a1a1a; color: #fff; border-radius: 8px; padding: 6px 14px; font-size: 13px; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Połączenia źródeł danych z Claude — przewodnik dla klientów agencji</h1>
+  <p>Najlepsze kombinacje: jeden login = wiele narzędzi. Aktualizacja: maj 2026</p>
+</div>
+
+<div class="tab-bar">
+  <div class="tab active" onclick="showTab('warianty')">Warianty (A/B/C)</div>
+  <div class="tab" onclick="showTab('konfiguracje')">Konfiguracje krok po kroku</div>
+  <div class="tab" onclick="showTab('matrix')">Macierz możliwości</div>
+</div>
+
+<!-- ===================== WARIANTY ===================== -->
+<div class="content">
+<div id="tab-warianty" class="panel active">
+
+<div class="combo-hero">
+  <h2>Kluczowa zasada: łącz źródła przez jedno konto</h2>
+  <p class="tagline">Zamiast konfigurować każde narzędzie osobno — wybierz kombinację która daje maksimum za minimum logowań.</p>
+  <div class="sources-chain">
+    <div class="source-chip">1 konto Google (Viewer)</div>
+    <div class="arrow">→</div>
+    <div class="login-badge">google-analytics-mcp</div>
+    <div class="arrow">→</div>
+    <div class="source-chip">GA4 (wszystkie property)</div>
+  </div>
+</div>
+
+<div class="section-title">Wybierz wariant dla swojego klienta</div>
+
+<div class="variant-grid">
+
+  <!-- WARIANT A -->
+  <div class="variant-card best">
+    <div class="badge badge-best">★ Rekomendowany</div>
+    <h3>Wariant A — Natywne konektory (per platforma)</h3>
+    <p class="desc">GA4 przez natywny konektor <code>google-analytics-mcp</code> — jeden OAuth/Service Account widzi wszystkie property gdzie konto jest Viewerem. Meta Ads, Clarity i Shopify dochodzą osobnymi natywnymi konektorami.</p>
+    <div class="pill-row">
+      <span class="pill pill-ga4">GA4</span>
+      <span class="pill pill-meta">Meta Ads (osobno)</span>
+      <span class="pill pill-clarity">Clarity (osobno)</span>
+      <span class="pill pill-shopify">Shopify (osobno)</span>
+    </div>
+    <div class="what-you-get">
+      <h4>Co dostajesz</h4>
+      <div class="get-item"><span class="check">✓</span><span>GA4 — raporty, zdarzenia, lejki, segmenty (wszystkie property po jednym koncie)</span></div>
+      <div class="get-item"><span class="check">✓</span><span>Meta Ads przez natywny konektor <code>meta-ads-glov</code></span></div>
+      <div class="get-item"><span class="check">✓</span><span>Microsoft Clarity przez dedykowany MCP (token)</span></div>
+      <div class="get-item"><span class="check">✓</span><span>Shopify przez oficjalny Shopify MCP</span></div>
+      <div class="get-item"><span class="cross">○</span><span>Search Console / Google Ads — osobne konektory community (gdy potrzebne)</span></div>
+    </div>
+  </div>
+
+  <!-- WARIANT B -->
+  <div class="variant-card">
+    <div class="badge badge-ok">Dobry start</div>
+    <h3>Wariant B — Oficjalne MCP od Google i Meta</h3>
+    <p class="desc">Każde narzędzie loguje się niezależnie przez OAuth. Działa tylko w Claude Desktop (Cowork) — przez Settings → MCP Servers → Add. Bez instalacji NPM.</p>
+    <div class="pill-row">
+      <span class="pill pill-ga4">GA4</span>
+      <span class="pill pill-meta">Meta Ads</span>
+    </div>
+    <div class="what-you-get">
+      <h4>Co dostajesz</h4>
+      <div class="get-item"><span class="check">✓</span><span>Meta Ads — 29 narzędzi (kampanie, insighty, katalogi)</span></div>
+      <div class="get-item"><span class="check">✓</span><span>Prosta instalacja — tylko Settings → Add URL</span></div>
+      <div class="cross get-item"><span class="cross">○</span><span>Search Console — brak oficjalnego MCP od Google</span></div>
+      <div class="cross get-item"><span class="cross">○</span><span>Google Ads — brak oficjalnego MCP od Google</span></div>
+      <div class="cross get-item"><span class="cross">○</span><span>Tylko Cowork (Claude Desktop), nie Terminal</span></div>
+    </div>
+  </div>
+
+  <!-- WARIANT C -->
+  <div class="variant-card">
+    <div class="badge badge-hard">Zaawansowany</div>
+    <h3>Wariant C — Pełna kontrola (własne tokeny)</h3>
+    <p class="desc">Każde narzędzie podłączone przez własny token API lub service account. Dla klientów z IT, którzy chcą pełnej kontroli nad dostępami.</p>
+    <div class="pill-row">
+      <span class="pill pill-ga4">GA4</span>
+      <span class="pill pill-sc">Search Console</span>
+      <span class="pill pill-gads">Google Ads</span>
+      <span class="pill pill-meta">Meta Ads</span>
+      <span class="pill pill-clarity">Clarity</span>
+      <span class="pill pill-shopify">Shopify</span>
+    </div>
+    <div class="what-you-get">
+      <h4>Co dostajesz</h4>
+      <div class="get-item"><span class="check">✓</span><span>Pełna kontrola nad tokenami i uprawnieniami</span></div>
+      <div class="get-item"><span class="check">✓</span><span>Działa w Terminal (Claude Code) i Desktop</span></div>
+      <div class="get-item"><span class="check">✓</span><span>Można ograniczyć dostęp (read-only)</span></div>
+      <div class="cross get-item"><span class="cross">○</span><span>Wymaga Google Cloud project + service account</span></div>
+      <div class="cross get-item"><span class="cross">○</span><span>Skomplikowana konfiguracja — wymaga dewelopera</span></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="note note-success">
+  <strong>Dla większości klientów agencji → Wariant A (natywne konektory).</strong> GA4 jednym kontem Google (Viewer) widzi wszystkie property — zero warstwy pośredniej. Meta Ads wymaga osobnej autoryzacji przez Facebook, ale to też jeden klik.
+</div>
+
+</div>
+
+<!-- ===================== KONFIGURACJE ===================== -->
+<div id="tab-konfiguracje" class="panel">
+
+<div class="section-title">Krok po kroku dla każdego źródła</div>
+
+<!-- GA4 -->
+<div class="instructions">
+  <h2>🔵 GA4 — Google Analytics 4</h2>
+  <div class="note note-success"><strong>Najlepsza metoda: natywny konektor <code>google-analytics-mcp</code></strong> (aplikacja Google Cloud "eel-analytics") — działa natychmiast, testowane na GLOV.co (Property ID: 342844459)</div>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Konektor <code>google-analytics-mcp</code> jest już podłączony</h4>
+      <p>Napisz do Claude'a: <code>"Uruchom raport GA4 dla [nazwa projektu]"</code> — Claude użyje <code>mcp__google-analytics-mcp__run_report</code></p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h4>Dodaj konto klienta jako Viewer (jeśli nowy klient)</h4>
+      <p>Klient dodaje mail agencji jako <strong>Viewer</strong> w GA4 → Admin → Property Access Management. Property pojawi się w <code>get_account_summaries</code> od razu — bez nowej konfiguracji konektora.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <h4>Znajdź Property ID</h4>
+      <p>GA4 Admin → Property Settings → Property ID. Podaj je Claude'owi: <code>"Property ID: 342844459"</code></p>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Co możesz robić:</strong> raporty sesji, transakcji, konwersji, lejki per kanał, segmenty, trendy, porównania okresów, anomalie ruchu
+  </div>
+</div>
+
+<!-- SEARCH CONSOLE -->
+<div class="instructions" style="margin-top:1rem;">
+  <h2>🟢 Google Search Console</h2>
+  <div class="note"><strong>Osobny konektor community</strong> — gdy potrzebne dane SC, podłącz dedykowany MCP (np. binary ncosentino lub suganthan-gsc-mcp) przez OAuth domeny</div>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Sprawdź czy konto Google ma dostęp do Search Console</h4>
+      <p>search.google.com/search-console → zaloguj się kontem klienta → sprawdź czy widzi domeny</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h4>Podaj domenę Claude'owi</h4>
+      <p>Napisz: <code>"Pobierz dane Search Console dla glov.co z ostatnich 28 dni"</code> — Claude wywoła narzędzie konektora SC</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Co możesz robić:</strong> top queries, pozycje, kliknięcia, CTR, Core Web Vitals, indeksowanie, błędy crawlowania, mobile usability
+  </div>
+</div>
+
+<!-- MICROSOFT CLARITY -->
+<div class="instructions" style="margin-top:1rem;">
+  <h2>🟣 Microsoft Clarity</h2>
+  <div class="note"><strong>Dedykowany MCP</strong> — wymaga Data Export Token, 10 zapytań/dzień limit</div>
+  
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Pobierz Data Export Token</h4>
+      <p>clarity.microsoft.com → Settings projektu → Data export → <strong>Generate token</strong> → skopiuj token</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h4>Dodaj do claude_desktop_config.json</h4>
+      <div class="code-block"><span class="comment">// ~/Library/Application Support/Claude/claude_desktop_config.json</span>
+{
+  <span class="key">"mcpServers"</span>: {
+    <span class="key">"clarity"</span>: {
+      <span class="key">"command"</span>: <span class="val">"npx"</span>,
+      <span class="key">"args"</span>: [<span class="val">"-y"</span>, <span class="val">"@microsoft/clarity-mcp-server"</span>],
+      <span class="key">"env"</span>: {
+        <span class="key">"CLARITY_API_TOKEN"</span>: <span class="val">"TWOJ_TOKEN_TUTAJ"</span>
+      }
+    }
+  }
+}</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <h4>Restart Claude Desktop</h4>
+      <p>Zamknij i otwórz Claude Desktop — Clarity pojawi się jako dostępne narzędzie</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Co możesz robić:</strong> heatmapy, nagrania sesji, ścieżki kliknięć, rage clicks, scroll depth, dead clicks, funnel analysis
+  </div>
+</div>
+
+<!-- GOOGLE ADS -->
+<div class="instructions" style="margin-top:1rem;">
+  <h2>🔴 Google Ads</h2>
+  <div class="note"><strong>Osobny konektor</strong> — oficjalny <code>google-ads-mcp</code> (developer token) lub community cohnen/mcp-google-ads. GLOV: czeka na dostęp API do konta</div>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Sprawdź Customer ID</h4>
+      <p>ads.google.com → lewy górny róg → Customer ID (format: XXX-XXX-XXXX). GLOV: <code>169-845-2663</code></p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h4>Podaj Customer ID Claude'owi</h4>
+      <p>Napisz: <code>"Pobierz wyniki kampanii Google Ads, Customer ID: 169-845-2663"</code></p>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Co możesz robić:</strong> wyniki kampanii, grupy reklam, słowa kluczowe, ROAS, CPA, porównania, optymalizacje stawek
+  </div>
+</div>
+
+<!-- META ADS -->
+<div class="instructions" style="margin-top:1rem;">
+  <h2>🔵 Meta Ads</h2>
+  <div class="note"><strong>Metoda 1 (Cowork):</strong> Settings → MCP Servers → Add → <code>mcp.facebook.com/ads</code> → OAuth login.<br><strong>Metoda 2 (GLOV, aktywne):</strong> natywny konektor <code>meta-ads-glov</code> (token Business Manager)</div>
+  
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Opcja A: Oficjalny Meta MCP (Claude Desktop)</h4>
+      <p>Settings → zakładka MCP Servers (lub Integrations) → Add → URL: <code>mcp.facebook.com/ads</code> → zaloguj się przez Facebook OAuth</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h4>Opcja B: Natywny konektor <code>meta-ads-glov</code></h4>
+      <p>Konektor podłączony tokenem Business Manager (konto <code>act_414505328896049</code>). Napisz do Claude'a: <code>"Pokaż wyniki kampanii Meta z ostatnich 7 dni"</code></p>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Co możesz robić:</strong> insighty kampanii, performance reklam, ROAS, wydatki, zasięg, CTR, kreacje, kampanie Advantage+
+  </div>
+</div>
+
+</div>
+
+<!-- ===================== MATRIX ===================== -->
+<div id="tab-matrix" class="panel">
+
+<div class="section-title">Macierz: metoda vs możliwości</div>
+
+<table class="matrix-table">
+  <thead>
+    <tr>
+      <th>Metoda</th>
+      <th>GA4</th>
+      <th>Search Console</th>
+      <th>Google Ads</th>
+      <th>Meta Ads</th>
+      <th>Clarity</th>
+      <th>Shopify</th>
+      <th>Trudność</th>
+      <th>Działa w</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="highlight-row">
+      <td><strong>google-analytics-mcp (natywny)</strong></td>
+      <td class="yes">✓ pełny</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td>⭐ łatwe</td>
+      <td>Cowork + Terminal</td>
+    </tr>
+    <tr>
+      <td><strong>meta-ads-glov (natywny)</strong></td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="yes">✓ pełny</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td>⭐⭐ proste</td>
+      <td>Cowork + Terminal</td>
+    </tr>
+    <tr class="highlight-row">
+      <td><strong>Oficjalny Meta MCP</strong></td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="yes">✓ pełny</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td>⭐ łatwe</td>
+      <td>Cowork tylko</td>
+    </tr>
+    <tr>
+      <td><strong>Clarity MCP (NPM)</strong></td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="yes">✓ pełny</td>
+      <td class="no">—</td>
+      <td>⭐⭐ proste</td>
+      <td>Cowork + Terminal</td>
+    </tr>
+    <tr class="highlight-row">
+      <td><strong>Shopify MCP (oficjalny)</strong></td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="yes">✓ pełny</td>
+      <td>⭐ łatwe</td>
+      <td>Cowork + Terminal</td>
+    </tr>
+    <tr>
+      <td><strong>Pipeboard Meta MCP</strong></td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="yes">✓ rozbudowany</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td>⭐⭐⭐ średnie</td>
+      <td>Cowork + Terminal</td>
+    </tr>
+    <tr class="highlight-row">
+      <td><strong>Google Service Account</strong></td>
+      <td class="yes">✓</td>
+      <td class="yes">✓</td>
+      <td class="yes">✓</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td class="no">—</td>
+      <td>⭐⭐⭐⭐⭐ trudne</td>
+      <td>Terminal głównie</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="section-title" style="margin-top:2rem;">Rekomendacje dla typowych klientów</div>
+
+<div class="variant-grid">
+  <div style="background:#fff; border-radius:12px; border:1px solid #e5e3dc; padding:1.25rem;">
+    <div class="badge badge-best" style="margin-bottom:10px;">Startup / SMB</div>
+    <h3 style="font-size:15px; margin-bottom:8px;">google-analytics-mcp + Clarity MCP</h3>
+    <p style="font-size:13px; color:#555;">GA4 przez natywny konektor (konto Viewer). Clarity przez NPM token. Opcjonalnie Meta Ads przez konektor <code>meta-ads-glov</code>. Gotowe w &lt;30 min.</p>
+  </div>
+  <div style="background:#fff; border-radius:12px; border:1px solid #e5e3dc; padding:1.25rem;">
+    <div class="badge badge-ok" style="margin-bottom:10px;">E-commerce</div>
+    <h3 style="font-size:15px; margin-bottom:8px;">google-analytics-mcp + Shopify MCP + Meta</h3>
+    <p style="font-size:13px; color:#555;">Pełne połączenie: analytics (GA4 przez natywny konektor), sklep (Shopify MCP), reklamy (Meta Ads przez <code>meta-ads-glov</code> lub oficjalny MCP). Pełen obraz, każda platforma natywnie.</p>
+  </div>
+  <div style="background:#fff; border-radius:12px; border:1px solid #e5e3dc; padding:1.25rem;">
+    <div class="badge badge-hard" style="margin-bottom:10px;">Enterprise / Agencja</div>
+    <h3 style="font-size:15px; margin-bottom:8px;">Własne service accounts (per klient)</h3>
+    <p style="font-size:13px; color:#555;">Każdy klient ma własny service account Google dodany jako Viewer do swojej property GA4. Izolacja przez <code>property_id</code> w zapytaniu. Pełna kontrola, audytowalne, headless dla automatyzacji.</p>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+</script>
+
+</body>
+</html>
