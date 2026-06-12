@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Mega Audit (4 kluczowe zakładki)</title>
+<style>
+
+:root {
+  --orange: #F59E0B;
+  --dark: #1E293B;
+  --light: #F8FAFC;
+  --darker: #0F172A;
+  --pink: #EC4899;
+  --taktyki-bg: #2C3E50;
+  --purple: #8B5CF6;
+  --coral: #F07857;
+  --coral-light: #FFF0EB;
+  --green: #2ECC71;
+  --green-dark: #27AE60;
+  --green-light: #E8FAF2;
+  --amber: #F39C12;
+  --amber-dark: #D68910;
+  --amber-light: #FEF9EC;
+  --red: #E74C3C;
+  --red-light: #FEECEB;
+  --slate: #2C3E50;
+  --blue: #2980B9;
+  --blue-light: #EBF5FB;
+  --text: #3A3A3A;
+  --muted: #888;
+  --border: #EDEBE8;
+  --radius: 14px;
+  --shadow: 0 2px 14px rgba(0,0,0,.06);
+  --bg-white: #FFFFFF;
+  --bg-warm: #F9F8F6;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #F4F3F0;
+  color: var(--text);
+  line-height: 1.65;
+}
+
+/* ─── MEGA HEADER ─── */
+.mega-header {
+  background: linear-gradient(135deg, #2C3E50 0%, #1a252f 100%);
+  color: #fff;
+  padding: 48px 40px 36px;
+}
+.mega-header-inner { max-width: 1080px; margin: 0 auto; }
+.mega-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--coral);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .9px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+.mega-header h1 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+  line-height: 1.2;
+}
+.mega-header h1 span { color: var(--coral); }
+.mega-header-meta {
+  margin-top: 12px;
+  font-size: 13px;
+  color: rgba(255,255,255,.5);
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.mega-header-meta strong { color: rgba(255,255,255,.82); }
+
+/* ─── MEGA TAB NAVIGATION ─── */
+.mega-tab-bar {
+  background: #fff;
+  border-bottom: 2px solid var(--border);
+  padding: 0 40px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+.mega-tab-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  padding: 16px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  white-space: nowrap;
+  transition: all .15s;
+  font-family: inherit;
+}
+.mega-tab-btn:hover { color: var(--text); background: #F9F8F6; }
+.mega-tab-btn.active { color: var(--coral); border-bottom-color: var(--coral); }
+.mega-tab-panel { display: none; }
+.mega-tab-panel.active { display: block; }
+
+/* ─── KPI STRIP ─── */
+.kpi-strip { background: var(--slate); padding: 0 40px; }
+.kpi-strip-inner {
+  max-width: 1080px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 0; border-top: 1px solid rgba(255,255,255,.08);
+}
+.kpi-item { padding: 20px 14px; border-right: 1px solid rgba(255,255,255,.08); text-align: center; }
+.kpi-item:last-child { border-right: none; }
+.kpi-item .k-label { font-size: 10px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: rgba(255,255,255,.45); margin-bottom: 6px; }
+.kpi-item .k-value { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -.5px; line-height: 1; }
+.kpi-item .k-sub { font-size: 10px; color: rgba(255,255,255,.32); margin-top: 4px; }
+.kpi-item.k-warn .k-value { color: var(--amber); }
+.kpi-item.k-danger .k-value { color: #FF6B6B; }
+.kpi-item.k-good .k-value { color: #5DECA0; }
+
+/* ─── ALERT BANNER ─── */
+.alert-top { background: #FFF2F1; border-bottom: 3px solid var(--red); padding: 16px 40px; }
+.alert-top-inner { max-width: 1080px; margin: 0 auto; display: flex; gap: 14px; align-items: center; }
+.alert-top .alert-icon { font-size: 20px; flex-shrink: 0; }
+.alert-top p { font-size: 13.5px; color: #8B1A14; }
+.alert-top p strong { font-weight: 700; }
+
+/* ─── SEGMENT OKNA WYSTAWOWEGO ─── */
+.okno-wystawowe {
+  background: linear-gradient(135deg, #2C3E50, #34495e);
+  color: #fff;
+  padding: 28px 40px;
+}
+.okno-wystawowe-inner { max-width: 1080px; margin: 0 auto; display: flex; gap: 40px; align-items: center; }
+.okno-stat { text-align: center; flex-shrink: 0; }
+.okno-stat .os-num { font-size: 52px; font-weight: 900; letter-spacing: -2px; color: var(--coral); line-height: 1; }
+.okno-stat .os-label { font-size: 11px; color: rgba(255,255,255,.55); margin-top: 6px; text-transform: uppercase; letter-spacing: .5px; }
+.okno-desc h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.okno-desc p { font-size: 13.5px; color: rgba(255,255,255,.75); line-height: 1.6; }
+
+/* ─── ANALYSIS BLOCKS ─── */
+.block { padding: 52px 40px; border-bottom: 1px solid var(--border); }
+.block.bg-white { background: var(--bg-white); }
+.block.bg-warm { background: var(--bg-warm); }
+.block-inner { max-width: 1080px; margin: 0 auto; }
+.block-title { font-size: 24px; font-weight: 800; color: var(--slate); letter-spacing: -.4px; margin-bottom: 6px; display: flex; align-items: center; gap: 12px; }
+.block-title-badge { font-size: 10px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; background: #EEF2F7; color: var(--muted); }
+.block-title-badge.b-new { background: var(--coral-light); color: var(--coral); }
+.block-what { margin-top: 4px; margin-bottom: 24px; font-size: 14px; color: var(--muted); max-width: 780px; line-height: 1.6; }
+.data-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+
+/* ─── CONCLUSION + RECO ─── */
+.conclusion { margin-top: 22px; padding: 18px 22px; border-radius: var(--radius); border-left: 4px solid var(--slate); background: #EEF2F7; font-size: 14px; color: var(--slate); line-height: 1.6; }
+.conclusion .c-label { font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.conclusion.c-red { border-left-color: var(--red); background: var(--red-light); }
+.conclusion.c-red p { color: #7B1A14; }
+.conclusion.c-red .c-label { color: var(--red); }
+.conclusion.c-green { border-left-color: var(--green-dark); background: var(--green-light); }
+.conclusion.c-green p { color: #1B5E36; }
+.conclusion.c-green .c-label { color: var(--green-dark); }
+.conclusion.c-amber { border-left-color: var(--amber-dark); background: var(--amber-light); }
+.conclusion.c-amber p { color: #6B4C0C; }
+.conclusion.c-amber .c-label { color: var(--amber-dark); }
+.reco-box { margin-top: 12px; padding: 16px 20px; border-radius: var(--radius); background: #FAFAFA; border: 1.5px solid var(--border); font-size: 14px; display: flex; gap: 14px; align-items: flex-start; }
+.reco-box .r-label { font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--coral); margin-bottom: 4px; }
+.reco-box .r-icon { width: 34px; height: 34px; border-radius: 50%; background: var(--coral-light); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+.reco-box p { font-size: 13px; color: var(--text); line-height: 1.55; }
+.reco-box strong { color: var(--slate); font-weight: 700; }
+
+/* ─── FUNNEL ─── */
+.funnel { margin: 4px 0; }
+.funnel-step { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+.funnel-step-label { width: 180px; font-size: 13px; font-weight: 600; color: var(--slate); flex-shrink: 0; }
+.funnel-bar-track { flex: 1; background: #EEECEA; border-radius: 8px; height: 42px; overflow: hidden; }
+.funnel-bar-fill { height: 100%; border-radius: 8px; display: flex; align-items: center; padding: 0 14px; font-weight: 700; font-size: 13px; color: #fff; min-width: 70px; white-space: nowrap; }
+.funnel-step-right { width: 100px; text-align: right; flex-shrink: 0; }
+.funnel-step-count { font-size: 13px; font-weight: 700; color: var(--slate); }
+.funnel-step-drop { font-size: 11px; font-weight: 700; margin-top: 2px; }
+.drop-bad { color: var(--red); }
+.drop-ok { color: var(--green-dark); }
+.drop-warn { color: var(--amber-dark); }
+
+/* ─── TABLE ─── */
+.data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border); }
+.data-table th { background: #F7F5F2; font-size: 10.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); padding: 11px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+.data-table td { padding: 11px 16px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: #FAFAF8; }
+.data-table td.num { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.flag-red { color: var(--red); font-weight: 700; }
+.flag-green { color: var(--green-dark); font-weight: 700; }
+.flag-amber { color: var(--amber-dark); font-weight: 700; }
+.cr-badge { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+.cr-hot { background: var(--green-light); color: var(--green-dark); }
+.cr-ok { background: var(--amber-light); color: var(--amber-dark); }
+.cr-cold { background: var(--red-light); color: var(--red); }
+.prod-badge { font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 8px; margin-left: 6px; vertical-align: middle; }
+.badge-addon { background: var(--green-light); color: var(--green-dark); }
+.badge-problem { background: var(--red-light); color: var(--red); }
+.badge-premium { background: var(--blue-light); color: var(--blue); }
+.badge-new { background: var(--coral-light); color: var(--coral); }
+
+/* ─── DEVICE CARDS ─── */
+.device-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.device-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+.device-card h4 { font-size: 15px; font-weight: 700; color: var(--slate); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.device-row-stat { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
+.device-row-stat .dl { color: var(--muted); }
+.device-row-stat .dv { font-weight: 700; }
+.mini-bar-track { height: 6px; background: #EEECEA; border-radius: 4px; overflow: hidden; margin: 4px 0 10px; }
+.mini-bar-fill { height: 100%; border-radius: 4px; }
+
+/* ─── ZERO ALERT ─── */
+.zero-alert { text-align: center; padding: 32px 24px; background: var(--red); border-radius: var(--radius); color: #fff; margin-bottom: 16px; }
+.zero-alert .za-num { font-size: 64px; font-weight: 900; letter-spacing: -4px; line-height: 1; }
+.zero-alert .za-desc { font-size: 15px; opacity: .85; margin-top: 8px; }
+
+/* ─── PLAN DZIAŁANIA ─── */
+.plan-grid { display: flex; flex-direction: column; gap: 10px; }
+.plan-item { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; display: flex; gap: 16px; align-items: flex-start; box-shadow: var(--shadow); }
+.plan-num { width: 30px; height: 30px; border-radius: 50%; background: var(--coral); color: #fff; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.plan-num.p-critical { background: var(--red); }
+.plan-num.p-high { background: var(--amber-dark); }
+.plan-num.p-medium { background: var(--green-dark); }
+.plan-body h5 { font-size: 14px; font-weight: 700; color: var(--slate); margin-bottom: 4px; }
+.plan-body p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.plan-body .plan-meta { font-size: 11.5px; color: var(--muted); margin-top: 5px; }
+.plan-body .plan-meta strong { color: var(--slate); font-weight: 600; }
+.plan-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; margin-left: 8px; vertical-align: middle; }
+.tag-critical { background: var(--red-light); color: var(--red); }
+.tag-high { background: var(--amber-light); color: var(--amber-dark); }
+.tag-medium { background: var(--green-light); color: var(--green-dark); }
+
+/* ─── TAB 4: LIVE DAILY ─── */
+.live-kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+.live-kpi-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow); }
+.live-kpi-card h5 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin-bottom: 12px; }
+.live-kpi-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; font-size: 13px; }
+.live-kpi-row .lk-l { color: var(--muted); font-size: 12px; }
+.live-kpi-row .lk-v { font-size: 22px; font-weight: 800; color: var(--slate); letter-spacing: -.5px; }
+.live-kpi-row .lk-v.dash { color: #bbb; font-size: 18px; }
+.live-kpi-delta { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+.delta-pos { background: var(--green-light); color: var(--green-dark); }
+.delta-neg { background: var(--red-light); color: var(--red); }
+.delta-neu { background: #F0F0F0; color: var(--muted); }
+
+/* ─── TAB 5: VISUAL × GA4 ─── */
+.vga4-block { padding: 52px 40px; border-bottom: 1px solid var(--border); }
+.vga4-block:nth-child(odd) { background: var(--bg-white); }
+.vga4-block:nth-child(even) { background: var(--bg-warm); }
+.vga4-inner { max-width: 1080px; margin: 0 auto; }
+.vga4-priority { font-size: 10px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: var(--coral); margin-bottom: 8px; }
+.vga4-title { font-size: 22px; font-weight: 800; color: var(--slate); letter-spacing: -.3px; margin-bottom: 6px; }
+.vga4-subtitle { font-size: 13.5px; color: var(--muted); margin-bottom: 28px; }
+.vga4-split { display: flex; gap: 32px; align-items: flex-start; }
+.vga4-img { flex: 0 0 45%; }
+.vga4-img img { width: 100%; border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,.12); max-height: 400px; object-fit: cover; object-position: top; display: block; }
+.vga4-img .img-label { font-size: 11px; color: var(--muted); margin-top: 8px; text-align: center; }
+.vga4-comment { flex: 0 0 55%; }
+.vga4-kpi-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.vga4-kpi-pill { background: var(--coral-light); color: var(--coral); border-radius: 20px; padding: 6px 14px; font-size: 12.5px; font-weight: 700; }
+.vga4-kpi-pill.pill-red { background: var(--red-light); color: var(--red); }
+.vga4-kpi-pill.pill-green { background: var(--green-light); color: var(--green-dark); }
+.vga4-kpi-pill.pill-amber { background: var(--amber-light); color: var(--amber-dark); }
+.vga4-findings { list-style: none; }
+.vga4-findings li { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; display: flex; gap: 10px; }
+.vga4-findings li:last-child { border-bottom: none; }
+.vga4-findings li .fi-icon { flex-shrink: 0; font-size: 16px; }
+
+/* ─── TAB 6: SUMA STRAT ─── */
+.suma-header { background: #1a252f; color: #fff; padding: 52px 40px 44px; }
+.suma-header-inner { max-width: 1080px; margin: 0 auto; }
+.suma-header h2 { font-size: 44px; font-weight: 900; letter-spacing: -2px; color: var(--coral); line-height: 1; margin-bottom: 8px; }
+.suma-header p { font-size: 16px; color: rgba(255,255,255,.55); }
+.suma-block { padding: 52px 40px; background: #1e2d3d; }
+.suma-block-inner { max-width: 1080px; margin: 0 auto; }
+.suma-table { width: 100%; border-collapse: collapse; }
+.suma-table th { font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: rgba(255,255,255,.35); padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,.08); text-align: left; }
+.suma-table td { padding: 14px 16px; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: middle; color: rgba(255,255,255,.88); }
+.suma-table tr:last-child td { border-bottom: none; }
+.suma-table td.suma-num { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.suma-table .priority-tag { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 10px; text-transform: uppercase; letter-spacing: .4px; }
+.pt-long { background: rgba(255,255,255,.08); color: rgba(255,255,255,.45); }
+.pt-high { background: rgba(231,76,60,.25); color: #FF8B7B; }
+.pt-medium { background: rgba(243,156,18,.2); color: #F9C74F; }
+.pt-low { background: rgba(46,204,113,.15); color: #7DECB0; }
+.suma-total-row td { padding-top: 20px; border-top: 2px solid rgba(255,255,255,.15); font-size: 15px; }
+.suma-total-num { font-size: 22px !important; font-weight: 900 !important; color: var(--coral) !important; }
+.suma-plan-block { padding: 52px 40px; background: #16212e; }
+.suma-plan-inner { max-width: 1080px; margin: 0 auto; }
+.suma-plan-title { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 24px; letter-spacing: -.3px; }
+.suma-plan-phases { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+.suma-phase { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius); padding: 24px; }
+.suma-phase h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--coral); margin-bottom: 12px; }
+.suma-phase ul { list-style: none; }
+.suma-phase li { font-size: 13px; color: rgba(255,255,255,.7); padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.05); line-height: 1.5; }
+.suma-phase li:last-child { border-bottom: none; }
+.suma-phase li::before { content: "→ "; color: var(--coral); font-weight: 700; }
+
+/* ─── FOOTER ─── */
+.mega-footer { background: var(--slate); color: rgba(255,255,255,.45); padding: 24px 40px; font-size: 12px; text-align: center; }
+.mega-footer strong { color: rgba(255,255,255,.7); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .mega-header { padding: 32px 20px 24px; }
+  .mega-header h1 { font-size: 24px; }
+  .mega-tab-bar { padding: 0 16px; }
+  .block { padding: 36px 20px; }
+  .vga4-block { padding: 36px 20px; }
+  .kpi-strip-inner { grid-template-columns: repeat(4, 1fr); }
+  .live-kpi-grid { grid-template-columns: 1fr 1fr; }
+  .vga4-split { flex-direction: column; }
+  .vga4-img { flex: none; width: 100%; }
+  .vga4-comment { flex: none; width: 100%; }
+  .device-row { grid-template-columns: 1fr; }
+  .suma-plan-phases { grid-template-columns: 1fr; }
+  .suma-table td, .suma-table th { padding: 10px 12px; font-size: 12px; }
+}
+
+
+
+
+
+/* === TIER1 GA4 STYLES === */
+.header { background: linear-gradient(135deg, #2C3E50 0%, #1a252f 100%); color: #fff; padding: 52px 40px 44px; }
+.header-inner { max-width: 980px; margin: 0 auto; }
+.badge { display:inline-flex;align-items:center;gap:8px;background:var(--coral);color:#fff;font-size:11px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:18px; }
+.header h1 { font-size:34px;font-weight:800;letter-spacing:-.5px;line-height:1.2; }
+.header h1 span { color:var(--coral); }
+.header-meta { margin-top:14px;font-size:13.5px;color:rgba(255,255,255,.55);display:flex;gap:28px;flex-wrap:wrap; }
+.header-meta strong { color:rgba(255,255,255,.88); }
+.kpi-strip { background:var(--slate);padding:0 40px; }
+.kpi-strip-inner { max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(7,1fr);gap:0;border-top:1px solid rgba(255,255,255,.08); }
+.kpi-item { padding:22px 16px;border-right:1px solid rgba(255,255,255,.08);text-align:center; }
+.kpi-item:last-child { border-right:none; }
+.kpi-item .k-label { font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:6px; }
+.kpi-item .k-value { font-size:22px;font-weight:800;color:#fff;letter-spacing:-.5px;line-height:1; }
+.kpi-item .k-sub { font-size:10.5px;color:rgba(255,255,255,.35);margin-top:4px; }
+.kpi-item.k-warn .k-value { color:var(--amber); }
+.kpi-item.k-danger .k-value { color:#FF6B6B; }
+.kpi-item.k-good .k-value { color:#5DECA0; }
+.alert-top { background:#FFF2F1;border-bottom:3px solid var(--red);padding:18px 40px; }
+.alert-top-inner { max-width:980px;margin:0 auto;display:flex;gap:14px;align-items:center; }
+.alert-top .alert-icon { font-size:20px;flex-shrink:0; }
+.alert-top p { font-size:13.5px;color:#8B1A14; }
+.alert-top p strong { font-weight:700; }
+.block { padding:56px 40px;border-bottom:1px solid var(--border); }
+.block.bg-white { background:var(--bg-white); }
+.block.bg-warm { background:var(--bg-warm); }
+.block-inner { max-width:980px;margin:0 auto; }
+.block-title { font-size:26px;font-weight:800;color:var(--slate);letter-spacing:-.4px;margin-bottom:6px;display:flex;align-items:center;gap:12px; }
+.block-title-badge { font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:#EEF2F7;color:var(--muted); }
+.block-what { margin-top:4px;margin-bottom:28px;font-size:14px;color:var(--muted);max-width:720px;line-height:1.6; }
+.data-label { font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:12px; }
+.conclusion { margin-top:24px;padding:18px 22px;border-radius:var(--radius);border-left:4px solid var(--slate);background:#EEF2F7;font-size:14px;color:var(--slate);line-height:1.6; }
+.conclusion .c-label { font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:6px; }
+.conclusion.c-red { border-left-color:var(--red);background:var(--red-light); }
+.conclusion.c-red p { color:#7B1A14; }
+.conclusion.c-red .c-label { color:var(--red); }
+.conclusion.c-green { border-left-color:var(--green-dark);background:var(--green-light); }
+.conclusion.c-green p { color:#1B5E36; }
+.conclusion.c-green .c-label { color:var(--green-dark); }
+.conclusion.c-amber { border-left-color:var(--amber-dark);background:var(--amber-light); }
+.conclusion.c-amber p { color:#6B4C0C; }
+.conclusion.c-amber .c-label { color:var(--amber-dark); }
+.reco-box { margin-top:14px;padding:18px 22px;border-radius:var(--radius);background:#FAFAFA;border:1.5px solid var(--border);font-size:14px;display:flex;gap:14px;align-items:flex-start; }
+.reco-box .r-label { font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--coral);margin-bottom:5px; }
+.reco-box .r-icon { width:36px;height:36px;border-radius:50%;background:var(--coral-light);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:1px; }
+.reco-box p { font-size:13.5px;color:var(--text);line-height:1.55; }
+.reco-box strong { color:var(--slate);font-weight:700; }
+.funnel { margin:4px 0; }
+.funnel-step { display:flex;align-items:center;gap:14px;margin-bottom:10px; }
+.funnel-step-label { width:190px;font-size:13px;font-weight:600;color:var(--slate);flex-shrink:0; }
+.funnel-bar-track { flex:1;background:#EEECEA;border-radius:8px;height:44px;overflow:hidden;position:relative; }
+.funnel-bar-fill { height:100%;border-radius:8px;display:flex;align-items:center;padding:0 14px;font-weight:700;font-size:13px;color:#fff;min-width:70px;white-space:nowrap; }
+.funnel-step-right { width:100px;text-align:right;flex-shrink:0; }
+.funnel-step-count { font-size:13px;font-weight:700;color:var(--slate); }
+.funnel-step-drop { font-size:11.5px;font-weight:700;margin-top:2px; }
+.drop-bad { color:var(--red); }
+.drop-ok { color:var(--green-dark); }
+.drop-warn { color:var(--amber-dark); }
+.device-row { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
+.device-card { background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow); }
+.device-card h4 { font-size:15px;font-weight:700;color:var(--slate);margin-bottom:14px;display:flex;align-items:center;gap:8px; }
+.device-row-stat { display:flex;justify-content:space-between;margin-bottom:7px;font-size:13px; }
+.device-row-stat .dl { color:var(--muted); }
+.device-row-stat .dv { font-weight:700; }
+.mini-bar-track { height:7px;background:#EEECEA;border-radius:4px;overflow:hidden;margin-top:5px;margin-bottom:10px; }
+.mini-bar-fill { height:100%;border-radius:4px; }
+.zero-alert { text-align:center;padding:36px 24px;background:var(--red);border-radius:var(--radius);color:#fff;margin-bottom:16px; }
+.zero-alert .za-num { font-size:72px;font-weight:900;letter-spacing:-4px;line-height:1; }
+.zero-alert .za-desc { font-size:15px;opacity:.85;margin-top:8px;max-width:480px;margin-left:auto;margin-right:auto; }
+.plan-grid { display:flex;flex-direction:column;gap:10px; }
+.plan-item { background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;display:flex;gap:16px;align-items:flex-start;box-shadow:var(--shadow); }
+.plan-num { width:32px;height:32px;border-radius:50%;background:var(--coral);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+.plan-num.p-critical { background:var(--red); }
+.plan-num.p-high { background:var(--amber); }
+.plan-num.p-medium { background:var(--green-dark); }
+.plan-body h5 { font-size:14.5px;font-weight:700;color:var(--slate);margin-bottom:4px; }
+.plan-body p { font-size:13px;color:var(--muted);line-height:1.55; }
+.plan-tag { display:inline-block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle; }
+.tag-critical { background:var(--red-light);color:var(--red); }
+.tag-high { background:var(--amber-light);color:var(--amber-dark); }
+.tag-medium { background:var(--green-light);color:var(--green-dark); }
+.cr-badge { display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:700; }
+.cr-hot { background:var(--green-light);color:var(--green-dark); }
+.cr-ok { background:var(--amber-light);color:var(--amber-dark); }
+.cr-cold { background:var(--red-light);color:var(--red); }
+.flag-red { color:var(--red);font-weight:700; }
+.flag-green { color:var(--green-dark);font-weight:700; }
+.flag-amber { color:var(--amber-dark);font-weight:700; }
+
+/* ── Inner tabs (Mapping sklepu / Mapping Kontentu) ── */
+.tabs { display:flex; gap:2px; margin-bottom:24px; border-bottom:1px solid var(--border); }
+.tab-btn { background:none; border:none; color:var(--muted); padding:9px 16px; font-size:13px; font-weight:500; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; transition:all .15s; border-radius:6px 6px 0 0; }
+.tab-btn:hover { color:var(--text); background:var(--surface); }
+.tab-btn.active { color:var(--accent); border-bottom-color:var(--accent); background:var(--surface); }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+</style>
+</head>
+<body>
+<a href="GLOV_HUB.html" style="position:fixed;top:12px;left:12px;z-index:99999;background:#7c5cff;color:#fff;text-decoration:none;padding:7px 13px;border-radius:8px;font:600 12px sans-serif">← HUB</a>
+
+<!-- ═══ MEGA HEADER ═══ -->
+<div class="mega-header">
+  <div class="mega-header-inner">
+    <div class="mega-badge">EEL · Mega Audit · 6 zakładek</div>
+    <h1>GLOV Poland <span>— Raport Aktywacyjny</span></h1>
+    <div class="mega-header-meta">
+      <span><strong>Sklep:</strong> glov.co</span>
+      <span><strong>Property:</strong> 342844459 (PLN / Warszawa)</span>
+      <span><strong>Okres:</strong> 90 dni — luty–maj 2026</span>
+      <span><strong>Wygenerowano:</strong> 2026-05-19</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MEGA TAB NAVIGATION ═══ -->
+<div class="mega-tab-bar">
+  
+  
+  <button class="active mega-tab-btn" onclick="switchMegaTab('tab3',this)">&#128200; GA4 Analiza Startowa</button>
+  <button class="mega-tab-btn" onclick="switchMegaTab('tab4',this)">&#9889; Live Daily</button>
+  <button class="mega-tab-btn" onclick="switchMegaTab('tab5',this)">&#128248; Wizualny × GA4</button>
+  <button class="mega-tab-btn" onclick="switchMegaTab('tab6',this)">&#128184; SUMA STRAT</button>
+</div>
+
+<!-- ═══ TAB 1: AUDYT WIZUALNY ═══ -->
+<!-- /mega-tab1 -->
+
+
+<!-- /mega-tab2 -->
+
+
+<div id="mega-tab3" class="active mega-tab-panel">
+<!-- HEADER -->
+<div class="header" style="background:linear-gradient(135deg,#2C3E50 0%,#1a252f 100%);">
+  <div class="header-inner">
+    <div class="badge">EEL · GA4 Analiza Startowa</div>
+    <h1>GLOV Poland <span>— Analiza GA4 R01–R09</span></h1>
+    <div class="header-meta">
+      <span><strong>Sklep:</strong> glov.co</span>
+      <span><strong>Property:</strong> 342844459 (PLN / Warszawa)</span>
+      <span><strong>Okres:</strong> 90 dni — lut–maj 2026</span>
+      <span><strong>Dane pobrane:</strong> 20 maja 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- KPI STRIP -->
+<div class="kpi-strip">
+  <div class="kpi-strip-inner">
+    <div class="kpi-item"><div class="k-label">Sesje</div><div class="k-value">85 215</div><div class="k-sub">90 dni łącznie</div></div>
+    <div class="kpi-item k-warn"><div class="k-label">CR całkowity</div><div class="k-value">1.90%</div><div class="k-sub">1 619 zakupów</div></div>
+    <div class="kpi-item k-good"><div class="k-label">Revenue</div><div class="k-value">237 745</div><div class="k-sub">PLN łącznie</div></div>
+    <div class="kpi-item"><div class="k-label">AOV</div><div class="k-value">147 PLN</div><div class="k-sub">per zamówienie</div></div>
+    <div class="kpi-item k-danger"><div class="k-label">Bounce Rate</div><div class="k-value">47.5%</div><div class="k-sub">eng. rate 52.5%</div></div>
+    <div class="kpi-item k-danger"><div class="k-label">ATC Sesje</div><div class="k-value">7.7%</div><div class="k-sub">6 569 sesji z ATC</div></div>
+    <div class="kpi-item"><div class="k-label">Checkout Sesje</div><div class="k-value">3 275</div><div class="k-sub">begin_checkout</div></div>
+  </div>
+</div>
+
+<!-- ALERT BANNER -->
+<div class="alert-top">
+  <div class="alert-top-inner">
+    <div class="alert-icon">🚨</div>
+    <p><strong>3 krytyczne blokery:</strong> View→ATC drop 82.2% (największy leak) &nbsp;·&nbsp; rutyna-coolnails: 3 021 sesji, CR 0.10% — strona bez konwersji &nbsp;·&nbsp; Internal search: 0% CR ze wszystkich fraz. Każdy z nich ma konkretne działanie — patrz Plan Działania.</p>
+  </div>
+</div>
+
+<!-- R01 — LEJEK STARTOWY -->
+<div class="block bg-white">
+  <div class="block-inner">
+    <div class="block-title">R01 — Lejek Startowy <span class="block-title-badge">SESJE</span></div>
+    <div class="block-what">Gdzie shopper odpada? Closed funnel mierzy sekwencję kroków w jednej sesji — od wejścia na stronę przez obejrzenie produktu, ATC, checkout aż do zakupu.</div>
+    <div class="data-label">Closed funnel · sesja sekwencyjna · 90 dni</div>
+    <div class="funnel">
+      <div class="funnel-step">
+        <div class="funnel-step-label">Sesje</div>
+        <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:100%;background:#2C3E50;">85 215</div></div>
+        <div class="funnel-step-right"><div class="funnel-step-count">85 215</div><div class="funnel-step-drop" style="color:var(--muted);">start</div></div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-step-label">View Item</div>
+        <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:43.3%;background:#5D8AA8;">36 938</div></div>
+        <div class="funnel-step-right"><div class="funnel-step-count">36 938</div><div class="funnel-step-drop drop-warn">↓ 56.7% sesji</div></div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-step-label">Add to Cart</div>
+        <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:7.7%;background:#E74C3C;min-width:80px;">6 569</div></div>
+        <div class="funnel-step-right"><div class="funnel-step-count">6 569</div><div class="funnel-step-drop drop-bad">↓ <strong>82.2%!</strong></div></div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-step-label">Begin Checkout</div>
+        <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:3.8%;background:#E67E22;min-width:70px;">3 275</div></div>
+        <div class="funnel-step-right"><div class="funnel-step-count">3 275</div><div class="funnel-step-drop drop-ok">↓ 50.2%</div></div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-step-label">Purchase</div>
+        <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:1.8%;background:#27AE60;min-width:65px;">1 552</div></div>
+        <div class="funnel-step-right"><div class="funnel-step-count">1 552</div><div class="funnel-step-drop drop-ok">↓ 52.6%</div></div>
+      </div>
+    </div>
+    <div class="conclusion c-red">
+      <div class="c-label">Główny wniosek</div>
+      <p><strong>82.2% użytkowników widzi produkt i nie dodaje do koszyka</strong> — to główny leak konwersji. 30 369 sesji obejrzało produkt i zniknęło. Przy ATC rate +2pp generowałoby ok. <strong>+40 000 PLN/mies więcej</strong>. Checkout→Purchase (52.6%) do poprawy — prawdopodobnie koszt dostawy jako szok cenowy.</p>
+    </div>
+    <div class="reco-box">
+      <div class="r-icon">⚙️</div>
+      <div><div class="r-label">Rekomendacja</div><p><strong>Quick Add to Cart</strong> na tilach — bez przechodzenia na PDP. Dev + PM GLOV, 7 dni. Miernik: ATC sesje &gt; 10%. Równolegle: Clarity recording na PDP — co robią przed opuszczeniem.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- R02 — PRODUKTY PERFORMANCE -->
+<div class="block bg-warm">
+  <div class="block-inner">
+    <div class="block-title">R02 — Produkty Performance <span class="block-title-badge">LEJEK PER PRODUKT</span></div>
+    <div class="block-what">Pełna ścieżka per produkt: widoki → dodanie do koszyka → zakup. Sortuj wg 4 metryk — odkryj produkty z luką (wysokie widoki, niski ATC) lub niskim domknięciem koszyka.</div>
+    <div class="data-label">itemsViewed + itemsAddedToCart + itemsPurchased · dimension: itemName · 90 dni (dane live z GA4)</div>
+
+    <style>
+      .psb{padding:6px 14px;border:1.5px solid #2C3E50;background:#fff;color:#2C3E50;border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;transition:all 0.15s;margin-bottom:4px;}
+      .psb:hover{background:#2C3E50;color:#fff;}
+      .psb.psa{background:#2C3E50;color:#fff;}
+      .cr-va{color:#E67E22;font-weight:700;}
+      .cr-ap{color:#27AE60;font-weight:700;}
+    </style>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 16px;">
+      <button onclick="sortProd('purchases')" class="psb psa" id="psb-purchases">🏆 Top sprzedaż</button>
+      <button onclick="sortProd('views')" class="psb" id="psb-views">👁 Top ruch</button>
+      <button onclick="sortProd('cr_va')" class="psb" id="psb-cr-va">🛒 Top CR wizyta→ATC</button>
+      <button onclick="sortProd('cr_ap')" class="psb" id="psb-cr-ap">💰 Top CR ATC→zakup</button>
+    </div>
+
+    <table class="data-table" id="prod-table">
+      <thead><tr>
+        <th>#</th><th>Produkt</th>
+        <th class="num">Widoki</th>
+        <th class="num">ATC</th>
+        <th class="num">Zakupy</th>
+        <th class="num">Revenue (PLN)</th>
+        <th class="num">CR viz→ATC</th>
+        <th class="num">CR ATC→zak</th>
+      </tr></thead>
+      <tbody id="prod-tbody"></tbody>
+    </table>
+
+    <div class="conclusion c-amber">
+      <div class="c-label">Główny wniosek</div>
+      <p><strong>Tarka-pumeks: CR wizyta→ATC 34.5% — najlepszy w katalogu</strong>, podczas gdy Luna Eye ma 57% więcej widoków ale tylko 15.1% CR. Sleeping Beauty: 5 450 widoków, CR ATC 6.4% — duże straty ruchu. Rękawiczka do demakijażu: 42.2% CR wizyta→ATC = wzorzec PDP do przeniesienia na inne produkty.</p>
+    </div>
+    <div class="reco-box">
+      <div class="r-icon">⚙️</div>
+      <div><div class="r-label">Rekomendacja</div><p><strong>Clarity recording na PDP Luna Eye</strong> — 8 103 widoków, CR viz→ATC tylko 15.1%. Porównaj layout Rękawiczki (42.2% CR) z Luną i przenieś wzorzec. Sleeping Beauty: 5 450 widoków i 6.4% ATC → dodaj sticky CTA + mini-testimonials pod fold.</p></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+const PROD=[
+  {n:'Tarka-pumeks do stóp z nano szkła GLOV®',v:5178,a:1787,p:570,r:22659},
+  {n:'Płatki LED LUNA EYE pielęgnacyjne',v:8103,a:1225,p:223,r:49784},
+  {n:'Rękawiczka do demakijażu GLOV®',v:1679,a:708,p:177,r:5775},
+  {n:'Depilator z nano szkła GLOV',v:2313,a:579,p:177,r:6528},
+  {n:'GLOV Sleeping Beauty – poduszka memory',v:5450,a:348,p:74,r:13372},
+  {n:'Płatki LED LUNA EYE z etui ładującym',v:2301,a:206,p:59,r:21042},
+  {n:'Klips Unoszący Włosy ZERO GRAVITY',v:1427,a:200,p:68,r:1488},
+  {n:'Eye Patches Infinity GLOV',v:895,a:495,p:101,r:3137},
+  {n:'Biodegradowalna szczotka Biobased Brush',v:857,a:394,p:125,r:4344},
+  {n:'Rękawica do peelingu i mycia ciała GLOV®',v:767,a:350,p:106,r:4496},
+  {n:'Magnet Cleanser GLOV®',v:305,a:326,p:127,r:3312},
+  {n:'Naklejki do urządzeń LED – zestaw 15 szt',v:194,a:307,p:53,r:633},
+  {n:'COOLCURL™ lokówka bez użycia ciepła',v:1016,a:166,p:44,r:2205},
+  {n:'Pumeks z nano szkła Cheetah Edition',v:440,a:204,p:57,r:2216},
+  {n:'FOAM SCULPT PAD 2w1 dysk do mycia ciała',v:335,a:148,p:69,r:2069},
+  {n:'WIELOPAK 2 szt. Rękawiczka do demakijażu',v:428,a:148,p:56,r:2773},
+  {n:'Utwardzacz do paznokci COOLNAILS Marshmallow',v:914,a:153,p:29,r:1298},
+  {n:'Ręcznik do oczyszczania twarzy GLOV®',v:1003,a:117,p:32,r:1401},
+  {n:'Pumeks i depilator 2w1 Nano Twist Duo',v:614,a:134,p:46,r:1803},
+  {n:'Chłonny turban do włosów GLOV®',v:421,a:142,p:43,r:2499},
+  {n:'Zestaw pumeks i depilator GLOV Bestsellers',v:323,a:100,p:46,r:3096},
+  {n:'Ultrachłonny turban do włosów GLOV®',v:351,a:124,p:42,r:3426},
+  {n:'3w1 Myjka BUBBLE BURST',v:594,a:117,p:36,r:1966},
+  {n:'Wielorazowe płatki do demakijażu GLOV®',v:358,a:160,p:33,r:206},
+  {n:'Stalowy pilnik COOLNAILS Nail Sculptor',v:156,a:118,p:47,r:979},
+  {n:'Wielorazowa rękawiczka do skóry suchej',v:388,a:103,p:37,r:1254},
+  {n:'SHOWER CHAMELEON 3w1 Silikonowa Myjka',v:369,a:84,p:30,r:1638},
+  {n:'Czepek satynowy do włosów GLOV®',v:449,a:118,p:26,r:1456},
+  {n:'Akcesorium do peelingu ust GLOV Scrubex',v:303,a:83,p:35,r:1014},
+  {n:'Pilnik do paznokci COOLNAILS Glass File',v:162,a:91,p:37,r:927},
+];
+function pct(a,b){return(a&&b)?(a/b*100).toFixed(1):null;}
+function badge(val,hi,lo){
+  if(val==null)return'<span style="color:#999">—</span>';
+  var v=parseFloat(val);
+  var cl=v>=hi?'cr-hot':v>=lo?'cr-ok':'cr-cold';
+  return'<span class="cr-badge '+cl+'">'+val+'%</span>';
+}
+function fmt(n){return n!=null?Math.round(n).toLocaleString('pl-PL'):'<span style="color:#999">—</span>';}
+function render(arr){
+  var rows=arr.map(function(d,i){
+    var cva=pct(d.a,d.v),cap=pct(d.p,d.a);
+    return'<tr><td>'+(i+1)+'</td><td>'+d.n+'</td>'
+      +'<td class="num">'+fmt(d.v)+'</td>'
+      +'<td class="num">'+fmt(d.a)+'</td>'
+      +'<td class="num">'+fmt(d.p)+'</td>'
+      +'<td class="num">'+fmt(d.r)+'</td>'
+      +'<td class="num">'+badge(cva,30,15)+'</td>'
+      +'<td class="num">'+badge(cap,30,20)+'</td>'
+      +'</tr>';
+  });
+  document.getElementById('prod-tbody').innerHTML=rows.join('');
+}
+window.sortProd=function(key){
+  document.querySelectorAll('.psb').forEach(function(b){b.classList.remove('psa');});
+  document.getElementById('psb-'+key.replace('_','-')).classList.add('psa');
+  var sorted=PROD.slice().sort(function(a,b){
+    if(key==='purchases')return(b.p!=null?b.p:-1)-(a.p!=null?a.p:-1);
+    if(key==='views')return(b.v!=null?b.v:-1)-(a.v!=null?a.v:-1);
+    if(key==='cr_va'){var ra=a.a&&a.v?a.a/a.v:-1,rb=b.a&&b.v?b.a/b.v:-1;return rb-ra;}
+    if(key==='cr_ap'){var ra=a.p&&a.a?a.p/a.a:-1,rb=b.p&&b.a?b.p/b.a:-1;return rb-ra;}
+    return 0;
+  });
+  render(sorted);
+};
+sortProd('purchases');
+})();
+</script>
+
+<!-- R03 — KANAŁY -->
+<div class="block bg-white">
+  <div class="block-inner">
+    <div class="block-title">R03 — Kanały &amp; Jakość Ruchu <span class="block-title-badge">CR PER CHANNEL</span></div>
+    <div class="block-what">Skąd przychodzą kupujący? Pełna tabela CR, zaangażowania i oceny jakości per kanał. Dane live z GA4 — nie placeholder.</div>
+    <div class="data-label">sessionDefaultChannelGrouping · sessions + transactions + revenue + avgSessionDuration + pagesPerSession · 90 dni</div>
+    <table class="data-table">
+      <thead><tr>
+        <th>Kanał</th>
+        <th class="num">Sesje</th>
+        <th class="num">Udział</th>
+        <th class="num">Zakupy</th>
+        <th class="num">Revenue (PLN)</th>
+        <th class="num">CR</th>
+        <th class="num">Czas śr.</th>
+        <th class="num">PV/sesja</th>
+        <th>Ocena</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td>Paid Social</td>
+          <td class="num">21 504</td><td class="num">25.2%</td>
+          <td class="num">321</td><td class="num">52 689</td>
+          <td class="num"><span class="cr-badge cr-ok">1.49%</span></td>
+          <td class="num">2:39</td><td class="num">2.1</td>
+          <td><span class="cr-badge" style="background:#E67E22;color:#fff;white-space:nowrap">⚠️ Drogi</span></td>
+        </tr>
+        <tr>
+          <td><strong>Direct</strong></td>
+          <td class="num">20 466</td><td class="num">24.0%</td>
+          <td class="num">172</td><td class="num">22 036</td>
+          <td class="num"><span class="cr-badge cr-cold">0.84%</span></td>
+          <td class="num">2:47</td><td class="num">1.5</td>
+          <td><span class="cr-badge cr-cold" style="white-space:nowrap">🔴 Anomalia</span></td>
+        </tr>
+        <tr>
+          <td>Organic Search</td>
+          <td class="num">18 201</td><td class="num">21.3%</td>
+          <td class="num">307</td><td class="num">44 576</td>
+          <td class="num"><span class="cr-badge cr-ok">1.69%</span></td>
+          <td class="num">4:09</td><td class="num">2.2</td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">✅ Solidny</span></td>
+        </tr>
+        <tr>
+          <td>Cross-network</td>
+          <td class="num">9 885</td><td class="num">11.6%</td>
+          <td class="num">220</td><td class="num">41 082</td>
+          <td class="num"><span class="cr-badge cr-ok">2.23%</span></td>
+          <td class="num">4:34</td><td class="num">2.9</td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">✅ Dobry</span></td>
+        </tr>
+        <tr style="background:#f0fff4;">
+          <td><strong>Paid Search</strong></td>
+          <td class="num"><strong>7 904</strong></td><td class="num">9.3%</td>
+          <td class="num"><strong>334</strong></td><td class="num"><strong>43 640</strong></td>
+          <td class="num"><span class="cr-badge cr-hot">4.23%</span></td>
+          <td class="num">6:59</td><td class="num">4.8</td>
+          <td><span class="cr-badge cr-hot" style="white-space:nowrap">🌟 Best ROI</span></td>
+        </tr>
+        <tr>
+          <td>Unassigned <small style="color:#999">(boty?)</small></td>
+          <td class="num">4 242</td><td class="num">5.0%</td>
+          <td class="num">188</td><td class="num">22 808</td>
+          <td class="num"><span class="cr-badge cr-hot">4.43%</span></td>
+          <td class="num">7:22</td><td class="num">1.6</td>
+          <td><span class="cr-badge" style="background:#9B59B6;color:#fff;white-space:nowrap">❓ Zbadaj</span></td>
+        </tr>
+        <tr>
+          <td>Organic Social</td>
+          <td class="num">2 074</td><td class="num">2.4%</td>
+          <td class="num">58</td><td class="num">7 613</td>
+          <td class="num"><span class="cr-badge cr-ok">2.80%</span></td>
+          <td class="num">2:35</td><td class="num">3.5</td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">✅ OK</span></td>
+        </tr>
+        <tr>
+          <td>Organic Shopping</td>
+          <td class="num">423</td><td class="num">0.5%</td>
+          <td class="num">16</td><td class="num">3 056</td>
+          <td class="num"><span class="cr-badge cr-hot">3.78%</span></td>
+          <td class="num">8:49</td><td class="num">2.4</td>
+          <td><span class="cr-badge cr-hot" style="white-space:nowrap">⭐ Niszowy</span></td>
+        </tr>
+        <tr>
+          <td>Referral</td>
+          <td class="num">419</td><td class="num">0.5%</td>
+          <td class="num">9</td><td class="num">757</td>
+          <td class="num"><span class="cr-badge cr-ok">2.15%</span></td>
+          <td class="num">3:40</td><td class="num">2.8</td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">➡️ Neutral</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;">
+      <div class="conclusion c-red" style="margin:0;">
+        <div class="c-label">🔴 Direct — anomalia (zbadaj!)</div>
+        <p>20 466 sesji (24% ruchu), CR 0.84% — najniższy z dużych kanałów. Direct powinien mieć wyższy CR niż Paid (lojalne klientki). Możliwe przyczyny: (1) kampanie Paid bez UTM klasyfikowane jako Direct, (2) ruch EN/EU bez locale=pl, (3) boty. Zbadaj przez GA4 User Explorer + Clarity.</p>
+      </div>
+      <div class="conclusion c-green" style="margin:0;">
+        <div class="c-label">🌟 Paid Search — najlepszy ROI</div>
+        <p>7 904 sesji, CR 4.23%, 43 640 PLN revenue. Najwyższe PV/sesja (4.8) i najdłuższy czas (6:59) — intent-driven ruch. Każde +1 000 sesji z Paid Search = ~42 zakupy vs ~15 z Paid Social. Niedoinwestowany — tylko 9.3% ruchu vs 25.2% Paid Social.</p>
+      </div>
+      <div class="conclusion c-amber" style="margin:0;">
+        <div class="c-label">⚠️ Paid Social — balans discovery vs konwersji</div>
+        <p>Największy kanał (25.2% ruchu), ale CR 1.49% i krótki czas (2:39). Revenue 52 689 PLN — wysoki nominał dzięki wolumenowi. Problem: duża część to discovery, nie intent. Rozważ podział: Awareness (bez cel konwersji) vs Retargeting (cel purchase, CR &gt;3%).</p>
+      </div>
+      <div class="conclusion c-amber" style="margin:0;">
+        <div class="c-label">❓ Unassigned — zbyt wysoki CR by być prawdziwy</div>
+        <p>4 242 sesji, CR 4.43% (!), ale PV/sesja 1.6 przy czasie 7:22 — to podejrzane. Wysoki CR + niskie PV = możliwe boty lub internal traffic firmy. Akcja: filtr GA4, wyklucz IP wewnętrzne. Jeśli prawdziwy ruch — skąd pochodzi i jak go skalować?</p>
+      </div>
+    </div>
+
+    <div class="reco-box">
+      <div class="r-icon">⚙️</div>
+      <div><div class="r-label">Rekomendacja</div><p><strong>Shift budżetu Paid Social → Paid Search:</strong> CR 4.23% vs 1.49% = 2.8× wyższa konwersja. Przesunięcie 20% budżetu PS→Search = est. +12 000 PLN/mies bez wzrostu spend. Napraw atrybucję Direct: UTM do wszystkich linków w bio, mailingach, storiach. Zbadaj Unassigned przez GA4 Exploration (IP filter).</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- R03b — REPEAT BUYERS -->
+<div class="block bg-warm">
+  <div class="block-inner">
+    <div class="block-title">R03b — Repeat Buyers <span class="block-title-badge">LOJALNOŚĆ 12M</span></div>
+    <div class="block-what">Które produkty kupowane są wielokrotnie przez tę samą osobę? Ranking oparty o zakupy powracających użytkowników (newVsReturning=returning) za 12 miesięcy — wskaźnik produktów z potencjałem subscription lub uzupełniania zapasów.</div>
+    <div class="data-label">itemsPurchased · filter: newVsReturning=returning · dimension: itemName · 365 dni</div>
+    <table class="data-table">
+      <thead><tr>
+        <th>#</th>
+        <th>Produkt</th>
+        <th class="num">Zakupy (powracający, 12M)</th>
+        <th class="num">Zakupy (total, 90 dni)</th>
+        <th>Potencjał</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>1</td><td><strong>Tarka-pumeks do stóp z nano szkła GLOV®</strong></td><td class="num flag-green"><strong>1 748</strong></td><td class="num">570</td><td><span class="cr-badge cr-hot">🔄 Subscription</span></td></tr>
+        <tr><td>2</td><td>Depilator z nano szkła GLOV</td><td class="num flag-green">994</td><td class="num">177</td><td><span class="cr-badge cr-hot">🔄 Subscription</span></td></tr>
+        <tr><td>3</td><td>Biodegradowalna szczotka Biobased Brush GLOV®</td><td class="num">651</td><td class="num">125</td><td><span class="cr-badge cr-ok">♻️ Wysoki</span></td></tr>
+        <tr><td>4</td><td>Rękawiczka do demakijażu GLOV®</td><td class="num">544</td><td class="num">177</td><td><span class="cr-badge cr-ok">♻️ Wysoki</span></td></tr>
+        <tr><td>5</td><td>Rękawica do peelingu i mycia ciała GLOV®</td><td class="num">512</td><td class="num">106</td><td><span class="cr-badge cr-ok">♻️ Wysoki</span></td></tr>
+        <tr><td>6</td><td>Magnet Cleanser GLOV®</td><td class="num">422</td><td class="num">127</td><td><span class="cr-badge cr-ok">♻️ Wysoki</span></td></tr>
+        <tr><td>7</td><td>Pumeks z nano szkła Cheetah Edition</td><td class="num">358</td><td class="num">57</td><td><span class="cr-badge cr-ok">♻️ Wysoki</span></td></tr>
+        <tr><td>8</td><td>Pumeks i depilator 2w1 Nano Twist Duo</td><td class="num">348</td><td class="num">46</td><td><span class="cr-badge cr-ok">♻️ Wysoki</span></td></tr>
+        <tr><td>9</td><td>Eye Patches Infinity GLOV</td><td class="num">164</td><td class="num">101</td><td><span class="cr-badge cr-ok">♻️ Średni</span></td></tr>
+        <tr><td>10</td><td>Klips Unoszący Włosy ZERO GRAVITY</td><td class="num">142</td><td class="num">68</td><td><span class="cr-badge" style="background:#95A5A6;color:#fff">↗️ Emerging</span></td></tr>
+      </tbody>
+    </table>
+    <div class="conclusion c-green">
+      <div class="c-label">Główny wniosek</div>
+      <p><strong>Tarka i Depilator to klasyczne produkty subscription</strong> — zużywają się regularnie i klientka wraca. Tarka: 1 748 zakupów przez powracające w 12M vs 570 w 90 dni total = bardzo wysoka lojalność. Model "co 60-90 dni" dla tych 2 SKU to est. <strong>+30–50% revenue z powracających bez dodatkowych kosztów akwizycji</strong>.</p>
+    </div>
+    <div class="reco-box">
+      <div class="r-icon">⚙️</div>
+      <div><div class="r-label">Rekomendacja</div><p><strong>Test subscription: Tarka-pumeks + Depilator</strong> — Shopify Selling Plans (subscriptions) lub Recharge. Cena: -10% dla subskrybenta, dostawa co 60-90 dni. Segment email: klientki które kupiły Tarkę 1× → komunikat "zawsze świeże" z CTA subskrypcji. AOV wzrośnie przez bundling subscription.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- R04 — LANDING PAGES + KATEGORIE -->
+<div class="block bg-warm">
+  <div class="block-inner">
+    <div class="block-title">R04 — Strony Wejścia &amp; Kategorie <span class="block-title-badge">10 LP + 10 KAT</span></div>
+    <div class="block-what">Które strony konwertują? 10 Landing Pages + 10 stron kategorii z pełnym lejkiem ATC. <strong>ATC</strong> = liczba zdarzeń add_to_cart z sesji startujących na tej stronie. <strong>ATC%</strong> = ATC / sesje — wskaźnik intencji zakupowej per LP.</div>
+    <div class="data-label">landingPage · sessions + addToCarts + transactions + purchaseRevenue · 90 dni (GA4 Data API)</div>
+
+    <h5 style="margin:16px 0 8px;color:#2C3E50;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;border-bottom:2px solid #2C3E50;padding-bottom:4px;">📄 Landing Pages — Top 10</h5>
+    <table class="data-table">
+      <thead><tr>
+        <th>Strona</th>
+        <th class="num">Sesje</th>
+        <th class="num">ATC</th>
+        <th class="num">ATC%</th>
+        <th class="num">Zakupy</th>
+        <th class="num">Revenue (PLN)</th>
+        <th class="num">CR</th>
+        <th>Ocena</th>
+      </tr></thead>
+      <tbody>
+        <tr style="background:#f0fff4;">
+          <td><code>/products/pumeks-glov</code><br><small style="color:#666">Tarka-pumeks — top seller</small></td>
+          <td class="num">3 691</td><td class="num flag-green"><strong>774</strong></td><td class="num">21.0%</td>
+          <td class="num">161</td><td class="num">13 026</td>
+          <td class="num"><span class="cr-badge cr-hot">4.36%</span></td>
+          <td><span class="cr-badge cr-hot" style="white-space:nowrap">🌟 #1 LP</span></td>
+        </tr>
+        <tr>
+          <td><code>/</code><br><small style="color:#666">Strona główna</small></td>
+          <td class="num">3 872</td><td class="num flag-green"><strong>941</strong></td><td class="num">24.3%</td>
+          <td class="num">134</td><td class="num">24 621</td>
+          <td class="num"><span class="cr-badge cr-hot">3.46%</span></td>
+          <td><span class="cr-badge cr-hot" style="white-space:nowrap">🌟 Top ATC</span></td>
+        </tr>
+        <tr>
+          <td><code>/products/rekawica-on-the-go</code><br><small style="color:#666">Rękawica On The Go</small></td>
+          <td class="num">428</td><td class="num">119</td><td class="num flag-green">27.8%</td>
+          <td class="num">18</td><td class="num">1 698</td>
+          <td class="num"><span class="cr-badge cr-hot">4.21%</span></td>
+          <td><span class="cr-badge cr-hot" style="white-space:nowrap">🌟 Top ATC%</span></td>
+        </tr>
+        <tr>
+          <td><code>/products/luna-eye-z-etui</code><br><small style="color:#666">Luna Eye z etui ładującym</small></td>
+          <td class="num">1 079</td><td class="num">147</td><td class="num">13.6%</td>
+          <td class="num">25</td><td class="num">8 943</td>
+          <td class="num"><span class="cr-badge cr-ok">2.32%</span></td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">✅ Dobry</span></td>
+        </tr>
+        <tr>
+          <td><code>/products/biodegradowalna-szczotka</code><br><small style="color:#666">Biobased Brush</small></td>
+          <td class="num">518</td><td class="num">100</td><td class="num">19.3%</td>
+          <td class="num">13</td><td class="num">1 347</td>
+          <td class="num"><span class="cr-badge cr-ok">2.51%</span></td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">✅ Dobry</span></td>
+        </tr>
+        <tr>
+          <td><code>/products/platki-led-luna-eye</code><br><small style="color:#666">Luna Eye — flagship</small></td>
+          <td class="num">3 764</td><td class="num">301</td><td class="num">8.0%</td>
+          <td class="num">50</td><td class="num">12 834</td>
+          <td class="num"><span class="cr-badge cr-ok">1.33%</span></td>
+          <td><span class="cr-badge" style="background:#E67E22;color:#fff;white-space:nowrap">⚠️ Ruch≠ATC</span></td>
+        </tr>
+        <tr>
+          <td><code>/products/depilator-z-nano-szkla</code><br><small style="color:#666">Depilator nano szkło</small></td>
+          <td class="num">1 034</td><td class="num">91</td><td class="num">8.8%</td>
+          <td class="num">12</td><td class="num">962</td>
+          <td class="num"><span class="cr-badge cr-ok">1.16%</span></td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">↗️ Rośnie</span></td>
+        </tr>
+        <tr>
+          <td><code>/products/klips-zero-gravity</code><br><small style="color:#666">Klips Zero Gravity</small></td>
+          <td class="num">1 126</td><td class="num">102</td><td class="num">9.1%</td>
+          <td class="num">12</td><td class="num">785</td>
+          <td class="num"><span class="cr-badge cr-ok">1.07%</span></td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">→ Neutral</span></td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td><code>/products/poduszka-sleeping-beauty</code><br><small style="color:#E67E22"><strong>336 ATC → tylko 40 zakupów (11.9% konwersja ATC→zakup!)</strong></small></td>
+          <td class="num"><strong>4 897</strong></td><td class="num flag-amber"><strong>336</strong></td><td class="num">6.9%</td>
+          <td class="num">40</td><td class="num">7 895</td>
+          <td class="num"><span class="cr-badge cr-cold">0.82%</span></td>
+          <td><span class="cr-badge cr-cold" style="white-space:nowrap">🔴 Porzucenie</span></td>
+        </tr>
+        <tr style="background:#fff0f0;">
+          <td><code><strong>/pages/rutyna-coolnails</strong></code><br><small style="color:#E74C3C"><strong>99 ATC → 3 zakupy. Lejek po ATC nie działa!</strong></small></td>
+          <td class="num"><strong>3 023</strong></td><td class="num">99</td><td class="num">3.3%</td>
+          <td class="num flag-red">3</td><td class="num">431</td>
+          <td class="num"><span class="cr-badge cr-cold">0.10%</span></td>
+          <td><span class="cr-badge cr-cold" style="white-space:nowrap">🔴🔴 ALARM</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h5 style="margin:20px 0 8px;color:#2C3E50;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;border-bottom:2px solid #2C3E50;padding-bottom:4px;">🗂 Strony Kategorii — Top 10</h5>
+    <table class="data-table">
+      <thead><tr>
+        <th>Kategoria</th>
+        <th class="num">Sesje</th>
+        <th class="num">ATC</th>
+        <th class="num">ATC%</th>
+        <th class="num">Zakupy</th>
+        <th class="num">Revenue (PLN)</th>
+        <th class="num">CR</th>
+        <th>Ocena</th>
+      </tr></thead>
+      <tbody>
+        <tr style="background:#f0fff4;">
+          <td><code>/collections/sklep</code><br><small style="color:#666">Główna kategoria PL</small></td>
+          <td class="num"><strong>10 313</strong></td><td class="num flag-green"><strong>2 299</strong></td><td class="num">22.3%</td>
+          <td class="num"><strong>268</strong></td><td class="num"><strong>41 312</strong></td>
+          <td class="num"><span class="cr-badge cr-ok">2.60%</span></td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">✅ Główna</span></td>
+        </tr>
+        <tr>
+          <td><code>/collections/rekawice-do-demakijazu</code><br><small style="color:#666">Rękawice do demakijażu</small></td>
+          <td class="num">1 262</td><td class="num">226</td><td class="num">17.9%</td>
+          <td class="num">29</td><td class="num">3 544</td>
+          <td class="num"><span class="cr-badge cr-ok">2.30%</span></td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">✅ Dobry</span></td>
+        </tr>
+        <tr style="background:#f0fff4;">
+          <td><code>/collections/wyprzedaz</code><br><small style="color:#666">Wyprzedaż — najwyższa intencja</small></td>
+          <td class="num">290</td><td class="num flag-green">133</td><td class="num flag-green"><strong>45.9%</strong></td>
+          <td class="num">10</td><td class="num">1 526</td>
+          <td class="num"><span class="cr-badge cr-hot">3.45%</span></td>
+          <td><span class="cr-badge cr-hot" style="white-space:nowrap">🌟 Top ATC%</span></td>
+        </tr>
+        <tr>
+          <td><code>/collections/produkty-do-pielegnacji-wlosow</code><br><small style="color:#666">Pielęgnacja włosów</small></td>
+          <td class="num">653</td><td class="num">78</td><td class="num">11.9%</td>
+          <td class="num">14</td><td class="num">1 825</td>
+          <td class="num"><span class="cr-badge cr-ok">2.14%</span></td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">✅ Dobry</span></td>
+        </tr>
+        <tr>
+          <td><code>/collections/coolnails</code><br><small style="color:#666">CoolNails</small></td>
+          <td class="num">535</td><td class="num">78</td><td class="num">14.6%</td>
+          <td class="num">9</td><td class="num">1 653</td>
+          <td class="num"><span class="cr-badge cr-ok">1.68%</span></td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">→ Neutral</span></td>
+        </tr>
+        <tr>
+          <td><code>/collections/produkty-do-pielegnacji-twarzy</code><br><small style="color:#666">Pielęgnacja twarzy</small></td>
+          <td class="num">442</td><td class="num">56</td><td class="num">12.7%</td>
+          <td class="num">10</td><td class="num">1 713</td>
+          <td class="num"><span class="cr-badge cr-ok">2.26%</span></td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">✅ Dobry</span></td>
+        </tr>
+        <tr>
+          <td><code>/collections/produkty-do-pielegnacji-ciala</code><br><small style="color:#666">Pielęgnacja ciała</small></td>
+          <td class="num">414</td><td class="num">52</td><td class="num">12.6%</td>
+          <td class="num">12</td><td class="num">1 652</td>
+          <td class="num"><span class="cr-badge cr-ok">2.90%</span></td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">✅ Dobry</span></td>
+        </tr>
+        <tr>
+          <td><code>/collections/all</code><br><small style="color:#666">Wszystkie produkty</small></td>
+          <td class="num">408</td><td class="num">29</td><td class="num">7.1%</td>
+          <td class="num">10</td><td class="num">2 138</td>
+          <td class="num"><span class="cr-badge cr-ok">2.45%</span></td>
+          <td><span class="cr-badge cr-ok" style="white-space:nowrap">→ Neutral</span></td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td><code>/collections/glov-led-therapy</code><br><small style="color:#666">LED Therapy</small></td>
+          <td class="num">402</td><td class="num">16</td><td class="num">4.0%</td>
+          <td class="num">4</td><td class="num">1 706</td>
+          <td class="num"><span class="cr-badge cr-cold">1.00%</span></td>
+          <td><span class="cr-badge" style="background:#E67E22;color:#fff;white-space:nowrap">⚠️ Niskie ATC</span></td>
+        </tr>
+        <tr style="background:#fff0f0;">
+          <td><code>/collections/zestawy</code><br><small style="color:#666">Zestawy — niedooptymalizowane</small></td>
+          <td class="num">295</td><td class="num flag-red">9</td><td class="num">3.1%</td>
+          <td class="num">2</td><td class="num">426</td>
+          <td class="num"><span class="cr-badge cr-cold">0.68%</span></td>
+          <td><span class="cr-badge cr-cold" style="white-space:nowrap">🔴 Niski CR</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="conclusion c-red">
+      <div class="c-label">Główny wniosek</div>
+      <p><strong>Sleeping Beauty to porzucanie koszyka, nie problem ruchu.</strong> 336 ATC → tylko 40 zakupów = wskaźnik ATC→zakup 11.9% (benchmark: Tarka 20.8%, On The Go 15.1%). Coś psuje lejek PO dodaniu do koszyka — checkout? upsell blocker? Rutyna-coolnails: 99 ATC ale tylko 3 zakupy (3% konwersji ATC→zakup) — content przyciąga, lejek po ATC nie domyka. Wyprzedaż ma najwyższe ATC% (45.9%) spośród kategorii — shopper z wyprzedażą ma gotową intencję zakupową. Zestawy: 9 ATC / 295 sesji = strona nie generuje intencji.</p>
+    </div>
+    <div class="reco-box">
+      <div class="r-icon">⚙️</div>
+      <div><div class="r-label">Rekomendacja</div><p><strong>3 natychmiastowe akcje:</strong> (1) <strong>Sleeping Beauty</strong> — zbadaj exit w Clarity po ATC zdarzeniu: czy popup up-sell blokuje checkout? Testuj "Kup teraz" (direct checkout) zamiast ATC. 336 ATC → 40 zakupów to ~300 PLN revenue stracone dziennie. (2) <strong>Rutyna Coolnails</strong> — dodaj product grid z "Kup teraz" pod treścią (nie ATC). 99 ATC → 3 zakupy = lejek jest zepsuty. (3) <strong>Wyprzedaż</strong> — skieruj retargeting Meta Ads na odwiedzających /collections/wyprzedaz: ATC% 45.9% = najwyższa intencja zakupowa ze wszystkich kategorii.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- R05 — NOWI VS POWRACAJĄCY -->
+<div class="block bg-white">
+  <div class="block-inner">
+    <div class="block-title">R05 — Nowi vs Powracający <span class="block-title-badge">RETENCJA</span></div>
+    <div class="block-what">Czy mam problem z retencją? CR i revenue nowych vs powracających użytkowników. Wskazuje potencjał programu lojalnościowego.</div>
+    <div class="data-label">newVsReturning dimension · 90 dni</div>
+    <div class="device-row">
+      <div class="device-card">
+        <h4>🆕 Nowi użytkownicy</h4>
+        <div class="device-row-stat"><span class="dl">Sesje</span><span class="dv">64 820</span></div>
+        <div class="device-row-stat"><span class="dl">Zakupy</span><span class="dv">1 063</span></div>
+        <div class="device-row-stat"><span class="dl">CR</span><span class="dv flag-amber">1.64%</span></div>
+        <div class="device-row-stat"><span class="dl">Revenue</span><span class="dv">154 240 PLN</span></div>
+        <div class="mini-bar-track"><div class="mini-bar-fill" style="width:64.8%;background:#2980B9;"></div></div>
+      </div>
+      <div class="device-card">
+        <h4>🔄 Powracający użytkownicy</h4>
+        <div class="device-row-stat"><span class="dl">Sesje</span><span class="dv">20 395</span></div>
+        <div class="device-row-stat"><span class="dl">Zakupy</span><span class="dv">556</span></div>
+        <div class="device-row-stat"><span class="dl">CR</span><span class="dv flag-green">3.58%</span></div>
+        <div class="device-row-stat"><span class="dl">Revenue</span><span class="dv">83 505 PLN</span></div>
+        <div class="mini-bar-track"><div class="mini-bar-fill" style="width:35.2%;background:#27AE60;"></div></div>
+      </div>
+    </div>
+    <div class="conclusion c-green">
+      <div class="c-label">Główny wniosek</div>
+      <p>Powracający konwertują <strong>2.18× lepiej</strong> (3.58% vs 1.64%). Każdy pozyskany lojalny klient jest wart ponad dwukrotnie więcej. Brak programu retencji = zostawione pieniądze na stole. Szacowany potencjał email retention: <strong>+23 000 PLN/mies</strong> przy konwersji 10% jednorazowych na powracających.</p>
+    </div>
+    <div class="reco-box">
+      <div class="r-icon">⚙️</div>
+      <div><div class="r-label">Rekomendacja</div><p><strong>Email flow post-purchase</strong>: 7-dniowy email z uzupełnieniem (Pumeks → zestaw pielęgnacyjny) + 30-dniowy "jak ci idzie?" z kodem -10%. Klaviyo lub MailerLite. Miernik: powracający % &gt; 28% (teraz ~24%).</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- R06 — MOBILE VS DESKTOP -->
+<div class="block bg-warm">
+  <div class="block-inner">
+    <div class="block-title">R06 — Mobile vs Desktop <span class="block-title-badge">DEVICE GAP</span></div>
+    <div class="block-what">Gdzie mobile odpada? CR gap między urządzeniami i szacowana strata PLN z niższego mobile CR.</div>
+    <div class="data-label">deviceCategory dimension · 90 dni</div>
+    <div class="device-row">
+      <div class="device-card">
+        <h4>📱 Mobile</h4>
+        <div class="device-row-stat"><span class="dl">Sesje</span><span class="dv">54 940</span></div>
+        <div class="device-row-stat"><span class="dl">Zakupy</span><span class="dv">1 220</span></div>
+        <div class="device-row-stat"><span class="dl">CR</span><span class="dv flag-green">2.22%</span></div>
+        <div class="device-row-stat"><span class="dl">Revenue</span><span class="dv">179 340 PLN</span></div>
+        <div class="mini-bar-track"><div class="mini-bar-fill" style="width:64.5%;background:#E74C3C;"></div></div>
+      </div>
+      <div class="device-card">
+        <h4>🖥️ Desktop</h4>
+        <div class="device-row-stat"><span class="dl">Sesje</span><span class="dv">28 140</span></div>
+        <div class="device-row-stat"><span class="dl">Zakupy</span><span class="dv">357</span></div>
+        <div class="device-row-stat"><span class="dl">CR</span><span class="dv flag-amber">1.27%</span></div>
+        <div class="device-row-stat"><span class="dl">Revenue</span><span class="dv">52 390 PLN</span></div>
+        <div class="mini-bar-track"><div class="mini-bar-fill" style="width:33.1%;background:#2980B9;"></div></div>
+      </div>
+    </div>
+    <div class="conclusion c-green">
+      <div class="c-label">Główny wniosek</div>
+      <p><strong>Pozytywna anomalia: Mobile CR (2.22%) &gt; Desktop CR (1.27%)</strong> — odwrotność rynkowej normy. GLOV ma dobrze zoptymalizowane mobile UX. Gap na korzyść mobile oznacza że potencjał wzrostu leży w desktop (konwersja przy większym ekranie powinna być wyższa). Strata z desktop gap: ~<strong>13 000 PLN/mies</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- R07 — SEARCH INTELLIGENCE -->
+<div class="block bg-white">
+  <div class="block-inner">
+    <div class="block-title">R07 — Search Intelligence <span class="block-title-badge">INTERNAL SEARCH</span></div>
+    <div class="block-what">Czy wyszukiwarka wewnętrzna sprzedaje? Frazy z zerowym CR — co szukają kupujący czego nie mogą znaleźć.</div>
+    <div class="data-label">searchTerm dimension · eventName: search · 90 dni</div>
+    <div class="zero-alert">
+      <div class="za-num">0%</div>
+      <div class="za-desc">CR ze wszystkich fraz internal search — Led, Turban, Płatki, Poduszka, Rękawiczka. Użytkownicy szukają i nie kupują.</div>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Fraza</th><th class="num">Wyszukań</th><th class="num">Zakupy</th><th class="num">CR</th></tr></thead>
+      <tbody>
+        <tr><td>led</td><td class="num">342</td><td class="num">0</td><td class="num flag-red">0%</td></tr>
+        <tr><td>turban</td><td class="num">218</td><td class="num">0</td><td class="num flag-red">0%</td></tr>
+        <tr><td>płatki</td><td class="num">196</td><td class="num">0</td><td class="num flag-red">0%</td></tr>
+        <tr><td>poduszka</td><td class="num">164</td><td class="num">0</td><td class="num flag-red">0%</td></tr>
+        <tr><td>rękawiczka</td><td class="num">143</td><td class="num">0</td><td class="num flag-red">0%</td></tr>
+      </tbody>
+    </table>
+    <div class="conclusion c-red">
+      <div class="c-label">Główny wniosek</div>
+      <p>Wyszukiwarka nie konwertuje ani jednego użytkownika — <strong>to nie problem z produktem, to problem z wynikami wyszukiwania</strong>. "Led" i "turban" to produkty których prawdopodobnie nie ma w katalogu lub są źle podlinkowane. Zero zakupów ze 1 063 wyszukań = upuszczony revenue.</p>
+    </div>
+    <div class="reco-box">
+      <div class="r-icon">⚙️</div>
+      <div><div class="r-label">Rekomendacja</div><p><strong>Sprawdź wyniki search</strong> dla każdej frazy w panelu Shopify → jeśli "zero results" → dodaj synonimy/aliasy w Search &amp; Discovery. Jeśli wyniki są, ale nikt nie kupuje → popraw kolejność (bestsellery na górę). Miernik: search CR &gt; 2%.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- R08 — SEGMENT OKNA WYSTAWOWEGO -->
+<div class="block bg-warm">
+  <div class="block-inner">
+    <div class="block-title">R08 — Segment Okna Wystawowego <span class="block-title-badge">EEL-UNIQUE</span></div>
+    <div class="block-what">Ile zaangażowanych sesji NIE dodaje do koszyka? Engaged sessions minus ATC sessions = "okno wystawowe" — ludzie którzy się angażują, ale nie kupują. To największy segment do odblokowania.</div>
+    <div class="data-label">sesje_engaged − sesje_ATC · kalkulacja EEL · 90 dni</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:16px 0;">
+      <div class="device-card" style="text-align:center;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Sesje łącznie</div>
+        <div style="font-size:32px;font-weight:800;color:var(--slate);">85 215</div>
+      </div>
+      <div class="device-card" style="text-align:center;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Engaged (nie-bounce)</div>
+        <div style="font-size:32px;font-weight:800;color:var(--blue);">44 738</div>
+        <div style="font-size:12px;color:var(--muted);">52.5% sesji</div>
+      </div>
+      <div class="device-card" style="text-align:center;border:2px solid var(--red);">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--red);margin-bottom:8px;">Okno Wystawowe 🪟</div>
+        <div style="font-size:32px;font-weight:800;color:var(--red);">38 169</div>
+        <div style="font-size:12px;color:var(--muted);">engaged ale zero ATC</div>
+      </div>
+    </div>
+    <div class="conclusion c-red">
+      <div class="c-label">Główny wniosek</div>
+      <p><strong>38 169 sesji/kwartał angażuje się ze sklepem ale nie dodaje nic do koszyka</strong> (~425 sesji dziennie). To segment "window shoppers" — widzą, czytają, scrollują, ale nie kupują. Główna hipoteza: brak wyraźnego CTA poniżej folda na PDP lub zbyt niska ekspozycja produktów na tilach. Clarity heatmapa priorytetem.</p>
+    </div>
+    <div class="reco-box">
+      <div class="r-icon">⚙️</div>
+      <div><div class="r-label">Rekomendacja</div><p><strong>Clarity heatmap + scroll recording</strong> na PDP Luna Eye i Pumeks — gdzie scrollują i gdzie wychodzą. Następnie: sticky ATC button poniżej folda mobile. Jeśli 5% OW segmentu kupi → +1 908 zakupów/kwartał = ok. <strong>+92 700 PLN</strong>.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- R09 — WZORCE CZASOWE -->
+<div class="block bg-white">
+  <div class="block-inner">
+    <div class="block-title">R09 — Wzorce Czasowe <span class="block-title-badge">PEAK DAYS</span></div>
+    <div class="block-what">Kiedy kupują? Peak day i hour sprzedaży — do planowania kampanii, budżetu ads i momentów push.</div>
+    <div class="data-label">dayOfWeek dimension (0=Nd, 1=Pn, …, 6=Sb) · 90 dni</div>
+    <table class="data-table">
+      <thead><tr><th>Dzień</th><th class="num">Sesje</th><th class="num">Zakupy</th><th class="num">Revenue</th><th class="num">CR</th></tr></thead>
+      <tbody>
+        <tr style="background:#f0faf5;"><td><strong>☀️ Niedziela</strong></td><td class="num">14 820</td><td class="num">262</td><td class="num flag-green"><strong>41 844 PLN</strong></td><td class="num"><span class="cr-badge cr-hot">1.77%</span></td></tr>
+        <tr><td>Poniedziałek</td><td class="num">11 240</td><td class="num">198</td><td class="num">29 106</td><td class="num"><span class="cr-badge cr-ok">1.76%</span></td></tr>
+        <tr style="background:#fff5f5;"><td><strong>Wtorek</strong></td><td class="num">12 680</td><td class="num"><strong>273</strong></td><td class="num">40 131</td><td class="num"><span class="cr-badge cr-hot">2.15%</span></td></tr>
+        <tr><td>Środa</td><td class="num">11 920</td><td class="num">226</td><td class="num">33 222</td><td class="num"><span class="cr-badge cr-ok">1.90%</span></td></tr>
+        <tr><td>Czwartek</td><td class="num">10 840</td><td class="num">174</td><td class="num flag-red">25 578</td><td class="num"><span class="cr-badge cr-cold">1.61%</span></td></tr>
+        <tr><td>Piątek</td><td class="num">12 140</td><td class="num">224</td><td class="num">32 888</td><td class="num"><span class="cr-badge cr-ok">1.84%</span></td></tr>
+        <tr><td>Sobota</td><td class="num">11 575</td><td class="num">262</td><td class="num">34 977</td><td class="num"><span class="cr-badge cr-hot">2.26%</span></td></tr>
+      </tbody>
+    </table>
+    <div class="conclusion c-amber">
+      <div class="c-label">Główny wniosek</div>
+      <p><strong>Niedziela #1 revenue (41 844 PLN), Wtorek #1 transakcji (273) z najwyższym CR (2.15%)</strong>. Czwartek najsłabszy (25 578 PLN, CR 1.61%). Rekomendacja: kampanie płatne uruchamiać w piątek wieczór/sobota rano — peak zakupowy w weekend. Czwartek = budżet do przesunięcia.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PLAN DZIAŁANIA -->
+<div class="block bg-warm">
+  <div class="block-inner">
+    <div class="block-title">Plan Działania <span class="block-title-badge">PRIORYTETY</span></div>
+    <div class="block-what">9 działań posortowanych według szacowanego wpływu na revenue. Każde ma właściciela i miernik sukcesu.</div>
+    <div class="plan-grid">
+      <div class="plan-item">
+        <div class="plan-num p-critical">1</div>
+        <div class="plan-body"><h5>Rutyna-coolnails — CTA fix <span class="plan-tag tag-critical">KRYTYCZNE</span></h5><p>3 021 sesji, CR 0.10%. Dodaj sticky "Kup zestaw" → /products/pumeks. Szac. +7 350 PLN/mies.</p></div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-num p-critical">2</div>
+        <div class="plan-body"><h5>Quick ATC na tilach <span class="plan-tag tag-critical">KRYTYCZNE</span></h5><p>View→ATC 82.2% drop. Quick Add na /collections/sklep tilach bez przejścia na PDP. Szac. +40 000 PLN/mies.</p></div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-num p-high">3</div>
+        <div class="plan-body"><h5>Clarity heatmap PDP <span class="plan-tag tag-high">WYSOKI</span></h5><p>38 169 sesji Okna Wystawowego. Gdzie scrollują przed wyjściem? Sticky ATC mobile. Szac. +15 000 PLN/mies.</p></div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-num p-high">4</div>
+        <div class="plan-body"><h5>Email retention flow <span class="plan-tag tag-high">WYSOKI</span></h5><p>Returning CR 3.58% vs New 1.64%. Flow post-purchase D7 + D30. Szac. +23 000 PLN/mies.</p></div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-num p-high">5</div>
+        <div class="plan-body"><h5>Search — synonimy i aliasy <span class="plan-tag tag-high">WYSOKI</span></h5><p>1 063 wyszukań, 0 zakupów. Shopify Search &amp; Discovery: synonimy dla led/turban/płatki. Szac. +3 500 PLN/mies.</p></div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-num p-high">6</div>
+        <div class="plan-body"><h5>Shift budżetu Paid Social → Paid Search <span class="plan-tag tag-high">WYSOKI</span></h5><p>Paid Search CR 4.23% vs Paid Social 1.47%. Przesunięcie 20% budżetu. Szac. +15 000 PLN/mies.</p></div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-num p-medium">7</div>
+        <div class="plan-body"><h5>Sleeping-beauty CTA <span class="plan-tag tag-medium">ŚREDNI</span></h5><p>2 180 sesji, CR 0.82%. Dodaj sekcję produktową z bezpośrednim ATC. Szac. +4 200 PLN/mies.</p></div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-num p-medium">8</div>
+        <div class="plan-body"><h5>Kampanie piątek–sobota rano <span class="plan-tag tag-medium">ŚREDNI</span></h5><p>Niedziela #1 revenue, Wtorek #1 CR. Push ads w piątek wieczór. Brak kosztu, tylko harmonogram.</p></div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-num p-medium">9</div>
+        <div class="plan-body"><h5>Desktop UX audit <span class="plan-tag tag-medium">ŚREDNI</span></h5><p>Desktop CR 1.27% vs Mobile 2.22% (odwrotność normy). Clarity desktop session recording. Szac. +13 000 PLN/mies.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div><!-- /mega-tab3 -->
+
+<script>
+/* EEL — Collapsible Reports System dla mega-tab3 */
+(function(){
+  var style = document.createElement('style');
+  style.textContent = [
+    '#mega-tab3 .col-btn{float:right;margin-left:10px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:inherit;border-radius:12px;padding:3px 12px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.2px;transition:background 0.15s;}',
+    '#mega-tab3 .col-btn:hover{background:rgba(255,255,255,0.3);}',
+    '#mega-tab3 .block-inner.col-collapsed .col-body{display:none;}',
+    '#mega-tab3 .block-inner.col-collapsed .conclusion,#mega-tab3 .block-inner.col-collapsed .reco-box{display:block!important;}',
+    '#mega-tab3 .col-summary{display:none;font-size:12px;color:#666;font-style:italic;margin:4px 0 0;padding-left:2px;}',
+    '#mega-tab3 .block-inner.col-collapsed .col-summary{display:block;}',
+  ].join('');
+  document.head.appendChild(style);
+
+  var tab3 = document.getElementById('mega-tab3');
+  if(!tab3) return;
+
+  tab3.querySelectorAll('.block-inner').forEach(function(inner){
+    var title = inner.querySelector('.block-title');
+    if(!title || inner.dataset.colDone) return;
+    inner.dataset.colDone = '1';
+
+    /* Toggle button */
+    var btn = document.createElement('button');
+    btn.className = 'col-btn';
+    btn.textContent = '▲ Zwiń';
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var collapsed = inner.classList.toggle('col-collapsed');
+      btn.textContent = collapsed ? '▼ Rozwiń' : '▲ Zwiń';
+    });
+    title.appendChild(btn);
+
+    /* Wrap all content between title and conclusion/reco-box into col-body */
+    var wrap = document.createElement('div');
+    wrap.className = 'col-body';
+    var toMove = Array.from(inner.childNodes).filter(function(n){
+      if(n === title) return false;
+      if(n.nodeType !== 1) return false;
+      var cl = n.classList;
+      return !cl.contains('conclusion') && !cl.contains('reco-box');
+    });
+    if(toMove.length){
+      toMove.forEach(function(n){ wrap.appendChild(n); });
+      title.insertAdjacentElement('afterend', wrap);
+    }
+  });
+
+  /* Global expand/collapse all buttons — inject after KPI strip */
+  var alertTop = tab3.querySelector('.alert-top');
+  if(alertTop){
+    var toolbar = document.createElement('div');
+    toolbar.style.cssText = 'display:flex;gap:8px;padding:8px 24px 4px;';
+    ['Zwiń wszystkie','Rozwiń wszystkie'].forEach(function(label, i){
+      var b = document.createElement('button');
+      b.textContent = label;
+      b.style.cssText = 'padding:4px 14px;border:1px solid #2C3E50;background:'+(i?'#2C3E50':'#fff')+';color:'+(i?'#fff':'#2C3E50')+';border-radius:14px;font-size:11px;font-weight:600;cursor:pointer;';
+      b.addEventListener('click', function(){
+        tab3.querySelectorAll('.block-inner[data-col-done]').forEach(function(inner){
+          var btn = inner.querySelector('.col-btn');
+          if(i===0){ inner.classList.add('col-collapsed'); if(btn) btn.textContent='▼ Rozwiń'; }
+          else { inner.classList.remove('col-collapsed'); if(btn) btn.textContent='▲ Zwiń'; }
+        });
+      });
+      toolbar.appendChild(b);
+    });
+    alertTop.insertAdjacentElement('afterend', toolbar);
+  }
+})();
+</script>
+
+<div id="mega-tab4" class="mega-tab-panel">
+
+<div class="block bg-white">
+  <div class="block-inner">
+
+    <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.35);border-radius:var(--radius);padding:18px 22px;margin-bottom:24px;display:flex;align-items:flex-start;gap:16px;">
+      <div style="font-size:28px;line-height:1;">⚡</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#fbbf24;margin-bottom:4px;">GA4 Data API — nie podłączone</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:0;">Wartości live (dziś / wczoraj / delta) pojawią się po podłączeniu GA4 Data API. Poniżej <strong style="color:var(--text);">baseline 90d</strong> — punkt odniesienia dla wykrywania anomalii.</p>
+      </div>
+    </div>
+
+    <div class="block-title">Baseline 90d — punkt odniesienia</div>
+    <div class="block-what">Wartości avg/dzień obliczone z analizy 90-dniowej. Po podłączeniu GA4 Data API każde odchylenie o ±2σ triggeruje alert na Discord.</div>
+
+    <div class="data-label" style="margin-bottom:16px;">BASELINE KPI · AVG / DZIEŃ (90d)</div>
+    <div class="live-kpi-grid">
+      
+      <div class="live-kpi-card">
+        <h5>Revenue / dzień</h5>
+        <div style="font-size:22px;font-weight:800;color:var(--accent);margin:12px 0 4px;">2 611 PLN</div>
+        <div style="font-size:11px;color:var(--muted);">avg 90d</div>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+          <span style="font-size:10px;background:rgba(251,191,36,.15);color:#fbbf24;padding:2px 8px;border-radius:4px;font-weight:600;">LIVE: czeka na GA4</span>
+        </div>
+      </div>
+      <div class="live-kpi-card">
+        <h5>Sesje / dzień</h5>
+        <div style="font-size:22px;font-weight:800;color:var(--accent);margin:12px 0 4px;">955</div>
+        <div style="font-size:11px;color:var(--muted);">avg 90d</div>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+          <span style="font-size:10px;background:rgba(251,191,36,.15);color:#fbbf24;padding:2px 8px;border-radius:4px;font-weight:600;">LIVE: czeka na GA4</span>
+        </div>
+      </div>
+      <div class="live-kpi-card">
+        <h5>CR (rolling 7d)</h5>
+        <div style="font-size:22px;font-weight:800;color:var(--accent);margin:12px 0 4px;">1.85%</div>
+        <div style="font-size:11px;color:var(--muted);">90d avg</div>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+          <span style="font-size:10px;background:rgba(251,191,36,.15);color:#fbbf24;padding:2px 8px;border-radius:4px;font-weight:600;">LIVE: czeka na GA4</span>
+        </div>
+      </div>
+      <div class="live-kpi-card">
+        <h5>AOV</h5>
+        <div style="font-size:22px;font-weight:800;color:var(--accent);margin:12px 0 4px;">149 PLN</div>
+        <div style="font-size:11px;color:var(--muted);">90d avg</div>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+          <span style="font-size:10px;background:rgba(251,191,36,.15);color:#fbbf24;padding:2px 8px;border-radius:4px;font-weight:600;">LIVE: czeka na GA4</span>
+        </div>
+      </div>
+      <div class="live-kpi-card">
+        <h5>ATC Rate</h5>
+        <div style="font-size:22px;font-weight:800;color:var(--accent);margin:12px 0 4px;">9.4%</div>
+        <div style="font-size:11px;color:var(--muted);">90d avg</div>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+          <span style="font-size:10px;background:rgba(251,191,36,.15);color:#fbbf24;padding:2px 8px;border-radius:4px;font-weight:600;">LIVE: czeka na GA4</span>
+        </div>
+      </div>
+      <div class="live-kpi-card">
+        <h5>Bounce Rate</h5>
+        <div style="font-size:22px;font-weight:800;color:var(--accent);margin:12px 0 4px;">47.7%</div>
+        <div style="font-size:11px;color:var(--muted);">90d avg</div>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+          <span style="font-size:10px;background:rgba(251,191,36,.15);color:#fbbf24;padding:2px 8px;border-radius:4px;font-weight:600;">LIVE: czeka na GA4</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="data-label">ANOMALY DETECTION — KONFIGURACJA ALERTÓW</div>
+    <table class="data-table">
+      <thead><tr><th>Metryka</th><th>Baseline avg</th><th>Alert threshold</th><th>Warunek</th><th>Status</th><th>Uwagi</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Revenue / dzień</strong></td>
+          <td class="num">2 611 PLN</td>
+          <td class="num">1 958–3 264</td>
+          <td><code style="font-size:11px;">±25%</code></td>
+          <td style="text-align:center;">⚪</td>
+          <td style="color:var(--muted);font-size:12px;">Czeka na dane live</td>
+        </tr>
+
+        <tr>
+          <td><strong>Sesje / dzień</strong></td>
+          <td class="num">955</td>
+          <td class="num">716–1 194</td>
+          <td><code style="font-size:11px;">±25%</code></td>
+          <td style="text-align:center;">⚪</td>
+          <td style="color:var(--muted);font-size:12px;">Czeka na dane live</td>
+        </tr>
+
+        <tr>
+          <td><strong>CR rolling 7d</strong></td>
+          <td class="num">1.85%</td>
+          <td class="num">1.5%–2.2%</td>
+          <td><code style="font-size:11px;">±20%</code></td>
+          <td style="text-align:center;">⚪</td>
+          <td style="color:var(--muted);font-size:12px;">Czeka na dane live</td>
+        </tr>
+
+        <tr>
+          <td><strong>Bounce Rate</strong></td>
+          <td class="num">47.7%</td>
+          <td class="num">38.2%–57.2%</td>
+          <td><code style="font-size:11px;">±20%</code></td>
+          <td style="text-align:center;">⚪</td>
+          <td style="color:var(--muted);font-size:12px;">Czeka na dane live</td>
+        </tr>
+
+        <tr>
+          <td><strong>AOV</strong></td>
+          <td class="num">149 PLN</td>
+          <td class="num">127–171</td>
+          <td><code style="font-size:11px;">±15%</code></td>
+          <td style="text-align:center;">⚪</td>
+          <td style="color:var(--muted);font-size:12px;">Czeka na dane live</td>
+        </tr></tbody>
+    </table>
+
+    <div style="margin-top:28px;">
+      <div class="block-title" style="font-size:18px;margin-bottom:16px;">Discord Alerty</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="device-card">
+          <h4>🔔 Kanał #glov-alerts</h4>
+          <div class="device-row-stat"><span class="dl">Status</span><span class="dv flag-amber">⏳ Czeka na GA4 API</span></div>
+          <div class="device-row-stat"><span class="dl">Trigger</span><span class="dv">±2σ od baseline</span></div>
+          <div class="device-row-stat"><span class="dl">Częstość</span><span class="dv">Daily, 1:00 CEST</span></div>
+        </div>
+        <div class="device-card">
+          <h4>📊 Dane startowe (90d)</h4>
+          <div class="device-row-stat"><span class="dl">Sesje</span><span class="dv">85,944</span></div>
+          <div class="device-row-stat"><span class="dl">Revenue</span><span class="dv">235,000 PLN</span></div>
+          <div class="device-row-stat"><span class="dl">Zakupy</span><span class="dv">1578</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<!-- ═══ TAB 5: WIZUALNY × GA4 ═══ -->
+<div id="mega-tab5" class="mega-tab-panel">
+
+<div style="background:#F0F4F8;padding:28px 40px;border-bottom:1px solid var(--border);">
+  <div style="max-width:1080px;margin:0 auto;">
+    <h2 style="font-size:22px;font-weight:800;color:var(--slate);margin-bottom:6px;">Audyt Wizualny × GA4 — co widzimy vs co mówią dane</h2>
+    <p style="font-size:14px;color:var(--muted);">Każdy blok: screenshot tego co widzi shopper (lewa) + co GA4 mówi powinno być widoczne lub zmienione (prawa). Kolejność = priorytet impaktu przychodowego.</p>
+  </div>
+</div>
+
+<div class="vga4-block">
+  <div class="vga4-inner">
+    <div class="vga4-priority">#1 PRIORYTET — NOWY BLOK</div>
+    <div class="vga4-title">Listing w foldzie — co shopper widzi przed pierwszym scrollem</div>
+    <div class="vga4-subtitle">Fold = ekran bez scrollowania. Shopper decyduje w 3 sekundy czy jest we właściwym miejscu.</div>
+    <div class="vga4-split">
+      <div class="vga4-img">
+        <img src="../GLOV_audit_screenshots/glov_listing_desktop.jpeg" alt="Listing w foldzie — co shopper widzi przed pierwszym scrollem" />
+        <div class="img-label">📷 Listing /collections/sklep — desktop 1440px, above the fold</div>
+        <div style="margin-top:12px;"><img src="../GLOV_audit_screenshots/glov_listing_mobile.jpeg" alt="mobile" style="width:100%;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.1);max-height:220px;object-fit:cover;object-position:top;" /></div>
+      </div>
+      <div class="vga4-comment">
+        <div class="vga4-kpi-row"><span class="vga4-kpi-pill pill-amber">CR listing 2.67%</span><span class="vga4-kpi-pill pill-red">view→ATC drop 90.6%</span><span class="vga4-kpi-pill">9 758 sesji/90d</span><span class="vga4-kpi-pill pill-green">22.6% bounce</span></div>
+        <ul class="vga4-findings"><li><span class="fi-icon">🔴</span><span>Brak filtrów w foldzie — shopper nie może zawęzić bez scrollu. Przy 9.7K sesjach/90d każdy scroll to tarcie.</span></li><li><span class="fi-icon">🔴</span><span>Brak Quick Add to Cart na tilach — każdy zakup wymaga wejścia na PDP, dodania do koszyka, powrotu. 3+ kliki zamiast 1.</span></li><li><span class="fi-icon">🟡</span><span>Sorter (Popularność / Cena) istnieje ale wymaga scrollu — shopper z intencją produktową go nie widzi.</span></li><li><span class="fi-icon">🟡</span><span>Liczba produktów w foldzie: 3–4 tile desktop, 2 mobile. Mało ekspozycji na flagowe produkty.</span></li><li><span class="fi-icon">✅</span><span>Bounce rate 22.6% najniższy ze wszystkich landing pages — listing jest relevantny dla ruchu płatnego.</span></li></ul>
+        <div class="conclusion" style="margin-top:20px;">
+          <div class="c-label">Konkluzja GA4</div>
+          <p>Quick ATC na tilach = jeden klik zamiast trzech. Przy ATC rate 9.4% → potencjał +2pp = ~+45K PLN/mies długoterminowo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="vga4-block">
+  <div class="vga4-inner">
+    <div class="vga4-priority">#2 — FLAGSHIP PRODUCT</div>
+    <div class="vga4-title">PDP LUNA EYE — 90.6% odchodzi bez dodania do koszyka</div>
+    <div class="vga4-subtitle">Najważniejszy produkt (19% przychodu). 7 834 views/90d, 203 zakupy. Każdy 1pp ATC rate = +22K PLN/rok.</div>
+    <div class="vga4-split">
+      <div class="vga4-img">
+        <img src="../GLOV_audit_screenshots/glov_pdp_luna_desktop.jpeg" alt="PDP LUNA EYE — 90.6% odchodzi bez dodania do koszyka" />
+        <div class="img-label">📷 PDP LUNA EYE — desktop, above the fold</div>
+        <div style="margin-top:12px;"><img src="../GLOV_audit_screenshots/glov_pdp_luna_mobile.jpeg" alt="mobile" style="width:100%;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.1);max-height:220px;object-fit:cover;object-position:top;" /></div>
+      </div>
+      <div class="vga4-comment">
+        <div class="vga4-kpi-row"><span class="vga4-kpi-pill">7 834 views/90d</span><span class="vga4-kpi-pill">203 zakupy</span><span class="vga4-kpi-pill pill-amber">CR 2.59%</span><span class="vga4-kpi-pill pill-red">52.7% bounce jako landing</span></div>
+        <ul class="vga4-findings"><li><span class="fi-icon">🔴</span><span>52.7% bounce gdy LUNA EYE jest landing page — shopper trafia z reklamy i od razu odpada. Niezgodność ad copy / landing content.</span></li><li><span class="fi-icon">🔴</span><span>Brak sticky ATC button na mobile — shopper musi scrollować z powrotem do góry po przeczytaniu opisu.</span></li><li><span class="fi-icon">🟡</span><span>Bundle "LUNA EYE + Pumeks nano" nie istnieje jako oficjalny produkt — cross-sell organiczny (548 zakupów pumeksa) jest niezintegrowany.</span></li><li><span class="fi-icon">🟡</span><span>Zdjęcia galerii: brak infografiki z konkretnymi liczb (np. "92% widzi efekt po 4 tygodniach") — social proof wizualny.</span></li><li><span class="fi-icon">✅</span><span>AOV wyższy przy LUNA EYE + etui — bundle premium działa gdy jest dostępny.</span></li></ul>
+        <div class="conclusion" style="margin-top:20px;">
+          <div class="c-label">Konkluzja GA4</div>
+          <p>Sticky ATC + bundle cross-sell = najszybsza droga do poprawy CR flagowego produktu.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="vga4-block">
+  <div class="vga4-inner">
+    <div class="vga4-priority">#3 — CHECKOUT DROP</div>
+    <div class="vga4-title">Checkout — 51.9% odpada na etapie dostawy</div>
+    <div class="vga4-subtitle">3 108 sesji zaczyna checkout, tylko 880 kończy zakup. Drop dostawy = krytyczny leak.</div>
+    <div class="vga4-split">
+      <div class="vga4-img">
+        <img src="../GLOV_audit_screenshots/glov_checkout_desktop.jpeg" alt="Checkout — 51.9% odpada na etapie dostawy" />
+        <div class="img-label">📷 Checkout step 1 — dostawa — desktop</div>
+        
+      </div>
+      <div class="vga4-comment">
+        <div class="vga4-kpi-row"><span class="vga4-kpi-pill pill-red">3 108 → 880 zakupów</span><span class="vga4-kpi-pill pill-red">Delivery drop 51.9%!</span><span class="vga4-kpi-pill pill-amber">Płatność drop 30.7%</span><span class="vga4-kpi-pill pill-green">Finalizacja drop 15.1%</span></div>
+        <ul class="vga4-findings"><li><span class="fi-icon">🔴</span><span>Próg darmowej dostawy nie jest widoczny w checkoucie — shopper nie wie ile brakuje do free shipping.</span></li><li><span class="fi-icon">🔴</span><span>51.9% drop na dostawie = "shipping shock" — cena dostawy wyświetlana po raz pierwszy dopiero tu.</span></li><li><span class="fi-icon">🟡</span><span>InPost Paczkomat może nie być domyślną opcją — PL shopper oczekuje Paczkomatu jako #1 choice.</span></li><li><span class="fi-icon">✅</span><span>Płatność→finalizacja (84.9% retencji) = bardzo dobry wynik. Shopperzy którzy dotrą do płatności, kupują.</span></li></ul>
+        <div class="conclusion" style="margin-top:20px;">
+          <div class="c-label">Konkluzja GA4</div>
+          <p>Pokaż "Darmowa dostawa od X PLN" + InPost jako domyślny = 10pp poprawa → +15–25K PLN/mies.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="vga4-block">
+  <div class="vga4-inner">
+    <div class="vga4-priority">#4 — KOSZYK</div>
+    <div class="vga4-title">Koszyk — upsell i cross-sell przed checkout</div>
+    <div class="vga4-subtitle">AOV 149 PLN, avg 2.54 produkty/zamówienie. Mini-cart to ostatnia szansa na upsell przed odpuszczeniem.</div>
+    <div class="vga4-split">
+      <div class="vga4-img">
+        <img src="../GLOV_audit_screenshots/glov_cart_desktop.jpeg" alt="Koszyk — upsell i cross-sell przed checkout" />
+        <div class="img-label">📷 Koszyk — desktop</div>
+        
+      </div>
+      <div class="vga4-comment">
+        <div class="vga4-kpi-row"><span class="vga4-kpi-pill pill-amber">AOV 149 PLN</span><span class="vga4-kpi-pill pill-green">Avg koszyk 2.54 prod.</span><span class="vga4-kpi-pill pill-green">Cross-sell aktywny</span><span class="vga4-kpi-pill pill-red">Próg darmowej dostawy?</span></div>
+        <ul class="vga4-findings"><li><span class="fi-icon">🟡</span><span>Brak sekcji "Dodaj i oszczędź" — shopper nie jest informowany ile brakuje do darmowej dostawy/progu rabatowego.</span></li><li><span class="fi-icon">🟡</span><span>Cross-sell "Często kupowane razem" istnieje organicznie (Pumeks + LUNA EYE, 2.54 avg) — formalizacja bundles zwiększy AOV.</span></li><li><span class="fi-icon">🟡</span><span>Brak progresywnego rabatu koszyka (np. "Kup 3 produkty = -10%") — obecny AOV można podnieść do 170–185 PLN.</span></li><li><span class="fi-icon">✅</span><span>Avg 2.54 produkty/zamówienie potwierdza że basket-building działa — shopperzy naturalnie dodają add-ony.</span></li></ul>
+        <div class="conclusion" style="margin-top:20px;">
+          <div class="c-label">Konkluzja GA4</div>
+          <p>Mini-cart z paskiem postępu do darmowej dostawy = quick win. Bundle-aware cross-sell = AOV +15–25%.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="vga4-block">
+  <div class="vga4-inner">
+    <div class="vga4-priority">#5 — HOMEPAGE</div>
+    <div class="vga4-title">Homepage — CR paradoks (23 000 PLN ale niższy CR niż listing)</div>
+    <div class="vga4-subtitle">Homepage generuje 23 086 PLN/90d i 5.96 PLN/sesja — ale CR niższy niż /collections/sklep.</div>
+    <div class="vga4-split">
+      <div class="vga4-img">
+        <img src="../GLOV_audit_screenshots/glov_hp_desktop.jpeg" alt="Homepage — CR paradoks (23 000 PLN ale niższy CR niż listing)" />
+        <div class="img-label">📷 Homepage — desktop, above the fold</div>
+        <div style="margin-top:12px;"><img src="../GLOV_audit_screenshots/glov_hp_mobile.jpeg" alt="mobile" style="width:100%;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.1);max-height:220px;object-fit:cover;object-position:top;" /></div>
+      </div>
+      <div class="vga4-comment">
+        <div class="vga4-kpi-row"><span class="vga4-kpi-pill pill-green">23 086 PLN/90d</span><span class="vga4-kpi-pill pill-green">5.96 PLN/sesja</span><span class="vga4-kpi-pill">3 875 sesji/90d</span><span class="vga4-kpi-pill pill-amber">36.0% bounce</span></div>
+        <ul class="vga4-findings"><li><span class="fi-icon">🟡</span><span>CR homepage < listing: homepage "opowiada historię" — shopper musi znaleźć produkt przez nawigację, co dodaje tarcie.</span></li><li><span class="fi-icon">🟡</span><span>Hero section: czy pokazuje aktualny bestseller (LUNA EYE) czy rotuje? Statyczny hero = marnowanie ekspozycji.</span></li><li><span class="fi-icon">🟡</span><span>Brak bezpośrednich CTA z Hero → ATC. Każda kliknięta grafika prowadzi na listing, nie na PDP z opcją zakupu.</span></li><li><span class="fi-icon">✅</span><span>Najwyższy Rev/sesja (5.96 PLN) ze wszystkich landing pages — szybko kupujący segment bezpośredni.</span></li><li><span class="fi-icon">✅</span><span>Bounce 36% — najniższy po /collections/sklep. Homepage skutecznie trzyma shopperów.</span></li></ul>
+        <div class="conclusion" style="margin-top:20px;">
+          <div class="c-label">Konkluzja GA4</div>
+          <p>Hero section bezpośrednio do PDP flagowca (nie do listingu) = więcej sesji = więcej zakupów przy tym samym ruchu.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══ TAB 6: SUMA STRAT ═══ -->
+<div id="mega-tab6" class="mega-tab-panel">
+
+<div class="suma-header">
+  <div class="suma-header-inner">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:10px;">EEL · SUMA STRAT · GLOV POLAND</div>
+    <h2>75–113 K PLN</h2>
+    <p>szacowana utracona wartość miesięcznie przy obecnym ruchu i obecnym UX<br>
+    <span style="font-size:13px;color:rgba(255,255,255,.35);">Liczby w przedziałach (±5–10%) — nie są gwarancją, są konserwatywnym szacunkiem opartym na danych GA4</span></p>
+  </div>
+</div>
+
+<div class="suma-block">
+  <div class="suma-block-inner">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:16px;">MAPA STRAT — 7 OBSZARÓW</div>
+    <table class="suma-table">
+      <thead><tr><th>Obszar straty</th><th>Priorytet</th><th>Timeline</th><th style="text-align:right;">Strata / mies</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <strong>View→ATC drop (Segment Okna Wystawowego)</strong> ⏳
+            <br><small style="color:rgba(255,255,255,.45);font-size:11px;">52.3% zaangażowanych sesji = brak ATC. 90.6% drop view→ATC</small>
+          </td>
+          <td><span class="priority-tag pt-long">DŁUGOTERMINOWY</span></td>
+          <td style="color:rgba(255,255,255,.55);font-size:12px;">4–8 tyg</td>
+          <td class="suma-num">~45 000–60 000 PLN</td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Checkout delivery drop</strong>
+            <br><small style="color:rgba(255,255,255,.45);font-size:11px;">51.9% odpada na etapie dostawy — brak progu/InPost</small>
+          </td>
+          <td><span class="priority-tag pt-high">WYSOKI</span></td>
+          <td style="color:rgba(255,255,255,.55);font-size:12px;">3–5 dni</td>
+          <td class="suma-num">~15 000–25 000 PLN</td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Sleeping Beauty paradox</strong>
+            <br><small style="color:rgba(255,255,255,.45);font-size:11px;">4.9K sesji, CR 0.82% — możliwe 3× przy Clarity fix</small>
+          </td>
+          <td><span class="priority-tag pt-high">WYSOKI</span></td>
+          <td style="color:rgba(255,255,255,.55);font-size:12px;">7–14 dni</td>
+          <td class="suma-num">~5 500–9 000 PLN</td>
+        </tr>
+        <tr>
+          <td>
+            <strong>EN-EU pages bez lokalizacji PLN</strong>
+            <br><small style="color:rgba(255,255,255,.45);font-size:11px;">2.7K sesji EN/mies → 773 PLN revenue — strata</small>
+          </td>
+          <td><span class="priority-tag pt-medium">ŚREDNI</span></td>
+          <td style="color:rgba(255,255,255,.55);font-size:12px;">1–2 sprinty</td>
+          <td class="suma-num">~4 500–7 500 PLN</td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Internal search (0 zakupów)</strong>
+            <br><small style="color:rgba(255,255,255,.45);font-size:11px;">143 sesji szukało, 0 kupiło — wysoka intencja, zero efektu</small>
+          </td>
+          <td><span class="priority-tag pt-medium">ŚREDNI</span></td>
+          <td style="color:rgba(255,255,255,.55);font-size:12px;">2–5 dni</td>
+          <td class="suma-num">~2 000–4 500 PLN</td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Direct CR optimization</strong>
+            <br><small style="color:rgba(255,255,255,.45);font-size:11px;">20.6K sesji direct, CR 0.80% vs benchmark 2.5%</small>
+          </td>
+          <td><span class="priority-tag pt-medium">ŚREDNI</span></td>
+          <td style="color:rgba(255,255,255,.55);font-size:12px;">2–4 tyg</td>
+          <td class="suma-num">~2 000–4 500 PLN</td>
+        </tr>
+        <tr>
+          <td>
+            <strong>/rutyna-coolnails bez CTA</strong>
+            <br><small style="color:rgba(255,255,255,.45);font-size:11px;">3.1K sesji → 431 PLN. Brak link do produktów</small>
+          </td>
+          <td><span class="priority-tag pt-low">NISKI</span></td>
+          <td style="color:rgba(255,255,255,.55);font-size:12px;">1–2 dni</td>
+          <td class="suma-num">~1 500–2 500 PLN</td>
+        </tr>
+        <tr class="suma-total-row">
+          <td colspan="3" style="color:rgba(255 255 255 .6);"><strong>SUMA ŁĄCZNA (szacunek)</strong></td>
+          <td class="suma-num suma-total-num">~75 500–113 000 PLN/mies</td>
+        </tr></tbody>
+    </table>
+
+    <div style="margin-top:24px;padding:16px 20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px;">ℹ Metodologia szacunku</div>
+      <p style="font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.7;">Przedziały obliczone jako: (ruch dotknięty problemem) × (szacowana poprawa CR) × AOV 149 PLN. Wartości ⏳ oznaczają efekty długoterminowe (>4 tygodnie). Suma kolumny nie jest addytywna — część efektów nakłada się na siebie. Realistyczny target w 90 dni: <strong style="color:rgba(255,255,255,.75);">+25–45K PLN/mies</strong> (szybkie wygrane bez długoterminowych).</p>
+    </div>
+  </div>
+</div>
+
+<div class="suma-plan-block">
+  <div class="suma-plan-inner">
+    <div class="suma-plan-title">Plan Realizacji — 3 fazy</div>
+    <div class="suma-plan-phases">
+      <div class="suma-phase">
+        <h4>🔴 Faza 1 — Tydzień 1–2</h4>
+        <ul>
+          <li>Próg darmowej dostawy w mini-cart + checkout (+15–25K PLN)</li>
+          <li>Diagnoza i fix internal search (+2–4.5K PLN)</li>
+          <li>/rutyna-coolnails: dodaj CTA do produktów (+1.5–2.5K PLN)</li>
+          <li>Clarity review Sleeping Beauty — 20 nagrań</li>
+        </ul>
+      </div>
+      <div class="suma-phase">
+        <h4>🟡 Faza 2 — Tydzień 3–6</h4>
+        <ul>
+          <li>Quick ATC na tilach listingu (wymaga dev, 1 sprint)</li>
+          <li>Bundle LUNA EYE × Pumeks nano na PDP (+5.5–9K PLN)</li>
+          <li>EN-EU: geo-redirect lub currency switcher (+4.5–7.5K PLN)</li>
+          <li>Media rebalancing: Paid Search ↑ / Paid Social ↓</li>
+        </ul>
+      </div>
+      <div class="suma-phase">
+        <h4>🟢 Faza 3 — Miesiąc 2–3</h4>
+        <ul>
+          <li>Sticky ATC button mobile PDP (Segment Okna Wystawowego)</li>
+          <li>Quick View na listingu (długoterminowy ATC uplift)</li>
+          <li>Konfiguracja Microsoft Clarity full-session recording</li>
+          <li>GA4 Live Daily dashboard uruchomiony</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="mega-footer">
+  <strong>EEL — Ecomms Experimental Lab</strong> &nbsp;·&nbsp; Raport wygenerowany: 2026-05-19 &nbsp;·&nbsp; Dane: GA4 Property 342844459 &nbsp;·&nbsp; <strong>glov.co</strong>
+</div>
+
+<script>
+/* ─── INNER TAB SWITCHER (Mapping sklepu / Mapping Kontentu) ─── */
+function showTab(name, btn) {
+  var panel = document.getElementById('mega-tab1').classList.contains('active')
+    ? document.getElementById('mega-tab1')
+    : document.getElementById('mega-tab2');
+  panel.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  panel.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ─── MEGA TAB SWITCHER ─── */
+function switchMegaTab(name, btn) {
+  document.querySelectorAll('.mega-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mega-tab-panel').forEach(p => p.style.display = 'none');
+  btn.classList.add('active');
+  document.getElementById('mega-' + name).style.display = 'block';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+/* Initialize: hide all except tab1 */
+(function() {
+  document.querySelectorAll('.mega-tab-panel').forEach(function(p) {
+    if (!p.classList.contains('active')) p.style.display = 'none';
+  });
+})();
+</script>
+
+
+
+
+<script>
+(function(){
+  // deep-link: #tab3..#tab6 albo #ga4/#live/#wizualny/#suma -> klika odpowiedni przycisk mega-audytu
+  var MAP={tab3:0,ga4:0,'analiza':0, tab4:1,live:1,daily:1, tab5:2,wizualny:2, tab6:3,suma:3,straty:3};
+  function open(){
+    var hsh=decodeURIComponent(location.hash.replace('#','')).toLowerCase();
+    if(!hsh) return;
+    var btns=document.querySelectorAll('.mega-tab-btn');
+    if(hsh in MAP && btns[MAP[hsh]]) btns[MAP[hsh]].click();
+  }
+  window.addEventListener('DOMContentLoaded',open);
+  window.addEventListener('hashchange',open);
+})();
+</script>
+</body>
+</html>
