@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Audit UX: Język & Koszyk | 6 maja 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: #1a1a1a; line-height: 1.6; background: #fff; }
+
+  .cover { page-break-after: always; background: #1a1a1a; color: #fff; height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 60px; }
+  .cover .label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #999; margin-bottom: 24px; }
+  .cover h1 { font-size: 42px; font-weight: 700; line-height: 1.1; margin-bottom: 16px; }
+  .cover .subtitle { font-size: 18px; color: #ccc; margin-bottom: 48px; }
+  .cover .meta { font-size: 12px; color: #666; }
+  .cover .meta span { color: #999; margin-right: 24px; }
+
+  .page { padding: 48px 60px; max-width: 100%; }
+  .page-break { page-break-before: always; }
+
+  h2 { font-size: 24px; font-weight: 700; margin-bottom: 8px; padding-bottom: 12px; border-bottom: 3px solid #1a1a1a; margin-top: 0; }
+  h3 { font-size: 16px; font-weight: 700; margin: 28px 0 12px; }
+  h4 { font-size: 13px; font-weight: 700; margin: 16px 0 8px; color: #444; }
+  p { margin-bottom: 12px; }
+
+  .section-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #999; margin-bottom: 6px; font-weight: 600; }
+
+  .summary-box { background: #f5f5f5; border-left: 4px solid #1a1a1a; padding: 20px 24px; margin: 24px 0; border-radius: 0 4px 4px 0; }
+  .summary-box p { margin: 0; font-size: 14px; line-height: 1.7; }
+
+  .alert-red { background: #fff5f5; border-left: 4px solid #e53e3e; padding: 16px 20px; margin: 16px 0; border-radius: 0 4px 4px 0; }
+  .alert-orange { background: #fffaf0; border-left: 4px solid #ed8936; padding: 16px 20px; margin: 16px 0; border-radius: 0 4px 4px 0; }
+  .alert-green { background: #f0fff4; border-left: 4px solid #38a169; padding: 16px 20px; margin: 16px 0; border-radius: 0 4px 4px 0; }
+
+  .alert-red .alert-title { font-weight: 700; color: #c53030; font-size: 13px; margin-bottom: 6px; }
+  .alert-orange .alert-title { font-weight: 700; color: #c05621; font-size: 13px; margin-bottom: 6px; }
+  .alert-green .alert-title { font-weight: 700; color: #276749; font-size: 13px; margin-bottom: 6px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 12px; }
+  th { background: #1a1a1a; color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; }
+  td { padding: 10px 14px; border-bottom: 1px solid #eee; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+  tr:last-child td { border-bottom: none; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-orange { background: #fed7aa; color: #9a3412; }
+  .badge-green { background: #d1fae5; color: #065f46; }
+  .badge-gray { background: #e5e7eb; color: #374151; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 20px 0; }
+  .col-box { border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; }
+  .col-box h4 { margin-top: 0; font-size: 14px; color: #1a1a1a; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; }
+
+  .check-list { list-style: none; margin: 0; padding: 0; }
+  .check-list li { padding: 6px 0; border-bottom: 1px solid #f0f0f0; display: flex; gap: 10px; }
+  .check-list li:last-child { border-bottom: none; }
+  .check-list .icon { flex-shrink: 0; width: 18px; }
+
+  .priority-table td:first-child { font-weight: 600; width: 32px; text-align: center; }
+
+  .flow-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin: 16px 0; font-family: monospace; font-size: 12px; line-height: 2; }
+  .flow-box .step-ok { color: #059669; }
+  .flow-box .step-bad { color: #dc2626; }
+  .flow-box .arrow { color: #6b7280; }
+
+  .footer-note { margin-top: 48px; padding-top: 16px; border-top: 1px solid #eee; font-size: 11px; color: #999; }
+
+  .toc { margin: 32px 0; }
+  .toc-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dotted #ddd; font-size: 13px; }
+  .toc-item .toc-num { color: #999; font-weight: 700; margin-right: 12px; }
+  .toc-item .toc-page { color: #999; }
+
+  @media print {
+    body { font-size: 12px; }
+    .cover { height: 100vh; }
+    .page { padding: 40px 50px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="label">Raport UX — e-commerce</div>
+  <h1>GLOV<br>Audit UX:<br>Język & Koszyk</h1>
+  <div class="subtitle">Analiza problemów konwersji na glov.co</div>
+  <div class="meta">
+    <span>Data: 6 maja 2026</span>
+    <span>Przygotował: Tomasz Waligóra</span>
+    <span>Ruch mobile: ~90%</span>
+  </div>
+</div>
+
+<!-- SPIS TREŚCI -->
+<div class="page">
+  <div class="section-label">Zawartość raportu</div>
+  <h2>Spis treści</h2>
+
+  <div class="toc">
+    <div class="toc-item"><span><span class="toc-num">01</span> Streszczenie wykonawcze</span></div>
+    <div class="toc-item"><span><span class="toc-num">02</span> Problem #1 — Język i waluta</span></div>
+    <div class="toc-item"><span><span class="toc-num">03</span> Problem #2 — Koszyk: Drawer vs Strona</span></div>
+    <div class="toc-item"><span><span class="toc-num">04</span> Bug — Duplikaty pozycji w koszyku</span></div>
+    <div class="toc-item"><span><span class="toc-num">05</span> Analiza mobile (90% ruchu)</span></div>
+    <div class="toc-item"><span><span class="toc-num">06</span> Plan działań (priorytetyzacja)</span></div>
+  </div>
+
+  <div class="summary-box">
+    <p><strong>Metodologia:</strong> Analiza techniczna za pomocą Playwright (automatyczna przeglądarka), inspekcja DOM, cookies, architektury Shopify Markets oraz porównanie wizualne obu wersji koszyka na desktop i mobile (390×844 px, iPhone 14 Pro).</p>
+  </div>
+</div>
+
+<!-- SEKCJA 01 -->
+<div class="page page-break">
+  <div class="section-label">01</div>
+  <h2>Streszczenie wykonawcze</h2>
+
+  <p>Analiza strony glov.co ujawniła <strong>trzy niezależne problemy</strong> bezpośrednio wpływające na porzucanie koszyka i utratę konwersji:</p>
+
+  <div class="alert-red">
+    <div class="alert-title">🔴 Krytyczne — bezpośrednia utrata konwersji</div>
+    <p><strong>Problem z językiem:</strong> Użytkownicy trafiający na stronę po angielsku muszą ręcznie przełączać język, a preferencja nie jest zapamiętywana. Loop angielski/polski przy każdej sesji.</p>
+  </div>
+
+  <div class="alert-red">
+    <div class="alert-title">🔴 Krytyczne — dezorientacja na ścieżce zakupowej</div>
+    <p><strong>Dwa różne koszyki:</strong> Drawer po "Dodaj do koszyka" i strona /cart wyglądają i działają inaczej. Użytkownik widzi dwa różne doświadczenia na tej samej ścieżce zakupu.</p>
+  </div>
+
+  <div class="alert-red">
+    <div class="alert-title">🔴 Krytyczne — błąd techniczny w koszyku</div>
+    <p><strong>Duplikaty linii:</strong> Dodanie tego samego produktu kilkukrotnie tworzy osobne pozycje zamiast zwiększać ilość. Koszyk wygląda jak błąd.</p>
+  </div>
+
+  <h3>Kluczowe liczby</h3>
+  <table>
+    <tr>
+      <th>Metryka</th>
+      <th>Wartość</th>
+      <th>Kontekst</th>
+    </tr>
+    <tr>
+      <td>Ruch mobile</td>
+      <td><strong>~90%</strong></td>
+      <td>Analiza mobile jest priorytetem</td>
+    </tr>
+    <tr>
+      <td>Liczba wersji koszyka</td>
+      <td><strong>2</strong></td>
+      <td>Drawer + URL /cart — różne layouty</td>
+    </tr>
+    <tr>
+      <td>Liczba rynków Shopify</td>
+      <td><strong>3+</strong></td>
+      <td>glov.co/ (PL/PLN), /en-eu (EN/EUR), /pl-global (PL/EUR)</td>
+    </tr>
+    <tr>
+      <td>Plugin językowy</td>
+      <td><strong>Hextom Translate & Currency</strong></td>
+      <td>Używa Google Translate + SSW cookie — konflikt z Cookiebot</td>
+    </tr>
+  </table>
+</div>
+
+<!-- SEKCJA 02 -->
+<div class="page page-break">
+  <div class="section-label">02</div>
+  <h2>Problem #1 — Język i waluta</h2>
+
+  <h3>Architektura rynków Shopify</h3>
+  <table>
+    <tr>
+      <th>URL</th>
+      <th>Język</th>
+      <th>Waluta</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td><code>glov.co/</code></td>
+      <td>Polski</td>
+      <td><strong>PLN</strong> (39,90 zł)</td>
+      <td><span class="badge badge-green">✅ Poprawny default</span></td>
+    </tr>
+    <tr>
+      <td><code>glov.co/en-eu</code></td>
+      <td>Angielski</td>
+      <td>EUR</td>
+      <td><span class="badge badge-gray">Rynek EU/EN</span></td>
+    </tr>
+    <tr>
+      <td><code>glov.co/pl-global</code></td>
+      <td>Polski</td>
+      <td><strong>EUR</strong> (€9,95)</td>
+      <td><span class="badge badge-orange">⚠️ Niejednoznaczny</span></td>
+    </tr>
+  </table>
+
+  <div class="alert-green">
+    <div class="alert-title">✅ Dobra wiadomość — default jest poprawny</div>
+    <p><code>glov.co/</code> serwuje polską wersję z cenami PLN. Nie trzeba zmieniać architektury Shopify Markets.</p>
+  </div>
+
+  <h3>Winowajca: ssw_customer_locale cookie</h3>
+  <p>Plugin <strong>Hextom: Translate &amp; Currency</strong> ustawia cookie <code>ssw_customer_locale=0_en</code> gdy użytkownik kliknie EN w selektorze języka. Ten cookie nadpisuje domyślny rynek polski przy każdej kolejnej wizycie.</p>
+
+  <div class="flow-box">
+    <div class="step-ok">✅ Wizyta 1: glov.co/ → Polski + PLN (poprawnie)</div>
+    <div class="arrow">↓ użytkownik klika EN w selektorze (przypadkowo lub z ciekawości)</div>
+    <div class="step-bad">❌ ssw_customer_locale=0_en ustawiony → override domyślnego rynku</div>
+    <div class="arrow">↓ Wizyta 2: glov.co/ → redirect do /en-eu</div>
+    <div class="step-bad">❌ Użytkownik przełącza na PL w Hextom</div>
+    <div class="arrow">↓ Cookiebot blokuje Preferences cookies (domyślnie wyłączone)</div>
+    <div class="step-bad">❌ Preferencja PL nie jest zapisana</div>
+    <div class="arrow">↓ Wizyta 3: ssw_customer_locale=0_en wygrywa → EN znowu</div>
+    <div class="step-bad">❌ Loop — użytkownik musi przełączać przy każdej sesji</div>
+  </div>
+
+  <h3>Problem /pl-global — mieszane waluty</h3>
+  <p>Na stronie <code>glov.co/pl-global</code> treść jest po polsku, ale ceny w EUR. Jednocześnie progi promocji ("darmowa dostawa od 150 zł", "prezent od 120 zł") pokazują PLN. Użytkownik widzi sprzeczne informacje.</p>
+
+  <div class="alert-orange">
+    <div class="alert-title">⚠️ Ryzyko: niespójna waluta = porzucenie koszyka</div>
+    <p>Polscy użytkownicy którzy trafią na <code>/pl-global</code> (np. przez zewnętrzny link) widzą ceny €9,95 ale próg darmowej dostawy "od 150 zł" — nie wiedzą czy są blisko progu czy nie.</p>
+  </div>
+
+  <h3>Rekomendowane działania</h3>
+  <table class="priority-table">
+    <tr>
+      <th>#</th>
+      <th>Działanie</th>
+      <th>Trudność</th>
+      <th>Impact</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Skonfigurować Hextom: nie nadpisywać <code>ssw_customer_locale</code> dla użytkowników z Polski (geo: PL jest już w Cookiebot cookie)</td>
+      <td><span class="badge badge-orange">Średnia</span></td>
+      <td><span class="badge badge-red">Wysoki</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Przenieść preferencję języka do kategorii "Necessary" w Cookiebot (lub domyślnie włączone Preferences)</td>
+      <td><span class="badge badge-green">Niska</span></td>
+      <td><span class="badge badge-red">Wysoki</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Usunąć market <code>/pl-global</code> lub poprawić walutę na PLN — wyeliminować mieszankę EUR/PLN</td>
+      <td><span class="badge badge-orange">Średnia</span></td>
+      <td><span class="badge badge-orange">Średni</span></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Usunąć selektor EN/PL z wersji polskiej (po co Polak ma widzieć EN na polskim sklepie?)</td>
+      <td><span class="badge badge-green">Niska</span></td>
+      <td><span class="badge badge-orange">Średni</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- SEKCJA 03 -->
+<div class="page page-break">
+  <div class="section-label">03</div>
+  <h2>Problem #2 — Koszyk: Drawer vs Strona /cart</h2>
+
+  <p>GLOV ma dwa punkty styku z koszykiem na ścieżce zakupowej. Oba powinny dawać identyczne lub maksymalnie spójne doświadczenie — tak nie jest.</p>
+
+  <h3>Porównanie elementów — Mobile (90% ruchu)</h3>
+  <table>
+    <tr>
+      <th>Element</th>
+      <th>Drawer cart</th>
+      <th>URL /cart</th>
+      <th>Ocena</th>
+    </tr>
+    <tr>
+      <td>Progress bar (darmowa dostawa)</td>
+      <td>✅ Widoczny na górze</td>
+      <td>✅ Widoczny na górze</td>
+      <td><span class="badge badge-green">OK</span></td>
+    </tr>
+    <tr>
+      <td>Upsell carousel (inne produkty)</td>
+      <td>✅ Widoczny</td>
+      <td>✅ Widoczny</td>
+      <td><span class="badge badge-green">OK</span></td>
+    </tr>
+    <tr>
+      <td>Gift with purchase CTA</td>
+      <td>⚠️ Mały link na dole: "Do zamówienia od 120 zł prezent TUTAJ"</td>
+      <td>✅ Prominentny baner: "Darmowy prezent do wyboru od 120 zł! Wybierz prezent +"</td>
+      <td><span class="badge badge-red">Niespójne</span></td>
+    </tr>
+    <tr>
+      <td>RAZEM / podsumowanie</td>
+      <td>❌ Brak sekcji RAZEM</td>
+      <td>✅ RAZEM + info o wysyłce</td>
+      <td><span class="badge badge-red">Niespójne</span></td>
+    </tr>
+    <tr>
+      <td>Wiadomość dla sprzedającego</td>
+      <td>⚠️ Widoczna sekcja — zajmuje miejsce</td>
+      <td>✅ Zwinięta jako link "+"</td>
+      <td><span class="badge badge-orange">Różnica</span></td>
+    </tr>
+    <tr>
+      <td>Przycisk "Przejdź do kasy"</td>
+      <td>✅ Sticky na dole, PLN</td>
+      <td>✅ Sticky na dole, PLN</td>
+      <td><span class="badge badge-green">OK</span></td>
+    </tr>
+    <tr>
+      <td>Waluta</td>
+      <td>✅ PLN</td>
+      <td>✅ PLN</td>
+      <td><span class="badge badge-green">OK</span></td>
+    </tr>
+    <tr>
+      <td>Trust signals (płatności, bezpieczeństwo)</td>
+      <td>❌ Brak</td>
+      <td>❌ Brak</td>
+      <td><span class="badge badge-orange">Obydwa brakuje</span></td>
+    </tr>
+  </table>
+
+  <h3>Porównanie elementów — Desktop</h3>
+  <table>
+    <tr>
+      <th>Element</th>
+      <th>Drawer cart</th>
+      <th>URL /cart</th>
+      <th>Ocena</th>
+    </tr>
+    <tr>
+      <td>Progress bar</td>
+      <td>❌ Nie renderuje (GFG app)</td>
+      <td>❌ Brak</td>
+      <td><span class="badge badge-red">Problem desktop</span></td>
+    </tr>
+    <tr>
+      <td>Upsell carousel</td>
+      <td>❌ Nie renderuje</td>
+      <td>❌ Brak</td>
+      <td><span class="badge badge-red">Problem desktop</span></td>
+    </tr>
+    <tr>
+      <td>Gift with purchase CTA</td>
+      <td>⚠️ Mały link</td>
+      <td>✅ Prominentny baner</td>
+      <td><span class="badge badge-red">Niespójne</span></td>
+    </tr>
+    <tr>
+      <td>Layout produktu</td>
+      <td>Wertykalny, bez nagłówków</td>
+      <td>Tabela: CENA / ILOŚĆ / CAŁOŚĆ</td>
+      <td><span class="badge badge-red">Niespójne</span></td>
+    </tr>
+    <tr>
+      <td>Trusted Shops widget</td>
+      <td>Pływa, nie blokuje CTA</td>
+      <td>⚠️ Częściowo zasłania przycisk "Przejdź do kasy"</td>
+      <td><span class="badge badge-red">Bug desktop</span></td>
+    </tr>
+    <tr>
+      <td>Waluta (rynek /pl-global)</td>
+      <td>❌ EUR zamiast PLN</td>
+      <td>❌ EUR zamiast PLN</td>
+      <td><span class="badge badge-red">Problem marketu</span></td>
+    </tr>
+  </table>
+
+  <div class="alert-red">
+    <div class="alert-title">🔴 Główny wniosek: dwa koszyki = dwa doświadczenia = dezorientacja</div>
+    <p>Użytkownik który widział drawer (po "Dodaj do koszyka") a potem klika ikonę koszyka i trafia na /cart — widzi zupełnie inną stronę. To niszczy zaufanie i spójność ścieżki zakupowej. Oba widoki powinny być maksymalnie zbliżone.</p>
+  </div>
+
+  <h3>Rekomendowane działania</h3>
+  <table class="priority-table">
+    <tr>
+      <th>#</th>
+      <th>Działanie</th>
+      <th>Trudność</th>
+      <th>Impact</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Ujednolicić GFG gift picker: prominentny baner w drawer (jak na stronie /cart)</td>
+      <td><span class="badge badge-green">Niska</span></td>
+      <td><span class="badge badge-red">Wysoki</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Dodać sekcję RAZEM + info o wysyłce do drawera</td>
+      <td><span class="badge badge-orange">Średnia</span></td>
+      <td><span class="badge badge-orange">Średni</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Zwinąć "Wiadomość do sprzedającego" w drawerze (jak na /cart)</td>
+      <td><span class="badge badge-green">Niska</span></td>
+      <td><span class="badge badge-orange">Średni</span></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Naprawić Trusted Shops widget na /cart (desktop) — z-index blokuje CTA</td>
+      <td><span class="badge badge-green">Niska (CSS)</span></td>
+      <td><span class="badge badge-orange">Średni</span></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Zbadać dlaczego GFG progress bar nie renderuje na desktop — sprawdzić konfigurację aplikacji</td>
+      <td><span class="badge badge-orange">Średnia</span></td>
+      <td><span class="badge badge-red">Wysoki (desktop)</span></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Dodać trust signals do obu koszyków (metody płatności, ikony bezpieczeństwa)</td>
+      <td><span class="badge badge-orange">Średnia</span></td>
+      <td><span class="badge badge-orange">Średni</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- SEKCJA 04 -->
+<div class="page page-break">
+  <div class="section-label">04</div>
+  <h2>Bug — Duplikaty pozycji w koszyku</h2>
+
+  <div class="alert-red">
+    <div class="alert-title">🔴 Błąd techniczny: ten sam produkt tworzy wiele linii zamiast ilość</div>
+    <p>Dodanie tego samego produktu (ten sam wariant) wielokrotnie tworzy osobne linie w koszyku (1×, 1×, 1×) zamiast jednej z ilością (1× ilość: 3). Koszyk wygląda jak błąd systemu.</p>
+  </div>
+
+  <div class="two-col">
+    <div class="col-box">
+      <h4>❌ Obecne zachowanie</h4>
+      <ul class="check-list">
+        <li><span class="icon">❌</span> Tarka-pumeks Pink — 39,90 zł × 1</li>
+        <li><span class="icon">❌</span> Tarka-pumeks Pink — 39,90 zł × 1</li>
+        <li><span class="icon">❌</span> Tarka-pumeks Pink — 39,90 zł × 1</li>
+      </ul>
+      <p style="margin-top:12px; color:#dc2626; font-size:12px">3 osobne linie = wygląda jak błąd</p>
+    </div>
+    <div class="col-box">
+      <h4>✅ Oczekiwane zachowanie</h4>
+      <ul class="check-list">
+        <li><span class="icon">✅</span> Tarka-pumeks Pink — 39,90 zł × <strong>3</strong></li>
+      </ul>
+      <p style="margin-top:12px; color:#059669; font-size:12px">1 linia z ilością = standardowe zachowanie Shopify</p>
+    </div>
+  </div>
+
+  <h3>Prawdopodobna przyczyna</h3>
+  <p>Aplikacja <strong>GFG (Gift For Good / Monster Cart)</strong> modyfikuje właściwości linii koszyka (<code>line_item.properties</code>) przy dodawaniu produktu. Każde dodanie ma inne <code>cart_properties</code>, przez co Shopify traktuje je jako oddzielne pozycje. Jest to znany problem z integracją aplikacji gift-with-purchase.</p>
+
+  <h3>Jak naprawić</h3>
+  <table>
+    <tr>
+      <th>Krok</th>
+      <th>Działanie</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Sprawdzić w GFG app czy "merge cart items" jest włączone</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Sprawdzić czy motyw (theme) dodaje jakieś custom properties przy ATC</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Przetestować zachowanie po wyłączeniu GFG app — jeśli bug znika, problem leży w GFG</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Skontaktować się z support GFG app z opisem problemu</td>
+    </tr>
+  </table>
+</div>
+
+<!-- SEKCJA 05 -->
+<div class="page page-break">
+  <div class="section-label">05</div>
+  <h2>Analiza mobile (90% ruchu)</h2>
+
+  <p>Zdecydowana większość użytkowników GLOV korzysta z urządzeń mobilnych. Analiza przeprowadzona w symulacji iPhone 14 Pro (390×844 px).</p>
+
+  <h3>Drawer cart — mobile</h3>
+  <ul class="check-list">
+    <li><span class="icon">✅</span> Progress bar darmowej dostawy widoczny na górze ("Do darmowej dostawy brakuje Ci X zł")</li>
+    <li><span class="icon">✅</span> Carousel upsell z produktami i przyciskiem "Dobierz"</li>
+    <li><span class="icon">✅</span> Ceny w PLN — poprawna waluta</li>
+    <li><span class="icon">✅</span> Sticky przycisk "PRZEJDŹ DO KASY – 119,70ZŁ" zawsze widoczny</li>
+    <li><span class="icon">❌</span> Duplikaty linii produktów (bug)</li>
+    <li><span class="icon">⚠️</span> Gift CTA jako mały link, nie prominentny baner</li>
+    <li><span class="icon">⚠️</span> Trusted Shops widget częściowo nakłada się na checkout button</li>
+    <li><span class="icon">❌</span> Brak sekcji RAZEM przed przyciskiem checkout</li>
+  </ul>
+
+  <h3>URL cart /cart — mobile</h3>
+  <ul class="check-list">
+    <li><span class="icon">✅</span> Progress bar darmowej dostawy widoczny na górze</li>
+    <li><span class="icon">✅</span> Carousel upsell z produktami</li>
+    <li><span class="icon">✅</span> Prominentny baner gift picker ("Darmowy prezent do wyboru od 120 zł!")</li>
+    <li><span class="icon">✅</span> Ceny w PLN</li>
+    <li><span class="icon">✅</span> Sticky przycisk checkout</li>
+    <li><span class="icon">✅</span> RAZEM + info o wysyłce widoczne</li>
+    <li><span class="icon">✅</span> "Wiadomość do sprzedającego" zwinięta (nie blokuje treści)</li>
+    <li><span class="icon">❌</span> Duplikaty linii produktów (ten sam bug)</li>
+  </ul>
+
+  <div class="alert-green">
+    <div class="alert-title">✅ Mobile jest znacznie lepszy niż desktop</div>
+    <p>Na mobile oba koszyki mają progress bar i carousel — GFG app renderuje poprawnie. Desktop wymaga osobnego sprawdzenia konfiguracji. URL /cart na mobile jest najbardziej kompletnym widokiem koszyka.</p>
+  </div>
+
+  <h3>Obserwacje mobile UX</h3>
+  <table>
+    <tr>
+      <th>Element</th>
+      <th>Ocena</th>
+      <th>Komentarz</th>
+    </tr>
+    <tr>
+      <td>Sticky ATC na PDP</td>
+      <td><span class="badge badge-green">✅ Dobrze</span></td>
+      <td>Przycisk zawsze widoczny podczas scrollowania</td>
+    </tr>
+    <tr>
+      <td>Galeria zdjęć PDP</td>
+      <td><span class="badge badge-orange">⚠️ Za dużo dot-ów</span></td>
+      <td>12+ kropek nawigacji — zbyt wiele zdjęć, przytłacza</td>
+    </tr>
+    <tr>
+      <td>Progress bar darmowej dostawy</td>
+      <td><span class="badge badge-green">✅ Dobrze</span></td>
+      <td>Czarny pasek, czytelny, z tekstem kwotowym</td>
+    </tr>
+    <tr>
+      <td>Trusted Shops widget</td>
+      <td><span class="badge badge-red">❌ Problem</span></td>
+      <td>Nakłada się na lewy dolny róg, przy checkoucie może blokować</td>
+    </tr>
+    <tr>
+      <td>Nawigacja w drawer</td>
+      <td><span class="badge badge-green">✅ OK</span></td>
+      <td>Scrollowalny, X zamyka — standard</td>
+    </tr>
+  </table>
+</div>
+
+<!-- SEKCJA 06 -->
+<div class="page page-break">
+  <div class="section-label">06</div>
+  <h2>Plan działań — priorytetyzacja</h2>
+
+  <h3>🔴 Natychmiast (tydzień 1)</h3>
+  <table class="priority-table">
+    <tr>
+      <th>#</th>
+      <th>Działanie</th>
+      <th>Kto</th>
+      <th>Czas</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><strong>Bug duplikatów koszyka</strong> — wyłączyć GFG app tymczasowo i przetestować czy bug znika; skontaktować się z supportem GFG</td>
+      <td>Dev / GFG support</td>
+      <td>1–2 dni</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>Trusted Shops widget</strong> — naprawić z-index na desktop /cart, żeby nie zasłaniał CTA</td>
+      <td>Dev (CSS)</td>
+      <td>1 godz.</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>Cookiebot + język</strong> — przenieść preferencję języka do "Necessary" lub domyślnie włączyć Preferences</td>
+      <td>Marketing / Dev</td>
+      <td>1 godz.</td>
+    </tr>
+  </table>
+
+  <h3>🟠 Krótkoterminowo (tydzień 2–3)</h3>
+  <table class="priority-table">
+    <tr>
+      <th>#</th>
+      <th>Działanie</th>
+      <th>Kto</th>
+      <th>Czas</th>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>Hextom SSW cookie</strong> — skonfigurować żeby użytkownicy z Polski nie dostawali override EN; lub usunąć selektor EN z polskiej wersji</td>
+      <td>Dev / Hextom config</td>
+      <td>2–4 godz.</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>Gift picker w drawer</strong> — prominentny baner jak na stronie /cart (konfiguracja GFG app)</td>
+      <td>GFG config</td>
+      <td>1–2 godz.</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><strong>RAZEM w drawer</strong> — dodać sekcję z sumą i info o wysyłce przed przyciskiem checkout</td>
+      <td>Dev (theme)</td>
+      <td>2–3 godz.</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><strong>Zbadać /pl-global</strong> — dlaczego PLN jest wymieszane z EUR; usunąć lub ujednolicić walutę</td>
+      <td>Dev / Shopify Markets</td>
+      <td>2 godz.</td>
+    </tr>
+  </table>
+
+  <h3>🟡 Średnioterminowo (miesiąc 1–2)</h3>
+  <table class="priority-table">
+    <tr>
+      <th>#</th>
+      <th>Działanie</th>
+      <th>Kto</th>
+      <th>Czas</th>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><strong>Ujednolicić layouty drawer ↔ /cart</strong> — maksymalnie zbliżone doświadczenie w obu widokach</td>
+      <td>Dev (theme)</td>
+      <td>1–2 dni</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><strong>GFG na desktop</strong> — zbadać dlaczego progress bar i carousel nie renderują; włączyć lub zastąpić</td>
+      <td>Dev / GFG support</td>
+      <td>1 dzień</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><strong>Trust signals w koszyku</strong> — dodać metody płatności, ikony bezpieczeństwa do obu widoków</td>
+      <td>Dev (theme)</td>
+      <td>2–4 godz.</td>
+    </tr>
+  </table>
+
+  <div class="summary-box" style="margin-top: 32px;">
+    <p><strong>Szacowany efekt napraw #1–3:</strong> Eliminacja technicznego błędu koszyka i naprawienie widoczności przycisku checkout powinny bezpośrednio zredukować porzucenia koszyka. Naprawienie problemu językowego eliminuje loop angielski/polski dla powracających użytkowników.</p>
+  </div>
+
+  <div class="footer-note">
+    <p>Raport przygotowany: 6 maja 2026 | Analiza techniczna: Playwright headless browser, inspekcja DOM, cookies | Viewport mobile: 390×844 px (iPhone 14 Pro) | Viewport desktop: 1440×900 px</p>
+    <p style="margin-top: 4px;">Przygotował: Tomasz Waligóra | tomasz.waligora@cleangang.com</p>
+  </div>
+</div>
+
+</body>
+</html>
