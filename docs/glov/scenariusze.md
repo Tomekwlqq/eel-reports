@@ -301,3 +301,23 @@ Próbka: 150 najkrótszych (bounce) + 250 najwięcej-klików (engaged) + 250 naj
 - **Segmenty behawioralne 1–4** (wyżej) — policzyć wolumeny w GA4 (maj+marzec), potem cross z Clarity na świeżej próbce dla „dlaczego".
 - **Profil aktywności: search / sortowanie / nawigacja** (maj + marzec) — mierzalne wg tabeli; filtry i ATC-per-obszar = ślepe pola.
 - Walidacja: GA4 vs Shopify analytics (ShopifyQL) jako benchmark transakcji.
+
+---
+
+# Sesja 2026-06-12 — HUB, publikacja, live, lista napraw (markery dla terminala)
+
+<!-- @ski -->
+**Publikacja HTML na www DZIAŁA z Cowork sandboxa (nie tylko terminal).** Metoda: GitHub Contents API przez Python urllib (PUT contents z base64 + Authorization token), NIE `gh`/`git push` (sandbox ich nie ma, ale MA sieć do api.github.com). Token w skillu publish-to-web (Audi_Plichta/ga4_cro/publish-to-web-SKILL.md). Wgrywaj PARTIAMI 3-8 plików (45s timeout sandboxa). Aktualizacja pliku = pobierz sha (GET) → PUT z sha. Pages serwuje z /docs → URL bez „docs". To powinno trafić do skilla publish-to-web jako wariant „z sandboxa przez API".
+<!-- /@ski -->
+
+<!-- @ski -->
+**Wzorzec „Master HUB + lista napraw" (przenośny na każdego klienta).** Jeden GLOV_HUB.html jako punkt wejścia (styl Skillta, jasny+toggle dark, kafelki kolorowe dla narzędzi operacyjnych w 1 rzędzie, deep-linki #hash do zakładek). + interaktywna lista napraw: wszystkie problemy ze WSZYSTKICH audytów zdeduplikowane, kolumny problem/obszar/priorytet/źródło/typ-skanu/data + ✓ checkbox + komentarz + localStorage + eksport/import. Zamienia katalog raportów w narzędzie do działania. Generatory: build_naprawy.py.
+<!-- /@ski -->
+
+<!-- @event -->
+**Pułapka „zbieranie problemów tylko z .md/.html pomija PDF-y".** Master lista napraw klienta często ma rdzeń w PDF uzgodnionym z agencją (GLOV: GLOV_Problemy_Techniczne_Agencja.pdf = 22 problemy, w tym JS error checkout, 5× wtyczka językowa, dyrektywa Omnibus). Subagent zbierający problemy MUSI czytać też PDF-y (Read obsługuje PDF). Inaczej lista niekompletna. Deduplikacja semantyczna 77→70 (bug ceny CTA = glify ▫ to ten sam problem).
+<!-- /@ski -->
+
+<!-- @ski -->
+**Sekcja LIVE na publicznej stronie bez backendu.** Statyczny HTML nie może trzymać klucza API. Rozwiązanie: scheduled task pobiera Shopify→live_data.json→publikacja (API), strona czyta JSON przy każdym otwarciu (fetch z cache-bust ?t=). „Live" = świeże co X godzin wg harmonogramu. Dla sekundowej świeżości: serverless proxy (Cloudflare Workers/Vercel, token jako sekret). W Cowork: artefakt create_artifact z callMcpTool = prawdziwie live przy każdym otwarciu. ShopifyQL: NIE ma startOfMonth — licz pierwszy dzień miesiąca dynamicznie.
+<!-- /@ski -->
