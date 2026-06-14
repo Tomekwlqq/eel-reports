@@ -2661,7 +2661,8 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
 // Next update date display
 const nextUpdate = new Date();
 nextUpdate.setDate(nextUpdate.getDate() + 7);
-document.getElementById('nextUpdate').textContent = nextUpdate.toLocaleDateString('pl-PL');
+const _nextUpdateEl = document.getElementById('nextUpdate');
+if (_nextUpdateEl) _nextUpdateEl.textContent = nextUpdate.toLocaleDateString('pl-PL');
 
 // Initial render
 render();
