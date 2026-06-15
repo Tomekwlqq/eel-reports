@@ -1,0 +1,305 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Audyt homies.com.pl — EEL</title>
+<style>
+:root{--bg:#f7f5f1;--card:#fff;--bd:#e6e0d6;--tx:#2b2b2b;--mut:#8a8275;--acc:#c8492f;--ok:#1a7a3a;--amb:#d4a017;--blu:#3b6ea5;--soft:#eef3f7}
+*{box-sizing:border-box}
+body{font:15px/1.6 -apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx);margin:0}
+.wrap{max-width:1000px;margin:0 auto;padding:30px 22px 70px}
+h1{font-size:26px;margin:0 0 3px}
+h2{font-size:20px;margin:38px 0 6px;padding-top:16px;border-top:2px solid var(--bd)}
+h3{font-size:15px;margin:16px 0 6px}
+.lead{color:var(--mut);margin-bottom:6px}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:5px;background:var(--acc);color:#fff;letter-spacing:.4px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin:13px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+.kpi{text-align:center;padding:12px}.kpi .v{font-size:26px;font-weight:800}.kpi .l{font-size:11px;color:var(--mut)}
+.g{color:var(--ok)}.r{color:var(--acc)}.a{color:var(--amb)}.b{color:var(--blu)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd);vertical-align:top}
+th{font-size:11px;text-transform:uppercase;color:var(--mut);letter-spacing:.4px}
+.sev{display:inline-block;width:22px;height:22px;border-radius:6px;color:#fff;font-weight:700;text-align:center;line-height:22px;font-size:12px}
+.s4{background:#a01b1b}.s3{background:var(--acc)}.s2{background:var(--amb);color:#3a2a00}.s1{background:#9bb7d4;color:#10243a}
+.shot{display:flex;gap:16px;align-items:flex-start;margin:14px 0}
+.shot img{border:1px solid var(--bd);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.shot.desk img{width:340px}.shot.mob img{width:200px}
+.shot .an{flex:1;font-size:13.5px}
+.an b{color:var(--acc)}
+.an .good{color:var(--ok)}
+ul{margin:5px 0;padding-left:20px}li{margin:3px 0}
+.pill{display:inline-block;background:#eef3f7;border:1px solid #d8e2ea;border-radius:5px;padding:2px 8px;margin:2px 3px 0 0;font-size:12px}
+.hyp{border-left:4px solid var(--ok);background:#f3f9f5;padding:11px 14px;border-radius:0 8px 8px 0;margin:8px 0;font-size:13.5px}
+.hyp b{color:var(--ok)}
+.muted{color:var(--mut);font-size:12.5px}
+.tc{background:#2c3e50;color:#e8e2d8;border-radius:12px;padding:18px 22px;margin-top:34px;font-size:13px}
+.tc h3{color:#fff;margin-top:0}
+.verdict{background:#fff7ee;border:1px solid #f0d9bf;border-radius:10px;padding:14px 16px}
+@media(max-width:760px){.shot{flex-direction:column}.shot.desk img,.shot.mob img{width:100%;max-width:320px}}
+
+
+:root{--bg:#f7f5f1;--card:#fff;--bd:#e6e0d6;--tx:#2b2b2b;--mut:#8a8275;--acc:#c8492f;--ok:#1a7a3a;--amb:#d4a017;--blu:#3b6ea5;--soft:#eef3f7}
+*{box-sizing:border-box}
+body{font:15px/1.6 -apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx);margin:0}
+.wrap{max-width:1000px;margin:0 auto;padding:30px 22px 70px}
+h1{font-size:26px;margin:0 0 3px}
+h2{font-size:20px;margin:40px 0 6px;padding-top:16px;border-top:2px solid var(--bd)}
+h3{font-size:15.5px;margin:18px 0 6px}
+.lead{color:var(--mut);margin-bottom:6px}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:5px;background:var(--acc);color:#fff;letter-spacing:.4px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin:13px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd);vertical-align:top}
+th{font-size:11px;text-transform:uppercase;color:var(--mut);letter-spacing:.4px}
+.enemy{display:flex;gap:12px;align-items:flex-start;margin:9px 0;padding:11px 13px;border-radius:9px;border:1px solid var(--bd);background:#fff}
+.enemy .n{flex:0 0 auto;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.e1{background:#fdeee9}.e2{background:#fbf3df}.e3{background:#fbe4e0}
+ul{margin:5px 0;padding-left:20px}li{margin:3px 0}
+.pill{display:inline-block;background:var(--soft);border:1px solid #d8e2ea;border-radius:5px;padding:2px 8px;margin:2px 3px 0 0;font-size:12px}
+.shot{margin:12px 0}.shot img{width:100%;max-width:560px;border:1px solid var(--bd);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.verdict{background:#fff7ee;border:1px solid #f0d9bf;border-radius:10px;padding:14px 16px}
+.yes{color:var(--ok);font-weight:700}.no{color:var(--acc);font-weight:700}.half{color:var(--amb);font-weight:700}
+.reco{border-left:4px solid var(--acc);background:#fbeae6;padding:11px 14px;border-radius:0 8px 8px 0;margin:8px 0;font-size:13.5px}
+.reco b{color:var(--acc)}
+.muted{color:var(--mut);font-size:12.5px}
+.tc{background:#2c3e50;color:#e8e2d8;border-radius:12px;padding:18px 22px;margin-top:34px;font-size:13px}
+.tc h3{color:#fff;margin-top:0}
+.big{font-size:17px;font-weight:700}
+
+.topnav{position:sticky;top:0;z-index:50;background:#f7f5f1;border-bottom:2px solid var(--bd);padding:10px 22px;display:flex;gap:8px;align-items:center}
+.topnav .brand{font-weight:800;font-size:15px;margin-right:auto}
+.tabbtn{padding:9px 16px;border:1px solid var(--bd);border-radius:9px;background:#fff;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--tx)}
+.tabbtn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.sec{display:none}.sec.on{display:block}
+</style></head><body>
+<div class="topnav">
+<span class="brand">🔬 EEL · Audyt homies.com.pl</span>
+<button class="tabbtn on" data-t="cro">① Audyt CRO/UX</button>
+<button class="tabbtn" data-t="strat">② Strategia (kategoria · wróg · moaty)</button>
+</div>
+<section class="sec on" id="cro"><div class="wrap">
+
+<span class="tag">EEL · TEST SERWISU — POZIOM 1 (skan z URL)</span>
+<h1>Audyt homies.com.pl</h1>
+<p class="lead">listki do prania bez plastiku · Shopify · <b>tylko skan wizualny + struktura</b> (bez dostępu do GA4/Clarity/Shopify klienta — to „Free/Lead" tier serwisu).</p>
+
+<div class="card verdict">
+<h3 style="margin-top:0">⚖️ Werdykt w jednym zdaniu</h3>
+<p>homies to <b>jeden z lepiej zrobionych polskich sklepów eco</b> jakie widziałem — czysty kod, mocny storytelling, świetny pricing per użycie. Problemy nie leżą w „bałaganie" (jak GLOV), tylko w <b>kilku precyzyjnych dźwigniach przychodu</b>: cookie wall zasłaniający hero, brak subskrypcji produktu cyklicznego, i kilka luk zaufania na PDP.</p>
+<div class="grid2" style="margin-top:8px">
+<div class="kpi"><div class="v g">8/10</div><div class="l">jakość wykonania (skan)</div></div>
+<div class="kpi"><div class="v a">5 dźwigni</div><div class="l">konkretnych do przetestowania</div></div>
+</div>
+<p class="muted">⚠️ Ocena z poziomu 1 = z heurystyk i struktury, nie z danych behawioralnych. Severity to hipoteza wpływu, nie zmierzony fakt — to potwierdza dopiero poziom 2–3 (GA4+Clarity).</p>
+</div>
+
+<h2>✅ Co działa dobrze (nie ruszać)</h2>
+<div class="card">
+<span class="pill">✓ 0 błędów JS (czysty kod — GLOV miał 2641)</span>
+<span class="pill">✓ Hero: jasny benefit + USP „testujesz bez ryzyka"</span>
+<span class="pill">✓ Cena „1,13 zł / pranie" — wzorcowy framing</span>
+<span class="pill">✓ Pakiety 60/120 prań (bulk-value)</span>
+<span class="pill">✓ 18 opinii + 4,9★ na PDP</span>
+<span class="pill">✓ 22 zdjęcia w galerii</span>
+<span class="pill">✓ Schema Product na PDP</span>
+<span class="pill">✓ Storytelling HP: 3 kroki, porównanie, edukacja, FAQ</span>
+<span class="pill">✓ GTM + GA4 + Pixel działają</span>
+<span class="pill">✓ 52 sygnały zaufania</span>
+</div>
+
+<h2>📸 Visual mapping — co widać i gdzie boli</h2>
+
+<div class="card">
+<h3>Strona główna — desktop</h3>
+<div class="shot desk">
+<img src="homies_hp_desktop.jpg" alt="HP desktop">
+<div class="an">
+<p><b>Problem #1 — cookie wall na hero.</b> Pierwsze wejście: baner cookie ląduje na środku hero, zasłaniając headline i CTA „WYBIERZ SWOJE LISTKI". User musi go odkliknąć zanim zobaczy ofertę. <span class="sev s3">3</span></p>
+<p class="good">Po akceptacji: hero jest mocny — „Piorą skutecznie bez dźwigania, bałaganu i plastiku" + benefit. Niżej świetna sekwencja: USP → produkty → opinie → porównanie → 3 kroki → edukacja → FAQ → newsletter. Kompletny storytelling.</p>
+<p><b>Problem #5 — H1 pusty + brak schema na HP.</b> Pierwszy H1 jest pusty, HP nie ma structured data. Dla eco-produktu, którego ludzie szukają w AI („ekologiczne listki do prania") — to utrata widoczności w Google/AI Overview. <span class="sev s2">2</span></p>
+</div></div>
+</div>
+
+<div class="card">
+<h3>Strona główna + PDP — mobile (główny ruch)</h3>
+<div class="shot mob">
+<img src="homies_hp_mobile.png" alt="HP mobile">
+<img src="homies_pdp_mobile.png" alt="PDP mobile">
+<div class="an">
+<p><b>Problem #1 mobilnie = krytyczny.</b> Na telefonie cookie banner zasłania <u>cały hero</u> — pierwsze co widzi mobilny user to ściana cookie zamiast oferty. To moment największego odpływu. <span class="sev s3">3</span></p>
+<p>PDP mobile (drugi screen): pakiety <b>60 prań / 120 prań</b> z ceną za pranie — bardzo dobry mechanizm value. Ale cookie znów zasłania galerię, a przycisk „Dodaj do koszyka" jest dopiero pod pakietami (scroll).</p>
+</div></div>
+</div>
+
+<div class="card">
+<h3>Karta produktu (PDP) — desktop</h3>
+<div class="shot desk">
+<img src="homies_pdp_desktop.jpg" alt="PDP desktop">
+<div class="an">
+<p class="good">Mocna PDP: galeria + akordeony (Opis / Jak używać / Dla kogo / Składniki), wybór zapachu, ikony płatności, USP bar „BEZ FOSFORANÓW / MIKROPLASTIKU / BARWNIKÓW", porównanie z tradycyjnym, blog edukacyjny, opinie 4,9.</p>
+<p><b>Problem #3 — brak FAQ na PDP.</b> FAQ jest na HP, ale nie w miejscu decyzji (PDP). Obiekcje („czy piorą w zimnej?", „ile na 1 pranie?") nieobsłużone tam, gdzie user decyduje. <span class="sev s2">2</span></p>
+<p><b>Problem #4 — brak dostawy/zwrotów przy ATC.</b> „14-dni gwarancja" jest w górnym pasku, ale przy przycisku zakupu nie ma progu darmowej dostawy ani czasu wysyłki — niepewność tuż przed kliknięciem. <span class="sev s2">2</span></p>
+</div></div>
+</div>
+
+<h2>🔧 Friction log + severity</h2>
+<div class="card">
+<table>
+<tr><th>#</th><th>Problem</th><th>Gdzie</th><th>Sev</th><th>Heurystyka / źródło</th></tr>
+<tr><td>1</td><td>Cookie wall zasłania hero (mobile: cały)</td><td>HP desktop+mobile, PDP</td><td><span class="sev s3">3</span></td><td>Nielsen H8 · skan wizualny</td></tr>
+<tr><td>2</td><td>Brak subskrypcji produktu cyklicznego</td><td>PDP / model</td><td><span class="sev s3">3</span></td><td>biznes / LTV · struktura</td></tr>
+<tr><td>3</td><td>Brak FAQ na PDP (jest tylko na HP)</td><td>PDP</td><td><span class="sev s2">2</span></td><td>obiekcje · struktura</td></tr>
+<tr><td>4</td><td>Brak progu dostawy / czasu wysyłki przy ATC</td><td>PDP</td><td><span class="sev s2">2</span></td><td>LIFT: Anxiety · skan</td></tr>
+<tr><td>5</td><td>H1 pusty + brak schema na HP</td><td>HP</td><td><span class="sev s2">2</span></td><td>SEO/GEO · skan</td></tr>
+<tr><td>6</td><td>ATC pod pakietami na mobile (scroll do zakupu)</td><td>PDP mobile</td><td><span class="sev s1">1</span></td><td>fold · skan</td></tr>
+</table>
+</div>
+
+<h2>🧪 Top hipotezy do przetestowania (PXL)</h2>
+
+<div class="hyp"><b>H1 · Cookie consent bez zasłaniania hero</b> (PXL ~9 — nad foldem, każda strona, mobile-critical)<br>
+Ponieważ baner cookie zasłania cały hero na mobile (skan), wierzymy że przeniesienie go do dolnego paska / mniejszego formatu zwiększy zaangażowanie i obniży bounce wejściowy, co zmierzymy bounce + scroll-rate na HP.</div>
+
+<div class="hyp"><b>H2 · Subskrypcja „co 8 tygodni −10%"</b> (PXL ~8 — duży wpływ na LTV)<br>
+Ponieważ listki to produkt cykliczny (kończą się), a sklep nie ma modelu recurring, wierzymy że opcja subskrypcji na PDP zwiększy RPV i powracalność, co zmierzymy % zamówień subskrypcyjnych + LTV. <span class="muted">Największa dźwignia przychodu, nie tylko CRO.</span></div>
+
+<div class="hyp"><b>H3 · FAQ na PDP z realnych obiekcji</b> (PXL ~7)<br>
+Ponieważ obiekcje zakupowe nie są obsłużone w miejscu decyzji, wierzymy że sekcja FAQ na PDP (zimne pranie, dawkowanie, plamy) podniesie ATC i obniży zwroty, co zmierzymy ATC rate + stopa zwrotów.</div>
+
+<div class="hyp"><b>H4 · Trust + dostawa przy przycisku ATC</b> (PXL ~7)<br>
+Ponieważ przy ATC brakuje progu darmowej dostawy i czasu wysyłki, wierzymy że dodanie ich obok przycisku obniży porzucenia, co zmierzymy cart→checkout rate.</div>
+
+<div class="hyp"><b>H5 · Schema + H1 na HP (SEO/GEO)</b> (PXL ~6 — łatwe, future-proof)<br>
+Ponieważ HP nie ma structured data ani H1, wierzymy że ich dodanie zwiększy widoczność w Google i cytowalność w AI-search dla fraz eco, co zmierzymy impresje GSC + obecność w AI Overview.</div>
+
+<h2>🎯 Ocena samego serwisu (czy zadziałał na żywym teście)</h2>
+<div class="card">
+<p>Test na nieznanym sklepie, bez żadnego dostępu, w kilka minut z URL dał: <b>strukturę + tech stack + 6 problemów z severity + 5 testowalnych hipotez + 4 widoki ze screenami</b>. To dowodzi, że <b>poziom 1 („Free/Lead") realnie działa jako lead magnet</b> — można go dać każdemu sklepowi od ręki.</p>
+<p><b>Ale test obnażył też granicę poziomu 1 — i to dobrze:</b> nie wiem, czy cookie wall <i>realnie</i> kosztuje sprzedaż, czy ludzie i tak konwertują. Severity to mój osąd z heurystyk, nie zmierzony fakt. <b>To jest dokładnie argument sprzedażowy za poziomem 2–3:</b> „dałem Ci diagnozę z samego URL za darmo — podłącz GA4 i Clarity, a powiem Ci które z tych 6 problemów faktycznie pali pieniądze i ile".</p>
+<p class="muted">Czyli serwis przeszedł test: poziom 1 dostarcza wartość samodzielnie I naturalnie sprzedaje wyższy tier. Model trzyma się na żywym przykładzie.</p>
+</div>
+
+<div class="tc">
+<h3>TRUTH CHECKER</h3>
+<p>— <b>Co wiem:</b> z bezpośredniego skanu — Shopify, 0 błędów JS, struktura HP/PDP, schema Product na PDP (brak na HP), H1 pusty HP, cena 67,90 zł / 1,13 zł za pranie, pakiety 60/120 prań, 18 opinii, cookie banner zasłania hero (4 screeny dowodowe), brak subskrypcji/FAQ-PDP/dostawy-przy-ATC.</p>
+<p>— <b>Co zakładam:</b> że cookie wall szkodzi konwersji (heurystyka, nie dane); że brak subskrypcji = stracony LTV (logiczne dla produktu cyklicznego, niezmierzone); że FAQ/dostawa przy ATC podniosą konwersję (branżowy wzorzec). Severity = mój osąd.</p>
+<p>— <b>Co może być błędne:</b> homies może mieć świetną konwersję mimo cookie wall (młoda marka, lojalni); subskrypcja może nie pasować do ich strategii; warianty/pakiety mój skan policzył jako 0 (zły selektor) — realnie są pakiety ilościowe; nie sprawdziłem koszyka/checkoutu ani listingu.</p>
+<p>— <b>Co zweryfikować (poziom 2–3):</b> GA4 — czy bounce mobile koreluje z cookie; CR PDP vs benchmark; Clarity — czy ludzie odbijają się od cookie wall, gdzie scroll-klif; czy w danych widać powracających (popyt na subskrypcję).</p>
+<p>— <b>Co poprawić z jednym inputem:</b> dostęp do GA4 homies (gdyby był) → zamieniłbym 6 hipotez na ranking „ile PLN każda warta", zamiast osądu severity.</p>
+</div>
+
+<p class="muted" style="margin-top:22px">EEL · audyt homies.com.pl · poziom 1 serwisu AI Badacz CRO/UX · 2026-06-14</p>
+
+</div></section>
+<section class="sec" id="strat"><div class="wrap">
+
+<span class="tag">EEL · UZUPEŁNIENIE — PERSPEKTYWA STRATEGICZNA</span>
+<h1>homies — kategoria, wróg, moaty</h1>
+<p class="lead">Druga warstwa audytu: nie „co poprawić na guziku", tylko <b>z kim ten sklep naprawdę walczy i czy to komunikuje</b>. <span class="muted">(Audyt CRO/UX → osobny plik AUDYT_homies.html)</span></p>
+
+<div class="card verdict">
+<p class="big">Najkrócej: homies sprzedaje produkt, a powinien wygrywać wojnę z nawykiem.</p>
+<p>Strona pokazuje „jesteśmy ładni i eco" — ale prawdziwy przeciwnik to nie inne listki, tylko <b>butelka Persila pod zlewem i przekonanie „taki cienki listek nie dopierze"</b>. Tych dwóch wrogów homies <span class="no">nie atakuje wprost</span>. I drugie: to <span class="no">nie wygląda jak ecommerce</span> — wygląda jak brand-landing z dwoma „edycjami", bo przejęło formę DTC bez jego mechaniki (subskrypcja, dowód skali, wróg).</p>
+</div>
+
+<h2>① Kategoria oczami GEO/CS</h2>
+<div class="grid2">
+<div class="card"><h3>Popyt jest EDUKACYJNY, nie discovery</h3>
+<p>Większość Polaków nie szuka „listków do prania" — szuka „czym zastąpić płyn" albo nie szuka wcale (pierze z nawyku). To kategoria w fazie przejścia early-adopters → mainstream.</p>
+<p><b>Najgorętsze wejście = frazy z obiekcją:</b> „listki do prania <u>opinie</u>", „<u>czy działają</u>". Kto to wpisuje, już miał kontakt (reklama) i sprawdza — to gorący lead w momencie rozbrajania sceptycyzmu.</p>
+</div>
+<div class="card"><h3>Luka AI (GEO)</h3>
+<p>ChatGPT/Perplexity na „czy listki działają" odpowiadają z <b>zachodnich testów</b> (Consumer Reports: płyny piorą 10–30% lepiej trudne plamy, słabo w zimnej). <b>Nie polecają polskich marek</b> — pole wolne. homies = niska widoczność w AI, brak cytowalnych treści.</p>
+<p class="muted">To realna szansa: kto pierwszy zbuduje cytowalny content kategorii po polsku, ten zajmie odpowiedzi AI.</p>
+</div>
+</div>
+<div class="card"><h3>CEP — kiedy ktoś pierwszy raz sięga po listki (8 wejść)</h3>
+<span class="pill">przeprowadzka / kawalerka</span><span class="pill">niemowlę</span><span class="pill">alergia / AZS</span><span class="pill">eco-przebudzenie</span><span class="pill">podróż (bagaż podręczny)</span><span class="pill">brak miejsca</span><span class="pill">prezent eco</span><span class="pill">zmęczenie bałaganem po płynach</span>
+<p class="muted" style="margin-top:8px">Najgorętsze: <b>rodzic niemowlęcia z wrażliwą skórą</b> (silny ból, gotowość do premium) i <b>zero-waster na starcie drogi</b>. homies adresuje głównie eco — pomija ból zdrowotny (dzieci/alergia) i wygodę (podróż/miejsce).</p>
+</div>
+
+<h2>② Prawdziwy WRÓG (nie konkurencja)</h2>
+<p class="lead">To kluczowa zmiana perspektywy. homies nie walczy o udział w niszy listków — walczy o zmianę nawyku 38 mln Polaków.</p>
+<div class="enemy"><span class="n e1">🧴</span><div><b>Wróg funkcjonalny — to, co kupują zamiast.</b> Płyny (Persil/Lenor ~0,7–1 zł/pranie), kapsułki (Ariel Pods 1,2–1,5 zł), proszek (Bryza 0,52 zł = wróg cenowy). homies 0,94 zł/pranie — <span class="half">tańszy od kapsułek</span>, droższy od proszku. <b>To z kapsułkami trzeba się porównywać, nie z proszkiem.</b></div></div>
+<div class="enemy"><span class="n e2">🧠</span><div><b>Wróg behawioralny — nawyk i wygoda.</b> Detergent = produkt o zerowym zaangażowaniu (połowa ludzi nie zna marki której używa). Nie ma niezadowolenia → nie ma potrzeby zmiany. Zakup z pamięci mięśniowej. <b>Zmiana wymaga triggera (CEP), inaczej nawyk wygrywa.</b></div></div>
+<div class="enemy"><span class="n e3">😒</span><div><b>Wróg mentalny — sceptycyzm „czy to w ogóle pierze".</b> NAJTWARDSZY. „Mała ilość = słabe działanie". Consumer Reports potwierdził słabsze plamy/zimną wodę. To <b>obiekcja #1</b> — bez jej rozbrojenia reszta nie ma znaczenia.</div></div>
+
+<h2>③ Czy homies komunikuje MOATY? (Twoja teza: nie bardzo — potwierdzam)</h2>
+<div class="card">
+<table>
+<tr><th>Moat / broń przeciw wrogowi</th><th>Czy homies używa?</th></tr>
+<tr><td>Atak na płyn konkretną liczbą (np. „płyn to 90% wody", „tylko 9% plastiku się recyklinguje")</td><td class="no">NIE — mówi ogólnie „bez plastiku"</td></tr>
+<tr><td>Rozbrojenie sceptycyzmu #1 (testy, before/after, „1 listek = X g proszku")</td><td class="no">NIE — brak twardego dowodu skuteczności</td></tr>
+<tr><td>Cena/pranie sframowana vs <b>kapsułki</b> (wygrywa)</td><td class="half">CZĘŚCIOWO — cena jest, ale bez porównania</td></tr>
+<tr><td>Certyfikaty (B Corp, Ecocert, Leaping Bunny)</td><td class="no">NIE — tylko „produkcja UE"</td></tr>
+<tr><td>Dowód skali (X mln prań, liczba klientów)</td><td class="no">NIE — 47 recenzji (za mała próba)</td></tr>
+<tr><td>Waga/miejsce vs butle (np. „94% lżejszy")</td><td class="half">CZĘŚCIOWO — „bez dźwigania", miękko</td></tr>
+<tr><td>Eco-storytelling, 3 kroki, edukacja</td><td class="yes">TAK — to robi dobrze</td></tr>
+</table>
+<p>homies komunikuje, że <b>jest eco</b> — miękko i ładnie. Nie komunikuje, że <b>twój płyn cię okłamuje, marnujesz pieniądze na wodę i plastik, a my pierzemy tak samo — sprawdź bez ryzyka</b>. To różnica między „opisem produktu" a „wojną z wrogiem". Earth Breeze i Tru Earth wygrywają właśnie tą wojną (twarde liczby + gwarancja).</p>
+</div>
+
+<h2>④ „To nie wygląda jak ecommerce" — diagnoza</h2>
+<div class="shot"><img src="homies_sklep_desktop.jpg" alt="sklep homies"></div>
+<div class="card">
+<p>Masz rację — i oto dlaczego intuicja podpowiada „karty podarunkowe / edycje", nie sklep:</p>
+<ul>
+<li><b>2 produkty</b> w całym „sklepie", prezentowane jak warianty/smaki (badge „czysty len" / „delikatna lanolina")</li>
+<li><b>Pastelowa, lifestyle'owa estetyka</b> — bliżej brand-booka niż drogerii</li>
+<li>Brak typowych sygnałów ecommerce: grid wielu SKU, filtry, kategorie, „kup teraz", promocje, pełny koszyk</li>
+<li>Hero to lifestyle-foto z claimem, nie oferta — „WYBIERZ SWOJE LISTKI" brzmi jak konfigurator prezentu</li>
+</ul>
+<p><b>Ale tu jest niuans, który zmienia ocenę:</b> liderzy kategorii (Earth Breeze, Tru Earth) <u>celowo</u> są single-product DTC, nie tradycyjnym sklepem — bo tej kategorii się nie „przegląda", tylko trzeba ją <b>uzasadnić</b> (zmiana nawyku, nie zakup nowości). Format landing/DTC jest słuszny.</p>
+<p class="big" style="color:var(--acc)">Problem homies nie w tym, że to landing — tylko że przejął FORMĘ DTC bez jego MECHANIKI.</p>
+<p>Earth Breeze/Tru Earth na tym landingu mają: <b>subskrypcję jako domyślny model</b>, twardy „shocking argument", dowód skali (3 mln klientów), certyfikaty, 60-dniową gwarancję. homies ma ładny landing <b>bez</b> tych elementów → wygląda jak brand-prezentacja, a nie jak miejsce, gdzie regularnie kupujesz detergent. Stąd wrażenie „to nie ecommerce".</p>
+</div>
+
+<h2>⑤ Konkurencja (z kim realnie gra)</h2>
+<div class="grid2">
+<div class="card"><h3>Polska</h3>
+<ul>
+<li><b>Natulim</b> — de facto lider DTC (921 recenzji, subskrypcja, fabryka w Katalonii)</li>
+<li><b>Cleangang</b> — <span class="muted">(Twój klient!)</span> Niemcy→PL, w Rossmannie, kolor/świeżość, ~1 zł/pranie</li>
+<li><b>Lessly</b> — „polscy naukowcy", 0,62 zł, bez subskrypcji</li>
+<li><b>Bluu, Essentia</b> — premium/ekodrogerie</li>
+<li>Allegro no-name — 0,20–0,40 zł (wróg cenowy z dołu)</li>
+</ul>
+<p class="muted">Masz insider-view kategorii przez Cleangang — homies to bezpośredni rywal Twojego klienta.</p>
+</div>
+<div class="card"><h3>Globalni (wzorce)</h3>
+<ul>
+<li><b>Earth Breeze</b> — 3 mln klientów, subskrypcja „MOST POPULAR", „9% plastiku się recyklinguje", „płyn to 90% wody", 60-day guarantee, B Corp</li>
+<li><b>Tru Earth</b> — „No Plastic. EVER", „94% lżejszy", subskrypcja z gamifikacją, „cancel anytime"</li>
+<li><b>Blueland</b> — atak na PVA jako „ukryty mikroplastik" (cios w całą kategorię listków!)</li>
+</ul>
+<p class="muted">Wszyscy: subskrypcja = rdzeń modelu + twarde liczby przeciw wrogowi + certyfikaty.</p>
+</div>
+</div>
+
+<h2>⑥ Rekomendacje strategiczne (nie CRO-checklist)</h2>
+<div class="reco"><b>1. Przestaw oś z „eco" na „wojnę z płynem".</b> Hero/sekcja z twardą liczbą: „Twój płyn to w 90% woda, którą wozisz przez Polskę" + „1 listek = 60 g proszku". Atakuj kapsułki ceną (wygrywasz), nie broń się przed proszkiem.</div>
+<div class="reco"><b>2. Rozbrój sceptycyzm #1 above the fold.</b> Test/before-after, „pierze od 15°C", „przetestuj na swojej najgorszej plamie — 14 dni bez ryzyka". To jest bramka do całej kategorii.</div>
+<div class="reco"><b>3. Dodaj subskrypcję — to norma kategorii, nie dodatek.</b> Produkt cykliczny bez recurring = stracony LTV. „Co 8 tygodni, −15%, anuluj kiedy chcesz, nigdy nie zabraknie". To zmienia model biznesowy, nie tylko CRO.</div>
+<div class="reco"><b>4. Zbuduj cytowalny content pod AI (GEO).</b> Artykuły Q&A („czy listki piorą w zimnej", „listki vs kapsułki cena") w formacie, który ChatGPT/Perplexity cytuje. Pole polskie jest wolne — kto pierwszy, ten zajmuje odpowiedzi AI.</div>
+<div class="reco"><b>5. Dobuduj zaufanie kategorii.</b> Certyfikaty (Ecocert/B Corp), dowód skali (liczba prań/klientów), origin story. Bez tego świadomy kupujący nie traktuje marki poważnie.</div>
+<div class="reco"><b>6. Celuj w gorące CEP, nie tylko eco.</b> Osobne ścieżki/komunikaty: dla rodzica (skóra dziecka), dla podróżnika (bagaż), dla kawalerki (miejsce). Eco to jeden z ośmiu wejść, nie jedyny.</div>
+
+<div class="tc">
+<h3>TRUTH CHECKER</h3>
+<p>— <b>Co wiem:</b> z researchu (Consumer Reports, Earth Breeze/Tru Earth/Blueland, Natulim/Lessly/Cleangang/Bluu, blogi PL) + skanu homies: 2 SKU, 0,94 zł/pranie, 47 recenzji, brak subskrypcji/certyfikatów, miękki eco-message. Wróg warstwowy (płyn/kapsułka + nawyk + sceptycyzm) potwierdzony danymi rynkowymi. Liderzy = DTC single-product + subskrypcja.</p>
+<p>— <b>Co zakładam:</b> że homies celuje w mainstream (nie tylko hardcore-eco); że subskrypcja by konwertowała (działa globalnie, niezweryfikowane na PL homies); że sceptycyzm #1 jest ich realną barierą (wzorzec kategorii, nie ich dane).</p>
+<p>— <b>Co może być błędne:</b> homies może świadomie być premium-niszą (nie mainstream) — wtedy „2 SKU + lifestyle" to wybór, nie błąd; ich CR może być dobre mimo braków (młoda marka, lojalni z IG/TikTok); cena 0,94 zł to „od" (pakiet 120) — pojedynczy droższy; nie znam ich realnego ruchu ani źródeł (paid/organic/social).</p>
+<p>— <b>Co zweryfikować:</b> skąd ruch homies (jeśli głównie social/paid — landing-brand ma sens); CR vs Natulim; czy mają powracających (popyt na subskrypcję); pozycja w AI na realnych frazach PL.</p>
+<p>— <b>Co poprawić z jednym inputem:</b> powiedz, czy homies celuje w mainstream czy premium-niszę — to przesądza, czy „za mało jak ecommerce" to wada (mainstream) czy zaleta (nisza). Plus: chcesz, żebym zestawił homies vs Cleangang (Twój klient) głowa w głowę?</p>
+</div>
+
+<p class="muted" style="margin-top:22px">EEL · homies — analiza strategiczna (kategoria/wróg/moaty) · uzupełnienie audytu · 2026-06-14</p>
+
+</div></section>
+<script>
+document.querySelectorAll('.tabbtn').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tabbtn').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));
+  window.scrollTo(0,0);
+});
+</script></body></html>
