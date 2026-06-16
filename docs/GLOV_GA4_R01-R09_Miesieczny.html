@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="pl"><head><meta charset="UTF-8">
+<html lang="pl" data-theme="dark"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GLOV — Raport GA4 R01–R09 (miesięczny)</title>
 <style>
-:root{--bg:#0f1115;--card:#181b22;--card2:#1f232c;--line:#2a2f3a;--txt:#e8eaed;--muted:#9aa0aa;--accent:#7c5cff;--good:#3ecf8e;--warn:#f5a623;--bad:#ff5c7c;--blue:#5b8def;--pink:#ec4899;}
+[data-theme="dark"]{--bg:#0f1115;--card:#181b22;--card2:#1f232c;--line:#2a2f3a;--txt:#e8eaed;--muted:#9aa0aa;--accent:#7c5cff;--good:#3ecf8e;--warn:#f5a623;--bad:#ff5c7c;--blue:#5b8def;--pink:#ec4899;}
+[data-theme="light"]{--bg:#ffffff;--card:#ffffff;--card2:#f4f4f6;--line:#e6e6e9;--txt:#0a0a0a;--muted:#6b6b76;--accent:#7c5cff;--good:#16a34a;--warn:#d97706;--bad:#dc2626;--blue:#2563eb;--pink:#ec4899;}
+.theme-btn{position:fixed;top:12px;right:12px;z-index:999;background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:9px;width:38px;height:38px;cursor:pointer;font-size:16px}
+.theme-btn:hover{border-color:var(--accent)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.55;padding:26px 20px;max-width:1180px;margin:0 auto}
 h1{font-size:23px;font-weight:700}
@@ -55,6 +58,7 @@ details.explain-wrap > summary::-webkit-details-marker{display:none}
 details.explain-wrap > summary:before{content:"💡 ";}
 details.explain-wrap[open] > summary{color:var(--accent)}
 </style></head><body><a href="GLOV_HUB.html" style="position:fixed;top:12px;left:12px;z-index:999;background:#7c5cff;color:#fff;text-decoration:none;padding:7px 13px;border-radius:8px;font:600 12px -apple-system,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.4)">← HUB</a>
+<button class="theme-btn" id="themeBtn" title="Tryb jasny/ciemny">🌙</button>
 
 <h1>GLOV — Raport GA4 · R01–R09</h1>
 <div class="sub">glov.co · property 342844459 · PLN · przełącznik miesięczny (wzór: raport Plichta) · <span id="periodLabel"></span></div>
@@ -232,6 +236,9 @@ PERIODS.forEach(([k,label])=>{
   b.onclick=()=>{cur=k;document.querySelectorAll('.month-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();};
   mc.appendChild(b);
 });
+(function(){const root=document.documentElement,btn=document.getElementById('themeBtn');
+ const saved=localStorage.getItem('glov-theme')||'dark';root.setAttribute('data-theme',saved);btn.textContent=saved==='light'?'☀️':'🌙';
+ btn.onclick=()=>{const nx=root.getAttribute('data-theme')==='light'?'dark':'light';root.setAttribute('data-theme',nx);localStorage.setItem('glov-theme',nx);btn.textContent=nx==='light'?'☀️':'🌙';};})();
 render();
 </script>
 </body></html>
