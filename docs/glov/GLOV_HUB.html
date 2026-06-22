@@ -66,13 +66,15 @@ h1{font-size:54px;font-weight:800;letter-spacing:-2px;line-height:1.05}
 .big p{font-size:13.5px;color:var(--txt2);line-height:1.5}
 .big .go{margin-left:auto;font-size:22px;color:var(--accent);flex-shrink:0}
 
-/* wyróżnione kafle operacyjne (Live + Lista napraw) — 2 w rzędzie, kolorowe */
-.hero-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px}
+/* wyróżnione kafle operacyjne (Live + Lista napraw + Tech SEO) — 3 w rzędzie, kolorowe */
+.hero-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:8px}
+@media(max-width:860px){.hero-row{grid-template-columns:1fr 1fr}}
 @media(max-width:720px){.hero-row{grid-template-columns:1fr}}
 .feat{border-radius:18px;padding:22px;text-decoration:none;display:flex;flex-direction:column;gap:4px;position:relative;overflow:hidden;color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.12);transition:.18s;min-height:150px}
 .feat:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.2)}
 .feat.live{background:linear-gradient(135deg,#16a34a,#0d8a3e)}
 .feat.fix{background:linear-gradient(135deg,#f5751a,#e0560a)}
+.feat.seo{background:linear-gradient(135deg,#7c5cff,#5b2ee0)}
 .feat .ico{width:46px;height:46px;border-radius:13px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:8px}
 .feat h3{font-size:18px;font-weight:800;letter-spacing:-.3px}
 .feat p{font-size:12.5px;color:#fff;line-height:1.5;flex:1}
@@ -144,7 +146,32 @@ h1{font-size:54px;font-weight:800;letter-spacing:-2px;line-height:1.05}
     <p>Wszystkie audyty + 22 z listy agencji (🤝), zdeduplikowane. Checkbox ✓ + komentarz, filtry, eksport. Twoje narzędzie do działania.</p>
     <div class="go">→</div>
   </a>
+  <a class="feat seo" href="GLOV_Full_SEO_Audit_2026-06-16.html">
+    <span class="badge2">🔎 SEO</span>
+    <div class="ico">🔬</div>
+    <h3>Full SEO Audit</h3>
+    <p>10 modułów: technika, on-page (202 URL), hreflang, widoczność, keywords, kanibalizacja, konkurencja, GEO/AI. Senuto+DataForSEO+GA4, cross-check. Spadek -13,8% = artefakt Senuto (zdemaskowany).</p>
+    <div class="go">→</div>
+  </a>
+  <a class="feat seo" href="GLOV_Technical_OnPage_SEO_2026-06-16.html">
+    <span class="badge2">🔧 Technical</span>
+    <div class="ico">⚙️</div>
+    <h3>Technical on-page SEO</h3>
+    <p>Audyt techniczny per URL: stan techniczny, znaleziska priorytetowo, wszystkie badane URL ze szczegółami. Uzupełnienie Full SEO Audit.</p>
+    <div class="go">→</div>
+  </a>
 </div>
+
+<!-- PROJEKT WYKONAWCZY -->
+<div class="sechead"><h2>🧭 Projekt wykonawczy</h2></div>
+<a class="big" href="GLOV_Serwis_6_Obszarow_PROJEKT.html">
+  <div class="ico">🧭</div>
+  <div>
+    <h3>Serwis 6 obszarów — projekt wykonawczy</h3>
+    <p>Brief klienta (UX · Ads · Content · SEO · Retencja · Ruch) + 2 wątki Tomka, przełożony na execution layer EEL. Per obszar: co realnie mamy, wykonalność (probe MCP 2026-06-14), roadmapa ROI, kandydaci na skille. Proxy of Truth — weryfikacja ruchu reklamowego. INTERNAL.</p>
+  </div>
+  <div class="go">→</div>
+</a>
 
 <!-- REFERENCE -->
 <div class="sechead"><h2>⭐ Master / Reference</h2></div>
@@ -193,6 +220,12 @@ h1{font-size:54px;font-weight:800;letter-spacing:-2px;line-height:1.05}
     <h3>Ścieżki zakupowe</h3>
     <p>Typy ścieżek (Listing / PDP / Homepage / Search / Landing) wg wejścia → zakup, stała kolejność, przełącznik miesięcy.</p>
     <div class="tags"><span class="t grn">przełącznik miesięcy</span><span class="t acc">twarde GA4</span></div>
+  </a>
+  <a class="card" href="GLOV_Ruch_Zrodla_LP.html">
+    <div class="ico">🌐</div>
+    <h3>Ruch / Źródła LP</h3>
+    <p>Pełne odtworzenie zakładki Audi: kanały pozyskania + CR MoM, trend sesji/CR, dystrybucja typ-strony × miesiąc (heatmapa CR), head-to-head miesiąc-do-miesiąca z URL. Filtr ruchu. Dane GA4 sty–cze 2026.</p>
+    <div class="tags"><span class="t grn">filtr ruchu</span><span class="t acc">wzór Audi 1:1</span><span class="t">head-to-head</span></div>
   </a>
   <a class="card" href="GLOV_Ekstrakcja_Ruchu_LP.html">
     <div class="ico">🎯</div>
