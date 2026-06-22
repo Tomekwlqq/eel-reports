@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Ruch / Źródła LP (GA4)</title>
+<style>
+:root{
+  --bg:#fafaf9;--card:#fff;--ink:#1a1a1a;--mut:#6b6b6b;--line:#e7e5e4;
+  --accent:#16a34a;--blue:#2563eb;--red:#dc2626;--amber:#d97706;
+  --chip:#f4f4f5;--shadow:0 1px 3px rgba(0,0,0,.06);--r:12px;
+  --cA:#dc2626;--cB:#2563eb;
+}
+[data-dark]{--bg:#0e0f11;--card:#17191c;--ink:#f3f4f6;--mut:#9aa0a6;--line:#2a2d31;--chip:#21242a;--shadow:0 1px 3px rgba(0,0,0,.4)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14.5px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
+header.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topin{display:flex;align-items:center;gap:14px;height:56px;max-width:1140px;margin:0 auto;padding:0 20px}
+.logo{font-weight:800;font-size:17px;letter-spacing:-.4px}.logo b{color:var(--accent)}
+.toggle{margin-left:auto;cursor:pointer;border:1px solid var(--line);background:var(--card);border-radius:999px;width:36px;height:36px;display:flex;align-items:center;justify-content:center}
+.back{color:var(--mut);font-size:13px;text-decoration:none}.back:hover{color:var(--ink)}
+h1{font-size:30px;font-weight:850;letter-spacing:-.9px;margin:26px 0 6px}
+.sub{color:var(--mut);font-size:14px}
+.meta{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 4px}
+.meta span{font-size:12px;color:var(--mut);background:var(--chip);padding:4px 11px;border-radius:999px}
+/* filtr ruchu */
+.filterbar{position:sticky;top:56px;z-index:40;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);padding:14px 0 10px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.filterbar .lbl{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--mut);margin-right:8px}
+.tbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 15px;font-size:13px;font-weight:600;cursor:pointer;margin:3px}
+.tbtn:hover{border-color:var(--accent)}
+.tbtn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tinfo{font-size:12.5px;color:var(--mut);margin-top:8px}
+section{margin:30px 0}
+h2.sec{font-size:18px;font-weight:800;letter-spacing:-.4px;margin:0 0 4px}
+h2.sec .h{font-size:12.5px;font-weight:500;color:var(--mut);margin-left:8px}
+.expl{font-size:12.5px;color:var(--mut);background:var(--chip);border-radius:10px;padding:10px 14px;margin:10px 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 20px}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+@media(max-width:880px){.kpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 14px}
+.kpi .n{font-size:23px;font-weight:800;letter-spacing:-.6px;line-height:1}
+.kpi .l{font-size:11.5px;color:var(--mut);margin-top:5px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--mut);font-weight:700;cursor:default}
+td.r,th.r{text-align:right}td.c,th.c{text-align:center}
+tr:last-child td{border-bottom:none}
+.bar{height:9px;border-radius:5px;background:var(--accent);display:inline-block;vertical-align:middle}
+.barwrap{display:flex;align-items:center;gap:8px}
+.barwrap .v{font-variant-numeric:tabular-nums;color:var(--mut);font-size:12px;min-width:46px}
+.cr{font-variant-numeric:tabular-nums;font-weight:600}
+.crpill{display:inline-block;padding:2px 7px;border-radius:6px;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.url{font-size:12.5px;word-break:break-all}
+.url a{color:var(--blue);text-decoration:none}.url a:hover{text-decoration:underline}
+.tag{font-size:10.5px;color:var(--mut);background:var(--chip);padding:2px 7px;border-radius:5px;white-space:nowrap}
+.note{font-size:12.5px;color:var(--mut);border-left:3px solid var(--amber);background:var(--chip);border-radius:8px;padding:10px 14px;margin:12px 0}
+.h2h{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:880px){.h2h{grid-template-columns:1fr}}
+.h2h h3{font-size:13px;margin:0 0 8px;font-weight:700}
+.pickrow{display:flex;gap:6px;flex-wrap:wrap;font-size:12px;margin-bottom:10px}
+.pickrow .mb{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:5px 11px;cursor:pointer;font-weight:600}
+.pickrow .mb.a{background:var(--cA);color:#fff;border-color:var(--cA)}
+.pickrow .mb.b{background:var(--cB);color:#fff;border-color:var(--cB)}
+.heatcell{text-align:center;font-variant-numeric:tabular-nums;border-radius:6px;padding:6px 4px}
+.heatcell .s{font-size:12px;font-weight:600}
+.heatcell .c{font-size:10.5px;opacity:.85}
+.foot{margin:36px 0 60px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--mut);text-align:center}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--mut);margin-top:8px}
+.legend b{color:var(--ink)}
+canvas{max-width:100%}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="topin">
+    <div class="logo">glov<b>.</b>ruch</div>
+    <a class="back" href="GLOV_HUB.html" style="margin-left:14px">← HUB</a>
+    <div class="toggle" onclick="document.body.toggleAttribute('data-dark');draw()">🌙</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1>Ruch / Źródła LP</h1>
+  <div class="sub">Skąd ruch, na jakie landing pages, jak konwertuje — wszystko z GA4. Wzór: zakładka „Ruch / Źródła LP" z raportu Audi Plichta.</div>
+  <div class="meta">
+    <span>glov.co · property 342844459</span>
+    <span>GA4 live · pobrane 14.06.2026</span>
+    <span>sty–cze 2026 (cze = do 13.)</span>
+    <span>PLN · twarde dane GA4</span>
+  </div>
+</div>
+
+<!-- FILTR RUCHU -->
+<div class="filterbar">
+  <div class="wrap">
+    <span class="lbl">Typ ruchu:</span>
+    <button class="tbtn on" data-t="all">Wszystko</button>
+    <button class="tbtn" data-t="paid">Płatny</button>
+    <button class="tbtn" data-t="psearch">Paid Search</button>
+    <button class="tbtn" data-t="psocial">Paid Social</button>
+    <button class="tbtn" data-t="xnet">Cross-network</button>
+    <button class="tbtn" data-t="free">Bezpłatny</button>
+    <div class="tinfo" id="tinfo">Wszystkie kanały · filtr przelicza wszystkie sekcje poniżej</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- KPI -->
+<section>
+  <h2 class="sec">Kluczowe metryki <span class="h">dla wybranego typu ruchu, cały okres</span></h2>
+  <div class="kpis" id="kpis"></div>
+</section>
+
+<!-- KANALY MoM -->
+<section>
+  <h2 class="sec">Kanały pozyskania <span class="h">sesje + CR miesiąc po miesiącu</span></h2>
+  <div class="expl"><b>Co tu widzisz:</b> które źródło ruchu przyprowadza ludzi i jak konwertuje, miesiąc po miesiącu. Patrz nie na ilość samą w sobie — ważne, czy z kanału idą też transakcje (CR). Długi pasek = dużo sesji; kolor CR = jakość ruchu.</div>
+  <div class="card" style="overflow-x:auto">
+    <table id="chanTbl"><thead><tr>
+      <th>Kanał</th><th class="r">Sesje</th><th class="r">Trans.</th><th class="c">CR</th><th style="width:34%">Udział sesji</th>
+    </tr></thead><tbody></tbody></table>
+  </div>
+  <div class="note" id="chanNote"></div>
+</section>
+
+<!-- TREND -->
+<section>
+  <h2 class="sec">Trend w czasie <span class="h">sesje (słupki) i CR (linia) wg miesięcy</span></h2>
+  <div class="card"><canvas id="trend" height="120"></canvas></div>
+  <div class="legend"><span>▬ <b>Sesje</b> (lewa oś)</span><span>● <b>CR %</b> (prawa oś)</span><span style="color:var(--mut)">cze 2026 = miesiąc niepełny (do 13.)</span></div>
+</section>
+
+<!-- DYSTRYBUCJA TYP STRONY x MIESIAC -->
+<section>
+  <h2 class="sec">Dystrybucja: typ strony × miesiąc <span class="h">sesje (góra) + CR% (dół)</span></h2>
+  <div class="expl"><b>Jak czytać:</b> każda komórka = sesje (góra) i CR% (dół, ciemniejsze tło = wyższy CR). Widzisz który typ landingu ciągnie ruch i gdzie ten ruch realnie konwertuje. Typy: Homepage, Listing (kolekcje), PDP (produkty), Koszyk, Blog, EN/EU (rynki obce), (not set) = GA4 gubi landing.</div>
+  <div class="card" style="overflow-x:auto">
+    <table id="distTbl"><thead><tr><th>Typ strony</th></tr></thead><tbody></tbody></table>
+  </div>
+  <div class="note">⚠️ <b>(not set)</b> = GA4 nie złapał landing page (in-app browser Meta gubi <code>page_location</code>). To największy „worek" GLOV — 31 603 sesji / 668 transakcji w okresie. Do rozbicia: Proxy of Truth + fix GTM.</div>
+</section>
+
+<!-- HEAD TO HEAD -->
+<section>
+  <h2 class="sec">Miesiąc-do-miesiąca (head-to-head) <span class="h">porównaj 2 miesiące, URL × sesje × konwersje × CR</span></h2>
+  <div class="expl"><b>Jak używać:</b> wybierz miesiąc A (czerwony) i miesiąc B (niebieski). Tabele pokazują top landing pages w każdym z nich dla wybranego typu ruchu. Porównuj te same URL między miesiącami.</div>
+  <div class="pickrow" id="pickA"></div>
+  <div class="pickrow" id="pickB"></div>
+  <div class="h2h">
+    <div class="card"><h3 id="hA" style="color:var(--cA)">—</h3><div style="overflow-x:auto"><table id="tblA"><thead><tr><th>URL</th><th class="r">Ses</th><th class="r">Kon</th><th class="c">CR</th></tr></thead><tbody></tbody></table></div></div>
+    <div class="card"><h3 id="hB" style="color:var(--cB)">—</h3><div style="overflow-x:auto"><table id="tblB"><thead><tr><th>URL</th><th class="r">Ses</th><th class="r">Kon</th><th class="c">CR</th></tr></thead><tbody></tbody></table></div></div>
+  </div>
+</section>
+
+<div class="foot">
+  glov.ruch — zakładka „Ruch / Źródła LP" · wzór Audi Plichta · dane GA4 property 342844459 · pobrane 2026-06-14 · INTERNAL<br>
+  Twarde dane GA4, bez estymacji. (not set) = ślepe pole landing page (in-app Meta). Warstwa spend/ROAS → Proxy of Truth (po dostępie Meta/Google Ads MCP).
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+const D = {"meta":{"property":"342844459","store":"glov.co","currency":"PLN","range":"2026-01-01 — 2026-06-13","note":"202606 = dane do 13.06 (miesiąc niepełny). Dane GA4 live, pobrane 2026-06-14.","source":"google-analytics-mcp run_report"},
+"by_month_channel":{"202601":{"Direct":{"s":6102,"t":25},"Cross-network":{"s":4135,"t":65},"Organic Search":{"s":3827,"t":53},"Paid Search":{"s":2960,"t":99},"Paid Social":{"s":2792,"t":11},"Unassigned":{"s":962,"t":55},"Organic Social":{"s":132,"t":2},"Referral":{"s":71,"t":3},"Paid Other":{"s":46,"t":0},"Organic Shopping":{"s":18,"t":0}},"202602":{"Direct":{"s":5164,"t":25},"Organic Search":{"s":3621,"t":50},"Cross-network":{"s":3592,"t":67},"Paid Search":{"s":1906,"t":80},"Paid Social":{"s":1749,"t":16},"Unassigned":{"s":640,"t":34},"Organic Social":{"s":80,"t":2},"Referral":{"s":56,"t":2},"Organic Shopping":{"s":29,"t":1}},"202603":{"Direct":{"s":5307,"t":40},"Organic Search":{"s":3447,"t":47},"Cross-network":{"s":2920,"t":72},"Paid Search":{"s":2338,"t":135},"Paid Social":{"s":941,"t":3},"Unassigned":{"s":857,"t":70},"Organic Social":{"s":125,"t":2},"Referral":{"s":64,"t":4},"Organic Shopping":{"s":32,"t":1},"Paid Other":{"s":8,"t":0}},"202604":{"Direct":{"s":5397,"t":37},"Organic Search":{"s":3633,"t":67},"Cross-network":{"s":2705,"t":70},"Paid Search":{"s":2521,"t":101},"Unassigned":{"s":754,"t":59},"Paid Social":{"s":725,"t":8},"Organic Social":{"s":93,"t":0},"Referral":{"s":54,"t":2},"Organic Shopping":{"s":41,"t":1}},"202605":{"Organic Search":{"s":5720,"t":171},"Direct":{"s":4617,"t":76},"Paid Social":{"s":3959,"t":101},"Paid Search":{"s":2670,"t":136},"Cross-network":{"s":2590,"t":56},"Unassigned":{"s":1133,"t":63},"Organic Shopping":{"s":223,"t":16},"Referral":{"s":219,"t":1},"Organic Social":{"s":171,"t":5},"Paid Other":{"s":10,"t":1}},"202606":{"Unassigned":{"s":2387,"t":34},"Organic Search":{"s":1924,"t":29},"Direct":{"s":1798,"t":10},"Paid Search":{"s":1121,"t":50},"Paid Social":{"s":1011,"t":3},"Cross-network":{"s":977,"t":22},"Organic Social":{"s":619,"t":0},"Referral":{"s":155,"t":3},"Paid Shopping":{"s":68,"t":0},"Organic Shopping":{"s":8,"t":1}}},
+"top_landings_overall":[{"url":"(not set)","s":31603,"t":668},{"url":"/collections/sklep","s":8238,"t":427},{"url":"/","s":5648,"t":208},{"url":"/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","s":3754,"t":183},{"url":"/products/platki-led-luna-eye","s":3189,"t":57},{"url":"/en-eu","s":2872,"t":13},{"url":"/collections/rekawice-do-demakijazu","s":2110,"t":72},{"url":"/en-eu/collections/coolnails","s":1824,"t":0},{"url":"/en-eu/collections/nano-glass-collection","s":1626,"t":0},{"url":"/en-eu/collections/glov-led-therapy","s":1590,"t":0},{"url":"/en-eu/collections/glov-cheetah-collection","s":1557,"t":0},{"url":"/en-eu/collections/bath-collection","s":1508,"t":0},{"url":"/en-eu/collections/store","s":1500,"t":1},{"url":"/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","s":1498,"t":6},{"url":"/products/platki-led-luna-eye-z-etui-ladujacym","s":1010,"t":28},{"url":"/en-global","s":950,"t":0},{"url":"/en-gb/pages/manage-subscriptions","s":779,"t":0},{"url":"/collections/sklep?page=2","s":760,"t":2},{"url":"/products/depilator-z-nano-szkla-glov","s":683,"t":13},{"url":"/collections/produkty-do-pielegnacji-twarzy","s":582,"t":9},{"url":"/collections/coolnails","s":580,"t":1},{"url":"/collections/produkty-do-pielegnacji-wlosow","s":561,"t":15},{"url":"/cart","s":519,"t":29},{"url":"/collections/glov-led-therapy","s":489,"t":12},{"url":"/fr-eu","s":470,"t":1},{"url":"/collections/wyprzedaz","s":455,"t":20},{"url":"/collections/produkty-do-pielegnacji-ciala","s":415,"t":10},{"url":"/products/overnight-blowout-set","s":403,"t":1},{"url":"/products/glov-hydroweave-twister","s":386,"t":11},{"url":"/collections/turbany-do-wlosow","s":384,"t":9},{"url":"/blogs/pl/pielegnacja-wlosow-a-fazy-ksiezyca","s":346,"t":0},{"url":"/products/sole-mate","s":337,"t":1},{"url":"/de-eu","s":334,"t":5}],
+"landing_channel_month":[{"url":"(not set)","ch":"Paid Social","m":"202605","s":2550,"t":84},{"url":"(not set)","ch":"Direct","m":"202601","s":2440,"t":2},{"url":"(not set)","ch":"Organic Search","m":"202605","s":2310,"t":119},{"url":"(not set)","ch":"Unassigned","m":"202606","s":2257,"t":24},{"url":"(not set)","ch":"Direct","m":"202605","s":1960,"t":44},{"url":"/collections/sklep","ch":"Paid Search","m":"202601","s":1455,"t":55},{"url":"/products/platki-led-luna-eye","ch":"Cross-network","m":"202601","s":1424,"t":9},{"url":"(not set)","ch":"Direct","m":"202603","s":1415,"t":8},{"url":"(not set)","ch":"Direct","m":"202604","s":1394,"t":10},{"url":"(not set)","ch":"Direct","m":"202602","s":1232,"t":7},{"url":"/collections/sklep","ch":"Paid Search","m":"202605","s":1214,"t":93},{"url":"(not set)","ch":"Paid Social","m":"202601","s":1171,"t":4},{"url":"/collections/sklep","ch":"Paid Search","m":"202604","s":1106,"t":52},{"url":"/collections/sklep","ch":"Paid Search","m":"202602","s":1038,"t":58},{"url":"/collections/sklep","ch":"Paid Search","m":"202603","s":993,"t":75},{"url":"(not set)","ch":"Organic Search","m":"202606","s":983,"t":12},{"url":"(not set)","ch":"Organic Search","m":"202602","s":847,"t":18},{"url":"(not set)","ch":"Paid Social","m":"202606","s":799,"t":3},{"url":"(not set)","ch":"Paid Social","m":"202602","s":796,"t":4},{"url":"(not set)","ch":"Organic Search","m":"202603","s":787,"t":20},{"url":"(not set)","ch":"Direct","m":"202606","s":777,"t":4},{"url":"(not set)","ch":"Organic Search","m":"202604","s":739,"t":21},{"url":"(not set)","ch":"Organic Search","m":"202601","s":729,"t":18},{"url":"(not set)","ch":"Unassigned","m":"202605","s":684,"t":52},{"url":"/products/platki-led-luna-eye","ch":"Cross-network","m":"202605","s":649,"t":18},{"url":"(not set)","ch":"Unassigned","m":"202603","s":556,"t":61},{"url":"(not set)","ch":"Paid Social","m":"202603","s":547,"t":0},{"url":"/products/platki-led-luna-eye-z-etui-ladujacym","ch":"Cross-network","m":"202603","s":492,"t":14},{"url":"(not set)","ch":"Unassigned","m":"202604","s":482,"t":52},{"url":"(not set)","ch":"Unassigned","m":"202601","s":480,"t":42},{"url":"/en-eu/collections/coolnails","ch":"Direct","m":"202604","s":461,"t":0},{"url":"/collections/sklep","ch":"Paid Search","m":"202606","s":448,"t":27},{"url":"/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","ch":"Cross-network","m":"202602","s":444,"t":2},{"url":"/en-eu","ch":"Direct","m":"202604","s":442,"t":0},{"url":"/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","ch":"Paid Search","m":"202604","s":433,"t":27},{"url":"/products/platki-led-luna-eye","ch":"Cross-network","m":"202604","s":429,"t":19},{"url":"(not set)","ch":"Cross-network","m":"202602","s":423,"t":0},{"url":"(not set)","ch":"Cross-network","m":"202601","s":405,"t":0},{"url":"/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","ch":"Paid Search","m":"202605","s":382,"t":16},{"url":"/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","ch":"Cross-network","m":"202605","s":377,"t":3},{"url":"/en-eu/collections/glov-cheetah-collection","ch":"Direct","m":"202604","s":376,"t":0},{"url":"(not set)","ch":"Paid Social","m":"202604","s":375,"t":2},{"url":"(not set)","ch":"Cross-network","m":"202603","s":371,"t":0},{"url":"(not set)","ch":"Unassigned","m":"202602","s":365,"t":26},{"url":"/products/platki-led-luna-eye-z-etui-ladujacym","ch":"Cross-network","m":"202602","s":360,"t":10},{"url":"/collections/rekawice-do-demakijazu","ch":"Paid Search","m":"202601","s":354,"t":13},{"url":"/en-eu/collections/glov-cheetah-collection","ch":"Direct","m":"202601","s":353,"t":0},{"url":"/en-eu/collections/coolnails","ch":"Direct","m":"202602","s":351,"t":0},{"url":"/en-eu/collections/nano-glass-collection","ch":"Direct","m":"202602","s":350,"t":0},{"url":"/en-eu/collections/glov-led-therapy","ch":"Direct","m":"202604","s":347,"t":0},{"url":"/en-eu/collections/bath-collection","ch":"Direct","m":"202604","s":342,"t":0},{"url":"/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","ch":"Organic Search","m":"202605","s":340,"t":14},{"url":"(not set)","ch":"Paid Search","m":"202601","s":336,"t":0},{"url":"(not set)","ch":"Paid Search","m":"202605","s":335,"t":0},{"url":"/en-eu/collections/bath-collection","ch":"Direct","m":"202602","s":335,"t":0},{"url":"/en-eu/collections/bath-collection","ch":"Direct","m":"202601","s":332,"t":0},{"url":"/en-eu/collections/store","ch":"Direct","m":"202603","s":332,"t":0},{"url":"/en-gb/pages/manage-subscriptions","ch":"Organic Search","m":"202604","s":331,"t":0},{"url":"/en-eu","ch":"Direct","m":"202605","s":329,"t":0},{"url":"(not set)","ch":"Cross-network","m":"202606","s":327,"t":0},{"url":"(not set)","ch":"Paid Search","m":"202604","s":327,"t":0},{"url":"/products/platki-led-luna-eye","ch":"Cross-network","m":"202602","s":327,"t":1},{"url":"/en-eu/collections/nano-glass-collection","ch":"Direct","m":"202603","s":326,"t":0},{"url":"/en-eu","ch":"Direct","m":"202603","s":325,"t":2},{"url":"(not set)","ch":"Cross-network","m":"202604","s":322,"t":0},{"url":"/en-eu/collections/glov-led-therapy","ch":"Direct","m":"202601","s":322,"t":0},{"url":"/","ch":"Organic Search","m":"202605","s":318,"t":17},{"url":"/en-eu/collections/coolnails","ch":"Direct","m":"202603","s":318,"t":0},{"url":"/en-eu/collections/glov-led-therapy","ch":"Direct","m":"202603","s":317,"t":0},{"url":"/en-eu/collections/glov-cheetah-collection","ch":"Direct","m":"202602","s":316,"t":0},{"url":"/en-eu/collections/bath-collection","ch":"Direct","m":"202603","s":313,"t":0},{"url":"/en-eu/collections/glov-cheetah-collection","ch":"Direct","m":"202603","s":313,"t":0},{"url":"/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","ch":"Cross-network","m":"202604","s":311,"t":5},{"url":"/","ch":"Organic Search","m":"202602","s":308,"t":7},{"url":"/en-eu/collections/nano-glass-collection","ch":"Direct","m":"202601","s":307,"t":0},{"url":"/","ch":"Direct","m":"202602","s":304,"t":9},{"url":"/","ch":"Direct","m":"202604","s":303,"t":11},{"url":"/","ch":"Organic Search","m":"202601","s":302,"t":13},{"url":"(not set)","ch":"Paid Search","m":"202603","s":301,"t":1},{"url":"/en-eu/collections/coolnails","ch":"Direct","m":"202601","s":301,"t":0},{"url":"/en-eu/collections/nano-glass-collection","ch":"Direct","m":"202604","s":301,"t":0},{"url":"/en-gb/pages/manage-subscriptions","ch":"Organic Search","m":"202605","s":301,"t":0},{"url":"/en-eu","ch":"Direct","m":"202602","s":298,"t":0},{"url":"/","ch":"Direct","m":"202605","s":296,"t":13},{"url":"(not set)","ch":"Cross-network","m":"202605","s":295,"t":0},{"url":"/","ch":"Direct","m":"202601","s":292,"t":10},{"url":"/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","ch":"Organic Search","m":"202604","s":292,"t":5},{"url":"/en-eu/collections/store","ch":"Direct","m":"202604","s":291,"t":0},{"url":"/en-eu","ch":"Direct","m":"202601","s":288,"t":1},{"url":"/en-eu/collections/glov-led-therapy","ch":"Direct","m":"202602","s":288,"t":0},{"url":"/en-eu/collections/store","ch":"Direct","m":"202601","s":275,"t":0},{"url":"/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","ch":"Paid Search","m":"202603","s":270,"t":20},{"url":"/collections/sklep","ch":"Cross-network","m":"202602","s":268,"t":11},{"url":"(not set)","ch":"Paid Search","m":"202606","s":267,"t":0},{"url":"/","ch":"Organic Search","m":"202604","s":258,"t":5},{"url":"/","ch":"Cross-network","m":"202601","s":247,"t":8},{"url":"/collections/rekawice-do-demakijazu","ch":"Paid Search","m":"202605","s":246,"t":13},{"url":"/","ch":"Direct","m":"202603","s":245,"t":10},{"url":"/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","ch":"Cross-network","m":"202603","s":245,"t":0},{"url":"/en-global","ch":"Direct","m":"202601","s":239,"t":0},{"url":"(not set)","ch":"Paid Search","m":"202602","s":232,"t":0},{"url":"/collections/rekawice-do-demakijazu","ch":"Paid Search","m":"202604","s":232,"t":6},{"url":"/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty","ch":"Cross-network","m":"202604","s":225,"t":1},{"url":"/","ch":"Organic Search","m":"202603","s":224,"t":11},{"url":"/collections/rekawice-do-demakijazu","ch":"Paid Search","m":"202603","s":217,"t":9},{"url":"/en-global","ch":"Direct","m":"202602","s":217,"t":0},{"url":"/collections/rekawice-do-demakijazu","ch":"Paid Search","m":"202602","s":215,"t":8},{"url":"/collections/sklep/products/platki-led-luna-eye","ch":"Paid Social","m":"202605","s":205,"t":2},{"url":"/en-global","ch":"Direct","m":"202603","s":204,"t":0},{"url":"/products/platki-led-luna-eye","ch":"Cross-network","m":"202606","s":202,"t":9},{"url":"/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","ch":"Cross-network","m":"202601","s":195,"t":10},{"url":"/en-eu/collections/coolnails","ch":"Direct","m":"202605","s":177,"t":0},{"url":"/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","ch":"Cross-network","m":"202602","s":168,"t":10},{"url":"/en-eu","ch":"Organic Search","m":"202604","s":163,"t":2},{"url":"/collections/sklep","ch":"Cross-network","m":"202603","s":142,"t":6},{"url":"/","ch":"Unassigned","m":"202605","s":162,"t":6},{"url":"/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","ch":"Organic Search","m":"202606","s":157,"t":8},{"url":"/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","ch":"Paid Search","m":"202606","s":157,"t":13},{"url":"/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","ch":"Paid Search","m":"202601","s":156,"t":12},{"url":"/","ch":"Cross-network","m":"202602","s":147,"t":6},{"url":"/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","ch":"Organic Search","m":"202602","s":143,"t":3},{"url":"/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka","ch":"Paid Search","m":"202602","s":143,"t":8},{"url":"/collections/sklep","ch":"Direct","m":"202603","s":101,"t":10},{"url":"/","ch":"Paid Search","m":"202601","s":98,"t":5},{"url":"/","ch":"Paid Social","m":"202605","s":97,"t":6},{"url":"/collections/sklep","ch":"Paid Social","m":"202605","s":95,"t":1},{"url":"/","ch":"Unassigned","m":"202601","s":130,"t":8}]}
+;
+const MONTHS=["202601","202602","202603","202604","202605","202606"];
+const MLAB={"202601":"Sty","202602":"Lut","202603":"Mar","202604":"Kwi","202605":"Maj","202606":"Cze*"};
+// mapowanie filtra -> kanaly GA4
+const FILTERS={
+  all:null,
+  paid:["Paid Search","Paid Social","Paid Other","Cross-network","Paid Shopping"],
+  psearch:["Paid Search"],
+  psocial:["Paid Social"],
+  xnet:["Cross-network"],
+  free:["Organic Search","Organic Social","Organic Shopping","Organic Video","Direct","Referral","Email","SMS","Unassigned","AI Assistant"]
+};
+const FINFO={all:"Wszystkie kanały",paid:"Paid Search + Social + Cross-network + inne płatne",psearch:"tylko Paid Search (Google Ads)",psocial:"tylko Paid Social (Meta)",xnet:"tylko Cross-network (PMax/Advantage+)",free:"Organic, Direct, Referral, Email, Unassigned…"};
+let TYPE="all";
+let MA="202604", MB="202605";
+
+function chMatch(ch){const f=FILTERS[TYPE];return f===null?true:f.includes(ch);}
+function landingMatch(ch){return chMatch(ch);}
+
+// klasyfikacja typu strony
+function pageType(u){
+  if(u==="(not set)")return "(not set)";
+  if(u==="/"||u==="/#"||u==="")return "Homepage";
+  if(u.startsWith("/cart"))return "Koszyk";
+  if(u.startsWith("/blogs"))return "Blog";
+  if(/^\/(en|fr|de|pl)-(eu|gb|global)/.test(u)||u==="/en-global")return "Rynki EN/EU";
+  if(u.startsWith("/products/")||u.includes("/products/"))return "PDP (produkt)";
+  if(u.startsWith("/collections/"))return "Listing (kolekcja)";
+  if(u.startsWith("/pages/"))return "Strona /pages";
+  return "Inne";
+}
+const fmt=n=>n.toLocaleString("pl-PL");
+function crColor(cr){ // cr w %
+  if(cr>=8)return"#16a34a";if(cr>=4)return"#65a30d";if(cr>=1.5)return"#d97706";if(cr>0)return"#dc2626";return"#9ca3af";
+}
+function crBg(cr){
+  if(cr>=8)return"rgba(22,163,74,.22)";if(cr>=4)return"rgba(101,163,13,.18)";if(cr>=1.5)return"rgba(217,119,6,.16)";if(cr>0)return"rgba(220,38,38,.13)";return"transparent";
+}
+
+function calcKPIs(){
+  let s=0,t=0;
+  MONTHS.forEach(m=>{const mc=D.by_month_channel[m]||{};for(const ch in mc){if(chMatch(ch)){s+=mc[ch].s;t+=mc[ch].t;}}});
+  const cr=s?(t/s*100):0;
+  // udzial w calym ruchu
+  let stot=0;MONTHS.forEach(m=>{const mc=D.by_month_channel[m]||{};for(const ch in mc)stot+=mc[ch].s;});
+  const share=stot?(s/stot*100):0;
+  // najlepszy miesiac wg CR
+  let best={m:"",cr:0};
+  MONTHS.forEach(m=>{let ms=0,mt=0;const mc=D.by_month_channel[m]||{};for(const ch in mc){if(chMatch(ch)){ms+=mc[ch].s;mt+=mc[ch].t;}}const c=ms?mt/ms*100:0;if(c>best.cr){best={m,cr:c};}});
+  return {s,t,cr,share,best};
+}
+
+function renderKPIs(){
+  const k=calcKPIs();
+  const el=document.getElementById("kpis");
+  el.innerHTML=`
+    <div class="kpi"><div class="n">${fmt(k.s)}</div><div class="l">Sesje</div></div>
+    <div class="kpi"><div class="n">${fmt(k.t)}</div><div class="l">Transakcje</div></div>
+    <div class="kpi"><div class="n" style="color:${crColor(k.cr)}">${k.cr.toFixed(2)}%</div><div class="l">CR (trans/sesje)</div></div>
+    <div class="kpi"><div class="n">${k.share.toFixed(0)}%</div><div class="l">udział w ruchu</div></div>
+    <div class="kpi"><div class="n">${k.best.m?MLAB[k.best.m]:"—"}</div><div class="l">najlepszy CR (mies.)</div></div>
+    <div class="kpi"><div class="n" style="color:${crColor(k.best.cr)}">${k.best.cr.toFixed(1)}%</div><div class="l">jego CR</div></div>`;
+}
+
+function renderChannels(){
+  // agreguj per kanal (caly okres) z filtrem
+  const agg={};
+  MONTHS.forEach(m=>{const mc=D.by_month_channel[m]||{};for(const ch in mc){if(!chMatch(ch))continue;agg[ch]=agg[ch]||{s:0,t:0};agg[ch].s+=mc[ch].s;agg[ch].t+=mc[ch].t;}});
+  const rows=Object.entries(agg).map(([ch,v])=>({ch,...v,cr:v.s?v.t/v.s*100:0})).sort((a,b)=>b.s-a.s);
+  const max=rows.length?rows[0].s:1;
+  const tb=document.querySelector("#chanTbl tbody");
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td><b>${r.ch}</b></td>
+    <td class="r">${fmt(r.s)}</td>
+    <td class="r">${fmt(r.t)}</td>
+    <td class="c"><span class="crpill" style="background:${crBg(r.cr)};color:${crColor(r.cr)}">${r.cr.toFixed(2)}%</span></td>
+    <td><div class="barwrap"><span class="bar" style="width:${Math.max(2,r.s/max*100)}%;background:${crColor(r.cr)}"></span></div></td>
+  </tr>`).join("");
+  // note: top kanal vs jakosc
+  if(rows.length){
+    const topS=rows[0], topCR=[...rows].sort((a,b)=>b.cr-a.cr)[0];
+    document.getElementById("chanNote").innerHTML=`💡 Najwięcej ruchu: <b>${topS.ch}</b> (${fmt(topS.s)} sesji, CR ${topS.cr.toFixed(2)}%). Najlepiej konwertuje: <b>${topCR.ch}</b> (CR ${topCR.cr.toFixed(2)}%). Jeśli kanał z dużym ruchem ma niski CR — ruch słabej jakości, sprawdź dopasowanie. Mały kanał z wysokim CR = kierunek do skalowania.`;
+  }
+}
+
+let chart=null;
+function renderTrend(){
+  const labels=MONTHS.map(m=>MLAB[m]);
+  const ses=MONTHS.map(m=>{let s=0;const mc=D.by_month_channel[m]||{};for(const ch in mc)if(chMatch(ch))s+=mc[ch].s;return s;});
+  const crs=MONTHS.map(m=>{let s=0,t=0;const mc=D.by_month_channel[m]||{};for(const ch in mc)if(chMatch(ch)){s+=mc[ch].s;t+=mc[ch].t;}return s?+(t/s*100).toFixed(2):0;});
+  const ink=getComputedStyle(document.body).getPropertyValue('--ink').trim()||"#1a1a1a";
+  const mut=getComputedStyle(document.body).getPropertyValue('--mut').trim()||"#6b6b6b";
+  if(chart)chart.destroy();
+  chart=new Chart(document.getElementById("trend"),{
+    data:{labels,datasets:[
+      {type:"bar",label:"Sesje",data:ses,backgroundColor:"rgba(22,163,74,.55)",borderRadius:5,yAxisID:"y"},
+      {type:"line",label:"CR %",data:crs,borderColor:"#2563eb",backgroundColor:"#2563eb",tension:.3,yAxisID:"y1",pointRadius:4}
+    ]},
+    options:{responsive:true,plugins:{legend:{display:false}},
+      scales:{
+        y:{beginAtZero:true,ticks:{color:mut},grid:{color:"rgba(128,128,128,.12)"}},
+        y1:{position:"right",beginAtZero:true,ticks:{color:mut,callback:v=>v+"%"},grid:{drawOnChartArea:false}},
+        x:{ticks:{color:ink},grid:{display:false}}
+      }}
+  });
+}
+
+function renderDist(){
+  // typ strony x miesiac : sesje + CR  (z landing_channel_month, filtr)
+  const types=["Homepage","Listing (kolekcja)","PDP (produkt)","Koszyk","Blog","Strona /pages","Rynki EN/EU","(not set)","Inne"];
+  const grid={};types.forEach(ty=>{grid[ty]={};MONTHS.forEach(m=>grid[ty][m]={s:0,t:0});});
+  D.landing_channel_month.forEach(r=>{
+    if(!landingMatch(r.ch))return;
+    const ty=pageType(r.url);if(!grid[ty])grid[ty]={};if(!grid[ty][r.m])grid[ty][r.m]={s:0,t:0};
+    grid[ty][r.m].s+=r.s;grid[ty][r.m].t+=r.t;
+  });
+  // tylko typy z jakimkolwiek ruchem
+  const active=types.filter(ty=>MONTHS.some(m=>grid[ty][m].s>0));
+  const thead=document.querySelector("#distTbl thead tr");
+  thead.innerHTML="<th>Typ strony</th>"+MONTHS.map(m=>`<th class="c">${MLAB[m]}</th>`).join("");
+  const tb=document.querySelector("#distTbl tbody");
+  tb.innerHTML=active.map(ty=>{
+    const cells=MONTHS.map(m=>{const c=grid[ty][m];const cr=c.s?c.t/c.s*100:0;
+      return `<td><div class="heatcell" style="background:${crBg(cr)}"><div class="s">${c.s?fmt(c.s):"·"}</div><div class="c" style="color:${crColor(cr)}">${c.s?cr.toFixed(1)+"%":""}</div></div></td>`;}).join("");
+    return `<tr><td><b>${ty}</b></td>${cells}</tr>`;
+  }).join("");
+}
+
+function renderPickers(){
+  const mk=(cont,sel,which)=>{document.getElementById(cont).innerHTML=
+    `<span style="color:var(--mut);align-self:center;font-size:11px;font-weight:700">${which}:</span>`+
+    MONTHS.map(m=>`<div class="mb ${m===sel?which.toLowerCase():''}" data-m="${m}" data-w="${which}">${MLAB[m]}</div>`).join("");};
+  mk("pickA",MA,"A");mk("pickB",MB,"B");
+  document.querySelectorAll(".pickrow .mb").forEach(b=>b.onclick=()=>{
+    if(b.dataset.w==="A")MA=b.dataset.m;else MB=b.dataset.m;renderPickers();renderH2H();});
+}
+function renderH2H(){
+  const fill=(tblId,hId,m,cls)=>{
+    document.getElementById(hId).textContent=MLAB[m].replace("*","")+" 2026";
+    const rows=D.landing_channel_month.filter(r=>r.m===m&&landingMatch(r.ch));
+    // agreguj per url (suma kanalow w tym miesiacu pasujacych do filtra)
+    const agg={};rows.forEach(r=>{agg[r.url]=agg[r.url]||{s:0,t:0};agg[r.url].s+=r.s;agg[r.url].t+=r.t;});
+    const list=Object.entries(agg).map(([url,v])=>({url,...v,cr:v.s?v.t/v.s*100:0})).sort((a,b)=>b.s-a.s).slice(0,16);
+    const isExt=u=>u!=="(not set)";
+    document.querySelector("#"+tblId+" tbody").innerHTML=list.length?list.map(r=>`<tr>
+      <td class="url">${isExt(r.url)?`<a href="https://glov.co${r.url}" target="_blank">${r.url}</a>`:'<span class="tag">(not set)</span>'}</td>
+      <td class="r">${fmt(r.s)}</td><td class="r">${fmt(r.t)}</td>
+      <td class="c"><span class="crpill" style="background:${crBg(r.cr)};color:${crColor(r.cr)}">${r.cr.toFixed(1)}%</span></td>
+    </tr>`).join(""):`<tr><td colspan="4" style="color:var(--mut);text-align:center;padding:18px">Brak danych dla tego filtra ≥80 sesji</td></tr>`;
+  };
+  fill("tblA","hA",MA,"a");fill("tblB","hB",MB,"b");
+}
+
+function draw(){renderKPIs();renderChannels();renderTrend();renderDist();renderH2H();}
+
+document.querySelectorAll(".tbtn").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tbtn").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");TYPE=b.dataset.t;document.getElementById("tinfo").textContent=FINFO[TYPE]+" · filtr przelicza wszystkie sekcje";
+  draw();
+});
+
+renderPickers();
+draw();
+</script>
+</body>
+</html>
