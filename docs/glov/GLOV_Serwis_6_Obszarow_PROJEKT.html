@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Serwis 6 Obszarów · Projekt wykonawczy (INTERNAL)</title>
+<style>
+:root{
+  --bg:#fafaf9; --card:#fff; --ink:#1a1a1a; --mut:#6b6b6b; --line:#e7e5e4;
+  --accent:#16a34a; --accent2:#ea580c; --blue:#2563eb; --amber:#d97706; --red:#dc2626;
+  --chip:#f4f4f5; --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --r:14px;
+}
+[data-dark]{
+  --bg:#0e0f11; --card:#17191c; --ink:#f3f4f6; --mut:#9aa0a6; --line:#2a2d31;
+  --chip:#21242a; --shadow:0 1px 3px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+header.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topin{display:flex;align-items:center;gap:18px;height:60px;max-width:1080px;margin:0 auto;padding:0 22px}
+.logo{font-weight:800;font-size:19px;letter-spacing:-.4px}
+.logo b{color:var(--accent)}
+nav.menu{display:flex;gap:16px;margin-left:auto;flex-wrap:wrap}
+nav.menu a{color:var(--mut);font-size:13.5px;font-weight:500}
+nav.menu a:hover{color:var(--ink);text-decoration:none}
+.toggle{cursor:pointer;border:1px solid var(--line);background:var(--card);border-radius:999px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.hero{padding:56px 0 30px;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--mut);background:var(--chip);padding:6px 14px;border-radius:999px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block}
+h1{font-size:42px;line-height:1.08;font-weight:850;letter-spacing:-1.2px;margin:18px 0 12px}
+.lead{font-size:17px;color:var(--mut);max-width:680px;margin:0 auto}
+.metabar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.metabar span{font-size:12.5px;color:var(--mut);background:var(--chip);padding:5px 12px;border-radius:999px}
+section{margin:34px 0}
+h2.sec{font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--mut);margin:0 0 16px;display:flex;align-items:center;gap:10px}
+h2.sec::after{content:"";flex:1;height:1px;background:var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.pad{padding:22px 24px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:780px){.g2,.g3{grid-template-columns:1fr}}
+.kpi{padding:18px 20px}
+.kpi .n{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1}
+.kpi .l{font-size:12.5px;color:var(--mut);margin-top:6px}
+.kpi .s{font-size:11.5px;color:var(--mut);margin-top:3px}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.3px}
+.b-ok{background:rgba(22,163,74,.13);color:#15803d}
+.b-warn{background:rgba(217,119,6,.14);color:#b45309}
+.b-no{background:rgba(220,38,38,.13);color:#b91c1c}
+.b-plan{background:rgba(37,99,235,.13);color:#1d4ed8}
+[data-dark] .b-ok{color:#4ade80}[data-dark] .b-warn{color:#fbbf24}[data-dark] .b-no{color:#f87171}[data-dark] .b-plan{color:#60a5fa}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);font-weight:700}
+td.c,th.c{text-align:center}
+tr:last-child td{border-bottom:none}
+.area{scroll-margin-top:80px}
+.area-h{display:flex;align-items:flex-start;gap:16px;padding:22px 24px;border-bottom:1px solid var(--line)}
+.area-num{flex:0 0 auto;width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#fff}
+.area-h h3{margin:0;font-size:20px;font-weight:800;letter-spacing:-.4px}
+.area-h .sub{font-size:13px;color:var(--mut);margin-top:3px}
+.area-h .right{margin-left:auto;text-align:right;flex:0 0 auto}
+.tag{font-size:11px;color:var(--mut);background:var(--chip);padding:3px 9px;border-radius:6px;display:inline-block;margin:2px 0 0 4px}
+ul.clean{margin:10px 0;padding-left:20px}
+ul.clean li{margin:5px 0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:780px){.row2{grid-template-columns:1fr}}
+.sub-block{padding:18px 24px}
+.sub-block + .sub-block{border-top:1px solid var(--line)}
+.lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);margin-bottom:6px}
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12.5px;margin:6px 0}
+.flow .step{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-weight:600}
+.flow .arr{color:var(--mut)}
+.note{background:var(--chip);border-left:3px solid var(--accent);border-radius:8px;padding:12px 16px;font-size:13.5px;margin:12px 0}
+.note.warn{border-left-color:var(--amber)}
+.note.red{border-left-color:var(--red)}
+.note.blue{border-left-color:var(--blue)}
+.marker{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--mut);background:var(--chip);padding:2px 7px;border-radius:5px}
+.foot{margin:40px 0 60px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--mut);text-align:center}
+.pill-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+code{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;background:var(--chip);padding:1px 6px;border-radius:5px}
+.metric{font-size:12.5px;color:var(--mut)}
+.metric b{color:var(--ink)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="topin">
+    <div class="logo">glov<b>.</b>serwis</div>
+    <nav class="menu">
+      <a href="#stack">Stack</a>
+      <a href="#area1">UX</a>
+      <a href="#area2">Ads</a>
+      <a href="#area3">Content</a>
+      <a href="#area4">SEO</a>
+      <a href="#area5">Retencja</a>
+      <a href="#area6">Ruch</a>
+      <a href="#recon">Proxy of Truth</a>
+      <a href="#road">Roadmapa</a>
+    </nav>
+    <div class="toggle" onclick="document.body.toggleAttribute('data-dark')">🌙</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<div class="hero">
+  <span class="eyebrow"><span class="dot"></span> Projekt wykonawczy · INTERNAL</span>
+  <h1>Serwis analityczno-akcyjny<br>GLOV — 6 obszarów</h1>
+  <p class="lead">Brief klienta przełożony na execution layer EEL: per obszar — co realnie mamy, czym dysponujemy, co działa dziś vs po setupie, jakie metody nadają się na skill. Ocena wykonalności zweryfikowana realnym probe MCP 2026-06-14.</p>
+  <div class="metabar">
+    <span>glov.co · property 342844459</span>
+    <span>6 obszarów + 2 wątki Tomka</span>
+    <span>MCP probe: 2026-06-14</span>
+    <span>baza: EEL execution layer</span>
+  </div>
+</div>
+
+<!-- ============ STACK / WYKONALNOŚĆ ============ -->
+<section id="stack" class="area">
+<h2 class="sec">Stan źródeł danych — twardy probe (2026-06-14)</h2>
+<div class="card">
+<div class="pad">
+<p style="margin-top:0">Każde źródło odpytane realnie w tej sesji. To jest fundament — od tego zależy co którego obszaru da się zrobić dziś, a co czeka na dostęp. <strong>Uwaga:</strong> dokument <code>DATA_CONNECTORS.md</code> (2026-05-22) był nieaktualny — Clarity i Senuto oznaczone tam jako ❌ realnie <strong>działają</strong>.</p>
+<table>
+<thead><tr><th>Źródło</th><th class="c">Status</th><th>Dowód z probe</th><th>Do czego w serwisie</th></tr></thead>
+<tbody>
+<tr><td><b>GA4</b> (google-analytics-mcp)</td><td class="c"><span class="badge b-ok">✅ działa</span></td><td>4 properties GLOV widoczne (PL 342844459, EU, FR, DE)</td><td>Lejek, ścieżki, kanały, landing, produkty — rdzeń wszystkiego</td></tr>
+<tr><td><b>Shopify MCP</b></td><td class="c"><span class="badge b-ok">✅ działa</span></td><td>glov.co, PLN, plan Shopify, CEST</td><td>Produkty, zamówienia, klienci, kolekcje, theme (warstwa akcji)</td></tr>
+<tr><td><b>Microsoft Clarity</b></td><td class="c"><span class="badge b-ok">✅ działa</span></td><td>4 203 sesje / ostatnie 3 dni (non-bot)</td><td>Heatmapy, nagrania, rage/dead-click, scroll depth — UX + Content</td></tr>
+<tr><td><b>Senuto</b></td><td class="c"><span class="badge b-ok">✅ działa</span></td><td>top3=163, top10=303, top50=1133, widoczność 2610, <b>AIO kw=464</b></td><td>SEO widoczność PL, pytania, kanibalizacja, GEO/AIO</td></tr>
+<tr><td><b>DataForSEO</b> — core (SERP/Labs)</td><td class="c"><span class="badge b-ok">✅ działa</span></td><td>ranked kw glov.co: „glov" #1 (6 600/mc), intent, AI-overview ref</td><td>SEO techniczne, SERP, search intent, on-page, Lighthouse</td></tr>
+<tr><td><b>DataForSEO</b> — AI-optimization (LLM mentions)</td><td class="c"><span class="badge b-no">❌ brak sub.</span></td><td>„Access denied. Activate subscription" (40204)</td><td>GEO/LLM mentions — zastępujemy Senuto AIO (464 kw)</td></tr>
+<tr><td><b>Meta Ads</b> (act_414505328896049)</td><td class="c"><span class="badge b-no">❌ token</span></td><td>„API access blocked" (OAuth 200) — token zablokowany przez Meta</td><td>Performance Ads + Proxy of Truth — <b>blokuje obszar 2</b></td></tr>
+<tr><td><b>Google Ads</b> (169-845-2663)</td><td class="c"><span class="badge b-warn">⏳ brak dostępu</span></td><td>brak konektora / dostępu API</td><td>Performance Ads + Proxy of Truth — Tomek deklaruje dostęp wkrótce</td></tr>
+<tr><td><b>Google Search Console</b></td><td class="c"><span class="badge b-no">❌ brak MCP</span></td><td>brak konektora; registry: Supermetrics/Semrush płatne</td><td>Faktyczne impressions/CTR per fraza — luka SEO (workaround: CSV)</td></tr>
+<tr><td><b>PostHog</b></td><td class="c"><span class="badge b-warn">⚠️ inny projekt</span></td><td>wskazuje cleangang.pl (14537), nie GLOV</td><td>N/A dla GLOV — GLOV używa GA4</td></tr>
+</tbody>
+</table>
+<div class="legend">
+  <span><span class="badge b-ok">✅</span> działa dziś</span>
+  <span><span class="badge b-warn">⏳/⚠️</span> wymaga setupu/dostępu</span>
+  <span><span class="badge b-no">❌</span> niedostępne teraz</span>
+  <span><span class="badge b-plan">◆</span> do zbudowania</span>
+</div>
+</div>
+</div>
+
+<div class="grid g3" style="margin-top:14px">
+  <div class="card kpi"><div class="n" style="color:var(--accent)">6/10</div><div class="l">źródeł działa dziś</div><div class="s">GA4 · Shopify · Clarity · Senuto · DFS core</div></div>
+  <div class="card kpi"><div class="n" style="color:var(--amber)">2</div><div class="l">czekają na dostęp (założone)</div><div class="s">Meta Ads token · Google Ads API</div></div>
+  <div class="card kpi"><div class="n" style="color:var(--red)">2</div><div class="l">luki do domknięcia</div><div class="s">GSC (CSV/Supermetrics) · DFS AI-opt</div></div>
+</div>
+
+<div class="note blue">⚙️ <b>Założenie scope (decyzja Tomka 2026-06-14):</b> zakładamy że <b>Meta Ads MCP + Google Ads MCP będą dostępne</b>. Obszar 2 i Proxy of Truth projektujemy jako pełne moduły gotowe do podpięcia — kod i logika niezależne od tego, czy token żyje dziś. Gdy MCP ożyją, moduł startuje bez przebudowy.</div>
+</section>
+
+<!-- ============ OBSZAR 1: UX/UI ============ -->
+<section id="area1" class="area">
+<h2 class="sec">Obszary automatyzacji</h2>
+<div class="card">
+  <div class="area-h">
+    <div class="area-num" style="background:var(--accent)">1</div>
+    <div>
+      <h3>UX / UI</h3>
+      <div class="sub">Gdzie klient się gubi i odpada → dlaczego → gotowa zmiana układu/copy</div>
+    </div>
+    <div class="right">
+      <span class="badge b-ok">✅ gotowe do startu</span>
+      <div class="pill-row" style="justify-content:flex-end"><span class="tag">GA4</span><span class="tag">Clarity</span><span class="tag">Shopify</span></div>
+    </div>
+  </div>
+
+  <div class="sub-block">
+    <div class="lbl">Z briefu klienta</div>
+    <ul class="clean">
+      <li>Gdzie są błędy na ścieżce · gdzie najwięcej odrzuceń</li>
+      <li>Heatmapy: gdzie krążą, gdzie się zatrzymują, gdzie w ogóle nie zaglądają</li>
+      <li>Optymalizacja układu na stronie</li>
+    </ul>
+    <div class="metric"><b>Mierzalny efekt:</b> wzrost konwersji · spadek porzuconych koszyków · wydłużenie sesji</div>
+  </div>
+
+  <div class="row2">
+    <div class="sub-block">
+      <div class="lbl">Czym to robimy (działa dziś)</div>
+      <ul class="clean">
+        <li><b>Lejek z punktami odrzuceń</b> — GA4 funnel view→ATC→checkout→purchase. Benchmark GLOV: <b>drop lista→produkt −75,6%</b>, View→ATC −82,2% (referencja R01–R09).</li>
+        <li><b>Heatmapy + nagrania</b> — Clarity (4203 sesji/3dni potwierdzone). Rage-click, dead-click, scroll depth, click maps.</li>
+        <li><b>Warstwa akcji</b> — Shopify theme: generowanie draftów CSS/liquid/copy do wklejenia (human-in-the-loop, żywy sklep).</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="lbl">Ograniczenia / ślepe pola</div>
+      <ul class="clean">
+        <li>Clarity API daje <b>agregaty + nagrania</b>, nie surowe per-element heatmap-y przez API → heatmapy często ze screenshotów + click data.</li>
+        <li>Theme-edit: tylko <b>draft/preview lub kod do wklejenia</b> — nie auto-deploy (ryzyko żywego sklepu).</li>
+        <li>ATC bez <code>page_location</code> = ślepe pole (nie rozróżnia PDP vs quick-add z listingu) — patrz instrukcja GTM.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-block">
+    <div class="lbl">Gotowe zasoby (nie zaczynamy od zera)</div>
+    <p style="margin:0">Mamy już: <code>GLOV_Clarity_Analiza.html</code> (1000 nagrań), <code>GLOV_Mega_Audit_4zakladki.html</code>, <code>GLOV_Vision_Scan_HP.html</code>, <code>GLOV_20_Frictions</code>, <code>GLOV_Checkout_Diagnoza_Kompletna</code>, <code>GLOV_Lista_Napraw.html</code> (70 problemów). <b>Baseline = te audyty</b>, nie diagnoza od zera.</p>
+    <div class="note">💡 <span class="marker">@ski [UX]</span> Metoda „Diagnoza → Wniosek AI → Draft akcji" per ekran nadaje się na skill <code>eel-ux-action</code>: wejście (GA4 funnel + Clarity sygnały) → wniosek → draft CSS/copy z gate. <b>To powinno być skillem.</b></div>
+  </div>
+</div>
+</section>
+
+<!-- ============ OBSZAR 2: PERFORMANCE ADS ============ -->
+<section id="area2" class="area">
+<div class="card">
+  <div class="area-h">
+    <div class="area-num" style="background:var(--accent2)">2</div>
+    <div>
+      <h3>Performance Ads</h3>
+      <div class="sub">Codzienna analiza kreacji i budżetów Ewy → wnioski do zmian + plan kampanii</div>
+    </div>
+    <div class="right">
+      <span class="badge b-warn">⏳ czeka na dostęp</span>
+      <div class="pill-row" style="justify-content:flex-end"><span class="tag">Meta MCP</span><span class="tag">Google Ads MCP</span><span class="tag">GA4</span></div>
+    </div>
+  </div>
+
+  <div class="sub-block">
+    <div class="lbl">Z briefu klienta</div>
+    <ul class="clean">
+      <li>Analiza kreacji Meta / Google / TikTok → wnioski do zmian</li>
+      <li>Analiza budżetów → wnioski do optymalizacji</li>
+      <li>Plan reklam pod konkretne kampanie</li>
+    </ul>
+    <div class="metric"><b>Model pracy:</b> Ewa ustawia reklamy wg wytycznych + swojej wiedzy; AI analizuje codziennie i podsuwa wnioski. <b>Efekt:</b> ↑CTR, ↑ROAS, ↓CPC, ↓CPM.</div>
+  </div>
+
+  <div class="row2">
+    <div class="sub-block">
+      <div class="lbl">Czym to robimy (po dostępie)</div>
+      <ul class="clean">
+        <li><b>Meta Ads MCP</b> — kampanie, adsety, kreacje, insights (spend/CTR/CPC/CPM/ROAS), previews kreacji.</li>
+        <li><b>Google Ads MCP</b> — kampanie, koszty, search terms, jakość.</li>
+        <li><b>GA4</b> — co ruch płatny robi po stronie sklepu (już mamy ekstrakcję, patrz Proxy of Truth).</li>
+        <li><b>Codzienny digest</b> — scheduled task: pull insights → anomalie ±2σ → wnioski → alert.</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="lbl">Status realny — blokery</div>
+      <ul class="clean">
+        <li><span class="badge b-no">Meta</span> token „API access blocked" — wymaga nowej autoryzacji (memory: aplikacja Claude MCP zablokowana przez Meta, setup Composio przerwany).</li>
+        <li><span class="badge b-warn">Google Ads</span> brak dostępu API (Customer ID 169-845-2663 czeka).</li>
+        <li>TikTok Ads — brak konektora; alternatywa: ręczny eksport / późniejszy moduł.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-block">
+    <div class="note warn">⚙️ <b>Założenie:</b> projektujemy obszar 2 jako gotowy moduł. Gdy Meta/Google MCP ożyją → startuje codzienny digest kreacji+budżetów bez przebudowy. <span class="marker">@ski [Ads]</span> Metoda „daily creative+budget digest z anomaliami" → skill <code>eel-ads-digest</code>. <b>To powinno być skillem.</b></div>
+  </div>
+</div>
+</section>
+
+<!-- ============ OBSZAR 3: CONTENT ============ -->
+<section id="area3" class="area">
+<div class="card">
+  <div class="area-h">
+    <div class="area-num" style="background:var(--blue)">3</div>
+    <div>
+      <h3>Content (PDP / produktowy)</h3>
+      <div class="sub">Na czym klient się zatrzymuje, czego brak vs konkurencja, FAQ vs opinie</div>
+    </div>
+    <div class="right">
+      <span class="badge b-ok">✅ częściowo</span>
+      <span class="badge b-plan">◆ + wątki Tomka</span>
+      <div class="pill-row" style="justify-content:flex-end"><span class="tag">Clarity</span><span class="tag">Shopify</span><span class="tag">DFS</span></div>
+    </div>
+  </div>
+
+  <div class="sub-block">
+    <div class="lbl">Z briefu klienta</div>
+    <ul class="clean">
+      <li>Na których elementach/zdjęciach klienci zatrzymują się dłużej, które pomijają</li>
+      <li>Analiza FAQ vs opinie (czy FAQ odpowiada na realne wątpliwości z recenzji)</li>
+      <li>Analiza konkurencyjnych PDP — jakie info mają, których my nie mamy</li>
+    </ul>
+    <div class="metric"><b>Mierzalny efekt:</b> wzrost konwersji · wydłużenie czasu sesji</div>
+  </div>
+
+  <div class="row2">
+    <div class="sub-block">
+      <div class="lbl">Czym to robimy</div>
+      <ul class="clean">
+        <li><b>Zatrzymania/pominięcia</b> — Clarity scroll depth + dead-click na elementach PDP (galeria, opis, recenzje). ✅</li>
+        <li><b>FAQ vs opinie</b> — Shopify (opinie/recenzje produktów) + Clarity → luka między pytaniami a FAQ. ✅</li>
+        <li><b>Konkurencyjne PDP</b> — Playwright scrape + DFS SERP (kto rankuje na frazy produktowe) → diff elementów. ✅ (DFS core działa)</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="lbl">Wątki Tomka (dodane do scope)</div>
+      <ul class="clean">
+        <li><b>3a. Praca nad kontentem produktowym</b> — wejście: 2–3 zdjęcia (z opakowaniem / bez / lifestyle) + krótki opis → generowanie kontentu PDP (tytuł wg modelu Brand+Name+Attribute, bullety cecha→korzyść, sekcje).</li>
+        <li><b>3b. Tworzenie kontentu reklamowego</b> — generatory typu <b>Higgsfield</b> (wideo/wizual z foty produktu) → kreacje pod obszar 2.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-block">
+    <div class="note">💡 <span class="marker">@ski [Content]</span> Dwie metody na skille: <code>eel-pdp-content</code> (foty+opis → komplet kontentu PDP wg EEL product framework) oraz <code>eel-ad-creative</code> (foty → brief/prompt do Higgsfield + warianty). <b>To powinny być skillami.</b> Łączą się z obszarem 2 (kreacje) i bazą 400 taktyk (Content+Copy).</div>
+  </div>
+</div>
+</section>
+
+<!-- ============ OBSZAR 4: SEO ============ -->
+<section id="area4" class="area">
+<div class="card">
+  <div class="area-h">
+    <div class="area-num" style="background:#0891b2">4</div>
+    <div>
+      <h3>SEO + GEO</h3>
+      <div class="sub">Audyt techniczny, hot topics → artykuły z produktami, GEO/AI, meta+alty, 404→301</div>
+    </div>
+    <div class="right">
+      <span class="badge b-ok">✅ mocne</span>
+      <span class="badge b-warn">⏳ GSC luka</span>
+      <div class="pill-row" style="justify-content:flex-end"><span class="tag">DFS</span><span class="tag">Senuto</span><span class="tag">Shopify</span></div>
+    </div>
+  </div>
+
+  <div class="sub-block">
+    <div class="lbl">Z briefu klienta</div>
+    <ul class="clean">
+      <li>Audyt techniczny SEO + wnioski/sugestie poprawy</li>
+      <li>Hot topics → artykuły eksperckie na blog Shopify, auto-osadzanie linków i kafelków produktów rozwiązujących problem</li>
+      <li>Poprawa treści pod widoczność w LLM-ach / GEO</li>
+      <li>Lepsze meta tagi + alt-texty zdjęć</li>
+      <li>Wszystkie 404 → przekierowania 301 do najbardziej podobnego produktu</li>
+    </ul>
+    <div class="metric"><b>Mierzalny efekt:</b> wzrost ruchu organicznego · wzrost pozycji rekomendacji w AI</div>
+  </div>
+
+  <div class="row2">
+    <div class="sub-block">
+      <div class="lbl">Czym to robimy (działa dziś)</div>
+      <ul class="clean">
+        <li><b>Audyt techniczny</b> — DFS on-page + Lighthouse; Senuto (kanibalizacja, kondycja domeny). ✅</li>
+        <li><b>Hot topics + artykuły</b> — DFS keyword ideas/questions + Senuto questions → temat → artykuł → kafelki produktów (Shopify). ✅ (mamy już skill <code>perception-journey-planner</code>)</li>
+        <li><b>GEO/AI</b> — Senuto <b>AIO keywords (464)</b> + DFS AI-overview references. ✅ (zastępuje płatny DFS AI-opt)</li>
+        <li><b>Meta + alty</b> — generowanie z danych produktu (Shopify) + DFS keyword. ✅</li>
+        <li><b>404 → 301</b> — crawl + Shopify URL redirects (zrobione już dla Sleeping Beauty 2026-06-09 jako wzór). ✅</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="lbl">Luka: GSC (sprawdzone na życzenie)</div>
+      <ul class="clean">
+        <li>Brak konektora GSC. DFS/Senuto estymują pozycje; <b>GSC daje faktyczne impressions/CTR per fraza</b>.</li>
+        <li>Potrzebne zwłaszcza do priorytetu meta tagów (CTR per URL) i fraz na poz. 8–15 (quick win).</li>
+        <li><b>Domknięcie:</b> ① ręczny CSV od Ewy/klienta (0 zł, od zaraz) · ② Supermetrics MCP (płatny) · ③ własny GSC API (etap C09).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-block">
+    <div class="lbl">Realne dane glov.co z tego probe (DFS, PL)</div>
+    <p style="margin:0">„glov" → <b>poz. #1</b>, 6 600 wyszuk./mc, ETV 2006 · „depilator z nano szkła" → #3, intent transakcyjny · „glov depilator" → #1 ale <b>trend roczny −91%</b> (warto zbadać). Senuto AIO: <b>161 fraz widocznych</b> z 464 w AI Overviews.</p>
+    <div class="note">💡 <span class="marker">@ski [SEO]</span> Metody „404→301 auto-match", „meta+alt z produktu", „GEO content gap z AIO" → kandydaci na skille. Pierwszy już częściowo pokryty <code>perception-journey-planner</code>.</div>
+  </div>
+</div>
+</section>
+
+<!-- ============ OBSZAR 5: RETENCJA ============ -->
+<section id="area5" class="area">
+<div class="card">
+  <div class="area-h">
+    <div class="area-num" style="background:#7c3aed">5</div>
+    <div>
+      <h3>Retencja / Loyalty</h3>
+      <div class="sub">Grupy klientów, koszyki, produkty kupowane razem, powracalność, program lojalnościowy</div>
+    </div>
+    <div class="right">
+      <span class="badge b-ok">✅ gotowe do startu</span>
+      <div class="pill-row" style="justify-content:flex-end"><span class="tag">Shopify</span><span class="tag">GA4</span></div>
+    </div>
+  </div>
+
+  <div class="sub-block">
+    <div class="lbl">Z briefu klienta</div>
+    <ul class="clean">
+      <li>Analiza grup klientów, koszyków, produktów kupowanych razem, okresu powracalności</li>
+      <li>Analiza programu lojalnościowego i jego optymalizacja</li>
+      <li>Analiza bazy klientów i segmentacja</li>
+    </ul>
+    <div class="metric"><b>Mierzalny efekt:</b> wzrost liczby powracających klientów · wzrost LTV</div>
+  </div>
+
+  <div class="row2">
+    <div class="sub-block">
+      <div class="lbl">Czym to robimy (działa dziś)</div>
+      <ul class="clean">
+        <li><b>Segmentacja + LTV + kohorty</b> — Shopify (orders, customers) + GA4. ✅ Mamy już <code>GLOV_LTV_Retencja_2024_2026.html</code> i <code>GLOV_Kohorty_2024_2026.html</code> — baza gotowa.</li>
+        <li><b>Product affinity</b> — co kupowane razem (Shopify order line items) → cross-sell. ✅</li>
+        <li><b>Powracalność</b> — okno repeat-purchase per segment/produkt. ✅</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="lbl">Ograniczenia</div>
+      <ul class="clean">
+        <li>Program lojalnościowy — zależy czy GLOV ma (Smile/LoyaltyLion itp.); jeśli zewnętrzny, potrzebny eksport lub konektor.</li>
+        <li>RODO: dane klientów = osobny krok, bez automatycznego działania (zasada GLOV).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="sub-block">
+    <div class="note">💡 <span class="marker">@ski [Retencja]</span> „Affinity + repeat-window + segment LTV" → skill <code>eel-retention</code> oparty o Shopify orders. <b>Najszybszy do zbudowania</b> bo dane i wzory (LTV/kohorty HTML) już są.</div>
+  </div>
+</div>
+</section>
+
+<!-- ============ OBSZAR 6: RUCH / AFILIACJA ============ -->
+<section id="area6" class="area">
+<div class="card">
+  <div class="area-h">
+    <div class="area-num" style="background:#db2777">6</div>
+    <div>
+      <h3>Ruch (w tym afiliacyjny)</h3>
+      <div class="sub">Auto-scouting influencerów + dynamiczne stawki CPS</div>
+    </div>
+    <div class="right">
+      <span class="badge b-plan">◆ osobny produkt</span>
+      <div class="pill-row" style="justify-content:flex-end"><span class="tag">scraping</span><span class="tag">outreach</span><span class="tag">Shopify</span></div>
+    </div>
+  </div>
+
+  <div class="sub-block">
+    <div class="lbl">Z briefu klienta</div>
+    <ul class="clean">
+      <li><b>Automatyczny scouting</b> — AI crawlery przeszukują IG/TikTok/blogi wg słów kluczowych, analizują zaangażowanie (odsiew fake-botów), wysyłają spersonalizowane zaproszenia do programu afiliacyjnego. Po „Zgadzam się" → auto-generacja kodu zniżkowego i linku w Shopify.</li>
+      <li><b>Dynamiczne stawki CPS</b> — inna stawka za nowego klienta vs klienta który już u nas był.</li>
+    </ul>
+    <div class="metric"><b>Mierzalny efekt:</b> wzrost ruchu referral · zmniejszenie CAC</div>
+  </div>
+
+  <div class="row2">
+    <div class="sub-block">
+      <div class="lbl">Czym to robimy</div>
+      <ul class="clean">
+        <li><b>Scouting</b> — scraping IG/TikTok/blog + filtr engagement/anti-bot. Shopify: auto-tworzenie kodów rabatowych + linków afiliacyjnych (Shopify MCP discounts ✅).</li>
+        <li><b>CPS dynamiczny</b> — Shopify orders: rozpoznanie new vs returning → różne reguły prowizji.</li>
+      </ul>
+    </div>
+    <div class="sub-block">
+      <div class="lbl">Status / ograniczenia</div>
+      <ul class="clean">
+        <li>EEL traktuje afiliację jako <b>osobny produkt</b> (scraping social + outreach), nie część dashboardu — zgodnie z wizją.</li>
+        <li>Scraping IG/TikTok — wymaga osobnego stacku (ToS, anti-bot); outreach = wysyłka wiadomości → zawsze gate (zasada: nie wysyłać bez zatwierdzenia).</li>
+        <li>Auto-generacja kodu po kliknięciu influencera = warstwa aplikacyjna poza MCP (webhook + Shopify API).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="sub-block">
+    <div class="note warn">⚠️ Obszar 6 to <b>najdalszy horyzont</b> — własny produkt, nie analityka. W tym serwisie pokrywamy część „Shopify: kody + new/returning CPS"; scouting/outreach to oddzielny build.</div>
+  </div>
+</div>
+</section>
+
+<!-- ============ PROXY OF TRUTH ============ -->
+<section id="recon" class="area">
+<h2 class="sec">Proxy of Truth — weryfikacja ruchu reklamowego</h2>
+<div class="card">
+<div class="pad">
+<p style="margin-top:0"><b>Proxy of Truth</b> = jedna wersja prawdy o ruchu płatnym. Osobny komponent wpinający się w obszar 2 i 6 (wzór: ekstrakcja Audi). <b>Idea:</b> systemy reklamowe i GA4 kłamią inaczej — Meta liczy view-through, GA4 last-click. Proxy of Truth krzyżuje dane z MCP reklam (spend, kliknięcia, CTR, CPC) × GA4 (sesje, transakcje) i pokazuje gdzie się rozjeżdżają oraz jaki jest realny koszt transakcji.</p>
+
+<div class="note blue">📍 <b>Gdzie dziś jest warstwa reklamowa GLOV:</b> jedyne źródło to <code>meta_ads/dashboard.py</code> (Streamlit, live z Meta Graph API — kreacje+insights, cache 5 min, <b>nic nie zapisuje</b>; token dziś zablokowany). Warstwa GA4 ruchu płatnego to <code>GLOV_Ekstrakcja_Ruchu_LP.html</code>. <b>Te dwie warstwy nigdy nie były skrzyżowane</b> — Meta żyje osobno, GA4 osobno. To jest luka, którą domyka Proxy of Truth.</div>
+
+<div class="grid g2">
+<div>
+  <div class="lbl">Co GLOV ma dziś</div>
+  <p style="margin:0 0 8px"><span class="badge b-ok">✅ połowa</span> <code>GLOV_Ekstrakcja_Ruchu_LP.html</code> — ale to <b>tylko GA4</b>: landing × typ kanału (Paid Social / Paid Search / paidother / notpaid) × sesje × transakcje, sty–cze 2026.</p>
+  <div class="flow">
+    <span class="step">GA4: landing</span><span class="arr">×</span><span class="step">typ ruchu</span><span class="arr">×</span><span class="step">sesje</span><span class="arr">×</span><span class="step">transakcje</span>
+  </div>
+  <p style="margin:8px 0 0;font-size:13px;color:var(--mut)">Zero danych o spend/CPC/CTR/ROAS. W HTML „Google Ads" pojawia się 1× (stopka).</p>
+</div>
+<div>
+  <div class="lbl">Czego brakuje = trzeba zrobić</div>
+  <p style="margin:0 0 8px"><span class="badge b-plan">◆ do zbudowania</span> Druga strona krzyżowania — warstwa reklamowa z MCP.</p>
+  <div class="flow">
+    <span class="step">Meta/Google: spend</span><span class="arr">+</span><span class="step">kliknięcia</span><span class="arr">+</span><span class="step">CTR/CPC</span><span class="arr">→</span><span class="step" style="border-color:var(--accent2)">× GA4 sesje</span>
+  </div>
+</div>
+</div>
+
+<div class="lbl" style="margin-top:18px">Co Proxy of Truth wyłapuje (czego sama ekstrakcja nie widzi)</div>
+<table>
+<thead><tr><th>Sygnał</th><th>Jak</th><th>Przykład z danych GLOV</th></tr></thead>
+<tbody>
+<tr><td><b>Wyciek atrybucji</b></td><td>Kliknięcia (Meta) − sesje (GA4) z tego źródła</td><td>Worek „(not set)/notpaid" = <b>5 226 sesji w maju</b> — in-app browser Meta gubi landing. Proxy of Truth pokaże ile z tego to realnie płatny ruch.</td></tr>
+<tr><td><b>Realny ROAS</b></td><td>Spend (Ads) ÷ przychód (GA4 last-click)</td><td>Meta liczy view-through + własne okno; GA4 last-click. Rozbieżność = prawdziwy koszt transakcji.</td></tr>
+<tr><td><b>CPC/CPM/CTR per landing</b></td><td>Spend Ads ÷ kliknięcia, mapowane na landing GA4</td><td>Czego GA4 nigdy nie poda — bo nie zna wydatków.</td></tr>
+<tr><td><b>Efektywność per produkt</b></td><td>Spend per kampania → landing produktowy → transakcje</td><td>Luna Eye paidother: 704 sesji/19 tr. (maj) — ale ile kosztował ten ruch?</td></tr>
+</tbody>
+</table>
+
+<div class="note red" style="margin-top:14px">🚧 <b>Werdykt:</b> GLOV <b>NIE MA</b> Proxy of Truth — ekstrakcja GA4 to dobra baza (połowa), warstwa reklamowa żyje osobno w dashboardzie Streamlit. Dziś brak domknięcia bo Meta token zablokowany + Google Ads bez dostępu. Projektujemy jako pełny moduł gotowy do podpięcia. <span class="marker">@ski [Ads]</span> → skill <code>eel-proxy-of-truth</code>. <b>To powinno być skillem</b> (uniwersalne dla każdego klienta z reklamami).</div>
+</div>
+</div>
+</section>
+
+<!-- ============ ROADMAPA ============ -->
+<section id="road" class="area">
+<h2 class="sec">Roadmapa wg ROI × gotowości danych</h2>
+<div class="card">
+<div class="pad">
+<table>
+<thead><tr><th>Faza</th><th>Obszar / moduł</th><th class="c">Gotowość</th><th>Dlaczego ta kolejność</th></tr></thead>
+<tbody>
+<tr><td><b>1 — teraz</b></td><td>UX/UI · Retencja · SEO+GEO</td><td class="c"><span class="badge b-ok">✅ 100%</span></td><td>Wszystkie źródła działają (GA4/Clarity/Shopify/DFS/Senuto). Wzory i baseline już są. Najszybszy efekt.</td></tr>
+<tr><td><b>2 — teraz</b></td><td>Content (PDP) + wątki Tomka (foty→kontent, Higgsfield)</td><td class="c"><span class="badge b-ok">✅ 90%</span></td><td>Clarity+Shopify+DFS działają; generatory kontentu niezależne od blokad. Zasila obszar 2.</td></tr>
+<tr><td><b>3 — po dostępie</b></td><td>Performance Ads + Proxy of Truth</td><td class="c"><span class="badge b-warn">⏳ dostęp</span></td><td>Czeka na Meta token + Google Ads API. Moduł zaprojektowany, startuje bez przebudowy gdy MCP ożyją.</td></tr>
+<tr><td><b>4 — domknięcie</b></td><td>GSC (CSV→Supermetrics) · DFS AI-opt (opcjonalnie)</td><td class="c"><span class="badge b-warn">⏳ setup</span></td><td>Luki SEO. CSV od zaraz za 0 zł; reszta gdy budżet pozwoli.</td></tr>
+<tr><td><b>5 — horyzont</b></td><td>Ruch / Afiliacja (scouting + outreach)</td><td class="c"><span class="badge b-plan">◆ produkt</span></td><td>Osobny produkt (scraping social), nie analityka. Najdłuższy build, własny stack.</td></tr>
+</tbody>
+</table>
+<div class="note blue" style="margin-top:14px">📌 <b>Zasada budowy (z CLAUDE.md):</b> metody zostawiamy w folderze GLOV z markerem <span class="marker">@ski [warstwa]</span> — Pan Setup (terminal) zbuduje z nich skille właściwie (installer + hook + mapa). NIE budujemy skilli sami. Kandydaci na skille zebrane w tym dokumencie: <code>eel-ux-action</code>, <code>eel-ads-digest</code>, <code>eel-pdp-content</code>, <code>eel-ad-creative</code>, <code>eel-retention</code>, <code>eel-proxy-of-truth</code>.</div>
+</div>
+</div>
+</section>
+
+<!-- markery dla terminala (martwe w Coworku — surowiec) -->
+<!-- @ski [UX] Metoda eel-ux-action: GA4 funnel + Clarity sygnały per ekran → wniosek AI → draft CSS/liquid/copy z gate zatwierdzenia. To powinno być skillem. /@ski -->
+<!-- @ski [Ads] Metoda eel-ads-digest: codzienny pull Meta+Google Ads insights → anomalie ±2σ → wnioski do kreacji i budżetów → alert. To powinno być skillem. /@ski -->
+<!-- @ski [Ads] Metoda eel-proxy-of-truth (serwis "Proxy of Truth"): krzyżowanie MCP reklam (spend/klik/CTR/CPC) × GA4 (sesje/transakcje) per landing → wyciek atrybucji, realny ROAS, CPC per landing, jedna wersja prawdy o ruchu płatnym. Wzór: ekstrakcja Audi. Warstwa reklamowa GLOV = meta_ads/dashboard.py (live Streamlit, nic nie zapisuje, token zablokowany); warstwa GA4 = GLOV_Ekstrakcja_Ruchu_LP.html; nigdy nie skrzyżowane. To powinno być skillem. /@ski -->
+<!-- @ski [Content] Metoda eel-pdp-content: 2-3 zdjęcia produktu (opakowanie/bez/lifestyle) + krótki opis → komplet kontentu PDP wg EEL product framework (tytuł, bullety cecha→korzyść, sekcje). To powinno być skillem. /@ski -->
+<!-- @ski [Content] Metoda eel-ad-creative: zdjęcia produktu → brief/prompt do Higgsfield + warianty kreacji reklamowej. Zasila obszar 2 Performance Ads. To powinno być skillem. /@ski -->
+<!-- @ski [Retencja] Metoda eel-retention: Shopify orders → product affinity + repeat-purchase window + segment LTV. Wzory: GLOV_LTV_Retencja i GLOV_Kohorty już istnieją. To powinno być skillem. /@ski -->
+<!-- @event Worek "(not set)/notpaid" = 5226 sesji maj 2026 w GLOV_Ekstrakcja_Ruchu_LP — in-app browser Meta gubi page_location. Proxy of Truth rozbije ten worek na realny ruch płatny vs organiczny. ATC bez page_location = ślepe pole PDP vs quick-add. /@event -->
+<!-- @ga4 glov.co probe 2026-06-14: "glov" poz #1 6600/mc ETV 2006; "depilator z nano szkla" #3 transakcyjny; "glov depilator" #1 trend roczny -91%. Senuto top3=163 top10=303 top50=1133 widocznosc 2610 AIO_kw=464 (161 widocznych). Clarity 4203 sesji/3dni. Meta Ads token zablokowany. Google Ads brak dostepu. GSC brak konektora. /@ga4 -->
+
+<div class="foot">
+  glov.serwis — projekt wykonawczy 6 obszarów · INTERNAL · zbudowano 2026-06-14<br>
+  Probe MCP zweryfikowany w sesji · źródła: brief klienta + EEL execution layer + GLOV hub · NIE zmyślać liczb, ślepe pola nazwane wprost
+</div>
+
+</div>
+</body>
+</html>
