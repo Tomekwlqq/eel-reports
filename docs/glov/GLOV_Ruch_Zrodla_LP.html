@@ -155,8 +155,26 @@ canvas{max-width:100%}
   </div>
 </section>
 
+<section>
+  <h2 class="sec">🔍 Direct — rozbicie <span class="h">kwi–cze 2026 · landing × urządzenie × konwersja · Direct to NIE jeden worek</span></h2>
+  <div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:14px">
+    <p style="font-size:13px;color:var(--mut);line-height:1.6;margin-bottom:14px">Direct = „brak źródła", ale rozkłada się na <b>4 zupełnie różne pod-typy</b>. Kluczowy wniosek: <b>~6 000 sesji to boty/scrapery na wersjach /en-eu/ (desktop) z zerową sprzedażą</b>, a najlepiej konwertujący Direct to <b>mobile bez landingu (4,1%) i homepage (4,5%)</b> = powracający klienci. To dwa różne światy w jednym kanale.</p>
+    <table>
+      <thead><tr><th>Pod-typ Direct</th><th class="r">Sesje</th><th class="r">Trans.</th><th class="c">CR</th><th>Co to naprawdę</th></tr></thead>
+      <tbody>
+        <tr><td>🏠 <b>Prawdziwy direct</b> (/ + /?country=PL)</td><td class="r">~790</td><td class="r">36</td><td class="c"><span class="crpill" style="background:rgba(22,163,74,.14);color:#16a34a">4,5%</span></td><td style="font-size:12px;color:var(--mut)">zakładki, wpisany adres, powracający — czysty direct</td></tr>
+        <tr><td>📱 <b>Zgubiony landing — mobile</b> ((not set))</td><td class="r">990</td><td class="r">41</td><td class="c"><span class="crpill" style="background:rgba(22,163,74,.14);color:#16a34a">4,1%</span></td><td style="font-size:12px;color:var(--mut)">in-app browser / powracający z telefonu — TOP konwersja</td></tr>
+        <tr><td>🛒 <b>PDP/listing wprost</b> (mobile, PL produkty)</td><td class="r">~600</td><td class="r">~20</td><td class="c"><span class="crpill" style="background:rgba(37,99,235,.14);color:#2563eb">~3%</span></td><td style="font-size:12px;color:var(--mut)">powracający z zapamiętanego linku / aplikacji Shopify</td></tr>
+        <tr><td>🖥️ <b>Zgubiony landing — desktop</b> ((not set))</td><td class="r">3 237</td><td class="r">21</td><td class="c"><span class="crpill" style="background:rgba(217,119,6,.14);color:#d97706">0,6%</span></td><td style="font-size:12px;color:var(--mut)">mix — część realna, część boty/preview</td></tr>
+        <tr><td>🤖 <b>Boty / scrapery EU</b> (/en-eu/, /fr-eu, /de-eu desktop)</td><td class="r">~5 900</td><td class="r">~2</td><td class="c"><span class="crpill" style="background:rgba(220,38,38,.14);color:#dc2626">~0%</span></td><td style="font-size:12px;color:var(--mut)">scrapery, monitoring, preview — ZERO sprzedaży, śmieciowy ruch</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:var(--mut);margin-top:12px;line-height:1.6">💡 <b>Co z tego wynika:</b> realny, wartościowy Direct to ~2 200 sesji (homepage + mobile-not-set + PDP-mobile, CR 3–4,5%) — to <b>powracający klienci i ruch z aplikacji</b>, nie „nieznane". Reszta (~9 000) to w większości <b>boty na wersjach językowych</b> — warto je wykluczyć z analiz konwersji (filtr „PL only" albo wykluczenie /en-eu/ desktop). Filtr botów podniósłby widoczny CR Direct z ~1% do realnych ~3-4%.</p>
+  </div>
+</section>
+
 <div class="foot">
-  glov.ruch — zakładka „Ruch / Źródła LP" · wzór Audi Plichta · dane GA4 property 342844459 · pobrane 2026-06-14 · INTERNAL<br>
+  glov.ruch — zakładka „Ruch / Źródła LP" · wzór Audi Plichta · dane GA4 property 342844459 · pobrane 2026-06-14 · Direct rozbicie kwi–cze 2026 · INTERNAL<br>
   Twarde dane GA4, bez estymacji. (not set) = ślepe pole landing page (in-app Meta). Warstwa spend/ROAS → Proxy of Truth (po dostępie Meta/Google Ads MCP).
 </div>
 </div>
