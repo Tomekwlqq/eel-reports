@@ -1,914 +1,4375 @@
 {
-  "meta": {
-    "property_id": "342844459",
-    "filter": "country=Poland",
-    "generated": "2026-06-22",
-    "currency": "PLN",
-    "periods": {
-      "jan": "2026-01-01..2026-01-31",
-      "feb": "2026-02-01..2026-02-28",
-      "mar": "2026-03-01..2026-03-31",
-      "apr": "2026-04-01..2026-04-30",
-      "may": "2026-05-01..2026-05-31",
-      "jun": "2026-06-01..2026-06-15",
-      "d90": "90daysAgo..today (2026-03-24..2026-06-22)"
-    }
-  },
-  "jan": {
-    "kpi": {
-      "sessions": 28253,
-      "totalRevenue": 82557,
-      "transactions": 486,
-      "bounceRate": 0.402,
-      "addToCarts": 3688,
-      "checkouts": 978,
-      "avgSessionDuration_s": 313
-    },
-    "devices": [
-      {"device": "mobile", "sessions": 24597, "transactions": 378, "revenue": 63483},
-      {"device": "desktop", "sessions": 3366, "transactions": 105, "revenue": 18712},
-      {"device": "tablet", "sessions": 241, "transactions": 3, "revenue": 362}
-    ],
-    "channels": [
-      {"channel": "Paid Social", "sessions": 14373, "transactions": 112, "revenue": 24226},
-      {"channel": "Cross-network", "sessions": 4471, "transactions": 85, "revenue": 14738},
-      {"channel": "Organic Search", "sessions": 3502, "transactions": 60, "revenue": 9135},
-      {"channel": "Paid Search", "sessions": 3146, "transactions": 119, "revenue": 16890},
-      {"channel": "Direct", "sessions": 1481, "transactions": 34, "revenue": 6484},
-      {"channel": "Unassigned", "sessions": 892, "transactions": 54, "revenue": 6285},
-      {"channel": "Organic Social", "sessions": 663, "transactions": 17, "revenue": 3422},
-      {"channel": "Referral", "sessions": 72, "transactions": 5, "revenue": 1377},
-      {"channel": "Organic Shopping", "sessions": 69, "transactions": 0, "revenue": 0},
-      {"channel": "Paid Other", "sessions": 56, "transactions": 0, "revenue": 0},
-      {"channel": "SMS", "sessions": 9, "transactions": 0, "revenue": 0},
-      {"channel": "Email", "sessions": 1, "transactions": 0, "revenue": 0}
-    ],
-    "landing": [
-      {"page": "/collections/coolnails", "sessions": 4047, "bounceRate": 0.191, "transactions": 3, "revenue": 390},
-      {"page": "/collections/sklep", "sessions": 3926, "bounceRate": 0.165, "transactions": 95, "revenue": 17077},
-      {"page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye", "sessions": 3899, "bounceRate": 0.478, "transactions": 49, "revenue": 14629},
-      {"page": "(not set)", "sessions": 2617, "bounceRate": 0.820, "transactions": 59, "revenue": 6123},
-      {"page": "/", "sessions": 1994, "bounceRate": 0.351, "transactions": 58, "revenue": 9690},
-      {"page": "/products/kuracja-punktowa-led-na-tradzik-supernova-glov", "sessions": 1977, "bounceRate": 0.674, "transactions": 9, "revenue": 2648},
-      {"page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty", "sessions": 1024, "bounceRate": 0.447, "transactions": 5, "revenue": 1473},
-      {"page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka", "sessions": 743, "bounceRate": 0.412, "transactions": 34, "revenue": 3531},
-      {"page": "/collections/rekawice-do-demakijazu", "sessions": 546, "bounceRate": 0.240, "transactions": 19, "revenue": 2671},
-      {"page": "/products/przyssawkowy-podnozek-prysznicowy-sole-mate", "sessions": 348, "bounceRate": 0.457, "transactions": 0, "revenue": 0},
-      {"page": "/products/overnight-blowout-set-zestaw-do-stylizacji-wlosow-na-zimno", "sessions": 313, "bounceRate": 0.524, "transactions": 0, "revenue": 0},
-      {"page": "/collections/produkty-do-pielegnacji-twarzy", "sessions": 245, "bounceRate": 0.314, "transactions": 3, "revenue": 415},
-      {"page": "/products/luksusowy-zestaw-dream-on-gorgeous-glov", "sessions": 212, "bounceRate": 0.613, "transactions": 1, "revenue": 152},
-      {"page": "/collections/glov-led-therapy", "sessions": 194, "bounceRate": 0.423, "transactions": 4, "revenue": 1255},
-      {"page": "/products/luksusowy-zestaw-glov-the-lazy-luxe-duo", "sessions": 184, "bounceRate": 0.489, "transactions": 3, "revenue": 333}
-    ],
-    "products": [
-      {"name": "Platki LED LUNA EYE", "viewed": 5577, "atc": 474, "purchased": 137, "revenue": 34131},
-      {"name": "Tarka-pumeks nano szkla GLOV", "viewed": 1144, "atc": 263, "purchased": 91, "revenue": 3969},
-      {"name": "Biodegradowalna szczotka Biobased Brush", "viewed": 382, "atc": 131, "purchased": 57, "revenue": 1945},
-      {"name": "Free gift Mango Sponge Set Mini", "viewed": 85, "atc": 79, "purchased": 40, "revenue": 0},
-      {"name": "Mydlo Magnet Cleanser", "viewed": 111, "atc": 89, "purchased": 38, "revenue": 956},
-      {"name": "Free gift Satynowa maska do spania", "viewed": 29, "atc": 62, "purchased": 36, "revenue": 0},
-      {"name": "Free Gift Quick Treat", "viewed": 60, "atc": 66, "purchased": 31, "revenue": 0},
-      {"name": "Rekawiczka do demakijazu GLOV", "viewed": 637, "atc": 163, "purchased": 27, "revenue": 880},
-      {"name": "Rekawica do peelingu GLOV", "viewed": 252, "atc": 69, "purchased": 27, "revenue": 1123},
-      {"name": "WIELOPAK 3 szt Rekawiczka GLOV", "viewed": 66, "atc": 41, "purchased": 25, "revenue": 1694},
-      {"name": "Gabeczka MakeUp Sponge", "viewed": 56, "atc": 57, "purchased": 25, "revenue": 323},
-      {"name": "Silikonowy pad FACE WASH", "viewed": 128, "atc": 49, "purchased": 20, "revenue": 274},
-      {"name": "Klasyczny lakier Coolnails Classic Nail Polish Pen", "viewed": 1358, "atc": 85, "purchased": 18, "revenue": 597},
-      {"name": "Pumeks Cheetah Edition", "viewed": 169, "atc": 45, "purchased": 18, "revenue": 781},
-      {"name": "Silikonowe platki Infinity Eye Patches", "viewed": 343, "atc": 67, "purchased": 17, "revenue": 587}
-    ],
-    "newret": [
-      {"segment": "new", "sessions": 20611, "transactions": 272, "revenue": 43462},
-      {"segment": "returning", "sessions": 5833, "transactions": 214, "revenue": 39096},
-      {"segment": "(not set)", "sessions": 2210, "transactions": 0, "revenue": 0}
-    ],
-    "dayofweek": [
-      {"day": "0_Sun", "sessions": 4028, "transactions": 67, "revenue": 11177},
-      {"day": "1_Mon", "sessions": 3680, "transactions": 95, "revenue": 15599},
-      {"day": "2_Tue", "sessions": 3799, "transactions": 62, "revenue": 9004},
-      {"day": "3_Wed", "sessions": 3483, "transactions": 66, "revenue": 12148},
-      {"day": "4_Thu", "sessions": 4963, "transactions": 70, "revenue": 11824},
-      {"day": "5_Fri", "sessions": 4415, "transactions": 64, "revenue": 12628},
-      {"day": "6_Sat", "sessions": 4376, "transactions": 62, "revenue": 10178}
-    ],
-    "funnel": {
-      "session_start": 21571,
-      "view_item": 14589,
-      "add_to_cart": 1521,
-      "begin_checkout": 747,
-      "purchase": 456,
-      "vi_to_ss_pct": 67.6,
-      "atc_to_vi_pct": 10.4,
-      "checkout_to_atc_pct": 49.1,
-      "purchase_to_checkout_pct": 61.0
-    },
-    "cities": [
-      {"city": "Warsaw", "sessions": 7991, "transactions": 137, "revenue": 24470},
-      {"city": "Wroclaw", "sessions": 2857, "transactions": 36, "revenue": 5160},
-      {"city": "Poznan", "sessions": 1556, "transactions": 15, "revenue": 2702},
-      {"city": "Krakow", "sessions": 1485, "transactions": 29, "revenue": 4555},
-      {"city": "Katowice", "sessions": 1153, "transactions": 21, "revenue": 3333},
-      {"city": "Gdansk", "sessions": 1152, "transactions": 24, "revenue": 3704},
-      {"city": "(not set)", "sessions": 1086, "transactions": 19, "revenue": 4792},
-      {"city": "Lodz", "sessions": 974, "transactions": 21, "revenue": 3508},
-      {"city": "Bydgoszcz", "sessions": 909, "transactions": 3, "revenue": 406},
-      {"city": "Pruszkow", "sessions": 671, "transactions": 2, "revenue": 410}
-    ],
-    "hour": [
-      {"h": 0, "sessions": 757, "transactions": 13},
-      {"h": 1, "sessions": 361, "transactions": 3},
-      {"h": 2, "sessions": 200, "transactions": 3},
-      {"h": 3, "sessions": 116, "transactions": 3},
-      {"h": 4, "sessions": 122, "transactions": 0},
-      {"h": 5, "sessions": 204, "transactions": 2},
-      {"h": 6, "sessions": 440, "transactions": 4},
-      {"h": 7, "sessions": 756, "transactions": 11},
-      {"h": 8, "sessions": 1257, "transactions": 20},
-      {"h": 9, "sessions": 1585, "transactions": 25},
-      {"h": 10, "sessions": 1706, "transactions": 34},
-      {"h": 11, "sessions": 1800, "transactions": 34},
-      {"h": 12, "sessions": 1729, "transactions": 23},
-      {"h": 13, "sessions": 1646, "transactions": 29},
-      {"h": 14, "sessions": 1613, "transactions": 37},
-      {"h": 15, "sessions": 1455, "transactions": 29},
-      {"h": 16, "sessions": 1545, "transactions": 19},
-      {"h": 17, "sessions": 1491, "transactions": 27},
-      {"h": 18, "sessions": 1580, "transactions": 31},
-      {"h": 19, "sessions": 1753, "transactions": 30},
-      {"h": 20, "sessions": 2051, "transactions": 31},
-      {"h": 21, "sessions": 2289, "transactions": 37},
-      {"h": 22, "sessions": 1926, "transactions": 23},
-      {"h": 23, "sessions": 1449, "transactions": 18}
-    ]
-  },
-  "feb": {
-    "kpi": {
-      "sessions": 27989,
-      "totalRevenue": 68823,
-      "transactions": 424,
-      "bounceRate": 0.446,
-      "addToCarts": 3233,
-      "checkouts": 815,
-      "avgSessionDuration_s": 246
-    },
-    "devices": [
-      {"device": "mobile", "sessions": 23596, "transactions": 335, "revenue": 53169},
-      {"device": "desktop", "sessions": 3962, "transactions": 85, "revenue": 15050},
-      {"device": "tablet", "sessions": 185, "transactions": 4, "revenue": 604}
-    ],
-    "channels": [
-      {"channel": "Paid Social", "sessions": 11719, "transactions": 89, "revenue": 19210},
-      {"channel": "Organic Search", "sessions": 5269, "transactions": 68, "revenue": 11798},
-      {"channel": "Cross-network", "sessions": 3999, "transactions": 79, "revenue": 12298},
-      {"channel": "Paid Search", "sessions": 2146, "transactions": 98, "revenue": 12500},
-      {"channel": "Direct", "sessions": 2065, "transactions": 39, "revenue": 5809},
-      {"channel": "Unassigned", "sessions": 673, "transactions": 37, "revenue": 4668},
-      {"channel": "Organic Social", "sessions": 615, "transactions": 9, "revenue": 1680},
-      {"channel": "Referral", "sessions": 70, "transactions": 3, "revenue": 342},
-      {"channel": "Organic Shopping", "sessions": 62, "transactions": 2, "revenue": 518},
-      {"channel": "Paid Other", "sessions": 28, "transactions": 0, "revenue": 0},
-      {"channel": "Email", "sessions": 12, "transactions": 0, "revenue": 0},
-      {"channel": "Organic Video", "sessions": 11, "transactions": 0, "revenue": 0}
-    ],
-    "landing": [
-      {"page": "/collections/sklep", "sessions": 4606, "bounceRate": 0.178, "transactions": 85, "revenue": 13229},
-      {"page": "/pages/rutyna-coolnails", "sessions": 2772, "bounceRate": 0.443, "transactions": 2, "revenue": 192},
-      {"page": "(not set)", "sessions": 2535, "bounceRate": 0.838, "transactions": 51, "revenue": 6840},
-      {"page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty", "sessions": 1873, "bounceRate": 0.427, "transactions": 16, "revenue": 3899},
-      {"page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye", "sessions": 1813, "bounceRate": 0.561, "transactions": 13, "revenue": 4532},
-      {"page": "/", "sessions": 1338, "bounceRate": 0.317, "transactions": 40, "revenue": 8296},
-      {"page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka", "sessions": 804, "bounceRate": 0.422, "transactions": 27, "revenue": 2338},
-      {"page": "/products/kuracja-punktowa-led-na-tradzik-supernova-glov", "sessions": 682, "bounceRate": 0.636, "transactions": 2, "revenue": 303},
-      {"page": "/collections/glov-led-therapy", "sessions": 625, "bounceRate": 0.349, "transactions": 12, "revenue": 4170},
-      {"page": "/collections/coolnails", "sessions": 517, "bounceRate": 0.222, "transactions": 2, "revenue": 461},
-      {"page": "/products/platki-led-luna-eye-z-etui-ladujacym-dla-rozswietlonej-i-odswiezonej-okolicy-oczu", "sessions": 515, "bounceRate": 0.386, "transactions": 16, "revenue": 6012},
-      {"page": "/products/utwardzacz-do-paznokci-w-formie-pisaka-coolnails-marshmallow-nail-hardener-pen", "sessions": 441, "bounceRate": 0.290, "transactions": 5, "revenue": 310},
-      {"page": "/collections/rekawice-do-demakijazu", "sessions": 397, "bounceRate": 0.295, "transactions": 12, "revenue": 1517},
-      {"page": "/pages/iconic-mitt-glov-wielopaki", "sessions": 389, "bounceRate": 0.463, "transactions": 10, "revenue": 1152},
-      {"page": "/products/klips-unoszacy-wlosy-u-nasady-zero-gravity", "sessions": 345, "bounceRate": 0.383, "transactions": 5, "revenue": 454}
-    ],
-    "products": [
-      {"name": "Tarka-pumeks nano szkla GLOV", "viewed": 1197, "atc": 277, "purchased": 83, "revenue": 3675},
-      {"name": "Biodegradowalna szczotka Biobased Brush", "viewed": 358, "atc": 120, "purchased": 41, "revenue": 1406},
-      {"name": "Rekawiczka do demakijazu GLOV", "viewed": 606, "atc": 160, "purchased": 39, "revenue": 1261},
-      {"name": "Mydlo Magnet Cleanser", "viewed": 127, "atc": 91, "purchased": 37, "revenue": 928},
-      {"name": "Rekawica do peelingu GLOV", "viewed": 241, "atc": 97, "purchased": 34, "revenue": 1333},
-      {"name": "PRZEDSPRZEDAZ! Platki LED LUNA EYE z etui", "viewed": 861, "atc": 123, "purchased": 33, "revenue": 10361},
-      {"name": "Free gift Mango Sponge Set Mini", "viewed": 62, "atc": 59, "purchased": 31, "revenue": 0},
-      {"name": "Free Gift Quick Treat", "viewed": 54, "atc": 55, "purchased": 30, "revenue": 0},
-      {"name": "Platki LED LUNA EYE z etui ladujacym", "viewed": 701, "atc": 114, "purchased": 28, "revenue": 10574},
-      {"name": "Silikonowe platki Infinity Eye Patches", "viewed": 355, "atc": 71, "purchased": 27, "revenue": 902},
-      {"name": "Sleeping Beauty Panterka", "viewed": 2294, "atc": 102, "purchased": 26, "revenue": 5640},
-      {"name": "Dysk FOAM SCULPT PAD", "viewed": 179, "atc": 58, "purchased": 26, "revenue": 726},
-      {"name": "Gabeczka MakeUp Sponge", "viewed": 66, "atc": 56, "purchased": 25, "revenue": 304},
-      {"name": "Depilator nano szkla GLOV", "viewed": 492, "atc": 81, "purchased": 21, "revenue": 850},
-      {"name": "Free gift Satynowa maska do spania", "viewed": 22, "atc": 45, "purchased": 21, "revenue": 0}
-    ],
-    "newret": [
-      {"segment": "new", "sessions": 20510, "transactions": 260, "revenue": 39194},
-      {"segment": "returning", "sessions": 5200, "transactions": 164, "revenue": 29629},
-      {"segment": "(not set)", "sessions": 1771, "transactions": 0, "revenue": 0}
-    ],
-    "dayofweek": [
-      {"day": "0_Sun", "sessions": 4998, "transactions": 77, "revenue": 12835},
-      {"day": "1_Mon", "sessions": 3894, "transactions": 53, "revenue": 9379},
-      {"day": "2_Tue", "sessions": 3467, "transactions": 60, "revenue": 9870},
-      {"day": "3_Wed", "sessions": 3449, "transactions": 64, "revenue": 8589},
-      {"day": "4_Thu", "sessions": 3473, "transactions": 47, "revenue": 7869},
-      {"day": "5_Fri", "sessions": 3604, "transactions": 57, "revenue": 10576},
-      {"day": "6_Sat", "sessions": 3856, "transactions": 66, "revenue": 9704}
-    ],
-    "funnel": {
-      "session_start": 20761,
-      "view_item": 12151,
-      "add_to_cart": 1310,
-      "begin_checkout": 661,
-      "purchase": 414,
-      "vi_to_ss_pct": 58.5,
-      "atc_to_vi_pct": 10.8,
-      "checkout_to_atc_pct": 50.5,
-      "purchase_to_checkout_pct": 62.6
-    },
-    "cities": [
-      {"city": "Warsaw", "sessions": 7912, "transactions": 127, "revenue": 21061},
-      {"city": "Wroclaw", "sessions": 2636, "transactions": 34, "revenue": 5243},
-      {"city": "Poznan", "sessions": 1598, "transactions": 21, "revenue": 3330},
-      {"city": "Krakow", "sessions": 1319, "transactions": 23, "revenue": 3675},
-      {"city": "Katowice", "sessions": 1181, "transactions": 20, "revenue": 3438},
-      {"city": "Gdansk", "sessions": 998, "transactions": 21, "revenue": 3070},
-      {"city": "(not set)", "sessions": 963, "transactions": 21, "revenue": 4077},
-      {"city": "Lodz", "sessions": 868, "transactions": 14, "revenue": 1972},
-      {"city": "Bydgoszcz", "sessions": 754, "transactions": 4, "revenue": 578},
-      {"city": "Lublin", "sessions": 606, "transactions": 8, "revenue": 1327}
-    ],
-    "hour": [
-      {"h": 0, "sessions": 696, "transactions": 16},
-      {"h": 1, "sessions": 347, "transactions": 3},
-      {"h": 2, "sessions": 187, "transactions": 1},
-      {"h": 3, "sessions": 136, "transactions": 1},
-      {"h": 4, "sessions": 126, "transactions": 0},
-      {"h": 5, "sessions": 230, "transactions": 3},
-      {"h": 6, "sessions": 423, "transactions": 3},
-      {"h": 7, "sessions": 931, "transactions": 6},
-      {"h": 8, "sessions": 1370, "transactions": 25},
-      {"h": 9, "sessions": 1493, "transactions": 23},
-      {"h": 10, "sessions": 1622, "transactions": 28},
-      {"h": 11, "sessions": 1549, "transactions": 27},
-      {"h": 12, "sessions": 1475, "transactions": 28},
-      {"h": 13, "sessions": 1396, "transactions": 24},
-      {"h": 14, "sessions": 1397, "transactions": 18},
-      {"h": 15, "sessions": 1325, "transactions": 21},
-      {"h": 16, "sessions": 1365, "transactions": 13},
-      {"h": 17, "sessions": 1429, "transactions": 20},
-      {"h": 18, "sessions": 1523, "transactions": 17},
-      {"h": 19, "sessions": 1620, "transactions": 19},
-      {"h": 20, "sessions": 1891, "transactions": 35},
-      {"h": 21, "sessions": 2123, "transactions": 41},
-      {"h": 22, "sessions": 1887, "transactions": 30},
-      {"h": 23, "sessions": 1162, "transactions": 22}
-    ]
-  },
-  "mar": {
-    "kpi": {
-      "sessions": 18548,
-      "totalRevenue": 70387,
-      "transactions": 495,
-      "bounceRate": 0.436,
-      "addToCarts": 3435,
-      "checkouts": 943,
-      "avgSessionDuration_s": 287
-    },
-    "devices": [
-      {"device": "mobile", "sessions": 14920, "transactions": 372, "revenue": 51356},
-      {"device": "desktop", "sessions": 3436, "transactions": 119, "revenue": 18435},
-      {"device": "tablet", "sessions": 172, "transactions": 4, "revenue": 596}
-    ],
-    "channels": [
-      {"channel": "Paid Social", "sessions": 5640, "transactions": 50, "revenue": 7407},
-      {"channel": "Organic Search", "sessions": 3866, "transactions": 58, "revenue": 7566},
-      {"channel": "Cross-network", "sessions": 3191, "transactions": 91, "revenue": 16738},
-      {"channel": "Paid Search", "sessions": 2434, "transactions": 140, "revenue": 20948},
-      {"channel": "Direct", "sessions": 1629, "transactions": 47, "revenue": 6351},
-      {"channel": "Unassigned", "sessions": 760, "transactions": 74, "revenue": 8720},
-      {"channel": "Organic Social", "sessions": 711, "transactions": 31, "revenue": 2785},
-      {"channel": "Referral", "sessions": 92, "transactions": 4, "revenue": -127},
-      {"channel": "Organic Shopping", "sessions": 54, "transactions": 0, "revenue": 0},
-      {"channel": "Paid Other", "sessions": 24, "transactions": 0, "revenue": 0},
-      {"channel": "Organic Video", "sessions": 13, "transactions": 0, "revenue": 0},
-      {"channel": "Paid Shopping", "sessions": 2, "transactions": 0, "revenue": 0},
-      {"channel": "Email", "sessions": 1, "transactions": 0, "revenue": 0}
-    ],
-    "landing": [
-      {"page": "(not set)", "sessions": 2164, "bounceRate": 0.857, "transactions": 83, "revenue": 9133},
-      {"page": "/collections/sklep", "sessions": 1938, "bounceRate": 0.191, "transactions": 98, "revenue": 15664},
-      {"page": "/pages/rutyna-coolnails", "sessions": 1688, "bounceRate": 0.477, "transactions": 2, "revenue": 348},
-      {"page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty", "sessions": 1432, "bounceRate": 0.444, "transactions": 7, "revenue": 1943},
-      {"page": "/", "sessions": 1295, "bounceRate": 0.342, "transactions": 60, "revenue": 7952},
-      {"page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka", "sessions": 1206, "bounceRate": 0.454, "transactions": 51, "revenue": 4349},
-      {"page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye", "sessions": 997, "bounceRate": 0.622, "transactions": 3, "revenue": 796},
-      {"page": "/products/platki-led-luna-eye-z-etui-ladujacym-dla-rozswietlonej-i-odswiezonej-okolicy-oczu", "sessions": 618, "bounceRate": 0.361, "transactions": 17, "revenue": 5692},
-      {"page": "/products/klips-unoszacy-wlosy-u-nasady-zero-gravity", "sessions": 501, "bounceRate": 0.449, "transactions": 8, "revenue": 481},
-      {"page": "/collections/rekawice-do-demakijazu", "sessions": 396, "bounceRate": 0.265, "transactions": 13, "revenue": 1715},
-      {"page": "/products/depilator-z-nano-szkla-glov", "sessions": 368, "bounceRate": 0.378, "transactions": 2, "revenue": 210},
-      {"page": "/products/utwardzacz-do-paznokci-w-formie-pisaka-coolnails-marshmallow-nail-hardener-pen", "sessions": 283, "bounceRate": 0.367, "transactions": 1, "revenue": 67},
-      {"page": "/collections/rekawice-do-demakijazu/products/glov-on-the-go-all-skin-types", "sessions": 246, "bounceRate": 0.207, "transactions": 7, "revenue": 742},
-      {"page": "/collections/glov-led-therapy", "sessions": 225, "bounceRate": 0.329, "transactions": 2, "revenue": 808},
-      {"page": "/products/rekawica-do-mycia-twarzy-i-demakijazu-cery-mieszanej-glov-on-the-go", "sessions": 203, "bounceRate": 0.315, "transactions": 12, "revenue": 1175}
-    ],
-    "products": [
-      {"name": "Tarka-pumeks nano szkla GLOV", "viewed": 1726, "atc": 357, "purchased": 151, "revenue": 6559},
-      {"name": "Rekawiczka do demakijazu GLOV", "viewed": 680, "atc": 294, "purchased": 71, "revenue": 2418},
-      {"name": "Mydlo Magnet Cleanser", "viewed": 98, "atc": 115, "purchased": 47, "revenue": 1221},
-      {"name": "Dysk FOAM SCULPT PAD", "viewed": 114, "atc": 79, "purchased": 46, "revenue": 1375},
-      {"name": "Free gift Mango Sponge Set Mini", "viewed": 61, "atc": 78, "purchased": 43, "revenue": 0},
-      {"name": "Platki LED LUNA EYE z etui ladujacym", "viewed": 978, "atc": 95, "purchased": 38, "revenue": 14211},
-      {"name": "Biodegradowalna szczotka Biobased Brush", "viewed": 225, "atc": 99, "purchased": 33, "revenue": 1151},
-      {"name": "Free Gift Quick Treat", "viewed": 42, "atc": 65, "purchased": 32, "revenue": 0},
-      {"name": "Rekawica do peelingu GLOV", "viewed": 154, "atc": 71, "purchased": 31, "revenue": 1355},
-      {"name": "Klips ZERO GRAVITY", "viewed": 603, "atc": 71, "purchased": 30, "revenue": 641},
-      {"name": "Free gift Satynowa maska do spania", "viewed": 24, "atc": 43, "purchased": 26, "revenue": 0},
-      {"name": "WIELOPAK 2 szt Rekawiczka GLOV", "viewed": 161, "atc": 65, "purchased": 25, "revenue": 1054},
-      {"name": "Depilator nano szkla GLOV", "viewed": 650, "atc": 109, "purchased": 24, "revenue": 1025},
-      {"name": "Zestaw pumeks i depilator Bestsellers", "viewed": 110, "atc": 36, "purchased": 24, "revenue": 1530},
-      {"name": "Recznik do demakijazu GLOV", "viewed": 715, "atc": 52, "purchased": 22, "revenue": 1038}
-    ],
-    "newret": [
-      {"segment": "new", "sessions": 14032, "transactions": 344, "revenue": 47606},
-      {"segment": "returning", "sessions": 3488, "transactions": 150, "revenue": 22204},
-      {"segment": "(not set)", "sessions": 1126, "transactions": 1, "revenue": 578}
-    ],
-    "dayofweek": [
-      {"day": "0_Sun", "sessions": 3581, "transactions": 106, "revenue": 17705},
-      {"day": "1_Mon", "sessions": 3021, "transactions": 80, "revenue": 11608},
-      {"day": "2_Tue", "sessions": 2712, "transactions": 73, "revenue": 10155},
-      {"day": "3_Wed", "sessions": 2578, "transactions": 79, "revenue": 10181},
-      {"day": "4_Thu", "sessions": 2169, "transactions": 51, "revenue": 5919},
-      {"day": "5_Fri", "sessions": 2238, "transactions": 43, "revenue": 4810},
-      {"day": "6_Sat", "sessions": 2316, "transactions": 63, "revenue": 10010}
-    ],
-    "funnel": {
-      "session_start": 14214,
-      "view_item": 8982,
-      "add_to_cart": 1349,
-      "begin_checkout": 752,
-      "purchase": 457,
-      "vi_to_ss_pct": 63.2,
-      "atc_to_vi_pct": 15.0,
-      "checkout_to_atc_pct": 55.7,
-      "purchase_to_checkout_pct": 60.8
-    },
-    "cities": [
-      {"city": "Warsaw", "sessions": 5708, "transactions": 159, "revenue": 22580},
-      {"city": "Wroclaw", "sessions": 1825, "transactions": 31, "revenue": 4367},
-      {"city": "Krakow", "sessions": 1052, "transactions": 35, "revenue": 5608},
-      {"city": "Poznan", "sessions": 982, "transactions": 27, "revenue": 3540},
-      {"city": "Lodz", "sessions": 738, "transactions": 12, "revenue": 1440},
-      {"city": "Gdansk", "sessions": 736, "transactions": 22, "revenue": 3933},
-      {"city": "(not set)", "sessions": 670, "transactions": 24, "revenue": 2531},
-      {"city": "Katowice", "sessions": 653, "transactions": 14, "revenue": 1287},
-      {"city": "Bydgoszcz", "sessions": 589, "transactions": 12, "revenue": 2437},
-      {"city": "Lublin", "sessions": 374, "transactions": 6, "revenue": 704}
-    ],
-    "hour": [
-      {"h": 0, "sessions": 445, "transactions": 9},
-      {"h": 1, "sessions": 214, "transactions": 2},
-      {"h": 2, "sessions": 122, "transactions": 1},
-      {"h": 3, "sessions": 121, "transactions": 1},
-      {"h": 4, "sessions": 135, "transactions": 3},
-      {"h": 5, "sessions": 180, "transactions": 4},
-      {"h": 6, "sessions": 407, "transactions": 10},
-      {"h": 7, "sessions": 619, "transactions": 19},
-      {"h": 8, "sessions": 981, "transactions": 24},
-      {"h": 9, "sessions": 1169, "transactions": 36},
-      {"h": 10, "sessions": 1050, "transactions": 39},
-      {"h": 11, "sessions": 1061, "transactions": 27},
-      {"h": 12, "sessions": 1012, "transactions": 25},
-      {"h": 13, "sessions": 999, "transactions": 27},
-      {"h": 14, "sessions": 980, "transactions": 22},
-      {"h": 15, "sessions": 844, "transactions": 28},
-      {"h": 16, "sessions": 856, "transactions": 19},
-      {"h": 17, "sessions": 1018, "transactions": 17},
-      {"h": 18, "sessions": 991, "transactions": 25},
-      {"h": 19, "sessions": 1223, "transactions": 31},
-      {"h": 20, "sessions": 1364, "transactions": 40},
-      {"h": 21, "sessions": 1439, "transactions": 38},
-      {"h": 22, "sessions": 1244, "transactions": 34},
-      {"h": 23, "sessions": 874, "transactions": 14}
-    ]
-  },
-  "apr": {
-    "kpi": {
-      "sessions": 15555,
-      "totalRevenue": 70512,
-      "transactions": 487,
-      "bounceRate": 0.416,
-      "addToCarts": 3188,
-      "checkouts": 959,
-      "avgSessionDuration_s": 336
-    },
-    "devices": [
-      {"device": "mobile", "sessions": 12482, "transactions": 382, "revenue": 53285},
-      {"device": "desktop", "sessions": 2949, "transactions": 105, "revenue": 17227},
-      {"device": "tablet", "sessions": 85, "transactions": 0, "revenue": 0}
-    ],
-    "channels": [
-      {"channel": "Paid Social", "sessions": 4355, "transactions": 97, "revenue": 16344},
-      {"channel": "Organic Search", "sessions": 2973, "transactions": 76, "revenue": 11598},
-      {"channel": "Cross-network", "sessions": 2881, "transactions": 85, "revenue": 16098},
-      {"channel": "Paid Search", "sessions": 2590, "transactions": 106, "revenue": 11940},
-      {"channel": "Direct", "sessions": 1440, "transactions": 43, "revenue": 5698},
-      {"channel": "Unassigned", "sessions": 695, "transactions": 63, "revenue": 6196},
-      {"channel": "Organic Social", "sessions": 277, "transactions": 9, "revenue": 1226},
-      {"channel": "Organic Shopping", "sessions": 99, "transactions": 3, "revenue": 542},
-      {"channel": "Referral", "sessions": 72, "transactions": 2, "revenue": 212},
-      {"channel": "Paid Other", "sessions": 19, "transactions": 3, "revenue": 658},
-      {"channel": "Organic Video", "sessions": 12, "transactions": 0, "revenue": 0},
-      {"channel": "Paid Shopping", "sessions": 2, "transactions": 0, "revenue": 0},
-      {"channel": "Email", "sessions": 1, "transactions": 0, "revenue": 0}
-    ],
-    "landing": [
-      {"page": "/collections/sklep", "sessions": 3395, "bounceRate": 0.202, "transactions": 102, "revenue": 16026},
-      {"page": "(not set)", "sessions": 1788, "bounceRate": 0.867, "transactions": 75, "revenue": 7162},
-      {"page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty", "sessions": 1429, "bounceRate": 0.410, "transactions": 20, "revenue": 3167},
-      {"page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye", "sessions": 1194, "bounceRate": 0.506, "transactions": 37, "revenue": 9008},
-      {"page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka", "sessions": 1188, "bounceRate": 0.419, "transactions": 66, "revenue": 5030},
-      {"page": "/", "sessions": 954, "bounceRate": 0.358, "transactions": 36, "revenue": 9189},
-      {"page": "/collections/rekawice-do-demakijazu", "sessions": 358, "bounceRate": 0.310, "transactions": 8, "revenue": 845},
-      {"page": "/products/klips-unoszacy-wlosy-u-nasady-zero-gravity", "sessions": 249, "bounceRate": 0.373, "transactions": 2, "revenue": 88},
-      {"page": "/products/depilator-z-nano-szkla-glov", "sessions": 243, "bounceRate": 0.416, "transactions": 5, "revenue": 499},
-      {"page": "/products/platki-led-luna-eye-z-etui-ladujacym-dla-rozswietlonej-i-odswiezonej-okolicy-oczu", "sessions": 226, "bounceRate": 0.460, "transactions": 6, "revenue": 2324},
-      {"page": "/collections/produkty-do-pielegnacji-wlosow", "sessions": 224, "bounceRate": 0.250, "transactions": 8, "revenue": 1069},
-      {"page": "/collections/sklep/products/platki-led-...", "sessions": 210, "bounceRate": 0.652, "transactions": 2, "revenue": 509},
-      {"page": "/collections/coolnails", "sessions": 196, "bounceRate": 0.270, "transactions": 2, "revenue": 604},
-      {"page": "/products/przyssawkowy-podnozek-prysznicowy-sole-mate", "sessions": 137, "bounceRate": 0.511, "transactions": 0, "revenue": 0},
-      {"page": "/collections/produkty-do-pielegnacji-ciala", "sessions": 135, "bounceRate": 0.207, "transactions": 5, "revenue": 528}
-    ],
-    "products": [
-      {"name": "Tarka-pumeks nano szkla GLOV", "viewed": 1653, "atc": 531, "purchased": 173, "revenue": 6817},
-      {"name": "Platki LED LUNA EYE pielegnacyjne", "viewed": 2589, "atc": 446, "purchased": 104, "revenue": 22530},
-      {"name": "Depilator nano szkla GLOV", "viewed": 559, "atc": 115, "purchased": 43, "revenue": 1622},
-      {"name": "Free gift Mango Sponge Set Mini", "viewed": 49, "atc": 68, "purchased": 43, "revenue": 0},
-      {"name": "Rekawiczka do demakijazu GLOV", "viewed": 392, "atc": 136, "purchased": 40, "revenue": 1166},
-      {"name": "Mydlo Magnet Cleanser", "viewed": 85, "atc": 78, "purchased": 33, "revenue": 867},
-      {"name": "Biodegradowalna szczotka Biobased Brush", "viewed": 169, "atc": 84, "purchased": 32, "revenue": 1082},
-      {"name": "Naklejki LED zestaw 15szt", "viewed": 76, "atc": 215, "purchased": 32, "revenue": 395},
-      {"name": "Sleeping Beauty Panterka", "viewed": 1715, "atc": 113, "purchased": 31, "revenue": 4765},
-      {"name": "Rekawica do peelingu GLOV", "viewed": 202, "atc": 97, "purchased": 29, "revenue": 1237},
-      {"name": "Silikonowe platki Infinity Eye Patches", "viewed": 240, "atc": 150, "purchased": 28, "revenue": 829},
-      {"name": "Free gift Satynowa maska do spania", "viewed": 20, "atc": 51, "purchased": 25, "revenue": 0},
-      {"name": "Free Gift Quick Treat", "viewed": 53, "atc": 37, "purchased": 23, "revenue": 0},
-      {"name": "Klips ZERO GRAVITY", "viewed": 357, "atc": 45, "purchased": 16, "revenue": 345},
-      {"name": "Gabeczka MakeUp Sponge", "viewed": 31, "atc": 42, "purchased": 16, "revenue": 172}
-    ],
-    "newret": [
-      {"segment": "new", "sessions": 11161, "transactions": 289, "revenue": 42402},
-      {"segment": "returning", "sessions": 3315, "transactions": 167, "revenue": 25161},
-      {"segment": "(not set)", "sessions": 1050, "transactions": 31, "revenue": 2949}
-    ],
-    "dayofweek": [
-      {"day": "0_Sun", "sessions": 2171, "transactions": 60, "revenue": 9575},
-      {"day": "1_Mon", "sessions": 2405, "transactions": 68, "revenue": 10046},
-      {"day": "2_Tue", "sessions": 2283, "transactions": 95, "revenue": 11238},
-      {"day": "3_Wed", "sessions": 2717, "transactions": 90, "revenue": 13333},
-      {"day": "4_Thu", "sessions": 2418, "transactions": 73, "revenue": 12410},
-      {"day": "5_Fri", "sessions": 1855, "transactions": 51, "revenue": 6807},
-      {"day": "6_Sat", "sessions": 1752, "transactions": 50, "revenue": 7103}
-    ],
-    "funnel": {
-      "session_start": 11587,
-      "view_item": 7809,
-      "add_to_cart": 1321,
-      "begin_checkout": 805,
-      "purchase": 462,
-      "vi_to_ss_pct": 67.4,
-      "atc_to_vi_pct": 16.9,
-      "checkout_to_atc_pct": 60.9,
-      "purchase_to_checkout_pct": 57.4
-    },
-    "cities": [
-      {"city": "Warsaw", "sessions": 5017, "transactions": 147, "revenue": 20530},
-      {"city": "Wroclaw", "sessions": 1613, "transactions": 29, "revenue": 3956},
-      {"city": "Krakow", "sessions": 1081, "transactions": 33, "revenue": 3566},
-      {"city": "Poznan", "sessions": 733, "transactions": 16, "revenue": 1618},
-      {"city": "Bydgoszcz", "sessions": 599, "transactions": 14, "revenue": 2171},
-      {"city": "Lodz", "sessions": 560, "transactions": 17, "revenue": 2148},
-      {"city": "Gdansk", "sessions": 539, "transactions": 24, "revenue": 3213},
-      {"city": "(not set)", "sessions": 513, "transactions": 20, "revenue": 2733},
-      {"city": "Katowice", "sessions": 468, "transactions": 20, "revenue": 3638},
-      {"city": "Pruszkow", "sessions": 445, "transactions": 3, "revenue": 267}
-    ],
-    "hour": [
-      {"h": 0, "sessions": 370, "transactions": 6},
-      {"h": 1, "sessions": 186, "transactions": 3},
-      {"h": 2, "sessions": 78, "transactions": 3},
-      {"h": 3, "sessions": 69, "transactions": 1},
-      {"h": 4, "sessions": 74, "transactions": 0},
-      {"h": 5, "sessions": 156, "transactions": 0},
-      {"h": 6, "sessions": 404, "transactions": 8},
-      {"h": 7, "sessions": 677, "transactions": 18},
-      {"h": 8, "sessions": 921, "transactions": 22},
-      {"h": 9, "sessions": 996, "transactions": 39},
-      {"h": 10, "sessions": 954, "transactions": 35},
-      {"h": 11, "sessions": 859, "transactions": 34},
-      {"h": 12, "sessions": 955, "transactions": 25},
-      {"h": 13, "sessions": 896, "transactions": 33},
-      {"h": 14, "sessions": 884, "transactions": 23},
-      {"h": 15, "sessions": 850, "transactions": 29},
-      {"h": 16, "sessions": 813, "transactions": 17},
-      {"h": 17, "sessions": 764, "transactions": 23},
-      {"h": 18, "sessions": 872, "transactions": 23},
-      {"h": 19, "sessions": 868, "transactions": 31},
-      {"h": 20, "sessions": 901, "transactions": 32},
-      {"h": 21, "sessions": 1079, "transactions": 38},
-      {"h": 22, "sessions": 1071, "transactions": 31},
-      {"h": 23, "sessions": 644, "transactions": 13}
-    ]
-  },
-  "may": {
-    "kpi": {
-      "sessions": 29317,
-      "totalRevenue": 121134,
-      "transactions": 797,
-      "bounceRate": 0.393,
-      "addToCarts": 6262,
-      "checkouts": 1833,
-      "avgSessionDuration_s": 315
-    },
-    "devices": [
-      {"device": "mobile", "sessions": 24978, "transactions": 627, "revenue": 94980},
-      {"device": "desktop", "sessions": 3844, "transactions": 161, "revenue": 25301},
-      {"device": "tablet", "sessions": 203, "transactions": 9, "revenue": 853}
-    ],
-    "channels": [
-      {"channel": "Paid Social", "sessions": 13577, "transactions": 237, "revenue": 41029},
-      {"channel": "Organic Search", "sessions": 5577, "transactions": 173, "revenue": 22979},
-      {"channel": "Cross-network", "sessions": 2784, "transactions": 67, "revenue": 11194},
-      {"channel": "Paid Search", "sessions": 2705, "transactions": 143, "revenue": 19065},
-      {"channel": "Direct", "sessions": 2130, "transactions": 84, "revenue": 12170},
-      {"channel": "Unassigned", "sessions": 993, "transactions": 62, "revenue": 9815},
-      {"channel": "Organic Social", "sessions": 549, "transactions": 12, "revenue": 1648},
-      {"channel": "Organic Shopping", "sessions": 300, "transactions": 17, "revenue": 2789},
-      {"channel": "Referral", "sessions": 83, "transactions": 0, "revenue": 0},
-      {"channel": "Paid Other", "sessions": 42, "transactions": 2, "revenue": 445},
-      {"channel": "Organic Video", "sessions": 8, "transactions": 0, "revenue": 0},
-      {"channel": "Email", "sessions": 2, "transactions": 0, "revenue": 0},
-      {"channel": "SMS", "sessions": 2, "transactions": 0, "revenue": 0}
-    ],
-    "landing": [
-      {"page": "/collections/sklep", "sessions": 8041, "bounceRate": 0.196, "transactions": 157, "revenue": 26050},
-      {"page": "(not set)", "sessions": 6378, "bounceRate": 0.548, "transactions": 288, "revenue": 44921},
-      {"page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty", "sessions": 1708, "bounceRate": 0.443, "transactions": 12, "revenue": 2345},
-      {"page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye", "sessions": 1623, "bounceRate": 0.465, "transactions": 29, "revenue": 7340},
-      {"page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka", "sessions": 1385, "bounceRate": 0.429, "transactions": 56, "revenue": 4534},
-      {"page": "/", "sessions": 1185, "bounceRate": 0.303, "transactions": 59, "revenue": 10401},
-      {"page": "/collections/produkty-do-pielegnacji-ciala/products/depilator-z-nano-szkla-glov", "sessions": 691, "bounceRate": 0.452, "transactions": 23, "revenue": 2503},
-      {"page": "/collections/sklep/products/platki-led-...", "sessions": 608, "bounceRate": 0.586, "transactions": 7, "revenue": 1518},
-      {"page": "/products/depilator-z-nano-szkla-glov", "sessions": 598, "bounceRate": 0.344, "transactions": 10, "revenue": 609},
-      {"page": "/products/rekawica-do-peelingu-i-mycia-ciala-glov-skin-smoothing", "sessions": 587, "bounceRate": 0.480, "transactions": 24, "revenue": 2948},
-      {"page": "/collections/rekawice-do-demakijazu", "sessions": 443, "bounceRate": 0.253, "transactions": 17, "revenue": 2166},
-      {"page": "/products/biodegradowalna-szczotka-do-wlosow-glov-biobased-brush", "sessions": 352, "bounceRate": 0.545, "transactions": 10, "revenue": 1190},
-      {"page": "/products/silikonowe-nawilzajace-platki-pod-oczy-glov-infinity-eye-patches", "sessions": 337, "bounceRate": 0.596, "transactions": 4, "revenue": 434},
-      {"page": "/products/klips-unoszacy-wlosy-u-nasady-zero-gravity", "sessions": 321, "bounceRate": 0.352, "transactions": 2, "revenue": 192},
-      {"page": "/products/3w1-silikonowa-myjka-...-bubble-burst", "sessions": 254, "bounceRate": 0.539, "transactions": 5, "revenue": 734}
-    ],
-    "products": [
-      {"name": "Tarka-pumeks nano szkla GLOV", "viewed": 1796, "atc": 1009, "purchased": 310, "revenue": 10589},
-      {"name": "Platki LED LUNA EYE pielegnacyjne", "viewed": 5155, "atc": 1253, "purchased": 220, "revenue": 50442},
-      {"name": "Depilator nano szkla GLOV", "viewed": 1457, "atc": 454, "purchased": 163, "revenue": 5474},
-      {"name": "Silikonowe platki Infinity Eye Patches", "viewed": 694, "atc": 461, "purchased": 94, "revenue": 2857},
-      {"name": "Rekawica do peelingu GLOV", "viewed": 718, "atc": 305, "purchased": 79, "revenue": 3261},
-      {"name": "Mydlo Magnet Cleanser", "viewed": 127, "atc": 222, "purchased": 75, "revenue": 1850},
-      {"name": "Biodegradowalna szczotka Biobased Brush", "viewed": 469, "atc": 211, "purchased": 66, "revenue": 2178},
-      {"name": "Free gift Mango Sponge Set Mini", "viewed": 108, "atc": 140, "purchased": 65, "revenue": 0},
-      {"name": "Rekawiczka do demakijazu GLOV", "viewed": 358, "atc": 174, "purchased": 43, "revenue": 1395},
-      {"name": "Naklejki LED zestaw 15szt", "viewed": 218, "atc": 219, "purchased": 43, "revenue": 484},
-      {"name": "Pumeks Cheetah Edition", "viewed": 182, "atc": 112, "purchased": 40, "revenue": 1269},
-      {"name": "Free gift Satynowa maska do spania", "viewed": 43, "atc": 90, "purchased": 40, "revenue": 0},
-      {"name": "Klips ZERO GRAVITY", "viewed": 531, "atc": 115, "purchased": 33, "revenue": 704},
-      {"name": "Gabeczka MakeUp Sponge", "viewed": 54, "atc": 82, "purchased": 33, "revenue": 390},
-      {"name": "Free Gift Quick Treat", "viewed": 72, "atc": 73, "purchased": 31, "revenue": 0}
-    ],
-    "newret": [
-      {"segment": "new", "sessions": 21857, "transactions": 543, "revenue": 80774},
-      {"segment": "returning", "sessions": 5039, "transactions": 205, "revenue": 33658},
-      {"segment": "(not set)", "sessions": 1899, "transactions": 49, "revenue": 6701}
-    ],
-    "dayofweek": [
-      {"day": "0_Sun", "sessions": 5426, "transactions": 120, "revenue": 18562},
-      {"day": "1_Mon", "sessions": 3719, "transactions": 121, "revenue": 18622},
-      {"day": "2_Tue", "sessions": 4011, "transactions": 138, "revenue": 21177},
-      {"day": "3_Wed", "sessions": 3931, "transactions": 111, "revenue": 14068},
-      {"day": "4_Thu", "sessions": 3896, "transactions": 94, "revenue": 14052},
-      {"day": "5_Fri", "sessions": 4134, "transactions": 106, "revenue": 17138},
-      {"day": "6_Sat", "sessions": 3951, "transactions": 107, "revenue": 17514}
-    ],
-    "funnel": {
-      "session_start": 22627,
-      "view_item": 10729,
-      "add_to_cart": 3572,
-      "begin_checkout": 1639,
-      "purchase": 777,
-      "vi_to_ss_pct": 47.4,
-      "atc_to_vi_pct": 33.3,
-      "checkout_to_atc_pct": 45.9,
-      "purchase_to_checkout_pct": 47.4
-    },
-    "cities": [
-      {"city": "Warsaw", "sessions": 8714, "transactions": 248, "revenue": 39766},
-      {"city": "Wroclaw", "sessions": 2810, "transactions": 46, "revenue": 7632},
-      {"city": "Krakow", "sessions": 1827, "transactions": 60, "revenue": 7493},
-      {"city": "Poznan", "sessions": 1634, "transactions": 31, "revenue": 3965},
-      {"city": "Gdansk", "sessions": 1155, "transactions": 31, "revenue": 4021},
-      {"city": "Lodz", "sessions": 1025, "transactions": 30, "revenue": 4960},
-      {"city": "Bydgoszcz", "sessions": 915, "transactions": 21, "revenue": 3486},
-      {"city": "(not set)", "sessions": 756, "transactions": 15, "revenue": 2526},
-      {"city": "Katowice", "sessions": 752, "transactions": 21, "revenue": 3477},
-      {"city": "Lublin", "sessions": 478, "transactions": 13, "revenue": 1730}
-    ],
-    "hour": [
-      {"h": 0, "sessions": 584, "transactions": 8},
-      {"h": 1, "sessions": 280, "transactions": 7},
-      {"h": 2, "sessions": 156, "transactions": 4},
-      {"h": 3, "sessions": 123, "transactions": 1},
-      {"h": 4, "sessions": 129, "transactions": 5},
-      {"h": 5, "sessions": 364, "transactions": 4},
-      {"h": 6, "sessions": 745, "transactions": 19},
-      {"h": 7, "sessions": 1149, "transactions": 26},
-      {"h": 8, "sessions": 1660, "transactions": 49},
-      {"h": 9, "sessions": 2044, "transactions": 49},
-      {"h": 10, "sessions": 2104, "transactions": 65},
-      {"h": 11, "sessions": 1853, "transactions": 59},
-      {"h": 12, "sessions": 1741, "transactions": 39},
-      {"h": 13, "sessions": 1819, "transactions": 46},
-      {"h": 14, "sessions": 1531, "transactions": 49},
-      {"h": 15, "sessions": 1332, "transactions": 35},
-      {"h": 16, "sessions": 1429, "transactions": 24},
-      {"h": 17, "sessions": 1514, "transactions": 37},
-      {"h": 18, "sessions": 1468, "transactions": 37},
-      {"h": 19, "sessions": 1465, "transactions": 44},
-      {"h": 20, "sessions": 1669, "transactions": 43},
-      {"h": 21, "sessions": 1983, "transactions": 42},
-      {"h": 22, "sessions": 1821, "transactions": 61},
-      {"h": 23, "sessions": 1165, "transactions": 44}
-    ]
-  },
-  "jun": {
-    "kpi": {
-      "sessions": 12740,
-      "totalRevenue": 35259,
-      "transactions": 324,
-      "bounceRate": 0.428,
-      "addToCarts": 2270,
-      "checkouts": 664,
-      "avgSessionDuration_s": 319
-    },
-    "devices": [
-      {"device": "mobile", "sessions": 9968, "transactions": 250, "revenue": 25650},
-      {"device": "desktop", "sessions": 2699, "transactions": 73, "revenue": 9477},
-      {"device": "tablet", "sessions": 76, "transactions": 1, "revenue": 131}
-    ],
-    "channels": [
-      {"channel": "Paid Social", "sessions": 5045, "transactions": 91, "revenue": 7274},
-      {"channel": "Organic Search", "sessions": 2159, "transactions": 49, "revenue": 4586},
-      {"channel": "Direct", "sessions": 1796, "transactions": 20, "revenue": 1639},
-      {"channel": "Paid Search", "sessions": 1415, "transactions": 68, "revenue": 7484},
-      {"channel": "Cross-network", "sessions": 1323, "transactions": 37, "revenue": 6153},
-      {"channel": "Unassigned", "sessions": 483, "transactions": 45, "revenue": 6368},
-      {"channel": "Organic Social", "sessions": 219, "transactions": 4, "revenue": 334},
-      {"channel": "Paid Shopping", "sessions": 123, "transactions": 0, "revenue": 0},
-      {"channel": "Referral", "sessions": 33, "transactions": 3, "revenue": 307},
-      {"channel": "Organic Shopping", "sessions": 27, "transactions": 6, "revenue": 1027},
-      {"channel": "Paid Other", "sessions": 15, "transactions": 1, "revenue": 87},
-      {"channel": "AI Assistant", "sessions": 10, "transactions": 0, "revenue": 0},
-      {"channel": "Organic Video", "sessions": 2, "transactions": 0, "revenue": 0}
-    ],
-    "landing": [
-      {"page": "/collections/sklep", "sessions": 2595, "bounceRate": 0.170, "transactions": 48, "revenue": 5011},
-      {"page": "(not set)", "sessions": 2368, "bounceRate": 0.682, "transactions": 49, "revenue": 4313},
-      {"page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty", "sessions": 917, "bounceRate": 0.437, "transactions": 7, "revenue": 1254},
-      {"page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka", "sessions": 798, "bounceRate": 0.372, "transactions": 51, "revenue": 3855},
-      {"page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye", "sessions": 567, "bounceRate": 0.503, "transactions": 15, "revenue": 4145},
-      {"page": "/products/rekawica-do-peelingu-i-mycia-ciala-glov-skin-smoothing", "sessions": 542, "bounceRate": 0.469, "transactions": 16, "revenue": 1333},
-      {"page": "/", "sessions": 496, "bounceRate": 0.341, "transactions": 23, "revenue": 4713},
-      {"page": "/collections/produkty-do-pielegnacji-wlosow/products/klips-unoszacy-wlosy-u-nasady-zero-gravity", "sessions": 488, "bounceRate": 0.492, "transactions": 19, "revenue": 1045},
-      {"page": "/products/depilator-z-nano-szkla-glov", "sessions": 433, "bounceRate": 0.374, "transactions": 7, "revenue": 384},
-      {"page": "/collections/produkty-do-pielegnacji-ciala/products/depilator-...", "sessions": 236, "bounceRate": 0.390, "transactions": 1, "revenue": 47},
-      {"page": "/products/klips-unoszacy-wlosy-u-nasady-zero-gravity", "sessions": 220, "bounceRate": 0.427, "transactions": 3, "revenue": 193},
-      {"page": "/collections/rekawice-do-demakijazu", "sessions": 211, "bounceRate": 0.299, "transactions": 9, "revenue": 937},
-      {"page": "/collections/produkty-do-pielegnacji-ciala/products/pumeks-...", "sessions": 114, "bounceRate": 0.342, "transactions": 8, "revenue": 416},
-      {"page": "/products/3w1-silikonowa-myjka-...-bubble-burst", "sessions": 114, "bounceRate": 0.430, "transactions": 1, "revenue": 32},
-      {"page": "/products/utwardzacz-do-paznokci-...-marshmallow-nail-hardener-pen", "sessions": 110, "bounceRate": 0.364, "transactions": 1, "revenue": 184}
-    ],
-    "products": [
-      {"name": "Tarka-pumeks nano szkla GLOV", "viewed": 1356, "atc": 441, "purchased": 173, "revenue": 5947},
-      {"name": "Depilator nano szkla GLOV", "viewed": 983, "atc": 194, "purchased": 56, "revenue": 1829},
-      {"name": "Rekawica do peelingu GLOV", "viewed": 626, "atc": 141, "purchased": 40, "revenue": 1584},
-      {"name": "Klips ZERO GRAVITY", "viewed": 827, "atc": 132, "purchased": 38, "revenue": 807},
-      {"name": "Biodegradowalna szczotka Biobased Brush", "viewed": 79, "atc": 66, "purchased": 26, "revenue": 846},
-      {"name": "Free gift Mango Sponge Set Mini", "viewed": 33, "atc": 50, "purchased": 26, "revenue": 0},
-      {"name": "Rekawiczka Iconic Mitt GLOV", "viewed": 205, "atc": 94, "purchased": 22, "revenue": 714},
-      {"name": "Platki LED LUNA EYE pielegnacyjne", "viewed": 947, "atc": 145, "purchased": 21, "revenue": 5337},
-      {"name": "Pumeks Cheetah Edition", "viewed": 196, "atc": 49, "purchased": 19, "revenue": 614},
-      {"name": "Silikonowe platki Infinity Eye Patches", "viewed": 128, "atc": 58, "purchased": 17, "revenue": 541},
-      {"name": "Mydlo Magnet Cleanser", "viewed": 66, "atc": 51, "purchased": 17, "revenue": 416},
-      {"name": "Free gift Satynowa maska do spania", "viewed": 12, "atc": 27, "purchased": 17, "revenue": 0},
-      {"name": "Sleeping Beauty Panterka", "viewed": 1183, "atc": 63, "purchased": 16, "revenue": 2756},
-      {"name": "Free Gift Quick Treat", "viewed": 24, "atc": 38, "purchased": 16, "revenue": 0},
-      {"name": "Wielorazowe platki do demakijazu GLOV", "viewed": 132, "atc": 31, "purchased": 15, "revenue": 97}
-    ],
-    "newret": [
-      {"segment": "new", "sessions": 9713, "transactions": 205, "revenue": 20269},
-      {"segment": "returning", "sessions": 2165, "transactions": 89, "revenue": 11492},
-      {"segment": "(not set)", "sessions": 882, "transactions": 30, "revenue": 3498}
-    ],
-    "dayofweek": [
-      {"day": "0_Sun", "sessions": 2102, "transactions": 33, "revenue": 4316},
-      {"day": "1_Mon", "sessions": 3042, "transactions": 69, "revenue": 6426},
-      {"day": "2_Tue", "sessions": 1540, "transactions": 37, "revenue": 3182},
-      {"day": "3_Wed", "sessions": 1473, "transactions": 57, "revenue": 6693},
-      {"day": "4_Thu", "sessions": 1543, "transactions": 47, "revenue": 4504},
-      {"day": "5_Fri", "sessions": 1567, "transactions": 45, "revenue": 5881},
-      {"day": "6_Sat", "sessions": 1402, "transactions": 36, "revenue": 4256}
-    ],
-    "funnel": {
-      "session_start": 10233,
-      "view_item": 6511,
-      "add_to_cart": 1002,
-      "begin_checkout": 577,
-      "purchase": 315,
-      "vi_to_ss_pct": 63.6,
-      "atc_to_vi_pct": 15.4,
-      "checkout_to_atc_pct": 57.6,
-      "purchase_to_checkout_pct": 54.6
-    },
-    "cities": [
-      {"city": "Warsaw", "sessions": 4605, "transactions": 91, "revenue": 10118},
-      {"city": "Wroclaw", "sessions": 1080, "transactions": 28, "revenue": 3559},
-      {"city": "Poznan", "sessions": 721, "transactions": 12, "revenue": 928},
-      {"city": "Krakow", "sessions": 681, "transactions": 26, "revenue": 2515},
-      {"city": "Gdansk", "sessions": 500, "transactions": 15, "revenue": 1915},
-      {"city": "Lodz", "sessions": 446, "transactions": 19, "revenue": 1973},
-      {"city": "Katowice", "sessions": 359, "transactions": 9, "revenue": 885},
-      {"city": "(not set)", "sessions": 340, "transactions": 7, "revenue": 806},
-      {"city": "Bydgoszcz", "sessions": 324, "transactions": 5, "revenue": 595},
-      {"city": "Lublin", "sessions": 215, "transactions": 3, "revenue": 117}
-    ],
-    "hour": [
-      {"h": 0, "sessions": 241, "transactions": 1},
-      {"h": 1, "sessions": 135, "transactions": 3},
-      {"h": 2, "sessions": 58, "transactions": 1},
-      {"h": 3, "sessions": 49, "transactions": 1},
-      {"h": 4, "sessions": 92, "transactions": 1},
-      {"h": 5, "sessions": 172, "transactions": 3},
-      {"h": 6, "sessions": 318, "transactions": 5},
-      {"h": 7, "sessions": 543, "transactions": 10},
-      {"h": 8, "sessions": 709, "transactions": 26},
-      {"h": 9, "sessions": 813, "transactions": 19},
-      {"h": 10, "sessions": 771, "transactions": 10},
-      {"h": 11, "sessions": 795, "transactions": 26},
-      {"h": 12, "sessions": 778, "transactions": 29},
-      {"h": 13, "sessions": 780, "transactions": 22},
-      {"h": 14, "sessions": 749, "transactions": 22},
-      {"h": 15, "sessions": 663, "transactions": 11},
-      {"h": 16, "sessions": 576, "transactions": 15},
-      {"h": 17, "sessions": 674, "transactions": 13},
-      {"h": 18, "sessions": 670, "transactions": 13},
-      {"h": 19, "sessions": 659, "transactions": 15},
-      {"h": 20, "sessions": 774, "transactions": 23},
-      {"h": 21, "sessions": 906, "transactions": 17},
-      {"h": 22, "sessions": 843, "transactions": 24},
-      {"h": 23, "sessions": 494, "transactions": 14}
-    ]
-  },
-  "d90": {
-    "kpi": {
-      "sessions": 68905,
-      "totalRevenue": 254431,
-      "transactions": 1829,
-      "bounceRate": 0.404,
-      "addToCarts": 13272,
-      "checkouts": 3916,
-      "avgSessionDuration_s": 304
-    },
-    "devices": [
-      {"device": "mobile", "sessions": 55447, "transactions": 1434, "revenue": 193861},
-      {"device": "desktop", "sessions": 13932, "transactions": 384, "revenue": 59479},
-      {"device": "tablet", "sessions": 411, "transactions": 11, "revenue": 1091}
-    ],
-    "channels": [
-      {"channel": "Paid Social", "sessions": 26178, "transactions": 495, "revenue": 70693},
-      {"channel": "Organic Search", "sessions": 12496, "transactions": 319, "revenue": 40805},
-      {"channel": "Direct", "sessions": 9134, "transactions": 161, "revenue": 21601},
-      {"channel": "Cross-network", "sessions": 8256, "transactions": 218, "revenue": 38063},
-      {"channel": "Paid Search", "sessions": 7860, "transactions": 373, "revenue": 46616},
-      {"channel": "Unassigned", "sessions": 2736, "transactions": 190, "revenue": 26456},
-      {"channel": "Organic Social", "sessions": 1176, "transactions": 30, "revenue": 3878},
-      {"channel": "Organic Shopping", "sessions": 457, "transactions": 28, "revenue": 4574},
-      {"channel": "Paid Shopping", "sessions": 238, "transactions": 1, "revenue": 199},
-      {"channel": "Referral", "sessions": 216, "transactions": 7, "revenue": 273},
-      {"channel": "Paid Other", "sessions": 85, "transactions": 6, "revenue": 1191},
-      {"channel": "AI Assistant", "sessions": 27, "transactions": 1, "revenue": 82},
-      {"channel": "Organic Video", "sessions": 22, "transactions": 0, "revenue": 0},
-      {"channel": "Email", "sessions": 4, "transactions": 0, "revenue": 0},
-      {"channel": "SMS", "sessions": 2, "transactions": 0, "revenue": 0}
-    ],
-    "landing": [
-      {"page": "/collections/sklep", "sessions": 17699, "bounceRate": 0.174, "transactions": 356, "revenue": 53258},
-      {"page": "(not set)", "sessions": 11709, "bounceRate": 0.648, "transactions": 435, "revenue": 58106},
-      {"page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty", "sessions": 4820, "bounceRate": 0.435, "transactions": 42, "revenue": 7121},
-      {"page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka", "sessions": 4145, "bounceRate": 0.423, "transactions": 210, "revenue": 16464},
-      {"page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye", "sessions": 3714, "bounceRate": 0.487, "transactions": 83, "revenue": 21112},
-      {"page": "/", "sessions": 2998, "bounceRate": 0.326, "transactions": 132, "revenue": 29055},
-      {"page": "/products/depilator-z-nano-szkla-glov", "sessions": 1569, "bounceRate": 0.363, "transactions": 27, "revenue": 1928},
-      {"page": "/products/rekawica-do-peelingu-i-mycia-ciala-glov-skin-smoothing", "sessions": 1416, "bounceRate": 0.481, "transactions": 49, "revenue": 5041},
-      {"page": "/collections/rekawice-do-demakijazu", "sessions": 1181, "bounceRate": 0.284, "transactions": 41, "revenue": 4700},
-      {"page": "/collections/produkty-do-pielegnacji-ciala/products/depilator-...", "sessions": 1015, "bounceRate": 0.446, "transactions": 28, "revenue": 2805},
-      {"page": "/products/klips-unoszacy-wlosy-u-nasady-zero-gravity", "sessions": 1014, "bounceRate": 0.393, "transactions": 9, "revenue": 540},
-      {"page": "/collections/sklep/products/platki-led-...", "sessions": 860, "bounceRate": 0.600, "transactions": 9, "revenue": 2027},
-      {"page": "/collections/produkty-do-pielegnacji-wlosow/products/klips-...", "sessions": 843, "bounceRate": 0.486, "transactions": 36, "revenue": 2165},
-      {"page": "/products/platki-led-luna-eye-z-etui-...", "sessions": 660, "bounceRate": 0.471, "transactions": 12, "revenue": 4214},
-      {"page": "/collections/produkty-do-pielegnacji-wlosow", "sessions": 621, "bounceRate": 0.262, "transactions": 14, "revenue": 1976}
-    ],
-    "products": [
-      {"name": "Tarka-pumeks nano szkla GLOV", "viewed": 6164, "atc": 2286, "purchased": 757, "revenue": 27211},
-      {"name": "Platki LED LUNA EYE pielegnacyjne", "viewed": 8977, "atc": 1844, "purchased": 345, "revenue": 78309},
-      {"name": "Depilator nano szkla GLOV", "viewed": 3732, "atc": 866, "purchased": 291, "revenue": 9962},
-      {"name": "Rekawica do peelingu GLOV", "viewed": 1860, "atc": 640, "purchased": 177, "revenue": 7340},
-      {"name": "Free gift Mango Sponge Set Mini", "viewed": 212, "atc": 290, "purchased": 148, "revenue": 0},
-      {"name": "Silikonowe platki Infinity Eye Patches", "viewed": 1138, "atc": 689, "purchased": 144, "revenue": 4366},
-      {"name": "Mydlo Magnet Cleanser", "viewed": 327, "atc": 404, "purchased": 143, "revenue": 3576},
-      {"name": "Biodegradowalna szczotka Biobased Brush", "viewed": 813, "atc": 396, "purchased": 133, "revenue": 4416},
-      {"name": "Klips ZERO GRAVITY", "viewed": 2240, "atc": 380, "purchased": 113, "revenue": 2478},
-      {"name": "Rekawiczka do demakijazu GLOV", "viewed": 880, "atc": 368, "purchased": 88, "revenue": 2737},
-      {"name": "Naklejki LED zestaw 15szt", "viewed": 346, "atc": 518, "purchased": 87, "revenue": 1026},
-      {"name": "Free gift Satynowa maska do spania", "viewed": 84, "atc": 173, "purchased": 86, "revenue": 0},
-      {"name": "Pumeks Cheetah Edition", "viewed": 957, "atc": 288, "purchased": 82, "revenue": 2713},
-      {"name": "Free Gift Quick Treat", "viewed": 170, "atc": 168, "purchased": 77, "revenue": 0},
-      {"name": "Sleeping Beauty Panterka", "viewed": 5696, "atc": 315, "purchased": 76, "revenue": 12346}
-    ],
-    "newret": [
-      {"segment": "new", "sessions": 52063, "transactions": 1178, "revenue": 161871},
-      {"segment": "returning", "sessions": 12181, "transactions": 532, "revenue": 78832},
-      {"segment": "(not set)", "sessions": 4321, "transactions": 118, "revenue": 13609},
-      {"segment": "", "sessions": 323, "transactions": 1, "revenue": 119}
-    ],
-    "dayofweek": [
-      {"day": "0_Sun", "sessions": 11704, "transactions": 248, "revenue": 39479},
-      {"day": "1_Mon", "sessions": 10025, "transactions": 272, "revenue": 36399},
-      {"day": "2_Tue", "sessions": 10227, "transactions": 303, "revenue": 38744},
-      {"day": "3_Wed", "sessions": 9830, "transactions": 291, "revenue": 37210},
-      {"day": "4_Thu", "sessions": 9649, "transactions": 249, "revenue": 34855},
-      {"day": "5_Fri", "sessions": 9002, "transactions": 240, "revenue": 34068},
-      {"day": "6_Sat", "sessions": 8499, "transactions": 226, "revenue": 33678}
-    ],
-    "funnel": {
-      "session_start": 51670,
-      "view_item": 30065,
-      "add_to_cart": 6437,
-      "begin_checkout": 3362,
-      "purchase": 1755,
-      "vi_to_ss_pct": 58.2,
-      "atc_to_vi_pct": 21.4,
-      "checkout_to_atc_pct": 52.2,
-      "purchase_to_checkout_pct": 52.2
-    },
-    "cities": [
-      {"city": "Warsaw", "sessions": 23591, "transactions": 551, "revenue": 77764},
-      {"city": "Wroclaw", "sessions": 6304, "transactions": 114, "revenue": 16287},
-      {"city": "Krakow", "sessions": 4190, "transactions": 139, "revenue": 16577},
-      {"city": "Poznan", "sessions": 3571, "transactions": 71, "revenue": 8204},
-      {"city": "Gdansk", "sessions": 2510, "transactions": 74, "revenue": 10078},
-      {"city": "Lodz", "sessions": 2377, "transactions": 73, "revenue": 10310},
-      {"city": "Bydgoszcz", "sessions": 2137, "transactions": 47, "revenue": 6775},
-      {"city": "(not set)", "sessions": 1989, "transactions": 54, "revenue": 6945},
-      {"city": "Katowice", "sessions": 1870, "transactions": 59, "revenue": 8752},
-      {"city": "Pruszkow", "sessions": 1301, "transactions": 5, "revenue": 975}
-    ],
-    "hour": [
-      {"h": 0, "sessions": 1517, "transactions": 21},
-      {"h": 1, "sessions": 834, "transactions": 13},
-      {"h": 2, "sessions": 465, "transactions": 9},
-      {"h": 3, "sessions": 399, "transactions": 3},
-      {"h": 4, "sessions": 549, "transactions": 7},
-      {"h": 5, "sessions": 962, "transactions": 8},
-      {"h": 6, "sessions": 1882, "transactions": 39},
-      {"h": 7, "sessions": 2873, "transactions": 64},
-      {"h": 8, "sessions": 3968, "transactions": 109},
-      {"h": 9, "sessions": 4514, "transactions": 120},
-      {"h": 10, "sessions": 4426, "transactions": 128},
-      {"h": 11, "sessions": 4289, "transactions": 130},
-      {"h": 12, "sessions": 4070, "transactions": 120},
-      {"h": 13, "sessions": 4106, "transactions": 117},
-      {"h": 14, "sessions": 3779, "transactions": 110},
-      {"h": 15, "sessions": 3472, "transactions": 87},
-      {"h": 16, "sessions": 3274, "transactions": 64},
-      {"h": 17, "sessions": 3407, "transactions": 80},
-      {"h": 18, "sessions": 3602, "transactions": 84},
-      {"h": 19, "sessions": 3525, "transactions": 97},
-      {"h": 20, "sessions": 4060, "transactions": 107},
-      {"h": 21, "sessions": 4755, "transactions": 108},
-      {"h": 22, "sessions": 4491, "transactions": 125},
-      {"h": 23, "sessions": 2703, "transactions": 79}
-    ]
+ "meta": {
+  "property_id": "342844459",
+  "filter": "country=Poland",
+  "generated": "2026-06-22",
+  "currency": "PLN",
+  "periods": {
+   "jan": "2026-01-01..2026-01-31",
+   "feb": "2026-02-01..2026-02-28",
+   "mar": "2026-03-01..2026-03-31",
+   "apr": "2026-04-01..2026-04-30",
+   "may": "2026-05-01..2026-05-31",
+   "jun": "2026-06-01..2026-06-15",
+   "d90": "90daysAgo..today (2026-03-24..2026-06-22)"
   }
+ },
+ "jan": {
+  "kpi": {
+   "sessions": 28253,
+   "totalRevenue": 82557,
+   "transactions": 486,
+   "bounceRate": 0.402,
+   "addToCarts": 3688,
+   "checkouts": 978,
+   "avgSessionDuration_s": 313
+  },
+  "devices": [
+   {
+    "device": "mobile",
+    "sessions": 24597,
+    "transactions": 378,
+    "revenue": 63483
+   },
+   {
+    "device": "desktop",
+    "sessions": 3366,
+    "transactions": 105,
+    "revenue": 18712
+   },
+   {
+    "device": "tablet",
+    "sessions": 241,
+    "transactions": 3,
+    "revenue": 362
+   }
+  ],
+  "channels": [
+   {
+    "channel": "Paid Social",
+    "sessions": 14373,
+    "transactions": 112,
+    "revenue": 24226
+   },
+   {
+    "channel": "Cross-network",
+    "sessions": 4471,
+    "transactions": 85,
+    "revenue": 14738
+   },
+   {
+    "channel": "Organic Search",
+    "sessions": 3502,
+    "transactions": 60,
+    "revenue": 9135
+   },
+   {
+    "channel": "Paid Search",
+    "sessions": 3146,
+    "transactions": 119,
+    "revenue": 16890
+   },
+   {
+    "channel": "Direct",
+    "sessions": 1481,
+    "transactions": 34,
+    "revenue": 6484
+   },
+   {
+    "channel": "Unassigned",
+    "sessions": 892,
+    "transactions": 54,
+    "revenue": 6285
+   },
+   {
+    "channel": "Organic Social",
+    "sessions": 663,
+    "transactions": 17,
+    "revenue": 3422
+   },
+   {
+    "channel": "Referral",
+    "sessions": 72,
+    "transactions": 5,
+    "revenue": 1377
+   },
+   {
+    "channel": "Organic Shopping",
+    "sessions": 69,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Paid Other",
+    "sessions": 56,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "SMS",
+    "sessions": 9,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Email",
+    "sessions": 1,
+    "transactions": 0,
+    "revenue": 0
+   }
+  ],
+  "landing": [
+   {
+    "page": "/collections/coolnails",
+    "sessions": 4047,
+    "bounceRate": 0.191,
+    "transactions": 3,
+    "revenue": 390
+   },
+   {
+    "page": "/collections/sklep",
+    "sessions": 3926,
+    "bounceRate": 0.165,
+    "transactions": 95,
+    "revenue": 17077
+   },
+   {
+    "page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye",
+    "sessions": 3899,
+    "bounceRate": 0.478,
+    "transactions": 49,
+    "revenue": 14629
+   },
+   {
+    "page": "(not set)",
+    "sessions": 2617,
+    "bounceRate": 0.82,
+    "transactions": 59,
+    "revenue": 6123
+   },
+   {
+    "page": "/",
+    "sessions": 1994,
+    "bounceRate": 0.351,
+    "transactions": 58,
+    "revenue": 9690
+   },
+   {
+    "page": "/products/kuracja-punktowa-led-na-tradzik-supernova-glov",
+    "sessions": 1977,
+    "bounceRate": 0.674,
+    "transactions": 9,
+    "revenue": 2648
+   },
+   {
+    "page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty",
+    "sessions": 1024,
+    "bounceRate": 0.447,
+    "transactions": 5,
+    "revenue": 1473
+   },
+   {
+    "page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka",
+    "sessions": 743,
+    "bounceRate": 0.412,
+    "transactions": 34,
+    "revenue": 3531
+   },
+   {
+    "page": "/collections/rekawice-do-demakijazu",
+    "sessions": 546,
+    "bounceRate": 0.24,
+    "transactions": 19,
+    "revenue": 2671
+   },
+   {
+    "page": "/products/przyssawkowy-podnozek-prysznicowy-sole-mate",
+    "sessions": 348,
+    "bounceRate": 0.457,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "page": "/products/overnight-blowout-set-zestaw-do-stylizacji-wlosow-na-zimno",
+    "sessions": 313,
+    "bounceRate": 0.524,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "page": "/collections/produkty-do-pielegnacji-twarzy",
+    "sessions": 245,
+    "bounceRate": 0.314,
+    "transactions": 3,
+    "revenue": 415
+   },
+   {
+    "page": "/products/luksusowy-zestaw-dream-on-gorgeous-glov",
+    "sessions": 212,
+    "bounceRate": 0.613,
+    "transactions": 1,
+    "revenue": 152
+   },
+   {
+    "page": "/collections/glov-led-therapy",
+    "sessions": 194,
+    "bounceRate": 0.423,
+    "transactions": 4,
+    "revenue": 1255
+   },
+   {
+    "page": "/products/luksusowy-zestaw-glov-the-lazy-luxe-duo",
+    "sessions": 184,
+    "bounceRate": 0.489,
+    "transactions": 3,
+    "revenue": 333
+   }
+  ],
+  "products": [
+   {
+    "name": "Platki LED LUNA EYE",
+    "viewed": 5577,
+    "atc": 474,
+    "purchased": 137,
+    "revenue": 34131
+   },
+   {
+    "name": "Tarka-pumeks nano szkla GLOV",
+    "viewed": 1144,
+    "atc": 263,
+    "purchased": 91,
+    "revenue": 3969
+   },
+   {
+    "name": "Biodegradowalna szczotka Biobased Brush",
+    "viewed": 382,
+    "atc": 131,
+    "purchased": 57,
+    "revenue": 1945
+   },
+   {
+    "name": "Free gift Mango Sponge Set Mini",
+    "viewed": 85,
+    "atc": 79,
+    "purchased": 40,
+    "revenue": 0
+   },
+   {
+    "name": "Mydlo Magnet Cleanser",
+    "viewed": 111,
+    "atc": 89,
+    "purchased": 38,
+    "revenue": 956
+   },
+   {
+    "name": "Free gift Satynowa maska do spania",
+    "viewed": 29,
+    "atc": 62,
+    "purchased": 36,
+    "revenue": 0
+   },
+   {
+    "name": "Free Gift Quick Treat",
+    "viewed": 60,
+    "atc": 66,
+    "purchased": 31,
+    "revenue": 0
+   },
+   {
+    "name": "Rekawiczka do demakijazu GLOV",
+    "viewed": 637,
+    "atc": 163,
+    "purchased": 27,
+    "revenue": 880
+   },
+   {
+    "name": "Rekawica do peelingu GLOV",
+    "viewed": 252,
+    "atc": 69,
+    "purchased": 27,
+    "revenue": 1123
+   },
+   {
+    "name": "WIELOPAK 3 szt Rekawiczka GLOV",
+    "viewed": 66,
+    "atc": 41,
+    "purchased": 25,
+    "revenue": 1694
+   },
+   {
+    "name": "Gabeczka MakeUp Sponge",
+    "viewed": 56,
+    "atc": 57,
+    "purchased": 25,
+    "revenue": 323
+   },
+   {
+    "name": "Silikonowy pad FACE WASH",
+    "viewed": 128,
+    "atc": 49,
+    "purchased": 20,
+    "revenue": 274
+   },
+   {
+    "name": "Klasyczny lakier Coolnails Classic Nail Polish Pen",
+    "viewed": 1358,
+    "atc": 85,
+    "purchased": 18,
+    "revenue": 597
+   },
+   {
+    "name": "Pumeks Cheetah Edition",
+    "viewed": 169,
+    "atc": 45,
+    "purchased": 18,
+    "revenue": 781
+   },
+   {
+    "name": "Silikonowe platki Infinity Eye Patches",
+    "viewed": 343,
+    "atc": 67,
+    "purchased": 17,
+    "revenue": 587
+   }
+  ],
+  "newret": [
+   {
+    "segment": "new",
+    "sessions": 20611,
+    "transactions": 272,
+    "revenue": 43462
+   },
+   {
+    "segment": "returning",
+    "sessions": 5833,
+    "transactions": 214,
+    "revenue": 39096
+   },
+   {
+    "segment": "(not set)",
+    "sessions": 2210,
+    "transactions": 0,
+    "revenue": 0
+   }
+  ],
+  "dayofweek": [
+   {
+    "day": "0_Sun",
+    "sessions": 4028,
+    "transactions": 67,
+    "revenue": 11177
+   },
+   {
+    "day": "1_Mon",
+    "sessions": 3680,
+    "transactions": 95,
+    "revenue": 15599
+   },
+   {
+    "day": "2_Tue",
+    "sessions": 3799,
+    "transactions": 62,
+    "revenue": 9004
+   },
+   {
+    "day": "3_Wed",
+    "sessions": 3483,
+    "transactions": 66,
+    "revenue": 12148
+   },
+   {
+    "day": "4_Thu",
+    "sessions": 4963,
+    "transactions": 70,
+    "revenue": 11824
+   },
+   {
+    "day": "5_Fri",
+    "sessions": 4415,
+    "transactions": 64,
+    "revenue": 12628
+   },
+   {
+    "day": "6_Sat",
+    "sessions": 4376,
+    "transactions": 62,
+    "revenue": 10178
+   }
+  ],
+  "funnel": {
+   "session_start": 21571,
+   "view_item": 14589,
+   "add_to_cart": 1521,
+   "begin_checkout": 747,
+   "purchase": 456,
+   "vi_to_ss_pct": 67.6,
+   "atc_to_vi_pct": 10.4,
+   "checkout_to_atc_pct": 49.1,
+   "purchase_to_checkout_pct": 61.0
+  },
+  "cities": [
+   {
+    "city": "Warsaw",
+    "sessions": 7991,
+    "transactions": 137,
+    "revenue": 24470
+   },
+   {
+    "city": "Wroclaw",
+    "sessions": 2857,
+    "transactions": 36,
+    "revenue": 5160
+   },
+   {
+    "city": "Poznan",
+    "sessions": 1556,
+    "transactions": 15,
+    "revenue": 2702
+   },
+   {
+    "city": "Krakow",
+    "sessions": 1485,
+    "transactions": 29,
+    "revenue": 4555
+   },
+   {
+    "city": "Katowice",
+    "sessions": 1153,
+    "transactions": 21,
+    "revenue": 3333
+   },
+   {
+    "city": "Gdansk",
+    "sessions": 1152,
+    "transactions": 24,
+    "revenue": 3704
+   },
+   {
+    "city": "(not set)",
+    "sessions": 1086,
+    "transactions": 19,
+    "revenue": 4792
+   },
+   {
+    "city": "Lodz",
+    "sessions": 974,
+    "transactions": 21,
+    "revenue": 3508
+   },
+   {
+    "city": "Bydgoszcz",
+    "sessions": 909,
+    "transactions": 3,
+    "revenue": 406
+   },
+   {
+    "city": "Pruszkow",
+    "sessions": 671,
+    "transactions": 2,
+    "revenue": 410
+   }
+  ],
+  "hour": [
+   {
+    "h": 0,
+    "sessions": 757,
+    "transactions": 13
+   },
+   {
+    "h": 1,
+    "sessions": 361,
+    "transactions": 3
+   },
+   {
+    "h": 2,
+    "sessions": 200,
+    "transactions": 3
+   },
+   {
+    "h": 3,
+    "sessions": 116,
+    "transactions": 3
+   },
+   {
+    "h": 4,
+    "sessions": 122,
+    "transactions": 0
+   },
+   {
+    "h": 5,
+    "sessions": 204,
+    "transactions": 2
+   },
+   {
+    "h": 6,
+    "sessions": 440,
+    "transactions": 4
+   },
+   {
+    "h": 7,
+    "sessions": 756,
+    "transactions": 11
+   },
+   {
+    "h": 8,
+    "sessions": 1257,
+    "transactions": 20
+   },
+   {
+    "h": 9,
+    "sessions": 1585,
+    "transactions": 25
+   },
+   {
+    "h": 10,
+    "sessions": 1706,
+    "transactions": 34
+   },
+   {
+    "h": 11,
+    "sessions": 1800,
+    "transactions": 34
+   },
+   {
+    "h": 12,
+    "sessions": 1729,
+    "transactions": 23
+   },
+   {
+    "h": 13,
+    "sessions": 1646,
+    "transactions": 29
+   },
+   {
+    "h": 14,
+    "sessions": 1613,
+    "transactions": 37
+   },
+   {
+    "h": 15,
+    "sessions": 1455,
+    "transactions": 29
+   },
+   {
+    "h": 16,
+    "sessions": 1545,
+    "transactions": 19
+   },
+   {
+    "h": 17,
+    "sessions": 1491,
+    "transactions": 27
+   },
+   {
+    "h": 18,
+    "sessions": 1580,
+    "transactions": 31
+   },
+   {
+    "h": 19,
+    "sessions": 1753,
+    "transactions": 30
+   },
+   {
+    "h": 20,
+    "sessions": 2051,
+    "transactions": 31
+   },
+   {
+    "h": 21,
+    "sessions": 2289,
+    "transactions": 37
+   },
+   {
+    "h": 22,
+    "sessions": 1926,
+    "transactions": 23
+   },
+   {
+    "h": 23,
+    "sessions": 1449,
+    "transactions": 18
+   }
+  ]
+ },
+ "feb": {
+  "kpi": {
+   "sessions": 27989,
+   "totalRevenue": 68823,
+   "transactions": 424,
+   "bounceRate": 0.446,
+   "addToCarts": 3233,
+   "checkouts": 815,
+   "avgSessionDuration_s": 246
+  },
+  "devices": [
+   {
+    "device": "mobile",
+    "sessions": 23596,
+    "transactions": 335,
+    "revenue": 53169
+   },
+   {
+    "device": "desktop",
+    "sessions": 3962,
+    "transactions": 85,
+    "revenue": 15050
+   },
+   {
+    "device": "tablet",
+    "sessions": 185,
+    "transactions": 4,
+    "revenue": 604
+   }
+  ],
+  "channels": [
+   {
+    "channel": "Paid Social",
+    "sessions": 11719,
+    "transactions": 89,
+    "revenue": 19210
+   },
+   {
+    "channel": "Organic Search",
+    "sessions": 5269,
+    "transactions": 68,
+    "revenue": 11798
+   },
+   {
+    "channel": "Cross-network",
+    "sessions": 3999,
+    "transactions": 79,
+    "revenue": 12298
+   },
+   {
+    "channel": "Paid Search",
+    "sessions": 2146,
+    "transactions": 98,
+    "revenue": 12500
+   },
+   {
+    "channel": "Direct",
+    "sessions": 2065,
+    "transactions": 39,
+    "revenue": 5809
+   },
+   {
+    "channel": "Unassigned",
+    "sessions": 673,
+    "transactions": 37,
+    "revenue": 4668
+   },
+   {
+    "channel": "Organic Social",
+    "sessions": 615,
+    "transactions": 9,
+    "revenue": 1680
+   },
+   {
+    "channel": "Referral",
+    "sessions": 70,
+    "transactions": 3,
+    "revenue": 342
+   },
+   {
+    "channel": "Organic Shopping",
+    "sessions": 62,
+    "transactions": 2,
+    "revenue": 518
+   },
+   {
+    "channel": "Paid Other",
+    "sessions": 28,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Email",
+    "sessions": 12,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Organic Video",
+    "sessions": 11,
+    "transactions": 0,
+    "revenue": 0
+   }
+  ],
+  "landing": [
+   {
+    "page": "/collections/sklep",
+    "sessions": 4606,
+    "bounceRate": 0.178,
+    "transactions": 85,
+    "revenue": 13229
+   },
+   {
+    "page": "/pages/rutyna-coolnails",
+    "sessions": 2772,
+    "bounceRate": 0.443,
+    "transactions": 2,
+    "revenue": 192
+   },
+   {
+    "page": "(not set)",
+    "sessions": 2535,
+    "bounceRate": 0.838,
+    "transactions": 51,
+    "revenue": 6840
+   },
+   {
+    "page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty",
+    "sessions": 1873,
+    "bounceRate": 0.427,
+    "transactions": 16,
+    "revenue": 3899
+   },
+   {
+    "page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye",
+    "sessions": 1813,
+    "bounceRate": 0.561,
+    "transactions": 13,
+    "revenue": 4532
+   },
+   {
+    "page": "/",
+    "sessions": 1338,
+    "bounceRate": 0.317,
+    "transactions": 40,
+    "revenue": 8296
+   },
+   {
+    "page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka",
+    "sessions": 804,
+    "bounceRate": 0.422,
+    "transactions": 27,
+    "revenue": 2338
+   },
+   {
+    "page": "/products/kuracja-punktowa-led-na-tradzik-supernova-glov",
+    "sessions": 682,
+    "bounceRate": 0.636,
+    "transactions": 2,
+    "revenue": 303
+   },
+   {
+    "page": "/collections/glov-led-therapy",
+    "sessions": 625,
+    "bounceRate": 0.349,
+    "transactions": 12,
+    "revenue": 4170
+   },
+   {
+    "page": "/collections/coolnails",
+    "sessions": 517,
+    "bounceRate": 0.222,
+    "transactions": 2,
+    "revenue": 461
+   },
+   {
+    "page": "/products/platki-led-luna-eye-z-etui-ladujacym-dla-rozswietlonej-i-odswiezonej-okolicy-oczu",
+    "sessions": 515,
+    "bounceRate": 0.386,
+    "transactions": 16,
+    "revenue": 6012
+   },
+   {
+    "page": "/products/utwardzacz-do-paznokci-w-formie-pisaka-coolnails-marshmallow-nail-hardener-pen",
+    "sessions": 441,
+    "bounceRate": 0.29,
+    "transactions": 5,
+    "revenue": 310
+   },
+   {
+    "page": "/collections/rekawice-do-demakijazu",
+    "sessions": 397,
+    "bounceRate": 0.295,
+    "transactions": 12,
+    "revenue": 1517
+   },
+   {
+    "page": "/pages/iconic-mitt-glov-wielopaki",
+    "sessions": 389,
+    "bounceRate": 0.463,
+    "transactions": 10,
+    "revenue": 1152
+   },
+   {
+    "page": "/products/klips-unoszacy-wlosy-u-nasady-zero-gravity",
+    "sessions": 345,
+    "bounceRate": 0.383,
+    "transactions": 5,
+    "revenue": 454
+   }
+  ],
+  "products": [
+   {
+    "name": "Tarka-pumeks nano szkla GLOV",
+    "viewed": 1197,
+    "atc": 277,
+    "purchased": 83,
+    "revenue": 3675
+   },
+   {
+    "name": "Biodegradowalna szczotka Biobased Brush",
+    "viewed": 358,
+    "atc": 120,
+    "purchased": 41,
+    "revenue": 1406
+   },
+   {
+    "name": "Rekawiczka do demakijazu GLOV",
+    "viewed": 606,
+    "atc": 160,
+    "purchased": 39,
+    "revenue": 1261
+   },
+   {
+    "name": "Mydlo Magnet Cleanser",
+    "viewed": 127,
+    "atc": 91,
+    "purchased": 37,
+    "revenue": 928
+   },
+   {
+    "name": "Rekawica do peelingu GLOV",
+    "viewed": 241,
+    "atc": 97,
+    "purchased": 34,
+    "revenue": 1333
+   },
+   {
+    "name": "PRZEDSPRZEDAZ! Platki LED LUNA EYE z etui",
+    "viewed": 861,
+    "atc": 123,
+    "purchased": 33,
+    "revenue": 10361
+   },
+   {
+    "name": "Free gift Mango Sponge Set Mini",
+    "viewed": 62,
+    "atc": 59,
+    "purchased": 31,
+    "revenue": 0
+   },
+   {
+    "name": "Free Gift Quick Treat",
+    "viewed": 54,
+    "atc": 55,
+    "purchased": 30,
+    "revenue": 0
+   },
+   {
+    "name": "Platki LED LUNA EYE z etui ladujacym",
+    "viewed": 701,
+    "atc": 114,
+    "purchased": 28,
+    "revenue": 10574
+   },
+   {
+    "name": "Silikonowe platki Infinity Eye Patches",
+    "viewed": 355,
+    "atc": 71,
+    "purchased": 27,
+    "revenue": 902
+   },
+   {
+    "name": "Sleeping Beauty Panterka",
+    "viewed": 2294,
+    "atc": 102,
+    "purchased": 26,
+    "revenue": 5640
+   },
+   {
+    "name": "Dysk FOAM SCULPT PAD",
+    "viewed": 179,
+    "atc": 58,
+    "purchased": 26,
+    "revenue": 726
+   },
+   {
+    "name": "Gabeczka MakeUp Sponge",
+    "viewed": 66,
+    "atc": 56,
+    "purchased": 25,
+    "revenue": 304
+   },
+   {
+    "name": "Depilator nano szkla GLOV",
+    "viewed": 492,
+    "atc": 81,
+    "purchased": 21,
+    "revenue": 850
+   },
+   {
+    "name": "Free gift Satynowa maska do spania",
+    "viewed": 22,
+    "atc": 45,
+    "purchased": 21,
+    "revenue": 0
+   }
+  ],
+  "newret": [
+   {
+    "segment": "new",
+    "sessions": 20510,
+    "transactions": 260,
+    "revenue": 39194
+   },
+   {
+    "segment": "returning",
+    "sessions": 5200,
+    "transactions": 164,
+    "revenue": 29629
+   },
+   {
+    "segment": "(not set)",
+    "sessions": 1771,
+    "transactions": 0,
+    "revenue": 0
+   }
+  ],
+  "dayofweek": [
+   {
+    "day": "0_Sun",
+    "sessions": 4998,
+    "transactions": 77,
+    "revenue": 12835
+   },
+   {
+    "day": "1_Mon",
+    "sessions": 3894,
+    "transactions": 53,
+    "revenue": 9379
+   },
+   {
+    "day": "2_Tue",
+    "sessions": 3467,
+    "transactions": 60,
+    "revenue": 9870
+   },
+   {
+    "day": "3_Wed",
+    "sessions": 3449,
+    "transactions": 64,
+    "revenue": 8589
+   },
+   {
+    "day": "4_Thu",
+    "sessions": 3473,
+    "transactions": 47,
+    "revenue": 7869
+   },
+   {
+    "day": "5_Fri",
+    "sessions": 3604,
+    "transactions": 57,
+    "revenue": 10576
+   },
+   {
+    "day": "6_Sat",
+    "sessions": 3856,
+    "transactions": 66,
+    "revenue": 9704
+   }
+  ],
+  "funnel": {
+   "session_start": 20761,
+   "view_item": 12151,
+   "add_to_cart": 1310,
+   "begin_checkout": 661,
+   "purchase": 414,
+   "vi_to_ss_pct": 58.5,
+   "atc_to_vi_pct": 10.8,
+   "checkout_to_atc_pct": 50.5,
+   "purchase_to_checkout_pct": 62.6
+  },
+  "cities": [
+   {
+    "city": "Warsaw",
+    "sessions": 7912,
+    "transactions": 127,
+    "revenue": 21061
+   },
+   {
+    "city": "Wroclaw",
+    "sessions": 2636,
+    "transactions": 34,
+    "revenue": 5243
+   },
+   {
+    "city": "Poznan",
+    "sessions": 1598,
+    "transactions": 21,
+    "revenue": 3330
+   },
+   {
+    "city": "Krakow",
+    "sessions": 1319,
+    "transactions": 23,
+    "revenue": 3675
+   },
+   {
+    "city": "Katowice",
+    "sessions": 1181,
+    "transactions": 20,
+    "revenue": 3438
+   },
+   {
+    "city": "Gdansk",
+    "sessions": 998,
+    "transactions": 21,
+    "revenue": 3070
+   },
+   {
+    "city": "(not set)",
+    "sessions": 963,
+    "transactions": 21,
+    "revenue": 4077
+   },
+   {
+    "city": "Lodz",
+    "sessions": 868,
+    "transactions": 14,
+    "revenue": 1972
+   },
+   {
+    "city": "Bydgoszcz",
+    "sessions": 754,
+    "transactions": 4,
+    "revenue": 578
+   },
+   {
+    "city": "Lublin",
+    "sessions": 606,
+    "transactions": 8,
+    "revenue": 1327
+   }
+  ],
+  "hour": [
+   {
+    "h": 0,
+    "sessions": 696,
+    "transactions": 16
+   },
+   {
+    "h": 1,
+    "sessions": 347,
+    "transactions": 3
+   },
+   {
+    "h": 2,
+    "sessions": 187,
+    "transactions": 1
+   },
+   {
+    "h": 3,
+    "sessions": 136,
+    "transactions": 1
+   },
+   {
+    "h": 4,
+    "sessions": 126,
+    "transactions": 0
+   },
+   {
+    "h": 5,
+    "sessions": 230,
+    "transactions": 3
+   },
+   {
+    "h": 6,
+    "sessions": 423,
+    "transactions": 3
+   },
+   {
+    "h": 7,
+    "sessions": 931,
+    "transactions": 6
+   },
+   {
+    "h": 8,
+    "sessions": 1370,
+    "transactions": 25
+   },
+   {
+    "h": 9,
+    "sessions": 1493,
+    "transactions": 23
+   },
+   {
+    "h": 10,
+    "sessions": 1622,
+    "transactions": 28
+   },
+   {
+    "h": 11,
+    "sessions": 1549,
+    "transactions": 27
+   },
+   {
+    "h": 12,
+    "sessions": 1475,
+    "transactions": 28
+   },
+   {
+    "h": 13,
+    "sessions": 1396,
+    "transactions": 24
+   },
+   {
+    "h": 14,
+    "sessions": 1397,
+    "transactions": 18
+   },
+   {
+    "h": 15,
+    "sessions": 1325,
+    "transactions": 21
+   },
+   {
+    "h": 16,
+    "sessions": 1365,
+    "transactions": 13
+   },
+   {
+    "h": 17,
+    "sessions": 1429,
+    "transactions": 20
+   },
+   {
+    "h": 18,
+    "sessions": 1523,
+    "transactions": 17
+   },
+   {
+    "h": 19,
+    "sessions": 1620,
+    "transactions": 19
+   },
+   {
+    "h": 20,
+    "sessions": 1891,
+    "transactions": 35
+   },
+   {
+    "h": 21,
+    "sessions": 2123,
+    "transactions": 41
+   },
+   {
+    "h": 22,
+    "sessions": 1887,
+    "transactions": 30
+   },
+   {
+    "h": 23,
+    "sessions": 1162,
+    "transactions": 22
+   }
+  ]
+ },
+ "mar": {
+  "kpi": {
+   "sessions": 18548,
+   "totalRevenue": 70387,
+   "transactions": 495,
+   "bounceRate": 0.436,
+   "addToCarts": 3435,
+   "checkouts": 943,
+   "avgSessionDuration_s": 287
+  },
+  "devices": [
+   {
+    "device": "mobile",
+    "sessions": 14920,
+    "transactions": 372,
+    "revenue": 51356
+   },
+   {
+    "device": "desktop",
+    "sessions": 3436,
+    "transactions": 119,
+    "revenue": 18435
+   },
+   {
+    "device": "tablet",
+    "sessions": 172,
+    "transactions": 4,
+    "revenue": 596
+   }
+  ],
+  "channels": [
+   {
+    "channel": "Paid Social",
+    "sessions": 5640,
+    "transactions": 50,
+    "revenue": 7407
+   },
+   {
+    "channel": "Organic Search",
+    "sessions": 3866,
+    "transactions": 58,
+    "revenue": 7566
+   },
+   {
+    "channel": "Cross-network",
+    "sessions": 3191,
+    "transactions": 91,
+    "revenue": 16738
+   },
+   {
+    "channel": "Paid Search",
+    "sessions": 2434,
+    "transactions": 140,
+    "revenue": 20948
+   },
+   {
+    "channel": "Direct",
+    "sessions": 1629,
+    "transactions": 47,
+    "revenue": 6351
+   },
+   {
+    "channel": "Unassigned",
+    "sessions": 760,
+    "transactions": 74,
+    "revenue": 8720
+   },
+   {
+    "channel": "Organic Social",
+    "sessions": 711,
+    "transactions": 31,
+    "revenue": 2785
+   },
+   {
+    "channel": "Referral",
+    "sessions": 92,
+    "transactions": 4,
+    "revenue": -127
+   },
+   {
+    "channel": "Organic Shopping",
+    "sessions": 54,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Paid Other",
+    "sessions": 24,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Organic Video",
+    "sessions": 13,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Paid Shopping",
+    "sessions": 2,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Email",
+    "sessions": 1,
+    "transactions": 0,
+    "revenue": 0
+   }
+  ],
+  "landing": [
+   {
+    "page": "(not set)",
+    "sessions": 2164,
+    "bounceRate": 0.857,
+    "transactions": 83,
+    "revenue": 9133
+   },
+   {
+    "page": "/collections/sklep",
+    "sessions": 1938,
+    "bounceRate": 0.191,
+    "transactions": 98,
+    "revenue": 15664
+   },
+   {
+    "page": "/pages/rutyna-coolnails",
+    "sessions": 1688,
+    "bounceRate": 0.477,
+    "transactions": 2,
+    "revenue": 348
+   },
+   {
+    "page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty",
+    "sessions": 1432,
+    "bounceRate": 0.444,
+    "transactions": 7,
+    "revenue": 1943
+   },
+   {
+    "page": "/",
+    "sessions": 1295,
+    "bounceRate": 0.342,
+    "transactions": 60,
+    "revenue": 7952
+   },
+   {
+    "page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka",
+    "sessions": 1206,
+    "bounceRate": 0.454,
+    "transactions": 51,
+    "revenue": 4349
+   },
+   {
+    "page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye",
+    "sessions": 997,
+    "bounceRate": 0.622,
+    "transactions": 3,
+    "revenue": 796
+   },
+   {
+    "page": "/products/platki-led-luna-eye-z-etui-ladujacym-dla-rozswietlonej-i-odswiezonej-okolicy-oczu",
+    "sessions": 618,
+    "bounceRate": 0.361,
+    "transactions": 17,
+    "revenue": 5692
+   },
+   {
+    "page": "/products/klips-unoszacy-wlosy-u-nasady-zero-gravity",
+    "sessions": 501,
+    "bounceRate": 0.449,
+    "transactions": 8,
+    "revenue": 481
+   },
+   {
+    "page": "/collections/rekawice-do-demakijazu",
+    "sessions": 396,
+    "bounceRate": 0.265,
+    "transactions": 13,
+    "revenue": 1715
+   },
+   {
+    "page": "/products/depilator-z-nano-szkla-glov",
+    "sessions": 368,
+    "bounceRate": 0.378,
+    "transactions": 2,
+    "revenue": 210
+   },
+   {
+    "page": "/products/utwardzacz-do-paznokci-w-formie-pisaka-coolnails-marshmallow-nail-hardener-pen",
+    "sessions": 283,
+    "bounceRate": 0.367,
+    "transactions": 1,
+    "revenue": 67
+   },
+   {
+    "page": "/collections/rekawice-do-demakijazu/products/glov-on-the-go-all-skin-types",
+    "sessions": 246,
+    "bounceRate": 0.207,
+    "transactions": 7,
+    "revenue": 742
+   },
+   {
+    "page": "/collections/glov-led-therapy",
+    "sessions": 225,
+    "bounceRate": 0.329,
+    "transactions": 2,
+    "revenue": 808
+   },
+   {
+    "page": "/products/rekawica-do-mycia-twarzy-i-demakijazu-cery-mieszanej-glov-on-the-go",
+    "sessions": 203,
+    "bounceRate": 0.315,
+    "transactions": 12,
+    "revenue": 1175
+   }
+  ],
+  "products": [
+   {
+    "name": "Tarka-pumeks nano szkla GLOV",
+    "viewed": 1726,
+    "atc": 357,
+    "purchased": 151,
+    "revenue": 6559
+   },
+   {
+    "name": "Rekawiczka do demakijazu GLOV",
+    "viewed": 680,
+    "atc": 294,
+    "purchased": 71,
+    "revenue": 2418
+   },
+   {
+    "name": "Mydlo Magnet Cleanser",
+    "viewed": 98,
+    "atc": 115,
+    "purchased": 47,
+    "revenue": 1221
+   },
+   {
+    "name": "Dysk FOAM SCULPT PAD",
+    "viewed": 114,
+    "atc": 79,
+    "purchased": 46,
+    "revenue": 1375
+   },
+   {
+    "name": "Free gift Mango Sponge Set Mini",
+    "viewed": 61,
+    "atc": 78,
+    "purchased": 43,
+    "revenue": 0
+   },
+   {
+    "name": "Platki LED LUNA EYE z etui ladujacym",
+    "viewed": 978,
+    "atc": 95,
+    "purchased": 38,
+    "revenue": 14211
+   },
+   {
+    "name": "Biodegradowalna szczotka Biobased Brush",
+    "viewed": 225,
+    "atc": 99,
+    "purchased": 33,
+    "revenue": 1151
+   },
+   {
+    "name": "Free Gift Quick Treat",
+    "viewed": 42,
+    "atc": 65,
+    "purchased": 32,
+    "revenue": 0
+   },
+   {
+    "name": "Rekawica do peelingu GLOV",
+    "viewed": 154,
+    "atc": 71,
+    "purchased": 31,
+    "revenue": 1355
+   },
+   {
+    "name": "Klips ZERO GRAVITY",
+    "viewed": 603,
+    "atc": 71,
+    "purchased": 30,
+    "revenue": 641
+   },
+   {
+    "name": "Free gift Satynowa maska do spania",
+    "viewed": 24,
+    "atc": 43,
+    "purchased": 26,
+    "revenue": 0
+   },
+   {
+    "name": "WIELOPAK 2 szt Rekawiczka GLOV",
+    "viewed": 161,
+    "atc": 65,
+    "purchased": 25,
+    "revenue": 1054
+   },
+   {
+    "name": "Depilator nano szkla GLOV",
+    "viewed": 650,
+    "atc": 109,
+    "purchased": 24,
+    "revenue": 1025
+   },
+   {
+    "name": "Zestaw pumeks i depilator Bestsellers",
+    "viewed": 110,
+    "atc": 36,
+    "purchased": 24,
+    "revenue": 1530
+   },
+   {
+    "name": "Recznik do demakijazu GLOV",
+    "viewed": 715,
+    "atc": 52,
+    "purchased": 22,
+    "revenue": 1038
+   }
+  ],
+  "newret": [
+   {
+    "segment": "new",
+    "sessions": 14032,
+    "transactions": 344,
+    "revenue": 47606
+   },
+   {
+    "segment": "returning",
+    "sessions": 3488,
+    "transactions": 150,
+    "revenue": 22204
+   },
+   {
+    "segment": "(not set)",
+    "sessions": 1126,
+    "transactions": 1,
+    "revenue": 578
+   }
+  ],
+  "dayofweek": [
+   {
+    "day": "0_Sun",
+    "sessions": 3581,
+    "transactions": 106,
+    "revenue": 17705
+   },
+   {
+    "day": "1_Mon",
+    "sessions": 3021,
+    "transactions": 80,
+    "revenue": 11608
+   },
+   {
+    "day": "2_Tue",
+    "sessions": 2712,
+    "transactions": 73,
+    "revenue": 10155
+   },
+   {
+    "day": "3_Wed",
+    "sessions": 2578,
+    "transactions": 79,
+    "revenue": 10181
+   },
+   {
+    "day": "4_Thu",
+    "sessions": 2169,
+    "transactions": 51,
+    "revenue": 5919
+   },
+   {
+    "day": "5_Fri",
+    "sessions": 2238,
+    "transactions": 43,
+    "revenue": 4810
+   },
+   {
+    "day": "6_Sat",
+    "sessions": 2316,
+    "transactions": 63,
+    "revenue": 10010
+   }
+  ],
+  "funnel": {
+   "session_start": 14214,
+   "view_item": 8982,
+   "add_to_cart": 1349,
+   "begin_checkout": 752,
+   "purchase": 457,
+   "vi_to_ss_pct": 63.2,
+   "atc_to_vi_pct": 15.0,
+   "checkout_to_atc_pct": 55.7,
+   "purchase_to_checkout_pct": 60.8
+  },
+  "cities": [
+   {
+    "city": "Warsaw",
+    "sessions": 5708,
+    "transactions": 159,
+    "revenue": 22580
+   },
+   {
+    "city": "Wroclaw",
+    "sessions": 1825,
+    "transactions": 31,
+    "revenue": 4367
+   },
+   {
+    "city": "Krakow",
+    "sessions": 1052,
+    "transactions": 35,
+    "revenue": 5608
+   },
+   {
+    "city": "Poznan",
+    "sessions": 982,
+    "transactions": 27,
+    "revenue": 3540
+   },
+   {
+    "city": "Lodz",
+    "sessions": 738,
+    "transactions": 12,
+    "revenue": 1440
+   },
+   {
+    "city": "Gdansk",
+    "sessions": 736,
+    "transactions": 22,
+    "revenue": 3933
+   },
+   {
+    "city": "(not set)",
+    "sessions": 670,
+    "transactions": 24,
+    "revenue": 2531
+   },
+   {
+    "city": "Katowice",
+    "sessions": 653,
+    "transactions": 14,
+    "revenue": 1287
+   },
+   {
+    "city": "Bydgoszcz",
+    "sessions": 589,
+    "transactions": 12,
+    "revenue": 2437
+   },
+   {
+    "city": "Lublin",
+    "sessions": 374,
+    "transactions": 6,
+    "revenue": 704
+   }
+  ],
+  "hour": [
+   {
+    "h": 0,
+    "sessions": 445,
+    "transactions": 9
+   },
+   {
+    "h": 1,
+    "sessions": 214,
+    "transactions": 2
+   },
+   {
+    "h": 2,
+    "sessions": 122,
+    "transactions": 1
+   },
+   {
+    "h": 3,
+    "sessions": 121,
+    "transactions": 1
+   },
+   {
+    "h": 4,
+    "sessions": 135,
+    "transactions": 3
+   },
+   {
+    "h": 5,
+    "sessions": 180,
+    "transactions": 4
+   },
+   {
+    "h": 6,
+    "sessions": 407,
+    "transactions": 10
+   },
+   {
+    "h": 7,
+    "sessions": 619,
+    "transactions": 19
+   },
+   {
+    "h": 8,
+    "sessions": 981,
+    "transactions": 24
+   },
+   {
+    "h": 9,
+    "sessions": 1169,
+    "transactions": 36
+   },
+   {
+    "h": 10,
+    "sessions": 1050,
+    "transactions": 39
+   },
+   {
+    "h": 11,
+    "sessions": 1061,
+    "transactions": 27
+   },
+   {
+    "h": 12,
+    "sessions": 1012,
+    "transactions": 25
+   },
+   {
+    "h": 13,
+    "sessions": 999,
+    "transactions": 27
+   },
+   {
+    "h": 14,
+    "sessions": 980,
+    "transactions": 22
+   },
+   {
+    "h": 15,
+    "sessions": 844,
+    "transactions": 28
+   },
+   {
+    "h": 16,
+    "sessions": 856,
+    "transactions": 19
+   },
+   {
+    "h": 17,
+    "sessions": 1018,
+    "transactions": 17
+   },
+   {
+    "h": 18,
+    "sessions": 991,
+    "transactions": 25
+   },
+   {
+    "h": 19,
+    "sessions": 1223,
+    "transactions": 31
+   },
+   {
+    "h": 20,
+    "sessions": 1364,
+    "transactions": 40
+   },
+   {
+    "h": 21,
+    "sessions": 1439,
+    "transactions": 38
+   },
+   {
+    "h": 22,
+    "sessions": 1244,
+    "transactions": 34
+   },
+   {
+    "h": 23,
+    "sessions": 874,
+    "transactions": 14
+   }
+  ]
+ },
+ "apr": {
+  "kpi": {
+   "sessions": 15555,
+   "totalRevenue": 70512,
+   "transactions": 487,
+   "bounceRate": 0.416,
+   "addToCarts": 3188,
+   "checkouts": 959,
+   "avgSessionDuration_s": 336
+  },
+  "devices": [
+   {
+    "device": "mobile",
+    "sessions": 12482,
+    "transactions": 382,
+    "revenue": 53285
+   },
+   {
+    "device": "desktop",
+    "sessions": 2949,
+    "transactions": 105,
+    "revenue": 17227
+   },
+   {
+    "device": "tablet",
+    "sessions": 85,
+    "transactions": 0,
+    "revenue": 0
+   }
+  ],
+  "channels": [
+   {
+    "channel": "Paid Social",
+    "sessions": 4355,
+    "transactions": 97,
+    "revenue": 16344
+   },
+   {
+    "channel": "Organic Search",
+    "sessions": 2973,
+    "transactions": 76,
+    "revenue": 11598
+   },
+   {
+    "channel": "Cross-network",
+    "sessions": 2881,
+    "transactions": 85,
+    "revenue": 16098
+   },
+   {
+    "channel": "Paid Search",
+    "sessions": 2590,
+    "transactions": 106,
+    "revenue": 11940
+   },
+   {
+    "channel": "Direct",
+    "sessions": 1440,
+    "transactions": 43,
+    "revenue": 5698
+   },
+   {
+    "channel": "Unassigned",
+    "sessions": 695,
+    "transactions": 63,
+    "revenue": 6196
+   },
+   {
+    "channel": "Organic Social",
+    "sessions": 277,
+    "transactions": 9,
+    "revenue": 1226
+   },
+   {
+    "channel": "Organic Shopping",
+    "sessions": 99,
+    "transactions": 3,
+    "revenue": 542
+   },
+   {
+    "channel": "Referral",
+    "sessions": 72,
+    "transactions": 2,
+    "revenue": 212
+   },
+   {
+    "channel": "Paid Other",
+    "sessions": 19,
+    "transactions": 3,
+    "revenue": 658
+   },
+   {
+    "channel": "Organic Video",
+    "sessions": 12,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Paid Shopping",
+    "sessions": 2,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Email",
+    "sessions": 1,
+    "transactions": 0,
+    "revenue": 0
+   }
+  ],
+  "landing": [
+   {
+    "page": "/collections/sklep",
+    "sessions": 3395,
+    "bounceRate": 0.202,
+    "transactions": 102,
+    "revenue": 16026
+   },
+   {
+    "page": "(not set)",
+    "sessions": 1788,
+    "bounceRate": 0.867,
+    "transactions": 75,
+    "revenue": 7162
+   },
+   {
+    "page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty",
+    "sessions": 1429,
+    "bounceRate": 0.41,
+    "transactions": 20,
+    "revenue": 3167
+   },
+   {
+    "page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye",
+    "sessions": 1194,
+    "bounceRate": 0.506,
+    "transactions": 37,
+    "revenue": 9008
+   },
+   {
+    "page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka",
+    "sessions": 1188,
+    "bounceRate": 0.419,
+    "transactions": 66,
+    "revenue": 5030
+   },
+   {
+    "page": "/",
+    "sessions": 954,
+    "bounceRate": 0.358,
+    "transactions": 36,
+    "revenue": 9189
+   },
+   {
+    "page": "/collections/rekawice-do-demakijazu",
+    "sessions": 358,
+    "bounceRate": 0.31,
+    "transactions": 8,
+    "revenue": 845
+   },
+   {
+    "page": "/products/klips-unoszacy-wlosy-u-nasady-zero-gravity",
+    "sessions": 249,
+    "bounceRate": 0.373,
+    "transactions": 2,
+    "revenue": 88
+   },
+   {
+    "page": "/products/depilator-z-nano-szkla-glov",
+    "sessions": 243,
+    "bounceRate": 0.416,
+    "transactions": 5,
+    "revenue": 499
+   },
+   {
+    "page": "/products/platki-led-luna-eye-z-etui-ladujacym-dla-rozswietlonej-i-odswiezonej-okolicy-oczu",
+    "sessions": 226,
+    "bounceRate": 0.46,
+    "transactions": 6,
+    "revenue": 2324
+   },
+   {
+    "page": "/collections/produkty-do-pielegnacji-wlosow",
+    "sessions": 224,
+    "bounceRate": 0.25,
+    "transactions": 8,
+    "revenue": 1069
+   },
+   {
+    "page": "/collections/sklep/products/platki-led-...",
+    "sessions": 210,
+    "bounceRate": 0.652,
+    "transactions": 2,
+    "revenue": 509
+   },
+   {
+    "page": "/collections/coolnails",
+    "sessions": 196,
+    "bounceRate": 0.27,
+    "transactions": 2,
+    "revenue": 604
+   },
+   {
+    "page": "/products/przyssawkowy-podnozek-prysznicowy-sole-mate",
+    "sessions": 137,
+    "bounceRate": 0.511,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "page": "/collections/produkty-do-pielegnacji-ciala",
+    "sessions": 135,
+    "bounceRate": 0.207,
+    "transactions": 5,
+    "revenue": 528
+   }
+  ],
+  "products": [
+   {
+    "name": "Tarka-pumeks nano szkla GLOV",
+    "viewed": 1653,
+    "atc": 531,
+    "purchased": 173,
+    "revenue": 6817
+   },
+   {
+    "name": "Platki LED LUNA EYE pielegnacyjne",
+    "viewed": 2589,
+    "atc": 446,
+    "purchased": 104,
+    "revenue": 22530
+   },
+   {
+    "name": "Depilator nano szkla GLOV",
+    "viewed": 559,
+    "atc": 115,
+    "purchased": 43,
+    "revenue": 1622
+   },
+   {
+    "name": "Free gift Mango Sponge Set Mini",
+    "viewed": 49,
+    "atc": 68,
+    "purchased": 43,
+    "revenue": 0
+   },
+   {
+    "name": "Rekawiczka do demakijazu GLOV",
+    "viewed": 392,
+    "atc": 136,
+    "purchased": 40,
+    "revenue": 1166
+   },
+   {
+    "name": "Mydlo Magnet Cleanser",
+    "viewed": 85,
+    "atc": 78,
+    "purchased": 33,
+    "revenue": 867
+   },
+   {
+    "name": "Biodegradowalna szczotka Biobased Brush",
+    "viewed": 169,
+    "atc": 84,
+    "purchased": 32,
+    "revenue": 1082
+   },
+   {
+    "name": "Naklejki LED zestaw 15szt",
+    "viewed": 76,
+    "atc": 215,
+    "purchased": 32,
+    "revenue": 395
+   },
+   {
+    "name": "Sleeping Beauty Panterka",
+    "viewed": 1715,
+    "atc": 113,
+    "purchased": 31,
+    "revenue": 4765
+   },
+   {
+    "name": "Rekawica do peelingu GLOV",
+    "viewed": 202,
+    "atc": 97,
+    "purchased": 29,
+    "revenue": 1237
+   },
+   {
+    "name": "Silikonowe platki Infinity Eye Patches",
+    "viewed": 240,
+    "atc": 150,
+    "purchased": 28,
+    "revenue": 829
+   },
+   {
+    "name": "Free gift Satynowa maska do spania",
+    "viewed": 20,
+    "atc": 51,
+    "purchased": 25,
+    "revenue": 0
+   },
+   {
+    "name": "Free Gift Quick Treat",
+    "viewed": 53,
+    "atc": 37,
+    "purchased": 23,
+    "revenue": 0
+   },
+   {
+    "name": "Klips ZERO GRAVITY",
+    "viewed": 357,
+    "atc": 45,
+    "purchased": 16,
+    "revenue": 345
+   },
+   {
+    "name": "Gabeczka MakeUp Sponge",
+    "viewed": 31,
+    "atc": 42,
+    "purchased": 16,
+    "revenue": 172
+   }
+  ],
+  "newret": [
+   {
+    "segment": "new",
+    "sessions": 11161,
+    "transactions": 289,
+    "revenue": 42402
+   },
+   {
+    "segment": "returning",
+    "sessions": 3315,
+    "transactions": 167,
+    "revenue": 25161
+   },
+   {
+    "segment": "(not set)",
+    "sessions": 1050,
+    "transactions": 31,
+    "revenue": 2949
+   }
+  ],
+  "dayofweek": [
+   {
+    "day": "0_Sun",
+    "sessions": 2171,
+    "transactions": 60,
+    "revenue": 9575
+   },
+   {
+    "day": "1_Mon",
+    "sessions": 2405,
+    "transactions": 68,
+    "revenue": 10046
+   },
+   {
+    "day": "2_Tue",
+    "sessions": 2283,
+    "transactions": 95,
+    "revenue": 11238
+   },
+   {
+    "day": "3_Wed",
+    "sessions": 2717,
+    "transactions": 90,
+    "revenue": 13333
+   },
+   {
+    "day": "4_Thu",
+    "sessions": 2418,
+    "transactions": 73,
+    "revenue": 12410
+   },
+   {
+    "day": "5_Fri",
+    "sessions": 1855,
+    "transactions": 51,
+    "revenue": 6807
+   },
+   {
+    "day": "6_Sat",
+    "sessions": 1752,
+    "transactions": 50,
+    "revenue": 7103
+   }
+  ],
+  "funnel": {
+   "session_start": 11587,
+   "view_item": 7809,
+   "add_to_cart": 1321,
+   "begin_checkout": 805,
+   "purchase": 462,
+   "vi_to_ss_pct": 67.4,
+   "atc_to_vi_pct": 16.9,
+   "checkout_to_atc_pct": 60.9,
+   "purchase_to_checkout_pct": 57.4
+  },
+  "cities": [
+   {
+    "city": "Warsaw",
+    "sessions": 5017,
+    "transactions": 147,
+    "revenue": 20530
+   },
+   {
+    "city": "Wroclaw",
+    "sessions": 1613,
+    "transactions": 29,
+    "revenue": 3956
+   },
+   {
+    "city": "Krakow",
+    "sessions": 1081,
+    "transactions": 33,
+    "revenue": 3566
+   },
+   {
+    "city": "Poznan",
+    "sessions": 733,
+    "transactions": 16,
+    "revenue": 1618
+   },
+   {
+    "city": "Bydgoszcz",
+    "sessions": 599,
+    "transactions": 14,
+    "revenue": 2171
+   },
+   {
+    "city": "Lodz",
+    "sessions": 560,
+    "transactions": 17,
+    "revenue": 2148
+   },
+   {
+    "city": "Gdansk",
+    "sessions": 539,
+    "transactions": 24,
+    "revenue": 3213
+   },
+   {
+    "city": "(not set)",
+    "sessions": 513,
+    "transactions": 20,
+    "revenue": 2733
+   },
+   {
+    "city": "Katowice",
+    "sessions": 468,
+    "transactions": 20,
+    "revenue": 3638
+   },
+   {
+    "city": "Pruszkow",
+    "sessions": 445,
+    "transactions": 3,
+    "revenue": 267
+   }
+  ],
+  "hour": [
+   {
+    "h": 0,
+    "sessions": 370,
+    "transactions": 6
+   },
+   {
+    "h": 1,
+    "sessions": 186,
+    "transactions": 3
+   },
+   {
+    "h": 2,
+    "sessions": 78,
+    "transactions": 3
+   },
+   {
+    "h": 3,
+    "sessions": 69,
+    "transactions": 1
+   },
+   {
+    "h": 4,
+    "sessions": 74,
+    "transactions": 0
+   },
+   {
+    "h": 5,
+    "sessions": 156,
+    "transactions": 0
+   },
+   {
+    "h": 6,
+    "sessions": 404,
+    "transactions": 8
+   },
+   {
+    "h": 7,
+    "sessions": 677,
+    "transactions": 18
+   },
+   {
+    "h": 8,
+    "sessions": 921,
+    "transactions": 22
+   },
+   {
+    "h": 9,
+    "sessions": 996,
+    "transactions": 39
+   },
+   {
+    "h": 10,
+    "sessions": 954,
+    "transactions": 35
+   },
+   {
+    "h": 11,
+    "sessions": 859,
+    "transactions": 34
+   },
+   {
+    "h": 12,
+    "sessions": 955,
+    "transactions": 25
+   },
+   {
+    "h": 13,
+    "sessions": 896,
+    "transactions": 33
+   },
+   {
+    "h": 14,
+    "sessions": 884,
+    "transactions": 23
+   },
+   {
+    "h": 15,
+    "sessions": 850,
+    "transactions": 29
+   },
+   {
+    "h": 16,
+    "sessions": 813,
+    "transactions": 17
+   },
+   {
+    "h": 17,
+    "sessions": 764,
+    "transactions": 23
+   },
+   {
+    "h": 18,
+    "sessions": 872,
+    "transactions": 23
+   },
+   {
+    "h": 19,
+    "sessions": 868,
+    "transactions": 31
+   },
+   {
+    "h": 20,
+    "sessions": 901,
+    "transactions": 32
+   },
+   {
+    "h": 21,
+    "sessions": 1079,
+    "transactions": 38
+   },
+   {
+    "h": 22,
+    "sessions": 1071,
+    "transactions": 31
+   },
+   {
+    "h": 23,
+    "sessions": 644,
+    "transactions": 13
+   }
+  ]
+ },
+ "may": {
+  "kpi": {
+   "sessions": 29317,
+   "totalRevenue": 121134,
+   "transactions": 797,
+   "bounceRate": 0.393,
+   "addToCarts": 6262,
+   "checkouts": 1833,
+   "avgSessionDuration_s": 315
+  },
+  "devices": [
+   {
+    "device": "mobile",
+    "sessions": 24978,
+    "transactions": 627,
+    "revenue": 94980
+   },
+   {
+    "device": "desktop",
+    "sessions": 3844,
+    "transactions": 161,
+    "revenue": 25301
+   },
+   {
+    "device": "tablet",
+    "sessions": 203,
+    "transactions": 9,
+    "revenue": 853
+   }
+  ],
+  "channels": [
+   {
+    "channel": "Paid Social",
+    "sessions": 13577,
+    "transactions": 237,
+    "revenue": 41029
+   },
+   {
+    "channel": "Organic Search",
+    "sessions": 5577,
+    "transactions": 173,
+    "revenue": 22979
+   },
+   {
+    "channel": "Cross-network",
+    "sessions": 2784,
+    "transactions": 67,
+    "revenue": 11194
+   },
+   {
+    "channel": "Paid Search",
+    "sessions": 2705,
+    "transactions": 143,
+    "revenue": 19065
+   },
+   {
+    "channel": "Direct",
+    "sessions": 2130,
+    "transactions": 84,
+    "revenue": 12170
+   },
+   {
+    "channel": "Unassigned",
+    "sessions": 993,
+    "transactions": 62,
+    "revenue": 9815
+   },
+   {
+    "channel": "Organic Social",
+    "sessions": 549,
+    "transactions": 12,
+    "revenue": 1648
+   },
+   {
+    "channel": "Organic Shopping",
+    "sessions": 300,
+    "transactions": 17,
+    "revenue": 2789
+   },
+   {
+    "channel": "Referral",
+    "sessions": 83,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Paid Other",
+    "sessions": 42,
+    "transactions": 2,
+    "revenue": 445
+   },
+   {
+    "channel": "Organic Video",
+    "sessions": 8,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Email",
+    "sessions": 2,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "SMS",
+    "sessions": 2,
+    "transactions": 0,
+    "revenue": 0
+   }
+  ],
+  "landing": [
+   {
+    "page": "/collections/sklep",
+    "sessions": 8041,
+    "bounceRate": 0.196,
+    "transactions": 157,
+    "revenue": 26050
+   },
+   {
+    "page": "(not set)",
+    "sessions": 6378,
+    "bounceRate": 0.548,
+    "transactions": 288,
+    "revenue": 44921
+   },
+   {
+    "page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty",
+    "sessions": 1708,
+    "bounceRate": 0.443,
+    "transactions": 12,
+    "revenue": 2345
+   },
+   {
+    "page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye",
+    "sessions": 1623,
+    "bounceRate": 0.465,
+    "transactions": 29,
+    "revenue": 7340
+   },
+   {
+    "page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka",
+    "sessions": 1385,
+    "bounceRate": 0.429,
+    "transactions": 56,
+    "revenue": 4534
+   },
+   {
+    "page": "/",
+    "sessions": 1185,
+    "bounceRate": 0.303,
+    "transactions": 59,
+    "revenue": 10401
+   },
+   {
+    "page": "/collections/produkty-do-pielegnacji-ciala/products/depilator-z-nano-szkla-glov",
+    "sessions": 691,
+    "bounceRate": 0.452,
+    "transactions": 23,
+    "revenue": 2503
+   },
+   {
+    "page": "/collections/sklep/products/platki-led-...",
+    "sessions": 608,
+    "bounceRate": 0.586,
+    "transactions": 7,
+    "revenue": 1518
+   },
+   {
+    "page": "/products/depilator-z-nano-szkla-glov",
+    "sessions": 598,
+    "bounceRate": 0.344,
+    "transactions": 10,
+    "revenue": 609
+   },
+   {
+    "page": "/products/rekawica-do-peelingu-i-mycia-ciala-glov-skin-smoothing",
+    "sessions": 587,
+    "bounceRate": 0.48,
+    "transactions": 24,
+    "revenue": 2948
+   },
+   {
+    "page": "/collections/rekawice-do-demakijazu",
+    "sessions": 443,
+    "bounceRate": 0.253,
+    "transactions": 17,
+    "revenue": 2166
+   },
+   {
+    "page": "/products/biodegradowalna-szczotka-do-wlosow-glov-biobased-brush",
+    "sessions": 352,
+    "bounceRate": 0.545,
+    "transactions": 10,
+    "revenue": 1190
+   },
+   {
+    "page": "/products/silikonowe-nawilzajace-platki-pod-oczy-glov-infinity-eye-patches",
+    "sessions": 337,
+    "bounceRate": 0.596,
+    "transactions": 4,
+    "revenue": 434
+   },
+   {
+    "page": "/products/klips-unoszacy-wlosy-u-nasady-zero-gravity",
+    "sessions": 321,
+    "bounceRate": 0.352,
+    "transactions": 2,
+    "revenue": 192
+   },
+   {
+    "page": "/products/3w1-silikonowa-myjka-...-bubble-burst",
+    "sessions": 254,
+    "bounceRate": 0.539,
+    "transactions": 5,
+    "revenue": 734
+   }
+  ],
+  "products": [
+   {
+    "name": "Tarka-pumeks nano szkla GLOV",
+    "viewed": 1796,
+    "atc": 1009,
+    "purchased": 310,
+    "revenue": 10589
+   },
+   {
+    "name": "Platki LED LUNA EYE pielegnacyjne",
+    "viewed": 5155,
+    "atc": 1253,
+    "purchased": 220,
+    "revenue": 50442
+   },
+   {
+    "name": "Depilator nano szkla GLOV",
+    "viewed": 1457,
+    "atc": 454,
+    "purchased": 163,
+    "revenue": 5474
+   },
+   {
+    "name": "Silikonowe platki Infinity Eye Patches",
+    "viewed": 694,
+    "atc": 461,
+    "purchased": 94,
+    "revenue": 2857
+   },
+   {
+    "name": "Rekawica do peelingu GLOV",
+    "viewed": 718,
+    "atc": 305,
+    "purchased": 79,
+    "revenue": 3261
+   },
+   {
+    "name": "Mydlo Magnet Cleanser",
+    "viewed": 127,
+    "atc": 222,
+    "purchased": 75,
+    "revenue": 1850
+   },
+   {
+    "name": "Biodegradowalna szczotka Biobased Brush",
+    "viewed": 469,
+    "atc": 211,
+    "purchased": 66,
+    "revenue": 2178
+   },
+   {
+    "name": "Free gift Mango Sponge Set Mini",
+    "viewed": 108,
+    "atc": 140,
+    "purchased": 65,
+    "revenue": 0
+   },
+   {
+    "name": "Rekawiczka do demakijazu GLOV",
+    "viewed": 358,
+    "atc": 174,
+    "purchased": 43,
+    "revenue": 1395
+   },
+   {
+    "name": "Naklejki LED zestaw 15szt",
+    "viewed": 218,
+    "atc": 219,
+    "purchased": 43,
+    "revenue": 484
+   },
+   {
+    "name": "Pumeks Cheetah Edition",
+    "viewed": 182,
+    "atc": 112,
+    "purchased": 40,
+    "revenue": 1269
+   },
+   {
+    "name": "Free gift Satynowa maska do spania",
+    "viewed": 43,
+    "atc": 90,
+    "purchased": 40,
+    "revenue": 0
+   },
+   {
+    "name": "Klips ZERO GRAVITY",
+    "viewed": 531,
+    "atc": 115,
+    "purchased": 33,
+    "revenue": 704
+   },
+   {
+    "name": "Gabeczka MakeUp Sponge",
+    "viewed": 54,
+    "atc": 82,
+    "purchased": 33,
+    "revenue": 390
+   },
+   {
+    "name": "Free Gift Quick Treat",
+    "viewed": 72,
+    "atc": 73,
+    "purchased": 31,
+    "revenue": 0
+   }
+  ],
+  "newret": [
+   {
+    "segment": "new",
+    "sessions": 21857,
+    "transactions": 543,
+    "revenue": 80774
+   },
+   {
+    "segment": "returning",
+    "sessions": 5039,
+    "transactions": 205,
+    "revenue": 33658
+   },
+   {
+    "segment": "(not set)",
+    "sessions": 1899,
+    "transactions": 49,
+    "revenue": 6701
+   }
+  ],
+  "dayofweek": [
+   {
+    "day": "0_Sun",
+    "sessions": 5426,
+    "transactions": 120,
+    "revenue": 18562
+   },
+   {
+    "day": "1_Mon",
+    "sessions": 3719,
+    "transactions": 121,
+    "revenue": 18622
+   },
+   {
+    "day": "2_Tue",
+    "sessions": 4011,
+    "transactions": 138,
+    "revenue": 21177
+   },
+   {
+    "day": "3_Wed",
+    "sessions": 3931,
+    "transactions": 111,
+    "revenue": 14068
+   },
+   {
+    "day": "4_Thu",
+    "sessions": 3896,
+    "transactions": 94,
+    "revenue": 14052
+   },
+   {
+    "day": "5_Fri",
+    "sessions": 4134,
+    "transactions": 106,
+    "revenue": 17138
+   },
+   {
+    "day": "6_Sat",
+    "sessions": 3951,
+    "transactions": 107,
+    "revenue": 17514
+   }
+  ],
+  "funnel": {
+   "session_start": 22627,
+   "view_item": 10729,
+   "add_to_cart": 3572,
+   "begin_checkout": 1639,
+   "purchase": 777,
+   "vi_to_ss_pct": 47.4,
+   "atc_to_vi_pct": 33.3,
+   "checkout_to_atc_pct": 45.9,
+   "purchase_to_checkout_pct": 47.4
+  },
+  "cities": [
+   {
+    "city": "Warsaw",
+    "sessions": 8714,
+    "transactions": 248,
+    "revenue": 39766
+   },
+   {
+    "city": "Wroclaw",
+    "sessions": 2810,
+    "transactions": 46,
+    "revenue": 7632
+   },
+   {
+    "city": "Krakow",
+    "sessions": 1827,
+    "transactions": 60,
+    "revenue": 7493
+   },
+   {
+    "city": "Poznan",
+    "sessions": 1634,
+    "transactions": 31,
+    "revenue": 3965
+   },
+   {
+    "city": "Gdansk",
+    "sessions": 1155,
+    "transactions": 31,
+    "revenue": 4021
+   },
+   {
+    "city": "Lodz",
+    "sessions": 1025,
+    "transactions": 30,
+    "revenue": 4960
+   },
+   {
+    "city": "Bydgoszcz",
+    "sessions": 915,
+    "transactions": 21,
+    "revenue": 3486
+   },
+   {
+    "city": "(not set)",
+    "sessions": 756,
+    "transactions": 15,
+    "revenue": 2526
+   },
+   {
+    "city": "Katowice",
+    "sessions": 752,
+    "transactions": 21,
+    "revenue": 3477
+   },
+   {
+    "city": "Lublin",
+    "sessions": 478,
+    "transactions": 13,
+    "revenue": 1730
+   }
+  ],
+  "hour": [
+   {
+    "h": 0,
+    "sessions": 584,
+    "transactions": 8
+   },
+   {
+    "h": 1,
+    "sessions": 280,
+    "transactions": 7
+   },
+   {
+    "h": 2,
+    "sessions": 156,
+    "transactions": 4
+   },
+   {
+    "h": 3,
+    "sessions": 123,
+    "transactions": 1
+   },
+   {
+    "h": 4,
+    "sessions": 129,
+    "transactions": 5
+   },
+   {
+    "h": 5,
+    "sessions": 364,
+    "transactions": 4
+   },
+   {
+    "h": 6,
+    "sessions": 745,
+    "transactions": 19
+   },
+   {
+    "h": 7,
+    "sessions": 1149,
+    "transactions": 26
+   },
+   {
+    "h": 8,
+    "sessions": 1660,
+    "transactions": 49
+   },
+   {
+    "h": 9,
+    "sessions": 2044,
+    "transactions": 49
+   },
+   {
+    "h": 10,
+    "sessions": 2104,
+    "transactions": 65
+   },
+   {
+    "h": 11,
+    "sessions": 1853,
+    "transactions": 59
+   },
+   {
+    "h": 12,
+    "sessions": 1741,
+    "transactions": 39
+   },
+   {
+    "h": 13,
+    "sessions": 1819,
+    "transactions": 46
+   },
+   {
+    "h": 14,
+    "sessions": 1531,
+    "transactions": 49
+   },
+   {
+    "h": 15,
+    "sessions": 1332,
+    "transactions": 35
+   },
+   {
+    "h": 16,
+    "sessions": 1429,
+    "transactions": 24
+   },
+   {
+    "h": 17,
+    "sessions": 1514,
+    "transactions": 37
+   },
+   {
+    "h": 18,
+    "sessions": 1468,
+    "transactions": 37
+   },
+   {
+    "h": 19,
+    "sessions": 1465,
+    "transactions": 44
+   },
+   {
+    "h": 20,
+    "sessions": 1669,
+    "transactions": 43
+   },
+   {
+    "h": 21,
+    "sessions": 1983,
+    "transactions": 42
+   },
+   {
+    "h": 22,
+    "sessions": 1821,
+    "transactions": 61
+   },
+   {
+    "h": 23,
+    "sessions": 1165,
+    "transactions": 44
+   }
+  ]
+ },
+ "jun": {
+  "kpi": {
+   "sessions": 12740,
+   "totalRevenue": 35259,
+   "transactions": 324,
+   "bounceRate": 0.428,
+   "addToCarts": 2270,
+   "checkouts": 664,
+   "avgSessionDuration_s": 319
+  },
+  "devices": [
+   {
+    "device": "mobile",
+    "sessions": 9968,
+    "transactions": 250,
+    "revenue": 25650
+   },
+   {
+    "device": "desktop",
+    "sessions": 2699,
+    "transactions": 73,
+    "revenue": 9477
+   },
+   {
+    "device": "tablet",
+    "sessions": 76,
+    "transactions": 1,
+    "revenue": 131
+   }
+  ],
+  "channels": [
+   {
+    "channel": "Paid Social",
+    "sessions": 5045,
+    "transactions": 91,
+    "revenue": 7274
+   },
+   {
+    "channel": "Organic Search",
+    "sessions": 2159,
+    "transactions": 49,
+    "revenue": 4586
+   },
+   {
+    "channel": "Direct",
+    "sessions": 1796,
+    "transactions": 20,
+    "revenue": 1639
+   },
+   {
+    "channel": "Paid Search",
+    "sessions": 1415,
+    "transactions": 68,
+    "revenue": 7484
+   },
+   {
+    "channel": "Cross-network",
+    "sessions": 1323,
+    "transactions": 37,
+    "revenue": 6153
+   },
+   {
+    "channel": "Unassigned",
+    "sessions": 483,
+    "transactions": 45,
+    "revenue": 6368
+   },
+   {
+    "channel": "Organic Social",
+    "sessions": 219,
+    "transactions": 4,
+    "revenue": 334
+   },
+   {
+    "channel": "Paid Shopping",
+    "sessions": 123,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Referral",
+    "sessions": 33,
+    "transactions": 3,
+    "revenue": 307
+   },
+   {
+    "channel": "Organic Shopping",
+    "sessions": 27,
+    "transactions": 6,
+    "revenue": 1027
+   },
+   {
+    "channel": "Paid Other",
+    "sessions": 15,
+    "transactions": 1,
+    "revenue": 87
+   },
+   {
+    "channel": "AI Assistant",
+    "sessions": 10,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Organic Video",
+    "sessions": 2,
+    "transactions": 0,
+    "revenue": 0
+   }
+  ],
+  "landing": [
+   {
+    "page": "/collections/sklep",
+    "sessions": 2595,
+    "bounceRate": 0.17,
+    "transactions": 48,
+    "revenue": 5011
+   },
+   {
+    "page": "(not set)",
+    "sessions": 2368,
+    "bounceRate": 0.682,
+    "transactions": 49,
+    "revenue": 4313
+   },
+   {
+    "page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty",
+    "sessions": 917,
+    "bounceRate": 0.437,
+    "transactions": 7,
+    "revenue": 1254
+   },
+   {
+    "page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka",
+    "sessions": 798,
+    "bounceRate": 0.372,
+    "transactions": 51,
+    "revenue": 3855
+   },
+   {
+    "page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye",
+    "sessions": 567,
+    "bounceRate": 0.503,
+    "transactions": 15,
+    "revenue": 4145
+   },
+   {
+    "page": "/products/rekawica-do-peelingu-i-mycia-ciala-glov-skin-smoothing",
+    "sessions": 542,
+    "bounceRate": 0.469,
+    "transactions": 16,
+    "revenue": 1333
+   },
+   {
+    "page": "/",
+    "sessions": 496,
+    "bounceRate": 0.341,
+    "transactions": 23,
+    "revenue": 4713
+   },
+   {
+    "page": "/collections/produkty-do-pielegnacji-wlosow/products/klips-unoszacy-wlosy-u-nasady-zero-gravity",
+    "sessions": 488,
+    "bounceRate": 0.492,
+    "transactions": 19,
+    "revenue": 1045
+   },
+   {
+    "page": "/products/depilator-z-nano-szkla-glov",
+    "sessions": 433,
+    "bounceRate": 0.374,
+    "transactions": 7,
+    "revenue": 384
+   },
+   {
+    "page": "/collections/produkty-do-pielegnacji-ciala/products/depilator-...",
+    "sessions": 236,
+    "bounceRate": 0.39,
+    "transactions": 1,
+    "revenue": 47
+   },
+   {
+    "page": "/products/klips-unoszacy-wlosy-u-nasady-zero-gravity",
+    "sessions": 220,
+    "bounceRate": 0.427,
+    "transactions": 3,
+    "revenue": 193
+   },
+   {
+    "page": "/collections/rekawice-do-demakijazu",
+    "sessions": 211,
+    "bounceRate": 0.299,
+    "transactions": 9,
+    "revenue": 937
+   },
+   {
+    "page": "/collections/produkty-do-pielegnacji-ciala/products/pumeks-...",
+    "sessions": 114,
+    "bounceRate": 0.342,
+    "transactions": 8,
+    "revenue": 416
+   },
+   {
+    "page": "/products/3w1-silikonowa-myjka-...-bubble-burst",
+    "sessions": 114,
+    "bounceRate": 0.43,
+    "transactions": 1,
+    "revenue": 32
+   },
+   {
+    "page": "/products/utwardzacz-do-paznokci-...-marshmallow-nail-hardener-pen",
+    "sessions": 110,
+    "bounceRate": 0.364,
+    "transactions": 1,
+    "revenue": 184
+   }
+  ],
+  "products": [
+   {
+    "name": "Tarka-pumeks nano szkla GLOV",
+    "viewed": 1356,
+    "atc": 441,
+    "purchased": 173,
+    "revenue": 5947
+   },
+   {
+    "name": "Depilator nano szkla GLOV",
+    "viewed": 983,
+    "atc": 194,
+    "purchased": 56,
+    "revenue": 1829
+   },
+   {
+    "name": "Rekawica do peelingu GLOV",
+    "viewed": 626,
+    "atc": 141,
+    "purchased": 40,
+    "revenue": 1584
+   },
+   {
+    "name": "Klips ZERO GRAVITY",
+    "viewed": 827,
+    "atc": 132,
+    "purchased": 38,
+    "revenue": 807
+   },
+   {
+    "name": "Biodegradowalna szczotka Biobased Brush",
+    "viewed": 79,
+    "atc": 66,
+    "purchased": 26,
+    "revenue": 846
+   },
+   {
+    "name": "Free gift Mango Sponge Set Mini",
+    "viewed": 33,
+    "atc": 50,
+    "purchased": 26,
+    "revenue": 0
+   },
+   {
+    "name": "Rekawiczka Iconic Mitt GLOV",
+    "viewed": 205,
+    "atc": 94,
+    "purchased": 22,
+    "revenue": 714
+   },
+   {
+    "name": "Platki LED LUNA EYE pielegnacyjne",
+    "viewed": 947,
+    "atc": 145,
+    "purchased": 21,
+    "revenue": 5337
+   },
+   {
+    "name": "Pumeks Cheetah Edition",
+    "viewed": 196,
+    "atc": 49,
+    "purchased": 19,
+    "revenue": 614
+   },
+   {
+    "name": "Silikonowe platki Infinity Eye Patches",
+    "viewed": 128,
+    "atc": 58,
+    "purchased": 17,
+    "revenue": 541
+   },
+   {
+    "name": "Mydlo Magnet Cleanser",
+    "viewed": 66,
+    "atc": 51,
+    "purchased": 17,
+    "revenue": 416
+   },
+   {
+    "name": "Free gift Satynowa maska do spania",
+    "viewed": 12,
+    "atc": 27,
+    "purchased": 17,
+    "revenue": 0
+   },
+   {
+    "name": "Sleeping Beauty Panterka",
+    "viewed": 1183,
+    "atc": 63,
+    "purchased": 16,
+    "revenue": 2756
+   },
+   {
+    "name": "Free Gift Quick Treat",
+    "viewed": 24,
+    "atc": 38,
+    "purchased": 16,
+    "revenue": 0
+   },
+   {
+    "name": "Wielorazowe platki do demakijazu GLOV",
+    "viewed": 132,
+    "atc": 31,
+    "purchased": 15,
+    "revenue": 97
+   }
+  ],
+  "newret": [
+   {
+    "segment": "new",
+    "sessions": 9713,
+    "transactions": 205,
+    "revenue": 20269
+   },
+   {
+    "segment": "returning",
+    "sessions": 2165,
+    "transactions": 89,
+    "revenue": 11492
+   },
+   {
+    "segment": "(not set)",
+    "sessions": 882,
+    "transactions": 30,
+    "revenue": 3498
+   }
+  ],
+  "dayofweek": [
+   {
+    "day": "0_Sun",
+    "sessions": 2102,
+    "transactions": 33,
+    "revenue": 4316
+   },
+   {
+    "day": "1_Mon",
+    "sessions": 3042,
+    "transactions": 69,
+    "revenue": 6426
+   },
+   {
+    "day": "2_Tue",
+    "sessions": 1540,
+    "transactions": 37,
+    "revenue": 3182
+   },
+   {
+    "day": "3_Wed",
+    "sessions": 1473,
+    "transactions": 57,
+    "revenue": 6693
+   },
+   {
+    "day": "4_Thu",
+    "sessions": 1543,
+    "transactions": 47,
+    "revenue": 4504
+   },
+   {
+    "day": "5_Fri",
+    "sessions": 1567,
+    "transactions": 45,
+    "revenue": 5881
+   },
+   {
+    "day": "6_Sat",
+    "sessions": 1402,
+    "transactions": 36,
+    "revenue": 4256
+   }
+  ],
+  "funnel": {
+   "session_start": 10233,
+   "view_item": 6511,
+   "add_to_cart": 1002,
+   "begin_checkout": 577,
+   "purchase": 315,
+   "vi_to_ss_pct": 63.6,
+   "atc_to_vi_pct": 15.4,
+   "checkout_to_atc_pct": 57.6,
+   "purchase_to_checkout_pct": 54.6
+  },
+  "cities": [
+   {
+    "city": "Warsaw",
+    "sessions": 4605,
+    "transactions": 91,
+    "revenue": 10118
+   },
+   {
+    "city": "Wroclaw",
+    "sessions": 1080,
+    "transactions": 28,
+    "revenue": 3559
+   },
+   {
+    "city": "Poznan",
+    "sessions": 721,
+    "transactions": 12,
+    "revenue": 928
+   },
+   {
+    "city": "Krakow",
+    "sessions": 681,
+    "transactions": 26,
+    "revenue": 2515
+   },
+   {
+    "city": "Gdansk",
+    "sessions": 500,
+    "transactions": 15,
+    "revenue": 1915
+   },
+   {
+    "city": "Lodz",
+    "sessions": 446,
+    "transactions": 19,
+    "revenue": 1973
+   },
+   {
+    "city": "Katowice",
+    "sessions": 359,
+    "transactions": 9,
+    "revenue": 885
+   },
+   {
+    "city": "(not set)",
+    "sessions": 340,
+    "transactions": 7,
+    "revenue": 806
+   },
+   {
+    "city": "Bydgoszcz",
+    "sessions": 324,
+    "transactions": 5,
+    "revenue": 595
+   },
+   {
+    "city": "Lublin",
+    "sessions": 215,
+    "transactions": 3,
+    "revenue": 117
+   }
+  ],
+  "hour": [
+   {
+    "h": 0,
+    "sessions": 241,
+    "transactions": 1
+   },
+   {
+    "h": 1,
+    "sessions": 135,
+    "transactions": 3
+   },
+   {
+    "h": 2,
+    "sessions": 58,
+    "transactions": 1
+   },
+   {
+    "h": 3,
+    "sessions": 49,
+    "transactions": 1
+   },
+   {
+    "h": 4,
+    "sessions": 92,
+    "transactions": 1
+   },
+   {
+    "h": 5,
+    "sessions": 172,
+    "transactions": 3
+   },
+   {
+    "h": 6,
+    "sessions": 318,
+    "transactions": 5
+   },
+   {
+    "h": 7,
+    "sessions": 543,
+    "transactions": 10
+   },
+   {
+    "h": 8,
+    "sessions": 709,
+    "transactions": 26
+   },
+   {
+    "h": 9,
+    "sessions": 813,
+    "transactions": 19
+   },
+   {
+    "h": 10,
+    "sessions": 771,
+    "transactions": 10
+   },
+   {
+    "h": 11,
+    "sessions": 795,
+    "transactions": 26
+   },
+   {
+    "h": 12,
+    "sessions": 778,
+    "transactions": 29
+   },
+   {
+    "h": 13,
+    "sessions": 780,
+    "transactions": 22
+   },
+   {
+    "h": 14,
+    "sessions": 749,
+    "transactions": 22
+   },
+   {
+    "h": 15,
+    "sessions": 663,
+    "transactions": 11
+   },
+   {
+    "h": 16,
+    "sessions": 576,
+    "transactions": 15
+   },
+   {
+    "h": 17,
+    "sessions": 674,
+    "transactions": 13
+   },
+   {
+    "h": 18,
+    "sessions": 670,
+    "transactions": 13
+   },
+   {
+    "h": 19,
+    "sessions": 659,
+    "transactions": 15
+   },
+   {
+    "h": 20,
+    "sessions": 774,
+    "transactions": 23
+   },
+   {
+    "h": 21,
+    "sessions": 906,
+    "transactions": 17
+   },
+   {
+    "h": 22,
+    "sessions": 843,
+    "transactions": 24
+   },
+   {
+    "h": 23,
+    "sessions": 494,
+    "transactions": 14
+   }
+  ]
+ },
+ "d90": {
+  "kpi": {
+   "sessions": 68905,
+   "totalRevenue": 254431,
+   "transactions": 1829,
+   "bounceRate": 0.404,
+   "addToCarts": 13272,
+   "checkouts": 3916,
+   "avgSessionDuration_s": 304
+  },
+  "devices": [
+   {
+    "device": "mobile",
+    "sessions": 55447,
+    "transactions": 1434,
+    "revenue": 193861
+   },
+   {
+    "device": "desktop",
+    "sessions": 13932,
+    "transactions": 384,
+    "revenue": 59479
+   },
+   {
+    "device": "tablet",
+    "sessions": 411,
+    "transactions": 11,
+    "revenue": 1091
+   }
+  ],
+  "channels": [
+   {
+    "channel": "Paid Social",
+    "sessions": 26178,
+    "transactions": 495,
+    "revenue": 70693
+   },
+   {
+    "channel": "Organic Search",
+    "sessions": 12496,
+    "transactions": 319,
+    "revenue": 40805
+   },
+   {
+    "channel": "Direct",
+    "sessions": 9134,
+    "transactions": 161,
+    "revenue": 21601
+   },
+   {
+    "channel": "Cross-network",
+    "sessions": 8256,
+    "transactions": 218,
+    "revenue": 38063
+   },
+   {
+    "channel": "Paid Search",
+    "sessions": 7860,
+    "transactions": 373,
+    "revenue": 46616
+   },
+   {
+    "channel": "Unassigned",
+    "sessions": 2736,
+    "transactions": 190,
+    "revenue": 26456
+   },
+   {
+    "channel": "Organic Social",
+    "sessions": 1176,
+    "transactions": 30,
+    "revenue": 3878
+   },
+   {
+    "channel": "Organic Shopping",
+    "sessions": 457,
+    "transactions": 28,
+    "revenue": 4574
+   },
+   {
+    "channel": "Paid Shopping",
+    "sessions": 238,
+    "transactions": 1,
+    "revenue": 199
+   },
+   {
+    "channel": "Referral",
+    "sessions": 216,
+    "transactions": 7,
+    "revenue": 273
+   },
+   {
+    "channel": "Paid Other",
+    "sessions": 85,
+    "transactions": 6,
+    "revenue": 1191
+   },
+   {
+    "channel": "AI Assistant",
+    "sessions": 27,
+    "transactions": 1,
+    "revenue": 82
+   },
+   {
+    "channel": "Organic Video",
+    "sessions": 22,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "Email",
+    "sessions": 4,
+    "transactions": 0,
+    "revenue": 0
+   },
+   {
+    "channel": "SMS",
+    "sessions": 2,
+    "transactions": 0,
+    "revenue": 0
+   }
+  ],
+  "landing": [
+   {
+    "page": "/collections/sklep",
+    "sessions": 17699,
+    "bounceRate": 0.174,
+    "transactions": 356,
+    "revenue": 53258
+   },
+   {
+    "page": "(not set)",
+    "sessions": 11709,
+    "bounceRate": 0.648,
+    "transactions": 435,
+    "revenue": 58106
+   },
+   {
+    "page": "/products/upiekszajaca-poduszka-nocna-glov-sleeping-beauty",
+    "sessions": 4820,
+    "bounceRate": 0.435,
+    "transactions": 42,
+    "revenue": 7121
+   },
+   {
+    "page": "/products/pumeks-glov-z-nano-szkla-do-zrogowacialego-naskorka",
+    "sessions": 4145,
+    "bounceRate": 0.423,
+    "transactions": 210,
+    "revenue": 16464
+   },
+   {
+    "page": "/products/platki-led-do-terapii-rozswietlajacej-i-odmladzajacej-okolice-oczu-luna-eye",
+    "sessions": 3714,
+    "bounceRate": 0.487,
+    "transactions": 83,
+    "revenue": 21112
+   },
+   {
+    "page": "/",
+    "sessions": 2998,
+    "bounceRate": 0.326,
+    "transactions": 132,
+    "revenue": 29055
+   },
+   {
+    "page": "/products/depilator-z-nano-szkla-glov",
+    "sessions": 1569,
+    "bounceRate": 0.363,
+    "transactions": 27,
+    "revenue": 1928
+   },
+   {
+    "page": "/products/rekawica-do-peelingu-i-mycia-ciala-glov-skin-smoothing",
+    "sessions": 1416,
+    "bounceRate": 0.481,
+    "transactions": 49,
+    "revenue": 5041
+   },
+   {
+    "page": "/collections/rekawice-do-demakijazu",
+    "sessions": 1181,
+    "bounceRate": 0.284,
+    "transactions": 41,
+    "revenue": 4700
+   },
+   {
+    "page": "/collections/produkty-do-pielegnacji-ciala/products/depilator-...",
+    "sessions": 1015,
+    "bounceRate": 0.446,
+    "transactions": 28,
+    "revenue": 2805
+   },
+   {
+    "page": "/products/klips-unoszacy-wlosy-u-nasady-zero-gravity",
+    "sessions": 1014,
+    "bounceRate": 0.393,
+    "transactions": 9,
+    "revenue": 540
+   },
+   {
+    "page": "/collections/sklep/products/platki-led-...",
+    "sessions": 860,
+    "bounceRate": 0.6,
+    "transactions": 9,
+    "revenue": 2027
+   },
+   {
+    "page": "/collections/produkty-do-pielegnacji-wlosow/products/klips-...",
+    "sessions": 843,
+    "bounceRate": 0.486,
+    "transactions": 36,
+    "revenue": 2165
+   },
+   {
+    "page": "/products/platki-led-luna-eye-z-etui-...",
+    "sessions": 660,
+    "bounceRate": 0.471,
+    "transactions": 12,
+    "revenue": 4214
+   },
+   {
+    "page": "/collections/produkty-do-pielegnacji-wlosow",
+    "sessions": 621,
+    "bounceRate": 0.262,
+    "transactions": 14,
+    "revenue": 1976
+   }
+  ],
+  "products": [
+   {
+    "name": "Tarka-pumeks nano szkla GLOV",
+    "viewed": 6164,
+    "atc": 2286,
+    "purchased": 757,
+    "revenue": 27211
+   },
+   {
+    "name": "Platki LED LUNA EYE pielegnacyjne",
+    "viewed": 8977,
+    "atc": 1844,
+    "purchased": 345,
+    "revenue": 78309
+   },
+   {
+    "name": "Depilator nano szkla GLOV",
+    "viewed": 3732,
+    "atc": 866,
+    "purchased": 291,
+    "revenue": 9962
+   },
+   {
+    "name": "Rekawica do peelingu GLOV",
+    "viewed": 1860,
+    "atc": 640,
+    "purchased": 177,
+    "revenue": 7340
+   },
+   {
+    "name": "Free gift Mango Sponge Set Mini",
+    "viewed": 212,
+    "atc": 290,
+    "purchased": 148,
+    "revenue": 0
+   },
+   {
+    "name": "Silikonowe platki Infinity Eye Patches",
+    "viewed": 1138,
+    "atc": 689,
+    "purchased": 144,
+    "revenue": 4366
+   },
+   {
+    "name": "Mydlo Magnet Cleanser",
+    "viewed": 327,
+    "atc": 404,
+    "purchased": 143,
+    "revenue": 3576
+   },
+   {
+    "name": "Biodegradowalna szczotka Biobased Brush",
+    "viewed": 813,
+    "atc": 396,
+    "purchased": 133,
+    "revenue": 4416
+   },
+   {
+    "name": "Klips ZERO GRAVITY",
+    "viewed": 2240,
+    "atc": 380,
+    "purchased": 113,
+    "revenue": 2478
+   },
+   {
+    "name": "Rekawiczka do demakijazu GLOV",
+    "viewed": 880,
+    "atc": 368,
+    "purchased": 88,
+    "revenue": 2737
+   },
+   {
+    "name": "Naklejki LED zestaw 15szt",
+    "viewed": 346,
+    "atc": 518,
+    "purchased": 87,
+    "revenue": 1026
+   },
+   {
+    "name": "Free gift Satynowa maska do spania",
+    "viewed": 84,
+    "atc": 173,
+    "purchased": 86,
+    "revenue": 0
+   },
+   {
+    "name": "Pumeks Cheetah Edition",
+    "viewed": 957,
+    "atc": 288,
+    "purchased": 82,
+    "revenue": 2713
+   },
+   {
+    "name": "Free Gift Quick Treat",
+    "viewed": 170,
+    "atc": 168,
+    "purchased": 77,
+    "revenue": 0
+   },
+   {
+    "name": "Sleeping Beauty Panterka",
+    "viewed": 5696,
+    "atc": 315,
+    "purchased": 76,
+    "revenue": 12346
+   }
+  ],
+  "newret": [
+   {
+    "segment": "new",
+    "sessions": 52063,
+    "transactions": 1178,
+    "revenue": 161871
+   },
+   {
+    "segment": "returning",
+    "sessions": 12181,
+    "transactions": 532,
+    "revenue": 78832
+   },
+   {
+    "segment": "(not set)",
+    "sessions": 4321,
+    "transactions": 118,
+    "revenue": 13609
+   },
+   {
+    "segment": "",
+    "sessions": 323,
+    "transactions": 1,
+    "revenue": 119
+   }
+  ],
+  "dayofweek": [
+   {
+    "day": "0_Sun",
+    "sessions": 11704,
+    "transactions": 248,
+    "revenue": 39479
+   },
+   {
+    "day": "1_Mon",
+    "sessions": 10025,
+    "transactions": 272,
+    "revenue": 36399
+   },
+   {
+    "day": "2_Tue",
+    "sessions": 10227,
+    "transactions": 303,
+    "revenue": 38744
+   },
+   {
+    "day": "3_Wed",
+    "sessions": 9830,
+    "transactions": 291,
+    "revenue": 37210
+   },
+   {
+    "day": "4_Thu",
+    "sessions": 9649,
+    "transactions": 249,
+    "revenue": 34855
+   },
+   {
+    "day": "5_Fri",
+    "sessions": 9002,
+    "transactions": 240,
+    "revenue": 34068
+   },
+   {
+    "day": "6_Sat",
+    "sessions": 8499,
+    "transactions": 226,
+    "revenue": 33678
+   }
+  ],
+  "funnel": {
+   "session_start": 51670,
+   "view_item": 30065,
+   "add_to_cart": 6437,
+   "begin_checkout": 3362,
+   "purchase": 1755,
+   "vi_to_ss_pct": 58.2,
+   "atc_to_vi_pct": 21.4,
+   "checkout_to_atc_pct": 52.2,
+   "purchase_to_checkout_pct": 52.2
+  },
+  "cities": [
+   {
+    "city": "Warsaw",
+    "sessions": 23591,
+    "transactions": 551,
+    "revenue": 77764
+   },
+   {
+    "city": "Wroclaw",
+    "sessions": 6304,
+    "transactions": 114,
+    "revenue": 16287
+   },
+   {
+    "city": "Krakow",
+    "sessions": 4190,
+    "transactions": 139,
+    "revenue": 16577
+   },
+   {
+    "city": "Poznan",
+    "sessions": 3571,
+    "transactions": 71,
+    "revenue": 8204
+   },
+   {
+    "city": "Gdansk",
+    "sessions": 2510,
+    "transactions": 74,
+    "revenue": 10078
+   },
+   {
+    "city": "Lodz",
+    "sessions": 2377,
+    "transactions": 73,
+    "revenue": 10310
+   },
+   {
+    "city": "Bydgoszcz",
+    "sessions": 2137,
+    "transactions": 47,
+    "revenue": 6775
+   },
+   {
+    "city": "(not set)",
+    "sessions": 1989,
+    "transactions": 54,
+    "revenue": 6945
+   },
+   {
+    "city": "Katowice",
+    "sessions": 1870,
+    "transactions": 59,
+    "revenue": 8752
+   },
+   {
+    "city": "Pruszkow",
+    "sessions": 1301,
+    "transactions": 5,
+    "revenue": 975
+   }
+  ],
+  "hour": [
+   {
+    "h": 0,
+    "sessions": 1517,
+    "transactions": 21
+   },
+   {
+    "h": 1,
+    "sessions": 834,
+    "transactions": 13
+   },
+   {
+    "h": 2,
+    "sessions": 465,
+    "transactions": 9
+   },
+   {
+    "h": 3,
+    "sessions": 399,
+    "transactions": 3
+   },
+   {
+    "h": 4,
+    "sessions": 549,
+    "transactions": 7
+   },
+   {
+    "h": 5,
+    "sessions": 962,
+    "transactions": 8
+   },
+   {
+    "h": 6,
+    "sessions": 1882,
+    "transactions": 39
+   },
+   {
+    "h": 7,
+    "sessions": 2873,
+    "transactions": 64
+   },
+   {
+    "h": 8,
+    "sessions": 3968,
+    "transactions": 109
+   },
+   {
+    "h": 9,
+    "sessions": 4514,
+    "transactions": 120
+   },
+   {
+    "h": 10,
+    "sessions": 4426,
+    "transactions": 128
+   },
+   {
+    "h": 11,
+    "sessions": 4289,
+    "transactions": 130
+   },
+   {
+    "h": 12,
+    "sessions": 4070,
+    "transactions": 120
+   },
+   {
+    "h": 13,
+    "sessions": 4106,
+    "transactions": 117
+   },
+   {
+    "h": 14,
+    "sessions": 3779,
+    "transactions": 110
+   },
+   {
+    "h": 15,
+    "sessions": 3472,
+    "transactions": 87
+   },
+   {
+    "h": 16,
+    "sessions": 3274,
+    "transactions": 64
+   },
+   {
+    "h": 17,
+    "sessions": 3407,
+    "transactions": 80
+   },
+   {
+    "h": 18,
+    "sessions": 3602,
+    "transactions": 84
+   },
+   {
+    "h": 19,
+    "sessions": 3525,
+    "transactions": 97
+   },
+   {
+    "h": 20,
+    "sessions": 4060,
+    "transactions": 107
+   },
+   {
+    "h": 21,
+    "sessions": 4755,
+    "transactions": 108
+   },
+   {
+    "h": 22,
+    "sessions": 4491,
+    "transactions": 125
+   },
+   {
+    "h": 23,
+    "sessions": 2703,
+    "transactions": 79
+   }
+  ],
+  "channels_quality": [
+   {
+    "channel": "Paid Social",
+    "sessions": 26178,
+    "transactions": 495,
+    "revenue": 70693,
+    "dur": 278,
+    "pps": 2.24,
+    "eng": 0.588
+   },
+   {
+    "channel": "Organic Search",
+    "sessions": 12496,
+    "transactions": 319,
+    "revenue": 40805,
+    "dur": 258,
+    "pps": 2.08,
+    "eng": 0.584
+   },
+   {
+    "channel": "Direct",
+    "sessions": 9167,
+    "transactions": 161,
+    "revenue": 21601,
+    "dur": 207,
+    "pps": 2.26,
+    "eng": 0.649
+   },
+   {
+    "channel": "Cross-network",
+    "sessions": 8260,
+    "transactions": 218,
+    "revenue": 38063,
+    "dur": 394,
+    "pps": 2.85,
+    "eng": 0.581
+   },
+   {
+    "channel": "Paid Search",
+    "sessions": 7862,
+    "transactions": 373,
+    "revenue": 46616,
+    "dur": 419,
+    "pps": 4.89,
+    "eng": 0.682
+   },
+   {
+    "channel": "Unassigned",
+    "sessions": 2764,
+    "transactions": 190,
+    "revenue": 26456,
+    "dur": 491,
+    "pps": 1.75,
+    "eng": 0.278
+   },
+   {
+    "channel": "Organic Social",
+    "sessions": 1177,
+    "transactions": 30,
+    "revenue": 3878,
+    "dur": 251,
+    "pps": 3.31,
+    "eng": 0.684
+   },
+   {
+    "channel": "Organic Shopping",
+    "sessions": 457,
+    "transactions": 28,
+    "revenue": 4574,
+    "dur": 488,
+    "pps": 2.98,
+    "eng": 0.683
+   },
+   {
+    "channel": "Paid Shopping",
+    "sessions": 239,
+    "transactions": 1,
+    "revenue": 199,
+    "dur": 91,
+    "pps": 1.35,
+    "eng": 0.615
+   },
+   {
+    "channel": "Referral",
+    "sessions": 216,
+    "transactions": 7,
+    "revenue": 273,
+    "dur": 456,
+    "pps": 3.53,
+    "eng": 0.667
+   }
+  ],
+  "categories": [
+   {
+    "page": "/collections/sklep",
+    "sessions": 4019,
+    "atc": 1823,
+    "transactions": 232,
+    "revenue": 31810
+   },
+   {
+    "page": "/collections/rekawice-do-demakijazu",
+    "sessions": 1029,
+    "atc": 263,
+    "transactions": 38,
+    "revenue": 4285
+   }
+  ],
+  "landing_atc": [
+   {
+    "page": "(not set)",
+    "sessions": 11709,
+    "atc": 3139,
+    "transactions": 435,
+    "revenue": 58106
+   },
+   {
+    "page": "/collections/sklep",
+    "sessions": 4019,
+    "atc": 1823,
+    "transactions": 232,
+    "revenue": 31810
+   },
+   {
+    "page": "/ (homepage)",
+    "sessions": 2352,
+    "atc": 794,
+    "transactions": 107,
+    "revenue": 24002
+   },
+   {
+    "page": "/products/pumeks-glov",
+    "sessions": 2340,
+    "atc": 562,
+    "transactions": 123,
+    "revenue": 10413
+   },
+   {
+    "page": "/products/platki-led-luna-eye",
+    "sessions": 1538,
+    "atc": 261,
+    "transactions": 51,
+    "revenue": 13008
+   },
+   {
+    "page": "/collections/rekawice-do-demakijazu",
+    "sessions": 1029,
+    "atc": 263,
+    "transactions": 38,
+    "revenue": 4285
+   },
+   {
+    "page": "/products/sleeping-beauty (war.1)",
+    "sessions": 920,
+    "atc": 30,
+    "transactions": 4,
+    "revenue": 724
+   },
+   {
+    "page": "/products/sleeping-beauty (war.2)",
+    "sessions": 670,
+    "atc": 59,
+    "transactions": 10,
+    "revenue": 1522
+   },
+   {
+    "page": "/products/sleeping-beauty (war.3)",
+    "sessions": 633,
+    "atc": 31,
+    "transactions": 8,
+    "revenue": 1443
+   }
+  ],
+  "search_terms": [
+   {
+    "term": "Płatki",
+    "count": 557,
+    "transactions": 0
+   },
+   {
+    "term": "Turban",
+    "count": 549,
+    "transactions": 0
+   },
+   {
+    "term": "Lakier",
+    "count": 359,
+    "transactions": 0
+   },
+   {
+    "term": "Led",
+    "count": 321,
+    "transactions": 0
+   },
+   {
+    "term": "Szczotka",
+    "count": 197,
+    "transactions": 0
+   },
+   {
+    "term": "Outlet",
+    "count": 156,
+    "transactions": 0
+   },
+   {
+    "term": "Etui",
+    "count": 151,
+    "transactions": 0
+   },
+   {
+    "term": "Poduszka",
+    "count": 128,
+    "transactions": 0
+   },
+   {
+    "term": "Zestaw",
+    "count": 116,
+    "transactions": 0
+   },
+   {
+    "term": "Luna",
+    "count": 85,
+    "transactions": 0
+   }
+  ],
+  "search_total": 2769,
+  "repeat_buyers": [
+   {
+    "name": "Tarka-pumeks do stóp GLOV®",
+    "ret365": 1363
+   },
+   {
+    "name": "Depilator z nano szkła GLOV",
+    "ret365": 630
+   },
+   {
+    "name": "Biobased Brush GLOV® (szczotka do włosów)",
+    "ret365": 599
+   },
+   {
+    "name": "Rękawica do peelingu ciała GLOV®",
+    "ret365": 469
+   },
+   {
+    "name": "Rękawiczka do demakijażu GLOV®",
+    "ret365": 446
+   },
+   {
+    "name": "Magnet Cleanser GLOV® (mydło do rękawic)",
+    "ret365": 395
+   },
+   {
+    "name": "Pumeks Cheetah Edition",
+    "ret365": 316
+   },
+   {
+    "name": "Nano Twist Duo (pumeks+depilator 2w1)",
+    "ret365": 288
+   },
+   {
+    "name": "FACE WASH (pad silikonowy)",
+    "ret365": 220
+   }
+  ]
+ }
 }
