@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Audyt techniczny on-page SEO (2026-06-16)</title>
+<style>
+:root{
+  --bg:#0e1116; --card:#161b22; --card2:#1c2230; --ink:#e6edf3; --muted:#8b98a5;
+  --line:#262d38; --ok:#2ea043; --warn:#d29922; --crit:#f85149; --info:#388bfd;
+  --accent:#7c3aed;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 22px 80px}
+header h1{font-size:30px;margin:0 0 6px}
+header .sub{color:var(--muted);font-size:14px}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 28px}
+.pill{background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:5px 13px;font-size:12.5px;color:var(--muted)}
+.pill b{color:var(--ink)}
+h2{font-size:20px;margin:38px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+h3{font-size:15.5px;margin:22px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:18px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.kpi .n{font-size:30px;font-weight:700}
+.kpi .l{font-size:12.5px;color:var(--muted);margin-top:2px}
+.kpi.ok .n{color:var(--ok)} .kpi.warn .n{color:var(--warn)} .kpi.crit .n{color:var(--crit)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.sev{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 9px;border-radius:6px;margin-right:8px;vertical-align:middle}
+.sev.crit{background:rgba(248,81,73,.15);color:var(--crit)}
+.sev.warn{background:rgba(210,153,34,.15);color:var(--warn)}
+.sev.ok{background:rgba(46,160,67,.15);color:var(--ok)}
+.sev.info{background:rgba(56,139,253,.15);color:var(--info)}
+.issue{border-left:3px solid var(--line);padding:4px 0 4px 16px;margin:16px 0}
+.issue.crit{border-color:var(--crit)} .issue.warn{border-color:var(--warn)} .issue.ok{border-color:var(--ok)}
+.issue h3{margin:0 0 6px}
+.issue p{margin:6px 0;color:#c9d4df;font-size:14px}
+.issue .fix{background:var(--card2);border-radius:8px;padding:10px 13px;font-size:13.5px;margin-top:8px}
+.issue .fix b{color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-weight:600;position:sticky;top:0;background:var(--card)}
+td.u{max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+.tag{font-size:11px;padding:2px 7px;border-radius:5px;font-weight:600}
+.t-ok{background:rgba(46,160,67,.15);color:var(--ok)}
+.t-bad{background:rgba(248,81,73,.15);color:var(--crit)}
+.t-warn{background:rgba(210,153,34,.15);color:var(--warn)}
+.muted{color:var(--muted)}
+code{background:var(--card2);padding:1px 6px;border-radius:5px;font-size:12.5px}
+.foot{margin-top:50px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+.legend{font-size:12px;color:var(--muted);margin:6px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Audyt techniczny on-page SEO — GLOV.co (PL)</h1>
+  <div class="sub">Canonicale · nagłówki H1–H6 · meta · status · hreflang · robots · schema</div>
+</header>
+
+<div class="meta">
+  <span class="pill">Domena: <b>glov.co</b> (wersja PL, root)</span>
+  <span class="pill">Data: <b>2026-06-16</b></span>
+  <span class="pill">Metoda: <b>crawl surowego HTML (server-side)</b></span>
+  <span class="pill">Próbka: <b>17 URL</b> reprezentatywnych z 361 PL</span>
+  <span class="pill">Koszt: <b>0 zł</b> (bez płatnego API)</span>
+</div>
+
+<div class="card">
+  <b>Jak czytać ten raport.</b> Strona jest na Shopify, więc HTML generuje się z szablonów — problem znaleziony w jednym URL danego typu (produkt / kolekcja / strona / wpis) występuje na <b>wszystkich</b> URL-ach tego typu. Dlatego próbka 17 stron (HP + 4 produkty + 4 kolekcje + 4 strony + blog PL/EN + 2 wpisy) wykrywa problemy systemowe całej witryny. Wszystkie tagi (canonical, hreflang) są renderowane po stronie serwera — potwierdzono w surowym HTML, nie trzeba renderowania JS.
+</div>
+
+<h2>Podsumowanie — stan techniczny</h2>
+<div class="grid">
+  <div class="kpi ok"><div class="n">100%</div><div class="l">stron z poprawnym self-canonical</div></div>
+  <div class="kpi ok"><div class="n">200</div><div class="l">status na wszystkich badanych URL</div></div>
+  <div class="kpi crit"><div class="n">100%</div><div class="l">stron z title za długim (&gt;60 zn.)</div></div>
+  <div class="kpi warn"><div class="n">4 / 17</div><div class="l">stron bez H1</div></div>
+  <div class="kpi warn"><div class="n">2</div><div class="l">strony blog bez meta description</div></div>
+  <div class="kpi ok"><div class="n">203</div><div class="l">hreflang + x-default (poprawna struktura)</div></div>
+</div>
+<p class="legend">Zielone = fundament zdrowy. Czerwone/pomarańczowe = do naprawy. Poniżej priorytety.</p>
+
+<h2>Znaleziska — priorytetowo</h2>
+
+<div class="issue crit">
+  <h3><span class="sev crit">Krytyczne</span>Title za długi na 100% stron — Shopify dokleja stały suffix</h3>
+  <p>Każdy title kończy się dopisanym automatycznie ciągiem <code>&ndash; GLOV - Innowacja w oczyszczaniu twarzy i pielęgnacji...</code>. Efekt: title mają <b>81–137 znaków</b>, a Google pokazuje ~<b>60</b>. Realny, sprzedażowy fragment title jest ucinany w wynikach wyszukiwania.</p>
+  <p class="muted">Przykład: produkt „Rękawiczka do demakijażu..." — title 137 zn. W SERP widać tylko początek, brand i USP znikają.</p>
+  <div class="fix"><b>Fix:</b> usunąć globalny suffix z szablonu motywu (<code>theme.liquid</code> / ustawienia title) lub skrócić go do samego <code>| GLOV</code>. Docelowo title 50–60 zn. Robić per typ szablonu (product, collection, article), nie ręcznie per produkt.</div>
+</div>
+
+<div class="issue warn">
+  <h3><span class="sev warn">Ważne</span>Strona główna bez H1</h3>
+  <p>HP ma <b>0× H1</b> i od razu <b>24× H2</b>. Brak głównego nagłówka osłabia sygnał tematyczny strony najważniejszej w domenie i psuje hierarchię nagłówków.</p>
+  <div class="fix"><b>Fix:</b> dodać jeden <code>&lt;h1&gt;</code> na HP (np. nazwa marki + kategoria: „GLOV — akcesoria do oczyszczania i pielęgnacji twarzy"). Pozostałe sekcje zejdą do H2.</div>
+</div>
+
+<div class="issue warn">
+  <h3><span class="sev warn">Ważne</span>Strony konta indeksowalne i bez H1</h3>
+  <p><code>/pages/profile</code>, <code>/pages/profile-edit</code>, <code>/pages/set-password</code> mają <b>status 200, brak noindex, brak H1</b>. To strony funkcjonalne (konto użytkownika) — nie powinny trafiać do indeksu Google, marnują crawl budget i mogą generować thin-content.</p>
+  <div class="fix"><b>Fix:</b> dodać <code>&lt;meta name="robots" content="noindex,follow"&gt;</code> na szablonach stron konta. Sprawdzić w GSC, czy nie są już zaindeksowane.</div>
+</div>
+
+<div class="issue warn">
+  <h3><span class="sev warn">Ważne</span>Blog listing bez meta description</h3>
+  <p><code>/blogs/pl</code> i <code>/blogs/en</code> nie mają <b>meta description</b> w ogóle. Google sam wygeneruje snippet — zwykle słaby, niesprzedażowy.</p>
+  <div class="fix"><b>Fix:</b> dodać meta description do szablonu blog/listing (max 155 zn.), opisującą tematykę bloga.</div>
+</div>
+
+<div class="issue warn">
+  <h3><span class="sev warn">Do sprawdzenia</span>hreflang: en-XX wskazują ścieżkę PL</h3>
+  <p>Struktura hreflang jest poprawna formalnie: 203 alternates, <b>x-default obecny</b>, self-reference dla PL jest. Ale angielskie warianty (np. <code>en-AC</code>, <code>en-AR</code>) dla wpisów blog wskazują na <code>/en-global/blogs/<b>pl</b></code> — ścieżka zawiera <code>pl</code> mimo wersji EN. To Shopify routing, ale warto zweryfikować, czy treść pod tym URL faktycznie jest po angielsku, a nie polska renderowana w EN sklepie.</p>
+  <div class="fix"><b>Fix:</b> zweryfikować w GSC raport „International Targeting" + ręcznie otworzyć kilka <code>en-global</code> URL-i. Jeśli treść = PL, to duplikat językowy.</div>
+</div>
+
+<div class="issue info">
+  <h3><span class="sev info">Obserwacja</span>Agresywny rate limiting (429)</h3>
+  <p>Przy crawlu kilku stron na sekundę serwer zwraca <b>429 Too Many Requests</b>. Pojedyncze żądania działają (200). To może ograniczać crawl budget botów przy większych przejściach indeksujących.</p>
+  <div class="fix"><b>Fix:</b> obserwacyjnie — sprawdzić w GSC „Crawl stats", czy Googlebot nie napotyka 429. Jeśli tak, poluzować limity dla znanych botów.</div>
+</div>
+
+<div class="issue ok">
+  <h3><span class="sev ok">OK</span>Co działa dobrze (nie ruszać)</h3>
+  <p><b>Canonicale</b> — wszystkie self-referencing, dokładnie 1 na stronę, zero konfliktów. <b>Status kody</b> — wszystkie 200, zero redirectów w próbce. <b>Schema JSON-LD</b> — obecna wszędzie (HP 5×, produkty 4×, kolekcje 2×). <b>x-default</b> + <b>viewport</b> + <b>OG tagi</b> obecne. <b>H1 na produktach, kolekcjach, wpisach blog</b> — dokładnie 1, poprawny.</p>
+</div>
+
+<h2>Dane szczegółowe — wszystkie badane URL</h2>
+<div class="tbl-wrap">
+<table id="t">
+<thead><tr>
+<th>URL</th><th>Status</th><th>Canonical</th><th>Title (len)</th><th>Meta desc</th><th>H1</th><th>H2</th><th>hreflang</th><th>noindex</th><th>JSON-LD</th>
+</tr></thead>
+<tbody id="tb"></tbody>
+</table>
+</div>
+
+<div class="card" style="margin-top:24px">
+<b>Metodologia.</b> Crawl surowego HTML (curl, User-Agent przeglądarki) 17 reprezentatywnych URL-i polskiej glov.co, po jednym+ z każdego typu szablonu Shopify. Dla każdej strony ekstrakcja: status + redirect, tag canonical (liczba + self-reference), title (+długość), meta description (+długość/brak), nagłówki H1–H6 (liczba + tekst H1), meta robots/noindex, alternates hreflang (+x-default), OG, JSON-LD, viewport. Lista URL pobrana z <code>sitemap.xml</code> (sitemap index Shopify → pod-sitemapy products/pages/collections/blogs, filtr na ścieżki PL bez prefiksu lokalizacji). Wszystkie tagi obecne server-side — renderowanie JS nie było potrzebne, więc audyt jest w 100% darmowy (bez płatnego scrapingu).
+</div>
+
+<div class="foot">
+Audyt techniczny on-page · GLOV.co PL · 2026-06-16 · próbka 17/361 URL · metoda: surowy HTML crawl (server-side), koszt 0 zł.
+</div>
+
+<!-- @ski [GEO-SEO] METODA: audyt techniczny on-page przez darmowy crawl surowego HTML Shopify.
+Krok 1: sitemap.xml -> sitemap index -> pod-sitemapy products/pages/collections/blogs -> filtr ścieżek PL (bez en-/de-/fr- prefiksu).
+Krok 2: próbka reprezentatywna 1+ URL na typ szablonu (HP, product, collection, page, blog-listing, article) — bo Shopify renderuje z szablonów, więc próbka = cała witryna dla problemów systemowych.
+Krok 3: curl z UA przeglądarki (urllib dostaje 403; równoległość >2 -> 429 rate limit, trzeba sekwencyjnie z sleep).
+Krok 4: regex-ekstrakcja: canonical (count+self-ref), title+len, meta desc+len/missing, H1-H6 count + H1 text, meta robots/noindex, hreflang+x-default, OG, JSON-LD, viewport.
+Uwaga: meta description regex MUSI być non-greedy z dopasowaniem do kolejności atrybutów (name przed/po content).
+To powinno być skillem: "eel-techseo-onpage" — darmowy on-page audyt dla każdego klienta na Shopify. Pan Setup: zbudować installer+hook, NIE w _shared ręcznie. -->
+<!-- /@ski -->
+
+<!-- @ga4 GLOV PL technical on-page (2026-06-16): canonicale 100% self-ref OK; title za długi 100% stron (Shopify global suffix, 81-137 zn.); HP 0xH1 (24xH2); strony konta /pages/profile,/profile-edit,/set-password = 200 indeksowalne bez noindex i bez H1; /blogs/pl i /blogs/en bez meta description; hreflang 203 + x-default OK ale en-XX -> /en-global/blogs/pl (PL w ścieżce EN); serwer 429 przy szybkim crawlu. --><!-- /@ga4 -->
+
+<script>
+const rows = [{"url": "/", "status": 200, "canon": 1, "self": true, "title": "Akcesoria do pielęgnacji twarzy ✨ i domowego SPA | GLOV", "tlen": 122, "dlen": 149, "dmiss": false, "h1": 0, "h2": 24, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 5, "h1text": null}, {"url": "/products/rekawica-do-mycia-twarzy-i-demakijazu-cery-mieszanej-glov-on-the-go", "status": 200, "canon": 1, "self": true, "title": "Rękawiczka do demakijażu i oczyszczania twarzy tylko przy użyciu wody", "tlen": 137, "dlen": 137, "dmiss": false, "h1": 1, "h2": 12, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 4, "h1text": "Rękawiczka do demakijażu i oczyszczania twarzy tylko przy użyciu wody GLOV® Iconic Mitt"}, {"url": "/products/glov-on-the-go-all-skin-types", "status": 200, "canon": 1, "self": true, "title": "Rękawica do oczyszczania twarzy i demakijażu GLOV Comfort | GLOV", "tlen": 131, "dlen": 129, "dmiss": false, "h1": 1, "h2": 13, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 4, "h1text": "Ręcznik do oczyszczania twarzy i demakijażu GLOV®"}, {"url": "/products/mini-rekawiczka-do-korekt-makijazu-glov-quick-treat", "status": 200, "canon": 1, "self": true, "title": "Mini-rękawiczka do korekt makijażu GLOV Quick Treat | GLOV", "tlen": 125, "dlen": 125, "dmiss": false, "h1": 1, "h2": 11, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 4, "h1text": "Mini-rękawiczka do korekt makijażu OUTLET"}, {"url": "/products/glov-dry-skin-expert-rekawiczka-do-oczyszczania-twarzy-i-demakijazu-cery-suchej", "status": 200, "canon": 1, "self": true, "title": "Rękawica do mycia twarzy i demakijażu cery suchej GLOV Dry Skin | GLOV", "tlen": 137, "dlen": 148, "dmiss": false, "h1": 1, "h2": 11, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 4, "h1text": "Wielorazowa rękawiczka do demakijażu i oczyszczania skóry suchej za pomoca wody GLOV®"}, {"url": "/collections/zestawy", "status": 200, "canon": 1, "self": true, "title": "Zestawy produktów do pielęgnacji | GLOV", "tlen": 106, "dlen": 146, "dmiss": false, "h1": 1, "h2": 8, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 2, "h1text": "Zestawy"}, {"url": "/collections/akcesoria", "status": 200, "canon": 1, "self": true, "title": "Akcesoria do makijażu i nie tylko | GLOV", "tlen": 107, "dlen": 187, "dmiss": false, "h1": 1, "h2": 8, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 2, "h1text": "Akcesoria"}, {"url": "/collections/oczyszczanie", "status": 200, "canon": 1, "self": true, "title": "Oczyszczanie twarzy i demakijaż | GLOV", "tlen": 105, "dlen": 143, "dmiss": false, "h1": 1, "h2": 8, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 2, "h1text": "Oczyszczanie"}, {"url": "/collections/twarz", "status": 200, "canon": 1, "self": true, "title": "Produkty do pielęgnacji twarzy | GLOV", "tlen": 104, "dlen": 162, "dmiss": false, "h1": 1, "h2": 8, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 2, "h1text": "Twarz"}, {"url": "/pages/contact", "status": 200, "canon": 1, "self": true, "title": "Masz jakieś pytanie? Skontaktuj się z nami | GLOV", "tlen": 116, "dlen": 158, "dmiss": false, "h1": 1, "h2": 8, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 1, "h1text": "Skontaktuj się z nami"}, {"url": "/pages/profile", "status": 200, "canon": 1, "self": true, "title": "Twój profil | GLOV", "tlen": 85, "dlen": 113, "dmiss": false, "h1": 0, "h2": 7, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 1, "h1text": null}, {"url": "/pages/profile-edit", "status": 200, "canon": 1, "self": true, "title": "Edycja profilu | GLOV", "tlen": 88, "dlen": 73, "dmiss": false, "h1": 0, "h2": 7, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 1, "h1text": null}, {"url": "/pages/set-password", "status": 200, "canon": 1, "self": true, "title": "Ustaw hasło | GLOV", "tlen": 85, "dlen": 86, "dmiss": false, "h1": 0, "h2": 7, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 1, "h1text": null}, {"url": "/blogs/pl", "status": 200, "canon": 1, "self": true, "title": "Blog PL – GLOV", "tlen": 81, "dlen": 0, "dmiss": true, "h1": 1, "h2": 7, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 1, "h1text": "GLOV's world"}, {"url": "/blogs/en", "status": 200, "canon": 1, "self": true, "title": "Blog EN – GLOV", "tlen": 81, "dlen": 0, "dmiss": true, "h1": 1, "h2": 7, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 1, "h1text": "GLOV's world"}, {"url": "/blogs/pl/tradycyjny-demakijaz-vs-nowe-metody-usuwania-makijazu", "status": 200, "canon": 1, "self": true, "title": "Tradycyjny demakijaż vs. nowe metody usuwania makijażu", "tlen": 121, "dlen": 143, "dmiss": false, "h1": 1, "h2": 9, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 4, "h1text": "Tradycyjny demakijaż vs. nowe metody usuwania makijażu"}, {"url": "/blogs/pl/5-mitow-na-temat-demakijazu-twarzy-tego-nigdy-nie-powinnas-robic", "status": 200, "canon": 1, "self": true, "title": "Mity na temat demakijażu twarzy. Tego nie powinnaś robić!", "tlen": 124, "dlen": 157, "dmiss": false, "h1": 1, "h2": 12, "hreflang": 203, "xdef": true, "noindex": false, "jsonld": 4, "h1text": "5 mitów na temat demakijażu twarzy. Tego nigdy nie powinnaś robić!"}];
+const tb=document.getElementById('tb');
+function tag(t,cls){return `<span class="tag ${cls}">${t}</span>`}
+rows.forEach(r=>{
+  const tr=document.createElement('tr');
+  const tlen = r.tlen>60 ? tag(r.tlen,'t-bad') : tag(r.tlen,'t-ok');
+  const desc = r.dmiss ? tag('BRAK','t-bad') : (r.dlen>160? tag(r.dlen+' (długa)','t-warn'): tag(r.dlen,'t-ok'));
+  const h1 = r.h1===1 ? tag('1','t-ok') : (r.h1===0? tag('0 BRAK','t-bad') : tag(r.h1+' wiele','t-warn'));
+  const can = (r.canon===1 && r.self) ? tag('self ✓','t-ok') : tag('?','t-warn');
+  const st = r.status===200 ? tag('200','t-ok') : tag(r.status,'t-bad');
+  const nix = r.noindex ? tag('noindex','t-warn') : tag('index','t-ok');
+  tr.innerHTML = `<td class="u" title="${r.url}">${r.url}</td>
+   <td>${st}</td><td>${can}</td>
+   <td>${(r.title||'').replace(/</g,'&lt;')} ${tlen}</td>
+   <td>${desc}</td><td>${h1}</td><td>${r.h2}</td>
+   <td>${r.hreflang}${r.xdef?' +xdef':''}</td><td>${nix}</td><td>${r.jsonld}</td>`;
+  tb.appendChild(tr);
+});
+</script>
+</body>
+</html>
