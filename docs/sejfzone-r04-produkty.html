@@ -448,7 +448,7 @@ function refreshData() {
   btn.disabled = true;
   btn.style.opacity = '0.6';
 
-  // Wyślij request do Composio webhook który regeneruje raport
+  // Wyślij request do webhooka który regeneruje raport
   // Na razie: otwórz instrukcję jak odświeżyć + zaznacz kiedy dane były pobrane
   setTimeout(() => {
     const msg = 'Ten raport jest statyczny.\n\nAby odświeżyć dane — powiedz Claude:\n"odśwież raport sejfzone-r04-produkty"\n\nDane zostaną pobrane z GA4 i raport zostanie zaktualizowany na GitHub Pages.';
