@@ -87,7 +87,7 @@ blockquote{border-left:3px solid var(--bd);padding-left:14px;color:var(--tx2);ma
   <div class="tab" data-v="pole" onclick="go(this)">❓ Pole pytań</div>
   <div class="tab" data-v="strat" onclick="go(this)">⚔️ Strategia odpowiedzi</div>
   <div class="tab" data-v="src" onclick="go(this)">📎 Źródła</div>
-  <a class="tab" href="MAPA_PERCEPCJI_lakier_do_paznokci.html" style="text-decoration:none" title="168 pytań × angle CoolNails + siła wejścia 🟢🟡🔴">🗺 Mapa percepcji ↗</a>
+  <div class="tab" data-v="mapa" onclick="go(this)">🗺 Mapa percepcji</div>
 </div>
 
 <div class="wrap">
@@ -160,12 +160,12 @@ blockquote{border-left:3px solid var(--bd);padding-left:14px;color:var(--tx2);ma
 
   <h2>🗺 Mapa percepcji</h2>
   <div class="cards">
-    <a class="cardlink" href="MAPA_PERCEPCJI_lakier_do_paznokci.html" style="text-decoration:none;color:inherit;border-color:var(--eko)">
+    <div class="cardlink" onclick="go(qs('[data-v=mapa]'))" style="border-color:var(--eko)">
       <div class="ico">🗺</div>
-      <div class="t">Mapa percepcji odpowiedzi ↗</div>
+      <div class="t">Mapa percepcji odpowiedzi</div>
       <div class="d"><b>9 ścieżek × etapy świadomości × 168 pytań</b>, każde z <b>angle CoolNails</b> (jak przekierować na zakup) + <b>siła wejścia 🟢🟡🔴</b>. Format wzorca SejfZone. Generatory: <code>perception_paths_v4</code> + <code>gen_angle</code> + <code>render_mapa</code>.</div>
-      <div class="meta" style="color:var(--eko)">otwórz mapę →</div>
-    </a>
+      <div class="meta" style="color:var(--eko)">otwórz zakładkę →</div>
+    </div>
   </div>
 
   <div class="foot">Plik: <code>HUB_lakiery.html</code> · źródła: <code>CS_lakiery_do_paznokci_PELNY.md</code> · <code>PILOT_SCIEZKI_lakiery.md</code> · <code>POLE_PYTAN_lakiery.html</code> · metodologia CS v3</div>
@@ -366,6 +366,13 @@ Q2d (dziecko)  → Wiek? → peel-off / wodny zmywalny
   <h1>Źródła — <span>CoolNails by GLOV</span></h1>
   <div class="sub">Materiały klienta (prezentacja PDF + brief) są <b>poufne</b>.</div>
   <div class="box wrog"><b>🔒 Nie publikowane na www.</b> Surowe materiały klienta dostępne tylko w wersji roboczej (lokalnej). Ta publiczna wersja zawiera wyłącznie opracowanie GEO (CS, strategia, pole pytań, mapa).</div>
+</section>
+
+<!-- ===================== MAPA (osadzona) ===================== -->
+<section class="view" id="v-mapa">
+  <h1>Mapa percepcji odpowiedzi — <span>CoolNails by GLOV</span></h1>
+  <div class="sub">168 pytań × etapy świadomości × angle + siła + format. <a href="MAPA_PERCEPCJI_lakier_do_paznokci.html" target="_blank">otwórz pełnoekranowo ↗</a></div>
+  <iframe src="MAPA_PERCEPCJI_lakier_do_paznokci.html" style="width:100%;height:84vh;border:1px solid var(--bd);border-radius:10px;background:#fff" title="Mapa percepcji odpowiedzi CoolNails"></iframe>
 </section>
 
 </div>
