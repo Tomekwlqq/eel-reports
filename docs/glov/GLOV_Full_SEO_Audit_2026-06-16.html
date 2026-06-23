@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="light"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Full SEO Audit (2026-06-16)</title>
+<style>
+[data-theme="light"]{--bg:#fff;--bg2:#f7f7f8;--card:#fff;--line:#e6e6e9;--line2:#ededf0;--txt:#0a0a0a;--txt2:#5b5b66;--muted:#9a9aa5;--accent:#7c5cff;--ok:#16a34a;--warn:#d97706;--crit:#dc2626;--info:#2563eb;--shadow:0 1px 3px rgba(0,0,0,.06)}
+[data-theme="dark"]{--bg:#0f1115;--bg2:#181b22;--card:#181b22;--line:#2a2f3a;--line2:#23272f;--txt:#e8eaed;--txt2:#9aa0aa;--muted:#6b7280;--accent:#9d7cff;--ok:#3ecf8e;--warn:#f5a623;--crit:#f87171;--info:#60a5fa;--shadow:0 1px 3px rgba(0,0,0,.3)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,sans-serif;line-height:1.55;transition:.3s}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px 80px}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:20}
+.logo{font-size:19px;font-weight:800}.logo span{color:var(--accent)}
+.theme-btn{background:var(--bg2);border:1px solid var(--line);border-radius:9px;width:36px;height:36px;cursor:pointer;font-size:15px}
+.hero{padding:44px 0 24px}
+.badge{display:inline-flex;gap:6px;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--txt2);background:var(--bg2);border:1px solid var(--line);padding:5px 12px;border-radius:30px;margin-bottom:18px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+h1{font-size:40px;font-weight:800;letter-spacing:-1.5px;line-height:1.08}
+@media(max-width:640px){h1{font-size:30px}}
+.hero p{font-size:15px;color:var(--txt2);max-width:720px;margin-top:14px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.pill{font-size:12px;padding:5px 12px;border-radius:30px;background:var(--bg2);color:var(--txt2);border:1px solid var(--line)}
+.tldr{background:linear-gradient(120deg,rgba(124,92,255,.08),rgba(22,163,74,.05));border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:14px;padding:20px 22px;margin:26px 0}
+.tldr h2{font-size:15px;margin-bottom:10px}
+.tldr p{font-size:14px;color:var(--txt);margin:7px 0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:13px;margin:24px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px;box-shadow:var(--shadow)}
+.kpi .n{font-size:27px;font-weight:800}.kpi .l{font-size:12px;color:var(--txt2);margin-top:3px}
+.kpi.ok .n{color:var(--ok)}.kpi.warn .n{color:var(--warn)}.kpi.crit .n{color:var(--crit)}.kpi.info .n{color:var(--info)}
+.modnav{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0}
+.modnav a{font-size:12.5px;padding:6px 12px;border-radius:8px;background:var(--bg2);border:1px solid var(--line);color:var(--txt2);text-decoration:none}
+.modnav a:hover{border-color:var(--accent);color:var(--accent)}
+.mod{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin:18px 0;box-shadow:var(--shadow);scroll-margin-top:70px}
+.mod .mh{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.mod .num{font-size:12px;font-weight:800;color:var(--accent);background:rgba(124,92,255,.1);padding:3px 9px;border-radius:7px}
+.mod h2{font-size:20px;font-weight:800;letter-spacing:-.4px}
+.mod .src{font-size:11.5px;color:var(--muted);margin-bottom:14px}
+.mod p{font-size:14px;color:var(--txt);margin:9px 0}
+.mod ul{margin:8px 0 8px 4px;list-style:none}
+.mod li{font-size:13.5px;color:var(--txt);padding:4px 0 4px 20px;position:relative}
+.mod li:before{content:"→";position:absolute;left:0;color:var(--accent)}
+.sev{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:5px;margin-right:7px}
+.sev.crit{background:rgba(220,38,38,.13);color:var(--crit)}.sev.warn{background:rgba(217,119,6,.13);color:var(--warn)}.sev.ok{background:rgba(22,163,74,.13);color:var(--ok)}.sev.info{background:rgba(37,99,235,.13);color:var(--info)}
+.find{border-left:3px solid var(--line);padding:3px 0 3px 15px;margin:14px 0}
+.find.crit{border-color:var(--crit)}.find.warn{border-color:var(--warn)}.find.ok{border-color:var(--ok)}.find.info{border-color:var(--info)}
+.find h4{font-size:14.5px;margin-bottom:4px}
+.fix{background:var(--bg2);border-radius:8px;padding:9px 12px;font-size:13px;margin-top:7px}
+.fix b{color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line)}
+th{color:var(--txt2);font-weight:600}
+code{background:var(--bg2);padding:1px 6px;border-radius:5px;font-size:12px;font-family:ui-monospace,Menlo,monospace}
+.tag{font-size:10.5px;padding:2px 7px;border-radius:5px;font-weight:600}
+.t-ok{background:rgba(22,163,74,.13);color:var(--ok)}.t-bad{background:rgba(220,38,38,.13);color:var(--crit)}.t-warn{background:rgba(217,119,6,.13);color:var(--warn)}
+.foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);text-align:center;line-height:1.8}
+.bar{height:7px;border-radius:4px;background:var(--bg2);overflow:hidden;display:inline-block;width:120px;vertical-align:middle;margin-left:6px}
+.bar > i{display:block;height:100%;background:var(--accent)}
+</style></head>
+<body>
+<div class="topbar wrap" style="max-width:none;padding-left:max(22px,calc((100vw - 1080px)/2));padding-right:max(22px,calc((100vw - 1080px)/2))">
+  <div class="logo">glov <span>·</span> full seo audit</div>
+  <button class="theme-btn" id="themeBtn">🌙</button>
+</div>
+<div class="wrap">
+
+<div class="hero">
+  <div class="badge"><span class="dot"></span> Audyt kanoniczny · 10 modułów · INTERNAL</div>
+  <h1>Full SEO Audit — glov.co (PL)</h1>
+  <p>Pełny audyt SEO: technika, on-page (202 URL), hreflang, widoczność, keywords, kanibalizacja, konkurencja i GEO/AI. Źródła: surowy crawl + Senuto + DataForSEO + GA4, każda liczba z weryfikacją krzyżową. Skonsultowany z wiki GEO (rubryka 14-elementowa, Answer Equity, Query Fan-out).</p>
+  <div class="pills">
+    <span class="pill">2026-06-16</span>
+    <span class="pill">Senuto · DataForSEO · GA4 · crawl</span>
+    <span class="pill">202 URL crawl</span>
+    <span class="pill">wg EEL warstwa 10 GEO+SEO</span>
+  </div>
+</div>
+
+<!-- TL;DR -->
+<div class="tldr">
+  <h2>⚡ TL;DR — 4 rzeczy do zapamiętania</h2>
+  <p><b>1. „Spadek widoczności -13,8%" to fałszywy alarm.</b> Uskok Senuto z 31.05 (-45% w dzień) to artefakt bazy Senuto, NIE utrata rankingów. Potwierdzone 3 źródłami: ruch organiczny GA4 stabilny/rosnący, DataForSEO ETV w czerwcu wręcz odbił, pozycje spadły tylko łagodnie.</p>
+  <p><b>2. Realny problem to powolna erozja</b> — liczba fraz 261→137 i ETV -30% przez cały H1 2026. Nie katastrofa, ale trend do zatrzymania.</p>
+  <p><b>3. On-page ma konkretne dziury:</b> 58 URL bez meta description, 31 stron /pages/ bez H1, testowe strony na produkcji, title za długi na 100% stron, kody rabatowe zamiast opisów.</p>
+  <p><b>4. GEO/AI to atut, nie luka</b> — GLOV ma llms.txt, UCP/MCP, AI-ready robots.txt. Za to w klasycznym SEO jest mały: widoczność 20× niższa od lidera niszy.</p>
+</div>
+
+<div class="kpis">
+  <div class="kpi info"><div class="n">2242</div><div class="l">widoczność Senuto (realna, nie 2601→artefakt)</div></div>
+  <div class="kpi crit"><div class="n">-30%</div><div class="l">ETV organic sty→cze (DataForSEO) — erozja</div></div>
+  <div class="kpi warn"><div class="n">58</div><div class="l">URL bez meta description (29%)</div></div>
+  <div class="kpi warn"><div class="n">31</div><div class="l">stron /pages/ bez H1</div></div>
+  <div class="kpi ok"><div class="n">llms.txt ✓</div><div class="l">GEO/AI ready (rzadkość)</div></div>
+  <div class="kpi crit"><div class="n">20×</div><div class="l">lider niszy ma 20× większą widoczność</div></div>
+</div>
+
+<div class="modnav">
+  <a href="#m1">1 · Technika</a><a href="#m2">2 · On-page</a><a href="#m3">3 · Hreflang</a>
+  <a href="#m4">4 · CWV</a><a href="#m5">5 · Widoczność</a><a href="#m6">6 · Keywords</a>
+  <a href="#m7">7 · Kanibalizacja</a><a href="#m8">8 · Konkurencja</a><a href="#m9">9 · GEO/AI</a><a href="#m10">10 · Synteza</a>
+</div>
+
+<!-- M1 -->
+<div class="mod" id="m1">
+  <div class="mh"><span class="num">MODUŁ 1</span><h2>Technika on-site</h2></div>
+  <div class="src">Źródło: crawl curl 202 URL · sitemap.xml</div>
+  <div class="find ok"><h4><span class="sev ok">OK</span>Fundament techniczny zdrowy</h4>
+    <p>Wszystkie 202 badane URL: <b>status 200, zero redirectów, zero 404</b> w przestrzeni PL. Sitemap index Shopify poprawny (products/pages/collections/blogs). robots.txt obecny i poprawny.</p></div>
+  <div class="find info"><h4><span class="sev info">Obserwacja</span>Rate limiting 429</h4>
+    <p>Serwer zwraca 429 przy szybkim crawlu (>2 żądania/s). Pojedyncze 200. Może ograniczać crawl budget przy dużych przejściach botów — sprawdzić w GSC Crawl Stats.</p></div>
+</div>
+
+<!-- M2 -->
+<div class="mod" id="m2">
+  <div class="mh"><span class="num">MODUŁ 2</span><h2>On-page całej witryny</h2></div>
+  <div class="src">Źródło: crawl 202 URL (43 pages, 83 collections, 41 products, 35 blogs)</div>
+  <div class="find crit"><h4><span class="sev crit">Krytyczne</span>Title za długi na 100% stron</h4>
+    <p>Shopify dokleja stały suffix <code>– GLOV - Innowacja w oczyszczaniu twarzy i pielęgnacji ciała</code> (61 zn.) do KAŻDEGO title. Efekt: title 62–131 zn. (śr. 96), Google pokazuje ~60. Dodatkowo <b>12 produktów ma podwójny separator</b> (<code>| GLOV – GLOV -...</code>).</p>
+    <div class="fix"><b>Fix:</b> skrócić globalny suffix do <code>| GLOV</code> w ustawieniach motywu. Ujednolicić separator.</div></div>
+  <div class="find crit"><h4><span class="sev crit">Krytyczne</span>Testowe strony na produkcji + indeksowalne</h4>
+    <p><code>/pages/testowy-page</code>, <code>/pages/testing-druga-strona</code> — żywe, indeksowalne, z meta „Przykładowy opis." i H1 „GLOV". <b>20 stron utility bez noindex</b> (profile, wishlist, set-password, reviews, tolstoy_test…).</p>
+    <div class="fix"><b>Fix:</b> usunąć strony testowe; dodać <code>noindex,follow</code> do stron konta/utility.</div></div>
+  <div class="find warn"><h4><span class="sev warn">Ważne</span>58 URL bez meta description (29%)</h4>
+    <p>Brak meta: <b>41% produktów, 30% kolekcji, 35% stron</b>. Dodatkowo 3 kolekcje mają <b>kod rabatowy zamiast opisu</b> (<code>-25% z kodem CIAŁO25</code>), a 2 — pusty tag.</p>
+    <div class="fix"><b>Fix:</b> meta description per szablon (≤155 zn.). Najpierw produkty i kolekcje z ruchem.</div></div>
+  <div class="find warn"><h4><span class="sev warn">Ważne</span>31 stron /pages/ bez H1</h4>
+    <p>72% stron /pages/ bez H1, w tym indeksowalne treściowe: FAQ, O nas, Regulamin, GLOV Club, Karty podarunkowe, Patenty. 7 stron z podwójnym H1. (Produkty, kolekcje, blog — H1 OK.)</p>
+    <div class="fix"><b>Fix:</b> dodać 1× H1 do szablonu page; naprawić podwójne H1.</div></div>
+  <div class="find warn"><h4><span class="sev warn">Porządek</span>Duplikaty title/meta</h4>
+    <p>Pary duplikatów: <code>walentynki</code>+<code>walentynki-1</code>, <code>bundles</code>+<code>fastbundles</code>, <code>obieg-zamkniety</code>+<code>-1</code>. Dwie kolekcje z title „. – GLOV" (nazwa = kropka).</p></div>
+  <div class="find ok"><h4><span class="sev ok">OK</span>Canonical + JSON-LD</h4>
+    <p>Canonical self-referencing na całości (9 „anomalii" to tylko wielkość liter w %-kodowaniu Unicode — benign). JSON-LD kompletny: produkty 4× (Organization, WebSite, Breadcrumb, Product), kolekcje 2×, blog 4×. OG + viewport wszędzie.</p></div>
+</div>
+
+<!-- M3 -->
+<div class="mod" id="m3">
+  <div class="mh"><span class="num">MODUŁ 3</span><h2>Hreflang / i18n</h2></div>
+  <div class="src">Źródło: crawl + analiza wzajemności</div>
+  <div class="find ok"><h4><span class="sev ok">OK</span>Struktura poprawna</h4>
+    <p>203 hreflang + <b>x-default obecny wszędzie</b>, wskazuje PL. Self-reference jest. Shopify implementuje hreflang per-kraj (~200 tagów/stronę zamiast 4-5) — valid wg Google, ale bulky w HTML.</p></div>
+  <div class="find warn"><h4><span class="sev warn">Do sprawdzenia</span>en-XX → ścieżka /blogs/pl</h4>
+    <p>Angielskie warianty wpisów blog wskazują <code>/en-global/blogs/<b>pl</b></code> — ścieżka zawiera „pl" mimo wersji EN. Zweryfikować czy treść pod tym URL faktycznie jest po angielsku (vs PL renderowana w EN sklepie).</p></div>
+</div>
+
+<!-- M4 -->
+<div class="mod" id="m4">
+  <div class="mh"><span class="num">MODUŁ 4</span><h2>Core Web Vitals</h2></div>
+  <div class="src">Źródło: poprzedni audyt GLOV_Core_Web_Vitals.md (Lighthouse, 2026-05-13)</div>
+  <div class="find ok"><h4><span class="sev ok">OK</span>CWV zielone (z poprzedniego audytu)</h4>
+    <p>LCP 1,7s · INP 127ms · CLS 0,02 — wszystko w zielonym. Core Web Vitals NIE są przyczyną problemów SEO. <span class="muted">(Ten moduł oparty na istniejącym audycie — do odświeżenia Lighthouse przy następnej turze, darmowo przez chrome-devtools.)</span></p></div>
+</div>
+
+<!-- M5 -->
+<div class="mod" id="m5">
+  <div class="mh"><span class="num">MODUŁ 5</span><h2>Widoczność — diagnoza spadku ⭐</h2></div>
+  <div class="src">Źródło: Senuto historia + DataForSEO ETV + GA4 organic — CROSS-CHECK 3 źródeł</div>
+  <div class="find crit"><h4><span class="sev crit">Demaskowanie</span>„Spadek -13,8%" to artefakt Senuto, nie realny</h4>
+    <p>Senuto pokazuje widoczność 2601→2242 (-13,8%), a w danych dziennych <b>uskok 31.05: 5207→2853 (-45% w jeden dzień)</b> + domain_rank 40586→63061. Wygląda jak katastrofa. NIE jest:</p>
+    <ul>
+      <li><b>GA4 organic 31.05:</b> 217 → 259 → 410 (01.06) — ruch <b>wzrósł</b>, nie spadł</li>
+      <li><b>DataForSEO ETV:</b> maj 3992 → <b>czerwiec 4084 (odbicie)</b> — brak uskoku</li>
+      <li><b>Pozycje Senuto:</b> top3 170→168, top10 318→301 — spadek łagodny, nieproporcjonalny do -45% „widoczności"</li>
+    </ul>
+    <p>Sama metryka „widoczność" runęła bez pokrycia w pozycjach i ruchu = <b>przeliczenie bazy Senuto</b>, nie utrata rankingów.</p></div>
+  <div class="find warn"><h4><span class="sev warn">Realny problem</span>Powolna erozja przez cały H1 2026</h4>
+    <p>DataForSEO — liczba fraz: sty <b>261</b> → cze <b>137</b> (-47%). ETV: 5712 → 4084 (-29%). To prawdziwy, stopniowy trend — głównie osypywanie słabszych/sezonowych fraz, nie nagłe zdarzenie.</p>
+    <div class="fix"><b>Fix:</b> nie panikować spadkiem Senuto. Skupić się na zatrzymaniu erozji fraz: odświeżyć stare treści (Content Freshness — reguła 10 mies.), odzyskać duże frazy tuż za top10 (Moduł 6).</div></div>
+  <div class="find ok"><h4><span class="sev ok">Rosnące</span>Co idzie w górę</h4>
+    <p>Kategorie włosowe: <code>turbany-do-wlosow</code> +425%, <code>reczniki-do-twarzy</code> +71. Blog poradnikowy: <code>naturalne-sposoby-na-rozjasnianie-wlosow</code> (31 fraz). Włosy + poradniki = motor wzrostu.</p></div>
+</div>
+
+<!-- M6 -->
+<div class="mod" id="m6">
+  <div class="mh"><span class="num">MODUŁ 6</span><h2>Keywords / pozycje</h2></div>
+  <div class="src">Źródło: DataForSEO ranked_keywords (top 40 wg ETV) + Senuto</div>
+  <div class="find info"><h4><span class="sev info">Mapa</span>Na czym stoi GLOV</h4>
+    <ul>
+      <li><b>Brand „glov"</b> — 6600 wysz., poz.1, ETV 2006 (~40% ruchu z top fraz)</li>
+      <li><b>Nano szkło / pumeks</b> — jeden produkt zgarnia ~11 fraz (pumeks, tarka, nano szkło do pięt…), filar pozabrandowy</li>
+      <li><b>Nisza włosowa</b> — grzebień do fal/loków, szczotka glov, turbany</li>
+    </ul>
+    <p>Rozkład top-20 fraz: 8× poz.1, 12× poz.2-3, 15× poz.4-10, 5× poz.11-20.</p></div>
+  <div class="find warn"><h4><span class="sev warn">Szansa</span>Duże frazy tuż za top10 — do odzyskania</h4>
+    <table><tr><th>Fraza</th><th>Wol.</th><th>Poz.</th><th>URL</th></tr>
+      <tr><td>gąbka do makijażu</td><td>3600</td><td><span class="tag t-warn">10</span></td><td><code>/collections/gabki-do-makijazu</code></td></tr>
+      <tr><td>ręczniki do twarzy</td><td>1900</td><td><span class="tag t-bad">11</span></td><td><code>/collections/reczniki-do-twarzy</code></td></tr>
+      <tr><td>satynowy czepek do spania</td><td>1600</td><td><span class="tag t-warn">10</span></td><td><code>/products/...czepek</code></td></tr>
+      <tr><td>grzebień do loków</td><td>1300</td><td><span class="tag t-warn">7</span></td><td><code>/products/coolcurl</code></td></tr>
+      <tr><td>pędzel kabuki</td><td>880</td><td><span class="tag t-warn">8</span></td><td><code>/blogs/pl/...pedzel-kabuki</code></td></tr>
+    </table>
+    <div class="fix"><b>Fix:</b> te strony mają duży wolumen i są blisko top — priorytet on-page (meta, H1, Answer Equity, wewnętrzne linki). „gąbka do makijażu" 3600/mc z poz.10 to największa pojedyncza szansa.</div></div>
+</div>
+
+<!-- M7 -->
+<div class="mod" id="m7">
+  <div class="mh"><span class="num">MODUŁ 7</span><h2>Kanibalizacja</h2></div>
+  <div class="src">Źródło: Senuto cannibalization</div>
+  <div class="find ok"><h4><span class="sev ok">OK</span>Brak problemu strukturalnego — severity LOW</h4>
+    <p>Tylko 5 fraz, w większości benign: różne wpisy blog na pokrewne frazy (zmywanie makijażu, fazy księżyca), dwie szczotki do ciała na „body brush". Nie wymaga konsolidacji. <span class="muted">Drobiazg: „body brush" — stara szczotka (poz.1) ustąpiła jonizującej (poz.3), warto ujednolicić który URL promować.</span></p></div>
+</div>
+
+<!-- M8 -->
+<div class="mod" id="m8">
+  <div class="mh"><span class="num">MODUŁ 8</span><h2>Konkurencja</h2></div>
+  <div class="src">Źródło: Senuto competitors (19 domen, 15 on-page)</div>
+  <div class="find crit"><h4><span class="sev crit">Realia</span>GLOV jest mały w swojej lidze</h4>
+    <table><tr><th>Domena</th><th>Widoczność</th><th>vs GLOV</th><th>Wspólne frazy</th></tr>
+      <tr><td><b>glov.co</b></td><td>2 242</td><td>—</td><td>—</td></tr>
+      <tr><td>rytmnatury.pl</td><td>43 678</td><td>20×</td><td>53</td></tr>
+      <tr><td>lullalove.com</td><td>35 092</td><td>16×</td><td>38</td></tr>
+      <tr><td>almania.pl</td><td>28 122</td><td>13×</td><td>32</td></tr>
+      <tr><td>jogapiekna.com</td><td>22 083</td><td>10×</td><td>41</td></tr>
+      <tr><td>keratinmoment.pl</td><td>15 895</td><td>7×</td><td>56</td></tr>
+      <tr><td>annabelleminerals.com</td><td>14 802</td><td>7×</td><td>52</td></tr>
+    </table>
+    <p>GLOV dzieli najwięcej fraz z keratinmoment (56) i rytmnatury (53) — to domeny włosowe/pielęgnacyjne. <b>domain_rank GLOV 65956</b> — gorszy niż prawie wszyscy konkurenci.</p>
+    <div class="fix"><b>Fix:</b> GLOV nie wygra szerokością z 20× większymi graczami. Strategia niszowa: wygrywać tam gdzie ma unikat produktowy (nano szkło, demakijaż wodą, akcesoria włosowe) + blog poradnikowy. Gap analysis fraz konkurentów = osobna tura.</div></div>
+</div>
+
+<!-- M9 -->
+<div class="mod" id="m9">
+  <div class="mh"><span class="num">MODUŁ 9</span><h2>GEO / AI search</h2></div>
+  <div class="src">Źródło: crawl (llms.txt, robots) + Senuto AIO · rubryka wiki GEO</div>
+  <div class="find ok"><h4><span class="sev ok">Atut</span>GLOV jest AI-ready — to rzadkość</h4>
+    <ul>
+      <li><b>llms.txt istnieje</b> (HTTP 200) — większość sklepów nie ma</li>
+      <li><b>robots.txt AI-ready:</b> UCP/MCP endpoint, agents.md, shop.app/SKILL.md, brak blokad GPTBot/ClaudeBot/PerplexityBot</li>
+      <li><b>Shopify agentic commerce</b> — strona przygotowana pod zakupy przez agentów AI</li>
+    </ul>
+    <p>To Shopify nowej generacji. W warstwie „GEO Bot Access" i „llms.txt" (wg wiki) GLOV jest dalej niż typowy sklep.</p></div>
+  <div class="find warn"><h4><span class="sev warn">Potencjał</span>AIO + rubryka GEO do dociśnięcia</h4>
+    <p>Senuto: <b>453 AIO keywords, 161 widocznych</b> w AI Overviews. Frazy z AIO już teraz: „zmywanie makijażu mydłem", „depilacja a fazy księżyca" (snippets: ai_overview + PAA).</p>
+    <div class="fix"><b>Fix (wg rubryki wiki GEO 14 elementów):</b> dla top PDP dodać Answer Equity block (30 słów, Primary Purchase Concern), FAQ 5-7 z PAA, Query Fan-out coverage, sprawdzić Data Parity (HTML=JSON-LD=feed). To osobny moduł produkcyjny — łączy się z perception-journey-planner i Category Standards.</p></div>
+</div>
+
+<!-- M10 -->
+<div class="mod" id="m10">
+  <div class="mh"><span class="num">MODUŁ 10</span><h2>Synteza — priorytety wg wpływu</h2></div>
+  <div class="src">Źródło: wszystkie moduły + GA4</div>
+  <p>Posortowane wg realnego wpływu na ruch/przychód, nie wg liczby błędów:</p>
+  <div class="find crit"><h4><span class="sev crit">1. Teraz</span>Posprzątać produkcję + odzyskać duże frazy z top10</h4>
+    <p>Usunąć strony testowe, noindex na utility, naprawić „gąbka do makijażu" (3600/mc, poz.10) i „ręczniki do twarzy" (1900, poz.11) — to największe pojedyncze szanse ruchu.</p></div>
+  <div class="find warn"><h4><span class="sev warn">2. Wkrótce</span>Zatrzymać erozję fraz</h4>
+    <p>261→137 fraz przez H1. Odświeżyć stare treści blog (Content Freshness), uzupełnić 58 brakujących meta, dodać H1 na stronach treściowych. Skrócić title.</p></div>
+  <div class="find info"><h4><span class="sev info">3. Strategicznie</span>Niszowa przewaga + GEO</h4>
+    <p>Nie ścigać 20× większych. Budować autorytet w niszy (nano szkło, demakijaż wodą, akcesoria włosowe) + wykorzystać przewagę AI-ready (llms.txt, UCP) pod rosnący agentic commerce. Docisnąć rubrykę GEO na top PDP.</p></div>
+</div>
+
+<div class="foot">
+  <b>GLOV Full SEO Audit</b> · 2026-06-16 · INTERNAL<br>
+  Źródła: surowy crawl 202 URL · Senuto (property PL) · DataForSEO Labs · GA4 342844459 · wiki GEO (rubryka 14-el.)<br>
+  Każda liczba zweryfikowana krzyżowo. Spadek widoczności Senuto zdemaskowany jako artefakt bazy (3 źródła).
+</div>
+</div>
+
+<!-- @ga4 GLOV Full SEO 2026-06-16: widocznosc Senuto 2242 (uskok 31.05 -45% = ARTEFAKT bazy, nie realny — potw. GA4 organic stabilny+DataForSEO ETV cze 4084 odbil+pozycje lagodne). Realna erozja: frazy 261->137, ETV -29% H1. Top fraza brand 'glov' 6600/poz1/ETV2006. Pumeks nano szkla = 11 fraz. Szanse: gabka do makijazu 3600/poz10, reczniki do twarzy 1900/poz11. Konkurencja: lider rytmnatury 20x wieksza widocznosc, domain_rank GLOV 65956. Kanibalizacja LOW (5 fraz). --><!-- /@ga4 -->
+<!-- @ski [geo] GLOV AI-ready: llms.txt HTTP200, robots ma UCP/MCP+agents.md+shop.app/SKILL.md, brak blokad GPTBot/ClaudeBot/PerplexityBot. 453 AIO keywords (161 widocznych). To powinno byc skillem: pelny audyt SEO modularny (eel-seo-audit-full) wg planu GLOV_Full_SEO_Audit_PLAN.md. --><!-- /@ski -->
+<!-- @ski [scan] On-page crawl 202 URL: title za dlugi 100% (Shopify suffix 61zn), 58 URL bez meta desc (41% produktow), 31 stron /pages/ bez H1, strony testowe na produkcji (testowy-page, testing-druga-strona), 20 utility bez noindex, kody rabatowe zamiast meta w 3 kolekcjach. --><!-- /@ski -->
+
+<script>
+const root=document.documentElement, btn=document.getElementById('themeBtn');
+const saved=localStorage.getItem('glov-theme')||'light';
+root.setAttribute('data-theme',saved); btn.textContent=saved==='light'?'🌙':'☀️';
+btn.onclick=()=>{const n=root.getAttribute('data-theme')==='light'?'dark':'light';root.setAttribute('data-theme',n);localStorage.setItem('glov-theme',n);btn.textContent=n==='light'?'🌙':'☀️';};
+</script>
+</body></html>
