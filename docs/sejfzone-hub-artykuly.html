@@ -453,6 +453,13 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
 
 <!-- ============ ZASOBY ============ -->
 <section class="view" id="res">
+  <div id="offlineNote" style="display:none;margin-bottom:18px;padding:14px 16px;border:1px solid #f0c674;border-radius:11px;background:#fff8e8;color:#7a5200;font-size:13.5px;line-height:1.5">
+    <strong>&#9888;&#65039; Cz&#281;&#347;&#263; link&#243;w poni&#380;ej (&#8222;lokalna&#8221;) otwiera pliki na dysku</strong> i dzia&#322;a tylko w <strong>wersji offline</strong> huba (otwartej z Twojego komputera). W tej wersji online s&#261; nieaktywne.
+    <div style="margin-top:10px">
+      <a class="btn ghost" href="sejfzone-hub-offline.html" download="HUB_artykuly.html" style="font-weight:600">&#11015; Pobierz wersj&#281; offline huba</a>
+      <span style="margin-left:8px;opacity:.8">Zapisz plik i otw&#243;rz go z dysku &#8212; wtedy linki lokalne zadzia&#322;aj&#261;.</span>
+    </div>
+  </div>
   <h2 class="sec"><span class="b"></span>Mapy i strategia</h2>
   <div class="grid k2">
     <a class="res" href="https://tomekwlqq.github.io/eel-reports/mapa-percepcji.html" target="_blank"><span class="ic">🗺️</span><div><div class="t">Mapa percepcji (live)</div><div class="ds">CEP + ścieżki decyzyjne A–G · GitHub Pages</div></div></a>
@@ -1146,6 +1153,15 @@ function boot(){
 (function(){ try{ if(localStorage.getItem(GATE_KEY)==="1"){ openApp(); } }catch(e){} })();
 
 
+</script>
+<script>
+/* pokaz baner offline tylko gdy hub dziala online (http/https), ukryj gdy otwarty z dysku (file:) */
+(function(){
+  try{
+    var n=document.getElementById('offlineNote');
+    if(n && location.protocol!=='file:'){ n.style.display='block'; }
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
