@@ -267,8 +267,7 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
   <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
     <div class="note" style="margin:0;flex:1;min-width:240px">Wszystkie uwagi i zdjęcia zapisują się automatycznie w Twojej przeglądarce.</div>
     <div style="text-align:right">
-      <button class="btn ghost" id="exportBtn">⬇ Eksport uwag (JSON)</button>
-      <div style="font-size:11px;color:var(--mut);margin-top:4px;max-width:230px">Kliknij <b>gdy skończysz recenzję</b> i odeślij pobrany plik do nas — wtedy naniesiemy poprawki.</div>
+      <div style="font-size:11px;color:var(--mut);margin-top:4px;max-width:230px">Twoje uwagi i akceptacje <b>zapisują się automatycznie</b> we wspólnej bazie — widzimy je od razu, nic nie musisz odsyłać.</div>
     </div>
   </div>
   <div class="rev">
@@ -940,18 +939,6 @@ function renderPhotos(){
   el.querySelectorAll(".del").forEach(b=>b.onclick=()=>{ Store.delPhoto(b.dataset.id); renderPhotos(); updateKpis(); });
 }
 
-/* ====================================================================
-   EKSPORT JSON
-   ==================================================================== */
-document.getElementById("exportBtn").onclick=function(){
-  const payload={ exportedAt:new Date().toISOString(), comments:Store.getAllComments(), photos:Store.getAllPhotos(), topicFeedback:Store.getTopicFeedback() };
-  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="sejfzone_uwagi_"+new Date().toISOString().slice(0,10)+".json";
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
-};
 
 /* ===== KPI / PODSUMOWANIE ===== */
 function renderKpis(){
