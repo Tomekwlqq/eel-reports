@@ -514,28 +514,79 @@ for(var aid in ART_RAW){ ARTICLES[aid]={title:ART_RAW[aid].t, html:decodeArt(ART
    Każdy rekord komentarza: {id, articleId, quote, prefix, suffix, text,
      author:"klient", ts, status:"otwarty"|"rozwiazany"}.
    ==================================================================== */
+/* ===== STORE z SUPABASE (hybryda: cache lokalny + sync do bazy) =====
+   Po założeniu Supabase wpisz SB_URL i SB_KEY poniżej.
+   Jeśli puste -> Store działa jak dawniej (localStorage). Zero ryzyka.
+   UI nie zmienia się: metody pozostają synchroniczne (czytają z cache),
+   a zapisy lecą do Supabase w tle. Przy starcie syncFromCloud() ściąga świeże dane. */
+const SB_URL = "https://bdbipkkydxizjcpydxpj.supabase.co";
+const SB_KEY = "sb_publishable_4oSVtzMrwRF_jNf362dPQg_B1MKZi56";
+const SB_ON = !!(SB_URL && SB_KEY);
+
 const Store=(function(){
   const K_C="sejfzone_comments", K_P="sejfzone_photos", K_T="sejfzone_topics";
   function rd(k){ try{ return JSON.parse(localStorage.getItem(k)||"[]"); }catch(e){ return []; } }
   function rdo(k){ try{ return JSON.parse(localStorage.getItem(k)||"{}"); }catch(e){ return {}; } }
   function wr(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
   function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+  // --- warstwa Supabase (REST) ---
+  function sbHeaders(extra){ return Object.assign({apikey:SB_KEY,Authorization:"Bearer "+SB_KEY,"Content-Type":"application/json"}, extra||{}); }
+  function sbInsert(table,row){ if(!SB_ON) return; fetch(SB_URL+"/rest/v1/"+table,{method:"POST",headers:sbHeaders({Prefer:"return=minimal"}),body:JSON.stringify(row)}).catch(()=>{}); }
+  function sbPatch(table,q,row){ if(!SB_ON) return; fetch(SB_URL+"/rest/v1/"+table+"?"+q,{method:"PATCH",headers:sbHeaders({Prefer:"return=minimal"}),body:JSON.stringify(row)}).catch(()=>{}); }
+  function sbDelete(table,q){ if(!SB_ON) return; fetch(SB_URL+"/rest/v1/"+table+"?"+q,{method:"DELETE",headers:sbHeaders()}).catch(()=>{}); }
+  async function sbSelect(table){ if(!SB_ON) return null; try{ const r=await fetch(SB_URL+"/rest/v1/"+table+"?select=*",{headers:sbHeaders()}); return await r.json(); }catch(e){ return null; } }
+
+  // przy starcie: pobierz z chmury i nadpisz cache (źródłem prawdy jest baza, gdy SB_ON)
+  async function syncFromCloud(){
+    if(!SB_ON) return;
+    const c=await sbSelect("comments"), p=await sbSelect("photos"), t=await sbSelect("topic_feedback");
+    if(Array.isArray(c)) wr(K_C, c.map(x=>({id:x.id,articleId:x.article_id,quote:x.quote,prefix:x.prefix,suffix:x.suffix,text:x.text,author:x.author,status:x.status,ts:Date.parse(x.created_at)||Date.now()})));
+    if(Array.isArray(p)) wr(K_P, p.map(x=>({id:x.id,articleId:x.article_id,type:x.type,name:x.name,dataUrl:x.data_url,text:x.description,ts:Date.parse(x.created_at)||Date.now()})));
+    if(Array.isArray(t)){ const o={}; t.forEach(x=>o[x.article_id]=x.value); wr(K_T,o); }
+    if(typeof renderHistory==="function"){ try{ renderHistory(); }catch(e){} }
+    if(typeof window.afterSync==="function"){ try{ window.afterSync(); }catch(e){} }
+  }
+
   return {
+    syncFromCloud: syncFromCloud,
+    cloudOn: SB_ON,
     // --- KOMENTARZE ---
     getComments:function(articleId){ return rd(K_C).filter(c=>String(c.articleId)===String(articleId)); },
     getAllComments:function(){ return rd(K_C); },
-    addComment:function(obj){ const all=rd(K_C); const rec=Object.assign({id:uid(),author:"klient",ts:Date.now(),status:"otwarty"},obj); all.push(rec); wr(K_C,all); return rec; },
-    resolveComment:function(id){ const all=rd(K_C); const c=all.find(x=>x.id===id); if(c)c.status=(c.status==="rozwiazany"?"otwarty":"rozwiazany"); wr(K_C,all); },
+    addComment:function(obj){
+      const all=rd(K_C); const id=uid();
+      const rec=Object.assign({id:id,author:"klient",ts:Date.now(),status:"otwarty"},obj);
+      all.push(rec); wr(K_C,all);
+      sbInsert("comments",{article_id:String(rec.articleId),quote:rec.quote||null,prefix:rec.prefix||null,suffix:rec.suffix||null,text:rec.text,author:rec.author,status:rec.status});
+      return rec;
+    },
+    resolveComment:function(id){
+      const all=rd(K_C); const c=all.find(x=>x.id===id);
+      if(c){ c.status=(c.status==="rozwiazany"?"otwarty":"rozwiazany"); wr(K_C,all);
+        sbPatch("comments","id=eq."+encodeURIComponent(id),{status:c.status}); }
+    },
     // --- ZDJĘCIA ---
     getPhotos:function(articleId){ return rd(K_P).filter(p=>String(p.articleId)===String(articleId)); },
     getAllPhotos:function(){ return rd(K_P); },
-    addPhoto:function(obj){ const all=rd(K_P); const rec=Object.assign({id:uid(),ts:Date.now()},obj); all.push(rec); wr(K_P,all); return rec; },
-    delPhoto:function(id){ wr(K_P, rd(K_P).filter(p=>p.id!==id)); },
+    addPhoto:function(obj){
+      const all=rd(K_P); const id=uid();
+      const rec=Object.assign({id:id,ts:Date.now()},obj); all.push(rec); wr(K_P,all);
+      sbInsert("photos",{article_id:String(rec.articleId),type:rec.type,name:rec.name||null,data_url:rec.dataUrl||null,description:rec.text||null});
+      return rec;
+    },
+    delPhoto:function(id){ wr(K_P, rd(K_P).filter(p=>p.id!==id)); sbDelete("photos","id=eq."+encodeURIComponent(id)); },
     // --- TEMATY ---
     getTopicFeedback:function(){ return rdo(K_T); },
-    setTopicFeedback:function(id,val){ const o=rdo(K_T); if(o[String(id)]===val){ delete o[String(id)]; } else { o[String(id)]=val; } wr(K_T,o); }
+    setTopicFeedback:function(id,val){
+      const o=rdo(K_T);
+      if(o[String(id)]===val){ delete o[String(id)]; sbDelete("topic_feedback","article_id=eq."+encodeURIComponent(id)); }
+      else { o[String(id)]=val; sbInsert("topic_feedback",{article_id:String(id),value:val}); }
+      wr(K_T,o);
+    }
   };
 })();
+if(Store.cloudOn){ try{ Store.syncFromCloud(); }catch(e){} }
 
 /* auto-odświeżanie Historii recenzji po każdej zmianie */
 (function(){
