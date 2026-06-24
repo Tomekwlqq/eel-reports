@@ -702,9 +702,13 @@ function renderReadyList(){
   const el=document.getElementById("readyList");
   el.innerHTML=ready.map(r=>{
     const n=Store.getComments(r.id).length;
+    // dociagnij tydzien + sciezke z ROWS (po nr+klaster) — wiecej info, spojnie z zakladka Artykuly
+    const rw=(typeof ROWS!=="undefined")?ROWS.find(x=>String(x.nr)===String(r.id) && (r.seg==="Broń"?x.kl==="bron":x.kl==="dom")):null;
+    const wk=rw&&rw.wk>0?(' · <b style="color:#1A6EF4">T'+rw.wk+'</b>'):'';
+    const sc=r.sc?(' · '+esc(r.sc)):'';
     return '<div class="revcard'+(currentArticle&&String(currentArticle.id)===String(r.id)?" sel":"")+'" data-id="'+esc(r.id)+'">'
-      +'<div class="t">'+esc(r.t)+'</div>'
-      +'<div class="m">'+segPill(r.seg)+'<span class="pill p-pis">napisany do akceptu</span>'
+      +'<div class="t">#'+esc(r.id)+' '+esc(r.t)+'</div>'
+      +'<div class="m" style="flex-wrap:wrap">'+segPill(r.seg)+'<span style="font-size:11px;color:#789">'+sc.replace(/^ · /,'')+wk+'</span><span class="pill p-pis">napisany do akceptu</span>'
       +(n>0?'<span class="cmtbadge">💬 '+n+'</span>':'')+'</div></div>';
   }).join("");
   el.querySelectorAll(".revcard").forEach(c=>c.onclick=()=>loadArticle(c.dataset.id));
