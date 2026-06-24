@@ -1202,7 +1202,7 @@ function renderArticles(){
   }
   const cWdr=col("📦 Do wdrożenia",doWdrozenia,"#1f9e6e",r=>{
     const f=FILES[String(r.nr)];
-    return card(r,'<button class="minibtn ok genpack" data-nr="'+r.nr+'" '+(f?'data-file="'+f+'"':'')+'>⚙️ Generuj paczkę</button>'
+    return card(r,'<button class="minibtn ok genpack" data-nr="'+r.nr+'" data-kl="'+r.kl+'" '+(f?'data-file="'+f+'"':'')+'>⬇ Pobierz HTML do wklejenia</button>'
       +(f?' <a class="minibtn" href="computer:///Users/Tomek_Main/Documents/Claude/Projects/SejfZone/'+f+'" style="text-decoration:none">📄 plik</a>':''));
   });
   const cAkc=col("✅ Do akceptu",doAkceptu,"#1A6EF4",r=>{
@@ -1213,29 +1213,31 @@ function renderArticles(){
   const cLive=col("🌐 Live",live,"#667",r=>card(r,''));
   document.getElementById("kanban").innerHTML=cWdr+cAkc+cNext+cLive;
   // generator paczki
-  document.querySelectorAll(".genpack").forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); genPaczka(b.dataset.nr,b.dataset.file); });
+  document.querySelectorAll(".genpack").forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); genPaczka(b.dataset.nr,b.dataset.file,b.dataset.kl); });
 }
-function genPaczka(nr,file){
-  // generator paczki wdrozeniowej w przegladarce (z ARTICLES jesli jest, inaczej instrukcja)
-  const row=ROWS.find(r=>String(r.nr)===String(nr)&&r.typ!=="nieblog");
+function genPaczka(nr,file,kl){
+  // PACZKA = gotowy HTML wsadu CMS do wklejenia w IdoSell (Edycja zaawansowana)
+  const row=ROWS.find(r=>String(r.nr)===String(nr)&&r.typ!=="nieblog"&&(!kl||r.kl===kl)) || ROWS.find(r=>String(r.nr)===String(nr)&&r.typ!=="nieblog");
   const KAT={A:"Przewodnik zakupowy",B:"Bezpieczeństwo i klasy odporności",C:"Przewodnik zakupowy",D:"Przewodnik zakupowy",E:"Przewodnik zakupowy",F:"Bezpieczeństwo i klasy odporności",G:"Montaż i użytkowanie"};
   const sciezka=(row&&row.sc?row.sc:"A").trim().charAt(0);
-  const lk=row&&row.lk?row.lk:{};
-  let md="# PACZKA WDROŻENIOWA — #"+nr+" "+(row?row.t:"")+"\n\n";
-  md+="## Pola formularza IdoSell (Blog → Dodaj/Edytuj wpis)\n";
-  md+="- Widoczny: TAK\n- Pokazuj na blogu: lista wpisów + Kategoria: **"+(KAT[sciezka]||"Przewodnik zakupowy")+"**\n";
-  md+="- Nazwa na stronie: "+(row?row.t:"")+"\n- Grafika: Obrazek → wgraj hero\n- Indeksowanie: tak · URL/meta/kanoniczny: automatycznie\n\n";
-  md+="## Pełna treść\nWklej HTML wsadu CMS w pole Edycja zaawansowana. Plik: "+(file||"artykuly_blog/art_"+nr+"_*.html")+"\n\n";
-  md+="## Towary powiązane (1 produkt inline + dobierz z karty)\n"+(lk.inP?("- "+lk.inP.name+"\n"):"")+"\n";
-  md+="## Linki blog w treści — sprawdź żywość\nReguła: cel nie istnieje → wytnij <a>, zostaw tekst.\n";
-  if(lk.inA)lk.inA.forEach(x=>md+="- [ ] "+x.t+" (T"+x.wk+")\n");
-  if(lk.rel)lk.rel.forEach(x=>md+="- [ ] (powiązany) "+x.t+" (T"+x.wk+")\n");
-  md+="\n## ⚠️ Zdjęcia do wgrania przed publikacją\nHero + zdjęcia produktów + ikony — wgraj na serwer IdoSell (/data/include/cms/...) zanim opublikujesz, inaczej obrazki będą puste.\n";
-  const blob=new Blob([md],{type:"text/markdown"});
+  const tytul=row?row.t:("artykuł #"+nr);
+  // gotowy HTML treści z osadzonego ART_RAW (to co wklejasz w CMS)
+  const art = (typeof ARTICLES!=="undefined") ? (ARTICLES[String(nr)]||ARTICLES[String(row&&row.id)]) : null;
+  if(!art || !art.html){
+    alert("Brak osadzonej treści dla #"+nr+" w hubie. Plik lokalny: "+(file||"artykuly_blog/")+" — otwórz go i skopiuj treść.");
+    return;
+  }
+  // krótka instrukcja pól jako komentarz HTML na górze (nie psuje wklejania — to komentarz)
+  const head="<!-- ====== WDROŻENIE IdoSell — #"+nr+" "+tytul+" ======\n"
+    +"  Kategoria bloga: "+(KAT[sciezka]||"Przewodnik zakupowy")+"\n"
+    +"  Nazwa na stronie: "+tytul+"\n"
+    +"  Grafika: Obrazek -> wgraj hero | Indeksowanie: tak | URL/meta: automatycznie\n"
+    +"  UWAGA: wgraj zdjęcia (/data/include/cms/...) na serwer PRZED publikacją.\n"
+    +"  Poniżej = treść do pola 'Edycja zaawansowana'. ====== -->\n\n";
+  const blob=new Blob([head+art.html],{type:"text/html;charset=utf-8"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
-  a.download="PACZKA_wdrozenie_art_"+nr+".md"; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  a.download="wdrozenie_art_"+nr+"_"+(kl||"")+".html"; document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(()=>URL.revokeObjectURL(a.href),1500);
-  alert("Paczka #"+nr+" pobrana. Treść artykułu wklej z pliku: "+(file||"artykuly_blog/")+"\nUzupełnij pola wg pobranego PACZKA_wdrozenie_art_"+nr+".md");
 }
 
 /* ===== updateKpis shim (rev wywołuje go po zmianach) ===== */
