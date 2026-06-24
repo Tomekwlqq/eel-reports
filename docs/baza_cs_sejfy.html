@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Baza CS — Sejfy domowe + Sejfy na broń (GEO PDP)</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--sb-bg:#161b22;--hd-bg:#161b22;--bd:#30363d;
+  --tx:#e6edf3;--tx2:#8b949e;--ac:#58a6ff;
+  --cb:#1c2128;--ts:#1c2128;--mb:#2d4a22;--mt:#7ee787;
+  --ab:#1f3353;--sw:292px;--hh:52px
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+     background:var(--bg);color:var(--tx);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* Header */
+#hd{height:var(--hh);background:var(--hd-bg);border-bottom:1px solid var(--bd);
+    display:flex;align-items:center;gap:10px;padding:0 14px;flex-shrink:0}
+#hd h1{font-size:15px;font-weight:700;white-space:nowrap;flex-shrink:0;letter-spacing:.01em}
+#hd h1 span{color:var(--ac)}
+#sw{flex:1;position:relative;max-width:440px}
+#si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--tx2);font-size:15px;pointer-events:none}
+#search{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:6px;
+        color:var(--tx);padding:6px 10px 6px 30px;font-size:15px;outline:none;transition:border-color .15s}
+#search:focus{border-color:var(--ac)}
+
+/* Filter buttons */
+.filt{display:flex;gap:4px;flex-shrink:0}
+.fb{font-size:13px;padding:3px 8px;border-radius:4px;border:1px solid var(--bd);
+    background:transparent;color:var(--tx2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.fb:hover{border-color:var(--ac);color:var(--tx)}
+.fb.on{border-color:var(--ac);background:var(--ab);color:var(--tx)}
+
+/* Lang toggle */
+#lang-btn{font-size:13px;padding:3px 9px;border-radius:4px;border:1px solid var(--bd);
+          background:transparent;color:var(--tx2);cursor:pointer;text-decoration:none;
+          display:flex;align-items:center;gap:4px;transition:all .15s;white-space:nowrap;flex-shrink:0}
+#lang-btn:hover{border-color:var(--ac);color:var(--tx)}
+
+#stat{font-size:13px;color:var(--tx2);flex-shrink:0;white-space:nowrap;min-width:90px;text-align:right}
+
+/* Layout */
+#lay{display:flex;flex:1;overflow:hidden}
+
+/* Sidebar */
+#sb{width:var(--sw);flex-shrink:0;background:var(--sb-bg);border-right:1px solid var(--bd);overflow-y:auto}
+.ci{display:flex;align-items:center;gap:7px;padding:7px 10px;cursor:pointer;
+    border-left:3px solid transparent;border-bottom:1px solid var(--bd);
+    transition:background .1s;user-select:none;min-height:36px}
+.ci:hover{background:rgba(88,166,255,.07)}
+.ci.active{background:var(--ab);border-left-color:var(--ac)}
+.ci.hidden{display:none}
+.cn{font-size:11.5px;color:var(--tx2);min-width:20px;flex-shrink:0;font-variant-numeric:tabular-nums}
+.ct{font-size:14px;line-height:1.3;color:var(--tx);flex:1;min-width:0}
+.ct mark{background:var(--mb);color:var(--mt);border-radius:2px;padding:0 1px}
+
+/* Version badge in sidebar */
+.vb{font-size:10.5px;font-weight:700;padding:1px 5px;border-radius:8px;flex-shrink:0;letter-spacing:.02em}
+.vb-v1{background:#21262d;color:#6e7681}
+.vb-v2{background:#2d2502;color:#d29922}
+.vb-v3{background:#0d2a1a;color:#3fb950}
+.vb-v4{background:#0d1e3c;color:#58a6ff}
+
+/* Verification pipeline dots */
+.pipe{display:flex;gap:2px;flex-shrink:0}
+.pd{width:6px;height:6px;border-radius:50%;background:var(--bd)}
+.pd.on-v1{background:#6e7681}
+.pd.on-v2{background:#d29922}
+.pd.on-v3{background:#3fb950}
+.pd.on-v4{background:#58a6ff}
+
+#nr{padding:20px 12px;font-size:15px;color:var(--tx2);text-align:center;display:none}
+
+/* Content */
+#ct{flex:1;overflow-y:auto;padding:26px 34px}
+.cs{display:none}
+.cs.vis{display:block}
+
+/* Markdown */
+.cs h2{font-size:23px;font-weight:700;border-bottom:1px solid var(--bd);padding-bottom:10px;margin-bottom:16px}
+.cs h3{font-size:13px;font-weight:700;color:var(--ac);margin:20px 0 9px;
+       text-transform:uppercase;letter-spacing:.06em}
+.cs h4{font-size:16px;font-weight:600;margin:14px 0 6px}
+.cs p{font-size:15.5px;line-height:1.65;margin-bottom:8px}
+.cs strong{font-weight:600}
+.cs em{font-style:italic;color:var(--tx2)}
+.cs code{font-family:'SF Mono','Fira Code',Menlo,monospace;font-size:13px;
+         background:var(--cb);border:1px solid var(--bd);border-radius:3px;
+         padding:1px 5px;color:#f0883e}
+.cs pre{background:var(--cb);border:1px solid var(--bd);border-radius:6px;
+        padding:12px 14px;overflow-x:auto;margin:10px 0}
+.cs pre code{background:none;border:none;padding:0;font-size:14px;color:var(--tx);line-height:1.5}
+.cs table{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0;display:block;overflow-x:auto}
+.cs th,.cs td{text-align:left;padding:7px 10px;border:1px solid var(--bd)}
+.cs th{background:var(--sb-bg);font-weight:600}
+.cs tr:nth-child(even) td{background:var(--ts)}
+.cs ul,.cs ol{padding-left:18px;margin:7px 0}
+.cs li{font-size:15.5px;line-height:1.6;margin-bottom:3px}
+.cs hr{border:none;border-top:1px solid var(--bd);margin:18px 0}
+
+/* Changelog / verification card */
+.changelog{background:#0b1e10;border:1px solid #2ea043;border-radius:8px;
+           padding:14px 18px;margin:18px 0;position:relative}
+.changelog::before{content:'🔬 VERIFIED';font-size:10.5px;font-weight:700;
+                   color:#3fb950;letter-spacing:.08em;display:block;margin-bottom:8px}
+.changelog h3{color:#3fb950 !important;margin-top:0 !important;font-size:14px !important}
+.changelog p,.changelog li{color:#c3e6cb;font-size:15px}
+.changelog ul{margin:4px 0}
+.changelog table{font-size:12px}
+.changelog th{background:#0d2a1a}
+.changelog code{background:#0d2a1a;color:#7ee787}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+::-webkit-scrollbar-track{background:transparent}
+
+body.light{
+  --bg:#ffffff;--sb-bg:#f6f8fa;--hd-bg:#f6f8fa;--bd:#d0d7de;
+  --tx:#1f2328;--tx2:#656d76;--ac:#0969da;
+  --cb:#f6f8fa;--ts:#f6f8fa;--mb:#fff8c5;--mt:#7a5c00;--ab:#ddf4ff;
+}
+body.light .cs code{color:#cf222e}
+body.light .cs pre code{color:var(--tx)}
+body.light .changelog{background:#f0fff4;border-color:#2ea043}
+body.light .changelog p,body.light .changelog li{color:#1a7f37}
+#theme-btn{font-size:14px;padding:3px 9px;border-radius:4px;border:1px solid var(--bd);
+  background:transparent;color:var(--tx2);cursor:pointer;flex-shrink:0;transition:all .15s}
+#theme-btn:hover{border-color:var(--ac);color:var(--tx)}
+
+/* FUND rozwijany blok */
+details.fund{border:1px solid var(--bd);border-radius:8px;margin:22px 0 8px;
+  background:var(--cb);overflow:hidden}
+details.fund>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;
+  padding:12px 16px;user-select:none;transition:background .12s}
+details.fund>summary::-webkit-details-marker{display:none}
+details.fund>summary:hover{background:rgba(88,166,255,.07)}
+.fund-arrow{color:var(--ac);font-size:13px;flex-shrink:0;transition:transform .15s}
+details.fund[open] .fund-arrow{transform:rotate(90deg)}
+.fund-head{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.fund-title{font-size:15px;font-weight:700;color:var(--tx)}
+.fund-src{font-size:12px;font-style:italic;color:var(--tx2);line-height:1.4}
+.fund-badge{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:10px;flex-shrink:0;white-space:nowrap}
+.fund-badge.ok{background:#0d2a1a;color:#3fb950}
+.fund-badge.warn{background:#3d2a02;color:#f0883e}
+body.light .fund-badge.ok{background:#dafbe1;color:#1a7f37}
+body.light .fund-badge.warn{background:#fff1e5;color:#bc4c00}
+.fund-hint{font-size:11px;color:var(--tx2);flex-shrink:0;border:1px solid var(--bd);
+  border-radius:4px;padding:2px 7px}
+details.fund[open] .fund-hint{display:none}
+.fund-body{padding:4px 18px 16px;border-top:1px solid var(--bd)}
+.fund-body h1{font-size:18px;margin:12px 0 6px}
+</style>
+</head>
+<body>
+<div id="hd">
+  <h1>GEO <span>Sejfy CS</span></h1>
+  <div id="sw">
+    <span id="si">⌕</span>
+    <input id="search" type="text" placeholder="Szukaj kategorii, CEP, pytania..." autocomplete="off" spellcheck="false">
+  </div>
+  <div class="filt">
+    <button class="fb on" data-f="all" onclick="setFilter('all')">All</button>
+    <button class="fb" data-f="v2p" onclick="setFilter('v2p')">✅ Verified</button>
+    <button class="fb" data-f="v1"  onclick="setFilter('v1')">📝 Draft</button>
+  </div>
+  <a id="lang-btn" href="%23">🌐 EN</a>
+  <button id="theme-btn" onclick="toggleTheme()" title="Tryb jasny/ciemny">☀️</button>
+  <span id="stat">2 cat.</span>
+</div>
+<div id="lay">
+  <div id="sb">
+    <div class="ci" id="i1" onclick="select(1)"><span class="cn">#1</span><span class="ct">Sejfy domowe na kosztowności</span><span class="vb vb-v2">v2</span><div class="pipe"><span class="pd on-v1"></span><span class="pd on-v2"></span><span class="pd"></span><span class="pd"></span></div></div>
+    <div class="ci" id="i2" onclick="select(2)"><span class="cn">#2</span><span class="ct">Szafy na broń długą (klasa S1)</span><span class="vb vb-v2">v2</span><div class="pipe"><span class="pd on-v1"></span><span class="pd on-v2"></span><span class="pd"></span><span class="pd"></span></div></div>
+    <div id="nr">No results</div>
+  </div>
+  <div id="ct">
+    <div class="cs" id="s1"><h1>14. Sejfy domowe na kosztowności — Category Standard v2</h1>
+
+<p><em>Baza: referencja 06.md #14 (matryca). Nowe warstwy: opis + Problemy kategorii · CEV (Schwartz+wagi) · Tone of Voice GEO. Kolejność wg ustaleń (format aparat V2, ze ścieżkami). Nic z referencji nie pominięto.</em></p>
+
+<hr>
+
+<h2>0. Opis kategorii</h2>
+
+<p>Sejf domowy to stalowa skrytka do przechowywania kosztowności, gotówki, dokumentów i nośników danych w domu lub mieszkaniu. Chroni przed dwoma zagrożeniami: <strong>włamaniem</strong> (klasa odporności S1/S2 wg EN 14450 lub klasa 0–VI wg EN 1143-1) oraz — w wariancie ognioodpornym — <strong>pożarem</strong> (klasa LFS, czas ochrony 30/60/120 min). Kupujący wchodzi w kategorię, gdy pojawia się zdarzenie zewnętrzne: włamanie u sąsiada, wymóg ubezpieczyciela, potrzeba ochrony dokumentów lub pamiątek.</p>
+
+<h2>0b. Problemy, które kategoria załatwia</h2>
+
+<p><em>Fundament — rzeczy powstają Z POWODU. Primary = funkcjonalny rdzeń, po co kategoria powstała. Secondary = jak rynek zdetalizował rdzeń na węższe potrzeby. Z secondary × keywordów wychodzą CEP-y.</em></p>
+
+<p><strong>🎯 Primary (rdzeń — po co sejf powstał):</strong></p>
+<p>> <strong>Chroni wartościowe mienie przed kradzieżą i/lub ogniem.</strong></p>
+<p>Goła funkcja, dla której kategoria istnieje. Nie „daje spokój", nie „podnosi bezpieczeństwo domu" — to warstwy wyżej. Rdzeń: zabezpiecza to, czego nie chcesz stracić.</p>
+
+<p><strong>Secondary (detalizacja rdzenia — rynek pociął „chroni mienie" na węższe konteksty):</strong></p>
+<ul><li>ochrona przed <strong>włamaniem</strong> (biżuteria, gotówka) (→ <code>cep_wlamanie_biz</code>)</li><li>ochrona <strong>dokumentów i danych przed ogniem</strong> (akty, dyski) (→ <code>cep_dokumenty_pozar</code>)</li><li><strong>gotówka / kosztowności firmy</strong>, wymóg klasy (→ <code>cep_gotowka_firma</code>)</li><li><strong>wymóg ubezpieczyciela</strong> (polisa wymaga klasy) (→ <code>cep_wymog_ubezpieczyciela</code>)</li><li><strong>prywatność / kontrola dostępu</strong> (leki, gotówka przed dziećmi) (→ <code>cep_prywatnosc_dzieci</code>)</li></ul>
+
+<p>> ⚠️ <strong>Pojemność, kolor, waga — to NIE problemy.</strong> Sejf nie powstał, żeby mieć litry. To atrybuty/specy → idą do KCF i preselekcji, nie tutaj i nie do CEP.</p>
+
+<hr>
+
+<h2>1. CEV — Category Emotional Valuation (zmodyfikowany Schwartz z wagami)</h2>
+
+<p><strong>Pasek CEV — profil emocjonalny kategorii (10 cech):</strong></p>
+
+<table>
+<tr><th>ryzyko</th><th>lęk</th><th>widoczność</th><th>impuls</th><th>sexy</th><th>aspiracja</th><th>tożsamość</th><th>zmysłowość</th><th>pilność</th><th>moralność</th></tr>
+<tr><td>.70</td><td>.65</td><td>.10</td><td>.15</td><td>.15</td><td>.20</td><td>.15</td><td>.10</td><td>.40</td><td>.10</td></tr>
+</table>
+
+<p>Wysokie <strong>ryzyko .70</strong> (koszt błędu = strata mienia / odrzucona polisa) + <strong>lęk .65</strong> (strach/strata po zdarzeniu) → kategoria research-owa z elementem uspokojenia. <code>apply_physics</code> przekłada profil na wagi etapów ↓.</p>
+
+<p><strong>Schwartz — 8 stanów świadomości + wagi (ile treści/uwagi na etap):</strong></p>
+
+<p>Fork <strong>POTRZEBA</strong>, research <strong>~3.0</strong> (umiarkowana — klasy/normy do nauki, ale rynek prostszy niż aparat), pole pytań ~<strong>55</strong>, emocja −0.9 (strata, nie lęk prawny jak broń).</p>
+
+<table>
+<tr><th>#</th><th>Stan świadomości</th><th>Waga</th><th>Co to znaczy dla treści</th></tr>
+<tr><td>1</td><td>Nie wiem (unaware)</td><td>◔ L</td><td>„Trzymam w szufladzie" — klient nie myśli o sejfie. Mało treści.</td></tr>
+<tr><td>2</td><td>Potrzeba (problem-aware)</td><td>◑ M</td><td>Zdarzenie zewnętrzne (włamanie u sąsiada / mail ubezpieczyciela) = trigger.</td></tr>
+<tr><td>3</td><td>CEP (rozpoznanie sytuacji)</td><td>◑ M</td><td>Włamanie / pożar / ubezpieczyciel / prywatność — routing do ścieżki.</td></tr>
+<tr><td>4</td><td><strong>Nauka kategorii</strong></td><td>● <strong>H</strong></td><td>Klasy S1/S2, EN 14450 vs EN 1143-1, LFS ognioodporność — etap najcięższy. Dużo treści edukacyjnej.</td></tr>
+<tr><td>5</td><td>Preselekcja (moje potrzeby)</td><td>◑ M</td><td>Co chronię (biżuteria/dokumenty) → klasa + ognioodporność + pojemność.</td></tr>
+<tr><td>6</td><td>Porównywanie</td><td>◑ M</td><td>Rottner vs Konsmetal vs Format; klasa vs cena. Lżejsze niż w elektronice.</td></tr>
+<tr><td>7</td><td><strong>Wybór sklepu</strong></td><td>● <strong>H</strong></td><td>Certyfikat do okazania ubezpieczycielowi, dostawa ciężkiego sprzętu, montaż. Wymóg cert = waga ↑.</td></tr>
+<tr><td>8</td><td>Zakup</td><td>◑ M</td><td>Kotwy w zestawie, dokument certyfikatu PDF, gwarancja, zwrot.</td></tr>
+</table>
+
+<p><strong>Kształt:</strong> POTRZEBA research-owa z ciężkim garbem na <strong>Nauce (E4 — klasy/normy)</strong> i podniesionym <strong>Wyborem sklepu (E7 — certyfikat dla ubezpieczyciela)</strong>. Etap impulsu (2) płaski — nikt nie kupuje sejfu pod wpływem chwili. Treść GEO musi obsłużyć głęboką Naukę klas i dowód zgodności (certyfikat, atest, instytucja).</p>
+
+<hr>
+
+<h2>2. CEP — Consumer Entry Points</h2>
+
+<p><em>Matryca: 5 CEP z referencji 06.md #14. Kategoria szeroka — zagrożenie determinuje typ produktu (antywłamaniowy ≠ ognioodporny ≠ biometryczny).</em></p>
+
+<table>
+<tr><th>id</th><th>Trigger (język konsumenta)</th><th>Kontekst</th><th>Primary concern</th><th>Routes to</th><th>PDP anchor</th></tr>
+<tr><td><code>cep_wlamanie_biz</code></td><td>„Strach przed włamaniem — w okolicy był napad / po zdarzeniu"</td><td>Biżuteria + gotówka w domu/mieszkaniu</td><td>Czy realnie ochroni / czy złodziej wyniesie</td><td>Antywłamaniowy EN 14450 S1/S2</td><td>„Klasa odporności + masa + punkty montażowe"</td></tr>
+<tr><td><code>cep_dokumenty_pozar</code></td><td>„Dokumenty i nośniki — pożar niszczy wszystko w minuty"</td><td>Akty, dyski, dane klientów</td><td>Ile minut ochrony, papier vs dysk</td><td>Ognioodporny min. 30/60 min (LFS)</td><td>„Czas odporności + temperatura wewnątrz + UL/EN"</td></tr>
+<tr><td><code>cep_gotowka_firma</code></td><td>„Gotówka/kosztowności firmy — ubezpieczyciel wymaga klasy"</td><td>Sklep, biuro, utarg</td><td>Jaka klasa do sumy / limit</td><td>EN 1143-1 (kasa wartości)</td><td>„Klasa VdS + limit sumy ubezpieczenia + certyfikat"</td></tr>
+<tr><td><code>cep_wymog_ubezpieczyciela</code></td><td>„Polisa wymaga certyfikowanego sejfu — co dokładnie?"</td><td>Odnowienie/zawarcie polisy</td><td>Co akceptuje ubezpieczyciel</td><td>per wymóg polisy (klasa+atest)</td><td>„Klasa certyfikatu + numer normy + zatwierdzony przez [ubezp.]"</td></tr>
+<tr><td><code>cep_prywatnosc_dzieci</code></td><td>„Schować leki / broń krótką / gotówkę przed dziećmi"</td><td>Dom z dziećmi</td><td>Szybkość dostępu + dyskrecja</td><td>Mały biometryczny / PIN</td><td>„Szybkość dostępu + biometria + dyskrecja montażu"</td></tr>
+</table>
+
+<hr>
+
+<h2>3. 20 Discovery Questions</h2>
+
+<p><em>Wspólny PUNKT STARTU ścieżki — adresują wszystkie CEP-y, zanim klient wejdzie w konkretną personę.</em></p>
+
+<ol><li>Jak bezpiecznie przechowywać biżuterię i gotówkę w domu? <em>(→ wlamanie_biz)</em></li><li>Czy mały sejf domowy wystarczy do ochrony przed włamywaczem?</li><li>Co to jest klasa EN 14450 w sejfie — ile ochrony daje?</li><li>Jaka różnica między sejfem ognioodpornym a zwykłym? <em>(→ dokumenty_pozar)</em></li><li>Ile minut odporności ogniowej powinien mieć sejf na dokumenty?</li><li>Sejf do ukrycia w szafie ubraniowej — co wybrać?</li><li>Czy ubezpieczyciel wymaga konkretnej klasy sejfu? <em>(→ wymog_ubezpieczyciela)</em></li><li>Jak zamontować sejf w ścianie żeby był naprawdę bezpieczny?</li><li>Sejf na dokumenty paszport i akty — jaką pojemność wziąć?</li><li>Sejf domowy do 500 zł — czy jest skuteczny?</li><li>Sejf z zamkiem biometrycznym — czy to bezpieczne i niezawodne? <em>(→ prywatnosc_dzieci)</em></li><li>Co zrobić jeśli zapomnę kod do sejfu elektronicznego?</li><li>Sejf podpodłogowy — wady i zalety w mieszkaniu?</li><li>Jak ciężki musi być sejf żeby złodziej nie mógł go wynieść?</li><li>Czy małe dziecko może otworzyć tani sejf z kluczykiem?</li><li>Sejf na działkę lub dom letniskowy — co jest odporne na wilgoć?</li><li>Jakie dokumenty warto trzymać w sejfie domowym?</li><li>Czy sejf ognioodporny chroni też nośniki USB i dyski twarde?</li><li>Sejf dla seniora — jaki zamek jest najłatwiejszy w obsłudze?</li><li>Ile kosztuje ubezpieczenie domu jeśli mam certyfikowany sejf? <em>(→ wymog_ubezpieczyciela)</em></li></ol>
+
+<hr>
+
+<h2>4. KCF — Key Category Features</h2>
+
+<table>
+<tr><th>Feature</th><th>Zakres rynkowy</th><th>Tier</th><th>Uwaga</th></tr>
+<tr><td>Klasa antywłamaniowa</td><td>EN 14450 S1/S2 / EN 1143-1 I–VI</td><td>T1</td><td>S1 = 5 min z elektronarzędziami; EN 1143-1 I = 30 min; wymagaj klasy, nie „certyfikowany"</td></tr>
+<tr><td>Odporność ogniowa</td><td>0 / 30 / 60 / 120 min (LFS, EN 15659)</td><td>T1</td><td>papier pali się w 175°C; dyski w ~70°C — różne klasy dla papieru i nośników</td></tr>
+<tr><td>Pojemność wewnętrzna</td><td>1–30 litrów</td><td>T1</td><td>konsument nie wie, że 10 L = mała walizka kabinowa; zawsze podaj wymiary</td></tr>
+<tr><td>Masa</td><td>5–200 kg</td><td>T1</td><td><15 kg = przenośny bez kotwienia; >30 kg = trudny do wyniesienia bez sprzętu</td></tr>
+<tr><td>Typ zamka</td><td>kluczowy / elektroniczny PIN / biometryczny / tarcza</td><td>T2</td><td>elektroniczny = ryzyko baterii; biometryczny = ~0.1% FAR</td></tr>
+<tr><td>Punkty montażowe</td><td>TAK (podłoga, bok) / NIE</td><td>T2</td><td>bez kotwienia każdy sejf można zabrać; podłoga = beton + kołki</td></tr>
+<tr><td>Certyfikat ubezpieczeniowy</td><td>VdS / ECB-S / IMP</td><td>T3</td><td>ubezpieczyciel może wymagać konkretnej klasy do odszkodowania</td></tr>
+</table>
+
+<hr>
+
+<h2>5. Typowy Produkt — konwencje kategorii</h2>
+
+<table>
+<tr><th>Cecha</th><th>Norma kategorii</th><th>Red flag</th></tr>
+<tr><td>Format</td><td>stalowa skrzynka z zamkiem</td><td>drewniana „kasetka z zamkiem" = dekoracja, nie sejf</td></tr>
+<tr><td>Drzwi</td><td>min. 3 mm blachy stalowej</td><td>cienkie drzwi bez ramy = otwierane łomem</td></tr>
+<tr><td>Wnętrze</td><td>wyścielone (ochrona kosztowności)</td><td>naga stal wewnątrz = zarysowania biżuterii</td></tr>
+<tr><td>Certyfikat</td><td>tabliczka EN / naklejka VdS</td><td>„sejf ognioodporny" bez normy EN 15659 = sprawdź realny czas ochrony</td></tr>
+<tr><td>Uchwyty/półki</td><td>TAK (zawieszki, półki)</td><td>pusty środek = dokumenty się tłoką</td></tr>
+<tr><td>Zapasowy klucz awaryjny</td><td>w zestawie (elektroniczne)</td><td>brak klucza awaryjnego do PIN = unieruchomiony przy utracie kodu</td></tr>
+</table>
+
+<hr>
+
+<h2>6. Tier Specs</h2>
+
+<p><strong>Tier-1 Universal</strong> (musi być w PDP każdego sejfu):</p>
+<ul><li>Klasa odporności na włamanie — <code>S1 / S2 (EN 14450) lub Klasa I / II (EN 1143-1)</code></li><li>Odporność ogniowa — <code>brak / LFS 30P / LFS 60P (EN 15659)</code></li><li>Wymiary zewnętrzne i wewnętrzne — <code>wys. x szer. x gł. [cm]</code></li><li>Pojemność — <code>XX L</code></li><li>Waga — <code>XX kg</code></li><li>Typ zamka — <code>kluczowy / elektroniczny / biometryczny</code></li></ul>
+
+<p><strong>Tier-2 Differentiator:</strong> certyfikat <code>IMP / VdS / ECB-S</code> · liczba i średnica rygli · otwory montażowe (dno / ściana tylna).</p>
+<p><strong>Tier-3 Niche:</strong> wodoszczelność IP · podświetlenie wnętrza · alarm wstrząsowy · zamek czasowy.</p>
+
+<hr>
+
+<h2>7. Tier Pricing — PLN, Polska 2026</h2>
+
+<table>
+<tr><th>Tier</th><th>Zakres</th><th>Typowy kupujący</th><th>Przykłady</th></tr>
+<tr><td>Budżet</td><td>200–600 zł</td><td>Ukrycie gotówki/leków przed dziećmi, małe kosztowności</td><td>Rottner Mambo, Yale YFM, Basi H-34E</td></tr>
+<tr><td>Mid-range</td><td>600–1800 zł</td><td>Biżuteria + dokumenty, antywłamaniowy EN 14450 S1, zamek PIN</td><td>Konsmetal Unica, Format MPS 30, Burg-Wächter Manhattan</td></tr>
+<tr><td>Premium</td><td>1800–8000 zł</td><td>Ognioodporny 60 min, firma, kolekcja, wymóg ubezpieczyciela</td><td>Hartmann Tresore, Chubbsafes, Fichet-Bauche</td></tr>
+</table>
+
+<hr>
+
+<h2>8. Consumer Decision Tree</h2>
+
+<pre><code>[L1 — Routing: przed czym chronisz i co?]
+
+Q1. Co głównie przechowuję?
+   consumer_language: &quot;co chcę schować — biżuteria / dokumenty / dane / mix&quot;
+   → Biżuteria/gotówka → [antywłamaniowy] → Q2
+   → Dokumenty (akty, paszport) → [ognioodporny] → Q2
+   → Dane cyfrowe (dyski/USB) → [ognioodporny media] → Q2
+   → Mix → [antywłamaniowy + ognioodporny] → Q2
+
+Q2. Czego się najbardziej obawiam? → Włamania / Pożaru / Kradzieży przez dzieci → routing klasy
+Q3. Ile przedmiotów? → Kilka sztuk (&lt;5L) / Średnio (5–20L) / Dużo (20L+)
+Q4. Gdzie montuję? → W szafie (ukryty) / W podłodze (beton) / W ścianie / Wolnostojący
+Q5. Jaki zamek? → Kluczowy / Elektroniczny PIN / Biometryczny / Mechaniczny tarcza
+Q6. Budżet? → &lt;500 zł / 500–1500 zł / 1500+ zł
+
+→ Kluczowe info: KLASA ODPORNOŚCI (EN 14450/EN 1143-1) · ODPORNOŚĆ OGNIOWA (min.) · POJEMNOŚĆ (L) · MASA (kotwienie) · TYP ZAMKA · PUNKTY MONTAŻOWE</code></pre>
+
+<hr>
+
+<h2>9. Forbidden Patterns</h2>
+
+<table>
+<tr><th>❌ Zakazane</th><th>✅ Poprawne</th></tr>
+<tr><td>„sejf antywłamaniowy"</td><td>„Sejf certyfikowany w klasie I wg EN 1143-1 przez ECB-S. Odporny na próby włamania narzędziami mechanicznymi i termicznymi."</td></tr>
+<tr><td>„chroni przed ogniem"</td><td>„Odporność ogniowa LFS 60P (EN 15659) — chroni dokumenty papierowe przez 60 minut w temperaturze do 1000°C."</td></tr>
+<tr><td>„solidny"</td><td>„Wielowarstwowa konstrukcja stalowa z wypełnieniem betonowym. Rygle o średnicy 25 mm wysuwane w trzech kierunkach."</td></tr>
+<tr><td>„łatwy w montażu"</td><td>„W zestawie 2 kotwy montażowe do betonu. Otwory montażowe w dnie i ścianie tylnej."</td></tr>
+<tr><td>„bezpieczny dla dokumentów i danych"</td><td>„Klasa LFS 60P dla papieru; dla nośników cyfrowych (dyski, USB) wymagana klasa DIS — temperatura wewnątrz do 50°C."</td></tr>
+</table>
+
+<hr>
+
+<h2>10. Ścieżki percepcji & pole pytań</h2>
+
+<p><em>Ścieżki + pytania z MAP PERCEPCJI (<code>ROZSZYTE_sejfzone_pole_pytan.md</code>, segment Sejfy domowe — 7 ścieżek, 156 pytań). Pytania rozpisane po etapach = pole pytań. Persony z referencji 06.md gdzie dostępne.</em></p>
+
+<table>
+<tr><th>Ścieżka</th><th>CEP wejścia</th><th>Persona / kontekst</th><th>Pytań</th></tr>
+<tr><td>A — Włamanie u sąsiada / strach przed utratą</td><td><code>cep_wlamanie_biz</code></td><td>Małgorzata, 52, księgowa — napad u sąsiadów, biżuteria + gotówka</td><td>61</td></tr>
+<tr><td>B — Wymóg ubezpieczyciela</td><td><code>cep_wymog_ubezpieczyciela</code></td><td>Tomasz, 49, jubiler — polisa wymaga klasy</td><td>21</td></tr>
+<tr><td>C — Ochrona dokumentów / pożar</td><td><code>cep_dokumenty_pozar</code></td><td>Paweł, 44, notariusz — akty + nośniki danych</td><td>20</td></tr>
+<tr><td>D — Firma / biuro</td><td><code>cep_gotowka_firma</code></td><td>właściciel sklepu/biura — gotówka, RODO, Sanepid</td><td>12</td></tr>
+<tr><td>E — Wartościowe przedmioty w domu</td><td><code>cep_kosztownosci_dom</code></td><td>kolekcjoner biżuterii/monet, gotówka „na czarną godzinę"</td><td>23</td></tr>
+<tr><td>F — Prywatność / kontrola dostępu</td><td><code>cep_prywatnosc_dzieci</code></td><td>Agata, 34, pielęgniarka — leki + gotówka przed dziećmi</td><td>11</td></tr>
+<tr><td>G — Przeprowadzka / nowy dom</td><td><code>cep_nowy_dom</code></td><td>urządzanie domu, sejf jako element wyposażenia</td><td>8</td></tr>
+</table>
+
+<h3>Ścieżka A — Włamanie u sąsiada / strach przed utratą (61)</h3>
+<p><strong>A1 — Świadomość / trigger:</strong></p>
+<ul><li>Czy warto mieć sejf w domu? 7 rzeczy które tracisz bez sejfu</li><li>Sejf domowy — czy warto go mieć? Fakty i mity o bezpieczeństwie</li><li>Co warto przechowywać w sejfie? Lista priorytetów dla właścicieli</li><li>Jak otwierają sejfy złodzieje — i jak się przed tym bronić?</li><li>Psychologia złodzieja — gdzie szuka sejfu i jak go zaskoczyć?</li><li>Sejf domowy a monitoring CCTV — jak uzupełnić system ochrony?</li><li>Dlaczego złodziej bierze sejf razem z zawartością? Jak temu zapobiec?</li><li>Jak złodzieje omijają systemy alarmowe i sejfy — film a rzeczywistość</li><li>Dlaczego kupujemy sejfy za mało? Raport o bezpieczeństwie domowym w Polsce</li><li>Sejf domowy + alarm + kamera — kompleksowa ochrona domu (cross-sell)</li><li>Dlaczego warto kupić sejf przed wakacjami? (sezonowy trigger)</li></ul>
+
+<p><strong>A2 — Cena / orientacja:</strong></p>
+<ul><li>Ile kosztuje sejf domowy? Przewodnik po cenach w każdej klasie</li><li>Czy tani sejf to dobry pomysł? Kiedy warto dopłacić</li><li>Jak wyglądają testy włamaniowe sejfów? Co jest naprawdę sprawdzane?</li></ul>
+
+<p><strong>A3 — Cechy / klasy (Nauka):</strong></p>
+<ul><li>Co powinien mieć dobry sejf domowy? Lista cech do sprawdzenia</li><li>Sejf meblowy — czy jest bezpieczny? Prawdy i mity</li><li>Jaka klasa sejfu wystarczy do domu? Kalkulator dla każdego przypadku</li><li>Przewodnik po klasach sejfów dla laika — S1, I, II, NT 60 w prostym języku</li><li>Kiedy warto kupić droższy sejf? Różnica między klasą S1 a klasą II</li><li>Sejf domowy — najczęstsze błędy przy wyborze (i jak ich uniknąć)</li><li>Sejf z alarmem — czy niezbędne i jakie modele mają wbudowany alarm?</li><li>Sejf antywłamaniowy klasy 0 — co oferuje i dla kogo wystarczy?</li><li>Sejf z zamkiem kluczowym — czy wciąż popularne i dla kogo?</li><li>Czy złodziej profesjonalny ominie sejf klasy I? Co daje wyższa klasa?</li></ul>
+
+<p><strong>A4 — Wybór produktu (komercyjny):</strong></p>
+<ul><li>Adorf vs Baden-Baden vs SAVE4EVER — porównanie popularnych sejfów domowych</li><li>Sejfy podłogowe i ścienne — kategoria (TEKST SEO)</li><li>Jaki sejf kupić za 1000 zł? Co dostaniesz w tym budżecie?</li><li>Jaki sejf kupić za 500 zł? Realny przegląd najtańszych certyfikowanych modeli</li><li>Sejf domowy za 2000 zł — co dostaniesz i kiedy to ma sens?</li><li>Gdzie kupić sejf domowy — sklep specjalistyczny vs Allegro vs market budowlany</li><li>Sejf z Castoramy vs sejf certyfikowany — co tracisz przy tanim zakupie?</li><li>Sejf klasy I — kiedy wybrać i jakie produkty SejfZone rozważyć?</li><li>Sejf klasy II — dla kogo i jakie scenariusze ochrony zapewnia?</li><li>Sejf premium powyżej 3000 zł — co dostaniesz za te pieniądze?</li><li>Jak nie przepłacić za sejf domowy — 7 błędów kupujących</li><li>Ile zmieści sejf 10, 20, 30, 50 litrów? Wizualizacja</li><li>Sejf do domu jednorodzinnego vs mieszkania w bloku — co wybrać?</li><li>Jak wybrać sejf przy ograniczonej przestrzeni? Modele kompaktowe</li><li>Sejf z szufladą — kiedy to ma sens i jakie modele w SejfZone?</li><li>Najlepsze sejfy domowe pod 1500 zł z certyfikatem — przegląd 2026</li></ul>
+
+<p><strong>A5 — Montaż (transakcyjny / FAQ):</strong></p>
+<ul><li>Jak zamontować sejf wolnostojący — krok po kroku</li><li>Jak ukryć sejf w domu — 12 sprawdzonych miejsc</li><li>Montaż sejfu w ścianie — krok po kroku, materiały, koszty</li><li>Sejf podpodłogowy — co to, jak montować, dla kogo?</li><li>Sejf kamuflażowy — jak wygląda, czy działa, czy warto?</li><li>Sejf ścienny — jak zamontować, czy warto ukryć za obrazem?</li><li>Kotwy montażowe — jak dobrać do betonu, cegły, drewna?</li><li>Sejf w piwnicy / garażu — wilgoć, temperatura, dostęp?</li><li>FAQ PDP: Ile waży sejf i jak go bezpiecznie przenieść?</li><li>FAQ PDP: Czy mogę zamontować sejf samodzielnie? Co potrzebne?</li><li>FAQ PDP: Czy sejf wolnostojący muszę przykręcić do ściany?</li><li>FAQ PDP: Jaką wagę wytrzymuje półka? Jak ułożyć zawartość?</li><li>Sejf na piętrze — jak wmontować bez ryzyka dla stropu?</li><li>Sejf na nóżkach vs wbudowany — co lepiej chroni, co łatwiej zainstalować?</li><li>Czy sejf trzeba zgłaszać do spółdzielni / zarządcy?</li></ul>
+
+<h3>Ścieżka B — Wymóg ubezpieczyciela (21)</h3>
+<p><strong>B1 — Zrozumienie wymogu:</strong></p>
+<ul><li>Wymóg sejfu w polisie — jak go spełnić i co udowodnić?</li><li>Sejf a ubezpieczenie domu — wymagania PZU, Allianz, Warta?</li><li>Jak negocjować niższe ubezpieczenie domu dzięki sejfowi?</li><li>Ile możesz przechować w sejfie bez zgłoszenia do ubezpieczyciela?</li><li>Odszkodowanie z OC/AC a zawartość sejfu</li><li>Jak rozmawiać z ubezpieczycielem o wymaganiach co do sejfu?</li></ul>
+
+<p><strong>B2 — Certyfikaty (Nauka):</strong></p>
+<ul><li>FAQ: Certyfikat sejfu dla ubezpieczyciela — co zaakceptuje polisa?</li><li>Jak sprawdzić autentyczność certyfikatu sejfu? Gdzie weryfikować?</li><li>PZU, Warta, Allianz — zestawienie wymagań dla sejfu domowego 2026</li><li>Sejfy domowe klasa I/II — kategoria i landing (TEKST SEO)</li><li>Różnica szafa metalowa vs certyfikowany sejf — co ważne dla ubezpieczyciela</li></ul>
+
+<p><strong>B3 — Dopasowanie klasy:</strong></p>
+<ul><li>Kalkulator — jaką klasę sejfu wymaga moja polisa?</li><li>Czy sejf meblowy jest zgodny z wymaganiami ubezpieczycieli w Polsce?</li></ul>
+
+<p><strong>B4 — Dokumentacja:</strong></p>
+<ul><li>Certyfikaty i dokumentacja — pobierz potwierdzenie dla ubezpieczyciela</li><li>FAQ: Jakie dokumenty otrzymuję przy zakupie sejfu? Pełna lista</li><li>Jak udokumentować zawartość sejfu dla ubezpieczyciela?</li><li>Jak przygotować sejf do kontroli ubezpieczyciela po kradzieży?</li><li>Jak przygotować listę zawartości sejfu do celów ubezpieczeniowych?</li></ul>
+
+<p><strong>B5 — Zakup (element PDP):</strong></p>
+<ul><li>ELEMENT PDP: „W zestawie: certyfikat EN 14450 + faktura VAT"</li><li>FAQ: Co jest w pudełku? Dokumenty, certyfikaty, instrukcja — pełna lista</li></ul>
+
+<h3>Ścieżka C — Ochrona dokumentów / pożar (20)</h3>
+<p><strong>C1 — Świadomość zagrożenia:</strong></p>
+<ul><li>Sejf a pożar — jak długo wytrzymuje ogień i w jakiej temperaturze?</li><li>Sejf ognioodporny — co naprawdę chroni, a co to marketing?</li><li>Jak długo dokumenty papierowe przetrwają w pożarze bez sejfu?</li></ul>
+
+<p><strong>C2 — Nauka klas ognioodporności:</strong></p>
+<ul><li>Przed czym chroni sejf ognioodporny? Temperatura, czas, certyfikaty</li><li>Sejf wodoodporny — czy istnieje i jak chronić przed zalaniem?</li><li>Klasa NT, 30, 60, 120 minut — co oznacza i co wybrać?</li><li>Sejf ognioodporny vs antywłamaniowy — kiedy przepłacić?</li><li>Dysk, pendrive, CD — jaką klasę ognioodporności dla danych?</li><li>Sejfy ognioodporne — kategoria i landing (TEKST SEO)</li><li>FAQ PDP: Czy sejf jest wodoodporny? Co zrobić po zalaniu?</li><li>Sejf a pożar elektryczny — ochrona przed zwarciem i nadtopieniem?</li><li>Klasa S60P — co oznacza dla ochrony nośników danych?</li><li>NT 60 vs NT 120 — kiedy wybrać dłuższą ochronę?</li><li>Sejf o podwyższonej ognioodporności S120P — kiedy wybrać?</li></ul>
+
+<p><strong>C3 — Dopasowanie do dokumentów:</strong></p>
+<ul><li>Sejf na dokumenty — co przechowywać i jaka klasa ognioodporności?</li><li>Jaki sejf na dokumenty? Wymiary A4, A3 a pojemność i klasa</li><li>Sejf na dokumenty A4 — jakie wymiary są naprawdę potrzebne?</li><li>Sejf na laptopa i dokumenty A4 — minimalne wymiary?</li><li>Sejf ognioodporny na paszporty i akty — jakie parametry?</li><li>Sejfy na dokumenty — kategoria i landing (TEKST SEO)</li></ul>
+
+<h3>Ścieżka D — Firma / biuro (12)</h3>
+<p><strong>D1 — Potrzeba firmowa:</strong></p>
+<ul><li>Mały sejf biurowy na leki, dokumenty, gotówkę — jaki wybrać?</li><li>Sejf dla firmy — jakie przepisy i normy w Polsce?</li><li>Sejf dla pracowników zdalnych — jak zabezpieczyć dane i sprzęt firmy w domu?</li></ul>
+
+<p><strong>D2 — Wybór i przepisy:</strong></p>
+<ul><li>Jak wybrać sejf do biura / małej firmy? Klasy, pojemność, montaż</li><li>Skrytka na gotówkę w sklepie — jaka klasa i jak zamontować?</li><li>Sejf dla gastronomii, handlu, usług — wymogi Sanepidu i ubezpieczyciela</li><li>Sejfy biurowe i firmowe — kategoria (TEKST SEO)</li><li>Dane osobowe i RODO — czy firma powinna mieć sejf? Co mówi prawo?</li><li>Kontrola dostępu — sejf czy szafka na klucz? Różnica prawna</li></ul>
+
+<p><strong>D3 — Specyfika:</strong></p>
+<ul><li>Jaki sejf na recepcji hotelu lub gabinetu lekarskiego?</li><li>Czy sejf biurowy chroni dane cyfrowe — laptopy, nośniki przed ogniem?</li></ul>
+
+<p><strong>D5 — Zakup:</strong></p>
+<ul><li>FAQ PDP: Czy mogę zamówić sejf na fakturę firmową?</li></ul>
+
+<h3>Ścieżka E — Wartościowe przedmioty w domu (23)</h3>
+<p><strong>E1 — Co i gdzie chronić:</strong></p>
+<ul><li>Sejf na biżuterię — co wybrać, gdzie montować, jak ubezpieczyć?</li><li>Sejf na biżuterię — rozmiar, klasa, specjalne wnętrze?</li><li>Gdzie w domu trzymać gotówkę na czarną godzinę? Sejf vs szuflada</li><li>Ile gotówki warto mieć w sejfie domowym? Limit i zdrowy rozsądek</li></ul>
+
+<p><strong>E2 — Dopasowanie do zawartości:</strong></p>
+<ul><li>Sejf na pieniądze — jaki wybrać, gdzie bezpiecznie trzymać gotówkę?</li><li>Jaki sejf na walutę obcą i monety kolekcjonerskie?</li><li>Złoto, srebrne monety, biżuteria — jaka klasa chroni kolekcję?</li><li>Sejf na paszport i dokumenty tożsamości — czy ma sens?</li><li>Kryptowaluty i seed phrase — jak bezpiecznie przechowywać w sejfie?</li><li>Sejf a notariusz — czy warto przechowywać testament w sejfie?</li><li>Sejf dla kolekcjonera zegarków i biżuterii — wymagania wnętrza</li></ul>
+
+<p><strong>E3 — Wybór modelu (FAQ produktowe):</strong></p>
+<ul><li>FAQ PDP: Sejfy domowe Adorf — najczęstsze pytania i specyfikacja</li><li>FAQ PDP: Sejfy Baden-Baden — dla kogo i jakie wymiary?</li><li>Mały sejf domowy — TOP 5 modeli do 800 zł</li><li>Jaki sejf na pieniądze do 500 zł? Ranking tanich z certyfikatem</li><li>Adorf 250 S1 — pełna specyfikacja, dla kogo, FAQ</li><li>Baden-Baden meblowy — opis produktu, dla kogo, kiedy wybrać?</li><li>Kasetki i mini-sejfy — kategoria (TEKST SEO)</li><li>Kasetka metalowa vs mini sejf — czym się różnią i co wybrać?</li><li>FAQ PDP: Adorf 250 S1 — najczęstsze pytania techniczne</li><li>FAQ PDP: Adorf vs Baden-Baden — krótkie porównanie dla kupujących</li><li>Sejf mini na klucze i dokumenty — ochrona czy zabawka?</li><li>Bestsellery sejfów domowych — strona kategorii (TEKST SEO)</li></ul>
+
+<h3>Ścieżka F — Prywatność / kontrola dostępu (11)</h3>
+<p><strong>F1 — Sytuacje dostępu:</strong></p>
+<ul><li>Sejf na leki i środki psychoaktywne — przepisy i praktyka</li><li>Mały domowy sejf na leki — jaki model do przechowalni?</li><li>Sejf noclegowy — jak ukryć gotówkę w mieszkaniu Airbnb?</li><li>Sejf dla opiekunki i niani — jak ukryć leki i gotówkę przed osobami z dostępem?</li><li>Sejf dla seniorów — łatwy zamek, duże cyfry, prosta obsługa</li><li>Jaki sejf po narodzinach dziecka? Checklista dla rodziców</li><li>Jaki sejf dla emeryta? Niski budżet, prosta obsługa, solidna ochrona</li></ul>
+
+<p><strong>F2 — Zamek / szybki dostęp:</strong></p>
+<ul><li>Sejf biometryczny dla rodziców — szybki dostęp dla dorosłych, niedostępny dla dzieci</li><li>FAQ PDP: Czy dziecko może otworzyć sejf z kodem? Jak zmienić PIN?</li><li>Zamek biometryczny — czy jest niezawodny i czy go potrzebujesz?</li><li>FAQ PDP: Szybki dostęp do sejfu — co oznacza tryb alarmowy i jak go włączyć?</li></ul>
+
+<h3>Ścieżka G — Przeprowadzka / nowy dom (8)</h3>
+<p><strong>G1 — Wyposażanie domu:</strong></p>
+<ul><li>Urządzam nowy dom — co kupić: sejf, szafkę czy sejf meblowy?</li></ul>
+
+<p><strong>G2 — Estetyka / dopasowanie:</strong></p>
+<ul><li>Sejf jako element wyposażenia — jak dopasować do wnętrza?</li><li>Sejf meblowy ukryty w szafie — czy to skuteczna ochrona?</li><li>Sejf do salonu — modele o estetycznym designie i certyfikacie</li></ul>
+
+<p><strong>G3 — Montaż samodzielny:</strong></p>
+<ul><li>Czy sejf ścienny można zamontować samodzielnie? Poradnik</li><li>Lista narzędzi potrzebnych do montażu sejfu w ścianie lub podłodze</li><li>Ile waży typowy sejf i jak go bezpiecznie wnieść na piętro?</li></ul>
+
+<hr>
+
+<h2>11. Cross-Category Triggers</h2>
+
+<table>
+<tr><th>Kategoria źródłowa</th><th>Trigger zakupu</th><th>CEP aktywowany</th><th>Fraza wejściowa w AI</th></tr>
+<tr><td>Biżuteria / Zegarki luksusowe</td><td>„Kupiłem drogi zegarek, gdzie go bezpiecznie przechowywać w domu?"</td><td><code>cep_wlamanie_biz</code></td><td>„jak przechowywać cenną biżuterię w domu?"</td></tr>
+<tr><td>Budowa domu / Remont</td><td>„Jesteśmy na etapie budowy, myślę o sejfie w ścianie lub podłodze"</td><td><code>cep_wlamanie_biz</code></td><td>„kiedy najlepiej zamontować sejf w domu?"</td></tr>
+<tr><td>Polisa ubezpieczeniowa</td><td>„Ubezpieczam dom, agent pyta o sejf na cenne przedmioty"</td><td><code>cep_wymog_ubezpieczyciela</code></td><td>„jaki sejf jest wymagany przez ubezpieczyciela?"</td></tr>
+<tr><td>Szafy na broń (S1)</td><td>„Mam w domu broń — czy ten sam sejf wystarczy?"</td><td><code>cep_prywatnosc_dzieci</code></td><td>„czy sejf domowy nadaje się na broń krótką?"</td></tr>
+</table>
+
+<hr>
+
+<h2>12. 🆕 Tone of Voice for GEO — jak pisać treść pod AI search</h2>
+
+<p><em>20 reguł pisania PDP/artykułów pod cytowalność w AI (Perplexity, AI Overviews, ChatGPT). Niezależna od Forbidden Patterns — tamto mówi czego NIE pisać, to mówi JAK pisać. Kategoria-specyficzne dla sejfów domowych.</em></p>
+
+<p><strong>Struktura passage'a (cytowalność):</strong></p>
+<ol><li>Odpowiadaj na pytanie w PIERWSZYM zdaniu akapitu. Źle: „Sejf to rozwiązanie do ochrony…". Dobrze: „Sejf klasy S1 jest akceptowany przez ubezpieczycieli PZU, Warta i Allianz przy sumie do 25 000 zł."</li><li>Jeden akapit = jedna kompletna odpowiedź na jedno pytanie. Nie zlepiaj „co to klasa S1" i „ile minut ognioodporności".</li><li>Liczba zawsze z jednostką i kontekstem: „60 min" → „LFS 60 — chroni dokumenty 60 minut w temperaturze do 1000°C (papier zwęgla się przy 177°C)".</li><li>Parametr zawsze z konsekwencją: „EN 14450 S1" → „S1 wg EN 14450 — minimalna klasa akceptowana przez większość ubezpieczycieli do sumy 25 000 zł".</li><li>Konkret marka+model zamiast „topowy sejf": „Konsmetal Unica" cytuje się, „solidny sejf w dobrej cenie" nie.</li></ol>
+
+<p><strong>Język konsumenta (nie producenta):</strong></p>
+<ol><li>Używaj słów z pytań klienta: „czy ubezpieczyciel uzna" → „akceptowany przez PZU/Warta do 25 000 zł" — nie „zgodny z normą zharmonizowaną EN 14450:2017".</li><li>Tłumacz każdy skrót przy pierwszym użyciu: „LFS (ognioodporność — czas ochrony zawartości przed pożarem)", „ECB-S (europejska jednostka certyfikująca sejfy)".</li><li>Mapuj cechę na sytuację: nie „2 kotwy montażowe", lecz „2 kotwy do podłogi i ściany — sejf 13 kg bez kotwienia można wynieść we dwóch".</li><li>Odpowiadaj na lęk wprost: „Czy złodziej wyniesie sejf?" → „13 kg trzeba zakotwić — bez montażu można wynieść; modele >50 kg + kotwienie = realna ochrona". (Primary Concern: skuteczność realna, nie deklarowana.)</li><li>Adresuj porównania, które klient zrobi i tak: „S1 vs S2: S1 chroni do ~25 000 zł, S2 do ~50 000 zł — wybierz wg sumy ubezpieczenia, nie wg ceny sejfu".</li></ol>
+
+<p><strong>Struktura pod AI parsing:</strong></p>
+<ol><li>Tabele dla parametrów porównywalnych — AI ekstrahuje tabelę (klasa, ognioodporność, pojemność, waga, zamek) lepiej niż prozę.</li><li>Nagłówki = pytania klienta: „Jaka klasa sejfu do domu?" zamiast „Specyfikacja".</li><li>Listy punktowane dla kryteriów wyboru: „Na co zwrócić uwagę: (1) klasa wg sumy ubezpieczenia, (2) ognioodporność jeśli dokumenty, (3) waga + kotwienie, (4) typ zamka".</li><li>Każdą normę podawaj z numerem i instytucją: „EN 14450", „atest ECB-S", „IMP" — AI cytuje konkretne normy, nie „certyfikowany".</li><li>Wariant zamka = osobne zdanie-odpowiedź: „Kluczowy: tańszy, wymaga noszenia klucza. Elektroniczny: szybki dostęp, wymaga baterii. Biometryczny: bez klucza, najdroższy".</li></ol>
+
+<p><strong>Zaufanie i kontekst:</strong></p>
+<ol><li>Podawaj „dla kogo NIE": „kasetka bez certyfikatu EN 14450 to NIE sejf w rozumieniu ubezpieczyciela" — buduje wiarygodność.</li><li>Dowód zamiast przymiotnika: „tabliczka znamionowa ECB-S widoczna wewnątrz", „certyfikat PDF do pobrania" zamiast „certyfikowany".</li><li>Dla wariantu ognioodpornego — osobna sekcja o dokumentach/danych (LFS dla papieru ≠ DIS dla nośników, różne klasy).</li><li>Adresuj budżet wprost jako oś (klient myśli kwotami: „do 500 zł", „do 1500 zł").</li><li>Zamknij każdą sekcję faktem do zacytowania (liczba/norma/instytucja), nie zachętą sprzedażową — to etap 8 (zakup): certyfikat, kotwy w zestawie, zwrot.</li></ol>
+
+<hr>
+
+<p><em>Źródło treści sekcji 2-11: referencja 06.md #14 (matryca, niezmieniona co do faktów — czysta, bez skażenia). Nowe: sekcja 0 (Opis), 0b (Problemy), 1 (CEV/Schwartz+wagi), 12 (Tone of Voice GEO sejf-specyficzny).</em></p>
+
+<h2>13. Pole pytań</h2>
+
+<h3>① Discovery Questions (20 — patrz sekcja 3)</h3>
+
+
+<hr>
+
+
+<hr>
+<h2>🔑 Keywordy DFS — paliwo z DataForSEO (5 CEP · 20 pytań · 8 gap)</h2>
+<h3>CEP-y (sytuacje zakupowe) + wolumeny DFS</h3>
+<table>
+<tr><th>#</th><th>CEP</th><th>Wymiar</th><th>Reprezentatywne keywordy</th><th>Vol DFS</th></tr>
+<tr><td>cep_wlamanie_biz</td><td><strong>włamanie / po napadzie</strong></td><td>why</td><td>sejf antywłamaniowy domowy, sejf domowy na biżuterię, sejf domowy na pieniądze, jaki sejf domowy s1, sejf domowy klasa s2</td><td>3200</td></tr>
+<tr><td>cep_dokumenty_pozar</td><td><strong>pożar / dokumenty / dane</strong></td><td>why</td><td>sejf ognioodporny domowy, sejf domowy na dokumenty, sejf ognioodporny na dokumenty ile minut, sejf lfs 60 dokumenty, sejf na dyski twarde</td><td>1400</td></tr>
+<tr><td>cep_gotowka_firma</td><td><strong>firma / biuro / utarg</strong></td><td>why</td><td>sejf biurowy na gotówkę, sejf firmowy klasa i, sejf na utarg sklep, kasa wartości en 1143-1, sejf vds certyfikat firma</td><td>800</td></tr>
+<tr><td>cep_wymog_ubezpieczyciela</td><td><strong>wymóg ubezpieczyciela / polisa</strong></td><td>why</td><td>czy ubezpieczyciel wymaga sejfu, certyfikat sejfu dla ubezpieczyciela pzu, jaki sejf wymaga warta allianz, sejf domowy z atestem, wymóg sejfu w polisie domowej</td><td>600</td></tr>
+<tr><td>cep_prywatnosc_dzieci</td><td><strong>prywatność / kontrola dostępu</strong></td><td>why</td><td>sejf na leki przed dziećmi, sejf biometryczny domowy, sejf domowy szybki dostęp pin, mały sejf do przechowalni leków, sejf na gotówkę przed dziećmi</td><td>490</td></tr>
+</table>
+<h3>Discovery Questions (realne zapytania klienta do AI)</h3>
+<table>
+<tr><th>Rank</th><th>Pytanie</th><th>Vol</th></tr>
+<tr><td>1</td><td>Jak bezpiecznie przechowywać biżuterię i gotówkę w domu?</td><td>260</td></tr>
+<tr><td>2</td><td>Czy mały sejf domowy wystarczy do ochrony przed włamywaczem?</td><td>210</td></tr>
+<tr><td>3</td><td>Co to jest klasa EN 14450 w sejfie — ile ochrony daje?</td><td>180</td></tr>
+<tr><td>4</td><td>Jaka różnica między sejfem ognioodpornym a zwykłym?</td><td>160</td></tr>
+<tr><td>5</td><td>Ile minut odporności ogniowej powinien mieć sejf na dokumenty?</td><td>130</td></tr>
+<tr><td>6</td><td>Sejf do ukrycia w szafie ubraniowej — co wybrać?</td><td>90</td></tr>
+<tr><td>7</td><td>Czy ubezpieczyciel wymaga konkretnej klasy sejfu?</td><td>90</td></tr>
+<tr><td>8</td><td>Jak zamontować sejf w ścianie żeby był naprawdę bezpieczny?</td><td>80</td></tr>
+<tr><td>9</td><td>Sejf na dokumenty paszport i akty — jaką pojemność wziąć?</td><td>70</td></tr>
+<tr><td>10</td><td>Sejf domowy do 500 zł — czy jest skuteczny?</td><td>60</td></tr>
+<tr><td>11</td><td>Sejf z zamkiem biometrycznym — czy to bezpieczne i niezawodne?</td><td>50</td></tr>
+<tr><td>12</td><td>Co zrobić jeśli zapomnę kod do sejfu elektronicznego?</td><td>50</td></tr>
+</table>
+<h3>Gap keywords (do odzyskania — priorytet)</h3>
+<table>
+<tr><th>Fraza</th><th>Priorytet</th><th>Ścieżki</th></tr>
+<tr><td>sejf domowy jaka klasa</td><td>KRYTYCZNY</td><td>A3, B3, D4</td></tr>
+<tr><td>czy ubezpieczyciel wymaga sejfu</td><td>KRYTYCZNY</td><td>D1, D2</td></tr>
+<tr><td>sejf ognioodporny na dokumenty ile minut</td><td>WYSOKI</td><td>B1, B2</td></tr>
+<tr><td>sejf domowy s1 s2 różnica</td><td>WYSOKI</td><td>A3, A4, D4</td></tr>
+<tr><td>ile litrów sejf na biżuterię i dokumenty</td><td>WYSOKI</td><td>A3, A4</td></tr>
+<tr><td>jak zamontować sejf do ściany samodzielnie</td><td>WYSOKI</td><td>A5, C3</td></tr>
+<tr><td>certyfikat sejfu dla ubezpieczyciela pzu warta</td><td>WYSOKI</td><td>D2, D4, D5</td></tr>
+<tr><td>mały sejf domowy kluczowy czy elektroniczny</td><td>SREDNI</td><td>E3, E4, A4</td></tr>
+</table>
+
+<hr>
+
+<details class="fund" id="fund1"><summary><span class="fund-arrow">▸</span><span class="fund-head"><span class="fund-title">🏗 Fundament — 14. Sejfy domowe na kosztowności — Fundament (KROK 0 → CEP)</span><span class="fund-src">Baza: referencja 06.md #14 (matryca, CEP bazowe niezmienione). Wzbogacona wg METODOLOGIA_FUNDAMENT.md + batch_fund JSON + krzyżowanie z Secondary. Data: 2026-06-10.</span></span><span class="fund-badge ok">✓ kompletny</span><span class="fund-hint">rozwiń ▾</span></summary><div class="fund-body"><h1>14. Sejfy domowe na kosztowności — Fundament (KROK 0 → CEP)</h1>
+
+<p><em>Baza: referencja 06.md #14 (matryca, CEP bazowe niezmienione). Wzbogacona wg METODOLOGIA_FUNDAMENT.md + batch_fund JSON + krzyżowanie z Secondary. Data: 2026-06-10.</em></p>
+
+<hr>
+
+<h2>0.1 Analiza KW</h2>
+
+<p><strong>Wolumen ogółem z harvestu:</strong> ~8 460 vol (modyfikatory + discovery).</p>
+
+<h3>Strumień SYTUACYJNY → wsad do CEP</h3>
+
+<table>
+<tr><th>Fraza / klaster</th><th>Modyfikatory</th><th>Vol</th><th>Signal CEP</th></tr>
+<tr><td>sejf domowy ogniotrwały</td><td>sejf domowy ogniotrwały, mały sejf domowy ogniotrwały, sejf do domu ogniotrwały, ogniotrwały i wodoszczelny</td><td>~1 150</td><td>pożar / dokumenty</td></tr>
+<tr><td>sejf do domu ukryty</td><td>sejf do domu ukryty, jak ukryć sejf w ścianie, gdzie ukryć sejf w domu, wmurować</td><td>~90</td><td>dyskrecja / włamanie</td></tr>
+<tr><td>sejf domowy na pieniądze</td><td>sejf domowy na pieniądze</td><td>~150*</td><td>gotówka / kosztowności</td></tr>
+<tr><td>sejf domowy z atestem</td><td>sejf domowy z atestem, klasa S1, klasa S2</td><td>~190</td><td>wymóg ubezpieczyciela / certyfikat</td></tr>
+<tr><td>sejf domowy montowany do ściany</td><td>przykręcany, mocowany do ściany/podłogi</td><td>130</td><td>montaż / antywłamaniowy</td></tr>
+<tr><td>jaki sejf do domu / forum / opinie / wybrać</td><td>jaki, jaki do domu forum, jaki domowy wybrać</td><td>~370</td><td>discovery — porównywanie / decyzja</td></tr>
+<tr><td>ile kosztuje sejf</td><td>ile kosztuje, ile kosztuje domowy</td><td>230</td><td>cenowe (discovery, nie CEP)</td></tr>
+<tr><td>gdzie kupić sejf domowy</td><td>gdzie kupić, gdzie można kupić</td><td>230</td><td>zakup (discovery, nie CEP)</td></tr>
+</table>
+
+<p><em><code>_other</code> (4 680 vol) zawiera niezaklasyfikowane, w tym „ogniotrwały" i „na pieniądze" — zaliczam do odpowiednich CEP.</em></p>
+
+<h3>Strumień ATRYBUTOWY → harvest filtrów / KCF (NIE CEP)</h3>
+
+<table>
+<tr><th>Atrybut</th><th>Modyfikatory</th><th>Vol</th></tr>
+<tr><td>mały / kompaktowy</td><td>mały sejf domowy, mały sejf do domu, mały domowy castorama</td><td>1 690</td></tr>
+<tr><td>duży</td><td>sejf domowy duży, duży sejf domowy</td><td>150</td></tr>
+<tr><td>zamek kluczowy</td><td>sejf domowy na klucz</td><td>270</td></tr>
+<tr><td>wodoodporny</td><td>sejf domowy ogniotrwały i wodoszczelny</td><td>140</td></tr>
+<tr><td>zakotwiczony / montaż</td><td>przykręcany, mocowany do ściany/podłogi</td><td>130</td></tr>
+<tr><td>klasa S1 / S2</td><td>sejf domowy s1, sejf domowy s2</td><td>140</td></tr>
+<tr><td>podłogowy</td><td>sejf domowy podłogowy</td><td>50</td></tr>
+<tr><td>profesjonalny</td><td>profesjonalny sejf domowy</td><td>40</td></tr>
+</table>
+
+<p>> Rozmiar, zamek, klasa EN, montaż — to <strong>atrybuty produktowe</strong> (parametry wyboru), nie sytuacje wejścia. Zasilają filtry/KCF/preselekcję, nie CEP.</p>
+
+<hr>
+
+<h2>0.2 Opis kategorii</h2>
+
+<p>Sejfy domowe na kosztowności — metalowe szafy/skrytki zapewniające fizyczną ochronę wartościowych przedmiotów w środowisku domowym lub biurowym. Klient wchodzi w kategorię, gdy ma coś konkretnego do schowania (gotówka, biżuteria, dokumenty, broń) i zdaje sobie sprawę, że zwykła szuflada nie daje wystarczającego zabezpieczenia — albo gdy ubezpieczyciel wymaga certyfikowanego pojemnika.</p>
+
+<hr>
+
+<h2>0.3 Problemy, które kategoria załatwia</h2>
+
+<h3>Primary (rdzeń — po co kategoria powstała)</h3>
+
+<p>> <strong>Chroni mienie przechowywane w domu przed kradzieżą lub utratą.</strong> Goła funkcja fizycznego zabezpieczenia. Tyle.</p>
+<p>> TEST: „czy kategoria POWSTAŁA, żeby to robić?" → TAK. Klasa S1/EN 14450, zamek, masa, punkty kotwiące — to atrybuty realizacji. Ogniotrwałość, biometria, certyfikat ubezpieczyciela — to detalizacje (secondary).</p>
+
+<h3>Secondary (rynek pociął rdzeń „ochrona mienia" na węższe pod-potrzeby)</h3>
+
+<ul><li><strong>złoto, biżuteria, gotówka, kosztowności</strong> — klasyczna zawartość domowego sejfu; klient szuka pojemności + klasy antywłamaniowej</li><li><strong>dokumenty (akty, paszporty, notarialne)</strong> — wrażliwe na pożar i wilgoć → CEP ognioodporności</li><li><strong>elektronika / dyski / nośniki danych</strong> — dane osobiste, backupy; ogień niszczy w minuty → wyższy próg temp. wewnętrznej</li><li><strong>broń krótka / długa / myśliwska</strong> — wymóg prawny (ustawa o broni) lub polisowy; odrębny wymóg certyfikatu</li><li><strong>pamiątki rodzinne / nieodtwarzalne przedmioty</strong> — wartość sentymentalna > finansowa; ogień/woda = strata permanentna</li><li><strong>ochrona przed pożarem / dymy</strong> — ognioodporny min. 30/60 min.; UL 72 / EN 1047; papier vs dysk (różne temp.)</li><li><strong>wymóg ubezpieczyciela</strong> — polisa wymaga klasy (np. S1/VdS); klient szuka nr certyfikatu nie produktu</li><li><strong>ochrona przed dziećmi</strong> — leki, amunicja, pieniądze; priorytet: szybki dostęp dla dorosłego + bariera dla dziecka</li><li><strong>biuro / firma w domu</strong> — gotówka z działalności, dokumenty firmowe; wartość wyższa → wyższa klasa EN</li></ul>
+
+<p>> Potwierdzenie KW: „sejf domowy ogniotrwały" (~1 150 vol), „sejf domowy z atestem/S1/S2" (~190 vol), „sejf domowy na pieniądze" (~150 vol), „sejf do domu ukryty" (~90 vol) — każdy secondary ma pokrycie wolumenowe.</p>
+
+<hr>
+
+<h2>CEP — Consumer Entry Points</h2>
+
+<p><em>Referencja #14 miała 5 CEP (matryca). Każdy secondary z 0.3 musi mieć ≥1 CEP → dociągnięto 4 🆕 spoza referencji z harvestu KW.</em></p>
+
+<p>> Kategoria szeroka — <strong>zagrożenie determinuje typ produktu</strong>. Sejf ognioodporny na dokumenty ≠ mały biometryczny na biżuterię ≠ kaseta wartości na gotówkę firmy. CEP = pierwsze pytanie routujące klienta do właściwego produktu.</p>
+
+<table>
+<tr><th>CEP</th><th>Trigger (problem klienta, język konsumenta)</th><th>Konsekwencja dla opisu</th></tr>
+<tr><td><code>cep_wlamanie</code></td><td><strong>Strach przed włamaniem</strong> — właśnie w okolicy, po zdarzeniu u sąsiada, chcę zabezpieczyć biżuterię/gotówkę</td><td>Klasa EN 14450 S1/S2, masa (>50 kg lub kotwy), punkty montażowe, czas włamania [min]</td></tr>
+<tr><td><code>cep_dokumenty_pozar</code></td><td><strong>Dokumenty i nośniki — pożar niszczy wszystko w minuty</strong> — akty, paszporty, dyski</td><td>Czas odporności ogniowej (30/60/120 min), temperatura wewnątrz (papier <177°C, dysk <52°C), certyfikat UL 72 / EN 1047</td></tr>
+<tr><td><code>cep_gotowka_firma</code></td><td><strong>Gotówka lub kosztowności firmy</strong> — ubezpieczyciel wymaga klasy, duża wartość w domu</td><td>Klasa EN 1143-1, limit sumy ubezpieczenia per klasa, certyfikat VdS / numer normy</td></tr>
+<tr><td><code>cep_wymog_ubezpieczyciela</code></td><td><strong>Polisa wymaga certyfikowanego sejfu</strong> — co dokładnie trzeba kupić, żeby ubezpieczyciel uznał?</td><td>Klasa certyfikatu w PD (S1/VdS/EN), numer normy, info „zatwierdzony przez [ubezp.]"</td></tr>
+<tr><td><code>cep_prywatnosc_dzieci</code></td><td><strong>Chcę schować leki, amunicja, pieniądze przed dziećmi</strong> — szybki dostęp dla siebie, bariera dla dziecka</td><td>Szybkość dostępu (biometria/PIN), dyskretny montaż, rozmiar (mały/kompaktowy)</td></tr>
+<tr><td>🆕 <code>cep_bron_prawny</code></td><td><strong>Wymóg prawny / polisowy na broń</strong> — ustawa o broni wymaga certyfikowanego sejfu, ubezpieczyciel weryfikuje</td><td>Klasa na broń (EN 1143-1 lub dedykowany certyfikat PZŁ), montaż wymagany (ściana/podłoga), atestowany</td></tr>
+<tr><td>🆕 <code>cep_elektronika_dane</code></td><td><strong>Dyski, nośniki danych, backup</strong> — dane osobiste/firmowe; ogień i wilgoć = strata permanentna</td><td>Temperatura wewnątrz <52°C (dyski), wodoodporność (IP), certyfikat data media UL 72 Class 350</td></tr>
+<tr><td>🆕 <code>cep_pamiatki_nieodtwarzalne</code></td><td><strong>Pamiątki rodzinne, zdjęcia, nieodtwarzalne przedmioty</strong> — nie finansowa, sentymentalna utrata permanentna</td><td>Dwóch wrogów: ogień + woda → ognioodporny + uszczelka wodna; opis „to czego nie odtworzysz"</td></tr>
+<tr><td>🆕 <code>cep_dyskrecja_montaz</code></td><td><strong>Chcę schować sejf tak, żeby nikt nie wiedział</strong> — wmurowany, za obrazem, podłogowy</td><td>Wymiary + możliwość wmurowania, waga (solo vs ekipa), instrukcja ukrycia, sejf podłogowy / ścienny</td></tr>
+</table>
+
+<h3>Uzasadnienie KW per CEP</h3>
+
+<table>
+<tr><th>CEP</th><th>Reprezentatywne frazy</th><th>Vol</th></tr>
+<tr><td><code>cep_wlamanie</code></td><td>sejf domowy, sejf do domu, sejf domowy S1/S2, sejf przykręcany do ściany</td><td>~2 400</td></tr>
+<tr><td><code>cep_dokumenty_pozar</code></td><td>sejf domowy ogniotrwały, mały sejf domowy ogniotrwały, ogniotrwały i wodoszczelny</td><td>~1 150</td></tr>
+<tr><td><code>cep_gotowka_firma</code></td><td>sejf domowy na pieniądze, dobry sejf domowy</td><td>~200</td></tr>
+<tr><td><code>cep_wymog_ubezpieczyciela</code></td><td>sejf domowy z atestem, klasa S1, klasa S2</td><td>~190</td></tr>
+<tr><td><code>cep_prywatnosc_dzieci</code></td><td>mały sejf domowy, mały sejf do domu (overlap; kontekst PIN/biometria)</td><td>~1 690</td></tr>
+<tr><td><code>cep_bron_prawny</code></td><td>[niska objętość w DFS—słowo kluczowe „sejf na broń" w osobnej kategorii; signal z _other]</td><td>~40*</td></tr>
+<tr><td><code>cep_elektronika_dane</code></td><td>sejf domowy ogniotrwały i wodoszczelny (overlap; specyfika temp. dysku)</td><td>~140</td></tr>
+<tr><td><code>cep_pamiatki_nieodtwarzalne</code></td><td>[zawiera się w ogniotrwały + ogólny sejf domowy; trigger narracyjny, nie vol-driven]</td><td>~100*</td></tr>
+<tr><td><code>cep_dyskrecja_montaz</code></td><td>sejf do domu ukryty, jak ukryć sejf w ścianie, gdzie ukryć sejf w domu, wmurować sejf</td><td>~130</td></tr>
+</table>
+
+<p><em>\</em> szacunek z _other i nakładania — głównie trigger narracyjny, nie osobna fraza.*</p>
+
+<hr>
+
+<h3>Mapa pokrycia problemów → CEP</h3>
+
+<table>
+<tr><th>Problem (0.3 Secondary)</th><th>CEP pokrywający</th></tr>
+<tr><td>złoto / biżuteria / gotówka / kosztowności</td><td><code>cep_wlamanie</code></td></tr>
+<tr><td>dokumenty (akty, paszporty)</td><td><code>cep_dokumenty_pozar</code></td></tr>
+<tr><td>elektronika / dyski / nośniki</td><td><code>cep_elektronika_dane</code> 🆕</td></tr>
+<tr><td>broń krótka / długa / myśliwska</td><td><code>cep_bron_prawny</code> 🆕</td></tr>
+<tr><td>pamiątki / nieodtwarzalne</td><td><code>cep_pamiatki_nieodtwarzalne</code> 🆕</td></tr>
+<tr><td>ochrona przed pożarem</td><td><code>cep_dokumenty_pozar</code> + <code>cep_elektronika_dane</code></td></tr>
+<tr><td>wymóg ubezpieczyciela</td><td><code>cep_wymog_ubezpieczyciela</code></td></tr>
+<tr><td>ochrona przed dziećmi</td><td><code>cep_prywatnosc_dzieci</code></td></tr>
+<tr><td>biuro / firma w domu</td><td><code>cep_gotowka_firma</code></td></tr>
+<tr><td>dyskrecja / ukrycie</td><td><code>cep_dyskrecja_montaz</code> 🆕</td></tr>
+</table>
+
+<p>> ✅ Każdy problem z 0.3 pokryty ≥1 CEP. Referencja miała 5 → wzbogacono o 4 🆕. Atrybuty (S1/S2, zamek, rozmiar, masa) → harvest filtrów, NIE CEP.</p>
+
+<hr>
+
+<p><em>Nadbudowa (20 Discovery Questions · KCF · Tier Specs · Decision Tree · Forbidden → Correct · Ścieżki+persony) — etap 2, wyrastają z tego fundamentu.</em></p>
+</div></details></div>
+    <div class="cs" id="s2"><h1>13. Szafy na broń długą (klasa S1) — Category Standard v2</h1>
+
+<p><em>Baza: referencja 06.md #13 (sekcje 2-9, matryca) + CEV z WPIS_szafy_bron_S1_NOWY + pole pytań z map percepcji (ROZSZYTE, segment Szafy na broń — 7 ścieżek, 177 pytań). Format aparat V2, ze ścieżkami. Z tego co już zrobione.</em></p>
+
+<hr>
+
+<h2>0. Opis kategorii</h2>
+
+<p>Szafa na broń długą to certyfikowana stalowa szafa do przechowywania broni palnej długiej (karabiny, strzelby), spełniająca <strong>klasę S1 wg PN-EN 14450</strong> — minimalny wymóg ustawowy Rozporządzenia MSWiA. Kupujący wchodzi w kategorię <strong>z nakazu prawa</strong>: po otrzymaniu pozwolenia na broń przechowywanie wymaga szafy ≥S1. To zakup wymuszony, nie z wyboru — dominuje lęk o zgodność z przepisami i kontrolą policji/PZŁ.</p>
+
+<h2>0b. Problemy, które kategoria załatwia</h2>
+
+<p><strong>🎯 Primary (rdzeń — po co szafa na broń powstała):</strong></p>
+<p>> <strong>Przechowuje broń długą zgodnie z wymogiem prawa (≥S1).</strong></p>
+<p>Goła funkcja: zabezpiecza broń tak, jak nakazuje MSWiA. Nie „daje spokój" — to zakup z nakazu, nie komfortu.</p>
+
+<p><strong>Secondary (detalizacja rdzenia):</strong></p>
+<ul><li><strong>świeże pozwolenie</strong> — wymóg ustawowy po otrzymaniu pozwolenia (→ <code>cep_pozwolenie_wymog_szafy</code> ⚡)</li><li><strong>kontrola PZŁ / policji</strong> — myśliwy musi udowodnić zgodność (→ <code>cep_mysliwy_wymog_msw</code>)</li><li><strong>kolekcja</strong> — 10+ sztuk, organizacja, skrytka na amunicję (→ <code>cep_kolekcjoner_bron</code>)</li><li><strong>strzelec sportowy</strong> — broń krótka, szybki dostęp (→ <code>cep_strzelec_sportowy</code>)</li><li><strong>upgrade</strong> — stara szafa bez certyfikatu, ubezpieczyciel/policja żąda S1 (→ <code>cep_upgrade_szafy</code>)</li></ul>
+
+<p>> ⚠️ <strong>Pojemność, kolor, masa — to NIE problemy.</strong> To atrybuty/specy → idą do KCF i preselekcji, nie do CEP. Są KONSEKWENCJĄ CEP (kolekcjoner → pojemność; nowe pozwolenie → certyfikat S1).</p>
+
+<hr>
+
+<h2>1. CEV — Category Emotional Valuation (zmodyfikowany Schwartz z wagami)</h2>
+
+<p><strong>Pasek CEV — profil emocjonalny kategorii (10 cech):</strong></p>
+
+<table>
+<tr><th>ryzyko</th><th>lęk</th><th>widoczność</th><th>impuls</th><th>sexy</th><th>aspiracja</th><th>tożsamość</th><th>zmysłowość</th><th>pilność</th><th>moralność</th></tr>
+<tr><td>.90</td><td>.85</td><td>.05</td><td>.10</td><td>.10</td><td>.10</td><td>.25</td><td>.10</td><td>.50</td><td>.15</td></tr>
+</table>
+
+<p>Bardzo wysokie <strong>ryzyko .90</strong> + <strong>lęk prawny .85</strong> + <strong>pilność .50</strong> → kategoria z dominującym lękiem o zgodność prawną. <code>apply_physics</code> → fork <strong>POTRZEBA</strong> (impuls ≈ 0.01), research ≈ <strong>7.3</strong> (głęboka), emocja <strong>−6.0</strong> → <strong>POTRZEBA research-owa, głęboka, lęk prawny dominuje.</strong></p>
+
+<p>> ⚖️ <strong>Kotwica regulacyjna:</strong> klasy <strong>S1/S2</strong> = norma <strong>PN-EN 14450</strong> (NIE EN 1143-1, która jest wyższa). Rozp. MSWiA 26.08.2014 wymaga <strong>≥S1</strong>. Szafy ≥S1 <strong>nie muszą</strong> być kotwione. Zgodność = <strong>certyfikat jednostki certyfikującej (IMP)</strong>, nie „atest MSWiA".</p>
+
+<p><strong>Schwartz — 8 stanów świadomości + wagi:</strong></p>
+
+<table>
+<tr><th>#</th><th>Stan świadomości</th><th>Waga</th><th>Co to znaczy dla treści</th></tr>
+<tr><td>1</td><td>Nie wiem</td><td>◔ L</td><td>przed pozwoleniem — pomijalny</td></tr>
+<tr><td>2</td><td>Potrzeba (problem-aware)</td><td>● <strong>H</strong></td><td>„Dostałem pozwolenie — co teraz?" — silny trigger prawny</td></tr>
+<tr><td>3</td><td>CEP</td><td>● <strong>H</strong></td><td>Pozwolenie / kontrola / kolekcja / strzelec — routing</td></tr>
+<tr><td>4</td><td><strong>Nauka kategorii</strong></td><td>● <strong>H</strong></td><td>Klasy S1/S2, PN-EN 14450, certyfikat IMP, pojemność — research 7.3, najcięższy</td></tr>
+<tr><td>5</td><td>Preselekcja</td><td>◑ M</td><td>Ile sztuk, broń z lunetą, zamek → model</td></tr>
+<tr><td>6</td><td>Porównywanie</td><td>◑ M</td><td>Siegen vs Gunz vs Fort; warianty pojemnościowe</td></tr>
+<tr><td>7</td><td>Wybór sklepu</td><td>◑ M</td><td>Certyfikat do kontroli, dostawa palety, sklep specjalistyczny</td></tr>
+<tr><td>8</td><td>Zakup</td><td>◑ M</td><td>Raty, BackOrder, certyfikat PDF, montaż</td></tr>
+</table>
+
+<p><strong>Kształt:</strong> POTRZEBA prawna z ciężkim początkiem (Potrzeba E2 + CEP E3 + Nauka E4 wszystkie ●H) — klient wchodzi pod presją prawa („dostałem pozwolenie") i drąży głęboko klasy/normy. Treść GEO musi obsłużyć lęk prawny: powołanie na MSWiA, certyfikat IMP, dowód zgodności jako pierwsza odpowiedź.</p>
+
+<hr>
+
+<h2>2. CEP — Consumer Entry Points</h2>
+
+<p><em>Matryca: 5 CEP z referencji 06.md #13. Kategoria fokusowa — jeden produkt (szafa S1), silny CEP dominujący z wymogu prawnego.</em></p>
+
+<table>
+<tr><th>id</th><th>Trigger (język konsumenta)</th><th>Kontekst</th><th>Primary concern</th><th>Routes to</th><th>PDP anchor</th></tr>
+<tr><td>⚡ <code>cep_pozwolenie_wymog_szafy</code></td><td>„Dostałem pozwolenie na broń — prawo nakazuje mieć szafę S1"</td><td>Świeże pozwolenie</td><td>Czy ta szafa spełnia wymóg MSWiA</td><td>Szafa S1</td><td>„Spełnia wymóg MSWiA + S1 + zamek VdS I — zakup z nakazu, nie z wyboru"</td></tr>
+<tr><td><code>cep_mysliwy_wymog_msw</code></td><td>„Myśliwy z aktywną licencją — kontrola PZŁ lub policji"</td><td>Przed kontrolą</td><td>Czy policja uzna przy kontroli</td><td>Szafa S1 z certyfikatem</td><td>„Powołanie na rozporządzenie MSWiA + certyfikat jako dowód zgodności"</td></tr>
+<tr><td><code>cep_kolekcjoner_bron</code></td><td>„Zbieram broń sportową/historyczną, 10+ sztuk"</td><td>Duża kolekcja</td><td>Pojemność + organizacja</td><td>Szafa S1 dużej pojemności + skrytka amunicji</td><td>„Pojemność (szt.) + organizacja + możliwość rozszerzenia"</td></tr>
+<tr><td><code>cep_strzelec_sportowy</code></td><td>„Chodzę na strzelnicę — szybki dostęp + bezpieczeństwo"</td><td>Broń krótka, sport</td><td>Szybkość dostępu + zgodność</td><td>Sejf broń krótka / szuflada</td><td>„Typ zamka + uchwyty regulowane + dostępność wariantów"</td></tr>
+<tr><td><code>cep_upgrade_szafy</code></td><td>„Mam stary sejf bez certyfikatu — ubezpieczyciel/policja żąda S1"</td><td>Wymiana</td><td>Co akceptuje ubezpieczyciel/policja</td><td>Szafa S1 certyfikowana</td><td>„Certyfikat EN 14450 + norma + instytut certyfikujący"</td></tr>
+</table>
+
+<hr>
+
+<h2>3. 20 Discovery Questions</h2>
+
+<p>> ⚡ Pytania 1–7 = dominujący CEP <code>cep_pozwolenie_wymog_szafy</code> — zakup z nakazu prawa, nie z wyboru.</p>
+
+<ol><li>Dostałem pozwolenie na broń — jaka szafa jest teraz wymagana przez prawo? <em>(→ pozwolenie)</em></li><li>Czy bez szafy S1 mogę legalnie trzymać broń myśliwską w domu?</li><li>Jaki paragraf mówi, że muszę mieć szafę na broń po otrzymaniu pozwolenia?</li><li>Szafa na broń — co dokładnie musi mieć, żeby była zgodna z MSWiA?</li><li>Czy każda szafa z zamkiem wystarczy na broń, czy musi być certyfikowana S1?</li><li>Co grozi za trzymanie broni bez certyfikowanej szafy w Polsce?</li><li>Dostałem pozwolenie myśliwskie — co kupić najpierw: broń czy szafę?</li><li>Jaka szafa na broń jest wymagana przez polskie prawo dla myśliwego?</li><li>Co to jest certyfikat S1 w szafie na broń — czy to wystarczy?</li><li>Ile kosztuje szafa na broń długą z certyfikatem S1?</li><li>Ile sztuk karabinów zmieści szafa na broń 125 cm?</li><li>Czy mogę trzymać amunicję w tej samej szafie co broń?</li><li>Szafa na broń klasa S1 vs S2 — czym się różnią?</li><li>Jak zamontować szafę na broń, żeby była bezpieczna?</li><li>Jaka szafa na broń dla kolekcjonera broni historycznej?</li><li>Czy szafa na broń długą mieści broń z lunetą?</li><li>Szafa na broń — zamek kluczowy czy elektroniczny, co lepsze?</li><li>Jak policja sprawdza przechowywanie broni podczas kontroli?</li><li>Uchwyty magnetyczne na broń — czy są lepsze od tradycyjnych?</li><li>Szafa na broń do mieszkania w bloku — jakie wymiary są optymalne?</li></ol>
+
+<hr>
+
+<h2>4. KCF — Key Category Features</h2>
+
+<table>
+<tr><th>Feature</th><th>Zakres rynkowy</th><th>Tier</th><th>Uwaga</th></tr>
+<tr><td>Klasa certyfikatu</td><td>S1 (EN 14450) / S2</td><td>T1</td><td>S1 = wymóg ustawowy MSWiA dla broni długiej; S2 = wyższy poziom odporności</td></tr>
+<tr><td>Pojemność (sztuki broni)</td><td>4–18+ szt.</td><td>T1</td><td>konsument często kupuje za małą — bierz z zapasem na kolekcję</td></tr>
+<tr><td>Typ zamka</td><td>kluczowy / elektroniczny / bimetaliczny</td><td>T1</td><td>zamek VdS klasy I = minimalny wymóg ustawowy</td></tr>
+<tr><td>Wymiary wewnętrzne (H×W×D cm)</td><td>120×30×20 – 200×60×40</td><td>T1</td><td>broń z lunetą wymaga min. 15 cm szerokości; sprawdź przed zamówieniem</td></tr>
+<tr><td>Masa</td><td>30–200 kg</td><td>T2</td><td><50 kg = można wynieść we dwóch; szafy ≥S1 nie muszą być kotwione</td></tr>
+<tr><td>Punkty montażowe</td><td>TAK (boki, podłoga) / NIE</td><td>T2</td><td>montaż opcjonalny dla S1; dla wyższej ochrony zalecane kotwienie</td></tr>
+<tr><td>Oddzielna komora na amunicję</td><td>TAK/NIE</td><td>T3</td><td>zalecana separacja amunicji w tej samej szafie</td></tr>
+</table>
+
+<hr>
+
+<h2>5. Typowy Produkt — konwencje kategorii</h2>
+
+<table>
+<tr><th>Cecha</th><th>Norma kategorii</th><th>Red flag</th></tr>
+<tr><td>Format</td><td>pionowa stalowa szafa z zamkiem</td><td>„szafka narzędziowa" bez certyfikatu EN 14450 = niezgodna z prawem</td></tr>
+<tr><td>Kolor/wykończenie</td><td>szary / antracyt / czarny metaliczny</td><td>błyszczące wykończenie bez certyfikatu = dekoracja, nie szafa S1</td></tr>
+<tr><td>Drzwi</td><td>grubość min. 3 mm stali</td><td>cienkie drzwi (<2 mm) = otwieralne łomem</td></tr>
+<tr><td>Zawiasy</td><td>ukryte wewnątrz</td><td>zawiasy zewnętrzne = można wyciąć zawias i otworzyć</td></tr>
+<tr><td>Certyfikat widoczny</td><td>tabliczka EN 14450 S1</td><td>brak tabliczki certyfikatu = nieuznane przez policję</td></tr>
+<tr><td>Uchwyty na broń</td><td>regulowane metalowe / magnetyczne</td><td>brak uchwytów = broń leży na podłodze szafy, ryzyko uszkodzenia</td></tr>
+</table>
+
+<hr>
+
+<h2>6. Tier Specs</h2>
+
+<p><strong>Tier-1 Universal</strong> (musi być w PDP każdej szafy S1):</p>
+<ul><li>Klasa odporności — <code>S1 (zgodnie z EN 14450)</code></li><li>Certyfikat — <code>wydany przez IMP / VdS / ECB-S</code></li><li>Pojemność — <code>na X jednostek broni długiej</code></li><li>Typ zamka — <code>kluczowy klasy A / elektroniczny klasy B</code></li><li>Wymiary zewnętrzne — <code>wys. x szer. x gł. [cm]</code></li><li>Waga — <code>XX kg</code></li></ul>
+
+<p><strong>Tier-2 Differentiator:</strong> wewnętrzna skrytka na amunicję (TAK zamykana osobno / NIE) · uchwyty na broń (piankowe / magnetyczne / regulowane) · punkty montażowe.</p>
+<p><strong>Tier-3 Niche:</strong> podświetlenie wnętrza · osuszacz/pochłaniacz wilgoci · zamek czasowy.</p>
+
+<hr>
+
+<h2>7. Tier Pricing — PLN, Polska 2026</h2>
+
+<table>
+<tr><th>Tier</th><th>Zakres</th><th>Typowy kupujący</th><th>Przykłady</th></tr>
+<tr><td>Budżet</td><td>800–1500 zł</td><td>Myśliwy z 1–4 sztukami broni, wymóg ustawowy, zamek kluczowy</td><td>Rottner, Konsmetal G1200, Brattby (Decathlon)</td></tr>
+<tr><td>Mid-range</td><td>1500–3000 zł</td><td>Strzelec sportowy, 5–10 sztuk, elektroniczny zamek</td><td>Format, Salvus, Burg-Wächter</td></tr>
+<tr><td>Premium</td><td>3000–8000 zł</td><td>Kolekcjoner 12+ sztuk, wyższa klasa, zamek bimetaliczny</td><td>Hartmann Tresore, Döttling, Wincent W18</td></tr>
+</table>
+
+<hr>
+
+<h2>8. Consumer Decision Tree</h2>
+
+<pre><code>[L1 — Routing: ile broni i jaki typ?]
+
+Q1. Ile sztuk broni długiej muszę przechowywać?
+   consumer_language: &quot;ile karabinów / strzelb mam i będę mieć&quot;
+   → 1–4 → [Szafa S1 mała] → Q2
+   → 5–10 → [Szafa S1 średnia] → Q2
+   → 11–18 → [Szafa S1 duża + szuflada] → Q2
+   → 18+ → [Dwie szafy / pojemność 200 cm] → Q2
+
+Q2. Jaki typ broni? → Karabiny / Strzelby / Mix / Broń z lunetami (min. 15 cm szer.)
+Q3. Jakiego zamka szukam? → Kluczowy (tańszy, wymóg ustawowy) / Elektroniczny / Bimetaliczny (wyższe klasy)
+Q4. Czy szafa musi być przymocowana na stałe? → TAK (śruby montażowe) / NIE (stoi swobodnie — dozwolone dla S1)
+Q5. Czy przechowuję też amunicję w tej samej szafie? → TAK (oddzielna komora) / NIE
+Q6. Budżet? → &lt;1500 zł / 1500–3000 zł / 3000+ zł
+
+→ Kluczowe info: POJEMNOŚĆ (szt.) · KLASA (S1/EN 14450) · TYP ZAMKA (VdS) · WYMIARY (H×W×D) · MASA · ZGODNOŚĆ Z ROZP. MSWiA</code></pre>
+
+<hr>
+
+<h2>9. Forbidden Patterns</h2>
+
+<table>
+<tr><th>❌ Zakazane</th><th>✅ Poprawne</th></tr>
+<tr><td>„bezpieczna szafa na broń"</td><td>„Certyfikowana w klasie S1 zgodnie z normą EN 14450 przez IMP w Warszawie. Spełnia wymogi MSWiA."</td></tr>
+<tr><td>„solidna konstrukcja"</td><td>„Korpus ze stali o grubości 3 mm, drzwi wielowarstwowe z płytą manganową chroniącą przed przewierceniem zamka."</td></tr>
+<tr><td>„dużo miejsca"</td><td>„Mieści 8 szt. broni o maksymalnej długości 125 cm. Regulowane uchwyty pozwalają na przechowywanie broni z optyką."</td></tr>
+<tr><td>„zgodna z prawem"</td><td>„Posiada tabliczkę znamionową IMP z hologramem, wymaganą podczas kontroli policyjnej."</td></tr>
+<tr><td>„innowacyjny zamek"</td><td>„Zamek kluczowy VdS klasy I — minimalny standard wymagany prawnie do legalnego przechowywania broni."</td></tr>
+</table>
+
+<hr>
+
+<h2>10. Ścieżki percepcji & pole pytań</h2>
+
+<p><em>Ścieżki + pytania z MAP PERCEPCJI (<code>ROZSZYTE_sejfzone_pole_pytan.md</code>, segment Szafy na broń — 7 ścieżek, 177 pytań). Persony z referencji 06.md #13 gdzie dostępne.</em></p>
+
+<table>
+<tr><th>Ścieżka</th><th>CEP wejścia</th><th>Persona / kontekst</th><th>Pytań</th></tr>
+<tr><td>A — Nowy właściciel broni</td><td><code>cep_pozwolenie_wymog_szafy</code> ⚡</td><td>Krzysztof, 38, świeże pozwolenie sportowe — nie zna klas</td><td>94</td></tr>
+<tr><td>B — Myśliwy przed kontrolą</td><td><code>cep_mysliwy_wymog_msw</code></td><td>Andrzej, 54, myśliwy — kontrola PZŁ za 3 mies., stara szafa bez cert.</td><td>18</td></tr>
+<tr><td>C — Kolekcjoner broni</td><td><code>cep_kolekcjoner_bron</code></td><td>Jerzy, 62, 12+ sztuk, skrytka na amunicję</td><td>25</td></tr>
+<tr><td>D — Strzelec sportowy</td><td><code>cep_strzelec_sportowy</code></td><td>strzelec IPSC — broń krótka, szybki dostęp</td><td>16</td></tr>
+<tr><td>E — Właściciel domu</td><td><code>cep_wlamanie_dom</code></td><td>właściciel domu — broń + ochrona mienia</td><td>7</td></tr>
+<tr><td>F — Wymóg ubezpieczyciela</td><td><code>cep_upgrade_szafy</code></td><td>ubezpieczenie kolekcji/domu — wymóg klasy</td><td>10</td></tr>
+<tr><td>G — Prywatność / Rodzina</td><td><code>cep_prywatnosc_dzieci</code></td><td>broń + dzieci w domu, leki, biometria</td><td>7</td></tr>
+</table>
+
+<h3>Ścieżka A — Nowy właściciel broni (94)</h3>
+<p><strong>A1 — Pozwolenie / obowiązki prawne:</strong></p>
+<ul><li>Dostałem pozwolenie na broń — co teraz? Kompletny przewodnik po obowiązkach</li><li>Co grozi za nieprawidłowe przechowywanie broni w Polsce?</li><li>Przepisy o przechowywaniu broni — pytania i odpowiedzi (FAQ)</li><li>Szafa na broń na wynajem — czy lokator może ją mieć? Prawa i obowiązki</li><li>Kiedy wygasa pozwolenie na broń i co wtedy zrobić z bronią i szafą?</li><li>Jakie bronie można mieć w Polsce bez pozwolenia? Przegląd przepisów</li><li>Jak dostać pozwolenie na broń myśliwską? Krok po kroku</li><li>Bronie gazowe i alarmowe — czy wymagają szafy S1?</li><li>Co zabrać na pierwsze polowanie po otrzymaniu pozwolenia? Checklista</li><li>FAQ: Czy mogę kupić szafę na broń bez pozwolenia na broń?</li><li>Gdzie dostać dofinansowanie na szafę na broń? PZŁ, ARiMR</li><li>Przechowywanie broni u znajomego — czy to legalne?</li><li>Broń pneumatyczna — czy wymaga szafy S1? Co mówi prawo?</li><li>Co to jest szafka vs szafa na broń? Różnica prawna i techniczna</li><li>Szafka na broń — co to i dlaczego nie zastąpi szafy S1?</li></ul>
+
+<p><strong>A2 — Klasy / normy (Nauka):</strong></p>
+<ul><li>Jakie cechy sejfu na broń naprawdę się liczą? Eksperci odpowiadają</li><li>Rodzaje sejfów na broń: szafy na broń długą i sejfy na broń krótką</li><li>Klasy bezpieczeństwa S1, S2 — norma EN 14450 dla broni. Kompletny przewodnik</li><li>Klasa S1 wg EN 14450 — co oznacza i dlaczego jest wymagana dla broni?</li><li>S1, S2, klasa I, II, III — jak nie pogubić się w normach?</li><li>Jak sprawdzić, czy szafa ma certyfikat S1? Co oznaczają tabliczki</li><li>Certyfikat VdS, EN 1143-1, EN 14450 — jak porównać normy?</li><li>Norma EN 14450 vs EN 1143-1 — czym różnią się certyfikaty?</li><li>Klasa S2 — kiedy jest wymagana i czym różni się od S1?</li><li>FAQ PDP: Czy szafa Siegen pasuje do polskich norm przechowywania broni?</li><li>Szafa S1 vs szafa antywłamaniowa klasy II — czym różnią się dla broni?</li><li>FAQ PDP: Czy Siegen Max Kombi ma certyfikat S1 dla wszystkich wariantów?</li><li>Jak szafa na broń chroni przed pożarem? Testy i normy ognioodporności</li><li>Sejfy S1 — kategoria i landing (TEKST SEO)</li></ul>
+
+<p><strong>A3 — Wybór marki / rankingi:</strong></p>
+<ul><li>Jaki sejf na broń myśliwską wybrać? Najlepsze szafy na broń długą</li><li>Ranking szaf na broń S1 — najlepsze modele w 2026 roku</li><li>Siegen, Gunz, Fort — porównanie marek szaf na broń myśliwską</li><li>Szafa na broń — sklep specjalistyczny vs Allegro. Co wybrać i dlaczego?</li><li>Szafa na broń — co mówią myśliwi z 20-letnim stażem? Opinie ekspertów</li><li>Sejf na broń — najczęstsze błędy przy wyborze i montażu</li><li>Jak myśliwi wybierają szafę na broń? Wyniki ankiety 100 myśliwych</li><li>Siegen vs import azjatycki — dlaczego polscy myśliwi wybierają Siegen?</li></ul>
+
+<p><strong>A4 — Wybór modelu / pojemność:</strong></p>
+<ul><li>Siegen Max vs Siegen Max Kombi — czym się różnią i który wybrać?</li><li>Jak wybrać rozmiar szafy na broń? Pojemność, wymiary zewnętrzne</li><li>Czy broń z lunetą zmieści się do szafy? Wymiary karabinów</li><li>Szafa KOMBI vs szuflada — czym się różnią i co wybrać?</li><li>FAQ: Ile sztuk broni długiej pomieści Siegen Max Kombi 125 i 200 cm?</li><li>Siegen Max Kombi 200 cm vs 125 cm — którą wybrać na małą przestrzeń?</li><li>FAQ: Czy szafa na broń musi stać pionowo? Wymogi transportu i instalacji</li><li>Szafa z szufladą vs bez szuflady — co wybrać?</li><li>Szafa na broń 125 cm — ile naprawdę wchodzi i co trzeba zmierzyć?</li><li>FAQ PDP: Siegen Max Kombi — najczęstsze pytania przed zakupem</li><li>Jak wybrać szafę jeśli masz mały pokój lub korytarz?</li><li>Siegen Max Kombi 18 szt. 125 cm — szczegółowy test i recenzja</li><li>Czy szafa wystarczy na pistolet i strzelbę jednocześnie?</li></ul>
+
+<p><strong>A5 — Zamek:</strong></p>
+<ul><li>Rozładowana bateria w zamku elektronicznym — co zrobić?</li><li>Czy zamek kluczowy jest bezpieczny? Plusy i minusy</li><li>Sejf elektroniczny czy kluczowy — porównanie dla kupującego</li><li>Nie pamiętasz kodu? Jak odzyskać dostęp bez zniszczenia</li><li>Zamek kluczowy, elektroniczny czy biometryczny — porównanie</li><li>Bezpieczeństwo zamka a przepisy — czy elektroniczny jest legalny?</li><li>Zamek S&G — co to i dlaczego warto?</li><li>Jak zabezpieczyć klucze do szafy na broń? Najlepsze praktyki</li><li>Przegląd zamków — S&G, Lagard, Kaba — ranking</li></ul>
+
+<p><strong>A6 — Montaż / dostawa:</strong></p>
+<ul><li>Czy sejf na broń musi być przytwierdzony do podłogi lub ściany?</li><li>Jak zamontować szafę na broń w domu? Wymogi prawne montażu wolnostojącego</li><li>Jak ukryć szafę na broń w salonie — estetyczne rozwiązania</li><li>Montaż krok po kroku — podłoga, ściana, beton</li><li>Szafa na broń w bloku — czy można i jak zamontować?</li><li>Ile waży szafa na broń? Jak bezpiecznie ją przenosić</li><li>Sejf na broń w garażu — czy legalne i jak chronić przed wilgocią?</li><li>Jak długo trwa wysyłka? Paleta, kurier, odbiór własny</li><li>Jak wybrać kotwę montażową do betonowej ściany?</li></ul>
+
+<p><strong>A7 — Zaufanie / certyfikaty:</strong></p>
+<ul><li>Certyfikaty i dokumenty — pobierz potwierdzenia zgodności S1/EN 14450</li><li>SejfZone — kim jesteśmy? Eksperci od zabezpieczeń broni od 2010</li><li>Szafa na broń + system alarmowy — jak połączyć zabezpieczenia</li><li>FAQ PDP: Reklamacja i warunki gwarancji Siegen</li><li>Gwarancja na szafę — kto serwisuje Siegen w Polsce?</li></ul>
+
+<p><strong>A8 — Zakup / posprzedaż:</strong></p>
+<ul><li>FAQ: Kalkulator rat — ile zapłacę miesięcznie za szafę?</li><li>FAQ: Co po złożeniu zamówienia? BackOrder — jak działa realizacja?</li><li>EMAIL: Potwierdzenie zamówienia — timeline realizacji BackOrder</li><li>EMAIL: 7 dni po dostawie — czy zamontowałeś szafę? Poradnik</li><li>EMAIL: 30 dni po zakupie — zaproszenie do opinii</li></ul>
+
+<h3>Ścieżka B — Myśliwy przed kontrolą (18)</h3>
+<p><strong>B1 — Przygotowanie do kontroli:</strong></p>
+<ul><li>Kontrola policji i PZŁ — co sprawdzają i jak się przygotować?</li><li>Checklist myśliwego: dokumenty i warunki przechowywania na kontrolę</li><li>Czy moja stara szafa spełnia aktualne przepisy? Jak to sprawdzić</li><li>Jak policja weryfikuje certyfikat szafy podczas kontroli?</li><li>Wymogi PZŁ dla przechowywania broni — co sprawdza koło łowieckie?</li><li>Szafa z kodem vs kluczem — co preferują inspektorzy policji?</li></ul>
+
+<p><strong>B2 — Weryfikacja / upgrade:</strong></p>
+<ul><li>Jak sprawdzić czy szafa ma certyfikat S1? Co szukać na tabliczce</li><li>Stara szafa bez certyfikatu — kupić nową czy ryzykować kontrolę PZŁ?</li><li>Kto odpowiada za broń jeśli zostanie skradziona ze złej szafy?</li><li>Minimalne wymagania szafy do kontroli policji — co wystarczy?</li><li>Upgrade szafy — kiedy warto wymienić stary model na S1?</li><li>Szafa S1 — ile kosztuje najtańszy certyfikowany model?</li><li>Najtańsza szafa z certyfikatem S1 — co dostaniesz za 1800 zł?</li><li>Ranking szaf do 2000 zł — co możesz dostać za ten budżet?</li></ul>
+
+<p><strong>B4 — Pilny zakup:</strong></p>
+<ul><li>Szafa przed kontrolą — co możemy dostarczyć w 5–7 dni?</li><li>FAQ PDP: Czas dostawy szafy — ile czekam na realizację BackOrder?</li></ul>
+
+<h3>Ścieżka C — Kolekcjoner broni (25)</h3>
+<p><strong>C1 — Pojemność / organizacja:</strong></p>
+<ul><li>Pojemność szaf — ile karabinów zmieści 125, 150, 175, 200 cm?</li><li>Uchwyty magnetyczne vs tradycyjne — co daje więcej miejsca?</li><li>Dwie szafy na broń zamiast jednej — czy przepisy pozwalają?</li><li>Kolekcjoner — jakie pozwolenia i jak przechowywać 20+ sztuk?</li><li>Szafa na broń długą 200 cm — przegląd najlepszych modeli Siegen</li></ul>
+
+<p><strong>C2 — Amunicja / konfiguracja:</strong></p>
+<ul><li>Czy można przechowywać broń i amunicję w tym samym sejfie?</li><li>Przechowywanie amunicji — w tej samej szafie czy osobno? Przepisy 2026</li><li>Szafa KOMBI na broń krótką i długą — jak skonfigurować Siegen D</li><li>Broń historyczna i odstrzelona — wymogi przechowywania w Polsce?</li><li>Jak skonfigurować Siegen dla kolekcji pistoletów historycznych?</li><li>Przechowywanie prochu i spłonek — osobne wymogi bezpieczeństwa</li><li>Siegen MAX KOMBI z szufladą na amunicję — dla kogo ten wariant?</li><li>Siegen MAX KOMBI + amunicja — co zawiera zestaw i dla kogo?</li></ul>
+
+<p><strong>C3 — Akcesoria / konserwacja:</strong></p>
+<ul><li>Siegen MAX KOMBI vs Siegen D — który model dla kolekcjonera?</li><li>ELEMENT PDP: Półka do szafy Siegen — opis z zastosowaniami</li><li>Elementy szafy Siegen — uchwyty, półki, wkłady na amunicję</li><li>Szafa na broń — jak oczyścić i zabezpieczyć przed rdzą wewnątrz?</li><li>Szafa powyżej 3000 zł — za co płacisz więcej?</li><li>Jak prawidłowo załadować i ułożyć broń w szafie Siegen?</li><li>Jak długo służy szafa? Trwałość zamka i struktury</li><li>FAQ PDP: Siegen — czy mogę zamontować dodatkowe uchwyty samodzielnie?</li></ul>
+
+<p><strong>C4 — Ubezpieczenie kolekcji:</strong></p>
+<ul><li>Ubezpieczenie kolekcji broni — co wymaga ubezpieczyciel i jaka klasa?</li><li>Czy S1 wystarczy do ubezpieczenia broni? Przegląd polis w Polsce</li><li>Szafa na broń a ubezpieczenie AC — czy broń objęta polisą auto?</li><li>Certyfikat S1 dla kolekcjonera — co potrzebujesz do ubezpieczenia zbioru?</li></ul>
+
+<h3>Ścieżka D — Strzelec sportowy (16)</h3>
+<p><strong>D1 — Broń krótka / szybki dostęp:</strong></p>
+<ul><li>Sejf na broń krótką dla strzelca — wymogi prawne i szybki dostęp</li><li>Biometryczny sejf na pistolet — czy spełnia wymogi S1? Co mówi prawo?</li><li>Gdzie umieścić sejf na broń krótką? Sypialnia, schowek, garderoba</li><li>Sejf w samochodzie — czy legalne i jakie wymagania dla broni?</li><li>Sejf na pistolet — TOP 5 modeli dla strzelców sportowych</li><li>Broń sportowa IPSC — wymagania przechowywania w Polsce?</li><li>Sejf a dzieci — co wybierają rodzice strzelcy?</li><li>Szafy na broń krótką — kategoria pistoletów (TEKST SEO)</li><li>Mały sejf na broń krótką — TOP 3 najkompaktowniejsze modele</li><li>Szafa na broń w aucie — transport broni myśliwskiej samochodem</li><li>Klub strzelecki a szafa — czy klub może przechowywać broń za ciebie?</li></ul>
+
+<p><strong>D2 — Wybór modelu:</strong></p>
+<ul><li>Siegen SG1 vs szuflada Siegen D — jaki sejf na pistolet dla IPSC?</li><li>Szuflady na broń i sejfy na broń krótką — kategoria (TEKST SEO)</li><li>ELEMENT PDP: Tekst konwersyjny dla kategorii /szuflady-na-bron</li></ul>
+
+<p><strong>D3 — Specyfikacja:</strong></p>
+<ul><li>ELEMENT PDP: Siegen SG1 — rozbudowany opis, FAQ, specyfikacja</li><li>Jak działa zamek biometryczny w szafie na broń? Test niezawodności</li></ul>
+
+<h3>Ścieżka E — Właściciel domu (7)</h3>
+<ul><li>Czy warto mieć sejf w domu? 7 rzeczy które tracisz bez sejfu</li><li>Jak otwierają sejfy złodzieje — i jak się przed tym bronić?</li><li>Sejfy ognioodporne — kategoria (TEKST SEO)</li><li>Jaka klasa sejfu wystarczy do domu? Kalkulator dla każdego przypadku</li><li>Szafa na broń a estetyka domu — jak ukryć szafę w salonie?</li><li>ELEMENT PDP: Ikony płatności — BLIK, karta, PayPo, 60 dni zwrotu</li><li>FAQ: Dostawa, gwarancja, zwroty — wszystko przed zakupem</li></ul>
+
+<h3>Ścieżka F — Wymóg ubezpieczyciela (10)</h3>
+<ul><li>Wymóg sejfu w polisie — jak go spełnić i co udowodnić?</li><li>Sejf a ubezpieczenie domu — wymagania PZU, Allianz, Warta?</li><li>FAQ: Certyfikat sejfu dla ubezpieczyciela — co zaakceptuje polisa?</li><li>Klasa S1 a wymagania PZU — co musisz wiedzieć przed zakupem szafy?</li><li>Szafa na broń a ochrona ubezpieczeniowa domu — jak powiązać?</li><li>Certyfikaty i dokumentacja — pobierz potwierdzenie dla ubezpieczyciela</li><li>FAQ: Jakie dokumenty otrzymuję przy zakupie sejfu? Pełna lista</li><li>ELEMENT PDP: „W zestawie: certyfikat S1 EN 14450 + faktura VAT"</li><li>FAQ: Co jest w pudełku? Dokumenty, certyfikaty, instrukcja</li><li>Faktura VAT i dokumenty zakupu — co dostanę z zamówieniem?</li></ul>
+
+<h3>Ścieżka G — Prywatność / Rodzina (7)</h3>
+<ul><li>Broń myśliwska a dzieci w domu — jak legalnie i bezpiecznie przechowywać?</li><li>Mały sejf biurowy na leki, dokumenty, gotówkę — jaki wybrać?</li><li>Sejf biometryczny dla rodziców — szybki dostęp dla dorosłych, niedostępny dla dzieci</li><li>Sejf na leki kontrolowane — przepisy i zalecenia</li><li>Mały sejf domowy — TOP 5 modeli do 800 zł</li><li>FAQ PDP: Czy dziecko może otworzyć sejf z kodem? Jak zmienić PIN?</li><li>Jaki sejf na pieniądze do 500 zł? Ranking tanich z certyfikatem</li></ul>
+
+<hr>
+
+<h2>11. Cross-Category Triggers</h2>
+
+<table>
+<tr><th>Kategoria źródłowa</th><th>Trigger zakupu</th><th>CEP aktywowany</th><th>Fraza wejściowa w AI</th></tr>
+<tr><td>Pozwolenie na broń (świeże)</td><td>„Dostałem pozwolenie — co kupić najpierw, broń czy szafę?"</td><td><code>cep_pozwolenie_wymog_szafy</code></td><td>„jaka szafa na broń jest wymagana po pozwoleniu?"</td></tr>
+<tr><td>Sejfy domowe</td><td>„Mam już sejf na kosztowności — czy nadaje się na broń?"</td><td><code>cep_mysliwy_wymog_msw</code></td><td>„czy sejf domowy spełnia wymóg S1 na broń?"</td></tr>
+<tr><td>Amunicja / akcesoria myśliwskie</td><td>„Kupuję amunicję — gdzie ją legalnie przechowywać?"</td><td><code>cep_kolekcjoner_bron</code></td><td>„czy amunicję trzymać w tej samej szafie co broń?"</td></tr>
+<tr><td>Polisa ubezpieczeniowa</td><td>„Ubezpieczam kolekcję broni — agent pyta o klasę szafy"</td><td><code>cep_upgrade_szafy</code></td><td>„jaka klasa szafy na broń wymagana przez ubezpieczyciela?"</td></tr>
+</table>
+
+<hr>
+
+<h2>12. 🆕 Tone of Voice for GEO — jak pisać treść pod AI search</h2>
+
+<p><em>20 reguł pisania PDP/artykułów pod cytowalność w AI. Niezależna od Forbidden Patterns. Kategoria-specyficzne: szafy na broń (lęk prawny dominuje).</em></p>
+
+<p><strong>Struktura passage'a (cytowalność):</strong></p>
+<ol><li>Odpowiadaj na pytanie w PIERWSZYM zdaniu akapitu. Źle: „Szafa to rozwiązanie do…". Dobrze: „Po otrzymaniu pozwolenia na broń prawo (Rozp. MSWiA 26.08.2014) wymaga szafy minimum klasy S1 wg PN-EN 14450."</li><li>Jeden akapit = jedna odpowiedź na jedno pytanie. Nie zlepiaj „co to S1" z „ile sztuk wchodzi".</li><li>Liczba zawsze z jednostką i kontekstem: „125 cm" → „szafa 125 cm mieści do 8 sztuk broni długiej bez optyki; z lunetą — sprawdź szerokość min. 15 cm".</li><li>Parametr zawsze z konsekwencją: „EN 14450 S1" → „S1 wg EN 14450 — minimalna klasa wymagana ustawowo; bez niej przechowywanie broni jest niezgodne z prawem".</li><li>Konkret marka+model zamiast „topowa szafa": „Siegen Max Kombi 125 cm" cytuje się, „solidna szafa myśliwska" nie.</li></ol>
+
+<p><strong>Język konsumenta (nie producenta):</strong></p>
+<ol><li>Używaj słów z pytań klienta: „czy policja uzna" → „posiada tabliczkę IMP wymaganą podczas kontroli policyjnej" — nie „zgodny z normą zharmonizowaną".</li><li>Tłumacz każdy skrót: „MSWiA (Ministerstwo Spraw Wewnętrznych — wydaje rozporządzenie o przechowywaniu broni)", „IMP (instytut certyfikujący szafy w Polsce)".</li><li>Mapuj cechę na sytuację: nie „pojemność 8 szt.", lecz „mieści 8 karabinów — kupuj z zapasem, bo kolekcja rośnie szybciej niż myślisz".</li><li>Odpowiadaj na lęk wprost: „Czy policja uzna moją szafę przy kontroli?" → „Szafa z certyfikatem S1 IMP i widoczną tabliczką znamionową jest uznawana podczas kontroli policji i PZŁ." (Primary Concern: zgodność prawna.)</li><li>Adresuj porównania: „S1 vs S2: S1 to wymóg ustawowy dla broni długiej; S2 wybierz, jeśli ubezpieczyciel wymaga wyższej klasy do kolekcji."</li></ol>
+
+<p><strong>Struktura pod AI parsing:</strong></p>
+<ol><li>Tabele dla parametrów (klasa, pojemność, wymiary, zamek, masa) — AI ekstrahuje lepiej niż prozę.</li><li>Nagłówki = pytania klienta: „Jaka szafa na broń jest wymagana przez prawo?" zamiast „Specyfikacja".</li><li>Listy kryteriów: „Na co zwrócić uwagę: (1) certyfikat S1 IMP, (2) pojemność z zapasem, (3) wymiary wewnętrzne pod lunetę, (4) typ zamka VdS."</li><li>Każdą normę z numerem i instytucją: „PN-EN 14450", „Rozp. MSWiA 26.08.2014", „certyfikat IMP" — AI cytuje konkrety.</li><li>Wariant zamka = osobne zdanie: „Kluczowy VdS I: minimalny wymóg, tańszy. Elektroniczny: szybki dostęp, ryzyko baterii. Bimetaliczny: wyższe klasy, najdroższy."</li></ol>
+
+<p><strong>Zaufanie i lęk prawny:</strong></p>
+<ol><li>Podawaj „co grozi za brak": „Przechowywanie broni bez certyfikowanej szafy S1 to naruszenie przepisów — ryzyko cofnięcia pozwolenia." AI cytuje konsekwencje prawne.</li><li>Dowód zamiast przymiotnika: „tabliczka IMP z hologramem", „certyfikat S1 do pobrania PDF" zamiast „certyfikowana".</li><li>Rozróżnij szafę od szafki: „Szafka bez certyfikatu EN 14450 to NIE szafa S1 — nie spełnia wymogu MSWiA i nie przejdzie kontroli."</li><li>Adresuj kotwienie wprost: „Szafy klasy ≥S1 nie muszą być kotwione (Rozp. MSWiA) — ale kotwienie podnosi realną ochronę przed wyniesieniem."</li><li>Zamknij każdą sekcję faktem do zacytowania (norma/instytucja/liczba), nie zachętą — to etap zakupu: certyfikat, dostawa, montaż.</li></ol>
+
+<hr>
+
+<p><em>Źródło treści sekcji 2-9: referencja 06.md #13 (matryca, czysta). CEV: WPIS_szafy_bron_S1_NOWY. Pole pytań (sekcja 10): mapy percepcji ROZSZYTE segment Szafy na broń. Nowe: 0 Opis, 0b Problemy, 1 CEV, 12 Tone of Voice GEO.</em></p>
+
+<h2>13. Pole pytań</h2>
+
+<h3>① Discovery Questions (20 — patrz sekcja 3)</h3>
+
+
+<hr>
+
+
+<hr>
+<h2>🔑 Keywordy DFS — paliwo z DataForSEO (5 CEP · 20 pytań · 10 gap)</h2>
+<h3>CEP-y (sytuacje zakupowe) + wolumeny DFS</h3>
+<table>
+<tr><th>#</th><th>CEP</th><th>Wymiar</th><th>Reprezentatywne keywordy</th><th>Vol DFS</th></tr>
+<tr><td>cep_pozwolenie_wymog_szafy</td><td><strong>Świeże pozwolenie — wymóg prawny</strong></td><td>when</td><td>szafa na broń s1, szafa s1 na broń, dostałem pozwolenie na broń co teraz, szafa na broń wymagana przepisami</td><td>4520</td></tr>
+<tr><td>cep_mysliwy_wymog_msw</td><td><strong>Myśliwy przed kontrolą PZŁ/policji</strong></td><td>when</td><td>jaka szafa na broń myśliwska, szafa na broń myśliwską, szafa na broń kontrola policji, szafa myśliwska certyfikat s1</td><td>540</td></tr>
+<tr><td>cep_kolekcjoner_bron</td><td><strong>Kolekcjoner 10+ sztuk broni</strong></td><td>who</td><td>szafa na broń długą 200 cm, szafa na broń pojemność, szafa na broń ile sztuk, szafa kombi na broń amunicja</td><td>100</td></tr>
+<tr><td>cep_strzelec_sportowy</td><td><strong>Strzelec sportowy — szybki dostęp</strong></td><td>who</td><td>sejf na broń krótką strzelec, szafa na broń ipsc, sejf na pistolet szybki dostęp, szafa na broń sportową</td><td>20</td></tr>
+<tr><td>cep_upgrade_szafy</td><td><strong>Wymiana starego sejfu na certyfikowany S1</strong></td><td>when</td><td>szafa na broń s1 używana, szafa na broń wymiana ubezpieczyciel, nowa szafa na broń certyfikat, szafa na broń wymagana przez ubezpieczyciela</td><td>10</td></tr>
+</table>
+<h3>Discovery Questions (realne zapytania klienta do AI)</h3>
+<table>
+<tr><th>Rank</th><th>Pytanie</th><th>Vol</th></tr>
+<tr><td>1</td><td>Dostałem pozwolenie na broń — jaka szafa jest teraz wymagana przez prawo?</td><td>30</td></tr>
+<tr><td>2</td><td>Czy bez szafy S1 mogę legalnie trzymać broń myśliwską w domu?</td><td>30</td></tr>
+<tr><td>3</td><td>Jaki paragraf mówi, że muszę mieć szafę na broń po otrzymaniu pozwolenia?</td><td>—</td></tr>
+<tr><td>4</td><td>Szafa na broń — co dokładnie musi mieć, żeby była zgodna z MSWiA?</td><td>—</td></tr>
+<tr><td>5</td><td>Czy każda szafa z zamkiem wystarczy na broń, czy musi być certyfikowana S1?</td><td>—</td></tr>
+<tr><td>6</td><td>Co grozi za trzymanie broni bez certyfikowanej szafy w Polsce?</td><td>—</td></tr>
+<tr><td>7</td><td>Dostałem pozwolenie myśliwskie — co kupić najpierw: broń czy szafę?</td><td>—</td></tr>
+<tr><td>8</td><td>Jaka szafa na broń jest wymagana przez polskie prawo dla myśliwego?</td><td>30</td></tr>
+<tr><td>9</td><td>Co to jest certyfikat S1 w szafie na broń — czy to wystarczy?</td><td>—</td></tr>
+<tr><td>10</td><td>Ile kosztuje szafa na broń długą z certyfikatem S1?</td><td>—</td></tr>
+<tr><td>11</td><td>Ile sztuk karabinów zmieści szafa na broń 125 cm?</td><td>—</td></tr>
+<tr><td>12</td><td>Czy mogę trzymać amunicję w tej samej szafie co broń?</td><td>—</td></tr>
+</table>
+<h3>Gap keywords (do odzyskania — priorytet)</h3>
+<table>
+<tr><th>Fraza</th><th>Priorytet</th><th>Ścieżki</th></tr>
+<tr><td>dostałem pozwolenie na broń co dalej</td><td>KRYTYCZNY</td><td>A1</td></tr>
+<tr><td>jak policja sprawdza przechowywanie broni</td><td>WYSOKI</td><td>B3</td></tr>
+<tr><td>szafa na broń ile sztuk</td><td>WYSOKI</td><td>C1, A4</td></tr>
+<tr><td>zamek kluczowy czy elektroniczny</td><td>WYSOKI</td><td>A4, D2</td></tr>
+<tr><td>szafa na broń wymiary zewnętrzne</td><td>WYSOKI</td><td>A4</td></tr>
+<tr><td>ubezpieczenie broni myśliwskiej</td><td>WYSOKI</td><td>C4, E1</td></tr>
+<tr><td>ranking szaf na broń</td><td>WYSOKI</td><td>A3</td></tr>
+<tr><td>uchwyty magnetyczne vs tradycyjne</td><td>SREDNI</td><td>C2, D2</td></tr>
+<tr><td>biometryczny sejf na broń przepisy</td><td>SREDNI</td><td>D1</td></tr>
+<tr><td>broń historyczna przechowywanie</td><td>SREDNI</td><td>C2</td></tr>
+</table>
+
+<hr>
+
+<details class="fund" id="fund2"><summary><span class="fund-arrow">▸</span><span class="fund-head"><span class="fund-title">🏗 Fundament — Szafy na broń długą (klasa S1) — Fundament kategorii</span><span class="fund-src">Baza: referencja 06.md #13 (matryca — CEP `cep_pozwolenie_wymog_szafy`, `cep_mysliwy_wymog_msw`, `cep_kolekcjoner_bron`, `cep_strzelec_sportowy`, `cep_upgrade_szafy` wzięte jako szkielet). Nowe warstwy dociągnięte z harvestu DFS: sekcje 0.1/0.2/0.3/CEP per METODOLOGIA_FUNDAMENT. Kategoria fokusowa — jeden produkt (szafa S1), kilka ścieżek wejścia.</span></span><span class="fund-badge ok">✓ kompletny</span><span class="fund-hint">rozwiń ▾</span></summary><div class="fund-body"><h1>Szafy na broń długą (klasa S1) — Fundament kategorii</h1>
+
+<p><em>Baza: referencja 06.md #13 (matryca — CEP <code>cep_pozwolenie_wymog_szafy</code>, <code>cep_mysliwy_wymog_msw</code>, <code>cep_kolekcjoner_bron</code>, <code>cep_strzelec_sportowy</code>, <code>cep_upgrade_szafy</code> wzięte jako szkielet). Nowe warstwy dociągnięte z harvestu DFS: sekcje 0.1/0.2/0.3/CEP per METODOLOGIA_FUNDAMENT. Kategoria fokusowa — jeden produkt (szafa S1), kilka ścieżek wejścia.</em></p>
+
+<hr>
+
+<h2>0.1 Analiza KW (najpierw — co ludzie realnie wpisują)</h2>
+
+<h3>Strumień SYTUACYJNY (→ wsad do CEP)</h3>
+
+<table>
+<tr><th>Fraza / typ</th><th>Vol</th><th>Uwaga</th></tr>
+<tr><td>„nowy właściciel broni / dostałem pozwolenie"</td><td>dominujący CEP (vol pośredni przez <code>szafa na broń s1</code> 4520)</td><td>trigger wymogowy — prawo nakazuje kupić</td></tr>
+<tr><td>„szafa na broń myśliwską"</td><td>540</td><td>myśliwy z aktywną licencją, kontrola PZŁ/policji</td></tr>
+<tr><td>„szafa na broń myśliwską wymogi"</td><td>wariant 540</td><td>wciąż sytuacyjny (wymogi = sytuacja prawna)</td></tr>
+<tr><td>„jaka szafa na broń"</td><td>30</td><td>discovery question — klient nie zna jeszcze kategorii</td></tr>
+<tr><td>„jaka szafa na broń myśliwską"</td><td>30</td><td>wariant discovery, myśliwy</td></tr>
+<tr><td>„Gdzie musi stać szafa na broń?"</td><td>0 (long-tail, AI-friendly)</td><td>sytuacja: montaż/lokal</td></tr>
+<tr><td>„Czy szafa na broń może stać w garażu?"</td><td>0 (long-tail)</td><td>sytuacja lokalizacyjna</td></tr>
+<tr><td>„Czy szafa S1 musi być przytwierdzona?"</td><td>0 (long-tail)</td><td>sytuacja instalacyjna / prawna</td></tr>
+<tr><td>„Czy policja sprawdza przechowywanie broni?"</td><td>0 (long-tail)</td><td>sytuacja lękowa — kontrola</td></tr>
+<tr><td>„szafa na broń krótką"</td><td>w grupie _other ~5950</td><td>strzelec sportowy / pistolet</td></tr>
+</table>
+
+<p>> <strong>Suma wolumenowa sytuacyjnych:</strong> ~5140 (s1 4520 + myśliwy 540 + discovery 60 + szacowane warianty). Long-taile o vol=0 = realny ruch AI-search / PAA.</p>
+
+<h3>Strumień ATRYBUTOWY (→ harvest filtrów/KCF, NIE do CEP)</h3>
+
+<table>
+<tr><th>Atrybut</th><th>Vol</th><th>CEP nie tworzy</th></tr>
+<tr><td>„szafa s1 na broń" (klasa produktu)</td><td>4520 (mieszany — głównie constraint)</td><td>S1 = klasa, nie sytuacja klienta</td></tr>
+<tr><td>„szafa na broń s2"</td><td>100</td><td>S2 = wyższy standard, atrybut klasy</td></tr>
+<tr><td>„duża szafa na broń"</td><td>20</td><td>pojemność = atrybut</td></tr>
+<tr><td>„szafa na broń tanio"</td><td>10</td><td>cenowy = atrybut/constraint budżetowy</td></tr>
+<tr><td>„szafa na broń używana"</td><td>w <code>s1 używana</code></td><td>stan towaru</td></tr>
+<tr><td>zamek kluczowy / elektroniczny / biometryczny</td><td>0 (long-tail)</td><td>typ zamka = atrybut → KCF</td></tr>
+<tr><td>pojemność (2/5/8/12/14 sztuk broni)</td><td>brak vol</td><td>liczba sztuk = atrybut → KCF</td></tr>
+</table>
+
+<hr>
+
+<h2>0.2 Opis kategorii</h2>
+
+<p>Szafy na broń długą klasy S1 — stalowe szafy przechowywania broni palnej (karabiny, strzelby, sztucery) spełniające normę PN-EN 14450 klasa odporności S1. Klient wchodzi w tę kategorię niemal wyłącznie z powodu wymogu prawnego: rozporządzenie MSWiA 26.08.2014 nakazuje posiadaczom pozwolenia na broń przechowywać ją w szafie co najmniej klasy S1 z zamkiem co najmniej klasy A (EN 1300). Zakup nie jest wyborem — jest obowiązkiem wynikającym z ustawy o broni i amunicji.</p>
+
+<hr>
+
+<h2>0.3 Problemy, które kategoria załatwia</h2>
+
+<p><strong>🎯 Primary (rdzeń — po co kategoria powstała):</strong></p>
+<p>> <strong>Bezpieczne przechowywanie broni palnej zgodne z przepisami prawa polskiego.</strong> Goła funkcja: spełnienie wymogu MSWiA na certyfikowaną szafę S1. Tyle. Bez tego — odpowiedzialność karna i cofnięcie pozwolenia.</p>
+
+<p><strong>Secondary (rynek pociął rdzeń „przechowanie zgodne z prawem" na węższe sytuacje):</strong></p>
+
+<ul><li><strong>nowy właściciel / pierwszy kupujący</strong> — osoba, która właśnie dostała pozwolenie i nie wiedziała, że musi mieć szafę S1 (wymóg nabycia w terminie po uzyskaniu pozwolenia)</li><li><strong>myśliwy przed kontrolą PZŁ/policji</strong> — posiadacz broni myśliwskiej, któremu grozi inspekcja; niepewność czy stara szafa (bez tabliczki S1) „przejdzie"</li><li><strong>kolekcjoner / wiele sztuk</strong> — zbieracz broni historycznej lub sportowej, któremu aktualna szafa jest za mała pojemnościowo lub za mało odporna (celo S2)</li><li><strong>strzelec sportowy / broń krótka</strong> — strzela na strzelnicy, przechowuje pistolet w domu; chce szybki dostęp przy zachowaniu zgodności z S1</li><li><strong>wymóg ubezpieczyciela</strong> — polisa na broń lub dom wymaga certyfikowanej szafy; klient dostał pismo od ubezpieczyciela</li><li><strong>ochrona przed dziećmi / domownicy</strong> — posiadacz broni, który martwi się dostępem niepowołanych (dzieci, goście); szafa jako mechanizm prywatności i bezpieczeństwa bliskich</li><li><strong>upgrade starego sejfu bez certyfikatu</strong> — ma szafę lub sejf, ale bez normy S1; policja lub ubezpieczyciel żąda dokumentu certyfikacyjnego</li></ul>
+
+<p>> ⚠️ Klasa zamka (A/B), pojemność (ile sztuk), elektroniczny vs kluczowy, kotwienie do ściany — to <strong>atrybuty produktu</strong>, NIE odrębne problemy. Idą do KCF/filtry preselekcji, nie tu.</p>
+
+<hr>
+
+<h2>CEP — Consumer Entry Points</h2>
+
+<p><em>Primary + każdy Secondary → ≥1 CEP. Referencja 06.md #13 miała 5 CEP — zachowuję jako matrycę i uzupełniam brakujące.</em></p>
+
+<table>
+<tr><th>CEP</th><th>Trigger (język klienta)</th><th>Konsekwencja dla opisu</th></tr>
+<tr><td><code>cep_pozwolenie_wymog_szafy</code> ⭐</td><td><strong>„Dostałem pozwolenie na broń — prawo nakazuje mi mieć szafę S1"</strong></td><td>Pierwsze zdanie = „spełnia wymóg MSWiA" + norma S1 + klasa zamka EN 1300 — to zakup z nakazu, nie z wyboru; certyfikat IMP jako dowód formalny</td></tr>
+<tr><td><code>cep_mysliwy_wymog_msw</code></td><td><strong>„Mam broń myśliwską, grozi mi kontrola PZŁ lub policji"</strong></td><td>Powołanie na rozp. MSWiA 26.08.2014 + certyfikat jako dokument kontrolny; jak sprawdzić czy posiadana szafa spełnia wymóg</td></tr>
+<tr><td><code>cep_kolekcjoner_bron</code></td><td><strong>„Kolekcja przerosła szafę — potrzebuję więcej miejsca lub wyższej klasy"</strong></td><td>Pojemność w sztukach broni długiej (125 vs 200 cm = ile jednostek) + możliwość dokupienia drugiej szafy (przepisy) + skrytka na amunicję</td></tr>
+<tr><td><code>cep_strzelec_sportowy</code></td><td><strong>„Chodzę na strzelnicę — potrzebuję szybki dostęp do pistoletu i zgodność z S1"</strong></td><td>Typ zamka (biometryczny/elektroniczny vs kluczowy) + uchwyty regulowane + warianty pojemnościowe na broń krótką</td></tr>
+<tr><td>🆕 <code>cep_wymog_ubezpieczyciela</code></td><td><strong>„Ubezpieczyciel (polisa domu/broni) wymaga certyfikowanej szafy"</strong></td><td>Certyfikat EN 14450 + numer + instytut certyfikujący (IMP) — dokument na żądanie ubezpieczyciela</td></tr>
+<tr><td>🆕 <code>cep_ochrona_przed_dziecmi</code></td><td><strong>„Mam dzieci / domownicy — chcę żeby broń była poza zasięgiem"</strong></td><td>Zamek kl. A/B jako bariera; brak możliwości otwarcia przez dziecko; lokalizacja szafy (sypialnia / piwnica)</td></tr>
+<tr><td><code>cep_upgrade_szafy</code> (z ref.)</td><td><strong>„Mam stary sejf bez certyfikatu — policja lub ubezpieczyciel żąda S1"</strong></td><td>Certyfikat EN 14450 + norma + instytut certyfikujący (IMP); różnica między „szafką zamykaną" a certyfikowaną S1</td></tr>
+</table>
+
+<p>> 🆕 = dociągnięte poza referencję. <code>cep_wymog_ubezpieczyciela</code> i <code>cep_ochrona_przed_dziecmi</code> wynikają z secondary problemów z 0.3 — każdy problem musi mieć pokrycie CEP.</p>
+
+<h3>Uzasadnienie KW per CEP</h3>
+
+<p><strong><code>cep_pozwolenie_wymog_szafy</code> ⭐ (dominujący)</strong></p>
+<ul><li>„szafa na broń s1" — vol 4520</li><li>„szafa s1 na broń" — vol (w 4520)</li><li>„szafa na broń s1 używana" — wariant long-tail</li><li>„tania szafa na broń s1" — wariant budżetowy</li><li>discovery: „jaka szafa na broń" (30), „Jaka klasa szaf na broń?" (0 PAA)</li><li>Suma dominująca >4500 — to najsilniejszy CEP kategorii, 85%+ wolumenu</li></ul>
+
+<p><strong><code>cep_mysliwy_wymog_msw</code></strong></p>
+<ul><li>„szafa na broń myśliwską" — 540</li><li>„szafa pancerna na broń myśliwską" — wariant</li><li>„szafa na broń myśliwską używana" — wariant</li><li>„szafa na broń myśliwską wymogi" — sytuacyjny</li><li>„jaka szafa na broń myśliwską" (30), „jaka szafa na broń myśliwska" (30)</li><li>„Czy policja sprawdza przechowywanie broni?" (0 PAA/AI)</li><li>Suma ~600</li></ul>
+
+<p><strong><code>cep_kolekcjoner_bron</code></strong></p>
+<ul><li>„szafa na broń s2" — 100 (kolekcjoner z większymi zasobami sięga po S2)</li><li>„duża szafa na broń" — 20</li><li>Suma ~120 — niszowy, ale realny segment</li></ul>
+
+<p><strong><code>cep_strzelec_sportowy</code></strong></p>
+<ul><li>„szafa na broń krótką" — w grupie _other ~5950 (mieszany)</li><li>Long-tail: „biometryczny na pistolet S1?", „szybki dostęp do pistoletu legalnie?"</li><li>Vol szacowany niski, ale AI-search silny (pytania w głowie)</li></ul>
+
+<p><strong><code>cep_wymog_ubezpieczyciela</code> 🆕</strong></p>
+<ul><li>„cep_upgrade_szafy" z referencji zakrywa częściowo</li><li>Long-tail: „szafa S1 do ubezpieczenia broni", „certyfikat szafy dla ubezpieczyciela"</li><li>Vol 0 w DFS, ale PAA-ready — realny moment zakupowy</li></ul>
+
+<p><strong><code>cep_ochrona_przed_dziecmi</code> 🆕</strong></p>
+<ul><li>Long-tail: „szafa na broń dla rodziny z dziećmi", „czy dzieci mogą otworzyć szafę na broń"</li><li>Vol 0 w DFS — podtekstowy, ale obecny w pytaniach klientów (SERP: „ochrona dzieci przed bronią")</li></ul>
+
+<p><strong><code>cep_upgrade_szafy</code> (z ref.)</strong></p>
+<ul><li>Referencja definiuje jako: stara szafa bez certyfikatu, policja/ubezpieczyciel żąda S1</li><li>Pokryta vol z <code>szafa na broń s1</code> (klient szuka nowej S1 w zastępstwie starej)</li><li>Suma wliczona w główne 4520+</li></ul>
+
+<hr>
+
+<p><em>Fundament zbudowany: matryca ref #13 + 2 🆕 CEP z brakujących secondary problemów. Nadbudowa (CEV/Schwartz · Discovery · KCF · Tier · DT · Forbidden · Ścieżki · ToV) — etap 2.</em></p>
+</div></details></div>
+  </div>
+</div>
+<script>
+const CATS=[{"num":1,"name":"Sejfy domowe na kosztowności","v":"v2","s":"sejfy domowe na kosztowności # 14. sejfy domowe na kosztowności — category standard v2\n\n*baza: referencja 06.md #14 (matryca). nowe warstwy: opis + problemy kategorii · cev (schwartz+wagi) · tone of voice geo. kolejność wg ustaleń (format aparat v2, ze ścieżkami). nic z referencji nie pominięto.*\n\n---\n\n## 0. opis kategorii\n\nsejf domowy to stalowa skrytka do przechowywania kosztowności, gotówki, dokumentów i nośników danych w domu lub mieszkaniu. chroni przed dwoma zagrożeniami: **włamaniem** (klasa odporności s1/s2 wg en 14450 lub klasa 0–vi wg en 1143-1) oraz — w wariancie ognioodpornym — **pożarem** (klasa lfs, czas ochrony 30/60/120 min). kupujący wchodzi w kategorię, gdy pojawia się zdarzenie zewnętrzne: włamanie u sąsiada, wymóg ubezpieczyciela, potrzeba ochrony dokumentów lub pamiątek.\n\n## 0b. problemy, które kategoria załatwia\n\n*fundament — rzeczy powstają z powodu. primary = funkcjonalny rdzeń, po co kategoria powstała. secondary = jak rynek zdetalizował rdzeń na węższe potrzeby. z secondary × keywordów wychodzą cep-y.*\n\n**🎯 primary (rdzeń — po co sejf powstał):**\n> **chroni wartościowe mienie przed kradzieżą i/lub ogniem.**\ngoła funkcja, dla której kategoria istnieje. nie „daje spokój\", nie „podnosi bezpieczeństwo domu\" — to warstwy wyżej. rdzeń: zabezpiecza to, czego nie chcesz stracić.\n\n**secondary (detalizacja rdzenia — rynek pociął „chroni mienie\" na węższe konteksty):**\n- ochrona przed **włamaniem** (biżuteria, gotówka) (→ `cep_wlamanie_biz`)\n- ochrona **dokumentów i danych przed ogniem** (akty, dyski) (→ `cep_dokumenty_pozar`)\n- **gotówka / kosztowności firmy**, wymóg klasy (→ `cep_gotowka_firma`)\n- **wymóg ubezpieczyciela** (polisa wymaga klasy) (→ `cep_wymog_ubezpieczyciela`)\n- **prywatność / kontrola dostępu** (leki, gotówka przed dziećmi) (→ `cep_prywatnosc_dzieci`)\n\n> ⚠️ **pojemność, kolor, waga — to nie problemy.** sejf nie powstał, żeby mieć litry. to atrybuty/specy → idą do kcf i preselekcji, nie tutaj i nie do cep.\n\n---\n\n## 1. cev — category emotional valuation (zmodyfikowany schwartz z wagami)\n\n**pasek cev — profil emocjonalny kategorii (10 cech):**\n\n| ryzyko | lęk | widoczność | impuls | sexy | aspiracja | tożsamość | zmysłowość | pilność | moralność |\n|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|\n| .70 | .65 | .10 | .15 | .15 | .20 | .15 | .10 | .40 | .10 |\n\nwysokie **ryzyko .70** (koszt błędu = strata mienia / odrzucona polisa) + **lęk .65** (strach/strata po zdarzeniu) → kategoria research-owa z elementem uspokojenia. `apply_physics` przekłada profil na wagi etapów ↓.\n\n**schwartz — 8 stanów świadomości + wagi (ile treści/uwagi na etap):**\n\nfork **potrzeba**, research **~3.0** (umiarkowana — klasy/normy do nauki, ale rynek prostszy niż aparat), pole pytań ~**55**, emocja −0.9 (strata, nie lęk prawny jak broń).\n\n| # | stan świadomości | waga | co to znaczy dla treści |\n|---|---|:--:|---|\n| 1 | nie wiem (unaware) | ◔ l | „trzymam w szufladzie\" — klient nie myśli o sejfie. mało treści. |\n| 2 | potrzeba (problem-awar"},{"num":2,"name":"Szafy na broń długą (klasa S1)","v":"v2","s":"szafy na broń długą (klasa s1) # 13. szafy na broń długą (klasa s1) — category standard v2\n\n*baza: referencja 06.md #13 (sekcje 2-9, matryca) + cev z wpis_szafy_bron_s1_nowy + pole pytań z map percepcji (rozszyte, segment szafy na broń — 7 ścieżek, 177 pytań). format aparat v2, ze ścieżkami. z tego co już zrobione.*\n\n---\n\n## 0. opis kategorii\n\nszafa na broń długą to certyfikowana stalowa szafa do przechowywania broni palnej długiej (karabiny, strzelby), spełniająca **klasę s1 wg pn-en 14450** — minimalny wymóg ustawowy rozporządzenia mswia. kupujący wchodzi w kategorię **z nakazu prawa**: po otrzymaniu pozwolenia na broń przechowywanie wymaga szafy ≥s1. to zakup wymuszony, nie z wyboru — dominuje lęk o zgodność z przepisami i kontrolą policji/pzł.\n\n## 0b. problemy, które kategoria załatwia\n\n**🎯 primary (rdzeń — po co szafa na broń powstała):**\n> **przechowuje broń długą zgodnie z wymogiem prawa (≥s1).**\ngoła funkcja: zabezpiecza broń tak, jak nakazuje mswia. nie „daje spokój\" — to zakup z nakazu, nie komfortu.\n\n**secondary (detalizacja rdzenia):**\n- **świeże pozwolenie** — wymóg ustawowy po otrzymaniu pozwolenia (→ `cep_pozwolenie_wymog_szafy` ⚡)\n- **kontrola pzł / policji** — myśliwy musi udowodnić zgodność (→ `cep_mysliwy_wymog_msw`)\n- **kolekcja** — 10+ sztuk, organizacja, skrytka na amunicję (→ `cep_kolekcjoner_bron`)\n- **strzelec sportowy** — broń krótka, szybki dostęp (→ `cep_strzelec_sportowy`)\n- **upgrade** — stara szafa bez certyfikatu, ubezpieczyciel/policja żąda s1 (→ `cep_upgrade_szafy`)\n\n> ⚠️ **pojemność, kolor, masa — to nie problemy.** to atrybuty/specy → idą do kcf i preselekcji, nie do cep. są konsekwencją cep (kolekcjoner → pojemność; nowe pozwolenie → certyfikat s1).\n\n---\n\n## 1. cev — category emotional valuation (zmodyfikowany schwartz z wagami)\n\n**pasek cev — profil emocjonalny kategorii (10 cech):**\n\n| ryzyko | lęk | widoczność | impuls | sexy | aspiracja | tożsamość | zmysłowość | pilność | moralność |\n|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|\n| .90 | .85 | .05 | .10 | .10 | .10 | .25 | .10 | .50 | .15 |\n\nbardzo wysokie **ryzyko .90** + **lęk prawny .85** + **pilność .50** → kategoria z dominującym lękiem o zgodność prawną. `apply_physics` → fork **potrzeba** (impuls ≈ 0.01), research ≈ **7.3** (głęboka), emocja **−6.0** → **potrzeba research-owa, głęboka, lęk prawny dominuje.**\n\n> ⚖️ **kotwica regulacyjna:** klasy **s1/s2** = norma **pn-en 14450** (nie en 1143-1, która jest wyższa). rozp. mswia 26.08.2014 wymaga **≥s1**. szafy ≥s1 **nie muszą** być kotwione. zgodność = **certyfikat jednostki certyfikującej (imp)**, nie „atest mswia\".\n\n**schwartz — 8 stanów świadomości + wagi:**\n\n| # | stan świadomości | waga | co to znaczy dla treści |\n|---|---|:--:|---|\n| 1 | nie wiem | ◔ l | przed pozwoleniem — pomijalny |\n| 2 | potrzeba (problem-aware) | ● **h** | „dostałem pozwolenie — co teraz?\" — silny trigger prawny |\n| 3 | cep | ● **h** | pozwolenie / kontrola / kolekcja / strzelec — routing |\n| 4 | **nauka kategorii** | "}];
+const searchEl=document.getElementById('search');
+const statEl=document.getElementById('stat');
+const nrEl=document.getElementById('nr');
+const TOTAL=CATS.length;
+let curFilter='all';
+
+function esc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+function hi(text,q){
+  if(!q)return text;
+  return text.replace(new RegExp('('+esc(q)+')','gi'),'<mark>$1</mark>');
+}
+
+function applySearch(q){
+  const ql=q.trim().toLowerCase();
+  let n=0;
+  CATS.forEach(c=>{
+    const item=document.getElementById('i'+c.num);
+    const matchQ=!ql||c.s.includes(ql);
+    const matchF=curFilter==='all'||(curFilter==='v1'&&c.v==='v1')||(curFilter==='v2p'&&c.v!=='v1');
+    const ok=matchQ&&matchF;
+    if(item)item.classList.toggle('hidden',!ok);
+    if(ok){
+      n++;
+      const el=item&&item.querySelector('.ct');
+      if(el)el.innerHTML=hi(c.name,q.trim());
+    }
+  });
+  nrEl.style.display=n===0?'block':'none';
+  const fLabel=curFilter==='v1'?' · Draft':curFilter==='v2p'?' · Verified':'';
+  statEl.textContent=(ql?n+'/':'')+TOTAL+' cat.'+fLabel;
+}
+
+function setFilter(f){
+  curFilter=f;
+  document.querySelectorAll('.fb').forEach(b=>b.classList.toggle('on',b.dataset.f===f));
+  applySearch(searchEl.value);
+}
+
+function select(num){
+  document.querySelectorAll('.ci').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.cs').forEach(e=>e.classList.remove('vis'));
+  const item=document.getElementById('i'+num);
+  const sec=document.getElementById('s'+num);
+  if(item){item.classList.add('active');item.scrollIntoView({block:'nearest'});}
+  if(sec)sec.classList.add('vis');
+  document.getElementById('ct').scrollTop=0;
+}
+
+searchEl.addEventListener('input',e=>applySearch(e.target.value));
+document.addEventListener('keydown',e=>{
+  if(e.key==='/'&&document.activeElement!==searchEl){e.preventDefault();searchEl.focus();searchEl.select();}
+  if(e.key==='Escape'&&document.activeElement===searchEl){searchEl.value='';applySearch('');searchEl.blur();}
+});
+
+if(CATS.length>0)select(CATS[0].num);
+
+function toggleTheme(){
+  const l=document.body.classList.toggle('light');
+  localStorage.setItem('geo-theme',l?'light':'dark');
+  document.getElementById('theme-btn').textContent=l?'🌙':'☀️';
+}
+(function(){if(localStorage.getItem('geo-theme')==='light'){
+  document.body.classList.add('light');
+  var b=document.getElementById('theme-btn');if(b)b.textContent='🌙';}})();
+</script>
+</body>
+</html>
