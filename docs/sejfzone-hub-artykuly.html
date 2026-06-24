@@ -276,7 +276,7 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
       <h2 class="sec"><span class="b"></span>Gotowe do akceptu (5)</h2>
       <div id="readyList"></div>
 
-      <h2 class="sec"><span class="b"></span>Tematy do akceptu</h2>
+      <h2 class="sec"><span class="b"></span>Tematy do akceptu</h2><div class="note" style="margin-bottom:10px">Pokazujemy tematy zaplanowane na <b>najbliższe 2 tygodnie</b> (T1–T2). Temat niezatwierdzony i tak idzie do pisania wg planu — zatwierdzenie/uwaga pomaga nam ustawić priorytety.</div>
       <div id="topicList"></div>
       <div id="topicMore" style="margin-top:8px"></div>
 
@@ -448,13 +448,9 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
 
 <!-- ============ ARTYKUŁY ============ -->
 <section class="view" id="art">
-  <h2 class="sec"><span class="b"></span>Opublikowane artykuły — klikalne</h2>
-  <div class="note">Linki pojawiają się tu stopniowo, w miarę przechodzenia kolejnych artykułów przez bramę jakości. Lokalne wsady CMS + podgląd live.</div>
-  <a class="btn" href="https://tomekwlqq.github.io/eel-reports/sejfzone-blog-podglad.html" target="_blank">🌐 Podgląd live wszystkich (GitHub Pages)</a>
-  <div class="grid k2" id="artList" style="margin-top:16px"></div>
-
-  <h2 class="sec"><span class="b"></span>W przygotowaniu</h2>
-  <div class="card" id="pipeline"></div>
+  <h2 class="sec"><span class="b"></span>Tablica artykułów — od wdrożenia do live</h2>
+  <div class="note">Status każdego artykułu: gotowe do wdrożenia → do akceptu → zaplanowane na najbliższe 2 tygodnie → live. Kliknij „Generuj paczkę", by pobrać komplet do wklejenia w IdoSell.</div>
+  <div id="kanban" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:16px"></div>
 </section>
 
 <!-- ============ ZASOBY ============ -->
@@ -714,17 +710,25 @@ function renderReadyList(){
 
 let topicExpanded=false;
 function renderTopicList(){
-  const briefs=DATA.filter(r=>r.st==="BRIEF");
+  // horyzont +2 tygodnie: tematy zaplanowane na najblizsze 2 tyg wg harmonogramu (ROWS.wk)
   const fb=Store.getTopicFeedback();
   const el=document.getElementById("topicList");
+  // zbuduj liste z ROWS: blogowe, wk 1-2, jeszcze nie napisane (NOWY) lub napisane do akceptu
+  const horizon=ROWS.filter(r=>r.typ!=="nieblog" && r.wk>0 && r.wk<=2)
+    .sort((a,b)=>(a.wk-b.wk)|| (b.ind-a.ind));
+  // mapuj na format topicrow (uid = kl+nr by spojnie z akceptem tematu)
+  const briefs=horizon.map(r=>({uid:r.kl+r.nr, t:r.t, seg:(r.kl==="bron"?"Broń":"Dom"), wk:r.wk, st:r.st}));
   const limit=topicExpanded?briefs.length:30;
   const shown=briefs.slice(0,limit);
   el.innerHTML=shown.map(r=>{
     const val=fb[String(r.uid)]||"";
+    const flow = val==="ok" ? '<span style="font-size:11px;color:#1f9e6e">→ zatwierdzony, gotowy do pisania</span>'
+               : (val==="uwaga" ? '<span style="font-size:11px;color:#d9821a">→ uwaga zgłoszona, wstrzymany</span>'
+               : '<span style="font-size:11px;color:#889">→ niezatwierdzony idzie do pisania wg planu</span>');
     return '<div class="topicrow">'
-      +'<div class="tt">'+segPill(r.seg)+' '+esc(r.t)+'</div>'
+      +'<div class="tt">'+segPill(r.seg)+' <b style="color:#1A6EF4">T'+r.wk+'</b> '+esc(r.t)+'<br>'+flow+'</div>'
       +'<div class="acts">'
-      +'<button class="minibtn '+(val==="ok"?"act-ok":"ok")+'" data-uid="'+esc(r.uid)+'" data-v="ok">'+(val==="ok"?"✓ Zaakceptowany":"Akceptuję temat")+'</button>'
+      +'<button class="minibtn '+(val==="ok"?"act-ok":"ok")+'" data-uid="'+esc(r.uid)+'" data-v="ok">'+(val==="ok"?"✓ Zatwierdzony":"Zatwierdzam temat")+'</button>'
       +'<button class="minibtn '+(val==="uwaga"?"act-warn":"warn")+'" data-uid="'+esc(r.uid)+'" data-v="uwaga">'+(val==="uwaga"?"⚑ Mam uwagę":"Mam uwagę")+'</button>'
       +'</div></div>';
   }).join("");
@@ -1164,27 +1168,66 @@ function renderRKpi(){
 
 /* ===== ARTYKUŁY (art) ===== */
 function renderArticles(){
-// ---- ARTYKULY ----
-const TEST={ "48":"art_48_kontrola_policji_pzl.html" };
-const pub=DATA.filter(r=>r.file);
-document.getElementById("artList").innerHTML = pub.length ? pub.map(r=>`
-  <a class="res" href="computer:///Users/Tomek_Main/Documents/Claude/Projects/SejfZone/artykuly_blog/${r.file}">
-    <span class="ic">📄</span><div><div class="t">#${r.id} · ${r.t}</div>
-    <div class="ds">${r.sc} · <span class="pill ${PILL[r.st]||'p-go'}">${ST_LABEL[r.st]||r.st}</span></div></div></a>`).join("")
-  : '<div class="card">Brak opublikowanych jeszcze.</div>';
-
-// w przygotowaniu (artykuly testowe + GO/NA_BRAMIE)
-const prep=[
- {id:"25",t:"Dostałem pozwolenie na broń — co teraz?",f:"artykuly_testowe/art_25_pozwolenie_na_bron.html"},
- {id:"26",t:"Co grozi za nieprawidłowe przechowywanie broni?",f:"artykuly_testowe/art_26_kara_za_brak_szafy.html"},
- {id:"28",t:"Klasa S1 wg EN 14450",f:"artykuly_testowe/art_28_klasa_s1_en14450.html"},
- {id:"48",t:"Kontrola policji i PZŁ",f:"artykuly_testowe/art_48_kontrola_policji_pzl.html"},
-];
-document.getElementById("pipeline").innerHTML='<div style="font-size:12.7px;color:#445">Drafty przez bramę jakości (testowe) — gotowe do wdrożenia w CMS:</div>'
- + '<div class="grid k2" style="margin-top:10px">'+prep.map(p=>`
-  <a class="res" href="computer:///Users/Tomek_Main/Documents/Claude/Projects/SejfZone/${p.f}">
-    <span class="ic">🧪</span><div><div class="t">#${p.id} · ${p.t}</div><div class="ds">artykuly_testowe/</div></div></a>`).join("")+'</div>';
-
+  // tablica statusow z ROWS (ma wk, st, kl, nr). Akcept z bazy.
+  const acc=(typeof Store!=="undefined"&&Store.getArticleAccept)?Store.getArticleAccept():{};
+  const FILES={"25":"artykuly_blog/art_25_pozwolenie_na_bron.html","31":"artykuly_blog/art_31_ranking_szaf_na_bron.html","38":"artykuly_blog/art_38_zamek_szafa_na_bron.html","40":"artykuly_blog/art_40_montaz_szafy_na_bron.html","30":"artykuly_blog/art_30_certyfikat_s1_szafa.html","34":"artykuly_blog/art_34_rozmiar_szafy_na_bron.html","26":"artykuly_testowe/art_26_kara_za_brak_szafy.html","28":"artykuly_testowe/art_28_klasa_s1_en14450.html","48":"artykuly_testowe/art_48_kontrola_policji_pzl.html"};
+  const blog=ROWS.filter(r=>r.typ!=="nieblog");
+  function accOf(r){ return acc[String(r.id)]||acc[r.kl+r.nr]||""; }
+  function isAccepted(r){ const a=accOf(r); return a==="oba"||a==="admin"||a==="klient"; }
+  // kategorie
+  const live=blog.filter(r=>r.st==="LIVE");
+  const napisane=blog.filter(r=>r.st==="NAPISANY");
+  const doWdrozenia=napisane.filter(r=>isAccepted(r) || FILES[String(r.nr)]); // gotowe i (zaakceptowane lub mamy plik)
+  const doAkceptu=napisane.filter(r=>!isAccepted(r));
+  const nextWk=blog.filter(r=>r.st==="NOWY" && r.wk>0 && r.wk<=2); // najblizsze 2 tyg
+  function card(r,extra){
+    const f=FILES[String(r.nr)];
+    const klp='<span class="kl '+(r.kl==="bron"?"kl-bron":"kl-dom")+'">'+(r.kl==="bron"?"broń":"dom")+'</span>';
+    return '<div style="border:1px solid var(--line);border-radius:9px;padding:10px 12px;margin-bottom:8px;background:#fff">'
+      +'<div style="font-size:12.5px;font-weight:600;line-height:1.35;margin-bottom:5px">#'+r.nr+' '+esc(r.t)+'</div>'
+      +'<div style="font-size:11px;color:#789;margin-bottom:7px">'+klp+' '+esc(r.sc)+(r.wk>0?' · T'+r.wk:'')+'</div>'
+      +(extra||'')+'</div>';
+  }
+  function col(title,arr,color,builder){
+    return '<div><div style="font-weight:700;font-size:13px;color:'+color+';padding:7px 10px;border-bottom:2px solid '+color+';margin-bottom:10px">'+title+' ('+arr.length+')</div>'
+      +(arr.length?arr.map(builder).join(''):'<div style="font-size:12px;color:#aab;padding:6px">—</div>')+'</div>';
+  }
+  const cWdr=col("📦 Do wdrożenia",doWdrozenia,"#1f9e6e",r=>{
+    const f=FILES[String(r.nr)];
+    return card(r,'<button class="minibtn ok genpack" data-nr="'+r.nr+'" '+(f?'data-file="'+f+'"':'')+'>⚙️ Generuj paczkę</button>'
+      +(f?' <a class="minibtn" href="computer:///Users/Tomek_Main/Documents/Claude/Projects/SejfZone/'+f+'" style="text-decoration:none">📄 plik</a>':''));
+  });
+  const cAkc=col("✅ Do akceptu",doAkceptu,"#1A6EF4",r=>{
+    const a=accOf(r);
+    return card(r,'<span style="font-size:11px;color:#888">'+(a?("akcept: "+a):"czeka na akceptację (zakładka Do recenzji)")+'</span>');
+  });
+  const cNext=col("📅 Najbliższe 2 tygodnie",nextWk,"#d9821a",r=>card(r,'<span style="font-size:11px;color:#b5751a">zaplanowany na T'+r.wk+' — do napisania</span>'));
+  const cLive=col("🌐 Live",live,"#667",r=>card(r,''));
+  document.getElementById("kanban").innerHTML=cWdr+cAkc+cNext+cLive;
+  // generator paczki
+  document.querySelectorAll(".genpack").forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); genPaczka(b.dataset.nr,b.dataset.file); });
+}
+function genPaczka(nr,file){
+  // generator paczki wdrozeniowej w przegladarce (z ARTICLES jesli jest, inaczej instrukcja)
+  const row=ROWS.find(r=>String(r.nr)===String(nr)&&r.typ!=="nieblog");
+  const KAT={A:"Przewodnik zakupowy",B:"Bezpieczeństwo i klasy odporności",C:"Przewodnik zakupowy",D:"Przewodnik zakupowy",E:"Przewodnik zakupowy",F:"Bezpieczeństwo i klasy odporności",G:"Montaż i użytkowanie"};
+  const sciezka=(row&&row.sc?row.sc:"A").trim().charAt(0);
+  const lk=row&&row.lk?row.lk:{};
+  let md="# PACZKA WDROŻENIOWA — #"+nr+" "+(row?row.t:"")+"\n\n";
+  md+="## Pola formularza IdoSell (Blog → Dodaj/Edytuj wpis)\n";
+  md+="- Widoczny: TAK\n- Pokazuj na blogu: lista wpisów + Kategoria: **"+(KAT[sciezka]||"Przewodnik zakupowy")+"**\n";
+  md+="- Nazwa na stronie: "+(row?row.t:"")+"\n- Grafika: Obrazek → wgraj hero\n- Indeksowanie: tak · URL/meta/kanoniczny: automatycznie\n\n";
+  md+="## Pełna treść\nWklej HTML wsadu CMS w pole Edycja zaawansowana. Plik: "+(file||"artykuly_blog/art_"+nr+"_*.html")+"\n\n";
+  md+="## Towary powiązane (1 produkt inline + dobierz z karty)\n"+(lk.inP?("- "+lk.inP.name+"\n"):"")+"\n";
+  md+="## Linki blog w treści — sprawdź żywość\nReguła: cel nie istnieje → wytnij <a>, zostaw tekst.\n";
+  if(lk.inA)lk.inA.forEach(x=>md+="- [ ] "+x.t+" (T"+x.wk+")\n");
+  if(lk.rel)lk.rel.forEach(x=>md+="- [ ] (powiązany) "+x.t+" (T"+x.wk+")\n");
+  md+="\n## ⚠️ Zdjęcia do wgrania przed publikacją\nHero + zdjęcia produktów + ikony — wgraj na serwer IdoSell (/data/include/cms/...) zanim opublikujesz, inaczej obrazki będą puste.\n";
+  const blob=new Blob([md],{type:"text/markdown"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="PACZKA_wdrozenie_art_"+nr+".md"; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+  alert("Paczka #"+nr+" pobrana. Treść artykułu wklej z pliku: "+(file||"artykuly_blog/")+"\nUzupełnij pola wg pobranego PACZKA_wdrozenie_art_"+nr+".md");
 }
 
 /* ===== updateKpis shim (rev wywołuje go po zmianach) ===== */
