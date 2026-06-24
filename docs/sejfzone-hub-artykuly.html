@@ -242,10 +242,10 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
   </div>
   <div class="tabs">
     <button class="tab on" data-v="rev">📋 Do recenzji</button>
+    <button class="tab" data-v="art">📄 Artykuły</button>
     <button class="tab" data-v="sum">📊 Podsumowanie</button>
     <button class="tab" data-v="met">📐 Metodologia</button>
     <button class="tab" data-v="tab">🗂️ Tabela wdrożeniowa</button>
-    <button class="tab" data-v="art">📄 Artykuły</button>
     <button class="tab" data-v="res">🔗 Zasoby</button>
   </div>
 </header>
@@ -696,7 +696,9 @@ function renderHistory(){
   }).join("");
 }
 function renderReadyList(){
-  const ready=DATA.filter(r=>r.st==="NAPISANY"&&ARTICLES[r.id]);
+  const _acc=(Store.getArticleAccept?Store.getArticleAccept():{});
+  function _isAcc(id){ const v=_acc[String(id)]||""; return v==="oba"||v==="admin"||v==="klient"; }
+  const ready=DATA.filter(r=>r.st==="NAPISANY"&&ARTICLES[r.id]&&!_isAcc(r.id));
   const el=document.getElementById("readyList");
   el.innerHTML=ready.map(r=>{
     const n=Store.getComments(r.id).length;
