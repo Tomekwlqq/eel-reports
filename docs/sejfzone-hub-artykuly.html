@@ -332,6 +332,13 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
             <div id="cmtList"></div>
           </div>
 
+          <!-- AKCEPTACJA ARTYKUŁU -->
+          <div class="cmtlist" id="acceptBox" style="margin-top:14px;padding:14px 16px;border:1px solid var(--line);border-radius:11px;background:#f8fcfb">
+            <h2 class="sec" style="margin-top:0"><span class="b"></span>Akceptacja artykułu</h2>
+            <div id="acceptState" style="font-size:13px;color:#456;margin-bottom:10px"></div>
+            <div id="acceptBtns" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+          </div>
+
           
         </div>
       </div>
@@ -573,6 +580,7 @@ const Store=(function(){
       if(c){ c.status=(c.status==="rozwiazany"?"otwarty":"rozwiazany"); wr(K_C,all);
         sbPatch("comments","id=eq."+encodeURIComponent(id),{status:c.status}); }
     },
+    delComment:function(id){ wr(K_C, rd(K_C).filter(c=>c.id!==id)); sbDelete("comments","id=eq."+encodeURIComponent(id)); },
     // --- ZDJĘCIA ---
     getPhotos:function(articleId){ return rd(K_P).filter(p=>String(p.articleId)===String(articleId)); },
     getAllPhotos:function(){ return rd(K_P); },
@@ -585,6 +593,9 @@ const Store=(function(){
     delPhoto:function(id){ wr(K_P, rd(K_P).filter(p=>p.id!==id)); sbDelete("photos","id=eq."+encodeURIComponent(id)); },
     // --- TEMATY ---
     getTopicFeedback:function(){ return rdo(K_T); },
+    getArticleAccept:function(){ const o=rdo(K_T); const r={}; Object.keys(o).forEach(k=>{ if(k.indexOf("accept:")===0) r[k.slice(7)]=o[k]; }); return r; },
+    setArticleAcceptState:function(id,val){ const key="accept:"+String(id); const o=rdo(K_T); if(!val){ delete o[key]; sbDelete("topic_feedback","article_id=eq."+encodeURIComponent(key)); } else { o[key]=val; sbInsert("topic_feedback",{article_id:key,value:val}); } wr(K_T,o); },
+    setArticleAccept:function(id,who){ const key="accept:"+String(id); const o=rdo(K_T); if(o[key]===who){ delete o[key]; sbDelete("topic_feedback","article_id=eq."+encodeURIComponent(key)); } else { o[key]=who; sbInsert("topic_feedback",{article_id:key,value:who}); } wr(K_T,o); },
     setTopicFeedback:function(id,val){
       const o=rdo(K_T);
       if(o[String(id)]===val){ delete o[String(id)]; sbDelete("topic_feedback","article_id=eq."+encodeURIComponent(id)); }
@@ -599,7 +610,7 @@ if(Store.cloudOn){ try{ Store.syncFromCloud(); }catch(e){} }
 (function(){
   if(typeof Store==="undefined") return;
   function wrap(name){ var orig=Store[name]; if(typeof orig!=="function") return; Store[name]=function(){ var r=orig.apply(Store,arguments); try{ if(typeof renderHistory==="function") renderHistory(); }catch(e){} return r; }; }
-  ["addComment","resolveComment","addPhoto","delPhoto","setTopicFeedback"].forEach(wrap);
+  ["addComment","resolveComment","delComment","addPhoto","delPhoto","setTopicFeedback","setArticleAccept"].forEach(wrap);
 })();
 
 /* ===== BRAMKA DWUHASŁOWA + TRYBY ===== */
@@ -840,6 +851,34 @@ document.addEventListener("mousedown",function(e){
   if(selPop.style.display==="block" && !selPop.contains(e.target) && e.target!==selBtn){ /* keep if clicking selBtn */ if(!selBtn.contains(e.target)) hideSelUI(); }
 });
 
+function renderAccept(){
+  const box=document.getElementById("acceptBox"); if(!box||!currentArticle) return;
+  const mode=(typeof currentMode==="function")?currentMode():"klient";
+  const acc=Store.getArticleAccept(); const cur=acc[String(currentArticle.id)]||"";
+  const kli=(cur==="klient"||cur==="oba"); const adm=(cur==="admin"||cur==="oba");
+  const st=document.getElementById("acceptState");
+  st.innerHTML='Status: '
+    +'<span class="pill '+(kli?"p-wdr":"p-back")+'">klient: '+(kli?"✓ zaakceptowany":"oczekuje")+'</span> '
+    +'<span class="pill '+(adm?"p-wdr":"p-back")+'">admin: '+(adm?"✓ zaakceptowany":"oczekuje")+'</span>';
+  const btns=document.getElementById("acceptBtns");
+  let html="";
+  if(mode==="admin"){
+    html+='<button class="minibtn '+(adm?"act-ok":"ok")+'" data-acc="admin">'+(adm?"✓ Zaakceptowane (admin)":"Akceptuję jako admin")+'</button>';
+    html+='<button class="minibtn '+(kli?"act-ok":"ok")+'" data-acc="klient">'+(kli?"✓ Zaakceptowane (klient)":"Akceptuję jako klient")+'</button>';
+  } else {
+    html+='<button class="minibtn '+(kli?"act-ok":"ok")+'" data-acc="klient">'+(kli?"✓ Zaakceptowany":"Akceptuję artykuł")+'</button>';
+  }
+  btns.innerHTML=html;
+  btns.querySelectorAll(".minibtn").forEach(b=>b.onclick=()=>{
+    const who=b.dataset.acc; const acc2=Store.getArticleAccept(); const c=acc2[String(currentArticle.id)]||"";
+    // toggle logiki: skladamy stan klient/admin/oba
+    let kl=(c==="klient"||c==="oba"), ad=(c==="admin"||c==="oba");
+    if(who==="klient") kl=!kl; else ad=!ad;
+    let val = kl&&ad?"oba":(kl?"klient":(ad?"admin":""));
+    Store.setArticleAcceptState(currentArticle.id, val);
+    renderAccept();
+  });
+}
 function renderCommentList(){
   const list=Store.getComments(currentArticle.id);
   document.getElementById("cmtCount").textContent=list.length;
@@ -853,13 +892,20 @@ function renderCommentList(){
       +'<div class="ct">'+esc(c.text)+'</div>'
       +'<div class="cm"><span>'+esc(c.author||"klient")+'</span><span>'+ds+'</span>'
       +'<span class="pill '+(c.status==="rozwiazany"?"p-wdr":"p-pis")+'">'+(c.status==="rozwiazany"?"rozwiązane":"otwarty")+'</span>'
-      +'<button class="minibtn" data-id="'+c.id+'">'+(c.status==="rozwiazany"?"Przywróć":"Rozwiązane")+'</button></div></div>';
+      +'<button class="minibtn" data-act="res" data-id="'+c.id+'">'+(c.status==="rozwiazany"?"Przywróć":"Rozwiązane")+'</button>'
+      +'<button class="minibtn" data-act="del" data-id="'+c.id+'" style="color:#c0392b;border-color:#e8b9b3" title="Usuń komentarz">Usuń</button></div></div>';
   }).join("");
   el.querySelectorAll(".minibtn").forEach(b=>b.onclick=()=>{
-    Store.resolveComment(b.dataset.id);
+    if(b.dataset.act==="del"){
+      if(!confirm("Usunąć ten komentarz na stałe?")) return;
+      Store.delComment(b.dataset.id);
+    } else {
+      Store.resolveComment(b.dataset.id);
+    }
     document.getElementById("artContent").innerHTML=ARTICLES[currentArticle.id].html;
-    applyHighlights(); renderCommentList(); renderReadyList();
+    applyHighlights(); renderCommentList(); renderReadyList(); if(typeof renderAccept==="function") renderAccept();
   });
+  if(typeof renderAccept==="function") renderAccept();
 }
 
 /* ====================================================================
