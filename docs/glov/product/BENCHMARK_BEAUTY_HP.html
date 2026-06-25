@@ -9,9 +9,11 @@ body{font:14px/1.55 -apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg
 .topbar{background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:20;padding:10px 20px}
 .topbar-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .topbar-title{font-weight:800;font-size:14px}
-.topbar-nav{display:flex;gap:10px;font-size:12px}
-.topbar-nav a{color:var(--mut);text-decoration:none}
-.topbar-nav a:hover{color:var(--tx)}
+.topbar-nav{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.topbar-nav a{display:inline-block;padding:6px 13px;border-radius:7px;font-size:12.5px;font-weight:600;text-decoration:none;background:#f1ece4;color:var(--tx);border:1px solid var(--bd);transition:background .15s,color .15s}
+.topbar-nav a:hover{background:#e6dfd5;color:#111}
+.topbar-nav a.back{background:#2c3e50;color:#fff;border-color:#2c3e50}
+.topbar-nav a.back:hover{background:#1a2533}
 .hero{padding:32px 0 20px}
 .badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:3px 9px;border-radius:5px;background:#2c3e50;color:#fff;margin-bottom:10px}
 h1{font-size:24px;font-weight:800;margin:0 0 4px;letter-spacing:-.3px}
@@ -89,13 +91,13 @@ tr:hover td{background:#faf7f3}
   <div class="topbar-inner">
     <span class="topbar-title">EEL · Benchmark Beauty HP</span>
     <nav class="topbar-nav">
+      <a href="../beauty_vision/INDEX.html" class="back">← Powrót do INDEX</a>
       <a href="#elementy">Elementy</a>
       <a href="#hero">Hero</a>
       <a href="#layout">Layout</a>
       <a href="#reko">Rekomendacje</a>
       <a href="#estetyka">Estetyka [PRÓBA]</a>
       <a href="#apendix">Apendiks</a>
-      <a href="INDEX.html">Index</a>
     </nav>
   </div>
 </div>
