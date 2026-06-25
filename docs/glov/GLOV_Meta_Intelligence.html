@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Meta Intelligence · Triangulacja 3 źródeł</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+[data-theme="light"]{--bg:#fff;--bg2:#f6f7f9;--card:#fff;--line:#e6e6e9;--line2:#eef0f3;--txt:#0a0a0a;--txt2:#5c6370;--muted:#9aa0ad;--accent:#7c5cff;--meta:#4f8cff;--shop:#16a34a;--ga4:#d97706;--good:#16a34a;--warn:#d97706;--bad:#dc2626;--shadow:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);--shadow-h:0 10px 30px rgba(0,0,0,.12)}
+[data-theme="dark"]{--bg:#0f1115;--bg2:#181b22;--card:#181b22;--line:#2a2f3a;--line2:#23272f;--txt:#e8eaed;--txt2:#9aa0aa;--muted:#6b7280;--accent:#9b7dff;--meta:#5f97ff;--shop:#3ecf8e;--ga4:#fbbd23;--good:#3ecf8e;--warn:#fbbd23;--bad:#f87272;--shadow:0 1px 3px rgba(0,0,0,.3);--shadow-h:0 10px 30px rgba(0,0,0,.5)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,sans-serif;line-height:1.55;transition:.3s}
+.wrap{max-width:1140px;margin:0 auto;padding:0 22px 80px}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:30}
+.logo{font-size:19px;font-weight:800;letter-spacing:-.5px}.logo span{color:var(--accent)}
+.theme-btn{background:var(--bg2);border:1px solid var(--line);border-radius:10px;width:38px;height:38px;cursor:pointer;font-size:16px}
+.hero{padding:32px 0 6px}.hero h1{font-size:31px;font-weight:800;letter-spacing:-1px;line-height:1.1}
+.hero .tagline{color:var(--accent);font-weight:700;font-size:14px;margin-top:8px}
+.hero p{color:var(--txt2);font-size:14px;margin-top:6px;max-width:760px}
+.metaline{color:var(--muted);font-size:12px;margin-top:10px}
+.tabs{display:flex;gap:4px;margin:22px 0 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tab{padding:11px 16px;font-size:14px;font-weight:600;color:var(--txt2);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab:hover{color:var(--txt)}.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.panel{display:none;padding-top:20px}.panel.active{display:block}
+h2{font-size:19px;margin:30px 0 4px;letter-spacing:-.3px}h2:first-child{margin-top:4px}
+h2 .em{font-size:12px;color:var(--muted);font-weight:400;margin-left:8px}
+h3{font-size:14px;margin:14px 0 8px}
+p{font-size:14px;margin:7px 0}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:840px){.g3,.g4{grid-template-columns:1fr 1fr}}@media(max-width:540px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 18px;box-shadow:var(--shadow)}
+.kpi .num{font-size:25px;font-weight:800;line-height:1.05}.kpi .lbl{color:var(--txt2);font-size:12px;margin-top:5px}.kpi .sub2{font-size:11px;color:var(--muted);margin-top:3px}
+.b-meta{border-left:3px solid var(--meta)}.b-shop{border-left:3px solid var(--shop)}.b-ga4{border-left:3px solid var(--ga4)}.b-acc{border-left:3px solid var(--accent)}
+.lead{background:linear-gradient(135deg,var(--bg2),var(--card))}
+.big-stat{text-align:center;padding:8px}.big-stat .v{font-size:42px;font-weight:800;letter-spacing:-1px}.big-stat .l{font-size:13px;color:var(--txt2);margin-top:2px}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{color:var(--txt2);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px}
+td.r,th.r{text-align:right}tr:hover td{background:var(--bg2)}
+.tiny{font-size:10.5px;color:var(--muted)}
+.tag{font-size:10.5px;padding:2px 7px;border-radius:5px;font-weight:700;white-space:nowrap}
+.t-good{background:rgba(22,163,74,.14);color:var(--good)}.t-warn{background:rgba(217,119,6,.14);color:var(--warn)}.t-bad{background:rgba(220,38,38,.14);color:var(--bad)}
+.callout{background:var(--bg2);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:13px 16px;margin:13px 0;font-size:13.5px}
+.callout.good{border-left-color:var(--good)}.callout.warn{border-left-color:var(--warn)}.callout.bad{border-left-color:var(--bad)}
+.chartbox{position:relative;height:300px}.chartbox.sm{height:240px}
+ul{margin:6px 0 6px 20px}li{margin:5px 0;font-size:13.5px}
+strong{color:var(--txt);font-weight:700}code{background:var(--bg2);padding:1px 6px;border-radius:5px;font-size:12px}
+.bar{height:6px;background:var(--bg2);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-top:3px}.bar i{display:block;height:100%}
+.tri{display:flex;gap:0;align-items:stretch;margin:16px 0;flex-wrap:wrap}
+.tri .node{flex:1;min-width:150px;text-align:center;padding:16px 10px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);position:relative}
+.tri .node .src{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.tri .node .big{font-size:28px;font-weight:800;margin:4px 0;letter-spacing:-1px}
+.tri .node .d{font-size:11px;color:var(--txt2)}
+.tri .conn{align-self:center;padding:0 6px;color:var(--muted);font-size:12px;text-align:center;min-width:80px}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:12px}
+.note{background:rgba(124,92,255,.08);border:1px dashed var(--accent);border-radius:10px;padding:11px 15px;margin:12px 0;font-size:13px}
+.note b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="topbar"><div class="logo">GLOV <span>Meta Intelligence</span></div><button class="theme-btn" id="themeBtn">🌙</button></div>
+
+<div class="hero">
+  <h1>Triangulacja: gdzie Meta zgadza się z rzeczywistością, a gdzie zmyśla</h1>
+  <div class="tagline">3 źródła weryfikują się nawzajem — Meta deklaruje, GA4 weryfikuje, Shopify rozstrzyga</div>
+  <p>To nie jest dashboard obok siebie. To ten sam wydatek prześwietlony przez trzy systemy: ROAS który Meta sobie raportuje vs ROAS policzony niezależnie z GA4 vs prawda Shopify. Różnice między nimi mówią więcej niż każda liczba osobno.</p>
+  <div class="metaline">2026-06-24 · glov.co (PLN) · Meta act_414505328896049 · GA4 342844459 · Shopify · kampanie&amp;kreacje 30d, typy stron 90d</div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-p="p1">⚖️ Dual ROAS — synergia</button>
+  <button class="tab" data-p="p2">🎯 Kreacje</button>
+  <button class="tab" data-p="p3">📄 Typy stron</button>
+  <button class="tab" data-p="p4">🔍 Reconciliation</button>
+</div>
+
+<!-- ===== PANEL 1: DUAL ROAS ===== -->
+<div class="panel active" id="p1">
+  <div class="card lead" style="border:2px solid var(--accent)">
+    <h2 style="margin-top:0">💡 Główne odkrycie: Meta zawyża ROAS o 43%</h2>
+    <div class="tri">
+      <div class="node b-meta"><div class="src" style="color:var(--meta)">META (pixel)</div><div class="big" style="color:var(--meta)">2,42×</div><div class="d">39 964 zł "przychodu"<br>view-through + click 7d</div></div>
+      <div class="conn">→ weryfikuje →</div>
+      <div class="node b-ga4"><div class="src" style="color:var(--ga4)">GA4 (last-click)</div><div class="big" style="color:var(--ga4)">1,39×</div><div class="d">22 921 zł przychodu<br>tylko realne wejścia</div></div>
+      <div class="conn">→ rozstrzyga →</div>
+      <div class="node b-shop"><div class="src" style="color:var(--shop)">SHOPIFY (prawda)</div><div class="big" style="color:var(--shop)">91 840 zł</div><div class="d">cały sklep / blended 5,42×<br>realne zamówienia</div></div>
+    </div>
+    <p style="margin-top:6px"><strong>Czytanie tego:</strong> Meta przypisuje sobie 39 964 zł, ale GA4 śledząc realne kliknięcia widzi tylko 22 921 zł z tych samych kampanii. <strong>Różnica 17 043 zł (43%)</strong> to przychód, który Meta zalicza sobie z tytułu „widział reklamę, kupił później" (view-through) — często byłby i tak. Prawda leży między tymi liczbami, a Shopify potwierdza że łącznie sklep zarabia dużo więcej (blended 5,42×), bo Meta rozgrzewa też inne kanały.</p>
+  </div>
+
+  <h2>Dual ROAS per kampania <span class="em">30 dni · sortowane wg wydatku</span></h2>
+  <p>Kolumna <b>GAP%</b> = o ile Meta zawyża względem GA4. Im wyższy, tym mniej można ufać autooptymalizacji Meta (bo uczy się na zawyżonych danych). <b>Trust</b> = na ile ROAS z panelu Meta jest wiarygodny.</p>
+  <div class="card"><table>
+    <tr><th>Kampania</th><th class="r">Spend zł</th><th class="r">Meta ROAS</th><th class="r">GA4 ROAS</th><th class="r">GAP</th><th class="r">Zak. M/G</th><th>Trust</th></tr>
+    <tr><td>Prospecting nowy zakup<div class="tiny">PAUSED</div></td><td class="r">5,348</td>
+      <td class="r"><span class="tag t-warn">2.51</span></td>
+      <td class="r"><span class="tag t-warn">1.46</span></td>
+      <td class="r"><b style="color:var(--bad)">+42%</b></td>
+      <td class="r">90/56</td>
+      <td><span class="tag t-bad">NISKI</span></td></tr><tr><td>Katalog DPA<div class="tiny">ACTIVE</div></td><td class="r">2,420</td>
+      <td class="r"><span class="tag t-warn">3.28</span></td>
+      <td class="r"><span class="tag t-warn">1.36</span></td>
+      <td class="r"><b style="color:var(--bad)">+59%</b></td>
+      <td class="r">77/35</td>
+      <td><span class="tag t-bad">NISKI</span></td></tr><tr><td>Konwersje hair<div class="tiny">ACTIVE</div></td><td class="r">1,631</td>
+      <td class="r"><span class="tag t-warn">3.36</span></td>
+      <td class="r"><span class="tag t-warn">1.73</span></td>
+      <td class="r"><b style="color:var(--bad)">+49%</b></td>
+      <td class="r">57/43</td>
+      <td><span class="tag t-bad">NISKI</span></td></tr><tr><td>Konwersje body<div class="tiny">ACTIVE</div></td><td class="r">1,499</td>
+      <td class="r"><span class="tag t-warn">2.60</span></td>
+      <td class="r"><span class="tag t-good">2.18</span></td>
+      <td class="r"><b style="color:var(--good)">+16%</b></td>
+      <td class="r">41/36</td>
+      <td><span class="tag t-warn">ŚREDNI</span></td></tr><tr><td>Nanoglass<div class="tiny">ACTIVE</div></td><td class="r">1,397</td>
+      <td class="r"><span class="tag t-warn">1.42</span></td>
+      <td class="r"><span class="tag t-bad">1.12</span></td>
+      <td class="r"><b style="color:var(--warn)">+21%</b></td>
+      <td class="r">22/21</td>
+      <td><span class="tag t-warn">ŚREDNI</span></td></tr><tr><td>Konwersje face<div class="tiny">PAUSED</div></td><td class="r">1,233</td>
+      <td class="r"><span class="tag t-warn">1.33</span></td>
+      <td class="r"><span class="tag t-bad">0.15</span></td>
+      <td class="r"><b style="color:var(--bad)">+89%</b></td>
+      <td class="r">9/2</td>
+      <td><span class="tag t-bad">NISKI</span></td></tr><tr><td>Sleeping Beauty<div class="tiny">ACTIVE</div></td><td class="r">1,191</td>
+      <td class="r"><span class="tag t-warn">1.17</span></td>
+      <td class="r"><span class="tag t-bad">0.45</span></td>
+      <td class="r"><b style="color:var(--bad)">+62%</b></td>
+      <td class="r">9/3</td>
+      <td><span class="tag t-bad">NISKI</span></td></tr><tr><td>Remarketing mix<div class="tiny">ACTIVE</div></td><td class="r">734</td>
+      <td class="r"><span class="tag t-warn">1.75</span></td>
+      <td class="r"><span class="tag t-warn">1.66</span></td>
+      <td class="r"><b style="color:var(--good)">+5%</b></td>
+      <td class="r">19/18</td>
+      <td><span class="tag t-good">WYSOKI</span></td></tr><tr><td>Luna Eye<div class="tiny">ACTIVE</div></td><td class="r">708</td>
+      <td class="r"><span class="tag t-warn">2.09</span></td>
+      <td class="r"><span class="tag t-good">2.02</span></td>
+      <td class="r"><b style="color:var(--good)">+4%</b></td>
+      <td class="r">9/5</td>
+      <td><span class="tag t-good">WYSOKI</span></td></tr><tr><td>Remarketing koszyk<div class="tiny">ACTIVE</div></td><td class="r">368</td>
+      <td class="r"><span class="tag t-warn">3.93</span></td>
+      <td class="r"><span class="tag t-good">2.20</span></td>
+      <td class="r"><b style="color:var(--bad)">+44%</b></td>
+      <td class="r">9/4</td>
+      <td><span class="tag t-bad">NISKI</span></td></tr>
+  </table></div>
+
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>Meta ROAS vs GA4 ROAS — rozjazd per kampania</h3><div class="chartbox"><canvas id="c_dual"></canvas></div></div>
+    <div class="card"><h3>Attribution gap (%) — gdzie Meta zmyśla najwięcej</h3><div class="chartbox"><canvas id="c_gap"></canvas></div></div>
+  </div>
+
+  <div class="callout bad"><strong>Czerwona flaga: Katalog DPA i Remarketing.</strong> DPA gap +59%, koszyk +44%, face +89%, sleeping beauty +62% — to klasyka: kampanie retargetingowe/katalogowe „przejmują" zasługi za zakupy, które i tak by nastąpiły. Meta raportuje DPA jako 3,28× (Twój top), ale GA4 widzi 1,36×. <strong>Te kampanie należy oceniać po GA4, nie po panelu Meta.</strong></div>
+  <div class="callout good"><strong>Zielone światło zaufania: Luna Eye (+4%), Remarketing mix (+5%), Body (+16%).</strong> Tu Meta i GA4 się zgadzają — autooptymalizacja działa na realnych danych. <strong>Luna Eye ma uczciwy ROAS 2,02× wg GA4 i jest niedofinansowana (708 zł)</strong> — to najbezpieczniejszy kandydat do skalowania, bo liczbom można ufać.</div>
+
+  <div class="note"><b>Po co to robić (synergia 3 źródeł):</b> Sama Meta = zawyżony, samochwalczy obraz. Sam GA4 = niedoszacowany (gubi view-through i część atrybucji). Sam Shopify = nie wie skąd przyszedł klient. <b>Dopiero zestawione:</b> Meta pokazuje kierunek, GA4 weryfikuje wiarygodność per kampania, Shopify potwierdza że całość się spina (blended 5,42×). Żadne pojedyncze źródło tego nie powie.</div>
+</div>
+
+<!-- ===== PANEL 2: KREACJE ===== -->
+<div class="panel" id="p2">
+  <div class="card lead"><h3>ROAS pojedynczych kreacji: 0,19 → 7,37 (Meta pixel)</h3><p>W tej samej kampanii jedne kreacje zarabiają 7×, inne tracą 80%. Statyczne sezonowe „Dzień Mamy" biją wszystko; kopia Sleeping Beauty (0,19) i Dzień Dziecka (0,59) palą budżet.</p></div>
+  <h2>ROAS per kreatja <span class="em">30d, Meta pixel</span></h2>
+  <div class="card"><div class="chartbox"><canvas id="c_creative"></canvas></div></div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3 style="color:var(--good)">🏆 TOP — skalować</h3>
+      <p style="font-size:13px">Dzień Mamy #6 <b>7,37</b> · Dzień Mamy #9 <b>4,99</b> · Infinity Patches <b>3,16</b> · Katalog DPA <b>3,28</b> · Zero Gravity <b>3,13</b></p>
+      <p class="tiny">Sezonowe statyczne + DPA. Dzień Mamy ma mikre budżety (712/357 zł) — zwiększyć.</p></div>
+    <div class="card"><h3 style="color:var(--bad)">🔻 PRZEPALACZE — wstrzymać</h3>
+      <p style="font-size:13px">Sleeping Beauty kopia <b>0,19</b> · Dzień Dziecka #3 <b>0,59</b> (1386 zł!) · Sleeping Beauty #4 wideo <b>0,92</b> · Pumeks UGC <b>1,15</b></p>
+      <p class="tiny">~2,1k zł/mc poniżej progu. Sleeping Beauty: wszystkie 3 warianty słabe.</p></div>
+  </div>
+  <div class="callout warn"><strong>Format nie decyduje sam.</strong> Statyczne sezonowe (śr. 2,45) i DPA (3,28) > wideo (1,78) i UGC (1,95). Wideo bywa skrajne: Zero Gravity 3,13 ✓ vs Dzień Dziecka 0,59 ✗. Liczy się oferta + moment, nie sam format.</div>
+</div>
+
+<!-- ===== PANEL 3: TYPY STRON ===== -->
+<div class="panel" id="p3">
+  <div class="card lead"><h3>Gdzie Meta wrzuca płatny ruch — i co to daje</h3><p>To czego brakowało: nie pojedyncze URL-e, tylko <strong>typy stron</strong> (homepage / PDP / kolekcja / paginacja / LP). Widać brutalnie, że płatny ruch trafia w złe miejsca.</p></div>
+  <h2>ROAS wg typu strony docelowej <span class="em">Paid Social, 90d, wg zł/sesja</span></h2>
+  <div class="card"><table>
+    <tr><th>Typ strony</th><th class="r">Sesje</th><th class="r">Przychód zł</th><th class="r">zł / sesja</th><th class="r">CR%</th><th class="r">ATC%</th></tr>
+    <tr><td>Homepage</td><td class="r">206</td><td class="r">1,422</td>
+      <td class="r"><b style="color:var(--good)">6.90</b><div class="bar"><i style="width:100%;background:var(--good)"></i></div></td>
+      <td class="r">3.4%</td><td class="r">17.0%</td></tr><tr><td>Koszyk (retargeting)</td><td class="r">58</td><td class="r">398</td>
+      <td class="r"><b style="color:var(--good)">6.86</b><div class="bar"><i style="width:99%;background:var(--good)"></i></div></td>
+      <td class="r">3.4%</td><td class="r">8.6%</td></tr><tr><td>PDP (produkt)</td><td class="r">249</td><td class="r">1,057</td>
+      <td class="r"><b style="color:var(--good)">4.25</b><div class="bar"><i style="width:61%;background:var(--good)"></i></div></td>
+      <td class="r">2.0%</td><td class="r">5.6%</td></tr><tr><td>Nieprzypisane</td><td class="r">4,215</td><td class="r">16,765</td>
+      <td class="r"><b style="color:var(--warn)">3.98</b><div class="bar"><i style="width:57%;background:var(--warn)"></i></div></td>
+      <td class="r">2.1%</td><td class="r">21.2%</td></tr><tr><td>Kolekcja</td><td class="r">497</td><td class="r">986</td>
+      <td class="r"><b style="color:var(--warn)">1.98</b><div class="bar"><i style="width:28%;background:var(--warn)"></i></div></td>
+      <td class="r">0.8%</td><td class="r">9.5%</td></tr><tr><td>PDP w kolekcji</td><td class="r">269</td><td class="r">478</td>
+      <td class="r"><b style="color:var(--warn)">1.78</b><div class="bar"><i style="width:25%;background:var(--warn)"></i></div></td>
+      <td class="r">0.7%</td><td class="r">3.7%</td></tr><tr><td>Kolekcja PAGINACJA</td><td class="r">513</td><td class="r">0</td>
+      <td class="r"><b style="color:var(--bad)">0.00</b><div class="bar"><i style="width:0%;background:var(--bad)"></i></div></td>
+      <td class="r">0.0%</td><td class="r">0.8%</td></tr><tr><td>Landing/Page</td><td class="r">60</td><td class="r">0</td>
+      <td class="r"><b style="color:var(--bad)">0.00</b><div class="bar"><i style="width:0%;background:var(--bad)"></i></div></td>
+      <td class="r">0.0%</td><td class="r">11.7%</td></tr>
+  </table></div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><div class="chartbox sm"><canvas id="c_ptype"></canvas></div></div>
+    <div class="card">
+      <h3>Hierarchia jakości</h3>
+      <ul>
+        <li><b>Homepage 6,90 zł/ses + Koszyk 6,86</b> — najlepsze, ale mały wolumen.</li>
+        <li><b>PDP produkt 4,25</b> — solidne, CR 2,0%. Tu powinien iść ruch.</li>
+        <li><b>Kolekcja 1,98 / PDP-w-kolekcji 1,78</b> — słabe, rozpraszają.</li>
+        <li><b style="color:var(--bad)">Paginacja kolekcji 0,00 zł</b> — 513 płatnych sesji, ZERO przychodu.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout bad"><strong>513 płatnych sesji ginie na stronach /collections/sklep?page=2…9.</strong> Meta wrzuca ludzi na 2-9 stronę list produktowych — 0 zł, 0 zakupów, ATC 0,8%. To czysty spalony budżet. Przy CPLC 1,38 zł to ~700 zł/kwartał wyrzucone. <strong>Naprawa: kreacje muszą kierować na konkretny PDP lub stronę 1 kolekcji, nigdy na paginację.</strong></div>
+  <div class="callout good"><strong>Wniosek do działania:</strong> przekierowanie ruchu z kolekcji/paginacji (śr. ~1,5 zł/ses) na PDP (4,25) lub homepage (6,90) potroiłoby zwrot z tej samej liczby kliknięć — bez dokładania budżetu.</div>
+</div>
+
+<!-- ===== PANEL 4: RECONCILIATION ===== -->
+<div class="panel" id="p4">
+  <div class="card lead"><h3>Czy w ogóle można ufać danym? Tak — 89% match</h3><p>Zanim zaufamy jakimkolwiek liczbom, sprawdzamy czy ruch się zgadza między systemami. Meta twierdzi że wysłała X kliknięć — ile GA4 faktycznie widzi?</p></div>
+  <h2>Meta → GA4 → Shopify <span class="em">90 dni</span></h2>
+  <div class="grid g4 kpi">
+    <div class="card b-meta"><div class="num" style="color:var(--meta)">30 654</div><div class="lbl">Meta link clicks</div><div class="sub2">ile wysłała na stronę</div></div>
+    <div class="card b-ga4"><div class="num" style="color:var(--ga4)">27 282</div><div class="lbl">GA4 sesje Paid Social</div><div class="sub2">ile weszło</div></div>
+    <div class="card b-shop"><div class="num" style="color:var(--good)">89%</div><div class="lbl">Match rate</div><div class="sub2">zdrowo (norma 70-90%)</div></div>
+    <div class="card"><div class="num" style="color:var(--warn)">11%</div><div class="lbl">Leakage (3 372)</div><div class="sub2">cookies/bounce/UTM→Direct</div></div>
+  </div>
+  <div class="card" style="margin-top:14px"><div class="chartbox sm"><canvas id="c_recon"></canvas></div></div>
+  <div class="callout good"><strong>89% w normie</strong> — tagowanie ruchu z Mety działa, więc liczbom GA4 dla Paid Social można ufać (to fundament całej tej analizy). 11% ginie przez blokery cookies, bounce przed tagiem, część bez UTM wpada do Direct.</div>
+  <div class="callout warn"><strong>Pułapka „conversions" w GA4:</strong> GA4 raportuje 8 537 „conversions" dla Paid Social — to NIE zakupy, tylko wszystkie zdarzenia konwersji (z mikrokonwersjami jak ATC). Realne zakupy: Meta 342 (30d). Dlatego do dual-ROAS użyłem <code>totalRevenue</code> i <code>ecommercePurchases</code>, nie licznika conversions.</div>
+</div>
+
+<div class="foot">Źródła: Meta Ads MCP (ad3d4b51, act_414505328896049) · GA4 google-analytics-mcp (342844459, dual-ROAS przez sessionCampaignName + landingPagePlusQueryString) · Shopify MCP. Dual ROAS = spend Meta ÷ przychód GA4 last-click per kampania (ta sama nazwa kampanii w obu systemach). Miniatury z Meta CDN jako base64. Kampanie/kreacje 30d, typy stron/ruch 90d. Liczby zmienne — odśwież przed decyzjami. 2026-06-24.</div>
+</div>
+
+<script>
+const root=document.documentElement, btn=document.getElementById('themeBtn');
+const saved=localStorage.getItem('glov-theme')||'light';
+root.setAttribute('data-theme',saved); btn.textContent=saved==='light'?'🌙':'☀️';
+btn.onclick=()=>{const n=root.getAttribute('data-theme')==='light'?'dark':'light';root.setAttribute('data-theme',n);localStorage.setItem('glov-theme',n);btn.textContent=n==='light'?'🌙':'☀️';drawAll();};
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById(t.dataset.p).classList.add('active');drawAll();});
+const CH={meta:'#4f8cff',ga4:'#d97706',good:'#16a34a',warn:'#d97706',bad:'#dc2626',shop:'#16a34a'};
+function gc(){return getComputedStyle(root).getPropertyValue('--line').trim()}
+function tc(){return getComputedStyle(root).getPropertyValue('--txt2').trim()}
+let charts={};
+function mk(id,cfg){if(charts[id])charts[id].destroy();const el=document.getElementById(id);if(!el)return;Chart.defaults.color=tc();Chart.defaults.font.size=10;cfg.options=cfg.options||{};cfg.options.maintainAspectRatio=false;charts[id]=new Chart(el,cfg);}
+const CAMP=['Prospecting','Katalog DPA','Hair','Body','Nanoglass','Face','Sleeping B.','Rmkt mix','Luna Eye','Rmkt koszyk'];
+const MROAS=[2.51,3.28,3.36,2.60,1.42,1.33,1.17,1.75,2.09,3.93];
+const GROAS=[1.46,1.36,1.73,2.18,1.12,0.15,0.45,1.66,2.02,2.20];
+const GAP=[42,59,49,16,21,89,62,5,4,44];
+function drawAll(){
+  const g=gc();
+  mk('c_dual',{type:'bar',data:{labels:CAMP,datasets:[{label:'Meta pixel ROAS',data:MROAS,backgroundColor:CH.meta},{label:'GA4 ROAS',data:GROAS,backgroundColor:CH.ga4}]},options:{plugins:{legend:{position:'top'}},scales:{x:{grid:{display:false},ticks:{maxRotation:55,minRotation:45}},y:{grid:{color:g}}}}});
+  mk('c_gap',{type:'bar',data:{labels:CAMP,datasets:[{data:GAP,backgroundColor:(c)=>c.raw>=40?CH.bad:c.raw>=20?CH.warn:CH.good}]},options:{indexAxis:'y',plugins:{legend:{display:false},title:{display:true,text:'% o ile Meta zawyża vs GA4'}},scales:{x:{grid:{color:g}},y:{grid:{display:false}}}}});
+  mk('c_creative',{type:'bar',data:{labels:['DzMamy#6','DzMamy#9','DPA','Infinity','ZeroGrav','Rękawica','LunaEye','Ciało#6','Ciało#1','Ciało#4','Depilator','SB#01','Pumeks#1','PumeksUGC','SB#4','DzDziecka','SBkopia'],datasets:[{data:[7.37,4.99,3.28,3.16,3.13,2.64,2.43,2.22,2.10,2.08,1.58,1.48,1.36,1.15,0.92,0.59,0.19],backgroundColor:(c)=>{const v=c.raw;return v>=3?CH.good:v>=2?CH.warn:CH.bad}}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:g}},y:{grid:{display:false}}}}});
+  mk('c_ptype',{type:'bar',data:{labels:['Homepage','Koszyk','PDP','Nieprzyp.','Kolekcja','PDP-w-kol','Paginacja','LP'],datasets:[{label:'zł/sesja',data:[6.90,6.86,4.25,3.98,1.98,1.78,0,0],backgroundColor:(c)=>{const v=c.raw;return v>=4?CH.good:v>=1.5?CH.warn:CH.bad}}]},options:{plugins:{legend:{display:false},title:{display:true,text:'Przychód na sesję wg typu strony'}},scales:{x:{grid:{display:false},ticks:{maxRotation:55,minRotation:45}},y:{grid:{color:g}}}}});
+  mk('c_recon',{type:'bar',data:{labels:['Wyświetlenia','Wsz. kliknięcia','Link clicks','GA4 sesje'],datasets:[{data:[4423410,41634,30654,27282],backgroundColor:[CH.meta,'#6fa3ff','#3f7ae0',CH.ga4]}]},options:{indexAxis:'y',plugins:{legend:{display:false},title:{display:true,text:'Lejek: wyświetlenie → sesja (90d)'}},scales:{x:{type:'logarithmic',grid:{color:g}},y:{grid:{display:false}}}}});
+}
+drawAll();
+</script>
+</body></html>
