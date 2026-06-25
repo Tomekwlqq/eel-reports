@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://roseinc.com" target="_blank">https://roseinc.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -66,90 +74,114 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Header</td>
 <td class="col-etyk">ROSE INC</td>
-<td class="col-opis">Dwupoziomowy header z logo po lewej, górna nawigacja (SHOP / BEST SELLERS / SHADE FINDER / EDUCATIONAL) i dolna nawigacja kategorii (NEW / FACE / LIP / EYE / SKIN / BODY), ikony konta/wyszukiwania/koszyka po prawej.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Ikony: konto (person), lupa (search), koszyk z licznikiem (cart). Dolny pasek nawigacyjny podkreśla aktywną zakładkę NEW. Rewards badge (kółko zielone) po lewej stronie.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">2</td>
-<td class="col-el">Pasek promocji</td>
 <td class="col-etyk">Find our most loved picks. Shop now</td>
-<td class="col-opis">Wąski pasek ponad headerem z tekstem promocyjnym i linkiem do bestsellerów.</td>
+<td class="col-el">Pasek promocji</td>
+<td class="col-zaw">Link 'Shop now' jako CTA. Jasne, prawie białe tło, dyskretny tekst.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="60" onclick="scrollShot(60)">
 <td class="col-lp">3</td>
-<td class="col-el">Hero split (obraz + tekst)</td>
 <td class="col-etyk">SKIN YOU'LL FALL FOR. LOVE STARTS WTH YOUR GLOW.</td>
-<td class="col-opis">Hero podzielony: lewa strona z dużym hasłem i przyciskiem CTA, prawa strona z flatlay produktów Rose Inc otoczonych różami na jasnym tle.</td>
+<td class="col-el">Hero split (obraz + tekst)</td>
+<td class="col-zaw">CTA: przycisk 'SHOP NOW' (ciemny, prostokątny). Brak badgeów produktowych. Styl lifestyle/editorial, beżowe tło. Literówka w haśle ('WTH' zamiast 'WITH').</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">60px</span></td>
 </tr>
 <tr class="el-row" data-top="780" onclick="scrollShot(780)">
 <td class="col-lp">4</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">Top Sellers</td>
-<td class="col-opis">Pozioma karuzela produktów oznaczonych jako bestsellery z gwiazdkami ocen i przyciskami szybkiego zakupu.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">CTA: QUICK SHOP per produkt. Badge: gwiazdki (4.5/5). Ceny widoczne (np. $54). Produkt widoczny: Softlight Skin-Smoothing Liquid Foundation. Strzałki karuzeli obecne. Pasek nawigacyjny kategorii (NEW/FACE/LIP/EYE) tuż nad sekcją jako nawigacja inline.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">780px</span></td>
 </tr>
 <tr class="el-row" data-top="1460" onclick="scrollShot(1460)">
 <td class="col-lp">5</td>
-<td class="col-el">Nowości</td>
 <td class="col-etyk">NEW</td>
-<td class="col-opis">Sekcja nowości z podzagłówkiem 'Elevate your beauty routine with our latest editions.' i karuzelą nowych produktów.</td>
+<td class="col-el">Nowości</td>
+<td class="col-zaw">CTA: 'Shop New' (link tekstowy), QUICK SHOP / OUT OF STOCK per produkt. Gwiazdki ocen widoczne. Ceny: $28, $42. Produkty: Lip Cream Weightless Matte Color, Resurfacing &amp; Balancing Body Polish. Badge OUT OF STOCK na jednym produkcie.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1460px</span></td>
 </tr>
 <tr class="el-row" data-top="1950" onclick="scrollShot(1950)">
 <td class="col-lp">6</td>
-<td class="col-el">Galeria UGC / Instagram</td>
 <td class="col-etyk">ROSEINC LOOKS GOOD ON YOU</td>
-<td class="col-opis">Grid zdjęć UGC — lifestyle fotografie modelek używających produktów Rose Inc, z shoppable karuzelą i przyciskami QUICK SHOP.</td>
+<td class="col-el">Galeria UGC / Instagram</td>
+<td class="col-zaw">CTA: QUICK SHOP, ADD SHOP per item. Zdjęcia: 5+ modelek w różnych tonach karnacji i stylizacjach. Mix content: portrety + flatlaye produktów. Shoppable grid z cenami poniżej zdjęć.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1950px</span></td>
 </tr>
 <tr class="el-row" data-top="2650" onclick="scrollShot(2650)">
 <td class="col-lp">7</td>
-<td class="col-el">Kalkulator odcieni<span class="new-badge">NOWY</span></td>
 <td class="col-etyk">SHADEFINDER</td>
-<td class="col-opis">Interaktywne narzędzie do doboru odcienia podkładu/serum — duże zdjęcie produktów po lewej, tekst 'CUSTOMIZE YOUR COVERAGE / Remove doubt and find the perfect shade' i przycisk CTA po prawej.</td>
+<td class="col-el">Kalkulator odcieni<span class="new-badge">NOWY</span></td>
+<td class="col-zaw">CTA: 'FIND YOUR SHADE' (przycisk/link). Brak badgeów. Duże split-baner z produktami. Funkcja quiz/kalkulator odcieni zintegrowana w HP.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2650px</span></td>
 </tr>
 <tr class="el-row" data-top="3100" onclick="scrollShot(3100)">
 <td class="col-lp">8</td>
-<td class="col-el">Galeria UGC / Instagram</td>
 <td class="col-etyk">COMMUNITY</td>
-<td class="col-opis">Drugi blok UGC — nieregularny grid zdjęć społecznościowych: portrety, makijaże, tutoriale video, produkty in-use.</td>
+<td class="col-el">Galeria UGC / Instagram</td>
+<td class="col-zaw">Zawiera video (tutorial aplikacji, widoczna kobieta nakładająca produkt). Grid asymetryczny — różne rozmiary kafelków. Hashtag '#roseinc' implikowany. Brak bezpośrednich CTA per zdjęcie.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">3100px</span></td>
 </tr>
 <tr class="el-row" data-top="4350" onclick="scrollShot(4350)">
 <td class="col-lp">9</td>
-<td class="col-el">O marce / misja</td>
 <td class="col-etyk">ABOUT US</td>
-<td class="col-opis">Sekcja brandowa z hasłem 'Rose Inc unites efficacy and ethics in all we do' i trzema filarami marki jako klikalnych zakładek.</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-zaw">CTA: 'Learn More' (link). Trzy zakładki/filtry: PERFORMANCE / INGREDIENTS / SUSTAINABILITY. Minimalistyczny design, dużo białej przestrzeni.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4350px</span></td>
 </tr>
 <tr class="el-row" data-top="5500" onclick="scrollShot(5500)">
 <td class="col-lp">10</td>
-<td class="col-el">O marce / misja</td>
 <td class="col-etyk">CLEAN BEAUTY POWERED BY SCIENCE.</td>
-<td class="col-opis">Dodatkowy blok brandowy z tagline marki i podzagłówkiem 'High-performance color and skincare.'</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-zaw">Brak CTA. Wycentrowany tekst na białym tle. Separator przed footerową strefą.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5500px</span></td>
 </tr>
 <tr class="el-row" data-top="5650" onclick="scrollShot(5650)">
 <td class="col-lp">11</td>
-<td class="col-el">Zapis do newslettera</td>
 <td class="col-etyk">STAY CONNECTED</td>
-<td class="col-opis">Formularz zapisu do newslettera i SMS-ów z dwoma polami (email + numer telefonu opcjonalnie) i przyciskiem subskrypcji.</td>
+<td class="col-el">Zapis do newslettera</td>
+<td class="col-zaw">CTA: 'SUBSCRIBE' (przycisk ciemny). Pola: 'Your email' + 'Your mobile # (optional - to sign up for texts)'. Drobny tekst prawny/zgody poniżej formularza.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5650px</span></td>
 </tr>
 <tr class="el-row" data-top="5900" onclick="scrollShot(5900)">
 <td class="col-lp">12</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Footer z logo ROSE INC, czterema kolumnami linków (SHOP / LEARN / SUPPORT / CONNECT) i ikonami social media.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">SHOP: New, Bestsellers, Shade Finder, Virtual Try-on, Subscribe &amp; Save. LEARN: About us, Ingredients, Sustainability, Recycling guide. SUPPORT: Concierge Service, Account, FAQs, Returns, Store Locator. CONNECT: Instagram, YouTube, Facebook, Twitter/X, TikTok, Pinterest. Copyright © 2026 Rose Inc. Linki prawne: T&amp;C, Privacy Policy, Accessibility, Your privacy rights.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5900px</span></td>
 </tr></tbody>
     </table>
@@ -158,71 +190,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Ikony: konto (person), lupa (search), koszyk z licznikiem (cart). Dolny pasek nawigacyjny podkreśla aktywną zakładkę NEW. Rewards badge (kółko zielone) po lewej stronie.</td>
-</tr>
-<tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">2</td>
-<td class="col-el">Pasek promocji</td>
-<td class="col-kom">Link 'Shop now' jako CTA. Jasne, prawie białe tło, dyskretny tekst.</td>
-</tr>
-<tr class="el-row" data-top="60" onclick="scrollShot(60)">
-<td class="col-lp">3</td>
-<td class="col-el">Hero split (obraz + tekst)</td>
-<td class="col-kom">CTA: przycisk 'SHOP NOW' (ciemny, prostokątny). Brak badgeów produktowych. Styl lifestyle/editorial, beżowe tło. Literówka w haśle ('WTH' zamiast 'WITH').</td>
-</tr>
-<tr class="el-row" data-top="780" onclick="scrollShot(780)">
-<td class="col-lp">4</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">CTA: QUICK SHOP per produkt. Badge: gwiazdki (4.5/5). Ceny widoczne (np. $54). Produkt widoczny: Softlight Skin-Smoothing Liquid Foundation. Strzałki karuzeli obecne. Pasek nawigacyjny kategorii (NEW/FACE/LIP/EYE) tuż nad sekcją jako nawigacja inline.</td>
-</tr>
-<tr class="el-row" data-top="1460" onclick="scrollShot(1460)">
-<td class="col-lp">5</td>
-<td class="col-el">Nowości</td>
-<td class="col-kom">CTA: 'Shop New' (link tekstowy), QUICK SHOP / OUT OF STOCK per produkt. Gwiazdki ocen widoczne. Ceny: $28, $42. Produkty: Lip Cream Weightless Matte Color, Resurfacing &amp; Balancing Body Polish. Badge OUT OF STOCK na jednym produkcie.</td>
-</tr>
-<tr class="el-row" data-top="1950" onclick="scrollShot(1950)">
-<td class="col-lp">6</td>
-<td class="col-el">Galeria UGC / Instagram</td>
-<td class="col-kom">CTA: QUICK SHOP, ADD SHOP per item. Zdjęcia: 5+ modelek w różnych tonach karnacji i stylizacjach. Mix content: portrety + flatlaye produktów. Shoppable grid z cenami poniżej zdjęć.</td>
-</tr>
-<tr class="el-row" data-top="2650" onclick="scrollShot(2650)">
-<td class="col-lp">7</td>
-<td class="col-el">Kalkulator odcieni</td>
-<td class="col-kom">CTA: 'FIND YOUR SHADE' (przycisk/link). Brak badgeów. Duże split-baner z produktami. Funkcja quiz/kalkulator odcieni zintegrowana w HP.</td>
-</tr>
-<tr class="el-row" data-top="3100" onclick="scrollShot(3100)">
-<td class="col-lp">8</td>
-<td class="col-el">Galeria UGC / Instagram</td>
-<td class="col-kom">Zawiera video (tutorial aplikacji, widoczna kobieta nakładająca produkt). Grid asymetryczny — różne rozmiary kafelków. Hashtag '#roseinc' implikowany. Brak bezpośrednich CTA per zdjęcie.</td>
-</tr>
-<tr class="el-row" data-top="4350" onclick="scrollShot(4350)">
-<td class="col-lp">9</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-kom">CTA: 'Learn More' (link). Trzy zakładki/filtry: PERFORMANCE / INGREDIENTS / SUSTAINABILITY. Minimalistyczny design, dużo białej przestrzeni.</td>
-</tr>
-<tr class="el-row" data-top="5500" onclick="scrollShot(5500)">
-<td class="col-lp">10</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-kom">Brak CTA. Wycentrowany tekst na białym tle. Separator przed footerową strefą.</td>
-</tr>
-<tr class="el-row" data-top="5650" onclick="scrollShot(5650)">
-<td class="col-lp">11</td>
-<td class="col-el">Zapis do newslettera</td>
-<td class="col-kom">CTA: 'SUBSCRIBE' (przycisk ciemny). Pola: 'Your email' + 'Your mobile # (optional - to sign up for texts)'. Drobny tekst prawny/zgody poniżej formularza.</td>
-</tr>
-<tr class="el-row" data-top="5900" onclick="scrollShot(5900)">
-<td class="col-lp">12</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">SHOP: New, Bestsellers, Shade Finder, Virtual Try-on, Subscribe &amp; Save. LEARN: About us, Ingredients, Sustainability, Recycling guide. SUPPORT: Concierge Service, Account, FAQs, Returns, Store Locator. CONNECT: Instagram, YouTube, Facebook, Twitter/X, TikTok, Pinterest. Copyright © 2026 Rose Inc. Linki prawne: T&amp;C, Privacy Policy, Accessibility, Your privacy rights.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -251,7 +218,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://www.refybeauty.com" target="_blank">https://www.refybeauty.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -66,62 +74,78 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="40" onclick="scrollShot(40)">
 <td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
 <td class="col-etyk">FREE DELIVERY ON ALL ORDERS £20+</td>
-<td class="col-opis">Cienki pasek na samej górze strony z informacją o darmowej dostawie od progu kwotowego.</td>
+<td class="col-el">Pasek promocji</td>
+<td class="col-zaw">Tekst statyczny, brak CTA, brak licznika.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">40px</span></td>
 </tr>
 <tr class="el-row" data-top="65" onclick="scrollShot(65)">
 <td class="col-lp">2</td>
-<td class="col-el">Header</td>
 <td class="col-etyk">REFY</td>
-<td class="col-opis">Nawigacja globalna z logo REFY, linkami kategorii i ikonami konta/koszyka.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Linki nav: SHOP ALL, LIPS, EYES, FACE, SKIN &amp; BODY, MORE. Ikony: search, konto, koszyk. Tło przezroczyste (overlay na hero).</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">65px</span></td>
 </tr>
 <tr class="el-row" data-top="120" onclick="scrollShot(120)">
 <td class="col-lp">3</td>
-<td class="col-el">Baner główny (Hero)</td>
 <td class="col-etyk">WATERCOLOR COLLECTION</td>
-<td class="col-opis">Fullscreen baner kolekcji z podtytułem opisującym efekt makijażu i głównym CTA.</td>
+<td class="col-el">Baner główny (Hero)</td>
+<td class="col-zaw">CTA: 'SHOP WATERCOLOR'. Podtytuł: 'Soft flushes, hydrating sheen, minimal effort. The makeup reimagined for real life.'. Tło: pełnoekranowe zdjęcie makijażu. Brak karuzeli.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">120px</span></td>
 </tr>
 <tr class="el-row" data-top="1415" onclick="scrollShot(1415)">
 <td class="col-lp">4</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">COMMUNITY FAVOURITES</td>
-<td class="col-opis">Karuzela produktów oznaczonych jako ulubione przez społeczność z cenami i krótkimi opisami.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">Produkty: Brow Sculpt, Lash Sculpt, Lip Gloss (x2), Blur (przycięty). CTA: 'SHOP ALL'. Strzałki karuzeli widoczne. Ceny widoczne (~£11-14). Gwiazdki ocen + liczba recenzji pod produktami.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1415px</span></td>
 </tr>
 <tr class="el-row" data-top="2145" onclick="scrollShot(2145)">
 <td class="col-lp">5</td>
-<td class="col-el">O marce / misja</td>
 <td class="col-etyk">OUR MISSION IS TO SIMPLIFY BEAUTY</td>
-<td class="col-opis">Blok tekstowy z manifestem marki podkreślający filozofię upraszczania rutyny piękna.</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-zaw">Duży bold tekst manifesto: 'SIMPLIFY BEAUTY, INSPIRING YOU TO BE YOUR MOST CONFIDENT SELF'. CTA: 'LEARN MORE'. Breadcrumb nawigacja (Cantonese Pear / Beige / Cookie Pot / Programme Key) widoczna nad sekcją.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2145px</span></td>
 </tr>
 <tr class="el-row" data-top="2840" onclick="scrollShot(2840)">
 <td class="col-lp">6</td>
-<td class="col-el">Galeria UGC / Instagram</td>
 <td class="col-etyk">OUR COMMUNITY</td>
-<td class="col-opis">Karuzela lifestyle z kadrami kampanii prezentująca produkty z różnych kolekcji z CTA do kategorii.</td>
+<td class="col-el">Galeria UGC / Instagram</td>
+<td class="col-zaw">Etykiety kategorii pod zdjęciami: LIP GLOSS, SKIN MATTE SKIN TINT, LIP COLLECTION. CTA: 'SHOP NOW' per każde zdjęcie. Strzałki karuzeli. Format: duże zdjęcia portretowe modelek.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">2840px</span></td>
 </tr>
 <tr class="el-row" data-top="3690" onclick="scrollShot(3690)">
 <td class="col-lp">7</td>
-<td class="col-el">Zapis do newslettera</td>
 <td class="col-etyk">REFY</td>
-<td class="col-opis">Sekcja zapisu do newslettera z formularzem i opisem benefitów subskrypcji.</td>
+<td class="col-el">Zapis do newslettera</td>
+<td class="col-zaw">Pola: First Name + Email. CTA: 'SUBSCRIBE'. Tekst: 'Be the first to hear about new product launches, exclusive sale access, and invites to community events.' Ikony social: TikTok, Instagram, YouTube, Spotify, Pinterest.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3690px</span></td>
 </tr>
 <tr class="el-row" data-top="3840" onclick="scrollShot(3840)">
 <td class="col-lp">8</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk">SIMPLIFYING BEAUTY</td>
-<td class="col-opis">Stopka z linkami nawigacji, informacjami prawnymi, metodami płatności i kolumną obsługi klienta.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">Kolumny: REFY (About Us, Blog, REFY World, Stockists, Careers, Cruelty Free), CUSTOMER CARE (My Account, Track Order, Shipping &amp; Delivery, Returns, Contact Us, Student Discount), LEGAL (T&amp;C, Privacy Policy, Cookie Policy). Metody płatności: Visa, Mastercard, Amex, PayPal, Klarna. Selector języka: PL PLN / POLAND.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3840px</span></td>
 </tr></tbody>
     </table>
@@ -130,51 +154,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="40" onclick="scrollShot(40)">
-<td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
-<td class="col-kom">Tekst statyczny, brak CTA, brak licznika.</td>
-</tr>
-<tr class="el-row" data-top="65" onclick="scrollShot(65)">
-<td class="col-lp">2</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Linki nav: SHOP ALL, LIPS, EYES, FACE, SKIN &amp; BODY, MORE. Ikony: search, konto, koszyk. Tło przezroczyste (overlay na hero).</td>
-</tr>
-<tr class="el-row" data-top="120" onclick="scrollShot(120)">
-<td class="col-lp">3</td>
-<td class="col-el">Baner główny (Hero)</td>
-<td class="col-kom">CTA: 'SHOP WATERCOLOR'. Podtytuł: 'Soft flushes, hydrating sheen, minimal effort. The makeup reimagined for real life.'. Tło: pełnoekranowe zdjęcie makijażu. Brak karuzeli.</td>
-</tr>
-<tr class="el-row" data-top="1415" onclick="scrollShot(1415)">
-<td class="col-lp">4</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">Produkty: Brow Sculpt, Lash Sculpt, Lip Gloss (x2), Blur (przycięty). CTA: 'SHOP ALL'. Strzałki karuzeli widoczne. Ceny widoczne (~£11-14). Gwiazdki ocen + liczba recenzji pod produktami.</td>
-</tr>
-<tr class="el-row" data-top="2145" onclick="scrollShot(2145)">
-<td class="col-lp">5</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-kom">Duży bold tekst manifesto: 'SIMPLIFY BEAUTY, INSPIRING YOU TO BE YOUR MOST CONFIDENT SELF'. CTA: 'LEARN MORE'. Breadcrumb nawigacja (Cantonese Pear / Beige / Cookie Pot / Programme Key) widoczna nad sekcją.</td>
-</tr>
-<tr class="el-row" data-top="2840" onclick="scrollShot(2840)">
-<td class="col-lp">6</td>
-<td class="col-el">Galeria UGC / Instagram</td>
-<td class="col-kom">Etykiety kategorii pod zdjęciami: LIP GLOSS, SKIN MATTE SKIN TINT, LIP COLLECTION. CTA: 'SHOP NOW' per każde zdjęcie. Strzałki karuzeli. Format: duże zdjęcia portretowe modelek.</td>
-</tr>
-<tr class="el-row" data-top="3690" onclick="scrollShot(3690)">
-<td class="col-lp">7</td>
-<td class="col-el">Zapis do newslettera</td>
-<td class="col-kom">Pola: First Name + Email. CTA: 'SUBSCRIBE'. Tekst: 'Be the first to hear about new product launches, exclusive sale access, and invites to community events.' Ikony social: TikTok, Instagram, YouTube, Spotify, Pinterest.</td>
-</tr>
-<tr class="el-row" data-top="3840" onclick="scrollShot(3840)">
-<td class="col-lp">8</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">Kolumny: REFY (About Us, Blog, REFY World, Stockists, Careers, Cruelty Free), CUSTOMER CARE (My Account, Track Order, Shipping &amp; Delivery, Returns, Contact Us, Student Discount), LEGAL (T&amp;C, Privacy Policy, Cookie Policy). Metody płatności: Visa, Mastercard, Amex, PayPal, Klarna. Selector języka: PL PLN / POLAND.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -203,7 +182,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

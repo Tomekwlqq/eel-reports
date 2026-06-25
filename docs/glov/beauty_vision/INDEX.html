@@ -1,75 +1,355 @@
-<!doctype html><html lang="pl"><head><meta charset="utf-8">
-<title>Beauty vision reports — indeks</title><style>
-body{font:15px/1.5 -apple-system,Segoe UI,sans-serif;background:#f7f5f1;color:#2b2b2b;max-width:980px;margin:0 auto;padding:30px 22px 70px}
-h1{font-size:24px;margin:0 0 4px} h2{font-size:16px;margin:26px 0 8px;color:#8a8275;text-transform:uppercase;letter-spacing:.4px;font-weight:700;border-top:2px solid #e6e0d6;padding-top:14px}
-.lead{color:#8a8275;margin-bottom:8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
-.grid a{display:block;background:#fff;border:1px solid #e6e0d6;border-radius:9px;padding:10px 13px;text-decoration:none;color:#2b2b2b;font-weight:600;font-size:13.5px}
-.grid a:hover{border-color:#c8492f;color:#c8492f}
-.miss{display:block;padding:10px 13px;color:#b9b2a6;font-size:13px}
-.bm{display:inline-block;margin-top:14px;background:#2c3e50;color:#fff;padding:9px 16px;border-radius:9px;text-decoration:none;font-weight:600}
-</style></head><body>
-<h1>Beauty — vision reports per sklep</h1>
-<p class="lead">47 audytów HP (split-view: sekcje ↔ screenshot, jak HEBE). Benchmark zbiorczy osobno.</p>
-<a class="bm" href="../product/BENCHMARK_BEAUTY_HP.html">📊 Benchmark zbiorczy — wzorce, kolory, wnioski vs GLOV</a>
-<h2>Akcesoria / demakijaż — najbliżej GLOV</h2>
-<div class='grid'>
-  <a href="beautyblender_VISION_REPORT.html">beautyblender</a>
-  <a href="realtechniques_VISION_REPORT.html">realtechniques</a>
-  <a href="ecotools_VISION_REPORT.html">ecotools</a>
-  <a href="facehalo_VISION_REPORT.html">facehalo</a>
-  <span class="miss">makeuperaser ✗</span>
-  <a href="spongelle_VISION_REPORT.html">spongelle</a>
-  <a href="foreo_VISION_REPORT.html">foreo</a>
-  <a href="vanityplanet_VISION_REPORT.html">vanityplanet</a>
-  <span class="miss">cleanlogic ✗</span>
-  <a href="kitsch_VISION_REPORT.html">kitsch</a>
-</div>
-<h2>Beauty DTC (USA)</h2>
-<div class='grid'>
-  <a href="glossier_VISION_REPORT.html">glossier</a>
-  <a href="rarebeauty_VISION_REPORT.html">rarebeauty</a>
-  <a href="fentybeauty_VISION_REPORT.html">fentybeauty</a>
-  <a href="drunkelephant_VISION_REPORT.html">drunkelephant</a>
-  <a href="theordinary_VISION_REPORT.html">theordinary</a>
-  <a href="glowrecipe_VISION_REPORT.html">glowrecipe</a>
-  <a href="iliabeauty_VISION_REPORT.html">iliabeauty</a>
-  <a href="meritbeauty_VISION_REPORT.html">meritbeauty</a>
-  <a href="kosas_VISION_REPORT.html">kosas</a>
-  <a href="saie_VISION_REPORT.html">saie</a>
-  <a href="milkmakeup_VISION_REPORT.html">milkmakeup</a>
-  <span class="miss">summerfridays ✗</span>
-  <a href="topicals_VISION_REPORT.html">topicals</a>
-  <a href="youthtothepeople_VISION_REPORT.html">youthtothepeople</a>
-  <a href="tatcha_VISION_REPORT.html">tatcha</a>
-  <a href="paulaschoice_VISION_REPORT.html">paulaschoice</a>
-  <a href="versed_VISION_REPORT.html">versed</a>
-  <a href="bubble_VISION_REPORT.html">bubble</a>
-  <a href="herocosmetics_VISION_REPORT.html">herocosmetics</a>
-  <a href="elf_VISION_REPORT.html">elf</a>
-  <a href="soldejaneiro_VISION_REPORT.html">soldejaneiro</a>
-  <a href="olaplex_VISION_REPORT.html">olaplex</a>
-  <a href="ouai_VISION_REPORT.html">ouai</a>
-  <a href="briogeo_VISION_REPORT.html">briogeo</a>
-  <a href="livingproof_VISION_REPORT.html">livingproof</a>
-  <a href="prose_VISION_REPORT.html">prose</a>
-  <a href="vegamour_VISION_REPORT.html">vegamour</a>
-  <a href="augustinusbader_VISION_REPORT.html">augustinusbader</a>
-  <a href="tataharper_VISION_REPORT.html">tataharper</a>
-  <a href="herbivore_VISION_REPORT.html">herbivore</a>
-  <a href="necessaire_VISION_REPORT.html">necessaire</a>
-  <a href="westmanatelier_VISION_REPORT.html">westmanatelier</a>
-  <a href="roseinc_VISION_REPORT.html">roseinc</a>
-  <a href="jonesroad_VISION_REPORT.html">jonesroad</a>
-  <a href="refy_VISION_REPORT.html">refy</a>
-  <a href="rhode_VISION_REPORT.html">rhode</a>
-</div>
-<h2>UK / multibrand</h2>
-<div class='grid'>
-  <a href="beautypie_VISION_REPORT.html">beautypie</a>
-  <a href="cultbeauty_VISION_REPORT.html">cultbeauty</a>
-  <a href="lookfantastic_VISION_REPORT.html">lookfantastic</a>
-  <a href="spacenk_VISION_REPORT.html">spacenk</a>
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Beauty Vision Reports — 52 sklepów</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f5f1;--surface:#fff;--border:#e6e0d6;--text:#2b2b2b;--muted:#8a8275;
+  --accent:#c8492f;--pl:#2563eb;--dtc:#7c3aed;--missing:#b9b2a6;
+  --hover-shadow:0 4px 16px rgba(0,0,0,.10);
+}
+body{font:14px/1.5 -apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:32px 24px 72px}
+.page-header{max-width:1200px;margin:0 auto 28px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.page-title{font-size:22px;font-weight:800;letter-spacing:-.3px}
+.page-sub{color:var(--muted);font-size:13px;margin-top:3px}
+.bm-link{display:inline-flex;align-items:center;gap:6px;background:#1e293b;color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:600;font-size:13px;white-space:nowrap}
+.bm-link:hover{background:#0f172a}
+.stats-bar{max-width:1200px;margin:0 auto 24px;display:flex;gap:10px;flex-wrap:wrap}
+.stat-chip{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 13px;font-size:12px;font-weight:600;color:var(--muted)}
+.stat-chip span{color:var(--text)}
+.section{max-width:1200px;margin:0 auto 32px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+.section-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.section-count{background:var(--border);color:var(--muted);border-radius:10px;padding:2px 8px;font-size:11px;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:14px 12px 12px;text-decoration:none;color:var(--text);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  transition:border-color .15s,box-shadow .15s;position:relative;
+  min-height:110px;
+}
+.card:hover{border-color:var(--accent);box-shadow:var(--hover-shadow);color:var(--accent)}
+.card-logo{width:40px;height:40px;border-radius:8px;object-fit:contain;background:#f8fafc;border:1px solid #f0f0f0;flex-shrink:0}
+.card-name{font-weight:700;font-size:13px;text-align:center;line-height:1.3}
+.card-tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-top:2px}
+.tag{font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;white-space:nowrap}
+.tag-pl{background:#dbeafe;color:var(--pl)}
+.tag-dtc{background:#ede9fe;color:var(--dtc)}
+.tag-supplement{background:#f0fdf4;color:#166534}
+.card-miss{
+  background:var(--bg);border:1px dashed var(--border);border-radius:12px;
+  padding:14px 12px 12px;color:var(--missing);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  min-height:110px;font-size:12px;font-style:italic;text-align:center;
+}
+.card-miss .card-logo{opacity:.3;filter:grayscale(1)}
+.flag{font-size:14px;line-height:1}
+/* dark mode toggle */
+.dark-btn{position:fixed;bottom:20px;right:20px;background:var(--surface);border:1px solid var(--border);border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);z-index:10}
+body.dark{--bg:#0f172a;--surface:#1e293b;--border:#334155;--text:#e2e8f0;--muted:#94a3b8;--hover-shadow:0 4px 16px rgba(0,0,0,.4)}
+body.dark .card-logo{background:#0f172a;border-color:#334155}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <div class="page-title">Beauty Vision Reports</div>
+    <div class="page-sub">HP visual mapping — 52 sklepy · nowy model (Typ/rola · Zawartość · P · Pozycja)</div>
+  </div>
+  <a class="bm-link" href="../product/BENCHMARK_BEAUTY_HP.html">Benchmark zbiorczy →</a>
 </div>
 
-</body></html>
+<div class="stats-bar">
+  <div class="stat-chip">Łącznie: <span>52 raporty</span></div>
+  <div class="stat-chip">PL DTC: <span>4 nowe 🇵🇱</span></div>
+  <div class="stat-chip">DTC benchmark: <span>AG1 (suplement)</span></div>
+  <div class="stat-chip">Lekkie HTML: <span>0× base64, ~14 KB per raport</span></div>
+</div>
+
+<!-- POLSKIE DTC (nowe) -->
+<div class="section">
+  <div class="section-header">
+    <span class="flag">🇵🇱</span>
+    <span class="section-title">Polskie DTC beauty — nowe</span>
+    <span class="section-count">4</span>
+  </div>
+  <div class="grid">
+    <a class="card" href="yourkaya_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://yourkaya.pl&size=64" alt="yourKAYA logo" onerror="this.src='https://www.google.com/s2/favicons?domain=yourkaya.pl&sz=64'">
+      <span class="card-name">yourKAYA</span>
+      <div class="card-tags"><span class="tag tag-pl">🇵🇱 PL</span><span class="tag tag-dtc">DTC</span></div>
+    </a>
+    <a class="card" href="semilac_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://semilac.pl&size=64" alt="Semilac logo" onerror="this.src='https://www.google.com/s2/favicons?domain=semilac.pl&sz=64'">
+      <span class="card-name">Semilac</span>
+      <div class="card-tags"><span class="tag tag-pl">🇵🇱 PL</span><span class="tag tag-dtc">DTC</span></div>
+    </a>
+    <a class="card" href="tolpa_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://tolpa.pl&size=64" alt="Tołpa logo" onerror="this.src='https://www.google.com/s2/favicons?domain=tolpa.pl&sz=64'">
+      <span class="card-name">tołpa.</span>
+      <div class="card-tags"><span class="tag tag-pl">🇵🇱 PL</span><span class="tag tag-dtc">DTC</span></div>
+    </a>
+    <a class="card" href="phlov_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://phlov.com&size=64" alt="phlov logo" onerror="this.src='https://www.google.com/s2/favicons?domain=phlov.com&sz=64'">
+      <span class="card-name">phlov.</span>
+      <div class="card-tags"><span class="tag tag-pl">🇵🇱 PL</span><span class="tag tag-dtc">DTC</span></div>
+    </a>
+  </div>
+</div>
+
+<!-- DTC / Suplement benchmark -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">DTC benchmark — suplement</span>
+    <span class="section-count">1</span>
+  </div>
+  <div class="grid">
+    <a class="card" href="drinkag1_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://drinkag1.com&size=64" alt="AG1 logo" onerror="this.src='https://www.google.com/s2/favicons?domain=drinkag1.com&sz=64'">
+      <span class="card-name">AG1 / Athletic Greens</span>
+      <div class="card-tags"><span class="tag tag-supplement">suplement</span><span class="tag tag-dtc">DTC</span></div>
+    </a>
+  </div>
+</div>
+
+<!-- Akcesoria / demakijaż — najbliżej GLOV -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">Akcesoria / demakijaż — najbliżej GLOV</span>
+    <span class="section-count">10</span>
+  </div>
+  <div class="grid">
+    <a class="card" href="beautyblender_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://beautyblender.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">beautyblender</span>
+    </a>
+    <a class="card" href="realtechniques_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://realtechniques.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">realtechniques</span>
+    </a>
+    <a class="card" href="ecotools_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://ecotools.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">ecotools</span>
+    </a>
+    <a class="card" href="facehalo_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://facehalo.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">facehalo</span>
+    </a>
+    <div class="card-miss">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://themakeuperaser.com&size=64" alt="" onerror="this.style.display='none'">
+      <span>makeuperaser</span>
+      <span style="font-size:10px">brak raportu</span>
+    </div>
+    <a class="card" href="spongelle_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://spongelle.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">spongelle</span>
+    </a>
+    <a class="card" href="foreo_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://foreo.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">foreo</span>
+    </a>
+    <a class="card" href="vanityplanet_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://vanityplanet.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">vanityplanet</span>
+    </a>
+    <div class="card-miss">
+      <span>cleanlogic</span>
+      <span style="font-size:10px">brak raportu</span>
+    </div>
+    <a class="card" href="kitsch_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://mykitsch.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">kitsch</span>
+    </a>
+  </div>
+</div>
+
+<!-- Beauty DTC (USA) -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">Beauty DTC (USA)</span>
+    <span class="section-count">36</span>
+  </div>
+  <div class="grid">
+    <a class="card" href="glossier_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://glossier.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">glossier</span>
+    </a>
+    <a class="card" href="rarebeauty_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://rarebeauty.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">rarebeauty</span>
+    </a>
+    <a class="card" href="fentybeauty_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://fentybeauty.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">fentybeauty</span>
+    </a>
+    <a class="card" href="drunkelephant_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://drunkelephant.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">drunk elephant</span>
+    </a>
+    <a class="card" href="theordinary_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://theordinary.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">the ordinary</span>
+    </a>
+    <a class="card" href="glowrecipe_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://glowrecipe.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">glow recipe</span>
+    </a>
+    <a class="card" href="iliabeauty_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://iliabeauty.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">ilia beauty</span>
+    </a>
+    <a class="card" href="meritbeauty_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://meritbeauty.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">merit beauty</span>
+    </a>
+    <a class="card" href="kosas_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://kosas.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">kosas</span>
+    </a>
+    <a class="card" href="saie_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://saiehello.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">saie</span>
+    </a>
+    <a class="card" href="milkmakeup_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://milkmakeup.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">milk makeup</span>
+    </a>
+    <a class="card" href="summerfridays_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://summerfridays.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">summer fridays</span>
+    </a>
+    <a class="card" href="topicals_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://mytopicals.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">topicals</span>
+    </a>
+    <a class="card" href="youthtothepeople_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://youthtothepeople.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">youth to the people</span>
+    </a>
+    <a class="card" href="tatcha_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://tatcha.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">tatcha</span>
+    </a>
+    <div class="card-miss">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://paulaschoice.com&size=64" alt="" onerror="this.style.display='none'">
+      <span>paula's choice</span>
+      <span style="font-size:10px">brak raportu</span>
+    </div>
+    <a class="card" href="versed_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://versedskin.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">versed</span>
+    </a>
+    <a class="card" href="bubble_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://hellobubble.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">bubble</span>
+    </a>
+    <a class="card" href="herocosmetics_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://herocosmetics.us&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">hero cosmetics</span>
+    </a>
+    <a class="card" href="elf_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://elfcosmetics.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">e.l.f.</span>
+    </a>
+    <a class="card" href="soldejaneiro_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://soldejaneiro.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">sol de janeiro</span>
+    </a>
+    <a class="card" href="olaplex_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://olaplex.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">olaplex</span>
+    </a>
+    <a class="card" href="ouai_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://theouai.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">ouai</span>
+    </a>
+    <a class="card" href="briogeo_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://briogeohair.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">briogeo</span>
+    </a>
+    <a class="card" href="livingproof_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://livingproof.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">living proof</span>
+    </a>
+    <a class="card" href="prose_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://prose.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">prose</span>
+    </a>
+    <a class="card" href="vegamour_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://vegamour.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">vegamour</span>
+    </a>
+    <a class="card" href="augustinusbader_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://augustinusbader.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">augustinus bader</span>
+    </a>
+    <a class="card" href="tataharper_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://tataharperskincare.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">tata harper</span>
+    </a>
+    <a class="card" href="herbivore_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://herbivorebotanicals.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">herbivore</span>
+    </a>
+    <a class="card" href="necessaire_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://necessaire.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">nécessaire</span>
+    </a>
+    <a class="card" href="westmanatelier_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://westman-atelier.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">westman atelier</span>
+    </a>
+    <a class="card" href="roseinc_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://roseinc.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">rose inc.</span>
+    </a>
+    <a class="card" href="jonesroad_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://jonesroadbeauty.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">jones road</span>
+    </a>
+    <a class="card" href="refy_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://refybeauty.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">refy</span>
+    </a>
+    <a class="card" href="rhode_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://rhodeskin.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">rhode</span>
+    </a>
+  </div>
+</div>
+
+<!-- UK / multibrand -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">UK / multibrand retail</span>
+    <span class="section-count">4</span>
+  </div>
+  <div class="grid">
+    <a class="card" href="beautypie_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://beautypie.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">beauty pie</span>
+    </a>
+    <a class="card" href="cultbeauty_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://cultbeauty.co.uk&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">cult beauty</span>
+    </a>
+    <a class="card" href="lookfantastic_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://lookfantastic.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">lookfantastic</span>
+    </a>
+    <a class="card" href="spacenk_VISION_REPORT.html">
+      <img class="card-logo" src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://spacenk.com&size=64" alt="" onerror="this.style.display='none'">
+      <span class="card-name">space nk</span>
+    </a>
+  </div>
+</div>
+
+<button class="dark-btn" onclick="document.body.classList.toggle('dark')" title="Dark mode">🌙</button>
+
+</body>
+</html>

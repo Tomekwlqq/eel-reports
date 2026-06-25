@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://www.cultbeauty.co.uk" target="_blank">https://www.cultbeauty.co.uk</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -66,104 +74,132 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Ciemny pasek na samej górze z rotującymi komunikatami promocyjnymi (darmowa dostawa, 10% off, log in for exclusives, Earn Cult Points).</td>
+<td class="col-el">Pasek promocji</td>
+<td class="col-zaw">Brak CTA przycisków; tekst rotuje automatycznie.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="35" onclick="scrollShot(35)">
 <td class="col-lp">2</td>
-<td class="col-el">Header</td>
 <td class="col-etyk">CULT BEAUTY</td>
-<td class="col-opis">Pełny header z logo, wyszukiwarką, mega-menu nawigacyjnym, przełącznikiem kraju, kontem i koszykiem.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Linki nawigacji: Trending &amp; Trending, Beauty, etc. Ikony: konto, koszyk (Bag). Wyszukiwarka centralna.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">35px</span></td>
 </tr>
 <tr class="el-row" data-top="100" onclick="scrollShot(100)">
 <td class="col-lp">3</td>
-<td class="col-el">Pasek darmowej dostawy</td>
 <td class="col-etyk">Free Next Day Delivery</td>
-<td class="col-opis">Jasny pasek pod headerem informujący o darmowej dostawie następnego dnia i promocji ojcowskiej (Father's Day at Cult).</td>
+<td class="col-el">Pasek darmowej dostawy</td>
+<td class="col-zaw">Tekst: 'Free Next Day Delivery. What summer?... FATHER'S DAY AT CULT'.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">100px</span></td>
 </tr>
 <tr class="el-row" data-top="130" onclick="scrollShot(130)">
 <td class="col-lp">4</td>
-<td class="col-el">Hero karuzela/slider</td>
 <td class="col-etyk">IT'S A SAIE SUMMER</td>
-<td class="col-opis">Duży hero slider z obrazem edytorialnym marki Saie, nagłówkiem i dwoma CTA; wskaźniki karuzeli widoczne na dole.</td>
+<td class="col-el">Hero karuzela/slider</td>
+<td class="col-zaw">CTA: 'BUILD TO ROUTINE', 'SHOP THE BRAND'. Strzałki karuzeli lewo/prawo. Badge: brak. Kategoria: marka partnerska.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">130px</span></td>
 </tr>
 <tr class="el-row" data-top="730" onclick="scrollShot(730)">
 <td class="col-lp">5</td>
-<td class="col-el">Kafelki kategorii</td>
 <td class="col-etyk">SHOP BY CATEGORY</td>
-<td class="col-opis">Poziomy rząd kafelków z nazwami kategorii i miniaturkami (zdjęcia produktów), z zakładkami filtrującymi nad nimi.</td>
+<td class="col-el">Kafelki kategorii</td>
+<td class="col-zaw">Zakładki: The Cult Residency, Now Now Next, Fragrance, Skincare, Makeup, Haircare. Brak CTA przycisku.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">730px</span></td>
 </tr>
 <tr class="el-row" data-top="920" onclick="scrollShot(920)">
 <td class="col-lp">6</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">NEW IN</td>
-<td class="col-opis">Siatka produktów z przełączanymi zakładkami (New In / Up to 30% Off / Trending), pokazująca 4–5 produktów z ceną i gwiazdkami.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">Zakładki: NEW IN, UP TO 30% OFF, TRENDING. Badge: EXCLUSIVE. Ceny widoczne (£45, £40, £30, £30). Gwiazdki (5.0, 4.8). Strzałki karuzeli.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">920px</span></td>
 </tr>
 <tr class="el-row" data-top="1550" onclick="scrollShot(1550)">
 <td class="col-lp">7</td>
-<td class="col-el">Nowości</td>
 <td class="col-etyk">WHAT'S NEW AT CULT?</td>
-<td class="col-opis">Karuzela edytorialna z nowo wprowadzonymi markami/produktami — każdy kafelek to 'JUST LAUNCHED' z opisem i przyciskiem.</td>
+<td class="col-el">Nowości</td>
+<td class="col-zaw">CTA per kafelek: 'DISCOVER', 'SHOP NOW'. Marki: Skin Concierge, Huda Beauty, NARS, SAE. Strzałki karuzeli lewo/prawo.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">1550px</span></td>
 </tr>
 <tr class="el-row" data-top="2100" onclick="scrollShot(2100)">
 <td class="col-lp">8</td>
-<td class="col-el">Sekcja blog / poradniki</td>
 <td class="col-etyk">IN FOCUS</td>
-<td class="col-opis">Siatka edytorialna z kafelkami artykułów/tematów trendowych — mieszanka obrazów produktowych i lifestylowych.</td>
+<td class="col-el">Sekcja blog / poradniki</td>
+<td class="col-zaw">Brak CTA przycisków na poziomie nagłówka sekcji; klikalne kafelki.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2100px</span></td>
 </tr>
 <tr class="el-row" data-top="2880" onclick="scrollShot(2880)">
 <td class="col-lp">9</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
 <td class="col-etyk">ON OUR WISHLIST / NEED IT NOW / IN THE SPOTLIGHT</td>
-<td class="col-opis">Trzy kolumny edytorialne z wyróżnionymi produktami marek (Mara Nea, KVD/Makeup Forever, Fenty Skin) — każda z opisem i CTA.</td>
+<td class="col-el">Spotlight produktu (editorial)</td>
+<td class="col-zaw">CTA: 'SHOP NOW' x3. Bez cen widocznych. Układ 3-kolumnowy, obrazy produktowe.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2880px</span></td>
 </tr>
 <tr class="el-row" data-top="3200" onclick="scrollShot(3200)">
 <td class="col-lp">10</td>
-<td class="col-el">Sekcja kolaboracja / limitowana kolekcja</td>
 <td class="col-etyk">New &amp; Exclusive — THE SUMMER AGENDA EDITS</td>
-<td class="col-opis">Hero baner z tytułem edycji limitowanej letniej + tekst o oszczędnościach do 65%, plus karuzela produktów z tej kolekcji.</td>
+<td class="col-el">Sekcja kolaboracja / limitowana kolekcja</td>
+<td class="col-zaw">CTA: 'SHOP NOW', 'DISCOVER WHAT'S INSIDE'. Strzałki karuzeli. Badge: 'New &amp; Exclusive'.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3200px</span></td>
 </tr>
 <tr class="el-row" data-top="3650" onclick="scrollShot(3650)">
 <td class="col-lp">11</td>
-<td class="col-el">Sekcja blog / poradniki</td>
 <td class="col-etyk">TRENDING</td>
-<td class="col-opis">Siatka edytorialna z dwoma zakładkami (Trending / Culture) pokazująca artykuły powiązane z kategoriami kosmetyków.</td>
+<td class="col-el">Sekcja blog / poradniki</td>
+<td class="col-zaw">Zakładki: TRENDING, CULTURE. Kafelki z obrazami marek (Huida Beauty, Chloe, SAE, Patrick TA, Glow Recipe, Medik8).</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3650px</span></td>
 </tr>
 <tr class="el-row" data-top="3978" onclick="scrollShot(3978)">
 <td class="col-lp">12</td>
-<td class="col-el">Cytaty klientów</td>
 <td class="col-etyk">MAJOR GLOW-HARD EVERY FRAGRANCE MEET PATRICK TA</td>
-<td class="col-opis">Sekcja z cytatem edytorialnym o produkcie (zapach Patrick TA) z gwiazdkami i opisem — spotlight pojedynczego produktu marki.</td>
+<td class="col-el">Cytaty klientów</td>
+<td class="col-zaw">Gwiazdki: 5. Cytat: 'This smells super luxe — warm, sweet, and a little musky. Pretty bottle, nice vibe'. Brak wyraźnego CTA przycisku.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3978px</span></td>
 </tr>
 <tr class="el-row" data-top="4500" onclick="scrollShot(4500)">
 <td class="col-lp">13</td>
-<td class="col-el">Zapis do newslettera</td>
 <td class="col-etyk">10% OFF YOUR ORDER WHEN YOU SIGN UP TO OUR EMAILS</td>
-<td class="col-opis">Ciemny pasek z zachętą do zapisu na newsletter oferującą rabat 10%, pole email i CTA, plus linki do social media.</td>
+<td class="col-el">Zapis do newslettera</td>
+<td class="col-zaw">CTA: 'SIGN UP'. Ikony social: X (Twitter), Facebook, Instagram, TikTok, Pinterest, YouTube.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4500px</span></td>
 </tr>
 <tr class="el-row" data-top="4650" onclick="scrollShot(4650)">
 <td class="col-lp">14</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk">CULT BEAUTY</td>
-<td class="col-opis">Pełny footer z logo, linkami obsługi klienta, informacjami o firmie, legalem, metodami płatności i Cookie Consent.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">Kolumny: Customer Service (Contact Us, Help, Delivery, FAQ, Track my order), About Cult Beauty (About Us, App, Careers, Affiliates, Cult Corrections), Legal (T&amp;C, Privacy Policy, Cookie Policy, Accessibility). Logo płatności: Visa, Mastercard, Amex, PayPal, Klarna, G-Pay, Apple Pay.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4650px</span></td>
 </tr></tbody>
     </table>
@@ -172,81 +208,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
-<td class="col-kom">Brak CTA przycisków; tekst rotuje automatycznie.</td>
-</tr>
-<tr class="el-row" data-top="35" onclick="scrollShot(35)">
-<td class="col-lp">2</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Linki nawigacji: Trending &amp; Trending, Beauty, etc. Ikony: konto, koszyk (Bag). Wyszukiwarka centralna.</td>
-</tr>
-<tr class="el-row" data-top="100" onclick="scrollShot(100)">
-<td class="col-lp">3</td>
-<td class="col-el">Pasek darmowej dostawy</td>
-<td class="col-kom">Tekst: 'Free Next Day Delivery. What summer?... FATHER'S DAY AT CULT'.</td>
-</tr>
-<tr class="el-row" data-top="130" onclick="scrollShot(130)">
-<td class="col-lp">4</td>
-<td class="col-el">Hero karuzela/slider</td>
-<td class="col-kom">CTA: 'BUILD TO ROUTINE', 'SHOP THE BRAND'. Strzałki karuzeli lewo/prawo. Badge: brak. Kategoria: marka partnerska.</td>
-</tr>
-<tr class="el-row" data-top="730" onclick="scrollShot(730)">
-<td class="col-lp">5</td>
-<td class="col-el">Kafelki kategorii</td>
-<td class="col-kom">Zakładki: The Cult Residency, Now Now Next, Fragrance, Skincare, Makeup, Haircare. Brak CTA przycisku.</td>
-</tr>
-<tr class="el-row" data-top="920" onclick="scrollShot(920)">
-<td class="col-lp">6</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">Zakładki: NEW IN, UP TO 30% OFF, TRENDING. Badge: EXCLUSIVE. Ceny widoczne (£45, £40, £30, £30). Gwiazdki (5.0, 4.8). Strzałki karuzeli.</td>
-</tr>
-<tr class="el-row" data-top="1550" onclick="scrollShot(1550)">
-<td class="col-lp">7</td>
-<td class="col-el">Nowości</td>
-<td class="col-kom">CTA per kafelek: 'DISCOVER', 'SHOP NOW'. Marki: Skin Concierge, Huda Beauty, NARS, SAE. Strzałki karuzeli lewo/prawo.</td>
-</tr>
-<tr class="el-row" data-top="2100" onclick="scrollShot(2100)">
-<td class="col-lp">8</td>
-<td class="col-el">Sekcja blog / poradniki</td>
-<td class="col-kom">Brak CTA przycisków na poziomie nagłówka sekcji; klikalne kafelki.</td>
-</tr>
-<tr class="el-row" data-top="2880" onclick="scrollShot(2880)">
-<td class="col-lp">9</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
-<td class="col-kom">CTA: 'SHOP NOW' x3. Bez cen widocznych. Układ 3-kolumnowy, obrazy produktowe.</td>
-</tr>
-<tr class="el-row" data-top="3200" onclick="scrollShot(3200)">
-<td class="col-lp">10</td>
-<td class="col-el">Sekcja kolaboracja / limitowana kolekcja</td>
-<td class="col-kom">CTA: 'SHOP NOW', 'DISCOVER WHAT'S INSIDE'. Strzałki karuzeli. Badge: 'New &amp; Exclusive'.</td>
-</tr>
-<tr class="el-row" data-top="3650" onclick="scrollShot(3650)">
-<td class="col-lp">11</td>
-<td class="col-el">Sekcja blog / poradniki</td>
-<td class="col-kom">Zakładki: TRENDING, CULTURE. Kafelki z obrazami marek (Huida Beauty, Chloe, SAE, Patrick TA, Glow Recipe, Medik8).</td>
-</tr>
-<tr class="el-row" data-top="3978" onclick="scrollShot(3978)">
-<td class="col-lp">12</td>
-<td class="col-el">Cytaty klientów</td>
-<td class="col-kom">Gwiazdki: 5. Cytat: 'This smells super luxe — warm, sweet, and a little musky. Pretty bottle, nice vibe'. Brak wyraźnego CTA przycisku.</td>
-</tr>
-<tr class="el-row" data-top="4500" onclick="scrollShot(4500)">
-<td class="col-lp">13</td>
-<td class="col-el">Zapis do newslettera</td>
-<td class="col-kom">CTA: 'SIGN UP'. Ikony social: X (Twitter), Facebook, Instagram, TikTok, Pinterest, YouTube.</td>
-</tr>
-<tr class="el-row" data-top="4650" onclick="scrollShot(4650)">
-<td class="col-lp">14</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">Kolumny: Customer Service (Contact Us, Help, Delivery, FAQ, Track my order), About Cult Beauty (About Us, App, Careers, Affiliates, Cult Corrections), Legal (T&amp;C, Privacy Policy, Cookie Policy, Accessibility). Logo płatności: Visa, Mastercard, Amex, PayPal, Klarna, G-Pay, Apple Pay.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -275,7 +236,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

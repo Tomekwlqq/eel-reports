@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://www.meritbeauty.com" target="_blank">https://www.meritbeauty.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -66,69 +74,87 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Hero split (obraz + tekst)</td>
 <td class="col-etyk">Spring | Summer 2026 Collection</td>
-<td class="col-opis">Pełnoekranowy hero split: lewa połowa to duże zdjęcie modelki, prawa kolumna zawiera oznaczenie LIMITED EDITION, tytuł kolekcji i CTA.</td>
+<td class="col-el">Hero split (obraz + tekst)</td>
+<td class="col-zaw">CTA: 'Shop Now ▶'; badge: LIMITED EDITION (tekstowy); brak ceny; brak karuzeli.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="390" onclick="scrollShot(390)">
 <td class="col-lp">2</td>
-<td class="col-el">Header</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Poziomy pasek nawigacji z logo MERIT pośrodku, linkami kategorii po lewej i ikonami narzędziowymi po prawej.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Linki: Shop, Makeup, Skincare, Fragrance, Find My Shade; ikony: Search, Account, koszyk (0 items); brak paska dostawy w headerze.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">390px</span></td>
 </tr>
 <tr class="el-row" data-top="520" onclick="scrollShot(520)">
 <td class="col-lp">3</td>
-<td class="col-el">O marce / misja</td>
 <td class="col-etyk">Beauty With Intention</td>
-<td class="col-opis">Krótka sekcja edytorialna z hasłem marki, jednym zdaniem opisu i linkiem do strony About Us.</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-zaw">CTA: 'About Us ▶'; brak obrazu; tekst wyśrodkowany na białym tle.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">520px</span></td>
 </tr>
 <tr class="el-row" data-top="1308" onclick="scrollShot(1308)">
 <td class="col-lp">4</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
 <td class="col-etyk">Try Our New Mascara</td>
-<td class="col-opis">Split editorial promujący nowy produkt (mascara) z opisem oferty próbek i zdjęciem tubki mascary po prawej.</td>
+<td class="col-el">Spotlight produktu (editorial)</td>
+<td class="col-zaw">Brak bezpośredniego CTA zakupu; komunikat promocyjny 'free sample with every order'; brak ceny; brak badge.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1308px</span></td>
 </tr>
 <tr class="el-row" data-top="1618" onclick="scrollShot(1618)">
 <td class="col-lp">5</td>
-<td class="col-el">Kafelki kategorii</td>
 <td class="col-etyk">Makeup</td>
-<td class="col-opis">Sekcja kategorii Makeup z editorialnym zdjęciem i jednym produktem (blush) z ceną.</td>
+<td class="col-el">Kafelki kategorii</td>
+<td class="col-zaw">Produkt: blush $44; brak strzałek karuzeli w widoku; layout split (foto lewi / produkt prawy).</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1618px</span></td>
 </tr>
 <tr class="el-row" data-top="2876" onclick="scrollShot(2876)">
 <td class="col-lp">6</td>
-<td class="col-el">Kafelki kategorii</td>
 <td class="col-etyk">Skincare</td>
-<td class="col-opis">Sekcja kategorii Skincare z editorialnym zdjęciem zestawu buteleczek i produktem Great Skin z ceną.</td>
+<td class="col-el">Kafelki kategorii</td>
+<td class="col-zaw">Produkt: Great Skin foundation; cena widoczna; layout split (tekst lewo / foto prawo); brak badge.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2876px</span></td>
 </tr>
 <tr class="el-row" data-top="3994" onclick="scrollShot(3994)">
 <td class="col-lp">7</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
 <td class="col-etyk">The Signature Bag</td>
-<td class="col-opis">Split editorial prezentujący produkt Signature Bag (torba/etui) na tle lifestylowego zdjęcia.</td>
+<td class="col-el">Spotlight produktu (editorial)</td>
+<td class="col-zaw">Brak ceny widocznej; brak CTA w kadrze; czysto editorialny styl.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3994px</span></td>
 </tr>
 <tr class="el-row" data-top="4400" onclick="scrollShot(4400)">
 <td class="col-lp">8</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">The Sets</td>
-<td class="col-opis">Sekcja zestawów produktowych — obszar prawdopodobnie z karuzelą lub gridem setów, treść niewidoczna w screenshocie.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">Brak widocznych produktów w screenshocie; pozycja poniżej Signature Bag.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4400px</span></td>
 </tr>
 <tr class="el-row" data-top="5282" onclick="scrollShot(5282)">
 <td class="col-lp">9</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Stopka z linkami pomocniczymi, wyborem kraju/języka, formularzem zapisu do newslettera i logo marki.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">Linki: About Us, Contact Us, FAQ, Shipping &amp; Returns, Refund Policy, Terms &amp; Conditions, My Account, My Privacy Choices, Privacy Policy, Loyalty, Accessibility, Careers; formularz email 'Be the first to know about new launches and promotions'; Country: US, Language: English.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5282px</span></td>
 </tr></tbody>
     </table>
@@ -137,56 +163,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Hero split (obraz + tekst)</td>
-<td class="col-kom">CTA: 'Shop Now ▶'; badge: LIMITED EDITION (tekstowy); brak ceny; brak karuzeli.</td>
-</tr>
-<tr class="el-row" data-top="390" onclick="scrollShot(390)">
-<td class="col-lp">2</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Linki: Shop, Makeup, Skincare, Fragrance, Find My Shade; ikony: Search, Account, koszyk (0 items); brak paska dostawy w headerze.</td>
-</tr>
-<tr class="el-row" data-top="520" onclick="scrollShot(520)">
-<td class="col-lp">3</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-kom">CTA: 'About Us ▶'; brak obrazu; tekst wyśrodkowany na białym tle.</td>
-</tr>
-<tr class="el-row" data-top="1308" onclick="scrollShot(1308)">
-<td class="col-lp">4</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
-<td class="col-kom">Brak bezpośredniego CTA zakupu; komunikat promocyjny 'free sample with every order'; brak ceny; brak badge.</td>
-</tr>
-<tr class="el-row" data-top="1618" onclick="scrollShot(1618)">
-<td class="col-lp">5</td>
-<td class="col-el">Kafelki kategorii</td>
-<td class="col-kom">Produkt: blush $44; brak strzałek karuzeli w widoku; layout split (foto lewi / produkt prawy).</td>
-</tr>
-<tr class="el-row" data-top="2876" onclick="scrollShot(2876)">
-<td class="col-lp">6</td>
-<td class="col-el">Kafelki kategorii</td>
-<td class="col-kom">Produkt: Great Skin foundation; cena widoczna; layout split (tekst lewo / foto prawo); brak badge.</td>
-</tr>
-<tr class="el-row" data-top="3994" onclick="scrollShot(3994)">
-<td class="col-lp">7</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
-<td class="col-kom">Brak ceny widocznej; brak CTA w kadrze; czysto editorialny styl.</td>
-</tr>
-<tr class="el-row" data-top="4400" onclick="scrollShot(4400)">
-<td class="col-lp">8</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">Brak widocznych produktów w screenshocie; pozycja poniżej Signature Bag.</td>
-</tr>
-<tr class="el-row" data-top="5282" onclick="scrollShot(5282)">
-<td class="col-lp">9</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">Linki: About Us, Contact Us, FAQ, Shipping &amp; Returns, Refund Policy, Terms &amp; Conditions, My Account, My Privacy Choices, Privacy Policy, Loyalty, Accessibility, Careers; formularz email 'Be the first to know about new launches and promotions'; Country: US, Language: English.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -215,7 +191,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

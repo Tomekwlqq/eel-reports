@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
-<head><meta charset="UTF-8"><title>BEAUTYBLENDER — Vision Scan</title><style>
+<head><meta charset="UTF-8"><title>? — Vision Scan</title><style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f8fafc;color:#1e293b;font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 .page-header{padding:10px 20px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:12px;flex-shrink:0}
@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -40,101 +43,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .col-gtm{width:180px} .gtm{font-size:10.5px;color:#92400e;background:#fef3c7;padding:1px 5px;border-radius:4px}
 .col-cls{color:#94a3b8}
 #tbl-developer{display:none}
+#tbl-comments{display:none}
 body.dev #tbl-shopper{display:none}
 body.dev #tbl-developer{display:table}
+body.comments #tbl-shopper{display:none}
+body.comments #tbl-comments{display:table}
+.col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
   <div>
-    <span class="client-name">BEAUTYBLENDER</span>
-    <span class="scan-meta"> — Vision Scan — 2026-06-15 — <a href="https://www.beautyblender.com" target="_blank">https://www.beautyblender.com</a> — platforma: shopify</span>
+    <span class="client-name">?</span>
+    <span class="scan-meta"> — Vision Scan —  — <a href="https://www.beautyblender.com" target="_blank">https://www.beautyblender.com</a> — platforma: ?</span>
   </div>
   <div class="header-right">
-
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
-  <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
+  
 </div></div>
 </div>
-<div class="new-block"><b>🆕 Nowe typy elementów (do elements_master.json):</b><ul><li>Pasek USP/trust above-fold (3 ikony) — kandydat do elements_master</li>
-<li>Baner '40% Off for Pros' — gating B2B/professional, nieobecny w bazie HP</li></ul></div>
+
 
 <div class="split-view">
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
-<td class="col-etyk">SAVE ON THE CATEGORY</td>
-<td class="col-opis">announcement bar (różowy), rotacyjny</td>
-<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
-</tr>
-<tr class="el-row" data-top="40" onclick="scrollShot(40)">
-<td class="col-lp">2</td>
-<td class="col-el">Header</td>
-<td class="col-etyk"></td>
-<td class="col-opis">logo beautyblender, nav (Shop/Category/About), search, koszyk/konto</td>
-<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">40px</span></td>
-</tr>
-<tr class="el-row" data-top="140" onclick="scrollShot(140)">
-<td class="col-lp">3</td>
-<td class="col-el">Baner główny</td>
-<td class="col-etyk">THE RESETTER™</td>
-<td class="col-opis">hero split — różowe pady produktowe + lifestyle model, podtytuł 'Reusable Blotting &amp; Resetting Pads', CTA SHOP NOW</td>
-<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">140px</span></td>
-</tr>
-<tr class="el-row" data-top="840" onclick="scrollShot(840)">
-<td class="col-lp">4</td>
-<td class="col-el">Pasek USP/trust</td>
-<td class="col-etyk">SAFE FOR ALL SKIN TYPES · MADE IN USA · CRUELTY FREE</td>
-<td class="col-opis">poziomy pasek 3 ikon zaufania</td>
-<td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">840px</span></td>
-</tr>
-<tr class="el-row" data-top="1695" onclick="scrollShot(1695)">
-<td class="col-lp">5</td>
-<td class="col-el">Karuzela produktowa</td>
-<td class="col-etyk">BEST SELLERS</td>
-<td class="col-opis">6 produktów widocznych (gąbki/blender), ceny + ADD TO BAG per produkt</td>
-<td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1695px</span></td>
-</tr>
-<tr class="el-row" data-top="2999" onclick="scrollShot(2999)">
-<td class="col-lp">6</td>
-<td class="col-el">Micro Landing Page</td>
-<td class="col-etyk">BIO PURE — 60% PLANT BASE</td>
-<td class="col-opis">sekcja eko, split: zdjęcie lifestyle (gąbka w kwiatach) + tekst o biodegradowalności + CTA</td>
-<td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2999px</span></td>
-</tr>
-<tr class="el-row" data-top="3719" onclick="scrollShot(3719)">
-<td class="col-lp">7</td>
-<td class="col-el">Galeria UGC</td>
-<td class="col-etyk">SEE IT IRL</td>
-<td class="col-opis">grid 4 zdjęcia klientek aplikujących produkt + FOLLOW US</td>
-<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3719px</span></td>
-</tr>
-<tr class="el-row" data-top="4297" onclick="scrollShot(4297)">
-<td class="col-lp">8</td>
-<td class="col-el">Baner promocyjny</td>
-<td class="col-etyk">40% OFF FOR OUR PROS</td>
-<td class="col-opis">ciemny baner — program rabatowy dla profesjonalistów/makijażystów (gating B2B)</td>
-<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4297px</span></td>
-</tr>
-<tr class="el-row" data-top="4727" onclick="scrollShot(4727)">
-<td class="col-lp">9</td>
-<td class="col-el">Sekcja wartości</td>
-<td class="col-etyk">WHAT SETS US APART</td>
-<td class="col-opis">3 kolumny diferencjatorów: Inventor of the Category / Not All Dupes Created Equal / Trusted by Pros</td>
-<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4727px</span></td>
-</tr>
-<tr class="el-row" data-top="5400" onclick="scrollShot(5400)">
-<td class="col-lp">10</td>
-<td class="col-el">Footer</td>
-<td class="col-etyk"></td>
-<td class="col-opis">linki, newsletter, social, prawne</td>
-<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5400px</span></td>
-</tr></tbody>
+      <tbody></tbody>
     </table>
     <table class="scan-table" id="tbl-developer">
       <thead><tr>
@@ -144,12 +86,12 @@ body.dev #tbl-developer{display:table}
     </table>
   </div>
   <div class="split-shot">
-    <img id="shot-img" class="shot-img" src="beautyblender_VISION_REPORT_img/0.jpg" alt="screenshot">
+    <img id="shot-img" class="shot-img" src="" alt="screenshot">
   </div>
 </div>
 <script>
-var imgD = "beautyblender_VISION_REPORT_img/0.jpg";
-var imgM = "beautyblender_VISION_REPORT_img/1.jpg";
+var imgD = "";
+var imgM = "";
 var currentVP = 'desktop';
 
 function scrollShot(top) {
@@ -169,13 +111,19 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {
     document.querySelectorAll('.tbtn[data-view]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.body.classList.toggle('dev', view === 'developer');
+    document.body.classList.toggle('comments', view === 'comments');
 }
 </script>
 </body></html>

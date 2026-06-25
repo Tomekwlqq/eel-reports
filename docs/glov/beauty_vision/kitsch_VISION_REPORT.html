@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://mykitsch.com" target="_blank">https://mykitsch.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -66,69 +74,87 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Header</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Sticky header z logo Kitsch w centrum, nawigacją kategoriową (Hair, Sleep, Accessories, Skin, Shower) po lewej, linkami (Collections, Best Sellers, New, Sale) po prawej oraz ikonami wyszukiwarki, konta i koszyka.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Ikony: search, account, cart. Pasek nawigacji dwupoziomowy (kategorie + kolekcje). Logo na środku.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="44" onclick="scrollShot(44)">
 <td class="col-lp">2</td>
-<td class="col-el">Baner główny (Hero)</td>
 <td class="col-etyk">FYP FAVORITES — The TikTok Edit</td>
-<td class="col-opis">Hero z dużym nagłówkiem promującym trendy z TikToka, krótkim opisem kuratorowanym i wizerunkiem produktów (Air Dry Cream, Frizz Shield Spray).</td>
+<td class="col-el">Baner główny (Hero)</td>
+<td class="col-zaw">CTA: 'SEE WHAT'S VIRAL'. Tło pastelowe (różowy gradient). Produkty na zdjęciu na prawej stronie. Brak karuzeli — single baner.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">44px</span></td>
 </tr>
 <tr class="el-row" data-top="870" onclick="scrollShot(870)">
 <td class="col-lp">3</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">best sellers</td>
-<td class="col-opis">Poziomy grid karuzelowy z bestsellerami, widoczne 4 produkty z ocenami gwiazdkowymi, cenami i nazwami.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">Produkty: Rosemary &amp; Biotin Volumizing Shampoo &amp; Conditioner Combo (PL 141.00), Smoothing Air Dry Cream (PL 81.00), Rice Water Shampoo &amp; Conditioner Bar Combo for Hair Growth (PL 141.00), Terracotta Volumizing Thermal Round Brush Medium (PL 252.00). Badge ocen (gwiazdki + liczba recenzji: 779, 453, 1768, 7). CTA: 'shop top sellers'. Strzałki karuzeli widoczne.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">870px</span></td>
 </tr>
 <tr class="el-row" data-top="1460" onclick="scrollShot(1460)">
 <td class="col-lp">4</td>
-<td class="col-el">Kafelki kategorii</td>
 <td class="col-etyk">top collections</td>
-<td class="col-opis">Grid 4 kafelków z banerem kolekcji (Coastal Cottage, KitschPop, hair &amp; body, heat-free curlers) z obrazem i linkiem tekstowym.</td>
+<td class="col-el">Kafelki kategorii</td>
+<td class="col-zaw">CTA pod każdym kafelkiem: 'shop [nazwa kolekcji]'. Lifestyle photos. Układ 4 kolumny.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1460px</span></td>
 </tr>
 <tr class="el-row" data-top="1940" onclick="scrollShot(1940)">
 <td class="col-lp">5</td>
-<td class="col-el">Nowości</td>
 <td class="col-etyk">what's new</td>
-<td class="col-opis">Karuzela nowości z 4 widocznymi produktami, cenami, ocenami gwiazdkowymi i badge'em Nowość.</td>
+<td class="col-el">Nowości</td>
+<td class="col-zaw">Produkty: Detox Shampoo Bar (PL 71.00), Rye Buildup Trio (PL 141.00), Humidity Blocking Frizz Shield Spray (PL 141.00→252.00 przekreślone, -50% OFF + Extra 10% OFF), Blush Satin Pillow Scrunchies Kit (PL 141.00). Badge: 'New' w górnym narożniku. Promocja flash -50%+10% na jeden produkt. CTA: 'shop what's new'. Strzałki karuzeli.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">1940px</span></td>
 </tr>
 <tr class="el-row" data-top="2650" onclick="scrollShot(2650)">
 <td class="col-lp">6</td>
-<td class="col-el">Cytaty klientów</td>
 <td class="col-etyk">The Feeling Is Mutual</td>
-<td class="col-opis">Sekcja z 4 cytatami klientów z imionami i ocenami gwiazdkowymi, poprzedzona zdaniem 'WE'VE ALWAYS BEEN OBSESSED WITH OUR CUSTOMERS &amp; WE THINK'.</td>
+<td class="col-el">Cytaty klientów</td>
+<td class="col-zaw">4 recenzje: Cindy, Tasha, niewidoczne 3., Jennifer. Gwiazdki 5/5. Brak CTA. Tło białe.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2650px</span></td>
 </tr>
 <tr class="el-row" data-top="3252" onclick="scrollShot(3252)">
 <td class="col-lp">7</td>
-<td class="col-el">O marce / misja</td>
 <td class="col-etyk">Our Story</td>
-<td class="col-opis">Sekcja edytorialna z filmem po lewej stronie i opisem historii marki po prawej — założona przez Cassandre Thurievell, misja zrównoważonej urody.</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-zaw">Video z przyciskiem play (0:00 / 2:32). Certyfikat WBENC (Women-Owned Business). Badge Trustpilot (147.865 ocen). Brak CTA tekstowego.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3252px</span></td>
 </tr>
 <tr class="el-row" data-top="3900" onclick="scrollShot(3900)">
 <td class="col-lp">8</td>
-<td class="col-el">Zapis do newslettera</td>
 <td class="col-etyk">LET'S CONNECT!</td>
-<td class="col-opis">Sekcja zapisu do newslettera z polem email i przyciskiem Subscribe, promująca aktualizacje o nowych produktach i promocjach.</td>
+<td class="col-el">Zapis do newslettera</td>
+<td class="col-zaw">CTA: 'SUBSCRIBE'. Ikony social media (X, Pinterest, Instagram, TikTok, YouTube, Facebook). Linki do App Store i Google Play.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3900px</span></td>
 </tr>
 <tr class="el-row" data-top="4050" onclick="scrollShot(4050)">
 <td class="col-lp">9</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Footer z 4 kolumnami (About Us, Store, Customer Service, brak tytułu 4.) i linkami polityki prywatności, copyright 2026 KITSCH.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">Kolumny: About Us (Our Founder, Our Story, Join Our Community, Kitsch Gives Back, Sustainability, Patents), Store (Rewards, Store Locator, Refer a Friend, Affiliates, Wholesale, Offers &amp; Promotions), Customer Service (Contact Us, My Account, Track My Order, Start a Return). Selector języka: Polski (PLN). Linki: Privacy Policy, Terms of Use, CCPA Rights, Accessibility, Toggle Accessibility.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4050px</span></td>
 </tr></tbody>
     </table>
@@ -137,56 +163,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Ikony: search, account, cart. Pasek nawigacji dwupoziomowy (kategorie + kolekcje). Logo na środku.</td>
-</tr>
-<tr class="el-row" data-top="44" onclick="scrollShot(44)">
-<td class="col-lp">2</td>
-<td class="col-el">Baner główny (Hero)</td>
-<td class="col-kom">CTA: 'SEE WHAT'S VIRAL'. Tło pastelowe (różowy gradient). Produkty na zdjęciu na prawej stronie. Brak karuzeli — single baner.</td>
-</tr>
-<tr class="el-row" data-top="870" onclick="scrollShot(870)">
-<td class="col-lp">3</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">Produkty: Rosemary &amp; Biotin Volumizing Shampoo &amp; Conditioner Combo (PL 141.00), Smoothing Air Dry Cream (PL 81.00), Rice Water Shampoo &amp; Conditioner Bar Combo for Hair Growth (PL 141.00), Terracotta Volumizing Thermal Round Brush Medium (PL 252.00). Badge ocen (gwiazdki + liczba recenzji: 779, 453, 1768, 7). CTA: 'shop top sellers'. Strzałki karuzeli widoczne.</td>
-</tr>
-<tr class="el-row" data-top="1460" onclick="scrollShot(1460)">
-<td class="col-lp">4</td>
-<td class="col-el">Kafelki kategorii</td>
-<td class="col-kom">CTA pod każdym kafelkiem: 'shop [nazwa kolekcji]'. Lifestyle photos. Układ 4 kolumny.</td>
-</tr>
-<tr class="el-row" data-top="1940" onclick="scrollShot(1940)">
-<td class="col-lp">5</td>
-<td class="col-el">Nowości</td>
-<td class="col-kom">Produkty: Detox Shampoo Bar (PL 71.00), Rye Buildup Trio (PL 141.00), Humidity Blocking Frizz Shield Spray (PL 141.00→252.00 przekreślone, -50% OFF + Extra 10% OFF), Blush Satin Pillow Scrunchies Kit (PL 141.00). Badge: 'New' w górnym narożniku. Promocja flash -50%+10% na jeden produkt. CTA: 'shop what's new'. Strzałki karuzeli.</td>
-</tr>
-<tr class="el-row" data-top="2650" onclick="scrollShot(2650)">
-<td class="col-lp">6</td>
-<td class="col-el">Cytaty klientów</td>
-<td class="col-kom">4 recenzje: Cindy, Tasha, niewidoczne 3., Jennifer. Gwiazdki 5/5. Brak CTA. Tło białe.</td>
-</tr>
-<tr class="el-row" data-top="3252" onclick="scrollShot(3252)">
-<td class="col-lp">7</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-kom">Video z przyciskiem play (0:00 / 2:32). Certyfikat WBENC (Women-Owned Business). Badge Trustpilot (147.865 ocen). Brak CTA tekstowego.</td>
-</tr>
-<tr class="el-row" data-top="3900" onclick="scrollShot(3900)">
-<td class="col-lp">8</td>
-<td class="col-el">Zapis do newslettera</td>
-<td class="col-kom">CTA: 'SUBSCRIBE'. Ikony social media (X, Pinterest, Instagram, TikTok, YouTube, Facebook). Linki do App Store i Google Play.</td>
-</tr>
-<tr class="el-row" data-top="4050" onclick="scrollShot(4050)">
-<td class="col-lp">9</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">Kolumny: About Us (Our Founder, Our Story, Join Our Community, Kitsch Gives Back, Sustainability, Patents), Store (Rewards, Store Locator, Refer a Friend, Affiliates, Wholesale, Offers &amp; Promotions), Customer Service (Contact Us, My Account, Track My Order, Start a Return). Selector języka: Polski (PLN). Linki: Privacy Policy, Terms of Use, CCPA Rights, Accessibility, Toggle Accessibility.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -215,7 +191,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

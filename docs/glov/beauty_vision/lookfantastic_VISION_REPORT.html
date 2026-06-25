@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://www.lookfantastic.com" target="_blank">https://www.lookfantastic.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -67,125 +75,159 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Pasek USP / Trust Bar</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Wąski pasek na samej górze z informacjami o dostawie, Premier Delivery, promo kodzie i aplikacji mobilnej.</td>
+<td class="col-el">Pasek USP / Trust Bar</td>
+<td class="col-zaw">Treść: FREE UK delivery on orders over £35 | 12 months Premier Delivery | Code: 25030 | Download App | LF Beauty Plus+. Brak CTA-button, tekst klikalny jako linki.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="30" onclick="scrollShot(30)">
 <td class="col-lp">2</td>
-<td class="col-el">Header</td>
 <td class="col-etyk">LOOKFANTASTIC</td>
-<td class="col-opis">Stały nagłówek z logo, wyszukiwarką, wyborem waluty/kraju (GBP), logowaniem i koszykiem oraz pełnym pasem nawigacyjnym.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Logo lewe, search bar centralna, ikony: GBP flag + Sign in + Basket (koszyk). Nav links: Summer Shop, Offers, Beauty Box, Brands, Makeup, Hair, Skincare, Body, Luxury, Korean Beauty. 1748 navItems.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">30px</span></td>
 </tr>
 <tr class="el-row" data-top="88" onclick="scrollShot(88)">
 <td class="col-lp">3</td>
-<td class="col-el">Pasek promocji</td>
 <td class="col-etyk">UP TO 20% OFF SELECTED BEAUTY / USE CODE: SAVE</td>
-<td class="col-opis">Pasek promocji bezpośrednio pod headerem z aktywnym kodem rabatowym.</td>
+<td class="col-el">Pasek promocji</td>
+<td class="col-zaw">Widoczny kod rabatowy: SAVE. Akcent czerwono-bordowy (#671D1A). CTA: SHOP NOW.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">88px</span></td>
 </tr>
 <tr class="el-row" data-top="132" onclick="scrollShot(132)">
 <td class="col-lp">4</td>
-<td class="col-el">Hero karuzela/slider</td>
 <td class="col-etyk">FATHER'S DAY — GIFTS, UPGRADED</td>
-<td class="col-opis">Główny hero slider z ofertą Father's Day — do 20% zniżki na wybrane produkty beauty.</td>
+<td class="col-el">Hero karuzela/slider</td>
+<td class="col-zaw">Obraz produktów (walizka, kosmetyki dla mężczyzn). CTA: SHOP NOW. Badge: 20% OFF (prawy róg). Kropki paginacji (minimum 2 slajdy). Strzałki nawigacji lewo/prawo.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">132px</span></td>
 </tr>
 <tr class="el-row" data-top="788" onclick="scrollShot(788)">
 <td class="col-lp">5</td>
-<td class="col-el">Kafelki kategorii</td>
 <td class="col-etyk">SHOP SAVINGS BY CATEGORY</td>
-<td class="col-opis">Poziomy rząd kafelków z kategoriami produktowymi, każdy klikalny.</td>
+<td class="col-el">Kafelki kategorii</td>
+<td class="col-zaw">6 kafelków: TOP OFFERS / HAIRCARE / COSMETICS / FRAGRANCE / BODY / SKINCARE. Styl: tekst na tle, bez zdjęć.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">788px</span></td>
 </tr>
 <tr class="el-row" data-top="1000" onclick="scrollShot(1000)">
 <td class="col-lp">6</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">THE ONES YOU'LL RATE</td>
-<td class="col-opis">Sekcja z polecnymi/bestsellerowymi produktami z zakładkami filtrującymi wyświetlane produkty.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">Zakładki: TREATS OF THE WEEK / FATHER'S DAY / MOST WANTED. Karuzela produktów — widoczne min. 4-5 kart: Kérastase, Armani YOU, Lancôme, NARS. Każda karta: zdjęcie, nazwa, ocena gwiazdki, ceny (before/after), badge SAVE. Strzałki karuzeli.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1000px</span></td>
 </tr>
 <tr class="el-row" data-top="1588" onclick="scrollShot(1588)">
 <td class="col-lp">7</td>
-<td class="col-el">Baner marki / brand spotlight<span class="new-badge">NOWY</span></td>
 <td class="col-etyk">L'ORÉAL MEN EXPERT</td>
-<td class="col-opis">Pełnoszerokoościowy baner brandowy L'Oréal Men Expert z CTA do odkrywania rutyny dla mężczyzn.</td>
+<td class="col-el">Baner marki / brand spotlight<span class="new-badge">NOWY</span></td>
+<td class="col-zaw">Tło: pomarańczowy (#F05A28 lub podobny). Tekst: 'For routines that deserve an upgrade — discover formulas made for real this Father's Day'. Bez wyraźnego przycisku CTA widocznego w widoku.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1588px</span></td>
 </tr>
 <tr class="el-row" data-top="1780" onclick="scrollShot(1780)">
 <td class="col-lp">8</td>
-<td class="col-el">Nowości</td>
 <td class="col-etyk">NEW FROM</td>
-<td class="col-opis">Sekcja edytorialna z nowościami podzielona na 4 kafelki brandowe z opisami nowych linii produktowych.</td>
+<td class="col-el">Nowości</td>
+<td class="col-zaw">4 kafle: JO MALONE (pielęgnacja ciała), [brak nazwy] (aktywny/sport), JUST LANDED (the Body Shop?), [sorry artistry — nieczytelne]. Każdy kafle: obraz + nagłówek + opis tekstowy. Brak widocznych cen — styl blogowy/edytorialny.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1780px</span></td>
 </tr>
 <tr class="el-row" data-top="2388" onclick="scrollShot(2388)">
 <td class="col-lp">9</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">Sponsored</td>
-<td class="col-opis">Karuzela produktów sponsorowanych (fragrance) z oznaczeniem Sponsored.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">Produkty: Hermès Terre d'Hermès Pure Parfume 75ml (£132), Hermès Terre d'H (£108). Badge: Sponsored. Gwiazdki 4.5/5. Strzałka nawigacji prawa.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2388px</span></td>
 </tr>
 <tr class="el-row" data-top="2660" onclick="scrollShot(2660)">
 <td class="col-lp">10</td>
-<td class="col-el">Rekomendowane dla Ciebie</td>
 <td class="col-etyk">JUNE FAVOURITES</td>
-<td class="col-opis">Sekcja kuratorska 'June Favourites' — edytorski wybór produktów i marek na wishlistę.</td>
+<td class="col-el">Rekomendowane dla Ciebie</td>
+<td class="col-zaw">Podtytuł: 'Curated, curated. Discover our edit of the products and brands to add to your wishlist'. Styl edytorialny, wizualne gallery.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">👶</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2660px</span></td>
 </tr>
 <tr class="el-row" data-top="2900" onclick="scrollShot(2900)">
 <td class="col-lp">11</td>
-<td class="col-el">Grid banerów promo</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Dwa równoległe baner edytorialne — brand collaboration Kérastase i oferta Beauty Box.</td>
+<td class="col-el">Grid banerów promo</td>
+<td class="col-zaw">Baner 1: 'BEHIND THE BRAND | KÉRASTASE' — ciemne tło, zdjęcie produktów haircare, CTA: SHOP NOW. Baner 2: 'THE JUNE BEAUTY BOX' £55 — bordowe tło, zdjęcie boxu z kosmetykami, CTA: SHOP NOW. Układ 2-kolumnowy.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2900px</span></td>
 </tr>
 <tr class="el-row" data-top="3582" onclick="scrollShot(3582)">
 <td class="col-lp">12</td>
-<td class="col-el">Pasek promocji</td>
 <td class="col-etyk">SUMMER SIMPLIFIED</td>
-<td class="col-opis">Pasek Clearpay z komunikatem BNPL (buy now pay later) w 4 ratach bez odsetek.</td>
+<td class="col-el">Pasek promocji</td>
+<td class="col-zaw">Logo Clearpay. Tekst: PAY IN 4, INTEREST-FREE. CTA: Shop Now. Tło: ciemnoczerwone/bordowe.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3582px</span></td>
 </tr>
 <tr class="el-row" data-top="3665" onclick="scrollShot(3665)">
 <td class="col-lp">13</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
 <td class="col-etyk">SPOTLIGHT ON: CAUDALIE</td>
-<td class="col-opis">Edytorialna sekcja spotlight z influencerem/ambasadorem i karuzelą produktów marki Caudalie.</td>
+<td class="col-el">Spotlight produktu (editorial)</td>
+<td class="col-zaw">Zdjęcie influencerki z produktem. Podtytuł: 'Amira Olivia's curated Caudalie routine for fresh, glass-like skin and the perfect base for makeup'. Karuzela produktów: Caudalie Very High Protection Lightweight Cream SPF50+ (£21.00→£14.93, ★4.7, 1375+), Caudalie Vinophydra (£30, ★4.8, 97+). Badge: SAVE. CTA: SHOP NOW. Strzałki karuzeli.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3665px</span></td>
 </tr>
 <tr class="el-row" data-top="4350" onclick="scrollShot(4350)">
 <td class="col-lp">14</td>
-<td class="col-el">Nowości</td>
 <td class="col-etyk">NEW FROM</td>
-<td class="col-opis">Druga sekcja 'New From' z kafelkami nowych produktów/marek — kontynuacja formatu edytorialnego.</td>
+<td class="col-el">Nowości</td>
+<td class="col-zaw">Kafelki: COCO i JOY / [FEATHERS] / [LONG DROPS] / [COLOR RUSH] — szczegóły nieczytelne. Ten sam layout co wcześniejsza sekcja New From (duplikat formatu).</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4350px</span></td>
 </tr>
 <tr class="el-row" data-top="4870" onclick="scrollShot(4870)">
 <td class="col-lp">15</td>
-<td class="col-el">AI quiz / konfigurator<span class="new-badge">NOWY</span></td>
 <td class="col-etyk">INTRODUCING: LF'S AI SKIN EXPERT</td>
-<td class="col-opis">Sekcja promująca własne narzędzie AI do analizy i dopasowywania rutyny pielęgnacyjnej.</td>
+<td class="col-el">AI quiz / konfigurator<span class="new-badge">NOWY</span></td>
+<td class="col-zaw">CTA: 'Discover The Tool'. Tło ciemne (navy). Typografia duża. Brak zdjęć produktów — narzędzie/feature promo.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4870px</span></td>
 </tr>
 <tr class="el-row" data-top="5000" onclick="scrollShot(5000)">
 <td class="col-lp">16</td>
-<td class="col-el">Zapis do newslettera</td>
 <td class="col-etyk">BE THE FIRST TO KNOW ABOUT THE LATEST ARRIVALS, TRENDS, EXCLUSIVE OFFERS AND DISCOUNTS</td>
-<td class="col-opis">Sekcja zapisu do newslettera z ikonami social media.</td>
+<td class="col-el">Zapis do newslettera</td>
+<td class="col-zaw">CTA: SIGN UP (button). Ikony social: X (Twitter), Facebook, Instagram, TikTok, Pinterest, YouTube. Tło ciemne.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5000px</span></td>
 </tr>
 <tr class="el-row" data-top="5100" onclick="scrollShot(5100)">
 <td class="col-lp">17</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk">LOOKFANTASTIC</td>
-<td class="col-opis">Stopka z pełną nawigacją pomocniczą, informacjami o firmie i metodami płatności.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">Kolumny: Help &amp; Information (Download App, Discount Exclusive, Returns, Delivery Info, Student Discount, Contact Us, Product Delivery, Track my order), Company Information (Terms &amp; Conditions, Privacy Policy, Cookie Info, Modern Slavery Statement, Sustainability, Sitemap), About LOOKFANTASTIC (The Glossary, Brand Directory, Diversity, Complaint &amp; We &amp; GB, Year Old Discounts, Discount Codes &amp; Offers, Disability Discount, Our Ambassadors, Affiliates, Partnership/Suppliers, Sitemap, Refer a Friend, Key Worker Discount, Become an Ambassador, Career Opportunities), Stores and Salons (Salon Locator, Find a Clinician/Professional, Near You, LOOKFANTASTIC Training). Cookie Consent link. Płatności: VISA, Mastercard, Amex, PayPal, GPay, Apple Pay, Klarna.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5100px</span></td>
 </tr></tbody>
     </table>
@@ -194,96 +236,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Pasek USP / Trust Bar</td>
-<td class="col-kom">Treść: FREE UK delivery on orders over £35 | 12 months Premier Delivery | Code: 25030 | Download App | LF Beauty Plus+. Brak CTA-button, tekst klikalny jako linki.</td>
-</tr>
-<tr class="el-row" data-top="30" onclick="scrollShot(30)">
-<td class="col-lp">2</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Logo lewe, search bar centralna, ikony: GBP flag + Sign in + Basket (koszyk). Nav links: Summer Shop, Offers, Beauty Box, Brands, Makeup, Hair, Skincare, Body, Luxury, Korean Beauty. 1748 navItems.</td>
-</tr>
-<tr class="el-row" data-top="88" onclick="scrollShot(88)">
-<td class="col-lp">3</td>
-<td class="col-el">Pasek promocji</td>
-<td class="col-kom">Widoczny kod rabatowy: SAVE. Akcent czerwono-bordowy (#671D1A). CTA: SHOP NOW.</td>
-</tr>
-<tr class="el-row" data-top="132" onclick="scrollShot(132)">
-<td class="col-lp">4</td>
-<td class="col-el">Hero karuzela/slider</td>
-<td class="col-kom">Obraz produktów (walizka, kosmetyki dla mężczyzn). CTA: SHOP NOW. Badge: 20% OFF (prawy róg). Kropki paginacji (minimum 2 slajdy). Strzałki nawigacji lewo/prawo.</td>
-</tr>
-<tr class="el-row" data-top="788" onclick="scrollShot(788)">
-<td class="col-lp">5</td>
-<td class="col-el">Kafelki kategorii</td>
-<td class="col-kom">6 kafelków: TOP OFFERS / HAIRCARE / COSMETICS / FRAGRANCE / BODY / SKINCARE. Styl: tekst na tle, bez zdjęć.</td>
-</tr>
-<tr class="el-row" data-top="1000" onclick="scrollShot(1000)">
-<td class="col-lp">6</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">Zakładki: TREATS OF THE WEEK / FATHER'S DAY / MOST WANTED. Karuzela produktów — widoczne min. 4-5 kart: Kérastase, Armani YOU, Lancôme, NARS. Każda karta: zdjęcie, nazwa, ocena gwiazdki, ceny (before/after), badge SAVE. Strzałki karuzeli.</td>
-</tr>
-<tr class="el-row" data-top="1588" onclick="scrollShot(1588)">
-<td class="col-lp">7</td>
-<td class="col-el">Baner marki / brand spotlight</td>
-<td class="col-kom">Tło: pomarańczowy (#F05A28 lub podobny). Tekst: 'For routines that deserve an upgrade — discover formulas made for real this Father's Day'. Bez wyraźnego przycisku CTA widocznego w widoku.</td>
-</tr>
-<tr class="el-row" data-top="1780" onclick="scrollShot(1780)">
-<td class="col-lp">8</td>
-<td class="col-el">Nowości</td>
-<td class="col-kom">4 kafle: JO MALONE (pielęgnacja ciała), [brak nazwy] (aktywny/sport), JUST LANDED (the Body Shop?), [sorry artistry — nieczytelne]. Każdy kafle: obraz + nagłówek + opis tekstowy. Brak widocznych cen — styl blogowy/edytorialny.</td>
-</tr>
-<tr class="el-row" data-top="2388" onclick="scrollShot(2388)">
-<td class="col-lp">9</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">Produkty: Hermès Terre d'Hermès Pure Parfume 75ml (£132), Hermès Terre d'H (£108). Badge: Sponsored. Gwiazdki 4.5/5. Strzałka nawigacji prawa.</td>
-</tr>
-<tr class="el-row" data-top="2660" onclick="scrollShot(2660)">
-<td class="col-lp">10</td>
-<td class="col-el">Rekomendowane dla Ciebie</td>
-<td class="col-kom">Podtytuł: 'Curated, curated. Discover our edit of the products and brands to add to your wishlist'. Styl edytorialny, wizualne gallery.</td>
-</tr>
-<tr class="el-row" data-top="2900" onclick="scrollShot(2900)">
-<td class="col-lp">11</td>
-<td class="col-el">Grid banerów promo</td>
-<td class="col-kom">Baner 1: 'BEHIND THE BRAND | KÉRASTASE' — ciemne tło, zdjęcie produktów haircare, CTA: SHOP NOW. Baner 2: 'THE JUNE BEAUTY BOX' £55 — bordowe tło, zdjęcie boxu z kosmetykami, CTA: SHOP NOW. Układ 2-kolumnowy.</td>
-</tr>
-<tr class="el-row" data-top="3582" onclick="scrollShot(3582)">
-<td class="col-lp">12</td>
-<td class="col-el">Pasek promocji</td>
-<td class="col-kom">Logo Clearpay. Tekst: PAY IN 4, INTEREST-FREE. CTA: Shop Now. Tło: ciemnoczerwone/bordowe.</td>
-</tr>
-<tr class="el-row" data-top="3665" onclick="scrollShot(3665)">
-<td class="col-lp">13</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
-<td class="col-kom">Zdjęcie influencerki z produktem. Podtytuł: 'Amira Olivia's curated Caudalie routine for fresh, glass-like skin and the perfect base for makeup'. Karuzela produktów: Caudalie Very High Protection Lightweight Cream SPF50+ (£21.00→£14.93, ★4.7, 1375+), Caudalie Vinophydra (£30, ★4.8, 97+). Badge: SAVE. CTA: SHOP NOW. Strzałki karuzeli.</td>
-</tr>
-<tr class="el-row" data-top="4350" onclick="scrollShot(4350)">
-<td class="col-lp">14</td>
-<td class="col-el">Nowości</td>
-<td class="col-kom">Kafelki: COCO i JOY / [FEATHERS] / [LONG DROPS] / [COLOR RUSH] — szczegóły nieczytelne. Ten sam layout co wcześniejsza sekcja New From (duplikat formatu).</td>
-</tr>
-<tr class="el-row" data-top="4870" onclick="scrollShot(4870)">
-<td class="col-lp">15</td>
-<td class="col-el">AI quiz / konfigurator</td>
-<td class="col-kom">CTA: 'Discover The Tool'. Tło ciemne (navy). Typografia duża. Brak zdjęć produktów — narzędzie/feature promo.</td>
-</tr>
-<tr class="el-row" data-top="5000" onclick="scrollShot(5000)">
-<td class="col-lp">16</td>
-<td class="col-el">Zapis do newslettera</td>
-<td class="col-kom">CTA: SIGN UP (button). Ikony social: X (Twitter), Facebook, Instagram, TikTok, Pinterest, YouTube. Tło ciemne.</td>
-</tr>
-<tr class="el-row" data-top="5100" onclick="scrollShot(5100)">
-<td class="col-lp">17</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">Kolumny: Help &amp; Information (Download App, Discount Exclusive, Returns, Delivery Info, Student Discount, Contact Us, Product Delivery, Track my order), Company Information (Terms &amp; Conditions, Privacy Policy, Cookie Info, Modern Slavery Statement, Sustainability, Sitemap), About LOOKFANTASTIC (The Glossary, Brand Directory, Diversity, Complaint &amp; We &amp; GB, Year Old Discounts, Discount Codes &amp; Offers, Disability Discount, Our Ambassadors, Affiliates, Partnership/Suppliers, Sitemap, Refer a Friend, Key Worker Discount, Become an Ambassador, Career Opportunities), Stores and Salons (Salon Locator, Find a Clinician/Professional, Near You, LOOKFANTASTIC Training). Cookie Consent link. Płatności: VISA, Mastercard, Amex, PayPal, GPay, Apple Pay, Klarna.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -312,7 +264,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

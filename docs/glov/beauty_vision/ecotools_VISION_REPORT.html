@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://www.ecotools.com" target="_blank">https://www.ecotools.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -66,76 +74,96 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Header</td>
 <td class="col-etyk">ecotools</td>
-<td class="col-opis">Pasek nawigacyjny z logo ecotools po lewej, menu główne i ikony (search, account, cart) po prawej.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Logo ecotools, nawigacja z kategoriami (46 nav items wg JSON), ikony koszyka/konta/wyszukiwania. Brak widocznego paska dostawy w headerze.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="55" onclick="scrollShot(55)">
 <td class="col-lp">2</td>
-<td class="col-el">Baner główny (Hero)</td>
 <td class="col-etyk">Better Brush Collection</td>
-<td class="col-opis">Duży baner hero z flat-lay fotografią pędzli i szczotek do makijażu na beżowym tle, z headline i subline oraz CTA.</td>
+<td class="col-el">Baner główny (Hero)</td>
+<td class="col-zaw">CTA: 'SHOP OUR BRUSHES'. Brak badge (Nowość/Promocja/Bestseller). Brak ceny. Brak licznika. Tekst: 'Home has and hair brushes for the planet'.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">55px</span></td>
 </tr>
 <tr class="el-row" data-top="720" onclick="scrollShot(720)">
 <td class="col-lp">3</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
 <td class="col-etyk">NEW</td>
-<td class="col-opis">Sekcja edytorialna eksponująca nową kolekcję z badge 'NEW', logo marki i pojedynczym CTA.</td>
+<td class="col-el">Spotlight produktu (editorial)</td>
+<td class="col-zaw">Badge: NEW. CTA: 'SHOP OUR BRUSHES'. Tło białe/kremowe. Widoczne produkty z kolekcji Better Brush.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">720px</span></td>
 </tr>
 <tr class="el-row" data-top="1200" onclick="scrollShot(1200)">
 <td class="col-lp">4</td>
-<td class="col-el">Video marki / kampanii</td>
 <td class="col-etyk">BETTER BRUSH by ecotools</td>
-<td class="col-opis">Sekcja video lub pełnoekranowy baner kampanii na głęboko-zielonym tle z dużym napisem brandingowym.</td>
+<td class="col-el">Video marki / kampanii</td>
+<td class="col-zaw">Tekst 'BETTER BRUSH by ecotools' jako nakładka. Intensywne zielone tło. Prawdopodobnie wideo w tle lub statyczny baner kampanii.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1200px</span></td>
 </tr>
 <tr class="el-row" data-top="1750" onclick="scrollShot(1750)">
 <td class="col-lp">5</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">BEST SELLERS</td>
-<td class="col-opis">Sekcja z produktami bestsellersami w poziomej karuzeli lub gridzie z nazwami produktów.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">Widoczne produkty: Makeup Brush + Intense Shampoo, Start The Day Beautiful Makeup Brush Kit, Bristle Bath Brush, Exfoliating EcoPouf Bath Sponge (Assorted Colors). Brak cen widocznych. Brak strzałek karuzeli widocznych (możliwe przewijanie).</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1750px</span></td>
 </tr>
 <tr class="el-row" data-top="2750" onclick="scrollShot(2750)">
 <td class="col-lp">6</td>
-<td class="col-el">Kafelki kategorii</td>
 <td class="col-etyk">SHOP BY CATEGORY</td>
-<td class="col-opis">Grid kafelków z fotografiami kategorii produktowych umożliwiający nawigację do podkategorii.</td>
+<td class="col-el">Kafelki kategorii</td>
+<td class="col-zaw">Kategorie: makeup brushes, blenders, tool cleansers, bath accessories, face tools. Każdy kafelek z lifestyle zdjęciem i etykietą tekstową.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2750px</span></td>
 </tr>
 <tr class="el-row" data-top="3800" onclick="scrollShot(3800)">
 <td class="col-lp">7</td>
-<td class="col-el">O marce / misja</td>
 <td class="col-etyk">A BEAUTY BRAND THAT JUST FEELS RIGHT</td>
-<td class="col-opis">Sekcja edytorialna z wartościami i filozofią marki, zorganizowana w grid 2x2 z zdjęciami i blokami tekstu.</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-zaw">Hasła: 'clean beauty', 'clean planet', 'MADE FOR YOU', 'CLEAN BEAUTY CLEAN PLANET'. Tekst o wartościach: 100% Vegan, Cruelty Free, biodegradowalne opakowania, recycled materials. CTA: 'LEARN MORE'.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3800px</span></td>
 </tr>
 <tr class="el-row" data-top="4700" onclick="scrollShot(4700)">
 <td class="col-lp">8</td>
-<td class="col-el">Sekcja CSR / zrównoważony rozwój</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Kontynuacja sekcji wartości marki z detalami CSR: Recycled Materials, biodegradowalne opakowania i inne zobowiązania środowiskowe.</td>
+<td class="col-el">Sekcja CSR / zrównoważony rozwój</td>
+<td class="col-zaw">Tekst: 'Recycled Materials - We believe in reducing waste and use recycled aluminum and recycled plastic in our products'. CTA: 'LEARN MORE'. Ikony/odznaki: clean beauty, clean planet.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4700px</span></td>
 </tr>
 <tr class="el-row" data-top="4955" onclick="scrollShot(4955)">
 <td class="col-lp">9</td>
-<td class="col-el">Video marki / kampanii</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Osadzone wideo lub ciemnozielony placeholder wideo (bez widocznej treści w statycznym screenie).</td>
+<td class="col-el">Video marki / kampanii</td>
+<td class="col-zaw">Jednolite ciemnozielone tło (#2D4A3E lub podobne). Prawdopodobnie embed wideo kampanii.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4955px</span></td>
 </tr>
 <tr class="el-row" data-top="5450" onclick="scrollShot(5450)">
 <td class="col-lp">10</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk">ecotools</td>
-<td class="col-opis">Stopka z logo marki, menu nawigacyjnym, formularzem zapisu do newslettera i ikonami social media.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">MENU: Our Story, FAQ, Where to Buy, Contact Us. NEWSLETTER: email input + CTA 'JOIN', tekst 'Be the first to hear about new launches, special offers and free giveaways'. Social: Facebook, Twitter, TikTok, Instagram, YouTube. Copyright © ECOTOOLS BEAUTY 2026. Linki: Terms &amp; Conditions, Privacy Policy.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5450px</span></td>
 </tr></tbody>
     </table>
@@ -144,61 +172,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Logo ecotools, nawigacja z kategoriami (46 nav items wg JSON), ikony koszyka/konta/wyszukiwania. Brak widocznego paska dostawy w headerze.</td>
-</tr>
-<tr class="el-row" data-top="55" onclick="scrollShot(55)">
-<td class="col-lp">2</td>
-<td class="col-el">Baner główny (Hero)</td>
-<td class="col-kom">CTA: 'SHOP OUR BRUSHES'. Brak badge (Nowość/Promocja/Bestseller). Brak ceny. Brak licznika. Tekst: 'Home has and hair brushes for the planet'.</td>
-</tr>
-<tr class="el-row" data-top="720" onclick="scrollShot(720)">
-<td class="col-lp">3</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
-<td class="col-kom">Badge: NEW. CTA: 'SHOP OUR BRUSHES'. Tło białe/kremowe. Widoczne produkty z kolekcji Better Brush.</td>
-</tr>
-<tr class="el-row" data-top="1200" onclick="scrollShot(1200)">
-<td class="col-lp">4</td>
-<td class="col-el">Video marki / kampanii</td>
-<td class="col-kom">Tekst 'BETTER BRUSH by ecotools' jako nakładka. Intensywne zielone tło. Prawdopodobnie wideo w tle lub statyczny baner kampanii.</td>
-</tr>
-<tr class="el-row" data-top="1750" onclick="scrollShot(1750)">
-<td class="col-lp">5</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">Widoczne produkty: Makeup Brush + Intense Shampoo, Start The Day Beautiful Makeup Brush Kit, Bristle Bath Brush, Exfoliating EcoPouf Bath Sponge (Assorted Colors). Brak cen widocznych. Brak strzałek karuzeli widocznych (możliwe przewijanie).</td>
-</tr>
-<tr class="el-row" data-top="2750" onclick="scrollShot(2750)">
-<td class="col-lp">6</td>
-<td class="col-el">Kafelki kategorii</td>
-<td class="col-kom">Kategorie: makeup brushes, blenders, tool cleansers, bath accessories, face tools. Każdy kafelek z lifestyle zdjęciem i etykietą tekstową.</td>
-</tr>
-<tr class="el-row" data-top="3800" onclick="scrollShot(3800)">
-<td class="col-lp">7</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-kom">Hasła: 'clean beauty', 'clean planet', 'MADE FOR YOU', 'CLEAN BEAUTY CLEAN PLANET'. Tekst o wartościach: 100% Vegan, Cruelty Free, biodegradowalne opakowania, recycled materials. CTA: 'LEARN MORE'.</td>
-</tr>
-<tr class="el-row" data-top="4700" onclick="scrollShot(4700)">
-<td class="col-lp">8</td>
-<td class="col-el">Sekcja CSR / zrównoważony rozwój</td>
-<td class="col-kom">Tekst: 'Recycled Materials - We believe in reducing waste and use recycled aluminum and recycled plastic in our products'. CTA: 'LEARN MORE'. Ikony/odznaki: clean beauty, clean planet.</td>
-</tr>
-<tr class="el-row" data-top="4955" onclick="scrollShot(4955)">
-<td class="col-lp">9</td>
-<td class="col-el">Video marki / kampanii</td>
-<td class="col-kom">Jednolite ciemnozielone tło (#2D4A3E lub podobne). Prawdopodobnie embed wideo kampanii.</td>
-</tr>
-<tr class="el-row" data-top="5450" onclick="scrollShot(5450)">
-<td class="col-lp">10</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">MENU: Our Story, FAQ, Where to Buy, Contact Us. NEWSLETTER: email input + CTA 'JOIN', tekst 'Be the first to hear about new launches, special offers and free giveaways'. Social: Facebook, Twitter, TikTok, Instagram, YouTube. Copyright © ECOTOOLS BEAUTY 2026. Linki: Terms &amp; Conditions, Privacy Policy.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -227,7 +200,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

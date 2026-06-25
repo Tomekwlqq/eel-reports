@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://soldejaneiro.com" target="_blank">https://soldejaneiro.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -66,90 +74,114 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
 <td class="col-etyk">Choose a FREE SAMPLE with every order.</td>
-<td class="col-opis">Wąski czarny pasek na samej górze informujący o darmowej próbce przy każdym zamówieniu, z linkami Accessibility/About Us/Need Help?</td>
+<td class="col-el">Pasek promocji</td>
+<td class="col-zaw">Linki tekstowe po prawej: Accessibility, About Us, Need Help?</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="30" onclick="scrollShot(30)">
 <td class="col-lp">2</td>
-<td class="col-el">Header</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Biały header z logo SOL DE JANEIRO (lewo), główną nawigacją poziomą i ikonami akcji (prawo).</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Nav: New + Featured, Fragrance, Body, Hair, Bundles, Rewards. Ikony: search, account, wishlist (serce), koszyk.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">30px</span></td>
 </tr>
 <tr class="el-row" data-top="85" onclick="scrollShot(85)">
 <td class="col-lp">3</td>
-<td class="col-el">Pasek promocji</td>
 <td class="col-etyk">LAST CHANCE 25% OFF EVERYTHING*</td>
-<td class="col-opis">Żółty pasek promocyjny pod headerem z komunikatem last-chance i CTA.</td>
+<td class="col-el">Pasek promocji</td>
+<td class="col-zaw">CTA: SHOP NOW (różowy przycisk). Badge: LAST CHANCE.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">85px</span></td>
 </tr>
 <tr class="el-row" data-top="130" onclick="scrollShot(130)">
 <td class="col-lp">4</td>
-<td class="col-el">Baner główny (Hero)</td>
 <td class="col-etyk">LAST CHANCE 25% OFF SITEWIDE* OLÁ SUMMER EVENT IS TOO HOT TO MISS.</td>
-<td class="col-opis">Pełnoszerokościowy hero z collage'em zdjęć produktów i lifestyle'u letniego; duży tekst promocyjny na pierwszym planie.</td>
+<td class="col-el">Baner główny (Hero)</td>
+<td class="col-zaw">CTA: SHOP NOW (różowy przycisk, wycentrowany). Badge: LAST CHANCE. Collage: produkty body wash/fragrance + modelka w stroju plażowym.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">130px</span></td>
 </tr>
 <tr class="el-row" data-top="965" onclick="scrollShot(965)">
 <td class="col-lp">5</td>
-<td class="col-el">Kafelki kategorii</td>
 <td class="col-etyk">TODAY'S OFFERS</td>
-<td class="col-opis">Sekcja z 3 kwadratowymi kafelkami kategorii opatrzonymi banerem 25% off sitewide.</td>
+<td class="col-el">Kafelki kategorii</td>
+<td class="col-zaw">3 kafelki: Best Sellers, Fragrance, Bundles. Każdy z overlayem 'Olá summer event 25% off sitewide*'.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">965px</span></td>
 </tr>
 <tr class="el-row" data-top="1400" onclick="scrollShot(1400)">
 <td class="col-lp">6</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">25% OFF SITEWIDE*</td>
-<td class="col-opis">Karuzela horyzontalna z bestsellerami z ceną, gwiazdkami recenzji i badge'em promocyjnym.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">Strzałki karuzeli (lewo/prawo). Badge: 25% OFF SITEWIDE*. Przykładowe produkty: Cheirosa Perfume Mini Best Seller Set ($125→$94), Brazilian Bum Bum Cream, Choose Your Body Balm™ Lotion Mini Duo, Limited Edition Body Balm™. Ceny widoczne. Gwiazdki recenzji. CTA: brak wyraźnego.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1400px</span></td>
 </tr>
 <tr class="el-row" data-top="1852" onclick="scrollShot(1852)">
 <td class="col-lp">7</td>
-<td class="col-el">Sekcja CSR / zrównoważony rozwój</td>
 <td class="col-etyk">TRASHIE TAKE BACK BAG™</td>
-<td class="col-opis">Sekcja kolaboracyjna promująca worek Trashie Take Back Bag jako ekologiczny sposób na recyclng z darmowym giftem SOL przy zakupie.</td>
+<td class="col-el">Sekcja CSR / zrównoważony rozwój</td>
+<td class="col-zaw">CTA: SHOP NOW. Duże zdjęcie różowej torby Trashie + odzież wisząca. Tekst: 'The Planet-Friendly Way to Clean Out Your Closet... And Receive An Exclusive Sol Gift With Any Purchase.'</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">1852px</span></td>
 </tr>
 <tr class="el-row" data-top="2192" onclick="scrollShot(2192)">
 <td class="col-lp">8</td>
-<td class="col-el">Rekomendowane dla Ciebie</td>
 <td class="col-etyk">NEW SOL PASSPORT REWARDS</td>
-<td class="col-opis">Sekcja programu lojalnościowego Sol Passport z produktami nagradzającymi punktami i CTA do logowania.</td>
+<td class="col-el">Rekomendowane dla Ciebie</td>
+<td class="col-zaw">Produkty z punktami: Rio Blu Body Wash (10K pkt), Glimmering Rio Sunset (300 pkt), Exclusive Bundle (500 pkt), 40K Rio Bright Cream (300 pkt). CTA: SIGN IN (żółty przycisk) + 'Not a member? Sign up for free.'</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">👶</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2192px</span></td>
 </tr>
 <tr class="el-row" data-top="3100" onclick="scrollShot(3100)">
 <td class="col-lp">9</td>
-<td class="col-el">O marce / misja</td>
 <td class="col-etyk">A FOUNDATION FOR THE NEXT GENERATION</td>
-<td class="col-opis">Sekcja Sol de Janeiro Foundation z dużym zdjęciem tropikalnej natury (rzeka/las amazoński) i CTA do strony fundacji.</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-zaw">Logo: Sol de Janeiro Foundation (okrągłe). CTA: LEARN MORE (żółty przycisk). Pełnoszerokościowy obraz tła ze zdjęciem natury.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3100px</span></td>
 </tr>
 <tr class="el-row" data-top="3700" onclick="scrollShot(3700)">
 <td class="col-lp">10</td>
-<td class="col-el">Pasek USP / Trust Bar</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Poziomy pasek z 4 ikonami USP: darmowa wysyłka, darmowa próbka, program nagród, subskrypcja.</td>
+<td class="col-el">Pasek USP / Trust Bar</td>
+<td class="col-zaw">4 bloki: FREE U.S. SHIPPING (Orders $35+, Free Returns), CHOOSE A FREE SAMPLE (With Every Order), SOL PASSPORT (Earn Points, More Perks), SUBSCRIBE + SAVE (Save 15%). Ikony ilustracyjne przy każdym.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3700px</span></td>
 </tr>
 <tr class="el-row" data-top="3876" onclick="scrollShot(3876)">
 <td class="col-lp">11</td>
-<td class="col-el">Loga mediów (As Seen In)</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Wyróżnienie nagrody allure z odznaczeniem certyfikacyjnym produktów jako 'cruelty-free' i 'made from globally sourced ingredients'.</td>
+<td class="col-el">Loga mediów (As Seen In)</td>
+<td class="col-zaw">Logo allure. Tekst: 'Made in the USA from globally sourced ingredients. Reviewed by Allure for accessibility.' Odznaka certyfikacyjna.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3876px</span></td>
 </tr>
 <tr class="el-row" data-top="4000" onclick="scrollShot(4000)">
 <td class="col-lp">12</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Pełny footer z kolumnami linków, formularzem zapisu do newslettera (email + telefon), social media icons i tekstem prawnym.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">Kolumny: Customer Service (Help Centre, Track Order, Returns, Sol Passport Rewards, Careers, Affiliate Program, Subscribe + Save, About Our Co-Founder), Blog. Newsletter: email + phone number field. Social: Facebook, TikTok, Instagram, Pinterest, YouTube. Dół: copyright + linki privacy/cookies.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4000px</span></td>
 </tr></tbody>
     </table>
@@ -158,71 +190,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
-<td class="col-kom">Linki tekstowe po prawej: Accessibility, About Us, Need Help?</td>
-</tr>
-<tr class="el-row" data-top="30" onclick="scrollShot(30)">
-<td class="col-lp">2</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Nav: New + Featured, Fragrance, Body, Hair, Bundles, Rewards. Ikony: search, account, wishlist (serce), koszyk.</td>
-</tr>
-<tr class="el-row" data-top="85" onclick="scrollShot(85)">
-<td class="col-lp">3</td>
-<td class="col-el">Pasek promocji</td>
-<td class="col-kom">CTA: SHOP NOW (różowy przycisk). Badge: LAST CHANCE.</td>
-</tr>
-<tr class="el-row" data-top="130" onclick="scrollShot(130)">
-<td class="col-lp">4</td>
-<td class="col-el">Baner główny (Hero)</td>
-<td class="col-kom">CTA: SHOP NOW (różowy przycisk, wycentrowany). Badge: LAST CHANCE. Collage: produkty body wash/fragrance + modelka w stroju plażowym.</td>
-</tr>
-<tr class="el-row" data-top="965" onclick="scrollShot(965)">
-<td class="col-lp">5</td>
-<td class="col-el">Kafelki kategorii</td>
-<td class="col-kom">3 kafelki: Best Sellers, Fragrance, Bundles. Każdy z overlayem 'Olá summer event 25% off sitewide*'.</td>
-</tr>
-<tr class="el-row" data-top="1400" onclick="scrollShot(1400)">
-<td class="col-lp">6</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">Strzałki karuzeli (lewo/prawo). Badge: 25% OFF SITEWIDE*. Przykładowe produkty: Cheirosa Perfume Mini Best Seller Set ($125→$94), Brazilian Bum Bum Cream, Choose Your Body Balm™ Lotion Mini Duo, Limited Edition Body Balm™. Ceny widoczne. Gwiazdki recenzji. CTA: brak wyraźnego.</td>
-</tr>
-<tr class="el-row" data-top="1852" onclick="scrollShot(1852)">
-<td class="col-lp">7</td>
-<td class="col-el">Sekcja CSR / zrównoważony rozwój</td>
-<td class="col-kom">CTA: SHOP NOW. Duże zdjęcie różowej torby Trashie + odzież wisząca. Tekst: 'The Planet-Friendly Way to Clean Out Your Closet... And Receive An Exclusive Sol Gift With Any Purchase.'</td>
-</tr>
-<tr class="el-row" data-top="2192" onclick="scrollShot(2192)">
-<td class="col-lp">8</td>
-<td class="col-el">Rekomendowane dla Ciebie</td>
-<td class="col-kom">Produkty z punktami: Rio Blu Body Wash (10K pkt), Glimmering Rio Sunset (300 pkt), Exclusive Bundle (500 pkt), 40K Rio Bright Cream (300 pkt). CTA: SIGN IN (żółty przycisk) + 'Not a member? Sign up for free.'</td>
-</tr>
-<tr class="el-row" data-top="3100" onclick="scrollShot(3100)">
-<td class="col-lp">9</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-kom">Logo: Sol de Janeiro Foundation (okrągłe). CTA: LEARN MORE (żółty przycisk). Pełnoszerokościowy obraz tła ze zdjęciem natury.</td>
-</tr>
-<tr class="el-row" data-top="3700" onclick="scrollShot(3700)">
-<td class="col-lp">10</td>
-<td class="col-el">Pasek USP / Trust Bar</td>
-<td class="col-kom">4 bloki: FREE U.S. SHIPPING (Orders $35+, Free Returns), CHOOSE A FREE SAMPLE (With Every Order), SOL PASSPORT (Earn Points, More Perks), SUBSCRIBE + SAVE (Save 15%). Ikony ilustracyjne przy każdym.</td>
-</tr>
-<tr class="el-row" data-top="3876" onclick="scrollShot(3876)">
-<td class="col-lp">11</td>
-<td class="col-el">Loga mediów (As Seen In)</td>
-<td class="col-kom">Logo allure. Tekst: 'Made in the USA from globally sourced ingredients. Reviewed by Allure for accessibility.' Odznaka certyfikacyjna.</td>
-</tr>
-<tr class="el-row" data-top="4000" onclick="scrollShot(4000)">
-<td class="col-lp">12</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">Kolumny: Customer Service (Help Centre, Track Order, Returns, Sol Passport Rewards, Careers, Affiliate Program, Subscribe + Save, About Our Co-Founder), Blog. Newsletter: email + phone number field. Social: Facebook, TikTok, Instagram, Pinterest, YouTube. Dół: copyright + linki privacy/cookies.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -251,7 +218,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

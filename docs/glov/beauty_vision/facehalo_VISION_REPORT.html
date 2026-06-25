@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://www.facehalo.com" target="_blank">https://www.facehalo.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -66,76 +74,96 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
 <td class="col-etyk">FREE SHIPPING IN USA &amp; UK</td>
-<td class="col-opis">Cienki pasek na samej górze strony informujący o darmowej wysyłce.</td>
+<td class="col-el">Pasek promocji</td>
+<td class="col-zaw">Brak CTA, sam tekst komunikatu.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="35" onclick="scrollShot(35)">
 <td class="col-lp">2</td>
-<td class="col-el">Header</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Główna nawigacja z logo, menu i ikonami narzędziowymi.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Logo FACE HALO (czarne kółko) na środku, lewa strona: SHOP, REVIEWS, ABOUT, NEWS, STOCKISTS, SUSTAINABILITY; prawa strona: ikony Search, Sign In, Cart.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">35px</span></td>
 </tr>
 <tr class="el-row" data-top="80" onclick="scrollShot(80)">
 <td class="col-lp">3</td>
-<td class="col-el">Hero karuzela/slider</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Trzy-slajdowy hero carousel prezentujący główne linie produktowe marki z modelnkami w tle.</td>
+<td class="col-el">Hero karuzela/slider</td>
+<td class="col-zaw">Slajdy: 'Face Halo Original' / 'Face Halo BODY' / 'Face Halo PRO'; każdy z CTA 'SHOP NOW'; wskaźnik 3 kropek na dole; strzałki nawigacji; zdjęcia produktów z modelkami na ciemnym tle.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">80px</span></td>
 </tr>
 <tr class="el-row" data-top="700" onclick="scrollShot(700)">
 <td class="col-lp">4</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Poziomy grid 4 produktów bestseller z cenami i przyciskami zakupu.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">Produkty: Face Halo Original - Pack of 3 ($21.00), Face Halo PRO - Pack of 3 ($22.00), Face Halo BODY ($22.00), Face Halo BFF Bundle ($80.00, Sold out); badge 'Sold out' przy bundlu.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">700px</span></td>
 </tr>
 <tr class="el-row" data-top="940" onclick="scrollShot(940)">
 <td class="col-lp">5</td>
-<td class="col-el">Hero split (obraz + tekst)</td>
 <td class="col-etyk">Non-Toxic &amp; Reusable Makeup Removal</td>
-<td class="col-opis">Sekcja dwukolumnowa z zdjęciem modelki z produktem po prawej i tekstem + CTA po lewej.</td>
+<td class="col-el">Hero split (obraz + tekst)</td>
+<td class="col-zaw">CTA 'SHOP FACE HALO'; brak ceny; zdjęcie lifestyle modelka z produktem przy twarzy.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">940px</span></td>
 </tr>
 <tr class="el-row" data-top="1385" onclick="scrollShot(1385)">
 <td class="col-lp">6</td>
-<td class="col-el">Pasek USP / Trust Bar</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Trójkolumnowy pasek z kluczowymi wartościami produktu oddzielonymi pionowymi kreskami.</td>
+<td class="col-el">Pasek USP / Trust Bar</td>
+<td class="col-zaw">3 filary: NON-TOXIC / JUST ADD WATER! | REUSABLE / UP TO 200 WASH CYCLES | CRUELTY-FREE / PETA APPROVED.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1385px</span></td>
 </tr>
 <tr class="el-row" data-top="1445" onclick="scrollShot(1445)">
 <td class="col-lp">7</td>
-<td class="col-el">Sekcja porównawcza<span class="new-badge">NOWY</span></td>
 <td class="col-etyk">FACE HALO vs MAKEUP WIPES</td>
-<td class="col-opis">Sekcja edukacyjna porównująca produkt z alternatywami rynkowymi i kierująca do pełnego porównania.</td>
+<td class="col-el">Sekcja porównawcza<span class="new-badge">NOWY</span></td>
+<td class="col-zaw">CTA 'FIND OUT MORE'; 1-2 zdania tekstu wprowadzającego; brak grafiki porównawczej widocznej w tym widoku.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1445px</span></td>
 </tr>
 <tr class="el-row" data-top="1605" onclick="scrollShot(1605)">
 <td class="col-lp">8</td>
-<td class="col-el">Loga mediów (As Seen In)</td>
 <td class="col-etyk">PRESS</td>
-<td class="col-opis">Sekcja z logotypami mediów, które opisywały markę, zaczerpnięta z relacji prasowych.</td>
+<td class="col-el">Loga mediów (As Seen In)</td>
+<td class="col-zaw">6 logotypów/banerów: Self Beauty Award Winner 2018, Daily Mail, Marie Claire (Beauty Award Editor's Pick 2018), Financial Times, The Sunday Times; pierwsze kafelko to zdjęcie modelki z produktem.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1605px</span></td>
 </tr>
 <tr class="el-row" data-top="1780" onclick="scrollShot(1780)">
 <td class="col-lp">9</td>
-<td class="col-el">Galeria UGC / Instagram</td>
 <td class="col-etyk">#FACEHALO REVIEWS...</td>
-<td class="col-opis">Sekcja agregująca recenzje i posty UGC z Instagrama z hashtagiem marki.</td>
+<td class="col-el">Galeria UGC / Instagram</td>
+<td class="col-zaw">Dwie warstwy: '#FACEHALO REVIEWS...' (recenzje klientów) i '@FACEHALO' (feed Instagram); brak widocznych zdjęć w tym kadrze (prawdopodobnie karuzela).</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">1780px</span></td>
 </tr>
 <tr class="el-row" data-top="1845" onclick="scrollShot(1845)">
 <td class="col-lp">10</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Stopka z logo, linkami nawigacyjnymi i ikonami social media.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">Logo FACE HALO (biały tekst na czarnym tle); linki: CONTACT, SHIPPING &amp; RETURNS, STOCKISTS, NEWS, PRIVACY POLICY, TERMS OF USE; ikony: Facebook, Instagram; copyright © 2025 FACE HALO.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">1845px</span></td>
 </tr></tbody>
     </table>
@@ -144,61 +172,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
-<td class="col-kom">Brak CTA, sam tekst komunikatu.</td>
-</tr>
-<tr class="el-row" data-top="35" onclick="scrollShot(35)">
-<td class="col-lp">2</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Logo FACE HALO (czarne kółko) na środku, lewa strona: SHOP, REVIEWS, ABOUT, NEWS, STOCKISTS, SUSTAINABILITY; prawa strona: ikony Search, Sign In, Cart.</td>
-</tr>
-<tr class="el-row" data-top="80" onclick="scrollShot(80)">
-<td class="col-lp">3</td>
-<td class="col-el">Hero karuzela/slider</td>
-<td class="col-kom">Slajdy: 'Face Halo Original' / 'Face Halo BODY' / 'Face Halo PRO'; każdy z CTA 'SHOP NOW'; wskaźnik 3 kropek na dole; strzałki nawigacji; zdjęcia produktów z modelkami na ciemnym tle.</td>
-</tr>
-<tr class="el-row" data-top="700" onclick="scrollShot(700)">
-<td class="col-lp">4</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">Produkty: Face Halo Original - Pack of 3 ($21.00), Face Halo PRO - Pack of 3 ($22.00), Face Halo BODY ($22.00), Face Halo BFF Bundle ($80.00, Sold out); badge 'Sold out' przy bundlu.</td>
-</tr>
-<tr class="el-row" data-top="940" onclick="scrollShot(940)">
-<td class="col-lp">5</td>
-<td class="col-el">Hero split (obraz + tekst)</td>
-<td class="col-kom">CTA 'SHOP FACE HALO'; brak ceny; zdjęcie lifestyle modelka z produktem przy twarzy.</td>
-</tr>
-<tr class="el-row" data-top="1385" onclick="scrollShot(1385)">
-<td class="col-lp">6</td>
-<td class="col-el">Pasek USP / Trust Bar</td>
-<td class="col-kom">3 filary: NON-TOXIC / JUST ADD WATER! | REUSABLE / UP TO 200 WASH CYCLES | CRUELTY-FREE / PETA APPROVED.</td>
-</tr>
-<tr class="el-row" data-top="1445" onclick="scrollShot(1445)">
-<td class="col-lp">7</td>
-<td class="col-el">Sekcja porównawcza</td>
-<td class="col-kom">CTA 'FIND OUT MORE'; 1-2 zdania tekstu wprowadzającego; brak grafiki porównawczej widocznej w tym widoku.</td>
-</tr>
-<tr class="el-row" data-top="1605" onclick="scrollShot(1605)">
-<td class="col-lp">8</td>
-<td class="col-el">Loga mediów (As Seen In)</td>
-<td class="col-kom">6 logotypów/banerów: Self Beauty Award Winner 2018, Daily Mail, Marie Claire (Beauty Award Editor's Pick 2018), Financial Times, The Sunday Times; pierwsze kafelko to zdjęcie modelki z produktem.</td>
-</tr>
-<tr class="el-row" data-top="1780" onclick="scrollShot(1780)">
-<td class="col-lp">9</td>
-<td class="col-el">Galeria UGC / Instagram</td>
-<td class="col-kom">Dwie warstwy: '#FACEHALO REVIEWS...' (recenzje klientów) i '@FACEHALO' (feed Instagram); brak widocznych zdjęć w tym kadrze (prawdopodobnie karuzela).</td>
-</tr>
-<tr class="el-row" data-top="1845" onclick="scrollShot(1845)">
-<td class="col-lp">10</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">Logo FACE HALO (biały tekst na czarnym tle); linki: CONTACT, SHIPPING &amp; RETURNS, STOCKISTS, NEWS, PRIVACY POLICY, TERMS OF USE; ikony: Facebook, Instagram; copyright © 2025 FACE HALO.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -227,7 +200,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

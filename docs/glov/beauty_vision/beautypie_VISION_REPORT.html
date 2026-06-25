@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://www.beautypie.com" target="_blank">https://www.beautypie.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -66,62 +74,78 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
 <td class="col-etyk">Free standard shipping on all orders £49+</td>
-<td class="col-opis">Wąski pasek na samej górze z informacją o darmowej dostawie od £49.</td>
+<td class="col-el">Pasek promocji</td>
+<td class="col-zaw">Tekst informacyjny, brak CTA. Nawigacja strzałki (&lt; &gt;) po bokach sugerująca rotację komunikatów.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="30" onclick="scrollShot(30)">
 <td class="col-lp">2</td>
-<td class="col-el">Header</td>
 <td class="col-etyk">BEAUTY PIE</td>
-<td class="col-opis">Globalny header z logo, menu nawigacyjnym i ikonami akcji użytkownika.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Logo BEAUTY PIE po lewej. Ikony po prawej: koszyk, konto, wyszukiwarka. Brak widocznych linków kategorii w nagłówku — prawdopodobnie mega-menu.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">30px</span></td>
 </tr>
 <tr class="el-row" data-top="65" onclick="scrollShot(65)">
 <td class="col-lp">3</td>
-<td class="col-el">Baner główny (Hero)</td>
 <td class="col-etyk">THE BRONZED BODY EDIT — You, but with summer lighting</td>
-<td class="col-opis">Pełnoekranowy hero z obrazem produktów na tle pasiastym złoto-białym, nagłówkiem edytorskim i CTA do kolekcji.</td>
+<td class="col-el">Baner główny (Hero)</td>
+<td class="col-zaw">CTA: 'SHOP THE COLLECTION'. Produkty: Nice Legs, Anti Bron bronzer body care. Brak badge, brak timera. Obraz lifestyle na żółto-białym pasiastym tle.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">65px</span></td>
 </tr>
 <tr class="el-row" data-top="695" onclick="scrollShot(695)">
 <td class="col-lp">4</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">Shop Bestsellers</td>
-<td class="col-opis">Sekcja z filtrowaną siatką produktów (taby kategorii) wyświetlająca bestsellery ze star ratings, cenami i przyciskami ATC.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">Taby: All Products, New In, Bestsellers, Join Beauty Pie+, Skincare Quiz, More. Produkty: Nice Legs (£32), Shona Electrolyte Drench (£80→£60), Wondercolour (£23), Love The Remix (£38). Oceny gwiazdkowe. CTA per produkt: 'Add To Bag'. CTA sekcji: 'Shop All New In'.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">695px</span></td>
 </tr>
 <tr class="el-row" data-top="1634" onclick="scrollShot(1634)">
 <td class="col-lp">5</td>
-<td class="col-el">O marce / misja</td>
 <td class="col-etyk">Welcome to the beauty revolution</td>
-<td class="col-opis">Sekcja brandingowa wyjaśniająca model biznesowy Beauty Pie (direct sourcing, bez marży detalicznej) z porównaniem cenowym i CTA do dołączenia.</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-zaw">Wizualne porównanie ceny: 'Us £19 vs Them £60'. CTA: 'JOIN NOW'. Tekst o modelu członkowskim i dostępie do luksusowych kosmetyków bez ukrytych marż. Obraz produktu (kremowy słoik).</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1634px</span></td>
 </tr>
 <tr class="el-row" data-top="2368" onclick="scrollShot(2368)">
 <td class="col-lp">6</td>
-<td class="col-el">Grid banerów promo</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Siatka 2 banerów promocyjnych z ofertami pakietowymi: starter kit oraz zestaw z LED mask.</td>
+<td class="col-el">Grid banerów promo</td>
+<td class="col-zaw">Baner 1: starter kit £28 (full year of member prices worth £154). CTA: 'SHOP THE KIT FOR £28'. Baner 2: LED mask + membership + free award-winning supercream. CTA: 'SHOP THE ULTIMATE SKINCARE KIT'. Układ 2-kolumnowy, obrazy produktów, wyróżnione wartości/oszczędności.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2368px</span></td>
 </tr>
 <tr class="el-row" data-top="2898" onclick="scrollShot(2898)">
 <td class="col-lp">7</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Dwa edytorskie spoty produktowe w układzie side-by-side — lifestyle (Nice Legs) i produktowy (Über Youth neck spray).</td>
+<td class="col-el">Spotlight produktu (editorial)</td>
+<td class="col-zaw">Spot 1: 'NEW PRODUCT DROP #50 — Nice Legs In 3 Smooth Flat'. CTA: 'SHOP NOW'. Spot 2: 'YOUR NECK WOULD LIKE A WORD — BEAUTY PIE ÜBER YOUTH, DÉCO &amp; CHEST SUPER LIFT CREAM SPRAY'. CTA: 'SHOP NOW'. Obraz lifestyle/flat lay.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2898px</span></td>
 </tr>
 <tr class="el-row" data-top="3942" onclick="scrollShot(3942)">
 <td class="col-lp">8</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Globalny footer z nawigacją pomocniczą, formularzem newslettera i linkami do social media.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">Kolumny: About Beauty Pie (Sign In, Become a Member, Gift a Membership, Refer a Friend, Work With Us, Sustainability), Customer Support (Help, Delivery, Returns, Payment Methods), Legal | T&amp;Cs, Other Stuff (Contact), Keep in touch — newsletter email input + submit. Social icons: Facebook, Instagram, TikTok, Twitter, YouTube, Pinterest. Selector kraju: United Kingdom (GBP). Copyright 2016–2026.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3942px</span></td>
 </tr></tbody>
     </table>
@@ -130,51 +154,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
-<td class="col-kom">Tekst informacyjny, brak CTA. Nawigacja strzałki (&lt; &gt;) po bokach sugerująca rotację komunikatów.</td>
-</tr>
-<tr class="el-row" data-top="30" onclick="scrollShot(30)">
-<td class="col-lp">2</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Logo BEAUTY PIE po lewej. Ikony po prawej: koszyk, konto, wyszukiwarka. Brak widocznych linków kategorii w nagłówku — prawdopodobnie mega-menu.</td>
-</tr>
-<tr class="el-row" data-top="65" onclick="scrollShot(65)">
-<td class="col-lp">3</td>
-<td class="col-el">Baner główny (Hero)</td>
-<td class="col-kom">CTA: 'SHOP THE COLLECTION'. Produkty: Nice Legs, Anti Bron bronzer body care. Brak badge, brak timera. Obraz lifestyle na żółto-białym pasiastym tle.</td>
-</tr>
-<tr class="el-row" data-top="695" onclick="scrollShot(695)">
-<td class="col-lp">4</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">Taby: All Products, New In, Bestsellers, Join Beauty Pie+, Skincare Quiz, More. Produkty: Nice Legs (£32), Shona Electrolyte Drench (£80→£60), Wondercolour (£23), Love The Remix (£38). Oceny gwiazdkowe. CTA per produkt: 'Add To Bag'. CTA sekcji: 'Shop All New In'.</td>
-</tr>
-<tr class="el-row" data-top="1634" onclick="scrollShot(1634)">
-<td class="col-lp">5</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-kom">Wizualne porównanie ceny: 'Us £19 vs Them £60'. CTA: 'JOIN NOW'. Tekst o modelu członkowskim i dostępie do luksusowych kosmetyków bez ukrytych marż. Obraz produktu (kremowy słoik).</td>
-</tr>
-<tr class="el-row" data-top="2368" onclick="scrollShot(2368)">
-<td class="col-lp">6</td>
-<td class="col-el">Grid banerów promo</td>
-<td class="col-kom">Baner 1: starter kit £28 (full year of member prices worth £154). CTA: 'SHOP THE KIT FOR £28'. Baner 2: LED mask + membership + free award-winning supercream. CTA: 'SHOP THE ULTIMATE SKINCARE KIT'. Układ 2-kolumnowy, obrazy produktów, wyróżnione wartości/oszczędności.</td>
-</tr>
-<tr class="el-row" data-top="2898" onclick="scrollShot(2898)">
-<td class="col-lp">7</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
-<td class="col-kom">Spot 1: 'NEW PRODUCT DROP #50 — Nice Legs In 3 Smooth Flat'. CTA: 'SHOP NOW'. Spot 2: 'YOUR NECK WOULD LIKE A WORD — BEAUTY PIE ÜBER YOUTH, DÉCO &amp; CHEST SUPER LIFT CREAM SPRAY'. CTA: 'SHOP NOW'. Obraz lifestyle/flat lay.</td>
-</tr>
-<tr class="el-row" data-top="3942" onclick="scrollShot(3942)">
-<td class="col-lp">8</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">Kolumny: About Beauty Pie (Sign In, Become a Member, Gift a Membership, Refer a Friend, Work With Us, Sustainability), Customer Support (Help, Delivery, Returns, Payment Methods), Legal | T&amp;Cs, Other Stuff (Contact), Keep in touch — newsletter email input + submit. Social icons: Facebook, Instagram, TikTok, Twitter, YouTube, Pinterest. Selector kraju: United Kingdom (GBP). Copyright 2016–2026.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -203,7 +182,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
-<head><meta charset="UTF-8"><title>tatcha — Vision Scan</title><style>
+<head><meta charset="UTF-8"><title>phlov — Vision Scan</title><style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f8fafc;color:#1e293b;font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 .page-header{padding:10px 20px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:12px;flex-shrink:0}
@@ -58,8 +58,8 @@ body.comments #tbl-comments{display:table}
 <body>
 <div class="page-header">
   <div>
-    <span class="client-name">tatcha</span>
-    <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://www.tatcha.com" target="_blank">https://www.tatcha.com</a> — platforma: shopify</span>
+    <span class="client-name">phlov</span>
+    <span class="scan-meta"> — Vision Scan — 2026-06-25 — <a href="https://phlov.com" target="_blank">https://phlov.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
 <div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
@@ -68,7 +68,9 @@ body.comments #tbl-comments{display:table}
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
 </div></div>
 </div>
-
+<div class="new-block"><b>🆕 Nowe typy elementów (do elements_master.json):</b><ul><li>Instagram-Stories-style kółka nawigacyjne na HP — przeniesienie formatu social na stronę</li>
+<li>Refill program (REFILLE PHLOV) jako sekcja HP — sustainability + economy proposition</li>
+<li>Founder/celebrity (Ewa Chodakowska) as brand face na HP — founder-led storytelling</li></ul></div>
 
 <div class="split-view">
   <div class="split-table">
@@ -78,120 +80,102 @@ body.comments #tbl-comments{display:table}
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-etyk">Complimentary Shipping</td>
+<td class="col-etyk">Kup 2 produkty z MAKE UP lub GLOW → zestaw gratis</td>
 <td class="col-el">Pasek promocji</td>
-<td class="col-zaw">Tekst statyczny, brak CTA; dark/neutral tło.</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-zaw">brak CTA inline — pasek informacyjny; rotacja z innymi komunikatami</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Oferta 'Kup 2, dostań zestaw gratis' zamiast % rabatu — wartość dodana, nie discount. Niestandardowe.</td>
 <td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
-<tr class="el-row" data-top="30" onclick="scrollShot(30)">
+<tr class="el-row" data-top="40" onclick="scrollShot(40)">
 <td class="col-lp">2</td>
-<td class="col-etyk">TATCHA</td>
+<td class="col-etyk">phlov.</td>
 <td class="col-el">Header</td>
-<td class="col-zaw">Logo lewy górny róg; ikony koszyk + profil prawy górny; nav poziomy; transparent tło nad hero.</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-zaw">ikony: wyszukiwarka, konto, koszyk; podkreślona zakładka 'KITS' jako wyróżnik</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Kropka w nazwie (jak tołpa.) — charakterystyczny trend PL brandów. MENCHCARE w nav = oddzielna linia dla mężczyzn. KITS jako dedykowana zakładka = zestawy są core ofertą.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">30px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">40px</span></td>
 </tr>
-<tr class="el-row" data-top="65" onclick="scrollShot(65)">
+<tr class="el-row" data-top="80" onclick="scrollShot(80)">
 <td class="col-lp">3</td>
-<td class="col-etyk">Flood Your Skin From Within</td>
-<td class="col-el">Baner główny (Hero)</td>
-<td class="col-zaw">CTA: 'Shop Now'; lifestyle zdjęcie produktów na kremowym tle; ciepła paleta; split-feel (tekst lewo, obraz prawo).</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-etyk">SUMMER GLOW UP / Kup 2 produkty GLOW lub MAKE UP / ZESTAW GRATIS!</td>
+<td class="col-el">Baner główny (Hero) — split layout</td>
+<td class="col-zaw">action: 'KUP TERAZ' (CTA button); badge 'NOWOŚĆ'; warunki oferty inline</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Split layout hero (2:1 foto:tekst) zamiast fullwidth foto. NOWE: phlov używa pary modeli — więcej produktów jednocześnie widocznych (cross-category teasing). Kolorystyka: fiolet + róż = paleta brandowa.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">65px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">80px</span></td>
 </tr>
-<tr class="el-row" data-top="960" onclick="scrollShot(960)">
+<tr class="el-row" data-top="700" onclick="scrollShot(700)">
 <td class="col-lp">4</td>
-<td class="col-etyk"></td>
-<td class="col-el">Cookie Consent (CMP)</td>
-<td class="col-zaw">Przyciski: ACCEPT ALL / REJECT ALL / PREFERENCES; niebieski pasek; widoczny nad treścią.</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-etyk">nowości — kółeczka miniaturowe</td>
+<td class="col-el">Pasek kółeczek z modelkami / twarze</td>
+<td class="col-zaw">action: klik kółka → produkt lub kategoria</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">NOWE: Instagram-Stories-style navigation na HP — kółka twarzą modeli. Bardzo rzadkie w beauty HP poza Instagramem. phlov przenosi format social na stronę.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">960px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">700px</span></td>
 </tr>
-<tr class="el-row" data-top="1120" onclick="scrollShot(1120)">
+<tr class="el-row" data-top="900" onclick="scrollShot(900)">
 <td class="col-lp">5</td>
-<td class="col-etyk">Bestsellers  New</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-zaw">Badge: BESTSELLER, NEW; tagi wariantu (Full Size, Gratitude, Refill, Mini); ceny: $71–$110; strzałki karuzeli widoczne; 4 produkty widoczne na raz.</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-etyk">NOWOŚCI</td>
+<td class="col-el">Sekcja nowości (NOWOŚCI)</td>
+<td class="col-zaw">action per karta: 'DO KOSZYKA'; badge 'NOWOŚĆ'; strzałki nawigacji</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">HAIR CARE jako banner w siatce nowości — cross-sell między kategoriami. Fioletowa kolorystyka packshot kart wyróżnia się.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1120px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">900px</span></td>
 </tr>
-<tr class="el-row" data-top="1450" onclick="scrollShot(1450)">
+<tr class="el-row" data-top="1600" onclick="scrollShot(1600)">
 <td class="col-lp">6</td>
-<td class="col-etyk">Compare Our Dewy Moisturizers</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
-<td class="col-zaw">CTA: 'Add to cart' per produkt; pola: Skin Type, Texture, Key Benefits; lifestyle zdjęcie po lewej (duże); nagłówek 'Find the formula that's best for your skin.'</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-etyk">BESTSELLERY</td>
+<td class="col-el">Bestsellery</td>
+<td class="col-zaw">action per karta: 'DO KOSZYKA'</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Standardowy układ. Ceny w zakresie 30-80 PLN — accessible mid-range positioning.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1450px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">1600px</span></td>
 </tr>
-<tr class="el-row" data-top="2560" onclick="scrollShot(2560)">
+<tr class="el-row" data-top="2400" onclick="scrollShot(2400)">
 <td class="col-lp">7</td>
-<td class="col-etyk">Shop by Skin Type</td>
-<td class="col-el">Kafelki kategorii</td>
-<td class="col-zaw">CTA per kafelek: 'Shop Dry', 'Shop Oily', 'Shop Sensitive', 'Shop Nature'; lifestyle fotografie; układ 4-kolumnowy.</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-etyk">POLECAMY — REFILLE PHLOV</td>
+<td class="col-el">Sekcja POLECAMY / zestawy</td>
+<td class="col-zaw">action: 'KUP TERAZ' (per zestaw); cena zestawu wyeksponowana</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">REFILLE PHLOV = program ekologicznych refili — sustainability message. NOWE: refill program eksponowany na HP jako wartość (eko + oszczędność).</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2560px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">2400px</span></td>
 </tr>
-<tr class="el-row" data-top="3000" onclick="scrollShot(3000)">
+<tr class="el-row" data-top="3400" onclick="scrollShot(3400)">
 <td class="col-lp">8</td>
-<td class="col-etyk"></td>
-<td class="col-el">Cytaty klientów</td>
-<td class="col-zaw">5 gwiazdek; imię: Elizabeth G; cytat wielozdaniowy o Longevity Serum; obraz produktu po prawej z CTA 'from $97'; układ split.</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-etyk">O MARCE — phlov by Ewa Chodakowska</td>
+<td class="col-el">Sekcja o marce (O MARCE)</td>
+<td class="col-zaw">action: link 'DOWIEDZ SIĘ WIĘCEJ'</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Founder/celebrity (Ewa Chodakowska) jako twarz marki eksponowana na HP. NOWE: founder-led brand storytelling na HP — rzadkie poza US (Fenty/Rare Beauty). W PL kontekście Chodakowska = ogromny trust dla target audience.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">3000px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3400px</span></td>
 </tr>
-<tr class="el-row" data-top="3750" onclick="scrollShot(3750)">
+<tr class="el-row" data-top="4200" onclick="scrollShot(4200)">
 <td class="col-lp">9</td>
-<td class="col-etyk"></td>
-<td class="col-el">Grid banerów promo</td>
-<td class="col-zaw">Panel 1: 'Curate Your Skincare Ritual' / CTA 'Get Started'; Panel 2: 'Glassy Shine, Volumizing Care' / CTA 'Shop Now'; Panel 3: 'Ritual Finder' / CTA 'Get Started'; układ 3-kolumnowy.</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-etyk">NAGRODY</td>
+<td class="col-el">Sekcja nagród i certyfikatów</td>
+<td class="col-zaw">brak CTA — sekcja trust-building</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Nagrody branżowe jako trust signals. Chodakowska + nagrody = double authority layer.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3750px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4200px</span></td>
 </tr>
-<tr class="el-row" data-top="4700" onclick="scrollShot(4700)">
+<tr class="el-row" data-top="5000" onclick="scrollShot(5000)">
 <td class="col-lp">10</td>
-<td class="col-etyk">With high-quality, nutrient-dense ingredients harvested from renowned sources in Japan, our formulas are gentle yet effective.</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-zaw">CTA: 'Learn More'; tło ciemna fotografia japońskiej natury; biały tekst; narracja brand values.</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-etyk">Zapisz się i odbierz rabat 15% na pierwsze zakupy</td>
+<td class="col-el">Newsletter</td>
+<td class="col-zaw">action: pole e-mail + 'ZAPISZ SIĘ'</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">15% za newsletter — standardowe. Fioletowe tło = brandowe.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4700px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5000px</span></td>
 </tr>
-<tr class="el-row" data-top="5100" onclick="scrollShot(5100)">
+<tr class="el-row" data-top="5900" onclick="scrollShot(5900)">
 <td class="col-lp">11</td>
-<td class="col-etyk"></td>
-<td class="col-el">Pasek USP / Trust Bar</td>
-<td class="col-zaw">Ikony: darmowa dostawa i zwroty (US), sample przy każdym zamówieniu, japońskie składniki, edukacja i egalitaryzm; układ 4-kolumnowy.</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
-<td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5100px</span></td>
-</tr>
-<tr class="el-row" data-top="5250" onclick="scrollShot(5250)">
-<td class="col-lp">12</td>
-<td class="col-etyk">Keep in Touch</td>
-<td class="col-el">Zapis do newslettera</td>
-<td class="col-zaw">Podtytuł: 'Signup for access to special offers, new products, tips, and more.'; CTA: 'Subscribe'; proste pole e-mail.</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
-<td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5250px</span></td>
-</tr>
-<tr class="el-row" data-top="5450" onclick="scrollShot(5450)">
-<td class="col-lp">13</td>
-<td class="col-etyk"></td>
+<td class="col-etyk">phlov. — Menu / Warunki / Pomoc</td>
 <td class="col-el">Footer</td>
-<td class="col-zaw">Kolumny: Company (About Us, Giving Back, Where to Buy, Careers), Help (Help Center, Shipping, Return Policy, Skincare Consultation, Contact Us), Account (My Account, Subscribe &amp; Save, Track an Order, Start A Return); selektor: UNITED STATES; ikony płatności; social: Instagram, TikTok; copyright © 2026 Tatcha Powered by Shopify.</td>
+<td class="col-zaw">social: TikTok, Instagram, YouTube; płatności: Blik, PayPo, Visa, Mastercard, Przelewy24</td>
 <td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5450px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5900px</span></td>
 </tr></tbody>
     </table>
     <table class="scan-table" id="tbl-developer">
@@ -202,12 +186,12 @@ body.comments #tbl-comments{display:table}
     </table>
   </div>
   <div class="split-shot">
-    <img id="shot-img" class="shot-img" src="tatcha_VISION_REPORT_img/0.jpg" alt="screenshot">
+    <img id="shot-img" class="shot-img" src="phlov_VISION_REPORT_img/0.jpg" alt="screenshot">
   </div>
 </div>
 <script>
-var imgD = "tatcha_VISION_REPORT_img/0.jpg";
-var imgM = "tatcha_VISION_REPORT_img/1.jpg";
+var imgD = "phlov_VISION_REPORT_img/0.jpg";
+var imgM = "phlov_VISION_REPORT_img/1.jpg";
 var currentVP = 'desktop';
 
 function scrollShot(top) {

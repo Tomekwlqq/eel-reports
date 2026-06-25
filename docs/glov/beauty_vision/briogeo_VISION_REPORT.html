@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://briogeohair.com" target="_blank">https://briogeohair.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -66,62 +74,78 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
 <td class="col-etyk">Free shipping on orders over $50</td>
-<td class="col-opis">Cienki pasek na samej górze strony z informacją o darmowej dostawie.</td>
+<td class="col-el">Pasek promocji</td>
+<td class="col-zaw">Tekst centralny; brak CTA; brak badge.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="3" onclick="scrollShot(3)">
 <td class="col-lp">2</td>
-<td class="col-el">Header</td>
 <td class="col-etyk">Briogeo</td>
-<td class="col-opis">Górna nawigacja z logo marki, menu głównym i ikonami akcji po prawej.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Logo 'Briogeo' po lewej; menu: Shop, Savor, Jennifer Sullivan; ikony: wyszukiwarka, konto, koszyk po prawej.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">3px</span></td>
 </tr>
 <tr class="el-row" data-top="45" onclick="scrollShot(45)">
 <td class="col-lp">3</td>
-<td class="col-el">Baner główny (Hero)</td>
 <td class="col-etyk">Unearth…</td>
-<td class="col-opis">Hero z modelem na tle naturalnych włosów; tekst po lewej, obraz po prawej — widoczny za popupem.</td>
+<td class="col-el">Baner główny (Hero)</td>
+<td class="col-zaw">Obraz lifestyle z modelką; fragment tekstu 'Unearth…' po lewej; brak wyraźnego CTA w widocznej przestrzeni (zakryty popupem).</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">45px</span></td>
 </tr>
 <tr class="el-row" data-top="130" onclick="scrollShot(130)">
 <td class="col-lp">4</td>
-<td class="col-el">Popup newsletter/rabat<span class="new-badge">NOWY</span></td>
 <td class="col-etyk">UNLOCK 15% OFF YOUR ORDER</td>
-<td class="col-opis">Modal overlay natrętnie zasłaniający hero, oferujący 15% rabatu w zamian za podanie adresu e-mail.</td>
+<td class="col-el">Popup newsletter/rabat<span class="new-badge">NOWY</span></td>
+<td class="col-zaw">CTA: 'CONTINUE'; pole 'Email Address'; zdjęcie produktu (serum) po prawej stronie popupu; X do zamknięcia.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">130px</span></td>
 </tr>
 <tr class="el-row" data-top="860" onclick="scrollShot(860)">
 <td class="col-lp">5</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">Rave-Worthy Rituals. Visible Results.</td>
-<td class="col-opis">Sekcja z nagłówkiem i poziomą karuzelą polecanych produktów z cenami i szybkim podglądem.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">CTA 'shop now' przy nagłówku; karuzela z 5+ produktami; badge: 'new arrival', 'best seller'; ceny: $10–$42; 'quick view' per produkt; strzałki nawigacji karuzeli.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">860px</span></td>
 </tr>
 <tr class="el-row" data-top="1541" onclick="scrollShot(1541)">
 <td class="col-lp">6</td>
-<td class="col-el">O marce / misja</td>
 <td class="col-etyk">Transformation Without Tradeoffs</td>
-<td class="col-opis">Sekcja editorial split z modelem po lewej i opisem filozofii/technologii formułowania marki po prawej.</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-zaw">Duży obraz lifestyle (kobieta z włosami) po lewej; blok tekstu po prawej z: GeoActive™ Formulation Approach, 6-Free™ Clean Science, High Performance Haircare; brak bezpośredniego CTA zakupowego.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1541px</span></td>
 </tr>
 <tr class="el-row" data-top="2442" onclick="scrollShot(2442)">
 <td class="col-lp">7</td>
-<td class="col-el">Kafelki kategorii</td>
 <td class="col-etyk">Care for Every Hair Concern</td>
-<td class="col-opis">Sekcja z kafelkami kategorii produktów według potrzeby/problemu włosów z obrazami produktów.</td>
+<td class="col-el">Kafelki kategorii</td>
+<td class="col-zaw">4 kafelki: STYLE, REPAIR, SCALP, CURL; każdy z obrazem produktu i etykietą kategorii; brak cen; brak wyraźnych CTA per kafelek.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2442px</span></td>
 </tr>
 <tr class="el-row" data-top="2919" onclick="scrollShot(2919)">
 <td class="col-lp">8</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk">For Every Force of Nature</td>
-<td class="col-opis">Stopka z hasłem marki, siatką linków informacyjnych, zapisem do newslettera i informacjami prawnymi.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">Logo i tagline 'For Every Force of Nature'; kolumny linków: Shop, About Us, Help Center, Careers, Terms; linki po prawej: Returns &amp; Exchanges, Store Locator, Web Accessibility, Cookies Settings, Subscription Terms; sekcja newsletter: pole e-mail + CTA 'submit'; ikony social (Instagram, TikTok); linki prawne na dole.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">2919px</span></td>
 </tr></tbody>
     </table>
@@ -130,51 +154,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
-<td class="col-kom">Tekst centralny; brak CTA; brak badge.</td>
-</tr>
-<tr class="el-row" data-top="3" onclick="scrollShot(3)">
-<td class="col-lp">2</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Logo 'Briogeo' po lewej; menu: Shop, Savor, Jennifer Sullivan; ikony: wyszukiwarka, konto, koszyk po prawej.</td>
-</tr>
-<tr class="el-row" data-top="45" onclick="scrollShot(45)">
-<td class="col-lp">3</td>
-<td class="col-el">Baner główny (Hero)</td>
-<td class="col-kom">Obraz lifestyle z modelką; fragment tekstu 'Unearth…' po lewej; brak wyraźnego CTA w widocznej przestrzeni (zakryty popupem).</td>
-</tr>
-<tr class="el-row" data-top="130" onclick="scrollShot(130)">
-<td class="col-lp">4</td>
-<td class="col-el">Popup newsletter/rabat</td>
-<td class="col-kom">CTA: 'CONTINUE'; pole 'Email Address'; zdjęcie produktu (serum) po prawej stronie popupu; X do zamknięcia.</td>
-</tr>
-<tr class="el-row" data-top="860" onclick="scrollShot(860)">
-<td class="col-lp">5</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">CTA 'shop now' przy nagłówku; karuzela z 5+ produktami; badge: 'new arrival', 'best seller'; ceny: $10–$42; 'quick view' per produkt; strzałki nawigacji karuzeli.</td>
-</tr>
-<tr class="el-row" data-top="1541" onclick="scrollShot(1541)">
-<td class="col-lp">6</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-kom">Duży obraz lifestyle (kobieta z włosami) po lewej; blok tekstu po prawej z: GeoActive™ Formulation Approach, 6-Free™ Clean Science, High Performance Haircare; brak bezpośredniego CTA zakupowego.</td>
-</tr>
-<tr class="el-row" data-top="2442" onclick="scrollShot(2442)">
-<td class="col-lp">7</td>
-<td class="col-el">Kafelki kategorii</td>
-<td class="col-kom">4 kafelki: STYLE, REPAIR, SCALP, CURL; każdy z obrazem produktu i etykietą kategorii; brak cen; brak wyraźnych CTA per kafelek.</td>
-</tr>
-<tr class="el-row" data-top="2919" onclick="scrollShot(2919)">
-<td class="col-lp">8</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">Logo i tagline 'For Every Force of Nature'; kolumny linków: Shop, About Us, Help Center, Careers, Terms; linki po prawej: Returns &amp; Exchanges, Store Locator, Web Accessibility, Cookies Settings, Subscription Terms; sekcja newsletter: pole e-mail + CTA 'submit'; ikony social (Instagram, TikTok); linki prawne na dole.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -203,7 +182,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

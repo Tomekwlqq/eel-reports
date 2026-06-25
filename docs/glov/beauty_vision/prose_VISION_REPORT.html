@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://prose.com" target="_blank">https://prose.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -67,111 +75,141 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Header</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Nawigacja z logo Prose po lewej, linkami (Hair / Skin / Accessories / Bestsellers / The Ritual), ikonami koszyka i konta po prawej.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Logo, menu główne tekstowe, ikona koszyka, ikona konta.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="60" onclick="scrollShot(60)">
 <td class="col-lp">2</td>
-<td class="col-el">Baner główny (Hero)</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Ciemne zdjęcie produktów do pielęgnacji włosów z tekstem nagłówkowym i CTA — personalizowane formuły jako główny przekaz marki.</td>
+<td class="col-el">Baner główny (Hero)</td>
+<td class="col-zaw">CTA niewidoczne pod modalem email; hero w tle zasłonięty przez popup newselttera.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">60px</span></td>
 </tr>
 <tr class="el-row" data-top="150" onclick="scrollShot(150)">
 <td class="col-lp">3</td>
-<td class="col-el">Zapis do newslettera</td>
 <td class="col-etyk">Summertime Sale: 60% off + free gift</td>
-<td class="col-opis">Modal pop-up email capture z ofertą 60% zniżki i darmowym upominkiem za zapis; pole email + CTA.</td>
+<td class="col-el">Zapis do newslettera</td>
+<td class="col-zaw">CTA: UNLOCK OFFER; badge: LIMITED TIME ONLY; pole: Enter email address; nota o subskrypcji SMS.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">150px</span></td>
 </tr>
 <tr class="el-row" data-top="1210" onclick="scrollShot(1210)">
 <td class="col-lp">4</td>
-<td class="col-el">Pasek USP / Trust Bar</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Przewijany pasek z atrybutami produktów wolnych od szkodliwych składników.</td>
+<td class="col-el">Pasek USP / Trust Bar</td>
+<td class="col-zaw">Wartości: phthalate free · free of mineral oils · free of gmos · cruelty-free · carbon neutral · paraben free · sulfate free.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1210px</span></td>
 </tr>
 <tr class="el-row" data-top="1302" onclick="scrollShot(1302)">
 <td class="col-lp">5</td>
-<td class="col-el">Sekcja jak to działa<span class="new-badge">NOWY</span></td>
 <td class="col-etyk">Personalization Works Better™</td>
-<td class="col-opis">Trzystopniowy prezentacja procesu personalizacji: konsultacja → formuła → aktualizacja.</td>
+<td class="col-el">Sekcja jak to działa<span class="new-badge">NOWY</span></td>
+<td class="col-zaw">CTA: SEE HOW IT WORKS; 3 kroki z obrazkami: Take our consultation / Your formulas are made to order / As you change so does your Prose.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1302px</span></td>
 </tr>
 <tr class="el-row" data-top="1700" onclick="scrollShot(1700)">
 <td class="col-lp">6</td>
-<td class="col-el">Baner główny (Hero)</td>
 <td class="col-etyk">Healthier hair and skin in just 4 weeks</td>
-<td class="col-opis">Pełnoszerokościowy editorial z portretem modelki i claimem klinicznym — dowód skuteczności marki.</td>
+<td class="col-el">Baner główny (Hero)</td>
+<td class="col-zaw">Etykieta: CLINICALLY TESTED; bez wyraźnego CTA.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1700px</span></td>
 </tr>
 <tr class="el-row" data-top="2000" onclick="scrollShot(2000)">
 <td class="col-lp">7</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">Custom haircare</td>
-<td class="col-opis">Grid produktów haircare z nazwami, cenami i CTA — prezentacja kategorii personalizowanych produktów do włosów.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">CTA sekcji: SHOP ALL HAIR / DISCOVER THE CUSTOM DIFFERENCE; produkty: Custom Shampoo, Custom Conditioner, Custom Scalp Serum; ceny widoczne (From $X); badge: NEW na Scalp Serum; strzałki karuzeli.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2000px</span></td>
 </tr>
 <tr class="el-row" data-top="2804" onclick="scrollShot(2804)">
 <td class="col-lp">8</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">Custom skincare</td>
-<td class="col-opis">Grid produktów skincare z claimami klinicznymi i CTA — prezentacja kategorii personalizowanych produktów do skóry.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">CTA sekcji: SHOP ALL SKIN; claim: DERMATOLOGIST TESTED / 8-hr hydration; produkty: Custom Cleanser (From $29.35), Custom Serum (From $67.80), Custom Moisturizer (From $49.75); strzałki karuzeli.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2804px</span></td>
 </tr>
 <tr class="el-row" data-top="3200" onclick="scrollShot(3200)">
 <td class="col-lp">9</td>
-<td class="col-el">Sekcja składniki<span class="new-badge">NOWY</span></td>
 <td class="col-etyk">Naturally powerful ingredients</td>
-<td class="col-opis">Kafelki z kluczowymi składnikami formuł wraz z opisem działania każdego składnika.</td>
+<td class="col-el">Sekcja składniki<span class="new-badge">NOWY</span></td>
+<td class="col-zaw">CTA: SEE ALL (X) INGREDIENTS; składniki: Hyaluronic Acid, Sea Moss, Spirulina, Biotin, Rosehip Oil, Niacinamide — z ikonami roślin/składników.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">3200px</span></td>
 </tr>
 <tr class="el-row" data-top="3600" onclick="scrollShot(3600)">
 <td class="col-lp">10</td>
-<td class="col-el">Ogólna ocena sklepu</td>
 <td class="col-etyk">Over 500,000 5-star product reviews</td>
-<td class="col-opis">Pełnoszerokościowy baner social proof z liczbą recenzji i zbliżeniem twarzy modelki — budowanie zaufania przez skalę.</td>
+<td class="col-el">Ogólna ocena sklepu</td>
+<td class="col-zaw">Gwiazdki 5/5; liczba: 500,000+; ciemne tło z portretem; bez bezpośredniego CTA.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">3600px</span></td>
 </tr>
 <tr class="el-row" data-top="4100" onclick="scrollShot(4100)">
 <td class="col-lp">11</td>
-<td class="col-el">Pasek USP / Trust Bar</td>
 <td class="col-etyk">The Prose Promise™</td>
-<td class="col-opis">Pasek z czterema gwarancjami zakupowymi Prose w poziomym układzie.</td>
+<td class="col-el">Pasek USP / Trust Bar</td>
+<td class="col-zaw">Gwarancje: Love your first order (or it's on us) / Free shipping for subscription orders / 30-day free returns / 15% off every order for subscribers.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4100px</span></td>
 </tr>
 <tr class="el-row" data-top="4400" onclick="scrollShot(4400)">
 <td class="col-lp">12</td>
-<td class="col-el">O marce / misja</td>
 <td class="col-etyk">Backed by science, powered by people</td>
-<td class="col-opis">Sekcja o zespole naukowców i chemistów z grupowym zdjęciem — budowanie autorytetu i wiarygodności marki.</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-zaw">Zdjęcie zespołu w białych kitlach; tekst podkreślający badania, testy kliniczne i dermatologiczne.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4400px</span></td>
 </tr>
 <tr class="el-row" data-top="5208" onclick="scrollShot(5208)">
 <td class="col-lp">13</td>
-<td class="col-el">Video marki / kampanii</td>
 <td class="col-etyk">Because beauty is personal</td>
-<td class="col-opis">Pełnoszerokościowa sekcja editorial/video z bliskim ujęciem twarzy i CTA do historii marki.</td>
+<td class="col-el">Video marki / kampanii</td>
+<td class="col-zaw">CTA: SEE THE STORY; ciemne, artystyczne zdjęcie z profilem twarzy.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5208px</span></td>
 </tr>
 <tr class="el-row" data-top="5708" onclick="scrollShot(5708)">
 <td class="col-lp">14</td>
-<td class="col-el">Sekcja CSR / zrównoważony rozwój</td>
 <td class="col-etyk">Always made to order. Never made to waste.</td>
-<td class="col-opis">Sekcja sustainability z ciemnozielonym tłem i claimem zero-waste — pozycjonowanie ekologiczne marki.</td>
+<td class="col-el">Sekcja CSR / zrównoważony rozwój</td>
+<td class="col-zaw">CTA: LEARN MORE; tło: ciemnozielony; brak obrazka produktowego.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5708px</span></td>
 </tr>
 <tr class="el-row" data-top="6008" onclick="scrollShot(6008)">
 <td class="col-lp">15</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Stopka z linkami serwisowymi, prawnymi i informacyjnymi w kolumnach.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">Linki: Contact us / Careers / Blog / Help+FAQ / Gift Prose / For stylists / Partner program / Terms of use / Privacy policy / Health Privacy Notice / Accessibility; nota FDA disclaimer na dole.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">6008px</span></td>
 </tr></tbody>
     </table>
@@ -180,86 +218,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Logo, menu główne tekstowe, ikona koszyka, ikona konta.</td>
-</tr>
-<tr class="el-row" data-top="60" onclick="scrollShot(60)">
-<td class="col-lp">2</td>
-<td class="col-el">Baner główny (Hero)</td>
-<td class="col-kom">CTA niewidoczne pod modalem email; hero w tle zasłonięty przez popup newselttera.</td>
-</tr>
-<tr class="el-row" data-top="150" onclick="scrollShot(150)">
-<td class="col-lp">3</td>
-<td class="col-el">Zapis do newslettera</td>
-<td class="col-kom">CTA: UNLOCK OFFER; badge: LIMITED TIME ONLY; pole: Enter email address; nota o subskrypcji SMS.</td>
-</tr>
-<tr class="el-row" data-top="1210" onclick="scrollShot(1210)">
-<td class="col-lp">4</td>
-<td class="col-el">Pasek USP / Trust Bar</td>
-<td class="col-kom">Wartości: phthalate free · free of mineral oils · free of gmos · cruelty-free · carbon neutral · paraben free · sulfate free.</td>
-</tr>
-<tr class="el-row" data-top="1302" onclick="scrollShot(1302)">
-<td class="col-lp">5</td>
-<td class="col-el">Sekcja jak to działa</td>
-<td class="col-kom">CTA: SEE HOW IT WORKS; 3 kroki z obrazkami: Take our consultation / Your formulas are made to order / As you change so does your Prose.</td>
-</tr>
-<tr class="el-row" data-top="1700" onclick="scrollShot(1700)">
-<td class="col-lp">6</td>
-<td class="col-el">Baner główny (Hero)</td>
-<td class="col-kom">Etykieta: CLINICALLY TESTED; bez wyraźnego CTA.</td>
-</tr>
-<tr class="el-row" data-top="2000" onclick="scrollShot(2000)">
-<td class="col-lp">7</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">CTA sekcji: SHOP ALL HAIR / DISCOVER THE CUSTOM DIFFERENCE; produkty: Custom Shampoo, Custom Conditioner, Custom Scalp Serum; ceny widoczne (From $X); badge: NEW na Scalp Serum; strzałki karuzeli.</td>
-</tr>
-<tr class="el-row" data-top="2804" onclick="scrollShot(2804)">
-<td class="col-lp">8</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">CTA sekcji: SHOP ALL SKIN; claim: DERMATOLOGIST TESTED / 8-hr hydration; produkty: Custom Cleanser (From $29.35), Custom Serum (From $67.80), Custom Moisturizer (From $49.75); strzałki karuzeli.</td>
-</tr>
-<tr class="el-row" data-top="3200" onclick="scrollShot(3200)">
-<td class="col-lp">9</td>
-<td class="col-el">Sekcja składniki</td>
-<td class="col-kom">CTA: SEE ALL (X) INGREDIENTS; składniki: Hyaluronic Acid, Sea Moss, Spirulina, Biotin, Rosehip Oil, Niacinamide — z ikonami roślin/składników.</td>
-</tr>
-<tr class="el-row" data-top="3600" onclick="scrollShot(3600)">
-<td class="col-lp">10</td>
-<td class="col-el">Ogólna ocena sklepu</td>
-<td class="col-kom">Gwiazdki 5/5; liczba: 500,000+; ciemne tło z portretem; bez bezpośredniego CTA.</td>
-</tr>
-<tr class="el-row" data-top="4100" onclick="scrollShot(4100)">
-<td class="col-lp">11</td>
-<td class="col-el">Pasek USP / Trust Bar</td>
-<td class="col-kom">Gwarancje: Love your first order (or it's on us) / Free shipping for subscription orders / 30-day free returns / 15% off every order for subscribers.</td>
-</tr>
-<tr class="el-row" data-top="4400" onclick="scrollShot(4400)">
-<td class="col-lp">12</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-kom">Zdjęcie zespołu w białych kitlach; tekst podkreślający badania, testy kliniczne i dermatologiczne.</td>
-</tr>
-<tr class="el-row" data-top="5208" onclick="scrollShot(5208)">
-<td class="col-lp">13</td>
-<td class="col-el">Video marki / kampanii</td>
-<td class="col-kom">CTA: SEE THE STORY; ciemne, artystyczne zdjęcie z profilem twarzy.</td>
-</tr>
-<tr class="el-row" data-top="5708" onclick="scrollShot(5708)">
-<td class="col-lp">14</td>
-<td class="col-el">Sekcja CSR / zrównoważony rozwój</td>
-<td class="col-kom">CTA: LEARN MORE; tło: ciemnozielony; brak obrazka produktowego.</td>
-</tr>
-<tr class="el-row" data-top="6008" onclick="scrollShot(6008)">
-<td class="col-lp">15</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">Linki: Contact us / Careers / Blog / Help+FAQ / Gift Prose / For stylists / Partner program / Terms of use / Privacy policy / Health Privacy Notice / Accessibility; nota FDA disclaimer na dole.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -288,7 +246,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://saiehello.com" target="_blank">https://saiehello.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -66,69 +74,87 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Baner główny (Hero)</td>
 <td class="col-etyk">SAIE SUMMER</td>
-<td class="col-opis">Pełnoekranowy hero z lifestyle'owym zdjęciem kosmetyków saie i hasłem sezonowym, CTA do shopowania kolekcji letniej.</td>
+<td class="col-el">Baner główny (Hero)</td>
+<td class="col-zaw">CTA: 'SHOW SOME SKIN'; układ split (obraz lewo + tekst prawo); brak badgy/ceny/licznika.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="720" onclick="scrollShot(720)">
 <td class="col-lp">2</td>
-<td class="col-el">Pasek USP / Trust Bar</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Ciemny poziomy pasek z komunikatem o darmowej dostawie międzynarodowej i linkiem do sklepu.</td>
+<td class="col-el">Pasek USP / Trust Bar</td>
+<td class="col-zaw">Tekst: 'International Shipping. Easy Now. Ships Worldwide / Shop Now'; brak CTA przycisku, tylko link inline.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">720px</span></td>
 </tr>
 <tr class="el-row" data-top="755" onclick="scrollShot(755)">
 <td class="col-lp">3</td>
-<td class="col-el">Header</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Nawigacja globalna z logiem saie, linkami kategorii i ikonami akcji.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Linki: SHOP / MERCH / SHADE FINDER / LIP LINER 101 / THE MAKEUP CLASS / LEARN / CLIMATE INITIATIVE; ikony: SEARCH / BAG; tło transparentne nad hero.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">755px</span></td>
 </tr>
 <tr class="el-row" data-top="950" onclick="scrollShot(950)">
 <td class="col-lp">4</td>
-<td class="col-el">O marce / misja</td>
 <td class="col-etyk">ELEVATED CLEAN MAKEUP</td>
-<td class="col-opis">Sekcja brandingowa z krótkim manifesto i CTA do strony o marce.</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-zaw">Podtytuł: 'Your clean makeup essentials for instant skin confidence.'; CTA: 'ABOUT US'; minimalistyczny układ tekst-center.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">950px</span></td>
 </tr>
 <tr class="el-row" data-top="1147" onclick="scrollShot(1147)">
 <td class="col-lp">5</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">SAIE SUMMER ESSENTIALS</td>
-<td class="col-opis">Karuzela produktów letnich z ocenami, cenami i CTA do koszyka.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">Produkty: Glowy Super Gel / Slip Tint Moisturizer / SuperSuede Baked Powder Blush / Dew Bronze; oceny gwiazdkowe z liczbą recenzji; ceny widoczne (np. $42, $35, $28); CTA: 'ADD TO MAKEUP BAG'; strzałki karuzeli.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1147px</span></td>
 </tr>
 <tr class="el-row" data-top="1750" onclick="scrollShot(1750)">
 <td class="col-lp">6</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Sekcja editorial z lifestyle'owym zdjęciem produktów saie na tle tekstylnym — bez CTA, pełni funkcję budowania wizerunku.</td>
+<td class="col-el">Spotlight produktu (editorial)</td>
+<td class="col-zaw">Brak nagłówka, brak CTA, brak cen; dwa ujęcia produktowe (bronzer + urządzenie do makijażu) w klimacie letnio-resortwear.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1750px</span></td>
 </tr>
 <tr class="el-row" data-top="2750" onclick="scrollShot(2750)">
 <td class="col-lp">7</td>
-<td class="col-el">Nowości</td>
 <td class="col-etyk">NEWNESS</td>
-<td class="col-opis">Sekcja z najnowszymi produktami w gridzie/karuzeli z ocenami, cenami i CTA.</td>
+<td class="col-el">Nowości</td>
+<td class="col-zaw">Produkty: Lip Liner 101 / SuperSuede Radiant Baked Bronzer / CitySet Lightweight Setting Spray / Slip Tint Undetectable Baked Setting Powder i kolejne; oceny gwiazdkowe; CTA: 'ADD TO MAKEUP BAG'; ceny widoczne (np. $22, $32).</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2750px</span></td>
 </tr>
 <tr class="el-row" data-top="3800" onclick="scrollShot(3800)">
 <td class="col-lp">8</td>
-<td class="col-el">Kafelki kategorii</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Siatka 4 kategorii produktowych z pełnoekranowymi zdjęciami editorial i etykietami tekstowymi.</td>
+<td class="col-el">Kafelki kategorii</td>
+<td class="col-zaw">Kategorie: FACE / LIP / EYE / CHEEK; układ 4-kolumnowy; zdjęcia lifestyle/ingredient; brak CTA przycisków — całe kafelki klikalne.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3800px</span></td>
 </tr>
 <tr class="el-row" data-top="4350" onclick="scrollShot(4350)">
 <td class="col-lp">9</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Globalny footer z logiem, nawigacją pomocniczą, ikonami social media i certyfikatami.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">Ikony social: Instagram/TikTok/Pinterest/Facebook; kolumny: SHOP / ABOUT / HELP / COMMITMENTS; certyfikaty Clean Beauty; podstrony: Founding Story / Saie Standards / Saie Recycles / AB Mission; linki: TERMS / PRIVACY / CALIFORNIA PRIVACY / ACCESSIBILITY / SIGN SAF.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4350px</span></td>
 </tr></tbody>
     </table>
@@ -137,56 +163,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Baner główny (Hero)</td>
-<td class="col-kom">CTA: 'SHOW SOME SKIN'; układ split (obraz lewo + tekst prawo); brak badgy/ceny/licznika.</td>
-</tr>
-<tr class="el-row" data-top="720" onclick="scrollShot(720)">
-<td class="col-lp">2</td>
-<td class="col-el">Pasek USP / Trust Bar</td>
-<td class="col-kom">Tekst: 'International Shipping. Easy Now. Ships Worldwide / Shop Now'; brak CTA przycisku, tylko link inline.</td>
-</tr>
-<tr class="el-row" data-top="755" onclick="scrollShot(755)">
-<td class="col-lp">3</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Linki: SHOP / MERCH / SHADE FINDER / LIP LINER 101 / THE MAKEUP CLASS / LEARN / CLIMATE INITIATIVE; ikony: SEARCH / BAG; tło transparentne nad hero.</td>
-</tr>
-<tr class="el-row" data-top="950" onclick="scrollShot(950)">
-<td class="col-lp">4</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-kom">Podtytuł: 'Your clean makeup essentials for instant skin confidence.'; CTA: 'ABOUT US'; minimalistyczny układ tekst-center.</td>
-</tr>
-<tr class="el-row" data-top="1147" onclick="scrollShot(1147)">
-<td class="col-lp">5</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">Produkty: Glowy Super Gel / Slip Tint Moisturizer / SuperSuede Baked Powder Blush / Dew Bronze; oceny gwiazdkowe z liczbą recenzji; ceny widoczne (np. $42, $35, $28); CTA: 'ADD TO MAKEUP BAG'; strzałki karuzeli.</td>
-</tr>
-<tr class="el-row" data-top="1750" onclick="scrollShot(1750)">
-<td class="col-lp">6</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
-<td class="col-kom">Brak nagłówka, brak CTA, brak cen; dwa ujęcia produktowe (bronzer + urządzenie do makijażu) w klimacie letnio-resortwear.</td>
-</tr>
-<tr class="el-row" data-top="2750" onclick="scrollShot(2750)">
-<td class="col-lp">7</td>
-<td class="col-el">Nowości</td>
-<td class="col-kom">Produkty: Lip Liner 101 / SuperSuede Radiant Baked Bronzer / CitySet Lightweight Setting Spray / Slip Tint Undetectable Baked Setting Powder i kolejne; oceny gwiazdkowe; CTA: 'ADD TO MAKEUP BAG'; ceny widoczne (np. $22, $32).</td>
-</tr>
-<tr class="el-row" data-top="3800" onclick="scrollShot(3800)">
-<td class="col-lp">8</td>
-<td class="col-el">Kafelki kategorii</td>
-<td class="col-kom">Kategorie: FACE / LIP / EYE / CHEEK; układ 4-kolumnowy; zdjęcia lifestyle/ingredient; brak CTA przycisków — całe kafelki klikalne.</td>
-</tr>
-<tr class="el-row" data-top="4350" onclick="scrollShot(4350)">
-<td class="col-lp">9</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">Ikony social: Instagram/TikTok/Pinterest/Facebook; kolumny: SHOP / ABOUT / HELP / COMMITMENTS; certyfikaty Clean Beauty; podstrony: Founding Story / Saie Standards / Saie Recycles / AB Mission; linki: TERMS / PRIVACY / CALIFORNIA PRIVACY / ACCESSIBILITY / SIGN SAF.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -215,7 +191,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

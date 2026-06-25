@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://www.glossier.com" target="_blank">https://www.glossier.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -66,90 +74,114 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Header</td>
 <td class="col-etyk">Glossier</td>
-<td class="col-opis">Pełna nawigacja z logo, linkami kategorii (Skincare, Makeup, Body, Fragrance, Sets, Sale, New, Edit), ikonami konta, wishlisty i koszyka.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Logo lewo, nav center, ikony konta + wyszukiwarki + koszyka prawo. Brak widocznego CTA promocyjnego w headerze.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">2</td>
-<td class="col-el">Pasek promocji</td>
 <td class="col-etyk">Friends of Glossier Sale</td>
-<td class="col-opis">Wąski ciemnoszary pasek nad headerem z informacją o promocji sprzedaży dla znajomych Glossier.</td>
+<td class="col-el">Pasek promocji</td>
+<td class="col-zaw">Tekst: 'Friends of Glossier Sale'. Link 'Shop sale'. Brak timera.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="55" onclick="scrollShot(55)">
 <td class="col-lp">3</td>
-<td class="col-el">Baner wyprzedaży / sale</td>
 <td class="col-etyk">25% OFF</td>
-<td class="col-opis">Pełnoekranowy hero w kolorze koralowym z wzorem powtarzającego się tekstu '25% OFF' i logo uśmiechu Glossier, promujący aktualną wyprzedaż.</td>
+<td class="col-el">Baner wyprzedaży / sale</td>
+<td class="col-zaw">CTA: 'Shop now' (lewy dół). Badge: '25% OFF' wielokrotnie w tle jako wzór. Brak timera odliczającego.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">55px</span></td>
 </tr>
 <tr class="el-row" data-top="200" onclick="scrollShot(200)">
 <td class="col-lp">4</td>
-<td class="col-el">Zapis do newslettera</td>
 <td class="col-etyk">Don't miss out on up to 25%* off</td>
-<td class="col-opis">Popup nakładkowy z formularzem email zapisu do newslettera z ofertą 25% zniżki za subskrypcję.</td>
+<td class="col-el">Zapis do newslettera</td>
+<td class="col-zaw">CTA: 'Sign up' + 'No thanks'. Pole email. Overlay centralny zasłaniający hero. Popup — nie sekcja strony.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">200px</span></td>
 </tr>
 <tr class="el-row" data-top="900" onclick="scrollShot(900)">
 <td class="col-lp">5</td>
-<td class="col-el">Kafelki kategorii</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Rząd 5 kafelków kategorii produktowych z zdjęciami i etykietami: BEST SELLERS, FRAGRANCE, MAKEUP, SKINCARE, BODY.</td>
+<td class="col-el">Kafelki kategorii</td>
+<td class="col-zaw">5 kafelków poziomo. Każdy: zdjęcie produktu + etykieta tekstowa pod spodem. Brak CTA/badge.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">900px</span></td>
 </tr>
 <tr class="el-row" data-top="1306" onclick="scrollShot(1306)">
 <td class="col-lp">6</td>
-<td class="col-el">Grid banerów promo</td>
 <td class="col-etyk">SHOP OUR TOP PICKS WITH UP TO 25% OFF.</td>
-<td class="col-opis">Editorialny baner w różowym tle z tekstem wyprzedaży po lewej i zdjęciem twarzy modelki po prawej z badge'ami promocyjnymi.</td>
+<td class="col-el">Grid banerów promo</td>
+<td class="col-zaw">CTA: 'Shop now' (lewy panel) + 'Shop sets' (prawy panel). Badge: '25% OFF' okrągły na modelu. Layout split 2 kolumny.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1306px</span></td>
 </tr>
 <tr class="el-row" data-top="1600" onclick="scrollShot(1600)">
 <td class="col-lp">7</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk">SHOP ALL</td>
-<td class="col-opis">Pozioma siatka produktów z kategorii Fragrance — 4 produkty widoczne z wariantami rozmiarów, cenami i przyciskiem dodania do koszyka.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">CTA: 'Add to bag' per produkt. Badge: '25% off' na każdym produkcie. Wybór rozmiarów inline (np. 50ml / 30ml / 8ml). Link 'Shop all products' prawy górny róg. 4 produkty widoczne + 1 zestaw.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1600px</span></td>
 </tr>
 <tr class="el-row" data-top="2612" onclick="scrollShot(2612)">
 <td class="col-lp">8</td>
-<td class="col-el">Cytaty klientów</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Sekcja edytorialna z cytatem klientki o zapachu ('My ex boyfriend borrowed my roommate's reading...') prezentowana jako osobista historia.</td>
+<td class="col-el">Cytaty klientów</td>
+<td class="col-zaw">Tekst cytatu + strzałki nawigacji karuzeli (lewo/prawo). Brak nazwy/inicjałów autorki widocznych w tym pasie. Format testimonial/UGC story.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2612px</span></td>
 </tr>
 <tr class="el-row" data-top="2750" onclick="scrollShot(2750)">
 <td class="col-lp">9</td>
-<td class="col-el">O marce / misja</td>
 <td class="col-etyk">Glossier you.</td>
-<td class="col-opis">Pełnoekranowy editorialny obraz z twarzą modelki i logotypem 'Glossier you.' — prezentacja tożsamości marki i zapachu signature.</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-zaw">Typowy brand editorial hero. Brak CTA widocznego w tym kadrze. Strzałki karuzeli po bokach.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2750px</span></td>
 </tr>
 <tr class="el-row" data-top="3200" onclick="scrollShot(3200)">
 <td class="col-lp">10</td>
-<td class="col-el">Galeria UGC / Instagram</td>
 <td class="col-etyk">GET THE LOOK</td>
-<td class="col-opis">Siatka 3 zdjęć lifestylowych z produktami Glossier ułożonymi w flat-lay i na powierzchniach, prezentująca sposoby użycia zestawów.</td>
+<td class="col-el">Galeria UGC / Instagram</td>
+<td class="col-zaw">3 zdjęcia lifestyle: kosmetyczka z produktami, flat-lay produktów, produkty na stoliku. Podpisy pod zdjęciami (np. 'Stock up on favorites or try something new', 'Save 25% during the biggest fragrance sale of the year'). Brak CTA per kafelek.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">3200px</span></td>
 </tr>
 <tr class="el-row" data-top="3918" onclick="scrollShot(3918)">
 <td class="col-lp">11</td>
-<td class="col-el">Zapis do newslettera</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Sekcja osadzona w stronie z polem email i przyciskiem Submit do zapisu na newsletter Glossier.</td>
+<td class="col-el">Zapis do newslettera</td>
+<td class="col-zaw">CTA: 'Submit'. Pole: Email Address. Minimalistyczna sekcja, ciemne tło, biały tekst. Osobna od popupu.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3918px</span></td>
 </tr>
 <tr class="el-row" data-top="4100" onclick="scrollShot(4100)">
 <td class="col-lp">12</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk">At Glossier, we believe...</td>
-<td class="col-opis">Rozbudowany footer z opisem misji marki, kolumnami linków (How Can We Help / About Glossier / Stores / Social), pełną listą produktów w alfabetycznym porządku i informacjami prawnymi.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">Kolumny: How Can We Help (Contact/Returns/Help/FAQ), About Glossier (Careers/Press/Glossier for Good), Stores (Find your store), Social (Instagram/Pinterest/TikTok). Lista produktów alfabetyczna w dolnej części. Ikony emoji (smiley + wave) dekoracyjne. Copyright 2026.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4100px</span></td>
 </tr></tbody>
     </table>
@@ -158,71 +190,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Logo lewo, nav center, ikony konta + wyszukiwarki + koszyka prawo. Brak widocznego CTA promocyjnego w headerze.</td>
-</tr>
-<tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">2</td>
-<td class="col-el">Pasek promocji</td>
-<td class="col-kom">Tekst: 'Friends of Glossier Sale'. Link 'Shop sale'. Brak timera.</td>
-</tr>
-<tr class="el-row" data-top="55" onclick="scrollShot(55)">
-<td class="col-lp">3</td>
-<td class="col-el">Baner wyprzedaży / sale</td>
-<td class="col-kom">CTA: 'Shop now' (lewy dół). Badge: '25% OFF' wielokrotnie w tle jako wzór. Brak timera odliczającego.</td>
-</tr>
-<tr class="el-row" data-top="200" onclick="scrollShot(200)">
-<td class="col-lp">4</td>
-<td class="col-el">Zapis do newslettera</td>
-<td class="col-kom">CTA: 'Sign up' + 'No thanks'. Pole email. Overlay centralny zasłaniający hero. Popup — nie sekcja strony.</td>
-</tr>
-<tr class="el-row" data-top="900" onclick="scrollShot(900)">
-<td class="col-lp">5</td>
-<td class="col-el">Kafelki kategorii</td>
-<td class="col-kom">5 kafelków poziomo. Każdy: zdjęcie produktu + etykieta tekstowa pod spodem. Brak CTA/badge.</td>
-</tr>
-<tr class="el-row" data-top="1306" onclick="scrollShot(1306)">
-<td class="col-lp">6</td>
-<td class="col-el">Grid banerów promo</td>
-<td class="col-kom">CTA: 'Shop now' (lewy panel) + 'Shop sets' (prawy panel). Badge: '25% OFF' okrągły na modelu. Layout split 2 kolumny.</td>
-</tr>
-<tr class="el-row" data-top="1600" onclick="scrollShot(1600)">
-<td class="col-lp">7</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">CTA: 'Add to bag' per produkt. Badge: '25% off' na każdym produkcie. Wybór rozmiarów inline (np. 50ml / 30ml / 8ml). Link 'Shop all products' prawy górny róg. 4 produkty widoczne + 1 zestaw.</td>
-</tr>
-<tr class="el-row" data-top="2612" onclick="scrollShot(2612)">
-<td class="col-lp">8</td>
-<td class="col-el">Cytaty klientów</td>
-<td class="col-kom">Tekst cytatu + strzałki nawigacji karuzeli (lewo/prawo). Brak nazwy/inicjałów autorki widocznych w tym pasie. Format testimonial/UGC story.</td>
-</tr>
-<tr class="el-row" data-top="2750" onclick="scrollShot(2750)">
-<td class="col-lp">9</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-kom">Typowy brand editorial hero. Brak CTA widocznego w tym kadrze. Strzałki karuzeli po bokach.</td>
-</tr>
-<tr class="el-row" data-top="3200" onclick="scrollShot(3200)">
-<td class="col-lp">10</td>
-<td class="col-el">Galeria UGC / Instagram</td>
-<td class="col-kom">3 zdjęcia lifestyle: kosmetyczka z produktami, flat-lay produktów, produkty na stoliku. Podpisy pod zdjęciami (np. 'Stock up on favorites or try something new', 'Save 25% during the biggest fragrance sale of the year'). Brak CTA per kafelek.</td>
-</tr>
-<tr class="el-row" data-top="3918" onclick="scrollShot(3918)">
-<td class="col-lp">11</td>
-<td class="col-el">Zapis do newslettera</td>
-<td class="col-kom">CTA: 'Submit'. Pole: Email Address. Minimalistyczna sekcja, ciemne tło, biały tekst. Osobna od popupu.</td>
-</tr>
-<tr class="el-row" data-top="4100" onclick="scrollShot(4100)">
-<td class="col-lp">12</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">Kolumny: How Can We Help (Contact/Returns/Help/FAQ), About Glossier (Careers/Press/Glossier for Good), Stores (Find your store), Social (Instagram/Pinterest/TikTok). Lista produktów alfabetyczna w dolnej części. Ikony emoji (smiley + wave) dekoracyjne. Copyright 2026.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -251,7 +218,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {

@@ -25,9 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .el-row:hover td{background:#f0f9ff}
 .el-row.active td{background:#e0f2fe}
 .col-lp{width:28px;color:#94a3b8;font-size:11px;text-align:right;padding-right:6px}
-.col-el{width:180px;font-weight:600;color:#0f172a}
-.col-etyk{width:200px;color:#475569;font-style:italic}
+.col-el{width:170px;font-weight:600;color:#0f172a}
+.col-etyk{width:200px;color:#0f172a;font-weight:600}
 .col-opis{color:#64748b;line-height:1.5}
+.col-zaw{color:#475569;line-height:1.5;font-size:12.5px}
+.col-p{width:34px;text-align:center;font-size:15px}
+.th-sub{font-weight:400;color:#94a3b8;font-size:10px}
 .col-pos{width:110px;white-space:nowrap}
 .zbadge{font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
 .dim{color:#94a3b8;font-size:10px}
@@ -46,6 +49,11 @@ body.dev #tbl-developer{display:table}
 body.comments #tbl-shopper{display:none}
 body.comments #tbl-comments{display:table}
 .col-kom{color:#475569;line-height:1.55;font-size:12.5px}
+.col-obs,.col-obs-h{width:240px;border-left:2px solid #f3e8ff}
+.col-obs{background:#faf5ff;color:#6b21a8;font-size:12px;line-height:1.5;cursor:text;outline:none}
+.col-obs:empty::before{content:attr(data-ph);color:#c4b5d4;font-style:italic}
+.col-obs:focus{background:#f3e8ff;box-shadow:inset 0 0 0 2px #d8b4fe}
+.col-obs-h{color:#7c3aed}
 </style></head>
 <body>
 <div class="page-header">
@@ -54,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-16 — <a href="https://www.rhodeskin.com" target="_blank">https://www.rhodeskin.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="comments" onclick="setView('comments',this)">💬 Komentarze</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -66,90 +74,114 @@ body.comments #tbl-comments{display:table}
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
       <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Etykieta</th><th>Opis</th><th>Pozycja</th>
+        <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
       <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
 <td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
 <td class="col-etyk">SUMMER '26 | EXCLUSIVE TO RHODE</td>
-<td class="col-opis">Cienki pasek na górze strony promujący ekskluzywną kolekcję Summer '26.</td>
+<td class="col-el">Pasek promocji</td>
+<td class="col-zaw">Tekst centralny, brak CTA, tło jasne/beżowe.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
 </tr>
 <tr class="el-row" data-top="40" onclick="scrollShot(40)">
 <td class="col-lp">2</td>
-<td class="col-el">Header</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Główna nawigacja z logo rhode pośrodku, linkami SHOP, ABOUT, FUTURES i ikonami SEARCH, ACCOUNT, CART po prawej.</td>
+<td class="col-el">Header</td>
+<td class="col-zaw">Sticky header z półprzezroczystym tłem (rgba white 80%), logo centralne, cart ikona z licznikiem (0).</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">40px</span></td>
 </tr>
 <tr class="el-row" data-top="40" onclick="scrollShot(40)">
 <td class="col-lp">3</td>
-<td class="col-el">Baner główny (Hero)</td>
 <td class="col-etyk">The summer '26 collection is here.</td>
-<td class="col-opis">Pełnoekranowy hero z filmowym ujęciem kobiety w samochodzie, duży headline i przycisk CTA.</td>
+<td class="col-el">Baner główny (Hero)</td>
+<td class="col-zaw">CTA: 'EXPLORE NOW'; ciemne tło, tekst biały na dole-lewym rogu; brak badge; editorial/kampanijny charakter.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">40px</span></td>
 </tr>
 <tr class="el-row" data-top="980" onclick="scrollShot(980)">
 <td class="col-lp">4</td>
-<td class="col-el">Bestsellery / Polecane</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Poziomy karuzel 3 kategorii produktowych (bronze, tint, case) z obrazkami produktów, etykietami i cenami.</td>
+<td class="col-el">Bestsellery / Polecane</td>
+<td class="col-zaw">3 produkty widoczne: Pocket Bronze $25, Peptide Lip Tint $25, Snap-On Lip Case $46; badge 'Only at Rhode' przy każdym; oceny gwiazdkowe (4.4–4.6); liczba recenzji w nawiasach; strzałki karuzeli po prawej.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">980px</span></td>
 </tr>
 <tr class="el-row" data-top="1480" onclick="scrollShot(1480)">
 <td class="col-lp">5</td>
-<td class="col-el">Sekcja kolaboracja / limitowana kolekcja</td>
 <td class="col-etyk">highlight, bronze, tint</td>
-<td class="col-opis">Duży baner editorial z opisem kolekcji letniej i CTA kierującym do ekskluzywnych produktów Rhode.</td>
+<td class="col-el">Sekcja kolaboracja / limitowana kolekcja</td>
+<td class="col-zaw">CTA: 'EXCLUSIVE TO RHODE'; tekst opisuje limited edition: Highlight Milk, Pocket Bronze, Peptide Lip Tint, Tinted Bag, Summer Kit; lifestyle photo z modelką; ciemne tło.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1480px</span></td>
 </tr>
 <tr class="el-row" data-top="2782" onclick="scrollShot(2782)">
 <td class="col-lp">6</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
 <td class="col-etyk">HIGHLIGHT MILK</td>
-<td class="col-opis">Sekcja skupiająca uwagę na jednym produkcie — Highlight Milk — z obrazem, opisem i przyciskiem dodania do koszyka.</td>
+<td class="col-el">Spotlight produktu (editorial)</td>
+<td class="col-zaw">CTA: 'ADD TO CART'; podtytuł 'multipurpose luminizer'; nawigacja '1/4' sugeruje slider produktowy; beżowe tło.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2782px</span></td>
 </tr>
 <tr class="el-row" data-top="3100" onclick="scrollShot(3100)">
 <td class="col-lp">7</td>
-<td class="col-el">Hero split (obraz + tekst)</td>
 <td class="col-etyk">bronzed all over</td>
-<td class="col-opis">Sekcja editorial z dużym zdjęciem flatlay produktów bronze i tekstem opisującym zastosowania kolekcji.</td>
+<td class="col-el">Hero split (obraz + tekst)</td>
+<td class="col-zaw">CTA: 'ONLY AT RHODE'; tekst o Lip Cases, Peptide Lip Tints, Tinted Bag, Terry Towel; ciepłe brązowe tony; brak ceny.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">3100px</span></td>
 </tr>
 <tr class="el-row" data-top="3700" onclick="scrollShot(3700)">
 <td class="col-lp">8</td>
-<td class="col-el">Galeria UGC / Instagram</td>
 <td class="col-etyk">rhode + you</td>
-<td class="col-opis">Galeria zdjęć UGC z mediów społecznościowych prezentująca użytkowników z produktami Rhode.</td>
+<td class="col-el">Galeria UGC / Instagram</td>
+<td class="col-zaw">Link: 'FIND US ON SOCIAL'; mozaika zdjęć lifestyle; ciepłe tony skóry dominują; brak CTA produktowego.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">3700px</span></td>
 </tr>
 <tr class="el-row" data-top="4500" onclick="scrollShot(4500)">
 <td class="col-lp">9</td>
-<td class="col-el">O marce / misja</td>
 <td class="col-etyk">To RESTORE, PROTECT, and NURTURE</td>
-<td class="col-opis">Sekcja brandowa z manifestem marki, linkami do misji, filantropii i zrównoważonego rozwoju oraz zdjęciem kampanijnym.</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-zaw">CTA: 'OUR VALUES'; linki dodatkowe: mission, philanthropy, sustainability; duże zdjęcie editorial po prawej (kobieta przy morzu).</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">4500px</span></td>
 </tr>
 <tr class="el-row" data-top="5250" onclick="scrollShot(5250)">
 <td class="col-lp">10</td>
-<td class="col-el">Baner wyprzedaży / sale</td>
 <td class="col-etyk">Drenched in summer.</td>
-<td class="col-opis">Ciemny baner kampanijny z nagłówkiem i CTA prowadzącym do kolekcji.</td>
+<td class="col-el">Baner wyprzedaży / sale</td>
+<td class="col-zaw">CTA: 'SHOP THE COLLECTION'; pełna szerokość, ciemne tło, modelka w letnim klimacie.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5250px</span></td>
 </tr>
 <tr class="el-row" data-top="5850" onclick="scrollShot(5850)">
 <td class="col-lp">11</td>
-<td class="col-el">Zapis do newslettera</td>
 <td class="col-etyk">Join us on the move to an effortless glow.</td>
-<td class="col-opis">Sekcja zapisu do newslettera z polem email i przyciskiem subskrypcji, personalizowana imieniem Hailey.</td>
+<td class="col-el">Zapis do newslettera</td>
+<td class="col-zaw">CTA: 'SUBSCRIBE'; pole: 'Email Address'; opis: 'tips, tricks &amp; exclusive content from Hailey'; link do polityki prywatności; tło jasne.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5850px</span></td>
 </tr>
 <tr class="el-row" data-top="6400" onclick="scrollShot(6400)">
 <td class="col-lp">12</td>
-<td class="col-el">Footer</td>
 <td class="col-etyk"></td>
-<td class="col-opis">Stopka z sekcjami nawigacyjnymi, linkami społecznościowymi, informacjami prawnymi i wsparciem.</td>
+<td class="col-el">Footer</td>
+<td class="col-zaw">Kolumny: NAVIGATE (Shop/Our Story/Rhode Futures/Impact/VLOG/Where to Find Us), SOCIAL (Instagram/Youtube/TikTok/Pinterest), OFFICIAL (Privacy/Terms/Accessibility/FAQ/Contact/Events), SUPPORT (godziny pracy CS, linki CCPA, Cookie Preferences); logo Afterpay; wybór kraju US/USD; copyright © rhode 2024.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…"></td>
+<td class="col-p" title="personalizacja">–</td>
 <td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">6400px</span></td>
 </tr></tbody>
     </table>
@@ -158,71 +190,6 @@ body.comments #tbl-comments{display:table}
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
       <tbody></tbody>
-    </table>
-    <table class="scan-table" id="tbl-comments">
-      <thead><tr>
-        <th class="col-lp">LP</th><th>Element</th><th>Komentarz — co widać (komponenty, action buttony)</th>
-      </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
-<td class="col-lp">1</td>
-<td class="col-el">Pasek promocji</td>
-<td class="col-kom">Tekst centralny, brak CTA, tło jasne/beżowe.</td>
-</tr>
-<tr class="el-row" data-top="40" onclick="scrollShot(40)">
-<td class="col-lp">2</td>
-<td class="col-el">Header</td>
-<td class="col-kom">Sticky header z półprzezroczystym tłem (rgba white 80%), logo centralne, cart ikona z licznikiem (0).</td>
-</tr>
-<tr class="el-row" data-top="40" onclick="scrollShot(40)">
-<td class="col-lp">3</td>
-<td class="col-el">Baner główny (Hero)</td>
-<td class="col-kom">CTA: 'EXPLORE NOW'; ciemne tło, tekst biały na dole-lewym rogu; brak badge; editorial/kampanijny charakter.</td>
-</tr>
-<tr class="el-row" data-top="980" onclick="scrollShot(980)">
-<td class="col-lp">4</td>
-<td class="col-el">Bestsellery / Polecane</td>
-<td class="col-kom">3 produkty widoczne: Pocket Bronze $25, Peptide Lip Tint $25, Snap-On Lip Case $46; badge 'Only at Rhode' przy każdym; oceny gwiazdkowe (4.4–4.6); liczba recenzji w nawiasach; strzałki karuzeli po prawej.</td>
-</tr>
-<tr class="el-row" data-top="1480" onclick="scrollShot(1480)">
-<td class="col-lp">5</td>
-<td class="col-el">Sekcja kolaboracja / limitowana kolekcja</td>
-<td class="col-kom">CTA: 'EXCLUSIVE TO RHODE'; tekst opisuje limited edition: Highlight Milk, Pocket Bronze, Peptide Lip Tint, Tinted Bag, Summer Kit; lifestyle photo z modelką; ciemne tło.</td>
-</tr>
-<tr class="el-row" data-top="2782" onclick="scrollShot(2782)">
-<td class="col-lp">6</td>
-<td class="col-el">Spotlight produktu (editorial)</td>
-<td class="col-kom">CTA: 'ADD TO CART'; podtytuł 'multipurpose luminizer'; nawigacja '1/4' sugeruje slider produktowy; beżowe tło.</td>
-</tr>
-<tr class="el-row" data-top="3100" onclick="scrollShot(3100)">
-<td class="col-lp">7</td>
-<td class="col-el">Hero split (obraz + tekst)</td>
-<td class="col-kom">CTA: 'ONLY AT RHODE'; tekst o Lip Cases, Peptide Lip Tints, Tinted Bag, Terry Towel; ciepłe brązowe tony; brak ceny.</td>
-</tr>
-<tr class="el-row" data-top="3700" onclick="scrollShot(3700)">
-<td class="col-lp">8</td>
-<td class="col-el">Galeria UGC / Instagram</td>
-<td class="col-kom">Link: 'FIND US ON SOCIAL'; mozaika zdjęć lifestyle; ciepłe tony skóry dominują; brak CTA produktowego.</td>
-</tr>
-<tr class="el-row" data-top="4500" onclick="scrollShot(4500)">
-<td class="col-lp">9</td>
-<td class="col-el">O marce / misja</td>
-<td class="col-kom">CTA: 'OUR VALUES'; linki dodatkowe: mission, philanthropy, sustainability; duże zdjęcie editorial po prawej (kobieta przy morzu).</td>
-</tr>
-<tr class="el-row" data-top="5250" onclick="scrollShot(5250)">
-<td class="col-lp">10</td>
-<td class="col-el">Baner wyprzedaży / sale</td>
-<td class="col-kom">CTA: 'SHOP THE COLLECTION'; pełna szerokość, ciemne tło, modelka w letnim klimacie.</td>
-</tr>
-<tr class="el-row" data-top="5850" onclick="scrollShot(5850)">
-<td class="col-lp">11</td>
-<td class="col-el">Zapis do newslettera</td>
-<td class="col-kom">CTA: 'SUBSCRIBE'; pole: 'Email Address'; opis: 'tips, tricks &amp; exclusive content from Hailey'; link do polityki prywatności; tło jasne.</td>
-</tr>
-<tr class="el-row" data-top="6400" onclick="scrollShot(6400)">
-<td class="col-lp">12</td>
-<td class="col-el">Footer</td>
-<td class="col-kom">Kolumny: NAVIGATE (Shop/Our Story/Rhode Futures/Impact/VLOG/Where to Find Us), SOCIAL (Instagram/Youtube/TikTok/Pinterest), OFFICIAL (Privacy/Terms/Accessibility/FAQ/Contact/Events), SUPPORT (godziny pracy CS, linki CCPA, Cookie Preferences); logo Afterpay; wybór kraju US/USD; copyright © rhode 2024.</td>
-</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
@@ -251,7 +218,12 @@ function setVP(vp, btn) {
     document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     var img = document.getElementById('shot-img');
-    if (img) img.src = vp === 'desktop' ? imgD : imgM;
+    if (img) {
+        img.src = vp === 'desktop' ? imgD : imgM;
+        // mobile: nie rozciągaj ponad natywne 390px (inaczej upscale/rozmycie)
+        img.style.maxWidth = vp === 'mobile' ? '390px' : '';
+        img.style.margin = vp === 'mobile' ? '0 auto' : '';
+    }
 }
 
 function setView(view, btn) {
