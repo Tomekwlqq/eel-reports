@@ -761,6 +761,7 @@ function loadArticle(id){
   applyHighlights();
   renderHistory(),renderCommentList();
   renderPhotos();
+  if(typeof renderAccept==="function") renderAccept();
   hideSelUI();
 }
 
@@ -892,7 +893,7 @@ function renderCommentList(){
   const list=Store.getComments(currentArticle.id);
   document.getElementById("cmtCount").textContent=list.length;
   const el=document.getElementById("cmtList");
-  if(!list.length){ el.innerHTML='<div style="color:var(--mut);font-size:13px">Brak uwag. Zaznacz fragment tekstu powyżej, aby dodać pierwszą.</div>'; return; }
+  if(!list.length){ el.innerHTML='<div style="color:var(--mut);font-size:13px">Brak uwag. Zaznacz fragment tekstu powyżej, aby dodać pierwszą.</div>'; if(typeof renderAccept==="function") renderAccept(); return; }
   el.innerHTML=list.slice().reverse().map(c=>{
     const d=new Date(c.ts);
     const ds=d.toLocaleDateString("pl-PL")+" "+d.toLocaleTimeString("pl-PL",{hour:"2-digit",minute:"2-digit"});
