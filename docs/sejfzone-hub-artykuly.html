@@ -1203,8 +1203,10 @@ function renderArticles(){
   }
   const cWdr=col("📦 Do wdrożenia",doWdrozenia,"#1f9e6e",r=>{
     const f=FILES[String(r.nr)];
-    return card(r,'<button class="minibtn ok genpack" data-nr="'+r.nr+'" data-kl="'+r.kl+'" '+(f?'data-file="'+f+'"':'')+'>⬇ Pobierz HTML do wklejenia</button>'
-      +(f?' <a class="minibtn" href="computer:///Users/Tomek_Main/Documents/Claude/Projects/SejfZone/'+f+'" style="text-decoration:none">📄 plik</a>':''));
+    return card(r,'<div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">'
+      +'<button class="minibtn ok artprev" data-nr="'+r.nr+'" data-kl="'+r.kl+'" style="width:100%">👁 Podgląd HTML</button>'
+      +'<button class="minibtn ok artcopy" data-nr="'+r.nr+'" data-kl="'+r.kl+'" style="width:100%">📋 Kopiuj do wklejenia</button>'
+      +'</div>');
   });
   const cAkc=col("✅ Do akceptu",doAkceptu,"#1A6EF4",r=>{
     const a=accOf(r);
@@ -1214,31 +1216,43 @@ function renderArticles(){
   const cLive=col("🌐 Live",live,"#667",r=>card(r,''));
   document.getElementById("kanban").innerHTML=cWdr+cAkc+cNext+cLive;
   // generator paczki
-  document.querySelectorAll(".genpack").forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); genPaczka(b.dataset.nr,b.dataset.file,b.dataset.kl); });
+  document.querySelectorAll(".artprev").forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); podgladHTML(b.dataset.nr,b.dataset.kl); });
+  document.querySelectorAll(".artcopy").forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); kopiujHTML(b.dataset.nr,b.dataset.kl,b); });
 }
-function genPaczka(nr,file,kl){
-  // PACZKA = gotowy HTML wsadu CMS do wklejenia w IdoSell (Edycja zaawansowana)
+function _artHTML(nr,kl){
+  // gotowy HTML wsadu CMS z osadzonego ARTICLES (to co idzie do edytora IdoSell)
   const row=ROWS.find(r=>String(r.nr)===String(nr)&&r.typ!=="nieblog"&&(!kl||r.kl===kl)) || ROWS.find(r=>String(r.nr)===String(nr)&&r.typ!=="nieblog");
+  const art=(typeof ARTICLES!=="undefined")?(ARTICLES[String(nr)]||ARTICLES[String(row&&row.id)]):null;
+  return {row:row, html:(art&&art.html)?art.html:null};
+}
+function podgladHTML(nr,kl){
+  const {row,html}=_artHTML(nr,kl);
+  if(!html){ alert("Brak osadzonej treści dla #"+nr+"."); return; }
   const KAT={A:"Przewodnik zakupowy",B:"Bezpieczeństwo i klasy odporności",C:"Przewodnik zakupowy",D:"Przewodnik zakupowy",E:"Przewodnik zakupowy",F:"Bezpieczeństwo i klasy odporności",G:"Montaż i użytkowanie"};
-  const sciezka=(row&&row.sc?row.sc:"A").trim().charAt(0);
-  const tytul=row?row.t:("artykuł #"+nr);
-  // gotowy HTML treści z osadzonego ART_RAW (to co wklejasz w CMS)
-  const art = (typeof ARTICLES!=="undefined") ? (ARTICLES[String(nr)]||ARTICLES[String(row&&row.id)]) : null;
-  if(!art || !art.html){
-    alert("Brak osadzonej treści dla #"+nr+" w hubie. Plik lokalny: "+(file||"artykuly_blog/")+" — otwórz go i skopiuj treść.");
-    return;
-  }
-  // krótka instrukcja pól jako komentarz HTML na górze (nie psuje wklejania — to komentarz)
-  const head="<!-- ====== WDROŻENIE IdoSell — #"+nr+" "+tytul+" ======\n"
-    +"  Kategoria bloga: "+(KAT[sciezka]||"Przewodnik zakupowy")+"\n"
-    +"  Nazwa na stronie: "+tytul+"\n"
-    +"  Grafika: Obrazek -> wgraj hero | Indeksowanie: tak | URL/meta: automatycznie\n"
-    +"  UWAGA: wgraj zdjęcia (/data/include/cms/...) na serwer PRZED publikacją.\n"
-    +"  Poniżej = treść do pola 'Edycja zaawansowana'. ====== -->\n\n";
-  const blob=new Blob([head+art.html],{type:"text/html;charset=utf-8"});
-  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
-  a.download="wdrozenie_art_"+nr+"_"+(kl||"")+".html"; document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+  const sc=(row&&row.sc?row.sc:"A").trim().charAt(0);
+  // otworz nowa karte z wyrenderowanym artykulem + pasek instrukcji u gory
+  const w=window.open("","_blank");
+  if(!w){ alert("Przeglądarka zablokowała nowe okno — zezwól na pop-upy."); return; }
+  const bar='<div style="position:sticky;top:0;background:#15252f;color:#fff;padding:10px 16px;font:13px/1.5 system-ui;z-index:99">'
+    +'<b>Podgląd #'+nr+'</b> — '+(row?row.t:"")+' &nbsp;|&nbsp; Kategoria: <b style="color:#40e0d0">'+(KAT[sc]||"Przewodnik zakupowy")+'</b>'
+    +' &nbsp;|&nbsp; ⚠️ wgraj zdjęcia na serwer przed publikacją</div>';
+  w.document.open();
+  w.document.write('<!doctype html><html lang="pl"><head><meta charset="utf-8"><title>Podgląd #'+nr+'</title></head><body style="margin:0;font-family:system-ui">'+bar+'<div style="max-width:820px;margin:0 auto;padding:24px">'+html+'</div></body></html>');
+  w.document.close();
+}
+function kopiujHTML(nr,kl,btn){
+  const {html}=_artHTML(nr,kl);
+  if(!html){ alert("Brak osadzonej treści dla #"+nr+"."); return; }
+  const done=()=>{ if(btn){ const t=btn.textContent; btn.textContent="✓ Skopiowano!"; setTimeout(()=>btn.textContent=t,1800); } };
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(html).then(done).catch(()=>fallbackCopy(html,done));
+  } else fallbackCopy(html,done);
+}
+function fallbackCopy(text,cb){
+  const ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; ta.style.left="-9999px";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); cb&&cb(); }catch(e){ alert("Nie udało się skopiować — zaznacz ręcznie."); }
+  document.body.removeChild(ta);
 }
 
 /* ===== updateKpis shim (rev wywołuje go po zmianach) ===== */
