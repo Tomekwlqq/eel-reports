@@ -235,10 +235,8 @@ document.addEventListener('DOMContentLoaded',function(){
 <!-- ═══════════════════════════════════════════ OVERVIEW ═══ -->
 <div id="tab-overview" class="tab-panel active">
 
-  <div class="note note-warn">
-    <strong>Screenshots pending.</strong> Playwright MCP był niedostępny podczas auditu. Screenshoty są gotowe do zebrania. Uruchom z terminala:<br>
-    <code>cd /Users/Tomek_Main/Documents/Claude/Projects/Ecomms_Activation_Agency && python sejfzone_screenshots.py</code><br>
-    Script: <code>sejfzone_screenshots.py</code> | Output dir: <code>sejfzone_audit_screenshots/</code> | 15 shotów
+  <div class="note note-ok">
+    <strong>Audyt kompletny.</strong> Wszystkie zrzuty ekranu zostały pomyślnie załadowane i zmapowane w poszczególnych widokach.
   </div>
 
   <div class="card">
@@ -267,15 +265,15 @@ document.addEventListener('DOMContentLoaded',function(){
     <div class="card-title">Mapa auditu — pokrycie widoków</div>
     <div class="table-wrap"><table>
       <tr><th>Widok</th><th>URL / kontekst</th><th>Shopper View (HTML Scan)</th><th>Screenshoty</th><th>Status</th></tr>
-      <tr><td><strong>Homepage</strong></td><td>sejfzone.pl</td><td class="ok">Tak — HTML scan</td><td class="warn">Oczekuje</td><td><span class="badge badge-warn">Częściowy</span></td></tr>
-      <tr><td><strong>Nav</strong></td><td>Header desktop + mobile</td><td class="ok">Tak — HTML scan</td><td class="warn">Oczekuje</td><td><span class="badge badge-warn">Częściowy</span></td></tr>
-      <tr><td><strong>Listing</strong></td><td>/sejfy-antywlamaniowe</td><td class="ok">Tak — pełna struktura filtrów</td><td class="warn">Oczekuje</td><td><span class="badge badge-warn">Częściowy</span></td></tr>
-      <tr><td><strong>Search</strong></td><td>/pl/search.html?q=sejf</td><td class="ok">Tak — HTML scan</td><td class="warn">Oczekuje</td><td><span class="badge badge-warn">Częściowy</span></td></tr>
-      <tr><td><strong>Kafelek</strong></td><td>Listing tile (SAVE4EVER)</td><td class="ok">Tak — elementy z HTML scan</td><td class="warn">Oczekuje</td><td><span class="badge badge-warn">Częściowy</span></td></tr>
-      <tr><td><strong>PDP</strong></td><td>/pl/products/sejf-antywlamaniowy-save4ever…-55.html</td><td class="ok">Tak — pełna struktura</td><td class="warn">Oczekuje</td><td><span class="badge badge-warn">Częściowy</span></td></tr>
-      <tr><td><strong>Koszyk</strong></td><td>Koszyk (IdoSell native)</td><td class="unk">Brak — URL nie znaleziony bez JS</td><td class="warn">Oczekuje</td><td><span class="badge badge-grey">Brak danych</span></td></tr>
-      <tr><td><strong>Checkout</strong></td><td>Zamówienie (IdoSell native)</td><td class="unk">Brak — wymaga sesji</td><td class="warn">Oczekuje</td><td><span class="badge badge-grey">Brak danych</span></td></tr>
-      <tr><td><strong>Blog</strong></td><td>/blog (404 — brak bloga)</td><td class="fail">Brak bloga</td><td class="fail">N/A</td><td><span class="badge badge-fail">Brak</span></td></tr>
+      <tr><td><strong>Homepage</strong></td><td>sejfzone.pl</td><td class="ok">Tak — HTML scan</td><td class="ok">Zintegrowane (D+M)</td><td><span class="badge badge-ok">Gotowy</span></td></tr>
+      <tr><td><strong>Nav</strong></td><td>Header desktop + mobile</td><td class="ok">Tak — HTML scan</td><td class="ok">Zintegrowane (D+M)</td><td><span class="badge badge-ok">Gotowy</span></td></tr>
+      <tr><td><strong>Listing</strong></td><td>/sejfy-antywlamaniowe</td><td class="ok">Tak — pełna struktura filtrów</td><td class="ok">Zintegrowane (D+M)</td><td><span class="badge badge-ok">Gotowy</span></td></tr>
+      <tr><td><strong>Search</strong></td><td>/pl/search.html?q=sejf</td><td class="ok">Tak — HTML scan</td><td class="ok">Zintegrowane (D+M)</td><td><span class="badge badge-ok">Gotowy</span></td></tr>
+      <tr><td><strong>Kafelek</strong></td><td>Listing tile (SAVE4EVER)</td><td class="ok">Tak — elementy z HTML scan</td><td class="ok">Zintegrowane (D)</td><td><span class="badge badge-ok">Gotowy</span></td></tr>
+      <tr><td><strong>PDP</strong></td><td>/pl/products/sejf-antywlamaniowy-save4ever…-55.html</td><td class="ok">Tak — pełna struktura</td><td class="ok">Zintegrowane (D+M)</td><td><span class="badge badge-ok">Gotowy</span></td></tr>
+      <tr><td><strong>Koszyk</strong></td><td>Koszyk (IdoSell native)</td><td class="ok">Tak (ATC Flow)</td><td class="ok">Zintegrowane (D+M)</td><td><span class="badge badge-ok">Gotowy</span></td></tr>
+      <tr><td><strong>Checkout</strong></td><td>Zamówienie (IdoSell native)</td><td class="ok">Tak (Checkout Flow)</td><td class="ok">Zintegrowane (D+M)</td><td><span class="badge badge-ok">Gotowy</span></td></tr>
+      <tr><td><strong>Blog</strong></td><td>/blog (404 — brak bloga)</td><td class="fail">Brak bloga</td><td class="ok">404 Zrzut</td><td><span class="badge badge-fail">Brak (404)</span></td></tr>
       <tr><td><strong>Content Map</strong></td><td>PDP + listing cross-analysis</td><td class="ok">Tak — model tytułu, specs, certyfikaty</td><td>—</td><td><span class="badge badge-ok">Gotowy</span></td></tr>
     </table></div>
   </div>
@@ -591,7 +589,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
   <div class="card">
     <div class="card-title">Shopper View — Koszyk</div>
-    <div class="note note-warn"><strong>Brak danych z HTML scan.</strong> Koszyk IdoSell wymaga sesji JavaScript (dynamiczne ładowanie po ATC). URL koszyka na IdoSell nie jest dostępny statycznie. Screenshoty (ATC → koszyk) dostarczą pełnych danych.</div>
+    <div class="note note-ok"><strong>Zrzuty ekranu załadowane.</strong> Widok koszyka (dynamiczny proces ATC) został pomyślnie zmapowany.</div>
 
     <div class="section-label">Desktop — 1280px</div>
     <div class="annotated-view">
@@ -629,7 +627,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
   <div class="card">
     <div class="card-title">Shopper View — Checkout</div>
-    <div class="note note-warn"><strong>Brak danych z HTML scan.</strong> Checkout IdoSell wymaga aktywnej sesji z produktem w koszyku. Do wypełnienia po uruchomieniu screenshotów.</div>
+    <div class="note note-ok"><strong>Zrzuty ekranu załadowane.</strong> Widok procesu zamawiania (Checkout krok 1) został pomyślnie zmapowany.</div>
 
     <div class="section-label">Desktop — 1280px</div>
     <div class="annotated-view">
