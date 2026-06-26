@@ -67,17 +67,19 @@ h1{font-size:54px;font-weight:800;letter-spacing:-2px;line-height:1.05}
 .big .go{margin-left:auto;font-size:22px;color:var(--accent);flex-shrink:0}
 
 /* wyróżnione kafle operacyjne (Live + Lista napraw + Tech SEO) — 3 w rzędzie, kolorowe */
-.hero-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:8px}
-@media(max-width:860px){.hero-row{grid-template-columns:1fr 1fr}}
-@media(max-width:720px){.hero-row{grid-template-columns:1fr}}
+.hero-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:8px}
+@media(max-width:1000px){.hero-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.hero-row{grid-template-columns:1fr}}
 .feat{border-radius:18px;padding:22px;text-decoration:none;display:flex;flex-direction:column;gap:4px;position:relative;overflow:hidden;color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.12);transition:.18s;min-height:150px}
 .feat:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.2)}
 .feat.live{background:linear-gradient(135deg,#16a34a,#0d8a3e)}
 .feat.fix{background:linear-gradient(135deg,#f5751a,#e0560a)}
 .feat.seo{background:linear-gradient(135deg,#7c5cff,#5b2ee0)}
+.feat.ads{background:linear-gradient(135deg,#0f7ae5,#0050b3)}
+.feat.nail{background:linear-gradient(135deg,#c2185b,#880e4f)}
 .feat .ico{width:46px;height:46px;border-radius:13px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:8px}
-.feat h3{font-size:18px;font-weight:800;letter-spacing:-.3px}
-.feat p{font-size:12.5px;color:#fff;line-height:1.5;flex:1}
+.feat h3{font-size:16px;font-weight:800;letter-spacing:-.3px}
+.feat p{font-size:12px;color:#fff;line-height:1.5;flex:1}
 .feat .badge2{position:absolute;top:16px;right:16px;font-size:10.5px;font-weight:700;background:rgba(255,255,255,.22);padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px}
 .feat .go{font-size:20px;align-self:flex-end}
 
@@ -132,25 +134,11 @@ h1{font-size:54px;font-weight:800;letter-spacing:-2px;line-height:1.05}
 
 <!-- WYRÓŻNIONE OPERACYJNE — PIERWSZY RZĄD pod tytułem -->
 <div class="hero-row">
-  <a class="feat fix" href="GLOV_Mega_Audit_4zakladki.html#ga4">
-    <span class="badge2">📈 złoty standard</span>
-    <div class="ico">📈</div>
-    <h3>GA4 — Analiza Startowa</h3>
-    <p>Pełna analiza startowa GA4 — segmenty, ścieżki, ruch płatny i behawior. Wejście wprost na zakładkę. Złoty standard analiz GLOV.</p>
-    <div class="go">→</div>
-  </a>
-  <a class="feat seo" href="beauty_vision/INDEX.html">
-    <span class="badge2">💄 benchmark 48</span>
-    <div class="ico">💄</div>
-    <h3>Beauty Vision — porównanie 48 stron</h3>
-    <p>Analiza porównawcza 48 sklepów beauty (DTC) zmapowanych vision-first, element-po-elemencie. Benchmark kontentu i struktury PDP — referencja dla GLOV. Zdublowane z shop-mapping (ważna analiza).</p>
-    <div class="go">→</div>
-  </a>
-  <a class="feat seo" href="GLOV_Konkurencja_LED_Content.html">
-    <span class="badge2">🆕 GEO</span>
-    <div class="ico">🔬</div>
-    <h3>Analiza konkurencji LED</h3>
-    <p>Porównanie kontentu kart 6 konkurentów Luna Eye (CurrentBody · Omnilux · Solawave · Dr Dennis Gross · Foreo) — screeny PDP + jak piszą + recenzje + 7 wymiarów cytowalności. Luki GLOV: zero dowodu/FDA, mało faktów, słabość konkurencji = trwałość.</p>
+  <a class="feat live" href="GLOV_Live.html">
+    <span class="badge2">🟢 Live</span>
+    <div class="ico">📡</div>
+    <h3>Live Dashboard</h3>
+    <p>Sprzedaż na żywo — gross · sesje · transakcje · CR w układzie miesiąc / tydzień / dziś + wykres dzień po dniu. Dane Shopify.</p>
     <div class="go">→</div>
   </a>
   <a class="feat fix" href="GLOV_Lista_Napraw.html">
@@ -172,6 +160,20 @@ h1{font-size:54px;font-weight:800;letter-spacing:-2px;line-height:1.05}
     <div class="ico">⚙️</div>
     <h3>Technical on-page SEO</h3>
     <p>Audyt techniczny per URL: stan techniczny, znaleziska priorytetowo, wszystkie badane URL ze szczegółami. Uzupełnienie Full SEO Audit.</p>
+    <div class="go">→</div>
+  </a>
+  <a class="feat ads" href="GLOV_kampanie_cross_source.html">
+    <span class="badge2">📊 Cross-source</span>
+    <div class="ico">🔗</div>
+    <h3>Kampanie Meta × GA4 × Shopify</h3>
+    <p>5 aktywnych kampanii w jednej tabeli — pixel vs last-click vs sprzedaż. Blended ROAS, ATC, przychód per kampania. Match po UTM.</p>
+    <div class="go">→</div>
+  </a>
+  <a class="feat nail" href="https://tomekwlqq.github.io/eel-reports/glov/HUB_lakiery.html" target="_blank">
+    <span class="badge2">💅 CoolNails</span>
+    <div class="ico">💅</div>
+    <h3>HUB Lakiery</h3>
+    <p>Analiza kategorii CoolNails — ruch, konwersja, produkty, zachowanie użytkowników. Raport opublikowany.</p>
     <div class="go">→</div>
   </a>
 </div>
