@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOV — Kampanie Meta × GA4 × Shopify</title>
+<style>
+  :root {
+    --bg: #f8f7f5;
+    --card: #ffffff;
+    --border: #e8e4df;
+    --text: #1a1a1a;
+    --muted: #6b6560;
+    --accent: #c9a96e;
+    --meta-bg: #fff4e6;
+    --meta-head: #f5e0b0;
+    --ga4-bg: #edf7ed;
+    --ga4-head: #c8e6c8;
+    --shop-bg: #eaeff8;
+    --shop-head: #c4d0ea;
+    --red: #d94f3d;
+    --green: #2e7d52;
+    --yellow: #b8860b;
+    --orange: #c85a00;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 13px;
+    padding: 28px 24px;
+  }
+
+  header { margin-bottom: 20px; }
+  h1 { font-size: 19px; font-weight: 700; margin-bottom: 4px; }
+  .meta-info { color: var(--muted); font-size: 11px; }
+  .meta-info span { margin-right: 16px; }
+
+  .legend {
+    display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+  }
+  .leg {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; color: var(--muted); font-weight: 500;
+  }
+  .leg-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+
+  table { width: 100%; border-collapse: collapse; min-width: 960px; }
+
+  /* === GROUP ROW === */
+  tr.grp th {
+    padding: 7px 10px;
+    font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    text-align: center; border-bottom: 1px solid var(--border);
+  }
+  th.grp-kamp { background: var(--card); text-align: left; }
+  th.grp-meta { background: var(--meta-head); color: #7a4a00; }
+  th.grp-ga4  { background: var(--ga4-head);  color: #1a5c1a; }
+  th.grp-shop { background: var(--shop-head); color: #1a3070; }
+
+  /* === COL HEADERS === */
+  tr.cols th {
+    padding: 7px 8px;
+    font-size: 10px; font-weight: 600; color: var(--muted);
+    text-align: right; white-space: nowrap;
+    border-bottom: 2px solid var(--border);
+  }
+  tr.cols th.left { text-align: left; }
+  tr.cols th.meta { background: var(--meta-bg); }
+  tr.cols th.ga4  { background: var(--ga4-bg); }
+  tr.cols th.shop { background: var(--shop-bg); }
+
+  /* === BODY === */
+  tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover td { filter: brightness(.97); }
+
+  td {
+    padding: 11px 8px; vertical-align: middle;
+    text-align: right; white-space: nowrap;
+  }
+  td.left { text-align: left; }
+  td.meta { background: color-mix(in srgb, var(--meta-bg) 55%, white); }
+  td.ga4  { background: color-mix(in srgb, var(--ga4-bg)  55%, white); }
+  td.shop { background: color-mix(in srgb, var(--shop-bg) 55%, white); }
+
+  .kname { font-weight: 600; font-size: 12px; }
+
+  /* ROAS badges */
+  .roas {
+    display: inline-block; padding: 2px 6px; border-radius: 4px;
+    font-weight: 700; font-size: 12px;
+  }
+  .roas-hi  { background: #d4edda; color: var(--green); }
+  .roas-mid { background: #fff3cd; color: var(--yellow); }
+  .roas-lo  { background: #fde8e6; color: var(--red); }
+  .zero     { color: #c0bbb5; }
+
+  .gap-badge {
+    display: inline-block; font-size: 10px; padding: 1px 5px;
+    border-radius: 3px; background: #fde8e6; color: var(--red); font-weight: 600;
+    margin-left: 4px; vertical-align: middle;
+  }
+
+  /* TOTAL */
+  tr.total td {
+    background: #f0ede8 !important;
+    font-weight: 700;
+    border-top: 2px solid #d0c8bc;
+  }
+
+  /* NOTES */
+  .notes {
+    margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .note {
+    background: #fffdf7; border: 1px solid #e8ddb0;
+    border-radius: 8px; padding: 12px 14px; font-size: 11px; line-height: 1.6;
+  }
+  .note strong { color: #7a4a00; display: block; margin-bottom: 4px; font-size: 12px; }
+  .note.red  { background: #fff8f7; border-color: #f0c0b8; }
+  .note.red strong { color: var(--red); }
+  .note.green { background: #f6fbf6; border-color: #b8ddb8; }
+  .note.green strong { color: var(--green); }
+
+  .src-note {
+    margin-top: 10px; font-size: 10px; color: var(--muted);
+    display: flex; gap: 20px; flex-wrap: wrap;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>GLOV — Kampanie Meta × GA4 × Shopify</h1>
+  <div class="meta-info">
+    <span>📅 26 maj – 24 cze 2026</span>
+    <span>🔗 Match GA4: sessionCampaignName (UTM)</span>
+    <span>🏪 Shopify: social referrer łącznie</span>
+  </div>
+</header>
+
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:var(--meta-head)"></div> Meta Ads (pixel)</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--ga4-head)"></div> GA4 last-click (UTM)</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--shop-head)"></div> Shopify (social referrer)</div>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+  <tr class="grp">
+    <th class="grp-kamp" rowspan="2" style="min-width:190px">Kampania</th>
+    <th class="grp-meta" colspan="5">META ADS — pixel</th>
+    <th class="grp-ga4"  colspan="5">GA4 — last-click (UTM)</th>
+    <th class="grp-shop" colspan="2">SHOPIFY</th>
+  </tr>
+  <tr class="cols">
+    <th class="meta">Wyśw.</th>
+    <th class="meta">CTR</th>
+    <th class="meta">Koszt</th>
+    <th class="meta">Zakupy</th>
+    <th class="meta">ROAS</th>
+
+    <th class="ga4">Sesje</th>
+    <th class="ga4">ATC</th>
+    <th class="ga4">Zakupy</th>
+    <th class="ga4">Przychód</th>
+    <th class="ga4">ROAS</th>
+
+    <th class="shop">Zamówienia</th>
+    <th class="shop">Przychód</th>
+  </tr>
+</thead>
+<tbody>
+
+  <!-- 1. KATALOG -->
+  <tr>
+    <td class="left"><span class="kname">adc_katalog_zakup_advantage</span></td>
+    <td class="meta">133 032</td>
+    <td class="meta">2,96%</td>
+    <td class="meta">2 484 zł</td>
+    <td class="meta">78</td>
+    <td class="meta"><span class="roas roas-hi">3,09</span></td>
+
+    <td class="ga4">2 463</td>
+    <td class="ga4">313</td>
+    <td class="ga4">35</td>
+    <td class="ga4">3 101 zł</td>
+    <td class="ga4"><span class="roas roas-hi">1,25</span></td>
+
+    <td class="shop" rowspan="5" style="vertical-align:middle;text-align:center;font-size:22px;font-weight:800;color:#1a3070">189</td>
+    <td class="shop" rowspan="5" style="vertical-align:middle;text-align:center;font-size:18px;font-weight:800;color:#1a3070">15 670 zł</td>
+  </tr>
+
+  <!-- 2. HAIR -->
+  <tr>
+    <td class="left"><span class="kname">adc_konwersje_hair</span></td>
+    <td class="meta">59 475</td>
+    <td class="meta">2,87%</td>
+    <td class="meta">1 653 zł</td>
+    <td class="meta">58</td>
+    <td class="meta"><span class="roas roas-hi">3,33</span></td>
+
+    <td class="ga4">1 111</td>
+    <td class="ga4" style="font-weight:700;color:var(--orange)">293</td>
+    <td class="ga4">44</td>
+    <td class="ga4">2 875 zł</td>
+    <td class="ga4"><span class="roas roas-hi">1,74</span></td>
+  </tr>
+
+  <!-- 3. BODY -->
+  <tr>
+    <td class="left"><span class="kname">adc_konwersje_body</span></td>
+    <td class="meta">66 491</td>
+    <td class="meta">2,07%</td>
+    <td class="meta">1 485 zł</td>
+    <td class="meta">40</td>
+    <td class="meta"><span class="roas roas-mid">2,47</span></td>
+
+    <td class="ga4">1 278</td>
+    <td class="ga4">306</td>
+    <td class="ga4">36</td>
+    <td class="ga4">3 263 zł</td>
+    <td class="ga4"><span class="roas roas-hi">2,20</span></td>
+  </tr>
+
+  <!-- 4. NANOGLASS -->
+  <tr>
+    <td class="left"><span class="kname">adc_konwersje_nanoglass</span></td>
+    <td class="meta">62 056</td>
+    <td class="meta">2,34%</td>
+    <td class="meta">1 378 zł</td>
+    <td class="meta">22</td>
+    <td class="meta"><span class="roas roas-lo">1,44</span></td>
+
+    <td class="ga4">822</td>
+    <td class="ga4">121</td>
+    <td class="ga4">19</td>
+    <td class="ga4">1 455 zł</td>
+    <td class="ga4"><span class="roas roas-mid">1,06</span></td>
+  </tr>
+
+  <!-- 5. SLEEPING BEAUTY -->
+  <tr>
+    <td class="left"><span class="kname">adc_konwersje_zakup_advantage_sleepingbeauty</span></td>
+    <td class="meta">42 139</td>
+    <td class="meta">1,75%</td>
+    <td class="meta">1 194 zł</td>
+    <td class="meta">10</td>
+    <td class="meta"><span class="roas roas-lo">1,24</span></td>
+
+    <td class="ga4">482</td>
+    <td class="ga4">54</td>
+    <td class="ga4">3</td>
+    <td class="ga4">531 zł</td>
+    <td class="ga4"><span class="roas roas-lo">0,44</span></td>
+  </tr>
+
+  <!-- SUMA -->
+  <tr class="total">
+    <td class="left">SUMA 5 kampanii</td>
+    <td class="meta">363 193</td>
+    <td class="meta">2,40% śr.</td>
+    <td class="meta">8 194 zł</td>
+    <td class="meta">208</td>
+    <td class="meta"><span class="roas roas-hi">2,67 śr.</span></td>
+
+    <td class="ga4">6 156</td>
+    <td class="ga4">1 087</td>
+    <td class="ga4">137</td>
+    <td class="ga4">11 225 zł</td>
+    <td class="ga4"><span class="roas roas-mid">1,37</span></td>
+
+    <td class="shop">189</td>
+    <td class="shop">15 670 zł</td>
+  </tr>
+
+</tbody>
+</table>
+</div>
+
+<div class="src-note">
+  <span>⚡ Blended ROAS (Shopify ÷ koszt Meta): <strong>15 670 ÷ 8 194 = 1,91</strong> — najbardziej wiarygodny wskaźnik</span>
+  <span>⚠ Meta pixel zawyża ROAS o ~40% vs Shopify</span>
+  <span>ℹ Shopify "social" = łącznie wszystkie kampanie, nie per kampania</span>
+</div>
+
+<div class="notes">
+  <div class="note green">
+    <strong>✅ Najlepsze kampanie</strong>
+    <b>Hair</b> — 293 ATC, ROAS GA4 1,74. Wysoki intent zakupowy, dobra skalowalność.<br>
+    <b>Body</b> — ROAS GA4 2,20, najwyższy ze wszystkich 5. Najlepszy last-click.
+  </div>
+  <div class="note red">
+    <strong>⚠ Do weryfikacji</strong>
+    <b>Sleeping Beauty</b> — ROAS GA4 0,44, tylko 3 zakupy z 482 sesji. Mimo naprawionego redirectu konwersje nie rosną.<br>
+    <b>Nanoglass</b> — ROAS Meta 1,44 (poniżej 2x), GA4 1,06. Kandydat do cięcia lub optymalizacji kreacji.
+  </div>
+  <div class="note">
+    <strong>📊 Trzy soczewki ROAS</strong>
+    Meta pixel: <b>2,67</b> (zawyżony — pixel liczy view-through i click 7d)<br>
+    GA4 last-click: <b>1,37</b> (niedoszacowany — gubi assisted conversions)<br>
+    Blended Shopify: <b>1,91</b> ← <b>najbardziej wiarygodny</b>
+  </div>
+  <div class="note">
+    <strong>🔍 Hair: 293 ATC → 44 zakupy = CR 15%</strong>
+    Przy najwyższym ATC ze wszystkich kampanii — checkout może być wąskim gardłem. Warto sprawdzić w Clarity czy porzucenia są na etapie dostawy/płatności.
+  </div>
+</div>
+
+</body>
+</html>
