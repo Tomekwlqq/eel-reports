@@ -62,7 +62,7 @@ body.comments #tbl-comments{display:table}
     <span class="scan-meta"> — Vision Scan — 2026-06-26 — <a href="https://www.tracksmith.com" target="_blank">https://www.tracksmith.com</a> — platforma: shopify</span>
   </div>
   <div class="header-right">
-<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button></div>
+<div class="toggle-group view-toggle"><button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button><button class="tbtn" data-view="developer" onclick="setView('developer',this)">🔧 Developer</button></div>
 <div class="toggle-group">
   <button class="tbtn active" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
   <button class="tbtn" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
@@ -70,7 +70,7 @@ body.comments #tbl-comments{display:table}
 </div>
 <div class="new-block"><b>🆕 Nowe typy elementów (do elements_master.json):</b><ul><li>Modal geolokalizacji — wyskakujące okienko geotargetowania (PL STORE / LOOKING FOR US STORE?), nakładające się na modal newslettera w tle i blokujące Hero.</li>
 <li>Kolumny informacyjne — trzykolumnowy układ na HP (Hare A.C., Community, Tracksmith Foundation) prezentujący filary marki i społeczność.</li></ul></div>
-
+<div class="stack-panel"><b>🔬 Stack analityczny (z network, bez dostępu do konta):</b> <span class="chip" style="--c:#16a34a">GA4: G-14V7LHG37W</span> <span class="chip" style="--c:#7c3aed">GTM: GTM-KCQGXTH</span> <span class="chip" style="--c:#0891b2">MS Clarity</span> <span class="chip" style="--c:#0891b2">Meta Pixel</span></div>
 <div class="split-view">
   <div class="split-table">
     <table class="scan-table" id="tbl-shopper">
@@ -181,7 +181,94 @@ body.comments #tbl-comments{display:table}
       <thead><tr>
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
-      <tbody></tbody>
+      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
+<td class="col-lp">1</td>
+<td class="col-el">Pasek promocji</td>
+<td class="col-sel"><code>—</code></td>
+<td class="col-track"><span class="tbadge" style="background:#dc262618;color:#dc2626">✗ brak node</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">—</span></td>
+</tr>
+<tr class="el-row" data-top="40" onclick="scrollShot(40)">
+<td class="col-lp">2</td>
+<td class="col-el">Header</td>
+<td class="col-sel"><code>header</code></td>
+<td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">Header is-scrolled is-scrolled--up</span></td>
+</tr>
+<tr class="el-row" data-top="120" onclick="scrollShot(120)">
+<td class="col-lp">3</td>
+<td class="col-el">Modal geolokalizacji</td>
+<td class="col-sel"><code>—</code></td>
+<td class="col-track"><span class="tbadge" style="background:#dc262618;color:#dc2626">✗ brak node</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">—</span></td>
+</tr>
+<tr class="el-row" data-top="40" onclick="scrollShot(40)">
+<td class="col-lp">4</td>
+<td class="col-el">Baner główny (Hero)</td>
+<td class="col-sel"><code>[class*='banner']</code></td>
+<td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">has-full-header has-top-banner header-visible</span></td>
+</tr>
+<tr class="el-row" data-top="980" onclick="scrollShot(980)">
+<td class="col-lp">5</td>
+<td class="col-el">Siatka produktów</td>
+<td class="col-sel"><code>—</code></td>
+<td class="col-track"><span class="tbadge" style="background:#dc262618;color:#dc2626">✗ brak node</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">—</span></td>
+</tr>
+<tr class="el-row" data-top="2160" onclick="scrollShot(2160)">
+<td class="col-lp">6</td>
+<td class="col-el">Baner wyprzedaży / sale</td>
+<td class="col-sel"><code>—</code></td>
+<td class="col-track"><span class="tbadge" style="background:#dc262618;color:#dc2626">✗ brak node</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">—</span></td>
+</tr>
+<tr class="el-row" data-top="3080" onclick="scrollShot(3080)">
+<td class="col-lp">7</td>
+<td class="col-el">Sekcja blog / poradniki</td>
+<td class="col-sel"><code>—</code></td>
+<td class="col-track"><span class="tbadge" style="background:#dc262618;color:#dc2626">✗ brak node</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">—</span></td>
+</tr>
+<tr class="el-row" data-top="4540" onclick="scrollShot(4540)">
+<td class="col-lp">8</td>
+<td class="col-el">O marce / misja</td>
+<td class="col-sel"><code>—</code></td>
+<td class="col-track"><span class="tbadge" style="background:#dc262618;color:#dc2626">✗ brak node</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">—</span></td>
+</tr>
+<tr class="el-row" data-top="5120" onclick="scrollShot(5120)">
+<td class="col-lp">9</td>
+<td class="col-el">Kolumny informacyjne</td>
+<td class="col-sel"><code>—</code></td>
+<td class="col-track"><span class="tbadge" style="background:#dc262618;color:#dc2626">✗ brak node</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">—</span></td>
+</tr>
+<tr class="el-row" data-top="5720" onclick="scrollShot(5720)">
+<td class="col-lp">10</td>
+<td class="col-el">Zapis do newslettera</td>
+<td class="col-sel"><code>input[type='email']</code></td>
+<td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">needsclick go242788435 kl-private-reset-css-Xuajs1</span></td>
+</tr>
+<tr class="el-row" data-top="6100" onclick="scrollShot(6100)">
+<td class="col-lp">11</td>
+<td class="col-el">Footer</td>
+<td class="col-sel"><code>footer</code></td>
+<td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">mt-auto</span></td>
+</tr></tbody>
     </table>
   </div>
   <div class="split-shot">
