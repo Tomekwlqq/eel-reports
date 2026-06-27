@@ -143,8 +143,8 @@ const DATA=[
 {s:"📚 Blueprint / Research / Brief",ico:"📜",t:"ZAPIS SESJI 15.06 (engine V4)",d:"Geneza algorytmu ścieżek V4: scraper cross-platform, Postgres MVP, pętla reko, cev_scorer+perception_paths_v4+sanity_gate.",date:"2026-06-16",l:"_ZAPIS_SESJI_2026-06-15.md",tags:["geneza","V4"]},
 
 // ===== BAZY CS =====
-{s:"🗃️ Bazy CS",sd:"katalogi i podglądy",pin:1,ico:"🗃️",t:"BAZA CS (KANON, 14 sekcji + §13 Pole pytań)",d:"Pełna baza CS w stylu referencyjnym: 106 kategorii (WPIS_CS_V2) + metodologia. §13 Pole pytań dodane do 108/111 plików. Format 14 sekcji od '0. Opis kategorii'. Generator build_baza_cs.py.",date:"2026-06-23",l:"baza_cs.html",w:"baza_cs.html",tags:["⭐ KANON","106 kat","§13 ✅"]},
-{s:"🗃️ Bazy CS",ico:"🗄️",t:"BAZA CS — z bazy (DB)",d:"Wariant viewera czytany z Postgres (MVP, na razie 2 sejfowe).",date:"2026-06-15",l:"baza_cs_db.html",w:"baza_cs_db.html",tags:["DB"]},
+{s:"🗃️ Bazy CS",sd:"katalogi i podglądy",pin:1,ico:"🗃️",t:"BAZA CS (KANON, 14 sekcji + §13 Pole pytań)",d:"Pełna baza CS w stylu referencyjnym: 106 kategorii (WPIS_CS_V2) + metodologia. §13 Pole pytań dodane do 108/111 plików. Format 14 sekcji od '0. Opis kategorii'. Generator build_baza_cs.py.",date:"2026-06-23",l:"reports/baza_cs.html",w:"baza_cs.html",tags:["⭐ KANON","106 kat","§13 ✅"]},
+{s:"🗃️ Bazy CS",ico:"🗄️",t:"BAZA CS — z bazy (DB)",d:"Wariant viewera czytany z Postgres (MVP, na razie 2 sejfowe).",date:"2026-06-15",l:"reports/baza_cs_db.html",w:"baza_cs_db.html",tags:["DB"]},
 {s:"🗃️ Bazy CS",ico:"📂",t:"CS KATALOG",d:"Katalog wpisów CS (wcześniejszy podgląd).",date:"2026-06-10",l:"CS_KATALOG.html",tags:["katalog"]},
 {s:"🗃️ Bazy CS",ico:"👁️",t:"CS V2 PODGLĄD",d:"Podgląd formatu wpisu CS V2 (14 sekcji).",date:"2026-06-10",l:"CS_V2_PODGLAD.html",tags:["podgląd"]},
 {s:"🗃️ Bazy CS",ico:"🔐",t:"CS SEJFY (wzorzec)",d:"Wpis CS sejfów — wzorzec golden ('sejfy bo dobre').",date:"2026-06-11",l:"CS_SEJFY.html",tags:["wzorzec"]},
@@ -203,7 +203,8 @@ function render(filter){
     let html=`<div class="sechead" id="${anchor}"><h2>${esc(sec)}</h2><span class="cnt">${groups[sec].length} poz.${sd&&sd.sd?' · '+esc(sd.sd):''}</span></div><div class="grid">`;
     items.forEach(it=>{
       const links=[];
-      if(it.l) links.push(`<a class="lnk local" href="${esc(it.l)}">🖥 Lokalnie</a>`);
+      const onWeb=location.protocol.startsWith('http');  // web (Pages): chowamy 🖥 Lokalnie — pliki repo nie są publikowane (404)
+      if(it.l && !onWeb) links.push(`<a class="lnk local" href="${esc(it.l)}">🖥 Lokalnie</a>`);
       if(it.w) links.push(`<a class="lnk web" href="${WEB}${esc(it.w)}" target="_blank">🌐 Web</a>`);
       const tags=(it.tags||[]).map((t,i)=>`<span class="t ${i===0?(t.includes('🔴')?'red':'acc'):''}">${esc(t)}</span>`).join('');
       html+=`<div class="card${it.pin?' pin':''}">
