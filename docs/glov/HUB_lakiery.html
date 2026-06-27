@@ -100,21 +100,44 @@ iframe.map{width:100%;height:900px;border:1px solid var(--line);border-radius:10
 <blockquote><strong>Uwaga progi:</strong> Budżet = oś #1 wolumenowa (85%+ sprzedaży e-commerce). Średni = najszybciej rosnący (quick-dry + gel-like bez lampy). Premium = niszowy, wysoka LTV, trigger = certyfikaty + limitowane edycje.</blockquote>
 <hr>
 <h2>8. Consumer Decision Tree</h2>
-<pre class="tree">Q1. PO CO szukasz lakieru?
-   consumer_language: „chcę trwały kolor / coś dla dziecka / nie zniszczyć po hybrydzie / wzmocnić łamliwe / czysty skład / na okazję"
-   → Trwałość bez salonu        → [gel-like 3w1 bez lampy]      → Q2
-   → Dla dziecka                → [peel-off / zmywalny wodą]    → Q3
-   → Po hybrydzie, nie niszczyć → [klasyk / peel-off]           → Q3
-   → Wzmocnić łamliwe           → [odżywczy z keratyną/Active]  → Q4
-   → Czysty skład / wege        → [7-free / wegański z cert.]   → Q4
-   → Na okazję (event/ślub)     → [gel-like / klasyk premium]   → Q2
+<pre class="tree">Q1: CO JEST DLA CIEBIE NAJWAŻNIEJSZE?
+│
+├─ A: TRWAŁOŚĆ bez salonu i lampy             (cep_hybrid_no_lamp, cep_occasion)
+│   └─ Q2: Masz lampę UV / ile ma trzymać?
+│       ├─ Bez lampy, długo (2 tyg)   → GEL-LIKE 3w1 bez lampy
+│       │     → Eksponuj: „do 14 dni bez UV", mechanizm flex/chip-resistant, aplikacja baza+kolor+top
+│       └─ Na okazję, kilka dni        → klasyk premium / gel-like
+│             → Eksponuj: trwałość na event, kolor „na wyjście" (nude/czerwień), nakładać z wyprzedzeniem
+│
+├─ B: ZDROWIE PŁYTKI / po hybrydzie           (cep_nail_care, cep_easy_removal)
+│   └─ Q2: Stan paznokci?
+│       ├─ Łamliwe, chcę wzmocnić      → ODŻYWCZY z keratyną (CoolNails Active)
+│       │     → Eksponuj: keratyna/biotyna/wapń = mechanizm, „efekt po 2–4 tyg", kolor + kuracja w jednym
+│       └─ Zniszczone po hybrydzie     → peel-off / klasyk + zmywacz bezacetonowy
+│             → Eksponuj: „zdejmujesz jak folię, bez acetonu", nie spiłowywać. BLOKER: płytkę niszczy zdejmowanie, nie sam lakier
+│
+├─ C: BEZPIECZEŃSTWO / skład                  (cep_kids_safe, cep_clean_formula)
+│   └─ Q2: Dla kogo?
+│       ├─ Dziecko                     → peel-off / zmywalny wodą
+│       │     → Eksponuj: bez formaldehydu/toluenu/acetonu, zmywalny wodą, wiek od, cert. derm.
+│       └─ Wrażliwa / ciąża / wege     → 7-free+ / wegański z certyfikatem
+│             → Eksponuj: lista „bez" (co konkretnie), Leaping Bunny / Vegan Society — NIE „naturalny" bez certyfikatu
+│
+├─ D: SZYBKOŚĆ / WYGODA                        (cep_quick_dry, cep_diy_salon)
+│   └─ Q2: Co Cię blokuje?
+│       ├─ Brak czasu na schnięcie     → SZYBKOSCHNĄCY / click-pen
+│       │     → Eksponuj: „schnie w 60 s", czy wymaga bazy, top coat quick-dry; click-pen = bez rozlania
+│       └─ Salon za drogi              → zestaw DIY / gel-like + top
+│             → Eksponuj: efekt salonowy krok po kroku, pędzelek, krycie 1–2 warstwy
+│
+└─ E: KOLOR / TREND / odświeżenie             (cep_impuls_estetyczny, cep_social_moda, cep_odswiezenie)
+    └─ Q2: Czego szukasz?
+        ├─ Konkretny kolor / trend    → klasyk kolorowy (filtr koloru)
+        │     → Eksponuj: swatch realistyczny „kolor na dłoni", modny odcień sezonu, social proof
+        └─ Naturalny clean look       → nude / milky / odżywczy
+              → Eksponuj: „clean girl / bare nails", subtelny połysk, zadbane bez koloru
 
-Q2. Lampa UV w grze?     → tak: hybryda salonowa (poza kat.) · nie: gel-like bez UV
-Q3. Sposób usunięcia?    → zmywalny wodą (dziecko) / peel-off (jak folia) / aceton+folia
-Q4. Skład krytyczny?     → tak (7-free / wege / cert. derm.) · nie (lista „bez" wystarczy)
-
-→ Kluczowe KCF: TYP (klasyk/gel-like/peel-off/odżywczy) · TRWAŁOŚĆ (dni) · LAMPA (t/n) · USUWANIE (woda/peel/aceton) · SKŁAD (x-free/wege)
-→ Bloker po hybrydzie: płytkę niszczy spiłowywanie przy zdejmowaniu, nie sam lakier — peel-off/klasyk omija problem</pre>
+→ Kluczowe KCF (mandatory w PDP): TYP (klasyk/gel-like/peel-off/odżywczy) · TRWAŁOŚĆ (dni) · CZAS SCHNIĘCIA · LAMPA (t/n) · USUWANIE (woda/peel/aceton) · SKŁAD (x-free/wege) · SKŁADNIKI PIELĘGNUJĄCE</pre>
 <hr>
 <h2>9. Forbidden Patterns</h2>
 <table><thead><tr><th>❌ Vague (zakazany)</th><th>✅ Konkret (wymagany)</th><th>Norma / parametr</th></tr></thead><tbody><tr><td>„Długotrwały kolor"</td><td>„Kolor utrzymuje się do 7 dni na paznokciach naturalnych — bez odprysków"</td><td>podaj liczbę dni + warunek (naturalny / z top coatem)</td></tr><tr><td>„Szybko schnie"</td><td>„Schnie w 60 sekund — nakładaj kolejną warstwę po minucie, nie po 10"</td><td>podaj czas w sekundach lub minutach</td></tr><tr><td>„Bezpieczny skład"</td><td>„Formuła 7-free: bez formaldehydu, toluenu, DBP, kamfory, karbamidu, ksenoestrogenów i ftalanów"</td><td>wymień co konkretnie „bez"</td></tr><tr><td>„Odpowiedni dla dzieci"</td><td>„Testowany dermatologicznie, zmywalny wodą — bez acetonu. Dla dzieci od 3. roku życia"</td><td>wiek + metoda zmywania + certyfikat derm.</td></tr><tr><td>„Naturalny / eko lakier"</td><td>„Certyfikat Leaping Bunny (cruelty-free) + Vegan Society. 10-free. Opakowanie z 30% szkła z recyklingu"</td><td>nazwij certyfikat; bez certyfikatu = greenwashing</td></tr></tbody></table>
