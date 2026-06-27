@@ -76,160 +76,211 @@ body.comments #tbl-comments{display:table}
       <thead><tr>
         <th class="col-lp">LP</th><th class="col-etyk">Etykieta <span class="th-sub">(jak jest)</span></th><th class="col-el">Typ / rola obiektu</th><th>Zawartość / akcje</th><th class="col-obs-h">Obserwacje <span class="th-sub">(→ baza)</span></th><th class="col-p" title="personalizacja">P</th><th class="col-pos">Pozycja</th>
       </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
+      <tbody><tr class="el-row" data-top="0" data-top-mobile="0" onclick="scrollShot(0, 0)">
 <td class="col-lp">1</td>
-<td class="col-etyk">Ta strona korzysta z plików cookie...</td>
-<td class="col-el">Baner cookie / Promo bar</td>
-<td class="col-zaw">Zasłania całą sekcję Hero, zwłaszcza na mobile (krytyczne tarcie).</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Cookie wall blokuje całe Value Proposition i CTA powyżej foldu.</td>
+<td class="col-etyk">Darmowa dostawa od 150 zł</td>
+<td class="col-el">Pasek ogłoszeń (Announcement Bar)</td>
+<td class="col-zaw">Informuje o progu darmowej dostawy.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Ekspozycja darmowej dostawy od razu po wejściu.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">0px / 0px</span></td>
 </tr>
-<tr class="el-row" data-top="45" onclick="scrollShot(45)">
+<tr class="el-row" data-top="31" data-top-mobile="36" onclick="scrollShot(31, 36)">
 <td class="col-lp">2</td>
 <td class="col-etyk">homies | SKLEP · O NAS · FAQ · KONTAKT | koszyk</td>
-<td class="col-el">Header główny</td>
-<td class="col-zaw">Menu skanowalne, proste. Ikona koszyka z licznikiem.</td>
+<td class="col-el">Nagłówek główny (Header)</td>
+<td class="col-zaw">Klasyczna nawigacja z hamburger menu na mobile.</td>
 <td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Czysty, tradycyjny header na białym tle, minimalistyczny.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">45px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">31px / 36px</span></td>
 </tr>
-<tr class="el-row" data-top="110" onclick="scrollShot(110)">
+<tr class="el-row" data-top="110" data-top-mobile="110" onclick="scrollShot(110, 110)">
 <td class="col-lp">3</td>
 <td class="col-etyk">Piorą skutecznie bez dźwigania, bałaganu i plastiku. WYBIERZ SWOJE LISTKI</td>
 <td class="col-el">Hero banner</td>
 <td class="col-zaw">Jasny benefit i CTA przekierowujące do oferty.</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Claim silny wizerunkowo, ale zasłonięty bannerem cookie na start.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Claim silny wizerunkowo, po zaakceptowaniu cookie consents w pełni widoczny above the fold.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">110px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">110px / 110px</span></td>
 </tr>
-<tr class="el-row" data-top="580" onclick="scrollShot(580)">
+<tr class="el-row" data-top="800" data-top-mobile="599" onclick="scrollShot(800, 599)">
 <td class="col-lp">4</td>
-<td class="col-etyk">Testujesz bez ryzyka | Darmowa dostawa od 150 zł | Bezpieczne płatności</td>
-<td class="col-el">Pasek USP</td>
-<td class="col-zaw">Zmniejsza obawy zakupowe tuż pod hero.</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Dobry dobór USP, ale informacja o darmowej dostawie mało widoczna na mobile.</td>
+<td class="col-etyk">[Wideo w tle: użycie listków w pralce]</td>
+<td class="col-el">Wideo prezentujące produkt</td>
+<td class="col-zaw">Dynamiczny element edukacyjny uwiarygadniający produkt.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Zwiększa time on page, dobrze obrazuje fizyczną postać listka.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#16a34a18;color:#16a34a">above fold</span><br><span class="dim">580px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">800px / 599px</span></td>
 </tr>
-<tr class="el-row" data-top="690" onclick="scrollShot(690)">
+<tr class="el-row" data-top="1413" data-top-mobile="1385" onclick="scrollShot(1413, 1385)">
 <td class="col-lp">5</td>
+<td class="col-etyk">Piorą w temperaturach od 15 do 95 | Bezpieczne dla alergików | Hipoalergiczne</td>
+<td class="col-el">Pasek USP / Wyróżniki</td>
+<td class="col-zaw">Zmniejsza obawy zakupowe (sceptycyzm co do prania w zimnej wodzie).</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Bardzo ważne USP dotyczące temperatury prania (rozbraja obiekcje CR).</td>
+<td class="col-p" title="personalizacja">–</td>
+<td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1413px / 1385px</span></td>
+</tr>
+<tr class="el-row" data-top="1675" data-top-mobile="1714" onclick="scrollShot(1675, 1714)">
+<td class="col-lp">6</td>
 <td class="col-etyk">Wybierz swoje listki do prania: Świeży Len / Bezzapachowe</td>
 <td class="col-el">Pakiety listków (Bestsellery)</td>
 <td class="col-zaw">Cena za pranie (1,13 zł) świetnie rozbija barierę cenową.</td>
 <td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Brak widgetu subskrypcji w tej sekcji — tylko zakupy jednorazowe.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">690px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#2563eb18;color:#2563eb">scroll 1</span><br><span class="dim">1675px / 1714px</span></td>
 </tr>
-<tr class="el-row" data-top="1380" onclick="scrollShot(1380)">
-<td class="col-lp">6</td>
-<td class="col-etyk">Co mówią o nas klienci? 4.9/5 gwiazdek</td>
-<td class="col-el">Opinie klientów</td>
-<td class="col-zaw">Dobre, uwiarygadniające cytaty z imionami.</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Zbyt mała ekspozycja logotypów recenzenckich (np. brak Trustpilot widget).</td>
-<td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">1380px</span></td>
-</tr>
-<tr class="el-row" data-top="2100" onclick="scrollShot(2100)">
+<tr class="el-row" data-top="2483" data-top-mobile="2588" onclick="scrollShot(2483, 2588)">
 <td class="col-lp">7</td>
-<td class="col-etyk">Nasza misja: Pranie bez plastiku</td>
-<td class="col-el">Sekcja 'O nas' / Ekologia</td>
-<td class="col-zaw">Storytelling: 3 proste kroki użycia i porównanie z tradycyjnymi proszkami.</td>
+<td class="col-etyk">Opinie Klientów homies 4.96 ★ (47)</td>
+<td class="col-el">Opinie klientów</td>
+<td class="col-zaw">Bardzo silny dowód społeczny (social proof).</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Średnia 4.96 buduje zaufanie, ale opinie są statyczne.</td>
+<td class="col-p" title="personalizacja">–</td>
+<td class="col-pos"><span class="zbadge" style="background:#7c3aed18;color:#7c3aed">scroll 2</span><br><span class="dim">2483px / 2588px</span></td>
+</tr>
+<tr class="el-row" data-top="2989" data-top-mobile="3090" onclick="scrollShot(2989, 3090)">
+<td class="col-lp">8</td>
+<td class="col-etyk">Jak działają listki homies vs tradycyjne proszki</td>
+<td class="col-el">Storytelling / Porównanie tabelaryczne</td>
+<td class="col-zaw">Kluczowa sekcja do rozbrajania obiekcji i zmiany nawyku zakupowego.</td>
 <td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Mocny punkt strony — graficzne i czytelne porównanie wagi i odpadów plastiku.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">2100px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">2989px / 3090px</span></td>
 </tr>
-<tr class="el-row" data-top="2980" onclick="scrollShot(2980)">
-<td class="col-lp">8</td>
-<td class="col-etyk">Dołącz do społeczności homies</td>
-<td class="col-el">Zapis do newslettera</td>
-<td class="col-zaw">Brak wyraźnego rabatu/incentive przy zapisie (tylko 'zostaw email').</td>
-<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Minimalistyczny formularz z jednym polem.</td>
-<td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">2980px</span></td>
-</tr>
-<tr class="el-row" data-top="3320" onclick="scrollShot(3320)">
+<tr class="el-row" data-top="3915" data-top-mobile="3776" onclick="scrollShot(3915, 3776)">
 <td class="col-lp">9</td>
+<td class="col-etyk">Czysty skład | Wyprodukowano w Europie | Hipoalergiczne</td>
+<td class="col-el">Dlaczego homies? (Multikolumna)</td>
+<td class="col-zaw">Edukacja o składnikach aktywnych.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Składniki naturalne i bez sztucznych wypełniaczy.</td>
+<td class="col-p" title="personalizacja">–</td>
+<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3915px / 3776px</span></td>
+</tr>
+<tr class="el-row" data-top="5459" data-top-mobile="4966" onclick="scrollShot(5459, 4966)">
+<td class="col-lp">10</td>
+<td class="col-etyk">Najczęściej zadawane pytania: Czym są listki? Na ile starczają?</td>
+<td class="col-el">Najczęstsze pytania (FAQ)</td>
+<td class="col-zaw">Obsługuje obiekcje techniczne i praktyczne.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Doskonała treść rozbrajająca sceptycyzm. Powinna być powtórzona na PDP.</td>
+<td class="col-p" title="personalizacja">–</td>
+<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">5459px / 4966px</span></td>
+</tr>
+<tr class="el-row" data-top="6027" data-top-mobile="5925" onclick="scrollShot(6027, 5925)">
+<td class="col-lp">11</td>
+<td class="col-etyk">Dołącz do społeczności homies i odbierz niespodziankę</td>
+<td class="col-el">Zapis do newslettera (Newsletter)</td>
+<td class="col-zaw">Zbiera leady od niezdecydowanych shopperów.</td>
+<td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Dopasowana kotwica w raporcie wskazuje teraz dokładnie tę dolną sekcję formularza.</td>
+<td class="col-p" title="personalizacja">–</td>
+<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">6027px / 5925px</span></td>
+</tr>
+<tr class="el-row" data-top="6429" data-top-mobile="6487" onclick="scrollShot(6429, 6487)">
+<td class="col-lp">12</td>
 <td class="col-etyk">homies © | REGULAMIN · POLITYKA PRYWATNOŚCI · KONTAKT</td>
 <td class="col-el">Stopka strony</td>
 <td class="col-zaw">Logotypy płatności: Visa, MC, PayPal, BLIK (zaufanie transakcyjne).</td>
 <td class="col-obs" contenteditable="true" data-ph="obserwacje wizualne → baza (tło, typ zdjęć, jakość, jak produkt)…">Spójna, estetyczna stopka, brak zbędnego clutteru.</td>
 <td class="col-p" title="personalizacja">–</td>
-<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">3320px</span></td>
+<td class="col-pos"><span class="zbadge" style="background:#64748b18;color:#64748b">scroll 3+</span><br><span class="dim">6429px / 6487px</span></td>
 </tr></tbody>
     </table>
     <table class="scan-table" id="tbl-developer">
       <thead><tr>
         <th class="col-lp">LP</th><th>Element</th><th>Selektor</th><th>Tracking</th><th>data-gtm-title</th><th>Klasy</th>
       </tr></thead>
-      <tbody><tr class="el-row" data-top="0" onclick="scrollShot(0)">
+      <tbody><tr class="el-row" data-top="0" data-top-mobile="0" onclick="scrollShot(0, 0)">
 <td class="col-lp">1</td>
-<td class="col-el">Baner cookie / Promo bar</td>
-<td class="col-sel"><code>#shopify-section-cookie-banner</code></td>
+<td class="col-el">Pasek ogłoszeń (Announcement Bar)</td>
+<td class="col-sel"><code>#shopify-section-sections--29365512896855__announcement-bar</code></td>
 <td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
 <td class="col-gtm"><span class="dim">—</span></td>
-<td class="col-cls"><span class="dim">cookie-banner</span></td>
+<td class="col-cls"><span class="dim">shopify-section announcement-bar</span></td>
 </tr>
-<tr class="el-row" data-top="45" onclick="scrollShot(45)">
+<tr class="el-row" data-top="31" data-top-mobile="36" onclick="scrollShot(31, 36)">
 <td class="col-lp">2</td>
-<td class="col-el">Header główny</td>
-<td class="col-sel"><code>header.site-header</code></td>
+<td class="col-el">Nagłówek główny (Header)</td>
+<td class="col-sel"><code>#shopify-section-sections--29365512896855__header</code></td>
 <td class="col-track"><span class="tbadge" style="background:#16a34a18;color:#16a34a">✅ tracked</span></td>
 <td class="col-gtm"><span class="dim">—</span></td>
 <td class="col-cls"><span class="dim">site-header</span></td>
 </tr>
-<tr class="el-row" data-top="110" onclick="scrollShot(110)">
+<tr class="el-row" data-top="110" data-top-mobile="110" onclick="scrollShot(110, 110)">
 <td class="col-lp">3</td>
 <td class="col-el">Hero banner</td>
-<td class="col-sel"><code>section.hero-banner</code></td>
+<td class="col-sel"><code>#shopify-section-sections--29365512896855__page_header_image_banner_CnWaQ6</code></td>
 <td class="col-track"><span class="tbadge" style="background:#16a34a18;color:#16a34a">✅ tracked</span></td>
 <td class="col-gtm"><span class="dim">—</span></td>
-<td class="col-cls"><span class="dim">hero</span></td>
+<td class="col-cls"><span class="dim">hero-banner</span></td>
 </tr>
-<tr class="el-row" data-top="580" onclick="scrollShot(580)">
+<tr class="el-row" data-top="800" data-top-mobile="599" onclick="scrollShot(800, 599)">
 <td class="col-lp">4</td>
-<td class="col-el">Pasek USP</td>
-<td class="col-sel"><code>.usp-bar</code></td>
+<td class="col-el">Wideo prezentujące produkt</td>
+<td class="col-sel"><code>#shopify-section-template--29365512503639__video_section_fWLDpP</code></td>
 <td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
 <td class="col-gtm"><span class="dim">—</span></td>
-<td class="col-cls"><span class="dim">usp-bar</span></td>
+<td class="col-cls"><span class="dim">shopify-section</span></td>
 </tr>
-<tr class="el-row" data-top="690" onclick="scrollShot(690)">
+<tr class="el-row" data-top="1413" data-top-mobile="1385" onclick="scrollShot(1413, 1385)">
 <td class="col-lp">5</td>
-<td class="col-el">Pakiety listków (Bestsellery)</td>
-<td class="col-sel"><code>.product-grid</code></td>
-<td class="col-track"><span class="tbadge" style="background:#16a34a18;color:#16a34a">✅ tracked</span></td>
+<td class="col-el">Pasek USP / Wyróżniki</td>
+<td class="col-sel"><code>#shopify-section-template--29365512503639__164580331540910010</code></td>
+<td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
 <td class="col-gtm"><span class="dim">—</span></td>
-<td class="col-cls"><span class="dim">product-grid</span></td>
+<td class="col-cls"><span class="dim">shopify-section</span></td>
 </tr>
-<tr class="el-row" data-top="1380" onclick="scrollShot(1380)">
+<tr class="el-row" data-top="1675" data-top-mobile="1714" onclick="scrollShot(1675, 1714)">
 <td class="col-lp">6</td>
-<td class="col-el">Opinie klientów</td>
-<td class="col-sel"><code>.testimonials-section</code></td>
-<td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
-<td class="col-gtm"><span class="dim">—</span></td>
-<td class="col-cls"><span class="dim">testimonials</span></td>
-</tr>
-<tr class="el-row" data-top="2100" onclick="scrollShot(2100)">
-<td class="col-lp">7</td>
-<td class="col-el">Sekcja 'O nas' / Ekologia</td>
-<td class="col-sel"><code>.mission-section</code></td>
-<td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
-<td class="col-gtm"><span class="dim">—</span></td>
-<td class="col-cls"><span class="dim">mission</span></td>
-</tr>
-<tr class="el-row" data-top="2980" onclick="scrollShot(2980)">
-<td class="col-lp">8</td>
-<td class="col-el">Zapis do newslettera</td>
-<td class="col-sel"><code>form.newsletter-form</code></td>
+<td class="col-el">Pakiety listków (Bestsellery)</td>
+<td class="col-sel"><code>#shopify-section-template--29365512503639__1645137069750a4751</code></td>
 <td class="col-track"><span class="tbadge" style="background:#16a34a18;color:#16a34a">✅ tracked</span></td>
 <td class="col-gtm"><span class="dim">—</span></td>
-<td class="col-cls"><span class="dim">newsletter-form</span></td>
+<td class="col-cls"><span class="dim">shopify-section</span></td>
 </tr>
-<tr class="el-row" data-top="3320" onclick="scrollShot(3320)">
+<tr class="el-row" data-top="2483" data-top-mobile="2588" onclick="scrollShot(2483, 2588)">
+<td class="col-lp">7</td>
+<td class="col-el">Opinie klientów</td>
+<td class="col-sel"><code>#shopify-section-template--29365512503639__17783393630d3df533</code></td>
+<td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">shopify-section</span></td>
+</tr>
+<tr class="el-row" data-top="2989" data-top-mobile="3090" onclick="scrollShot(2989, 3090)">
+<td class="col-lp">8</td>
+<td class="col-el">Storytelling / Porównanie tabelaryczne</td>
+<td class="col-sel"><code>#shopify-section-template--29365512503639__custom_liquid_VzHpTh</code></td>
+<td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">shopify-section</span></td>
+</tr>
+<tr class="el-row" data-top="3915" data-top-mobile="3776" onclick="scrollShot(3915, 3776)">
 <td class="col-lp">9</td>
+<td class="col-el">Dlaczego homies? (Multikolumna)</td>
+<td class="col-sel"><code>#shopify-section-template--29365512503639__multicolumn_Lp4hY3</code></td>
+<td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">shopify-section</span></td>
+</tr>
+<tr class="el-row" data-top="5459" data-top-mobile="4966" onclick="scrollShot(5459, 4966)">
+<td class="col-lp">10</td>
+<td class="col-el">Najczęstsze pytania (FAQ)</td>
+<td class="col-sel"><code>#shopify-section-template--29365512503639__collapsible_menu_with_image_AwpeHV</code></td>
+<td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">shopify-section</span></td>
+</tr>
+<tr class="el-row" data-top="6027" data-top-mobile="5925" onclick="scrollShot(6027, 5925)">
+<td class="col-lp">11</td>
+<td class="col-el">Zapis do newslettera (Newsletter)</td>
+<td class="col-sel"><code>#shopify-section-template--29365512503639__1649160937e2665513</code></td>
+<td class="col-track"><span class="tbadge" style="background:#16a34a18;color:#16a34a">✅ tracked</span></td>
+<td class="col-gtm"><span class="dim">—</span></td>
+<td class="col-cls"><span class="dim">shopify-section newsletter-section</span></td>
+</tr>
+<tr class="el-row" data-top="6429" data-top-mobile="6487" onclick="scrollShot(6429, 6487)">
+<td class="col-lp">12</td>
 <td class="col-el">Stopka strony</td>
-<td class="col-sel"><code>footer.site-footer</code></td>
+<td class="col-sel"><code>#shopify-section-sections--29365512864087__footer</code></td>
 <td class="col-track"><span class="tbadge" style="background:#94a3b818;color:#94a3b8">○ untracked</span></td>
 <td class="col-gtm"><span class="dim">—</span></td>
 <td class="col-cls"><span class="dim">site-footer</span></td>
@@ -245,7 +296,7 @@ var imgD = "HOMIES_VISION_REPORT_img/0.jpg";
 var imgM = "HOMIES_VISION_REPORT_img/1.jpg";
 var currentVP = 'desktop';
 
-function scrollShot(top) {
+function scrollShot(top, topMobile) {
     var img = document.getElementById('shot-img');
     var vp  = document.querySelector('.split-shot');
     if (!img || !vp) return;
@@ -253,7 +304,8 @@ function scrollShot(top) {
     event.currentTarget.classList.add('active');
     var pageW = currentVP === 'desktop' ? 1440 : 390;
     var scale  = img.offsetWidth / pageW;
-    var offset = Math.max(0, top * scale - vp.offsetHeight * 0.15);
+    var actualTop = currentVP === 'desktop' ? top : topMobile;
+    var offset = Math.max(0, actualTop * scale - vp.offsetHeight * 0.15);
     vp.scrollTo({ top: offset, behavior: 'smooth' });
 }
 
