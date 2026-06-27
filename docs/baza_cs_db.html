@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GEO DT DB — PL — 2 categories</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--sb-bg:#161b22;--hd-bg:#161b22;--bd:#30363d;
+  --tx:#e6edf3;--tx2:#8b949e;--ac:#58a6ff;
+  --cb:#1c2128;--ts:#1c2128;--mb:#2d4a22;--mt:#7ee787;
+  --ab:#1f3353;--sw:292px;--hh:52px
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+     background:var(--bg);color:var(--tx);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* Header */
+#hd{height:var(--hh);background:var(--hd-bg);border-bottom:1px solid var(--bd);
+    display:flex;align-items:center;gap:10px;padding:0 14px;flex-shrink:0}
+#hd h1{font-size:15px;font-weight:700;white-space:nowrap;flex-shrink:0;letter-spacing:.01em}
+#hd h1 span{color:var(--ac)}
+#sw{flex:1;position:relative;max-width:440px}
+#si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--tx2);font-size:15px;pointer-events:none}
+#search{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:6px;
+        color:var(--tx);padding:6px 10px 6px 30px;font-size:15px;outline:none;transition:border-color .15s}
+#search:focus{border-color:var(--ac)}
+
+/* Filter buttons */
+.filt{display:flex;gap:4px;flex-shrink:0}
+.fb{font-size:13px;padding:3px 8px;border-radius:4px;border:1px solid var(--bd);
+    background:transparent;color:var(--tx2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.fb:hover{border-color:var(--ac);color:var(--tx)}
+.fb.on{border-color:var(--ac);background:var(--ab);color:var(--tx)}
+
+/* Lang toggle */
+#lang-btn{font-size:13px;padding:3px 9px;border-radius:4px;border:1px solid var(--bd);
+          background:transparent;color:var(--tx2);cursor:pointer;text-decoration:none;
+          display:flex;align-items:center;gap:4px;transition:all .15s;white-space:nowrap;flex-shrink:0}
+#lang-btn:hover{border-color:var(--ac);color:var(--tx)}
+
+#stat{font-size:13px;color:var(--tx2);flex-shrink:0;white-space:nowrap;min-width:90px;text-align:right}
+
+/* Layout */
+#lay{display:flex;flex:1;overflow:hidden}
+
+/* Sidebar */
+#sb{width:var(--sw);flex-shrink:0;background:var(--sb-bg);border-right:1px solid var(--bd);overflow-y:auto}
+.ci{display:flex;align-items:center;gap:7px;padding:7px 10px;cursor:pointer;
+    border-left:3px solid transparent;border-bottom:1px solid var(--bd);
+    transition:background .1s;user-select:none;min-height:36px}
+.ci:hover{background:rgba(88,166,255,.07)}
+.ci.active{background:var(--ab);border-left-color:var(--ac)}
+.ci.hidden{display:none}
+.cn{font-size:11.5px;color:var(--tx2);min-width:20px;flex-shrink:0;font-variant-numeric:tabular-nums}
+.ct{font-size:14px;line-height:1.3;color:var(--tx);flex:1;min-width:0}
+.ct mark{background:var(--mb);color:var(--mt);border-radius:2px;padding:0 1px}
+
+/* Version badge in sidebar */
+.vb{font-size:10.5px;font-weight:700;padding:1px 5px;border-radius:8px;flex-shrink:0;letter-spacing:.02em}
+.vb-v1{background:#21262d;color:#6e7681}
+.vb-v2{background:#2d2502;color:#d29922}
+.vb-v3{background:#0d2a1a;color:#3fb950}
+.vb-v4{background:#0d1e3c;color:#58a6ff}
+
+/* Verification pipeline dots */
+.pipe{display:flex;gap:2px;flex-shrink:0}
+.pd{width:6px;height:6px;border-radius:50%;background:var(--bd)}
+.pd.on-v1{background:#6e7681}
+.pd.on-v2{background:#d29922}
+.pd.on-v3{background:#3fb950}
+.pd.on-v4{background:#58a6ff}
+
+#nr{padding:20px 12px;font-size:15px;color:var(--tx2);text-align:center;display:none}
+
+/* Content */
+#ct{flex:1;overflow-y:auto;padding:26px 34px}
+.cs{display:none}
+.cs.vis{display:block}
+
+/* Markdown */
+.cs h2{font-size:23px;font-weight:700;border-bottom:1px solid var(--bd);padding-bottom:10px;margin-bottom:16px}
+.cs h3{font-size:13px;font-weight:700;color:var(--ac);margin:20px 0 9px;
+       text-transform:uppercase;letter-spacing:.06em}
+.cs h4{font-size:16px;font-weight:600;margin:14px 0 6px}
+.cs p{font-size:15.5px;line-height:1.65;margin-bottom:8px}
+.cs strong{font-weight:600}
+.cs em{font-style:italic;color:var(--tx2)}
+.cs code{font-family:'SF Mono','Fira Code',Menlo,monospace;font-size:13px;
+         background:var(--cb);border:1px solid var(--bd);border-radius:3px;
+         padding:1px 5px;color:#f0883e}
+.cs pre{background:var(--cb);border:1px solid var(--bd);border-radius:6px;
+        padding:12px 14px;overflow-x:auto;margin:10px 0}
+.cs pre code{background:none;border:none;padding:0;font-size:14px;color:var(--tx);line-height:1.5}
+.cs table{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0;display:block;overflow-x:auto}
+.cs th,.cs td{text-align:left;padding:7px 10px;border:1px solid var(--bd)}
+.cs th{background:var(--sb-bg);font-weight:600}
+.cs tr:nth-child(even) td{background:var(--ts)}
+.cs ul,.cs ol{padding-left:18px;margin:7px 0}
+.cs li{font-size:15.5px;line-height:1.6;margin-bottom:3px}
+.cs hr{border:none;border-top:1px solid var(--bd);margin:18px 0}
+
+/* Changelog / verification card */
+.changelog{background:#0b1e10;border:1px solid #2ea043;border-radius:8px;
+           padding:14px 18px;margin:18px 0;position:relative}
+.changelog::before{content:'🔬 VERIFIED';font-size:10.5px;font-weight:700;
+                   color:#3fb950;letter-spacing:.08em;display:block;margin-bottom:8px}
+.changelog h3{color:#3fb950 !important;margin-top:0 !important;font-size:14px !important}
+.changelog p,.changelog li{color:#c3e6cb;font-size:15px}
+.changelog ul{margin:4px 0}
+.changelog table{font-size:12px}
+.changelog th{background:#0d2a1a}
+.changelog code{background:#0d2a1a;color:#7ee787}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+::-webkit-scrollbar-track{background:transparent}
+
+body.light{
+  --bg:#ffffff;--sb-bg:#f6f8fa;--hd-bg:#f6f8fa;--bd:#d0d7de;
+  --tx:#1f2328;--tx2:#656d76;--ac:#0969da;
+  --cb:#f6f8fa;--ts:#f6f8fa;--mb:#fff8c5;--mt:#7a5c00;--ab:#ddf4ff;
+}
+body.light .cs code{color:#cf222e}
+body.light .cs pre code{color:var(--tx)}
+body.light .changelog{background:#f0fff4;border-color:#2ea043}
+body.light .changelog p,body.light .changelog li{color:#1a7f37}
+#theme-btn{font-size:14px;padding:3px 9px;border-radius:4px;border:1px solid var(--bd);
+  background:transparent;color:var(--tx2);cursor:pointer;flex-shrink:0;transition:all .15s}
+#theme-btn:hover{border-color:var(--ac);color:var(--tx)}
+
+/* FUND rozwijany blok */
+details.fund{border:1px solid var(--bd);border-radius:8px;margin:22px 0 8px;
+  background:var(--cb);overflow:hidden}
+details.fund>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;
+  padding:12px 16px;user-select:none;transition:background .12s}
+details.fund>summary::-webkit-details-marker{display:none}
+details.fund>summary:hover{background:rgba(88,166,255,.07)}
+.fund-arrow{color:var(--ac);font-size:13px;flex-shrink:0;transition:transform .15s}
+details.fund[open] .fund-arrow{transform:rotate(90deg)}
+.fund-head{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.fund-title{font-size:15px;font-weight:700;color:var(--tx)}
+.fund-src{font-size:12px;font-style:italic;color:var(--tx2);line-height:1.4}
+.fund-badge{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:10px;flex-shrink:0;white-space:nowrap}
+.fund-badge.ok{background:#0d2a1a;color:#3fb950}
+.fund-badge.warn{background:#3d2a02;color:#f0883e}
+body.light .fund-badge.ok{background:#dafbe1;color:#1a7f37}
+body.light .fund-badge.warn{background:#fff1e5;color:#bc4c00}
+.fund-hint{font-size:11px;color:var(--tx2);flex-shrink:0;border:1px solid var(--bd);
+  border-radius:4px;padding:2px 7px}
+details.fund[open] .fund-hint{display:none}
+.fund-body{padding:4px 18px 16px;border-top:1px solid var(--bd)}
+.fund-body h1{font-size:18px;margin:12px 0 6px}
+</style>
+</head>
+<body>
+<div id="hd">
+  <h1>GEO <span>Baza CS</span> · z Postgres 🗄️</h1>
+  <div id="sw">
+    <span id="si">⌕</span>
+    <input id="search" type="text" placeholder="Szukaj kategorii, CEP, pytania..." autocomplete="off" spellcheck="false">
+  </div>
+  <div class="filt">
+    <button class="fb on" data-f="all" onclick="setFilter('all')">All</button>
+    <button class="fb" data-f="v2p" onclick="setFilter('v2p')">✅ Verified</button>
+    <button class="fb" data-f="v1"  onclick="setFilter('v1')">📝 Draft</button>
+  </div>
+  <a id="lang-btn" href="%23">🌐 EN</a>
+  <button id="theme-btn" onclick="toggleTheme()" title="Tryb jasny/ciemny">☀️</button>
+  <span id="stat">2 cat.</span>
+</div>
+<div id="lay">
+  <div id="sb">
+    <div class="ci" id="i1" onclick="select(1)"><span class="cn">#1</span><span class="ct">Sejfy domowe na kosztowności</span><span class="vb vb-v2">v2</span><div class="pipe"><span class="pd on-v1"></span><span class="pd on-v2"></span><span class="pd"></span><span class="pd"></span></div></div>
+    <div class="ci" id="i2" onclick="select(2)"><span class="cn">#2</span><span class="ct">Szafy na broń długą (klasa S1)</span><span class="vb vb-v2">v2</span><div class="pipe"><span class="pd on-v1"></span><span class="pd on-v2"></span><span class="pd"></span><span class="pd"></span></div></div>
+    <div id="nr">No results</div>
+  </div>
+  <div id="ct">
+    <div class="cs" id="s1"><hr>
+<h2>🔑 Keywordy DFS — paliwo z DataForSEO (12 CEP · 20 pytań · 8 gap)</h2>
+<h3>CEP-y (sytuacje zakupowe) + wolumeny DFS</h3>
+<table>
+<tr><th>#</th><th>CEP</th><th>Wymiar</th><th>Reprezentatywne keywordy</th><th>Vol DFS</th></tr>
+<tr><td>feeling_ma_y_kompaktowy</td><td><strong>mały/kompaktowy</strong></td><td>feeling</td><td>sejf mały domowy, mały sejf domowy, mały sejf do domu, mały sejf domowy ogniotrwały</td><td>1690</td></tr>
+<tr><td>where_do_domu</td><td><strong>do domu</strong></td><td>where</td><td>jaki sejf kupic do domu, sejf do domu, sejf do domu ukryty, sejf do domu ogniotrwały</td><td>1150</td></tr>
+<tr><td>withwhat_zamek_kluczowy</td><td><strong>zamek kluczowy</strong></td><td>withwhat</td><td>domowy sejf na klucz, sejf domowy na klucz</td><td>270</td></tr>
+<tr><td>feeling_du_y</td><td><strong>duży</strong></td><td>feeling</td><td>duży sejf domowy, sejf domowy duży</td><td>150</td></tr>
+<tr><td>withwhat_wodoodporny</td><td><strong>wodoodporny</strong></td><td>withwhat</td><td>sejf domowy ogniotrwały i wodoszczelny</td><td>140</td></tr>
+<tr><td>constraint_zakotwiczony</td><td><strong>zakotwiczony</strong></td><td>constraint</td><td>sejf domowy przykręcany do podłogi, sejf domowy przykręcany do ściany, sejf domowy mocowany do ściany, sejf domowy mocowany do podłogi</td><td>130</td></tr>
+<tr><td>constraint_klasa_s1</td><td><strong>klasa S1</strong></td><td>constraint</td><td>sejf domowy s1, Jaki sejf jest lepszy, S1 czy S2?</td><td>90</td></tr>
+<tr><td>constraint_klasa_s2</td><td><strong>klasa S2</strong></td><td>constraint</td><td>sejf domowy s2</td><td>50</td></tr>
+<tr><td>constraint_atestowany</td><td><strong>atestowany</strong></td><td>constraint</td><td>sejf domowy z atestem</td><td>50</td></tr>
+<tr><td>where_na_pod_odze</td><td><strong>na podłodze</strong></td><td>where</td><td>sejf domowy podłogowy</td><td>50</td></tr>
+<tr><td>feeling_profesjonalny</td><td><strong>profesjonalny</strong></td><td>feeling</td><td>profesjonalny sejf domowy</td><td>40</td></tr>
+</table>
+<h3>Discovery Questions (realne zapytania klienta do AI)</h3>
+<table>
+<tr><th>Rank</th><th>Pytanie</th><th>Vol</th></tr>
+<tr><td>1</td><td>jaki sejf do domu</td><td>260</td></tr>
+<tr><td>2</td><td>ile kosztuje sejf</td><td>210</td></tr>
+<tr><td>3</td><td>gdzie kupic sejf domowy</td><td>90</td></tr>
+<tr><td>4</td><td>gdzie kupić sejf domowy</td><td>90</td></tr>
+<tr><td>5</td><td>gdzie zamontowac sejf w domu</td><td>50</td></tr>
+<tr><td>6</td><td>jak zrobić sejf</td><td>50</td></tr>
+<tr><td>7</td><td>jak otworzyć sejf domowy</td><td>40</td></tr>
+<tr><td>8</td><td>jaki sejf do domu forum</td><td>40</td></tr>
+<tr><td>9</td><td>jak zamontować sejf</td><td>40</td></tr>
+<tr><td>10</td><td>jak otworzyć sejf yale bez klucza</td><td>40</td></tr>
+<tr><td>11</td><td>jaki sejf do domu opinie</td><td>30</td></tr>
+<tr><td>12</td><td>gdzie kupić sejf</td><td>30</td></tr>
+</table>
+<h3>Gap keywords (do odzyskania — priorytet)</h3>
+<table>
+<tr><th>Fraza</th><th>Priorytet</th><th>Ścieżki</th></tr>
+<tr><td>sejf domowy jaka klasa</td><td>KRYTYCZNY</td><td>A3, B3, G4</td></tr>
+<tr><td>czy ubezpieczyciel wymaga sejfu</td><td>KRYTYCZNY</td><td>B1, B2</td></tr>
+<tr><td>sejf ognioodporny na dokumenty ile minut</td><td>WYSOKI</td><td>C1, C2</td></tr>
+<tr><td>sejf domowy s1 s2 różnica</td><td>WYSOKI</td><td>A3, G4, G5</td></tr>
+<tr><td>ile litrów sejf na biżuterię i dokumenty</td><td>WYSOKI</td><td>E2, E3</td></tr>
+<tr><td>jak zamontować sejf do ściany samodzielnie</td><td>WYSOKI</td><td>A5, G3</td></tr>
+<tr><td>certyfikat sejfu dla ubezpieczyciela pzu warta</td><td>WYSOKI</td><td>B2, B4, B5</td></tr>
+<tr><td>mały sejf domowy kluczowy czy elektroniczny</td><td>SREDNI</td><td>E3, F3, A4</td></tr>
+</table>
+
+<hr>
+
+<h2>🔧 KCF — kluczowe cechy kategorii</h2>
+
+<table>
+<tr><th>Cecha</th><th>Zakres</th><th>Tier</th></tr>
+<tr><td>Klasa odporności na włamanie</td><td>S1 / S2 (EN 14450) lub klasa 0–VI (EN 1143-1)</td><td>T1</td></tr>
+<tr><td>Ognioodporność (LFS / DIS)</td><td>LFS 30 / LFS 60 / LFS 120 / DIS 30P / DIS 60P</td><td>T1</td></tr>
+<tr><td>Typ zamka</td><td>kluczowy / elektroniczny / biometryczny</td><td>T1</td></tr>
+<tr><td>Pojemność (litry)</td><td>3–200 l</td><td>T1</td></tr>
+<tr><td>Masa i możliwość kotwienia</td><td><15 kg (przenośny) / 15–50 kg (lekki) / 50+ kg (trudny do wyciągnięcia)</td><td>T2</td></tr>
+<tr><td>Certyfikat / Atest</td><td>ECB-S / IMP Warszawa / VdS / TÜV</td><td>T2</td></tr>
+<tr><td>Grubość stali drzwi / korpusu</td><td>drzwi: 3–20 mm; korpus: 2–10 mm</td><td>T2</td></tr>
+<tr><td>Wodoszczelność</td><td>IP54 / IP65 / brak</td><td>T3</td></tr>
+</table>
+
+<hr>
+
+<h2>🚫 Forbidden patterns</h2>
+
+<table>
+<tr><th>Źle</th><th>Dobrze</th></tr>
+</table>
+
+<hr>
+
+<details class="fund" id="fund1"><summary><span class="fund-arrow">▸</span><span class="fund-head"><span class="fund-title">🏗 Fundament — 14. Sejfy domowe na kosztowności — Fundament (KROK 0 → CEP)</span><span class="fund-src">Baza: referencja 06.md #14 (matryca, CEP bazowe niezmienione). Wzbogacona wg METODOLOGIA_FUNDAMENT.md + batch_fund JSON + krzyżowanie z Secondary. Data: 2026-06-10.</span></span><span class="fund-badge ok">✓ kompletny</span><span class="fund-hint">rozwiń ▾</span></summary><div class="fund-body"><h1>14. Sejfy domowe na kosztowności — Fundament (KROK 0 → CEP)</h1>
+
+<p><em>Baza: referencja 06.md #14 (matryca, CEP bazowe niezmienione). Wzbogacona wg METODOLOGIA_FUNDAMENT.md + batch_fund JSON + krzyżowanie z Secondary. Data: 2026-06-10.</em></p>
+
+<hr>
+
+<h2>0.1 Analiza KW</h2>
+
+<p><strong>Wolumen ogółem z harvestu:</strong> ~8 460 vol (modyfikatory + discovery).</p>
+
+<h3>Strumień SYTUACYJNY → wsad do CEP</h3>
+
+<table>
+<tr><th>Fraza / klaster</th><th>Modyfikatory</th><th>Vol</th><th>Signal CEP</th></tr>
+<tr><td>sejf domowy ogniotrwały</td><td>sejf domowy ogniotrwały, mały sejf domowy ogniotrwały, sejf do domu ogniotrwały, ogniotrwały i wodoszczelny</td><td>~1 150</td><td>pożar / dokumenty</td></tr>
+<tr><td>sejf do domu ukryty</td><td>sejf do domu ukryty, jak ukryć sejf w ścianie, gdzie ukryć sejf w domu, wmurować</td><td>~90</td><td>dyskrecja / włamanie</td></tr>
+<tr><td>sejf domowy na pieniądze</td><td>sejf domowy na pieniądze</td><td>~150*</td><td>gotówka / kosztowności</td></tr>
+<tr><td>sejf domowy z atestem</td><td>sejf domowy z atestem, klasa S1, klasa S2</td><td>~190</td><td>wymóg ubezpieczyciela / certyfikat</td></tr>
+<tr><td>sejf domowy montowany do ściany</td><td>przykręcany, mocowany do ściany/podłogi</td><td>130</td><td>montaż / antywłamaniowy</td></tr>
+<tr><td>jaki sejf do domu / forum / opinie / wybrać</td><td>jaki, jaki do domu forum, jaki domowy wybrać</td><td>~370</td><td>discovery — porównywanie / decyzja</td></tr>
+<tr><td>ile kosztuje sejf</td><td>ile kosztuje, ile kosztuje domowy</td><td>230</td><td>cenowe (discovery, nie CEP)</td></tr>
+<tr><td>gdzie kupić sejf domowy</td><td>gdzie kupić, gdzie można kupić</td><td>230</td><td>zakup (discovery, nie CEP)</td></tr>
+</table>
+
+<p><em><code>_other</code> (4 680 vol) zawiera niezaklasyfikowane, w tym „ogniotrwały" i „na pieniądze" — zaliczam do odpowiednich CEP.</em></p>
+
+<h3>Strumień ATRYBUTOWY → harvest filtrów / KCF (NIE CEP)</h3>
+
+<table>
+<tr><th>Atrybut</th><th>Modyfikatory</th><th>Vol</th></tr>
+<tr><td>mały / kompaktowy</td><td>mały sejf domowy, mały sejf do domu, mały domowy castorama</td><td>1 690</td></tr>
+<tr><td>duży</td><td>sejf domowy duży, duży sejf domowy</td><td>150</td></tr>
+<tr><td>zamek kluczowy</td><td>sejf domowy na klucz</td><td>270</td></tr>
+<tr><td>wodoodporny</td><td>sejf domowy ogniotrwały i wodoszczelny</td><td>140</td></tr>
+<tr><td>zakotwiczony / montaż</td><td>przykręcany, mocowany do ściany/podłogi</td><td>130</td></tr>
+<tr><td>klasa S1 / S2</td><td>sejf domowy s1, sejf domowy s2</td><td>140</td></tr>
+<tr><td>podłogowy</td><td>sejf domowy podłogowy</td><td>50</td></tr>
+<tr><td>profesjonalny</td><td>profesjonalny sejf domowy</td><td>40</td></tr>
+</table>
+
+<p>> Rozmiar, zamek, klasa EN, montaż — to <strong>atrybuty produktowe</strong> (parametry wyboru), nie sytuacje wejścia. Zasilają filtry/KCF/preselekcję, nie CEP.</p>
+
+<hr>
+
+<h2>0.2 Opis kategorii</h2>
+
+<p>Sejfy domowe na kosztowności — metalowe szafy/skrytki zapewniające fizyczną ochronę wartościowych przedmiotów w środowisku domowym lub biurowym. Klient wchodzi w kategorię, gdy ma coś konkretnego do schowania (gotówka, biżuteria, dokumenty, broń) i zdaje sobie sprawę, że zwykła szuflada nie daje wystarczającego zabezpieczenia — albo gdy ubezpieczyciel wymaga certyfikowanego pojemnika.</p>
+
+<hr>
+
+<h2>0.3 Problemy, które kategoria załatwia</h2>
+
+<h3>Primary (rdzeń — po co kategoria powstała)</h3>
+
+<p>> <strong>Chroni mienie przechowywane w domu przed kradzieżą lub utratą.</strong> Goła funkcja fizycznego zabezpieczenia. Tyle.</p>
+<p>> TEST: „czy kategoria POWSTAŁA, żeby to robić?" → TAK. Klasa S1/EN 14450, zamek, masa, punkty kotwiące — to atrybuty realizacji. Ogniotrwałość, biometria, certyfikat ubezpieczyciela — to detalizacje (secondary).</p>
+
+<h3>Secondary (rynek pociął rdzeń „ochrona mienia" na węższe pod-potrzeby)</h3>
+
+<ul><li><strong>złoto, biżuteria, gotówka, kosztowności</strong> — klasyczna zawartość domowego sejfu; klient szuka pojemności + klasy antywłamaniowej</li><li><strong>dokumenty (akty, paszporty, notarialne)</strong> — wrażliwe na pożar i wilgoć → CEP ognioodporności</li><li><strong>elektronika / dyski / nośniki danych</strong> — dane osobiste, backupy; ogień niszczy w minuty → wyższy próg temp. wewnętrznej</li><li><strong>broń krótka / długa / myśliwska</strong> — wymóg prawny (ustawa o broni) lub polisowy; odrębny wymóg certyfikatu</li><li><strong>pamiątki rodzinne / nieodtwarzalne przedmioty</strong> — wartość sentymentalna > finansowa; ogień/woda = strata permanentna</li><li><strong>ochrona przed pożarem / dymy</strong> — ognioodporny min. 30/60 min.; UL 72 / EN 1047; papier vs dysk (różne temp.)</li><li><strong>wymóg ubezpieczyciela</strong> — polisa wymaga klasy (np. S1/VdS); klient szuka nr certyfikatu nie produktu</li><li><strong>ochrona przed dziećmi</strong> — leki, amunicja, pieniądze; priorytet: szybki dostęp dla dorosłego + bariera dla dziecka</li><li><strong>biuro / firma w domu</strong> — gotówka z działalności, dokumenty firmowe; wartość wyższa → wyższa klasa EN</li></ul>
+
+<p>> Potwierdzenie KW: „sejf domowy ogniotrwały" (~1 150 vol), „sejf domowy z atestem/S1/S2" (~190 vol), „sejf domowy na pieniądze" (~150 vol), „sejf do domu ukryty" (~90 vol) — każdy secondary ma pokrycie wolumenowe.</p>
+
+<hr>
+
+<h2>CEP — Consumer Entry Points</h2>
+
+<p><em>Referencja #14 miała 5 CEP (matryca). Każdy secondary z 0.3 musi mieć ≥1 CEP → dociągnięto 4 🆕 spoza referencji z harvestu KW.</em></p>
+
+<p>> Kategoria szeroka — <strong>zagrożenie determinuje typ produktu</strong>. Sejf ognioodporny na dokumenty ≠ mały biometryczny na biżuterię ≠ kaseta wartości na gotówkę firmy. CEP = pierwsze pytanie routujące klienta do właściwego produktu.</p>
+
+<table>
+<tr><th>CEP</th><th>Trigger (problem klienta, język konsumenta)</th><th>Konsekwencja dla opisu</th></tr>
+<tr><td><code>cep_wlamanie</code></td><td><strong>Strach przed włamaniem</strong> — właśnie w okolicy, po zdarzeniu u sąsiada, chcę zabezpieczyć biżuterię/gotówkę</td><td>Klasa EN 14450 S1/S2, masa (>50 kg lub kotwy), punkty montażowe, czas włamania [min]</td></tr>
+<tr><td><code>cep_dokumenty_pozar</code></td><td><strong>Dokumenty i nośniki — pożar niszczy wszystko w minuty</strong> — akty, paszporty, dyski</td><td>Czas odporności ogniowej (30/60/120 min), temperatura wewnątrz (papier <177°C, dysk <52°C), certyfikat UL 72 / EN 1047</td></tr>
+<tr><td><code>cep_gotowka_firma</code></td><td><strong>Gotówka lub kosztowności firmy</strong> — ubezpieczyciel wymaga klasy, duża wartość w domu</td><td>Klasa EN 1143-1, limit sumy ubezpieczenia per klasa, certyfikat VdS / numer normy</td></tr>
+<tr><td><code>cep_wymog_ubezpieczyciela</code></td><td><strong>Polisa wymaga certyfikowanego sejfu</strong> — co dokładnie trzeba kupić, żeby ubezpieczyciel uznał?</td><td>Klasa certyfikatu w PD (S1/VdS/EN), numer normy, info „zatwierdzony przez [ubezp.]"</td></tr>
+<tr><td><code>cep_prywatnosc_dzieci</code></td><td><strong>Chcę schować leki, amunicja, pieniądze przed dziećmi</strong> — szybki dostęp dla siebie, bariera dla dziecka</td><td>Szybkość dostępu (biometria/PIN), dyskretny montaż, rozmiar (mały/kompaktowy)</td></tr>
+<tr><td>🆕 <code>cep_bron_prawny</code></td><td><strong>Wymóg prawny / polisowy na broń</strong> — ustawa o broni wymaga certyfikowanego sejfu, ubezpieczyciel weryfikuje</td><td>Klasa na broń (EN 1143-1 lub dedykowany certyfikat PZŁ), montaż wymagany (ściana/podłoga), atestowany</td></tr>
+<tr><td>🆕 <code>cep_elektronika_dane</code></td><td><strong>Dyski, nośniki danych, backup</strong> — dane osobiste/firmowe; ogień i wilgoć = strata permanentna</td><td>Temperatura wewnątrz <52°C (dyski), wodoodporność (IP), certyfikat data media UL 72 Class 350</td></tr>
+<tr><td>🆕 <code>cep_pamiatki_nieodtwarzalne</code></td><td><strong>Pamiątki rodzinne, zdjęcia, nieodtwarzalne przedmioty</strong> — nie finansowa, sentymentalna utrata permanentna</td><td>Dwóch wrogów: ogień + woda → ognioodporny + uszczelka wodna; opis „to czego nie odtworzysz"</td></tr>
+<tr><td>🆕 <code>cep_dyskrecja_montaz</code></td><td><strong>Chcę schować sejf tak, żeby nikt nie wiedział</strong> — wmurowany, za obrazem, podłogowy</td><td>Wymiary + możliwość wmurowania, waga (solo vs ekipa), instrukcja ukrycia, sejf podłogowy / ścienny</td></tr>
+</table>
+
+<h3>Uzasadnienie KW per CEP</h3>
+
+<table>
+<tr><th>CEP</th><th>Reprezentatywne frazy</th><th>Vol</th></tr>
+<tr><td><code>cep_wlamanie</code></td><td>sejf domowy, sejf do domu, sejf domowy S1/S2, sejf przykręcany do ściany</td><td>~2 400</td></tr>
+<tr><td><code>cep_dokumenty_pozar</code></td><td>sejf domowy ogniotrwały, mały sejf domowy ogniotrwały, ogniotrwały i wodoszczelny</td><td>~1 150</td></tr>
+<tr><td><code>cep_gotowka_firma</code></td><td>sejf domowy na pieniądze, dobry sejf domowy</td><td>~200</td></tr>
+<tr><td><code>cep_wymog_ubezpieczyciela</code></td><td>sejf domowy z atestem, klasa S1, klasa S2</td><td>~190</td></tr>
+<tr><td><code>cep_prywatnosc_dzieci</code></td><td>mały sejf domowy, mały sejf do domu (overlap; kontekst PIN/biometria)</td><td>~1 690</td></tr>
+<tr><td><code>cep_bron_prawny</code></td><td>[niska objętość w DFS—słowo kluczowe „sejf na broń" w osobnej kategorii; signal z _other]</td><td>~40*</td></tr>
+<tr><td><code>cep_elektronika_dane</code></td><td>sejf domowy ogniotrwały i wodoszczelny (overlap; specyfika temp. dysku)</td><td>~140</td></tr>
+<tr><td><code>cep_pamiatki_nieodtwarzalne</code></td><td>[zawiera się w ogniotrwały + ogólny sejf domowy; trigger narracyjny, nie vol-driven]</td><td>~100*</td></tr>
+<tr><td><code>cep_dyskrecja_montaz</code></td><td>sejf do domu ukryty, jak ukryć sejf w ścianie, gdzie ukryć sejf w domu, wmurować sejf</td><td>~130</td></tr>
+</table>
+
+<p><em>\</em> szacunek z _other i nakładania — głównie trigger narracyjny, nie osobna fraza.*</p>
+
+<hr>
+
+<h3>Mapa pokrycia problemów → CEP</h3>
+
+<table>
+<tr><th>Problem (0.3 Secondary)</th><th>CEP pokrywający</th></tr>
+<tr><td>złoto / biżuteria / gotówka / kosztowności</td><td><code>cep_wlamanie</code></td></tr>
+<tr><td>dokumenty (akty, paszporty)</td><td><code>cep_dokumenty_pozar</code></td></tr>
+<tr><td>elektronika / dyski / nośniki</td><td><code>cep_elektronika_dane</code> 🆕</td></tr>
+<tr><td>broń krótka / długa / myśliwska</td><td><code>cep_bron_prawny</code> 🆕</td></tr>
+<tr><td>pamiątki / nieodtwarzalne</td><td><code>cep_pamiatki_nieodtwarzalne</code> 🆕</td></tr>
+<tr><td>ochrona przed pożarem</td><td><code>cep_dokumenty_pozar</code> + <code>cep_elektronika_dane</code></td></tr>
+<tr><td>wymóg ubezpieczyciela</td><td><code>cep_wymog_ubezpieczyciela</code></td></tr>
+<tr><td>ochrona przed dziećmi</td><td><code>cep_prywatnosc_dzieci</code></td></tr>
+<tr><td>biuro / firma w domu</td><td><code>cep_gotowka_firma</code></td></tr>
+<tr><td>dyskrecja / ukrycie</td><td><code>cep_dyskrecja_montaz</code> 🆕</td></tr>
+</table>
+
+<p>> ✅ Każdy problem z 0.3 pokryty ≥1 CEP. Referencja miała 5 → wzbogacono o 4 🆕. Atrybuty (S1/S2, zamek, rozmiar, masa) → harvest filtrów, NIE CEP.</p>
+
+<hr>
+
+<p><em>Nadbudowa (20 Discovery Questions · KCF · Tier Specs · Decision Tree · Forbidden → Correct · Ścieżki+persony) — etap 2, wyrastają z tego fundamentu.</em></p>
+</div></details></div>
+    <div class="cs" id="s2"><hr>
+<h2>🔑 Keywordy DFS — paliwo z DataForSEO (8 CEP · 10 pytań · 10 gap)</h2>
+<h3>CEP-y (sytuacje zakupowe) + wolumeny DFS</h3>
+<table>
+<tr><th>#</th><th>CEP</th><th>Wymiar</th><th>Reprezentatywne keywordy</th><th>Vol DFS</th></tr>
+<tr><td>constraint_klasa_s1</td><td><strong>klasa S1</strong></td><td>constraint</td><td>szafa na broń s1 zamek elektroniczny promocją, szafa na broń s1, szafa s1 na broń, szafa na broń s1 używana</td><td>4520</td></tr>
+<tr><td>forwhom_my_liwy</td><td><strong>myśliwy</strong></td><td>forwhom</td><td>jaka szafa na broń myśliwska, szafa na broń myśliwską, szafa pancerna na broń myśliwską, szafa na broń myśliwską używana</td><td>540</td></tr>
+<tr><td>constraint_klasa_s2</td><td><strong>klasa S2</strong></td><td>constraint</td><td>szafa na broń myśliwską s2, szafa na broń s2</td><td>100</td></tr>
+<tr><td>feeling_du_y</td><td><strong>duży</strong></td><td>feeling</td><td>duża szafa na broń</td><td>20</td></tr>
+<tr><td>constraint_tani_bud_etowy</td><td><strong>tani/budżetowy</strong></td><td>constraint</td><td>szafa na broń tanio</td><td>10</td></tr>
+<tr><td>where_do_gara_u</td><td><strong>do garażu</strong></td><td>where</td><td>Czy szafa na broń może stać w garażu?</td><td>—</td></tr>
+<tr><td>constraint_zakotwiczony</td><td><strong>zakotwiczony</strong></td><td>constraint</td><td>Czy szafa S1 musi być przytwierdzona?, Czy szafa na broń musi być przytwierdzona do ściany?</td><td>—</td></tr>
+</table>
+<h3>Discovery Questions (realne zapytania klienta do AI)</h3>
+<table>
+<tr><th>Rank</th><th>Pytanie</th><th>Vol</th></tr>
+<tr><td>1</td><td>jaka szafa na broń</td><td>30</td></tr>
+<tr><td>2</td><td>jaka szafa na broń myśliwską</td><td>30</td></tr>
+<tr><td>3</td><td>jaka szafa na broń myśliwska</td><td>30</td></tr>
+<tr><td>4</td><td>Gdzie musi stać szafa na broń?</td><td>—</td></tr>
+<tr><td>5</td><td>Czy szafa na broń może stać w garażu?</td><td>—</td></tr>
+<tr><td>6</td><td>Czy szafa S1 musi być przytwierdzona?</td><td>—</td></tr>
+<tr><td>7</td><td>Jaka jest klasa szaf na broń?</td><td>—</td></tr>
+<tr><td>8</td><td>Jaka szafa na broń długa?</td><td>—</td></tr>
+<tr><td>9</td><td>Czy szafa na broń musi być przytwierdzona do ściany?</td><td>—</td></tr>
+<tr><td>10</td><td>Czy policja sprawdza przechowywanie broni?</td><td>—</td></tr>
+</table>
+<h3>Gap keywords (do odzyskania — priorytet)</h3>
+<table>
+<tr><th>Fraza</th><th>Priorytet</th><th>Ścieżki</th></tr>
+<tr><td>dostałem pozwolenie na broń co dalej</td><td>KRYTYCZNY</td><td>A1</td></tr>
+<tr><td>jak policja sprawdza przechowywanie broni</td><td>WYSOKI</td><td>B1</td></tr>
+<tr><td>szafa na broń ile sztuk</td><td>WYSOKI</td><td>A4, C1</td></tr>
+<tr><td>zamek kluczowy czy elektroniczny</td><td>WYSOKI</td><td>A5, D2</td></tr>
+<tr><td>szafa na broń wymiary zewnętrzne</td><td>WYSOKI</td><td>A4</td></tr>
+<tr><td>ubezpieczenie broni myśliwskiej</td><td>WYSOKI</td><td>C4, F1</td></tr>
+<tr><td>ranking szaf na broń</td><td>WYSOKI</td><td>A3</td></tr>
+<tr><td>uchwyty magnetyczne vs tradycyjne</td><td>SREDNI</td><td>C1, D2</td></tr>
+<tr><td>biometryczny sejf na broń przepisy</td><td>SREDNI</td><td>D1, G2</td></tr>
+<tr><td>broń historyczna przechowywanie</td><td>SREDNI</td><td>C2</td></tr>
+</table>
+
+<hr>
+
+<h2>🔧 KCF — kluczowe cechy kategorii</h2>
+
+<table>
+<tr><th>Cecha</th><th>Zakres</th><th>Tier</th></tr>
+<tr><td>Klasa certyfikatu</td><td>S1 (EN 14450) / S2</td><td>T1</td></tr>
+<tr><td>Pojemność (sztuki broni)</td><td>4-18+ szt.</td><td>T1</td></tr>
+<tr><td>Typ zamka</td><td>kluczowy / elektroniczny / bimetaliczny</td><td>T1</td></tr>
+<tr><td>Wymiary wewnętrzne</td><td>120x30x20 - 200x60x40 cm</td><td>T1</td></tr>
+<tr><td>Masa</td><td>30-200 kg</td><td>T2</td></tr>
+<tr><td>Punkty montażowe</td><td>TAK (boki, podłoga) / NIE</td><td>T2</td></tr>
+<tr><td>Oddzielna komora na amunicję</td><td>TAK/NIE</td><td>T3</td></tr>
+</table>
+
+<hr>
+
+<h2>🚫 Forbidden patterns</h2>
+
+<table>
+<tr><th>Źle</th><th>Dobrze</th></tr>
+</table>
+
+<hr>
+
+<details class="fund" id="fund2"><summary><span class="fund-arrow">▸</span><span class="fund-head"><span class="fund-title">🏗 Fundament — Szafy na broń długą (klasa S1) — Fundament kategorii</span><span class="fund-src">Baza: referencja 06.md #13 (matryca — CEP `cep_pozwolenie_wymog_szafy`, `cep_mysliwy_wymog_msw`, `cep_kolekcjoner_bron`, `cep_strzelec_sportowy`, `cep_upgrade_szafy` wzięte jako szkielet). Nowe warstwy dociągnięte z harvestu DFS: sekcje 0.1/0.2/0.3/CEP per METODOLOGIA_FUNDAMENT. Kategoria fokusowa — jeden produkt (szafa S1), kilka ścieżek wejścia.</span></span><span class="fund-badge ok">✓ kompletny</span><span class="fund-hint">rozwiń ▾</span></summary><div class="fund-body"><h1>Szafy na broń długą (klasa S1) — Fundament kategorii</h1>
+
+<p><em>Baza: referencja 06.md #13 (matryca — CEP <code>cep_pozwolenie_wymog_szafy</code>, <code>cep_mysliwy_wymog_msw</code>, <code>cep_kolekcjoner_bron</code>, <code>cep_strzelec_sportowy</code>, <code>cep_upgrade_szafy</code> wzięte jako szkielet). Nowe warstwy dociągnięte z harvestu DFS: sekcje 0.1/0.2/0.3/CEP per METODOLOGIA_FUNDAMENT. Kategoria fokusowa — jeden produkt (szafa S1), kilka ścieżek wejścia.</em></p>
+
+<hr>
+
+<h2>0.1 Analiza KW (najpierw — co ludzie realnie wpisują)</h2>
+
+<h3>Strumień SYTUACYJNY (→ wsad do CEP)</h3>
+
+<table>
+<tr><th>Fraza / typ</th><th>Vol</th><th>Uwaga</th></tr>
+<tr><td>„nowy właściciel broni / dostałem pozwolenie"</td><td>dominujący CEP (vol pośredni przez <code>szafa na broń s1</code> 4520)</td><td>trigger wymogowy — prawo nakazuje kupić</td></tr>
+<tr><td>„szafa na broń myśliwską"</td><td>540</td><td>myśliwy z aktywną licencją, kontrola PZŁ/policji</td></tr>
+<tr><td>„szafa na broń myśliwską wymogi"</td><td>wariant 540</td><td>wciąż sytuacyjny (wymogi = sytuacja prawna)</td></tr>
+<tr><td>„jaka szafa na broń"</td><td>30</td><td>discovery question — klient nie zna jeszcze kategorii</td></tr>
+<tr><td>„jaka szafa na broń myśliwską"</td><td>30</td><td>wariant discovery, myśliwy</td></tr>
+<tr><td>„Gdzie musi stać szafa na broń?"</td><td>0 (long-tail, AI-friendly)</td><td>sytuacja: montaż/lokal</td></tr>
+<tr><td>„Czy szafa na broń może stać w garażu?"</td><td>0 (long-tail)</td><td>sytuacja lokalizacyjna</td></tr>
+<tr><td>„Czy szafa S1 musi być przytwierdzona?"</td><td>0 (long-tail)</td><td>sytuacja instalacyjna / prawna</td></tr>
+<tr><td>„Czy policja sprawdza przechowywanie broni?"</td><td>0 (long-tail)</td><td>sytuacja lękowa — kontrola</td></tr>
+<tr><td>„szafa na broń krótką"</td><td>w grupie _other ~5950</td><td>strzelec sportowy / pistolet</td></tr>
+</table>
+
+<p>> <strong>Suma wolumenowa sytuacyjnych:</strong> ~5140 (s1 4520 + myśliwy 540 + discovery 60 + szacowane warianty). Long-taile o vol=0 = realny ruch AI-search / PAA.</p>
+
+<h3>Strumień ATRYBUTOWY (→ harvest filtrów/KCF, NIE do CEP)</h3>
+
+<table>
+<tr><th>Atrybut</th><th>Vol</th><th>CEP nie tworzy</th></tr>
+<tr><td>„szafa s1 na broń" (klasa produktu)</td><td>4520 (mieszany — głównie constraint)</td><td>S1 = klasa, nie sytuacja klienta</td></tr>
+<tr><td>„szafa na broń s2"</td><td>100</td><td>S2 = wyższy standard, atrybut klasy</td></tr>
+<tr><td>„duża szafa na broń"</td><td>20</td><td>pojemność = atrybut</td></tr>
+<tr><td>„szafa na broń tanio"</td><td>10</td><td>cenowy = atrybut/constraint budżetowy</td></tr>
+<tr><td>„szafa na broń używana"</td><td>w <code>s1 używana</code></td><td>stan towaru</td></tr>
+<tr><td>zamek kluczowy / elektroniczny / biometryczny</td><td>0 (long-tail)</td><td>typ zamka = atrybut → KCF</td></tr>
+<tr><td>pojemność (2/5/8/12/14 sztuk broni)</td><td>brak vol</td><td>liczba sztuk = atrybut → KCF</td></tr>
+</table>
+
+<hr>
+
+<h2>0.2 Opis kategorii</h2>
+
+<p>Szafy na broń długą klasy S1 — stalowe szafy przechowywania broni palnej (karabiny, strzelby, sztucery) spełniające normę PN-EN 14450 klasa odporności S1. Klient wchodzi w tę kategorię niemal wyłącznie z powodu wymogu prawnego: rozporządzenie MSWiA 26.08.2014 nakazuje posiadaczom pozwolenia na broń przechowywać ją w szafie co najmniej klasy S1 z zamkiem co najmniej klasy A (EN 1300). Zakup nie jest wyborem — jest obowiązkiem wynikającym z ustawy o broni i amunicji.</p>
+
+<hr>
+
+<h2>0.3 Problemy, które kategoria załatwia</h2>
+
+<p><strong>🎯 Primary (rdzeń — po co kategoria powstała):</strong></p>
+<p>> <strong>Bezpieczne przechowywanie broni palnej zgodne z przepisami prawa polskiego.</strong> Goła funkcja: spełnienie wymogu MSWiA na certyfikowaną szafę S1. Tyle. Bez tego — odpowiedzialność karna i cofnięcie pozwolenia.</p>
+
+<p><strong>Secondary (rynek pociął rdzeń „przechowanie zgodne z prawem" na węższe sytuacje):</strong></p>
+
+<ul><li><strong>nowy właściciel / pierwszy kupujący</strong> — osoba, która właśnie dostała pozwolenie i nie wiedziała, że musi mieć szafę S1 (wymóg nabycia w terminie po uzyskaniu pozwolenia)</li><li><strong>myśliwy przed kontrolą PZŁ/policji</strong> — posiadacz broni myśliwskiej, któremu grozi inspekcja; niepewność czy stara szafa (bez tabliczki S1) „przejdzie"</li><li><strong>kolekcjoner / wiele sztuk</strong> — zbieracz broni historycznej lub sportowej, któremu aktualna szafa jest za mała pojemnościowo lub za mało odporna (celo S2)</li><li><strong>strzelec sportowy / broń krótka</strong> — strzela na strzelnicy, przechowuje pistolet w domu; chce szybki dostęp przy zachowaniu zgodności z S1</li><li><strong>wymóg ubezpieczyciela</strong> — polisa na broń lub dom wymaga certyfikowanej szafy; klient dostał pismo od ubezpieczyciela</li><li><strong>ochrona przed dziećmi / domownicy</strong> — posiadacz broni, który martwi się dostępem niepowołanych (dzieci, goście); szafa jako mechanizm prywatności i bezpieczeństwa bliskich</li><li><strong>upgrade starego sejfu bez certyfikatu</strong> — ma szafę lub sejf, ale bez normy S1; policja lub ubezpieczyciel żąda dokumentu certyfikacyjnego</li></ul>
+
+<p>> ⚠️ Klasa zamka (A/B), pojemność (ile sztuk), elektroniczny vs kluczowy, kotwienie do ściany — to <strong>atrybuty produktu</strong>, NIE odrębne problemy. Idą do KCF/filtry preselekcji, nie tu.</p>
+
+<hr>
+
+<h2>CEP — Consumer Entry Points</h2>
+
+<p><em>Primary + każdy Secondary → ≥1 CEP. Referencja 06.md #13 miała 5 CEP — zachowuję jako matrycę i uzupełniam brakujące.</em></p>
+
+<table>
+<tr><th>CEP</th><th>Trigger (język klienta)</th><th>Konsekwencja dla opisu</th></tr>
+<tr><td><code>cep_pozwolenie_wymog_szafy</code> ⭐</td><td><strong>„Dostałem pozwolenie na broń — prawo nakazuje mi mieć szafę S1"</strong></td><td>Pierwsze zdanie = „spełnia wymóg MSWiA" + norma S1 + klasa zamka EN 1300 — to zakup z nakazu, nie z wyboru; certyfikat IMP jako dowód formalny</td></tr>
+<tr><td><code>cep_mysliwy_wymog_msw</code></td><td><strong>„Mam broń myśliwską, grozi mi kontrola PZŁ lub policji"</strong></td><td>Powołanie na rozp. MSWiA 26.08.2014 + certyfikat jako dokument kontrolny; jak sprawdzić czy posiadana szafa spełnia wymóg</td></tr>
+<tr><td><code>cep_kolekcjoner_bron</code></td><td><strong>„Kolekcja przerosła szafę — potrzebuję więcej miejsca lub wyższej klasy"</strong></td><td>Pojemność w sztukach broni długiej (125 vs 200 cm = ile jednostek) + możliwość dokupienia drugiej szafy (przepisy) + skrytka na amunicję</td></tr>
+<tr><td><code>cep_strzelec_sportowy</code></td><td><strong>„Chodzę na strzelnicę — potrzebuję szybki dostęp do pistoletu i zgodność z S1"</strong></td><td>Typ zamka (biometryczny/elektroniczny vs kluczowy) + uchwyty regulowane + warianty pojemnościowe na broń krótką</td></tr>
+<tr><td>🆕 <code>cep_wymog_ubezpieczyciela</code></td><td><strong>„Ubezpieczyciel (polisa domu/broni) wymaga certyfikowanej szafy"</strong></td><td>Certyfikat EN 14450 + numer + instytut certyfikujący (IMP) — dokument na żądanie ubezpieczyciela</td></tr>
+<tr><td>🆕 <code>cep_ochrona_przed_dziecmi</code></td><td><strong>„Mam dzieci / domownicy — chcę żeby broń była poza zasięgiem"</strong></td><td>Zamek kl. A/B jako bariera; brak możliwości otwarcia przez dziecko; lokalizacja szafy (sypialnia / piwnica)</td></tr>
+<tr><td><code>cep_upgrade_szafy</code> (z ref.)</td><td><strong>„Mam stary sejf bez certyfikatu — policja lub ubezpieczyciel żąda S1"</strong></td><td>Certyfikat EN 14450 + norma + instytut certyfikujący (IMP); różnica między „szafką zamykaną" a certyfikowaną S1</td></tr>
+</table>
+
+<p>> 🆕 = dociągnięte poza referencję. <code>cep_wymog_ubezpieczyciela</code> i <code>cep_ochrona_przed_dziecmi</code> wynikają z secondary problemów z 0.3 — każdy problem musi mieć pokrycie CEP.</p>
+
+<h3>Uzasadnienie KW per CEP</h3>
+
+<p><strong><code>cep_pozwolenie_wymog_szafy</code> ⭐ (dominujący)</strong></p>
+<ul><li>„szafa na broń s1" — vol 4520</li><li>„szafa s1 na broń" — vol (w 4520)</li><li>„szafa na broń s1 używana" — wariant long-tail</li><li>„tania szafa na broń s1" — wariant budżetowy</li><li>discovery: „jaka szafa na broń" (30), „Jaka klasa szaf na broń?" (0 PAA)</li><li>Suma dominująca >4500 — to najsilniejszy CEP kategorii, 85%+ wolumenu</li></ul>
+
+<p><strong><code>cep_mysliwy_wymog_msw</code></strong></p>
+<ul><li>„szafa na broń myśliwską" — 540</li><li>„szafa pancerna na broń myśliwską" — wariant</li><li>„szafa na broń myśliwską używana" — wariant</li><li>„szafa na broń myśliwską wymogi" — sytuacyjny</li><li>„jaka szafa na broń myśliwską" (30), „jaka szafa na broń myśliwska" (30)</li><li>„Czy policja sprawdza przechowywanie broni?" (0 PAA/AI)</li><li>Suma ~600</li></ul>
+
+<p><strong><code>cep_kolekcjoner_bron</code></strong></p>
+<ul><li>„szafa na broń s2" — 100 (kolekcjoner z większymi zasobami sięga po S2)</li><li>„duża szafa na broń" — 20</li><li>Suma ~120 — niszowy, ale realny segment</li></ul>
+
+<p><strong><code>cep_strzelec_sportowy</code></strong></p>
+<ul><li>„szafa na broń krótką" — w grupie _other ~5950 (mieszany)</li><li>Long-tail: „biometryczny na pistolet S1?", „szybki dostęp do pistoletu legalnie?"</li><li>Vol szacowany niski, ale AI-search silny (pytania w głowie)</li></ul>
+
+<p><strong><code>cep_wymog_ubezpieczyciela</code> 🆕</strong></p>
+<ul><li>„cep_upgrade_szafy" z referencji zakrywa częściowo</li><li>Long-tail: „szafa S1 do ubezpieczenia broni", „certyfikat szafy dla ubezpieczyciela"</li><li>Vol 0 w DFS, ale PAA-ready — realny moment zakupowy</li></ul>
+
+<p><strong><code>cep_ochrona_przed_dziecmi</code> 🆕</strong></p>
+<ul><li>Long-tail: „szafa na broń dla rodziny z dziećmi", „czy dzieci mogą otworzyć szafę na broń"</li><li>Vol 0 w DFS — podtekstowy, ale obecny w pytaniach klientów (SERP: „ochrona dzieci przed bronią")</li></ul>
+
+<p><strong><code>cep_upgrade_szafy</code> (z ref.)</strong></p>
+<ul><li>Referencja definiuje jako: stara szafa bez certyfikatu, policja/ubezpieczyciel żąda S1</li><li>Pokryta vol z <code>szafa na broń s1</code> (klient szuka nowej S1 w zastępstwie starej)</li><li>Suma wliczona w główne 4520+</li></ul>
+
+<hr>
+
+<p><em>Fundament zbudowany: matryca ref #13 + 2 🆕 CEP z brakujących secondary problemów. Nadbudowa (CEV/Schwartz · Discovery · KCF · Tier · DT · Forbidden · Ścieżki · ToV) — etap 2.</em></p>
+</div></details></div>
+  </div>
+</div>
+<script>
+const CATS=[{"num":1,"name":"Sejfy domowe na kosztowności","v":"v2","s":"sejfy domowe na kosztowności"},{"num":2,"name":"Szafy na broń długą (klasa S1)","v":"v2","s":"szafy na broń długą (klasa s1)"}];
+const searchEl=document.getElementById('search');
+const statEl=document.getElementById('stat');
+const nrEl=document.getElementById('nr');
+const TOTAL=CATS.length;
+let curFilter='all';
+
+function esc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+function hi(text,q){
+  if(!q)return text;
+  return text.replace(new RegExp('('+esc(q)+')','gi'),'<mark>$1</mark>');
+}
+
+function applySearch(q){
+  const ql=q.trim().toLowerCase();
+  let n=0;
+  CATS.forEach(c=>{
+    const item=document.getElementById('i'+c.num);
+    const matchQ=!ql||c.s.includes(ql);
+    const matchF=curFilter==='all'||(curFilter==='v1'&&c.v==='v1')||(curFilter==='v2p'&&c.v!=='v1');
+    const ok=matchQ&&matchF;
+    if(item)item.classList.toggle('hidden',!ok);
+    if(ok){
+      n++;
+      const el=item&&item.querySelector('.ct');
+      if(el)el.innerHTML=hi(c.name,q.trim());
+    }
+  });
+  nrEl.style.display=n===0?'block':'none';
+  const fLabel=curFilter==='v1'?' · Draft':curFilter==='v2p'?' · Verified':'';
+  statEl.textContent=(ql?n+'/':'')+TOTAL+' cat.'+fLabel;
+}
+
+function setFilter(f){
+  curFilter=f;
+  document.querySelectorAll('.fb').forEach(b=>b.classList.toggle('on',b.dataset.f===f));
+  applySearch(searchEl.value);
+}
+
+function select(num){
+  document.querySelectorAll('.ci').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.cs').forEach(e=>e.classList.remove('vis'));
+  const item=document.getElementById('i'+num);
+  const sec=document.getElementById('s'+num);
+  if(item){item.classList.add('active');item.scrollIntoView({block:'nearest'});}
+  if(sec)sec.classList.add('vis');
+  document.getElementById('ct').scrollTop=0;
+}
+
+searchEl.addEventListener('input',e=>applySearch(e.target.value));
+document.addEventListener('keydown',e=>{
+  if(e.key==='/'&&document.activeElement!==searchEl){e.preventDefault();searchEl.focus();searchEl.select();}
+  if(e.key==='Escape'&&document.activeElement===searchEl){searchEl.value='';applySearch('');searchEl.blur();}
+});
+
+if(CATS.length>0)select(CATS[0].num);
+
+function toggleTheme(){
+  const l=document.body.classList.toggle('light');
+  localStorage.setItem('geo-theme',l?'light':'dark');
+  document.getElementById('theme-btn').textContent=l?'🌙':'☀️';
+}
+(function(){if(localStorage.getItem('geo-theme')==='light'){
+  document.body.classList.add('light');
+  var b=document.getElementById('theme-btn');if(b)b.textContent='🌙';}})();
+</script>
+</body>
+</html>
