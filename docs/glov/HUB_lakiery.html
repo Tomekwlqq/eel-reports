@@ -83,8 +83,6 @@ blockquote{border-left:3px solid var(--bd);padding-left:14px;color:var(--tx2);ma
   <div class="brand">💅 Lakiery <span>· GEO HUB</span></div>
   <div class="tab on" data-v="hub" onclick="go(this)">Hub</div>
   <div class="tab" data-v="cs" onclick="go(this)">📄 CS pełny</div>
-  <div class="tab" data-v="paths" onclick="go(this)">🛣 Ścieżki percepcji</div>
-  <div class="tab" data-v="pole" onclick="go(this)">❓ Pole pytań</div>
   <div class="tab" data-v="strat" onclick="go(this)">⚔️ Strategia odpowiedzi</div>
   <div class="tab" data-v="src" onclick="go(this)">📎 Źródła</div>
   <div class="tab" data-v="mapa" onclick="go(this)">🗺 Mapa percepcji</div>
@@ -95,7 +93,7 @@ blockquote{border-left:3px solid var(--bd);padding-left:14px;color:var(--tx2);ma
 <!-- ===================== HUB ===================== -->
 <section class="view on" id="v-hub">
   <h1>Lakiery do paznokci — <span>workspace GEO</span></h1>
-  <div class="sub">Materiał roboczy dla klienta (profil eko / odżywczy). Cel końcowy: <b>mapa percepcji jakości</b> jak dla sejfów + strategia komunikatu. · stan 2026-06-22</div>
+  <div class="sub">Workspace GEO dla CoolNails by GLOV: CS pełny → strategia odpowiedzi → mapa percepcji. · <b>v2.0</b> (11 mocnych CEP, 220 pytań) · stan 2026-06-27</div>
 
   <div class="box brief">
     <h3 style="margin-top:0">🎯 Brief strategiczny — CoolNails by GLOV</h3>
@@ -120,18 +118,6 @@ blockquote{border-left:3px solid var(--bd);padding-left:14px;color:var(--tx2);ma
       <div class="ico">📄</div>
       <div class="t">CS pełny</div>
       <div class="d">Category Standard wg metodologii v3: CEV, KCF, CEP, subkategorie, decision tree, forbidden patterns, cross-category (moat).</div>
-      <div class="meta">otwórz zakładkę →</div>
-    </div>
-    <div class="cardlink" onclick="go(qs('[data-v=paths]'))">
-      <div class="ico">🛣</div>
-      <div class="t">Ścieżki percepcji</div>
-      <div class="d">8 ścieżek (A–H) z personami i kształtami z CEV: impuls, research z garbem, lęk/dowód, deadline, aspiracja. Blokery 🛡️ + szkic hooków eko.</div>
-      <div class="meta">otwórz zakładkę →</div>
-    </div>
-    <div class="cardlink" onclick="go(qs('[data-v=pole]'))">
-      <div class="ico">❓</div>
-      <div class="t">Pole pytań</div>
-      <div class="d">Interaktywne: discovery (20) + pogłębione ścieżkowe (~105 pytań). Filtr info/komerc/transakc + 🛡️ tylko blokery + szukajka.</div>
       <div class="meta">otwórz zakładkę →</div>
     </div>
     <div class="cardlink" onclick="go(qs('[data-v=strat]'))" style="border-color:var(--bloker)">
@@ -163,7 +149,7 @@ blockquote{border-left:3px solid var(--bd);padding-left:14px;color:var(--tx2);ma
     <div class="cardlink" onclick="go(qs('[data-v=mapa]'))" style="border-color:var(--eko)">
       <div class="ico">🗺</div>
       <div class="t">Mapa percepcji odpowiedzi</div>
-      <div class="d"><b>9 ścieżek × etapy świadomości × 168 pytań</b>, każde z <b>angle CoolNails</b> (jak przekierować na zakup) + <b>siła wejścia 🟢🟡🔴</b>. Format wzorca SejfZone. Generatory: <code>perception_paths_v4</code> + <code>gen_angle</code> + <code>render_mapa</code>.</div>
+      <div class="d"><b>11 ścieżek × etapy świadomości × 220 pytań</b>, każde z <b>angle CoolNails</b> (jak przekierować na zakup) + <b>siła wejścia 🟢🟡🔴</b>. Format wzorca SejfZone. Generatory: <code>perception_paths_v4</code> + <code>gen_angle</code> + <code>render_mapa</code>.</div>
       <div class="meta" style="color:var(--eko)">otwórz zakładkę →</div>
     </div>
   </div>
@@ -200,40 +186,50 @@ blockquote{border-left:3px solid var(--bd);padding-left:14px;color:var(--tx2);ma
   <tr><td>Krycie/pędzelek</td><td>1 vs 2 warstwy</td><td>T3</td><td>jakość aplikacji</td></tr></table>
   <p><b>Konwencje:</b> buteleczka ~10–15 ml z pędzelkiem; hybryda = system (baza+kolor+top+lampa). Red flag: „hybryda" bez informacji o lampie.</p>
 
-  <h2>3 · CEP — Consumer Entry Points (L1)</h2>
+  <h2>3 · CEP — Consumer Entry Points (L1) · 11 mocnych, osadzonych w problemie/formie</h2>
   <table><tr><th>id</th><th>trigger (zdanie konsumenta)</th><th>primary_concern</th><th>bloker decyzji</th><th>routes_to</th></tr>
-  <tr><td><code>cep_trwalosc</code></td><td>„manicure, który wytrzyma 2–3 tyg bez odprysków"</td><td>trwałość bez poprawek</td><td>czy zniszczy paznokcie</td><td>hybryda/żel</td></tr>
-  <tr><td><code>cep_dom_szybko</code></td><td>„szybko pomalować w domu, bez lampy i sprzętu"</td><td>prostota, schnięcie</td><td>że się rozmaże</td><td>klasyczny</td></tr>
-  <tr><td><code>cep_event</code></td><td>„ślub za tydzień — idealne na ten dzień"</td><td>efekt na okazję</td><td>że nie wytrzyma do wieczora</td><td>hybryda/klasyk premium</td></tr>
-  <tr style="background:rgba(63,185,80,.06)"><td><code>cep_pielegnacja</code> 🌿</td><td>„łamliwe paznokcie, boję się że lakier je zniszczy"</td><td>nie uszkodzić płytki</td><td>że pogorszy stan</td><td><b>odżywka/leczniczy (KLIENT)</b></td></tr>
-  <tr><td><code>cep_salon_w_domu</code></td><td>„nie chcę płacić 100 zł w salonie, zrobię hybrydę sama"</td><td>efekt salonowy + oszczędność</td><td>że nie umiem / sprzęt drogi</td><td>zestaw żel+lampa</td></tr>
-  <tr><td><code>cep_zmiana</code></td><td>„lubię często zmieniać kolory pod trendy"</td><td>różnorodność, łatwy zmyw</td><td>że szybko się niszczy</td><td>klasyczny (tani)</td></tr>
-  <tr><td><code>cep_dziecko</code></td><td>„bezpieczny dla córki, zmywalny wodą"</td><td>bezpieczeństwo składu</td><td>toksyczność/aceton</td><td>peel-off/wodny</td></tr>
-  <tr><td>⭐ <code>cep_odswiezenie</code></td><td>„chcę po prostu odświeżyć wygląd"</td><td>poprawa samopoczucia</td><td>—</td><td>dowolny</td></tr>
-  <tr><td>⭐ <code>cep_impuls_estetyczny</code></td><td>„zobaczyłam ten kolor — biorę"</td><td>trafić w gust</td><td>że się rozczaruję</td><td>klasyk/hybryda</td></tr>
-  <tr><td>⭐ <code>cep_social_moda</code></td><td>„widziałam u influencerki, chcę takie"</td><td>być na trendzie</td><td>czy to dla mnie</td><td>trend-dependent</td></tr></table>
-  <blockquote>⭐ = standardowe CEP beauty (kontekst kulturowy). Dodane, bo CEV krzyczy aspiracja .50 / widoczność .75 / sexy .60 — kategoria napędzana kulturą. <b>Gate odsiał do KCF:</b> czerwony/matowy/5-free/tani/hebe (atrybuty, nie sytuacje).</blockquote>
+  <tr style="background:rgba(63,185,80,.06)"><td><code>cep_nail_care</code> 🌿</td><td>„łamliwe paznokcie, chcę je wzmocnić a nie zniszczyć"</td><td>odbudowa płytki, nie pogorszyć</td><td>czy działa czy marketing</td><td><b>odżywczy/wzmacniający (CoolNails Active)</b></td></tr>
+  <tr><td><code>cep_hybrid_no_lamp</code></td><td>„trwały jak hybryda, ale bez lampy UV i salonu"</td><td>trwałość bez salonu/UV</td><td>czy naprawdę trzyma bez lampy</td><td>gel-like 3w1 / click-pen</td></tr>
+  <tr><td><code>cep_easy_removal</code></td><td>„coś co łatwo zmyć i nie zniszczy paznokci jak hybryda"</td><td>nie niszczyć płytki</td><td>czy się trzyma skoro łatwo schodzi</td><td>peel-off / klasyk</td></tr>
+  <tr><td><code>cep_kids_safe</code></td><td>„bezpieczny lakier dla dziecka, zmywalny wodą"</td><td>bezpieczeństwo składu</td><td>toksyczność / aceton</td><td>peel-off / wodny</td></tr>
+  <tr><td><code>cep_quick_dry</code></td><td>„szybkoschnący, nie mam czasu czekać"</td><td>szybkie schnięcie</td><td>że i tak się rozmaże</td><td>szybkoschnący / click-pen</td></tr>
+  <tr><td><code>cep_clean_formula</code></td><td>„lakier bez toksyn / wegański / czysty skład"</td><td>bezpieczny, czysty skład</td><td>greenwashing — czy to prawda</td><td>7-free / wegański</td></tr>
+  <tr><td><code>cep_diy_salon</code></td><td>„manicure w domu jak z salonu, bez płacenia"</td><td>efekt salonowy samodzielnie</td><td>czy umiem, czy wyjdzie</td><td>zestaw / gel-like</td></tr>
+  <tr><td><code>cep_occasion</code></td><td>„ważne wydarzenie za parę dni, idealne na ten dzień"</td><td>efekt na okazję</td><td>że nie wytrzyma do eventu</td><td>gel-like / klasyk premium</td></tr>
+  <tr><td>⭐ <code>cep_social_moda</code></td><td>„widziałam u influencerki, chcę takie"</td><td>być na trendzie</td><td>czy to dla mnie</td><td>trend-dependent</td></tr>
+  <tr><td>⭐ <code>cep_impuls_estetyczny</code></td><td>„zobaczyłam ten kolor — biorę"</td><td>trafić w gust</td><td>że się rozczaruję</td><td>klasyk / hybryda</td></tr>
+  <tr><td>⭐ <code>cep_odswiezenie</code></td><td>„odświeżyć wygląd, naturalny zadbany look"</td><td>poprawa samopoczucia</td><td>—</td><td>nude / odżywczy</td></tr></table>
+  <blockquote>Rdzeń = <b>problemowo-sytuacyjne</b> (z DFS-volumes: hybrid_no_lamp ~3470, easy_removal ~3340, kids_safe ~2720). ⭐ = <b>kulturowe</b> — obowiązkowe, bo CEV ma aspiracja .65 / widoczność .9 / sexy .85 / impuls .8 (≥3/4 suwaków > 0.5 → brama CEP social/moda). <b>Gate odsiał do KCF:</b> kolor/wykończenie/5-free/pojemność (atrybuty, nie sytuacje). Dominant 🌿 = <code>cep_nail_care</code> (teren CoolNails Active).</blockquote>
 
   <h2>3b · Potencjalne subkategorie</h2>
   <table><tr><th>subkategoria</th><th>które CEP tu routują</th></tr>
-  <tr><td>Lakiery hybrydowe (gel polish)</td><td>trwalosc, salon_w_domu, event</td></tr>
-  <tr style="background:rgba(63,185,80,.06)"><td><b>Odżywki / lakiery lecznicze 🌿 (KLIENT)</b></td><td>pielegnacja</td></tr>
-  <tr><td>Lakiery klasyczne</td><td>dom_szybko, zmiana, event</td></tr>
-  <tr><td>Lakiery żelowe UV</td><td>salon_w_domu</td></tr>
-  <tr><td>Peel-off / wodne dziecięce</td><td>dziecko</td></tr>
-  <tr><td>Baza + top coat</td><td>(komponent)</td></tr></table>
+  <tr style="background:rgba(63,185,80,.06)"><td><b>Odżywcze / wzmacniające 🌿 (CoolNails Active)</b></td><td>nail_care</td></tr>
+  <tr><td>Gel-like 3w1 bez lampy</td><td>hybrid_no_lamp, diy_salon, occasion</td></tr>
+  <tr><td>Szybkoschnące / click-pen</td><td>quick_dry, occasion</td></tr>
+  <tr><td>Peel-off / wodne dziecięce</td><td>kids_safe, easy_removal</td></tr>
+  <tr><td>Klasyczne kolorowe</td><td>impuls_estetyczny, social_moda, odswiezenie</td></tr>
+  <tr><td>Wegańskie / clean (7-free+)</td><td>clean_formula</td></tr></table>
 
   <h2>4 · Discovery Questions (20)</h2>
-  <p>1. Jak wybrać lakier hybrydowy do domu? 2. Ile trzyma się hybryda a ile żel? 3. Czy lakier hybrydowy niszczy paznokcie? 4. Jak zrobić hybrydę w domu krok po kroku? 5. Lampa UV czy LED do hybrydy? 6. Co znaczy lakier 5-free / 7-free? 7. Jak zdjąć hybrydę bez niszczenia paznokcia? 8. Lakier klasyczny czy hybryda dla początkującej? 9. Bezpieczny lakier dla dziecka — jaki? 10. Jak wzmocnić słabe paznokcie? 11. Jak zregenerować paznokcie po hybrydzie? 12. Ile warstw lakieru nakładać? 13. Dlaczego lakier się odpryskuje? 14. Najtrwalszy lakier klasyczny bez lampy? 15. Jakie kolory paznokci modne tej jesieni? 16. Ile kosztuje zestaw do hybrydy? 17. Czy odżywki do paznokci działają? 18. Lakier szybkoschnący — który? 19. Jak długo schnie lakier klasyczny? 20. Czym różni się żel od hybrydy?</p>
+  <p>1. Jaki lakier trwały jak hybryda ale bez lampy UV? 2. Ile schnie lakier szybkoschnący? 3. Który lakier trzyma się najdłużej? 4. Lakier bezpieczny dla dzieci — jaki wybrać? 5. Czy lakier dla dzieci można zmyć bez acetonu? 6. Jaki lakier wegański i bez szkodliwych substancji? 7. Co znaczy 5-free / 7-free / 10-free? 8. Jaki lakier wzmocni łamliwe paznokcie? 9. Lakier z keratyną — czy naprawdę wzmacnia? 10. Jak długo trzyma się lakier na paznokciach naturalnych? 11. Jaki kolor lakieru na ślub/wesele? 12. Jak zrobić manicure w domu jak z salonu? 13. Lakier peel-off — co to i czy warto? 14. Jak zmyć lakier hybrydowy bez acetonu? 15. Czy lakier w ciąży jest bezpieczny? 16. Jaki lakier dla 5-latki? 17. Różnica klasyczny vs hybrydowy — co wybrać? 18. Który lakier najlepiej kryjący? 19. Jaki lakier nie żółknie? 20. Czy można nałożyć lakier bez bazy?</p>
   <blockquote>[DFS dołoży wolumeny + PAA + ujawni brakujące]</blockquote>
 
-  <h2>5 · Consumer Decision Tree (L1 routing)</h2>
-  <pre class="mono" style="display:block;padding:14px;border-radius:8px;white-space:pre-wrap;line-height:1.7">Q1. Czego oczekujesz? → Trwałości tygodniami / Szybko i prosto / Regeneracji paznokci / Dla dziecka
-Q2a (trwałość) → Masz lampę? → tak: kolor hybryda · nie: zestaw startowy z lampą
-Q2b (szybko)   → Jak długo ma trzymać? → 1 dzień (event) / kilka dni (klasyk trwały)
-Q2c (regeneracja) → Stan paznokci? → po hybrydzie / łamliwe z natury → odżywka + aplikator
-Q2d (dziecko)  → Wiek? → peel-off / wodny zmywalny
-→ KCF kluczowe: TECHNOLOGIA · TRWAŁOŚĆ · LAMPA(t/n) · USUWANIE · FORMUŁA</pre>
+  <h2>5 · Consumer Decision Tree (drzewo zawężające — routing do typu → KCF)</h2>
+  <pre class="mono" style="display:block;padding:14px;border-radius:8px;white-space:pre-wrap;line-height:1.7">Q1. PO CO szukasz lakieru?
+   consumer_language: „chcę trwały kolor / coś dla dziecka / nie zniszczyć po hybrydzie / wzmocnić łamliwe / czysty skład / na okazję"
+   → Trwałość bez salonu        → [gel-like 3w1 bez lampy]      → Q2
+   → Dla dziecka                → [peel-off / zmywalny wodą]    → Q3
+   → Po hybrydzie, nie niszczyć → [klasyk / peel-off]           → Q3
+   → Wzmocnić łamliwe           → [odżywczy z keratyną/Active]  → Q4
+   → Czysty skład / wege        → [7-free / wegański z cert.]   → Q4
+   → Na okazję (event/ślub)     → [gel-like / klasyk premium]   → Q2
+
+Q2. Lampa UV w grze?     → tak: hybryda salonowa (poza kat.) · nie: gel-like bez UV
+Q3. Sposób usunięcia?    → zmywalny wodą (dziecko) / peel-off (jak folia) / aceton+folia
+Q4. Skład krytyczny?     → tak (7-free / wege / cert. derm.) · nie (lista „bez" wystarczy)
+
+→ Kluczowe KCF: TYP (klasyk/gel-like/peel-off/odżywczy) · TRWAŁOŚĆ (dni) · LAMPA (t/n) · USUWANIE (woda/peel/aceton) · SKŁAD (x-free/wege)
+→ Bloker po hybrydzie: płytkę niszczy spiłowywanie przy zdejmowaniu, nie sam lakier — peel-off/klasyk omija problem</pre>
 
   <h2>7 · Forbidden Patterns (❌ → ✅)</h2>
   <table><tr><th>❌ zakazane</th><th>✅ poprawne (cytowalne S2)</th></tr>
@@ -244,10 +240,10 @@ Q2d (dziecko)  → Wiek? → peel-off / wodny zmywalny
 
   <h2>8 · Cross-Category Triggers ⭐ (tu siedzi moat klienta)</h2>
   <table><tr><th>Kategoria źródłowa</th><th>Trigger</th><th>CEP</th><th>Fraza wejściowa w AI</th></tr>
-  <tr style="background:rgba(63,185,80,.06)"><td><b>Hybryda (po latach)</b></td><td>„paznokcie zniszczone po hybrydzie"</td><td><code>cep_pielegnacja</code></td><td>„jak zregenerować paznokcie po hybrydzie" → <b>ODŻYWKA (KLIENT)</b></td></tr>
-  <tr><td>Ślub / wesele</td><td>„paznokcie na dzień ślubu"</td><td><code>cep_event</code></td><td>„jakie paznokcie na ślub"</td></tr>
-  <tr><td>Zdobienia / nail art</td><td>„potrzebuję bazy/topu"</td><td>—</td><td>„baza i top do hybrydy"</td></tr>
-  <tr><td>Salon (rezygnacja)</td><td>„za drogo w salonie"</td><td><code>cep_salon_w_domu</code></td><td>„hybryda w domu zestaw"</td></tr></table>
+  <tr style="background:rgba(63,185,80,.06)"><td><b>Hybryda (po latach)</b></td><td>„paznokcie zniszczone po hybrydzie"</td><td><code>cep_nail_care</code> / <code>cep_easy_removal</code></td><td>„jak zregenerować paznokcie po hybrydzie" → <b>ODŻYWCZY (CoolNails Active)</b></td></tr>
+  <tr><td>Ślub / wesele</td><td>„paznokcie na dzień ślubu"</td><td><code>cep_occasion</code></td><td>„jakie paznokcie na ślub"</td></tr>
+  <tr><td>Zmywacz / aceton</td><td>„czym zmyć bez niszczenia"</td><td><code>cep_easy_removal</code></td><td>„lakier który zmyję bez acetonu"</td></tr>
+  <tr><td>Kosmetyki wege / zero-waste</td><td>„szukam cruelty-free"</td><td><code>cep_clean_formula</code></td><td>„wegański lakier bez toksyn"</td></tr></table>
   <blockquote><b>Moat klienta:</b> pole pytań HYBRYDY (bloker „niszczy") = wejście odżywki. Treść klienta ma odpowiadać S2 na „co po hybrydzie" — wtedy AI cytuje markę, zanim ktoś ją zna.</blockquote>
 
   <h2>9 · Tone of Voice GEO (jak pisać cytowalnie)</h2>
@@ -262,41 +258,7 @@ Q2d (dziecko)  → Wiek? → peel-off / wodny zmywalny
   <div class="box"><b>STATUS / NEXT:</b> ✅ Pełny CS L1 nową metodą. ⏭️ [DFS] harvest → wolumeny per CEP/pytanie. ⏭️ Wydzielić CS „lakiery hybrydowe" (L2) + CS „odżywki do paznokci" (L2, KLIENT) — każdy własny przebieg.</div>
 </section>
 
-<!-- ===================== ŚCIEŻKI ===================== -->
-<section class="view" id="v-paths">
-  <h1>Ścieżki percepcji — <span>Lakiery do paznokci</span></h1>
-  <div class="sub">8 ścieżek (A–H) · różne kształty z CEV · 🛡️ = bloker/obiekcja z zaplanowaną S2 gaszącą · <span style="color:var(--eko)">zielony hook = szkic komunikatu klienta (eko/odżywcze)</span></div>
-  <div id="pathsbox"></div>
-
-  <div class="box eko">
-    <h3 style="margin-top:0;color:var(--eko)">📌 Podsumowanie pola pytań</h3>
-    <ul style="margin-bottom:0">
-      <li><b>8 ścieżek · ~33 stany · ~105 pytań</b> ([DFS] domyka wolumeny + ujawnia brakujące).</li>
-      <li><b>Kształty:</b> impuls/skok (A,E) · research z garbem (B,D) · lęk/dowód (C,G) · deadline (F) · aspiracja/social (H).</li>
-      <li><b>Blokery → pytania:</b> B4, C3, D3, F3, G1 — obiekcje jako stany, każdy z S2 gaszącą.</li>
-      <li><b>Wejście klienta:</b> ścieżka <b>C (C1–C4)</b> = pole pytań po hybrydzie = wejście odżywki/eko. Wtórnie <b>G</b> (bezpieczeństwo/skład).</li>
-    </ul>
-  </div>
-</section>
-
-<!-- ===================== POLE PYTAŃ ===================== -->
-<section class="view" id="v-pole">
-  <h1>Pole pytań — <span>Lakiery do paznokci</span></h1>
-  <div class="sub">Discovery (otwarcie) + pogłębione (ścieżkowe). 8 ścieżek · ~105 pytań · 🛡️ = bloker (wymaga S2 gaszącej).</div>
-  <div class="bar">
-    <input id="search" placeholder="🔎 szukaj w pytaniach…" oninput="flt()">
-    <button class="fb on" data-i="all" onclick="setI(this)">wszystkie</button>
-    <button class="fb" data-i="info" onclick="setI(this)">info</button>
-    <button class="fb" data-i="komerc" onclick="setI(this)">komerc</button>
-    <button class="fb" data-i="transakc" onclick="setI(this)">transakc</button>
-    <button class="fb" data-bl="1" onclick="this.classList.toggle('on');flt()">🛡️ tylko blokery</button>
-  </div>
-  <div class="legend"><span><i class="i-info"></i>informacyjne</span><span><i class="i-komerc"></i>komercyjne</span><span><i class="i-transakc"></i>transakcyjne</span><span>🛡️ bloker</span></div>
-  <h2>① Discovery Questions (otwarcie — 20)</h2>
-  <div class="disc" id="disc"></div>
-  <h2>② Pogłębione — ścieżka → etap → pytania</h2>
-  <div id="paths"></div>
-</section>
+<!-- ścieżki + pole pytań skonsolidowane w zakładce Mapa percepcji (2.0) -->
 
 <!-- ===================== STRATEGIA ODPOWIEDZI ===================== -->
 <section class="view" id="v-strat">
@@ -365,13 +327,13 @@ Q2d (dziecko)  → Wiek? → peel-off / wodny zmywalny
 <section class="view" id="v-src">
   <h1>Źródła — <span>CoolNails by GLOV</span></h1>
   <div class="sub">Materiały klienta (prezentacja PDF + brief) są <b>poufne</b>.</div>
-  <div class="box wrog"><b>🔒 Nie publikowane na www.</b> Surowe materiały klienta dostępne tylko w wersji roboczej (lokalnej). Ta publiczna wersja zawiera wyłącznie opracowanie GEO (CS, strategia, pole pytań, mapa).</div>
+  <div class="box wrog"><b>🔒 Nie publikowane na www.</b> Surowe materiały klienta dostępne tylko w wersji roboczej (lokalnej). Ta publiczna wersja zawiera wyłącznie opracowanie GEO (CS, strategia, mapa).</div>
 </section>
 
 <!-- ===================== MAPA (osadzona) ===================== -->
 <section class="view" id="v-mapa">
   <h1>Mapa percepcji odpowiedzi — <span>CoolNails by GLOV</span></h1>
-  <div class="sub">168 pytań × etapy świadomości × angle + siła + format. <a href="MAPA_PERCEPCJI_lakier_do_paznokci.html" target="_blank">otwórz pełnoekranowo ↗</a></div>
+  <div class="sub">220 pytań × 11 ścieżek × etapy świadomości × angle + siła + format. <a href="MAPA_PERCEPCJI_lakier_do_paznokci.html" target="_blank">otwórz pełnoekranowo ↗</a></div>
   <iframe src="MAPA_PERCEPCJI_lakier_do_paznokci.html" style="width:100%;height:84vh;border:1px solid var(--bd);border-radius:10px;background:#fff" title="Mapa percepcji odpowiedzi CoolNails"></iframe>
 </section>
 
@@ -390,75 +352,6 @@ function go(el){
 }
 
 /* ---- data (ścieżki + pole pytań) ---- */
-const DISC=["Jak wybrać lakier hybrydowy do domu?","Ile trzyma się hybryda a ile żel?","Czy lakier hybrydowy niszczy paznokcie?","Jak zrobić hybrydę w domu krok po kroku?","Lampa UV czy LED do hybrydy?","Co znaczy lakier 5-free / 7-free?","Jak zdjąć hybrydę bez niszczenia paznokcia?","Lakier klasyczny czy hybryda dla początkującej?","Bezpieczny lakier dla dziecka — jaki?","Jak wzmocnić słabe paznokcie?","Jak zregenerować paznokcie po hybrydzie?","Ile warstw lakieru nakładać?","Dlaczego lakier się odpryskuje?","Najtrwalszy lakier klasyczny bez lampy?","Jakie kolory paznokci modne tej jesieni?","Ile kosztuje zestaw do hybrydy?","Czy odżywki do paznokci działają?","Lakier szybkoschnący — który?","Jak długo schnie lakier klasyczny?","Czym różni się żel od hybrydy?"];
-const P=[
-{l:"A",cep:"cep_zmiana",shape:"IMPULS · skok",per:"Wiktoria, 24, studentka — zmienia kolor co tydzień pod stylizację. Niski budżet, zero cierpliwości do sprzętu.",st:[
- {n:"Inspiracja",bl:0,q:[["jakie kolory paznokci modne tej jesieni?","info"],["paznokcie pod czarną sukienkę","info"],["trendy manicure 2026","info"]]},
- {n:"Wybór produktu",bl:0,q:[["lakier klasyczny szybkoschnący","komerc"],["lakier co długo trzyma bez hybrydy","komerc"],["lakier kryjący w 1 warstwie","komerc"]]},
- {n:"Zakup",bl:0,q:[["tani lakier dobry kolor","transakc"],["lakier do paznokci sklep online","transakc"],["lakier drogeria opinie","transakc"]]}]},
-{l:"B",cep:"cep_salon_w_domu",shape:"POTRZEBA · garb na nauce",per:"Magda, 31, urlop macierzyński. Salon 100 zł co 3 tyg — chce robić hybrydę sama. Boi się, że nie umie i sprzęt drogi.",st:[
- {n:"Opłacalność",bl:0,q:[["ile kosztuje hybryda w salonie miesięcznie","info"],["czy opłaca się robić hybrydę w domu","info"],["ile kosztuje zestaw do hybrydy","info"]]},
- {n:"Nauka technologii (garb)",bl:0,q:[["co potrzebne do hybrydy w domu","info"],["lampa UV czy LED — co lepsze","info"],["hybryda krok po kroku dla początkujących","info"],["ile warstw hybrydy nakładać","info"],["jak długo utwardzać hybrydę w lampie","info"]]},
- {n:"Wybór zestawu",bl:0,q:[["zestaw startowy do hybrydy ranking","komerc"],["jaka lampa do hybrydy dla początkującej","komerc"],["ile mocy lampa LED do hybrydy","komerc"],["dobry zestaw hybryda dla początkujących","komerc"]]},
- {n:"Bloker",bl:1,q:[["czy hybryda w domu niszczy paznokcie","info"],["jak zdjąć hybrydę żeby nie zniszczyć płytki","info"],["co jeśli źle nałożę hybrydę","info"]]},
- {n:"Zakup",bl:0,q:[["zestaw do hybrydy z lampą cena","transakc"],["gdzie kupić komplet do hybrydy","transakc"]]}]},
-{l:"C",cep:"cep_pielegnacja",glov:1,shape:"LĘK · ciężar na dowodzie",per:"Ola, 38. Po latach hybrydy paznokcie cienkie, łamliwe, białe plamy. Chce odbudować naturalnie, boi się pogorszyć.",hook:"WEJŚCIE KLIENTA — komunikat: „odbudowa bez chemii, składniki odżywcze, dowód przed/po”. Tu wygrywamy pole po-hybrydowe.",st:[
- {n:"Problem",bl:0,q:[["paznokcie zniszczone po hybrydzie co robić","info"],["cienkie łamliwe paznokcie przyczyny","info"],["białe plamy na paznokciach po hybrydzie","info"]]},
- {n:"Szukanie rozwiązania",bl:0,q:[["jak zregenerować paznokcie po hybrydzie","info"],["naturalna odżywka do paznokci","info"],["domowe sposoby na słabe paznokcie","info"]]},
- {n:"Dowód (garb)",bl:1,q:[["czy odżywki do paznokci naprawdę działają","komerc"],["ile trwa regeneracja paznokci po hybrydzie","komerc"],["odżywka czy olejek do paznokci","komerc"]]},
- {n:"Wybór produktu",bl:0,q:[["najlepsza odżywka do paznokci ranking","komerc"],["odżywka z aplikatorem do paznokci","komerc"],["odżywka eko do paznokci opinie","komerc"]]},
- {n:"Zakup",bl:0,q:[["odżywka do paznokci sklep","transakc"],["odżywka eko cena","transakc"]]}]},
-{l:"D",cep:"cep_trwalosc",shape:"POTRZEBA · research",per:"Karolina, 29, biuro, brak czasu na poprawki. Chce manicure, który po prostu wytrzyma.",st:[
- {n:"Co daje trwałość",bl:0,q:[["co trzyma się dłużej hybryda czy żel","info"],["ile wytrzymuje hybryda","info"],["dlaczego zwykły lakier szybko schodzi","info"]]},
- {n:"Porównanie technologii",bl:0,q:[["hybryda vs żel różnice","komerc"],["co lepsze na słabe paznokcie hybryda czy żel","komerc"],["manicure żelowy a hybrydowy","komerc"]]},
- {n:"Bloker",bl:1,q:[["czy hybryda niszczy paznokcie","info"],["jak często można robić hybrydę","info"],["czy paznokcie muszą odpoczywać między hybrydami","info"]]},
- {n:"Zakup",bl:0,q:[["trwały lakier hybrydowy kolor","transakc"],["gdzie kupić trwałą hybrydę","transakc"]]}]},
-{l:"E",cep:"cep_dom_szybko",shape:"IMPULS · płaska",per:"Ania, 35, maluje szybko przed wyjściem. Żadnego sprzętu, ma być od ręki.",st:[
- {n:"Wybór",bl:0,q:[["lakier szybkoschnący","komerc"],["najszybciej schnący lakier do paznokci","komerc"],["lakier kryjący w jednej warstwie","komerc"]]},
- {n:"Zakup",bl:0,q:[["dobry lakier do paznokci tani","transakc"],["lakier do paznokci drogeria","transakc"]]}]},
-{l:"F",cep:"cep_event",shape:"POTRZEBA · deadline",per:"Marta, 27, ślub siostry za tydzień. Chce idealne paznokcie konkretnie na ten dzień.",st:[
- {n:"Decyzja typu",bl:0,q:[["jakie paznokcie na ślub","info"],["hybryda czy zwykły lakier na wesele","info"],["manicure na specjalną okazję co wybrać","info"]]},
- {n:"Kolor / styl",bl:0,q:[["kolor paznokci do sukienki ślubnej","komerc"],["francuski manicure na ślub","komerc"],["eleganckie nude paznokcie","komerc"]]},
- {n:"Bloker",bl:1,q:[["czy hybryda wytrzyma cały dzień wesela","info"],["kiedy zrobić paznokcie przed ślubem","info"],["co jeśli odpryśnie na weselu","info"]]},
- {n:"Zakup",bl:0,q:[["manicure ślubny zestaw","transakc"],["lakier na wesele kupić z wyprzedzeniem","transakc"]]}]},
-{l:"G",cep:"cep_dziecko",glov:1,shape:"LĘK · bezpieczeństwo",per:"Kasia, 33, córka 6 lat chce mieć pomalowane paznokcie. Boi się chemii i toksyn.",hook:"WEJŚCIE WTÓRNE KLIENTA — „skład bezpieczny, bez toksyn” rezonuje z eko-pozycjonowaniem.",st:[
- {n:"Bezpieczeństwo",bl:1,q:[["czy lakier do paznokci jest bezpieczny dla dzieci","info"],["lakier dla dziecka nietoksyczny","info"],["od jakiego wieku można malować paznokcie dziecku","info"]]},
- {n:"Typ produktu",bl:0,q:[["lakier zmywalny wodą dla dzieci","komerc"],["lakier peel-off dla dziecka","komerc"],["lakier wodny do paznokci dla dzieci","komerc"]]},
- {n:"Zakup",bl:0,q:[["bezpieczny lakier dla dziewczynki kupić","transakc"],["lakier dla dzieci sklep","transakc"]]}]},
-{l:"H",cep:"cep_social_moda",shape:"ASPIRACJA · social ⭐",per:"Zofia, 22, scrolluje TikTok/IG, widzi paznokcie u influencerek i gwiazd, chce „takie same”.",hook:"Trend „clean girl / zdrowe paznokcie” jest aspiracyjny — można wpiąć eko jako modę, nie tylko leczenie.",st:[
- {n:"Podpatrywanie / inspiracja",bl:0,q:[["jakie paznokcie modne teraz","info"],["paznokcie jak [celebrytka]","info"],["czy bogate aktorki/gwiazdy używają hybrydy","info"],["trend paznokcie TikTok 2026","info"],["jaki kolor paznokci noszą celebrytki","info"]]},
- {n:"Przełożenie na siebie",bl:0,q:[["czy ten kolor pasuje do mojej karnacji","komerc"],["jak zrobić paznokcie jak na Instagramie","komerc"],["czy [trend] jest dla mnie","komerc"]]},
- {n:"Zakup",bl:0,q:[["lakier w modnym kolorze [sezon]","transakc"],["gdzie kupić lakier jak u [celebrytka]","transakc"]]}]}
-];
-
-/* render ścieżki (narracyjny widok z personą + hook) */
-document.getElementById('pathsbox').innerHTML=P.map(p=>`<div class="path">
-<div class="phead"><span class="plet">${p.l}</span><span class="pcep">${p.cep}</span><span class="pshape">${p.shape}</span>${p.glov?'<span class="pglov">🌿 wejście klienta</span>':''}</div>
-<div class="ppersona">${p.per}</div>
-${p.st.map(s=>`<div class="stage ${s.bl?'bl':''}"><div class="sname">${s.bl?'🛡️ ':''}${s.n}</div>
-${s.q.map(q=>`<div class="qrow"><span class="dot i-${q[1]}"></span>${q[0]}</div>`).join('')}</div>`).join('')}
-${p.hook?`<div class="hook">💬 ${p.hook}</div>`:''}</div>`).join('');
-
-/* render pole pytań (interaktywne) */
-document.getElementById('disc').innerHTML=DISC.map((q,i)=>`<div class="q" data-q="${q.toLowerCase()}"><b>${i+1}.</b>${q}</div>`).join('');
-document.getElementById('paths').innerHTML=P.map(p=>`<div class="path" data-path="${p.l}">
-<div class="phead"><span class="plet">${p.l}</span><span class="pcep">${p.cep}</span><span class="pshape">${p.shape}</span></div>
-<div class="ppersona">${p.per}</div>
-${p.st.map(s=>`<div class="stage ${s.bl?'bl':''}" data-bl="${s.bl}"><div class="sname">${s.bl?'🛡️ ':''}${s.n}</div>
-${s.q.map(q=>`<div class="qrow" data-q="${q[0].toLowerCase()}" data-i="${q[1]}"><span class="dot i-${q[1]}"></span>${q[0]}</div>`).join('')}</div>`).join('')}</div>`).join('');
-
-let curI="all";
-function setI(b){document.querySelectorAll('.fb[data-i]').forEach(x=>x.classList.remove('on'));b.classList.add('on');curI=b.dataset.i;flt()}
-function flt(){
- const s=document.getElementById('search').value.toLowerCase();
- const blOnly=document.querySelector('.fb[data-bl]').classList.contains('on');
- document.querySelectorAll('#disc .q').forEach(q=>{q.classList.toggle('hidden',(s&&!q.dataset.q.includes(s))||curI!=='all'||blOnly)});
- document.querySelector('#v-pole h2').classList.toggle('hidden',curI!=='all'||blOnly);
- P.forEach(p=>{const el=document.querySelector(`.path[data-path="${p.l}"]`);let any=0;
-  el.querySelectorAll('.stage').forEach(st=>{let sv=0;
-   st.querySelectorAll('.qrow').forEach(r=>{const ok=(!s||r.dataset.q.includes(s))&&(curI==='all'||r.dataset.i===curI)&&(!blOnly||st.dataset.bl==='1');r.classList.toggle('hidden',!ok);if(ok)sv++});
-   st.classList.toggle('hidden',sv===0);if(sv)any++});
-  el.classList.toggle('hidden',any===0)});
-}
+/* moduł ścieżki/pole usunięty w 2.0 — w zakładce Mapa */
 </script>
 </body></html>
