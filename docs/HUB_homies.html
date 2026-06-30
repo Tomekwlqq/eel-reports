@@ -28,6 +28,14 @@ section .lead{color:var(--mut);font-size:13px;margin:4px 0 16px}
 .content blockquote{margin:8px 0;padding:6px 14px;border-left:3px solid var(--accent);background:#fff;color:var(--mut);font-size:13.5px}
 .content code{background:var(--chip);padding:1px 5px;border-radius:4px;font-size:12.5px}
 .content pre.tree{background:#1c1a17;color:#e7e1d8;padding:16px 18px;border-radius:10px;overflow-x:auto;font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre}
+details.drop{border:1px solid var(--line);border-left:4px solid var(--dc,#5a8a4a);border-radius:10px;margin:12px 0;background:#fff;overflow:hidden}
+details.drop>summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:700;font-size:15px;color:var(--dc,#5a8a4a);display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--dc,#5a8a4a) 7%,#fff)}
+details.drop>summary::-webkit-details-marker{display:none}
+details.drop>summary::before{content:"▶";font-size:12px;transition:transform .15s;color:var(--dc,#5a8a4a)}
+details.drop[open]>summary::before{transform:rotate(90deg)}
+details.drop>summary::after{content:"(otwórz)";margin-left:auto;font-size:11px;font-weight:600;color:var(--mut);opacity:.7}
+details.drop[open]>summary::after{content:"(zwiń)"}
+details.drop>.content{padding:4px 18px 16px}
 .content a{color:var(--accent)}
 .content hr{border:none;border-top:1px solid var(--line);margin:18px 0}
 .tcheck{background:#fff;border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:10px;padding:16px 18px;margin:18px 0}
@@ -1051,6 +1059,24 @@ iframe.map{width:100%;height:900px;border:1px solid var(--line);border-radius:10
 <p>*Surowe dane anglojęzyczne · 1:1 gdzie źródło pozwoliło · ZERO parafrazowania claimów*</p>
 <hr>
 <p>*Plik surowy · źródła: Playwright (proton_copy) + geo_check.py --render + WebFetch · 1:1 · ZERO parafrazowania*</p></div></details>
+<details class="drop" style="--dc:#b5762e"><summary>💰 Analiza cen (zł/pranie · segmenty · pozycja Homies)</summary><div class="content"><h2>💰 Analiza cen — listki / eko-pranie (zł/pranie = metryka porównywalna)</h2>
+<p>*Źródło: <code>HOMIES_KONKURENCJA_DANE.md</code> · ceny: zrzut 2026-06-27. Metryka = <strong>zł/pranie</strong> (nie cena opakowania — różne wielkości), bo to jedyne uczciwe porównanie.*</p>
+<h3>Tabela cen (bezpośrednia konkurencja)</h3>
+<table><thead><tr><th>Marka</th><th>Cena opak.</th><th>Prań/opak.</th><th>zł/pranie</th><th>Segment</th><th>PL</th></tr></thead><tbody><tr><td>Dr. Beckmann</td><td>12,99–37 zł</td><td>20–80</td><td><strong>0,46–0,93</strong></td><td>budget-mid</td><td>✅</td></tr><tr><td><strong>Homies</strong> ⭐</td><td>67,90–169,90 zł</td><td>60–180</td><td><strong>0,94–1,13</strong> (3× = 0,94)</td><td><strong>mid</strong></td><td>✅</td></tr><tr><td>Natulim</td><td>38–45 zł</td><td>40 (+XL 360)</td><td>0,95–1,12</td><td>mid</td><td>✅</td></tr><tr><td>Earth Breeze</td><td>$12–20</td><td>60</td><td>~0,80–1,33</td><td>mid</td><td>🌐</td></tr><tr><td>Kind Laundry</td><td>$46,50/3-pak</td><td>180 (bulk)</td><td>~1,04</td><td>mid</td><td>🌐</td></tr><tr><td>Dizolve</td><td>31,89–38,99 zł</td><td>32</td><td>1,00–1,22</td><td>mid</td><td>✅</td></tr><tr><td>Cleangang</td><td>24,99–49,98 zł</td><td>25</td><td>1,00–2,00</td><td>mid-premium</td><td>✅</td></tr><tr><td>Tru Earth</td><td>$22,95</td><td>64</td><td>~1,44</td><td>premium</td><td>🌐</td></tr><tr><td>Bluu</td><td>~52,50 zł</td><td>30</td><td>~1,75</td><td>premium</td><td>✅</td></tr></tbody></table>
+<h3>Segmenty cenowe (zł/pranie)</h3>
+<ul><li><strong>Budget &lt; 0,50</strong> — mainstream (Ariel/Persil 0,30–0,50), orzechy piorące ~0,12 (skrajnie tanio, ale nisza/słabsze)</li><li><strong>Listki budget 0,46–0,93</strong> — Dr. Beckmann (masowy, gra ceną)</li><li><strong>MID 0,94–1,33</strong> ⭐ — <strong>Homies</strong>, Natulim, Dizolve, Earth Breeze, Kind</li><li><strong>Premium 1,44+</strong> — Tru Earth (PVA-free), Bluu (design), Cleangang (górna granica)</li></ul>
+<h3>Pozycja Homies</h3>
+<ul><li><strong>Dolna granica MID</strong> (0,94 zł/pranie w pakiecie 3×; 1,13 za pojedynczą paczkę).</li><li><strong>Taniej niż importy premium</strong> (Tru Earth 1,44, Bluu 1,75) — przy polskiej narracji + jawnym składzie.</li><li><strong>Drożej niż masowy Dr. Beckmann</strong> (0,46) — różnicę uzasadnia eko-opakowanie, transparentność (CAS), 2 warianty pod skórę. NIE konkuruj ceną z masówką.</li><li><strong>Dźwignia pakietu:</strong> 3× spada do 0,94 — komunikuj cenę pakietową, nie jednostkową.</li></ul>
+<h3>Insight cenowy</h3>
+<ul><li><strong>Homies jest dobrze wyceniony</strong> — mid to właściwy segment dla świadomego eko-klienta (budget = masówka, premium = import bez PL-historii).</li><li><strong>Luka:</strong> brak <strong>premium-PL z jawnym składem</strong> — Tru Earth (premium, transparentny) niedostępny w PL → Homies może iść w górę WARTOŚCIĄ (nie ceną), a nie zostać zepchnięty w wojnę cenową z Dr. Beckmann.</li><li><strong>Ryzyko:</strong> komunikacja ceny jednostkowej (1,13) bez pakietu wygląda drogo vs Dr. Beckmann 0,46 — zawsze pokazuj zł/pranie w pakiecie + value (skład/opakowanie).</li></ul></div></details>
+<details class="drop" style="--dc:#2e6fb5"><summary>📦 Analiza asortymentowa (opakowania · ilości · szerokość oferty)</summary><div class="content"><h2>📦 Analiza asortymentowa — opakowania, ilości, szerokość oferty</h2>
+<p>*Źródło: <code>HOMIES_KONKURENCJA_DANE.md</code> + scrape 1:1 · zrzut 2026-06-27. Co i jak konkurenci pakują/oferują.*</p>
+<h3>Tabela asortymentu</h3>
+<table><thead><tr><th>Marka</th><th>Opakowanie</th><th>Ilość / opak.</th><th>Dawka</th><th>Warianty</th><th>Pakiety</th><th>Szerokość</th></tr></thead><tbody><tr><td><strong>Homies</strong> ⭐</td><td>paczka papierowa (bezplastik)</td><td>30 listków = <strong>60 prań</strong></td><td>½ listka = 1 pranie (elastyczne)</td><td>2 (Czysty Len, Delikatna Lanolina)</td><td>1 / 2 / 3 paczki</td><td><strong>pure-play</strong> (6 SKU)</td></tr><tr><td>Dr. Beckmann</td><td>karton</td><td>20–40 szt (20–80 prań)</td><td>1 listek = 1–2 prania</td><td>kilka</td><td>wiele</td><td><strong>szeroka</strong> (467 listingów Allegro)</td></tr><tr><td>Cleangang</td><td>karton</td><td>25 szt = 25 prań</td><td>1 listek = 1 pranie</td><td>—</td><td>pojedyncze/multi</td><td>wąska</td></tr><tr><td>Natulim</td><td>karton</td><td>40 prań <strong>+ zestaw XL 360 prań</strong></td><td>1 listek = 1 pranie</td><td>vegan / hipoalergiczny</td><td>std + <strong>XL bundle</strong></td><td>śr. + bundle</td></tr><tr><td>Dizolve</td><td>karton</td><td>32 szt</td><td>1 listek = 1 pranie</td><td>zapachowy / bezzapachowy</td><td>pojedyncze</td><td>wąska</td></tr><tr><td>Bluu</td><td>karton premium</td><td>30 prań</td><td>1 listek = 1 pranie</td><td>design-driven</td><td>pojedyncze</td><td>wąska (premium)</td></tr><tr><td>Earth Breeze</td><td>karton</td><td>60 prań</td><td>1 listek = 1 pranie</td><td><strong>7 zapachów</strong></td><td>sub + jednorazowo</td><td><strong>szeroka zapachowo</strong></td></tr><tr><td>Tru Earth</td><td>karton</td><td>32 paski = 64 prań</td><td>1 pasek = 2 prania</td><td>kilka zapachów</td><td>sub</td><td>śr.</td></tr><tr><td>Blueland</td><td>pudełko <strong>+ refill</strong></td><td>tabletki</td><td>1 tabletka = 1 pranie</td><td>starter + refill</td><td><strong>refill-model</strong></td><td>refill</td></tr></tbody></table>
+<h3>Pozycja Homies</h3>
+<ul><li><strong>Pure-play, wąsko i świadomie:</strong> 2 warianty × 3 pakiety = 6 SKU. Nie półka 40 produktów — fokus + spójna narracja.</li><li><strong>Bezplastikowe opakowanie</strong> (paczka papierowa) — różnicownik vs karton/folia/butelka.</li><li><strong>Elastyczna dawka:</strong> ½ listka = 1 pranie (60 prań z 30 listków) — przewaga vs „1 listek = 1 pranie" (dawkowanie pod wielkość wsadu, mniej marnowania).</li><li><strong>2 warianty pod potrzebę:</strong> Czysty Len (codzienna świeżość) + Delikatna Lanolina (skóra wrażliwa/wełna/dzieci).</li></ul>
+<h3>Luki asortymentowe (co rozważyć)</h3>
+<ul><li><strong>Brak pakietu XL</strong> (Natulim ma 360 prań) — opcja subskrypcji/XL dla lojalnych = niższy zł/pranie + retencja.</li><li><strong>Brak wariantu bezzapachowego</strong> wprost (Lanolina jest blisko, ale „0% zapachu" to osobny sygnał dla alergika — luka vs „hipoalergiczny" Natulim).</li><li><strong>Wąska oś zapachów</strong> (2 vs Earth Breeze 7) — świadomy wybór (eko ≠ perfumeria), ale to bariera dla „łowcy zapachu" (CEP <code>cep_zapach</code>). Można dodać 1 sezonowy bez rozmywania marki.</li><li><strong>Brak modelu refill/subskrypcji</strong> (Blueland refill, Earth Breeze sub) — pure-play paczka jest OK, ale subskrypcja = retencja + przewidywalność.</li></ul></div></details>
 <h3 style="margin:26px 0 6px">Fazy 3–5 · Mapa kontentu (jak piszą + 7 wymiarów cytowalności + luki → CS + Vision Reporty)</h3>
 <iframe class="map" style="height:3200px" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;pl&quot;&gt;
@@ -2100,6 +2126,8 @@ render();
 <a href="HOMIES_FAKTY.md">Fakty / Truth Checker</a> ·
 <a href="HOMIES_DFS_KEYWORDS.md">DFS keywords (~950 fraz)</a> ·
 <a href="HOMIES_KONKURENCJA_DANE.md">Dane konkurencji (krajobraz)</a> ·
+<a href="#konkurencja">Analiza cen (zł/pranie)</a> ·
+<a href="#konkurencja">Analiza asortymentowa</a> ·
 <a href="#scrape-tekstowy">Scrape tekstowy konkurencji 1:1 (pełny, w zakładce Konkurencja)</a> ·
 <a href="STRATEGIA_ODPOWIEDZI_homies.md">Strategia odpowiedzi</a> ·
 <a href="MAPA_PERCEPCJI_pranie_homies.html">Mapa percepcji</a>
