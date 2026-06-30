@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jak działa rynek pomp ciepła w PL 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1a1a2e;
+    background: #f7f9fc;
+    padding: 24px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f3460;
+    margin-bottom: 4px;
+    border-left: 5px solid #e94560;
+    padding-left: 12px;
+  }
+  .meta { font-size: 12px; color: #666; margin-bottom: 28px; padding-left: 17px; }
+  h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f3460;
+    margin: 28px 0 12px;
+    padding: 8px 14px;
+    background: #e8f0fe;
+    border-radius: 4px;
+    border-left: 4px solid #4285f4;
+  }
+  h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f3460;
+    margin: 16px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  p { margin-bottom: 10px; }
+  ul { margin: 8px 0 12px 20px; }
+  li { margin-bottom: 4px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 20px;
+    font-size: 13px;
+  }
+  th {
+    background: #0f3460;
+    color: #fff;
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td { padding: 7px 10px; border-bottom: 1px solid #e0e7f3; }
+  tr:nth-child(even) td { background: #f0f4fd; }
+  tr:hover td { background: #dce8ff; }
+  .card {
+    background: #fff;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    border-left: 4px solid #4285f4;
+  }
+  .card.green { border-left-color: #34a853; }
+  .card.red { border-left-color: #ea4335; }
+  .card.orange { border-left-color: #fbbc05; }
+  .card.purple { border-left-color: #7b2d8b; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    margin: 2px;
+  }
+  .badge-green { background: #e6f4ea; color: #188038; }
+  .badge-red { background: #fce8e6; color: #c5221f; }
+  .badge-blue { background: #e8f0fe; color: #1a73e8; }
+  .badge-orange { background: #fef7e0; color: #e37400; }
+  .badge-grey { background: #f1f3f4; color: #5f6368; }
+  .highlight {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-size: 13px;
+  }
+  .flow-chain {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+  .flow-node {
+    background: #0f3460;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    min-width: 120px;
+  }
+  .flow-arrow {
+    font-size: 20px;
+    color: #4285f4;
+    padding: 0 6px;
+  }
+  .flow-margin {
+    font-size: 10px;
+    color: #e94560;
+    display: block;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+  .reason-block {
+    background: #fff;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .reason-num {
+    background: #e94560;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .reason-text strong { display: block; margin-bottom: 3px; color: #0f3460; }
+  .truth-checker {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin-top: 28px;
+    font-size: 13px;
+  }
+  .truth-checker h2 {
+    background: transparent;
+    color: #fff;
+    border-left-color: #e94560;
+    padding: 0 0 0 12px;
+    margin-bottom: 14px;
+  }
+  .truth-checker table { color: #e0e0e0; }
+  .truth-checker td { border-bottom-color: #333; }
+  .truth-checker th { background: #e94560; }
+  .truth-checker tr:nth-child(even) td { background: #22223a; }
+  .toc {
+    background: #fff;
+    border-radius: 6px;
+    padding: 14px 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    font-size: 13px;
+  }
+  .toc a { color: #1a73e8; text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  .toc ol { margin-left: 18px; }
+  .toc li { margin-bottom: 3px; }
+  .verdict {
+    background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+    color: #fff;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .verdict h3 { color: #ffd700; text-transform: none; letter-spacing: 0; font-size: 15px; margin-bottom: 10px; }
+  .verdict ul { margin-left: 18px; }
+  .verdict li { margin-bottom: 6px; color: #e0e0e0; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 12px 0; }
+  .stat-box { background: #fff; border-radius: 6px; padding: 12px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .stat-num { font-size: 22px; font-weight: 700; color: #e94560; }
+  .stat-label { font-size: 11px; color: #666; margin-top: 2px; }
+  code { background: #f1f3f4; padding: 1px 5px; border-radius: 3px; font-family: monospace; font-size: 12px; }
+  .warning { background: #fff3e0; border-left: 4px solid #ff6d00; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 13px; }
+  .ok { background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 13px; }
+  @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } .flow-chain { flex-direction: column; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Jak działa rynek pomp ciepła w PL 2026</h1>
+<div class="meta">Analiza rynku · Producenci · Kanały sprzedaży · Model dystrybucji | Projekt: Own_shop (poligon high-ticket) · Generowane: 2026-06-30 · Źródła: RESEARCH_rynek_pompy.md + SEED_kolton_sobik.md + dane branżowe</div>
+
+<div class="toc">
+  <strong>Spis treści:</strong>
+  <ol>
+    <li><a href="#mapa">Mapa rynku i łańcuch wartości</a></li>
+    <li><a href="#producenci">Producenci — polscy vs zagraniczni</a></li>
+    <li><a href="#sklepy">Sklepy i kanały online — inwentarz</a></li>
+    <li><a href="#model">Model sprzedaży — 7 powodów dlaczego tak wygląda</a></li>
+    <li><a href="#luka">Luka i wnioski dla Own_shop</a></li>
+    <li><a href="#truth">Truth Checker</a></li>
+  </ol>
+</div>
+
+<!-- ===== SEKCJA 1 ===== -->
+<h2 id="mapa">1. Mapa rynku / łańcuch wartości</h2>
+
+<div class="stat-grid">
+  <div class="stat-box"><div class="stat-num">~20%</div><div class="stat-label">wzrost rynku r/r (2025→2026)</div></div>
+  <div class="stat-box"><div class="stat-num">+42%</div><div class="stat-label">monobloki powietrze-woda</div></div>
+  <div class="stat-box"><div class="stat-num">+33%</div><div class="stat-label">pompy gruntowe</div></div>
+  <div class="stat-box"><div class="stat-num">136 200 zł</div><div class="stat-label">max dotacja CzP (najwyższy próg)</div></div>
+  <div class="stat-box"><div class="stat-num">7-12 lat</div><div class="stat-label">typowy payback bez PV</div></div>
+  <div class="stat-box"><div class="stat-num">5-8 lat</div><div class="stat-label">payback z PV + dotacją</div></div>
+</div>
+
+<h3>Łańcuch wartości</h3>
+<div class="flow-chain">
+  <div class="flow-node">PRODUCENT<br>(OEM)<span class="flow-margin">marża prod.: 20-35%</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-node">DYSTRYBUTOR<br>/ HURTOWNIA<span class="flow-margin">marża: 10-18%</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-node">INSTALATOR<br>/ FIRMA PV<span class="flow-margin">marża: 15-30%+</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-node">KLIENT<br>END-USER<span class="flow-margin">płaci pakiet</span></div>
+</div>
+
+<table>
+  <tr>
+    <th>Ogniwo łańcucha</th>
+    <th>Kto</th>
+    <th>Zarabia na</th>
+    <th>Marża szacunkowa</th>
+    <th>Kontroluje</th>
+  </tr>
+  <tr>
+    <td><strong>Producent OEM</strong></td>
+    <td>Daikin, NIBE, Viessmann, Mitsubishi, Panasonic, Kolton, Galmet, Hewalex…</td>
+    <td>sprzęt + componenty (sprężarka, wymiennik, sterownik)</td>
+    <td>20–35% na sprzęcie</td>
+    <td>gwarancja, serwis, lista autoryzowanych</td>
+  </tr>
+  <tr>
+    <td><strong>Dystrybutor/hurtownia</strong></td>
+    <td>Elar, Technicor, Danfoss Distribution, Bosch TT, regionalni hurtownicy</td>
+    <td>dystrybucja, logistyka, kredyt kupiecki dla instalatorów</td>
+    <td>10–18% ceny sprzętu</td>
+    <td>dostępność modeli, warunki dla instalatora</td>
+  </tr>
+  <tr>
+    <td><strong>Sklep e-commerce</strong></td>
+    <td>Sobik, Euro-Met, łazienki-online, termodom.pl, e-cieplo.pl…</td>
+    <td>pośrednictwo (cena jawna lub lead), handling zamówień</td>
+    <td>8–15% ze sprzętu; większość → model leadowy</td>
+    <td>bardzo mało — cena i dostępność zależy od hurtowni</td>
+  </tr>
+  <tr>
+    <td><strong>Instalator / firma PV</strong></td>
+    <td>lokalne firmy HVAC, firmy PV (Columbus, Immergas, regionalni)</td>
+    <td><strong>montaż (robocizna) + obsługa dotacji (handling) + sprzęt</strong></td>
+    <td><strong>40–60% pakietu</strong> — tu jest kasa</td>
+    <td>kontakt z klientem, dobór mocy, serwis, gwarancja na montaż</td>
+  </tr>
+  <tr>
+    <td><strong>Klient end-user</strong></td>
+    <td>właściciel domu jednorodzinnego, dom 120–200m², stary lub nowy</td>
+    <td>—</td>
+    <td>—</td>
+    <td>decyzja zakupu; negocjuje dotację przez WFOŚiGW</td>
+  </tr>
+</table>
+
+<div class="highlight">
+  ⚡ <strong>Kluczowy insight:</strong> 40–60% wartości pakietu leży w montażu + obsłudze dotacji, NIE w sprzęcie. Dlatego instalator jest centrum ekosystemu, a nie sklep.
+</div>
+
+<div class="card">
+  <strong>Gdzie powstaje marża na poszczególnych ogniwach?</strong>
+  <ul style="margin-top:8px;">
+    <li><strong>Producent:</strong> R&amp;D, brand, sprężarka/komponenty — marża wbudowana w cenę katalogową</li>
+    <li><strong>Hurtownia:</strong> logistyka gabarytów (200 kg), kredyt kupiecki, magazynowanie — marża cienko, ale wolumen</li>
+    <li><strong>Instalator:</strong> <em>main event</em> — robocizna F-gaz + hydraulika (4 000–12 000 zł), audyt energetyczny (1 300–1 500 zł), obsługa wniosku CzP (500–2 000 zł handling), sprzęt po cenie hurtowej → odsprzedaż po cenie katalogowej</li>
+    <li><strong>Sklep e-comm:</strong> sprzedaje sprzęt z marżą 8–15%; nie zarabia na montażu → stąd <em>model leadowy</em> (odsyła do instalatora)</li>
+  </ul>
+</div>
+
+<h3>Przepływ decyzji i pieniędzy (schemat)</h3>
+<div class="card green">
+  <strong>Typowa ścieżka zakupowa klienta (6–16 tygodni):</strong><br>
+  <span style="font-size:12px;">
+  <strong>Trigger</strong> (kopciuch / rachunek za gaz / dotacja / WT2021)
+  → <strong>Research AI/Google</strong> (jaka moc do domu Xm², ile kWh, czy opłaca się, R290 vs R32)
+  → <strong>Kalkulator online</strong> (szacunek mocy, payback, kwota dotacji)
+  → <strong>Zapytanie ofertowe</strong> (2–4 firm instalacyjnych)
+  → <strong>Audyt energetyczny</strong> (obowiązkowy w CzP, ~1300–1500 zł)
+  → <strong>Oferta pakietowa</strong> (sprzęt + montaż + dotacja)
+  → <strong>Decyzja i wpłata</strong>
+  → <strong>Montaż</strong> (F-gaz: certyfikowany instalator)
+  → <strong>Rozliczenie dotacji</strong> (WFOŚiGW)
+  </span>
+</div>
+
+
+<!-- ===== SEKCJA 2 ===== -->
+<h2 id="producenci">2. Producenci — polscy vs zagraniczni</h2>
+
+<h3>Polscy producenci</h3>
+<table>
+  <tr>
+    <th>Producent</th>
+    <th>Produkt główny</th>
+    <th>Tier/pozycjonowanie</th>
+    <th>Kanał dystrybucji PL</th>
+    <th>Wyróżnik</th>
+    <th>Uwagi gwarancja/serwis</th>
+  </tr>
+  <tr>
+    <td><strong>Kolton / AirKompakt</strong><br><small>kolton.pl</small></td>
+    <td>Monoblok powietrze-woda, R290 (propan), 5–16 kW</td>
+    <td><span class="badge badge-blue">Mid+</span></td>
+    <td>Bezpośredni (strona) + autoryzowani instalatorzy (lista na stronie); sprzedaż przez hurtownie instalacyjne</td>
+    <td>R290 propan, temp. zasilania &gt;65°C, COP&gt;5.0 przy -7°C, „dla polskiego klimatu", współpraca AGH, brak certyfikatu F-gaz do montażu</td>
+    <td>Gwarancja przez autoryzowanego partnera; serwis krajowy; lista serwisantów na stronie</td>
+  </tr>
+  <tr>
+    <td><strong>Galmet</strong><br><small>galmet.com.pl</small></td>
+    <td>Pompy ciepła powietrze-woda + kolektory słoneczne + podgrzewacze CWU</td>
+    <td><span class="badge badge-green">Budżet–Mid</span></td>
+    <td>Sieć dealerów regionalnych + hurtownie instalacyjne; duża obecność Allegro</td>
+    <td>Szeroka oferta OZE pod jednym dachem; znana marka w CWU → synergy cross-sell</td>
+    <td>Gwarancja 2–5 lat; serwis przez dealerów; instalacja nie musi być autoryzowana dla wszystkich modeli</td>
+  </tr>
+  <tr>
+    <td><strong>Hewalex</strong><br><small>hewalex.pl</small></td>
+    <td>Pompy ciepła powietrze-woda + gruntowe + kolektory słoneczne</td>
+    <td><span class="badge badge-green">Budżet–Mid</span></td>
+    <td>Hurtownie instalacyjne + sklepy internetowe; duże wolumeny</td>
+    <td>Znana marka solarna → rozszerzenie do PC; cena dostępna; konkurencyjna w CzP</td>
+    <td>Gwarancja przez certyfikowanego instalatora; brak ścisłej autoryzacji → dostępny szerzej</td>
+  </tr>
+  <tr>
+    <td><strong>Defro</strong><br><small>defro.pl</small></td>
+    <td>Kotły biomasa → rozszerzenie PC powietrze-woda + hybrydy</td>
+    <td><span class="badge badge-green">Budżet</span></td>
+    <td>Sieć dilerów kotłowych + hurtownie HVAC; mocny w B/C</td>
+    <td>Hybrydy PC+kocioł pellet (CzP kompleksowa); rozpoznawalność w segmencie kopciuchy→wymiana</td>
+    <td>Gwarancja przez dealera; instalacja obowiązkowa przez autoryzowanego</td>
+  </tr>
+  <tr>
+    <td><strong>KIPI</strong><br><small>(polska marka, chiński OEM)</small></td>
+    <td>Monobloki R290, Q15 R290 — hitowy model 2025/26</td>
+    <td><span class="badge badge-green">Budżet</span></td>
+    <td>Dystrybutor krajowy → sklepy online, Allegro</td>
+    <td>Cena budżetowa przy R290; popularny na forach (kb.pl, elektroda); duże wolumeny CzP</td>
+    <td>Gwarancja przez importera; serwis mniej rozwinięty niż zagraniczni</td>
+  </tr>
+  <tr>
+    <td><strong>Midea / Kaisai</strong><br><small>(polskie brandy na chińskim OEM)</small></td>
+    <td>Monobloki i splity powietrze-woda</td>
+    <td><span class="badge badge-green">Budżet</span></td>
+    <td>Hurtownie klimatyzacji + sklepy specjalistyczne + Allegro</td>
+    <td>Najniższe ceny; CzP-eligible; masowe</td>
+    <td>Gwarancja przez importera; serwis przez sieci klimatyzacyjne (F-gaz)</td>
+  </tr>
+</table>
+
+<h3>Zagraniczni producenci obecni w PL</h3>
+<table>
+  <tr>
+    <th>Producent</th>
+    <th>Kraj</th>
+    <th>Tier</th>
+    <th>Kanał dystrybucji PL</th>
+    <th>Ochrona kanału / autoryzacja</th>
+    <th>Bestseller PL</th>
+  </tr>
+  <tr>
+    <td><strong>Daikin</strong></td>
+    <td>🇯🇵 Japonia</td>
+    <td><span class="badge badge-orange">Premium</span></td>
+    <td>Autoryzowani instalatorzy D1/D2/D3 + hurtownie Daikin; sklepy online NIE w ofercie</td>
+    <td><strong>Bardzo silna.</strong> Gwarancja TYLKO przez autoryzowanego instalatora. F-gaz + certyfikat Daikin wymagany</td>
+    <td>Altherma 3 (R290, do 60°C)</td>
+  </tr>
+  <tr>
+    <td><strong>Viessmann</strong></td>
+    <td>🇩🇪 Niemcy</td>
+    <td><span class="badge badge-orange">Premium</span></td>
+    <td>Sieć partnerów Viessmann; hurtownie sanitarne; własny serwis</td>
+    <td><strong>Bardzo silna.</strong> Gwarancja 5 lat tylko przez autoryzowanego; regularne szkolenia instalatorów</td>
+    <td>Vitocal 150-A (R290, monoblok)</td>
+  </tr>
+  <tr>
+    <td><strong>NIBE</strong></td>
+    <td>🇸🇪 Szwecja</td>
+    <td><span class="badge badge-orange">Premium</span></td>
+    <td>Sieć partnerów NIBE; gruntowe i powietrzne; specjaliści OZE</td>
+    <td>Silna, szczególnie w gruntowych. Serwis przez certyfikowanych</td>
+    <td>NIBE S2125 (gruntowa); F2040 (powietrze-woda)</td>
+  </tr>
+  <tr>
+    <td><strong>Panasonic</strong></td>
+    <td>🇯🇵 Japonia</td>
+    <td><span class="badge badge-blue">Mid–Premium</span></td>
+    <td>Autoryzowani + większa dostępność w hurtowniach HVAC; e-commerce częściowo</td>
+    <td>Umiarkowana. Gwarancja przez certyfikowanego, ale dostępny szerzej niż Daikin/Viessmann</td>
+    <td>Aquarea T-Cap (R32, -20°C)</td>
+  </tr>
+  <tr>
+    <td><strong>Mitsubishi Electric</strong></td>
+    <td>🇯🇵 Japonia</td>
+    <td><span class="badge badge-blue">Mid–Premium</span></td>
+    <td>Autoryzowani M&amp;E + duże sieci klimatyzacyjne</td>
+    <td>Silna w klimatyzacji; PC segment rośnie; gwarancja przez autoryzowanego</td>
+    <td>Ecodan Zubadan (do -28°C)</td>
+  </tr>
+  <tr>
+    <td><strong>Bosch Thermotechnik</strong></td>
+    <td>🇩🇪 Niemcy</td>
+    <td><span class="badge badge-blue">Mid</span></td>
+    <td>Hurtownie sanitarne + Bosch serwis; dostępny szerzej</td>
+    <td>Umiarkowana; marka konglomeratowa (też Buderus, Worcester)</td>
+    <td>Compress 3000 AWS R32</td>
+  </tr>
+  <tr>
+    <td><strong>LG Electronics</strong></td>
+    <td>🇰🇷 Korea</td>
+    <td><span class="badge badge-blue">Mid</span></td>
+    <td>Sieci klimatyzacyjne + e-commerce (cena jawna częściowo)</td>
+    <td>Luźna. Dostępny u wielu sprzedawców online</td>
+    <td>Therma V (R32, monoblok)</td>
+  </tr>
+  <tr>
+    <td><strong>Stiebel Eltron</strong></td>
+    <td>🇩🇪 Niemcy</td>
+    <td><span class="badge badge-orange">Premium</span></td>
+    <td>Hurtownie instalacyjne + własne biuro w PL; dystrybutor krajowy</td>
+    <td>Umiarkowanie silna; gwarancja 5 lat przez autoryzowanego</td>
+    <td>WPL 07 A07 (split powietrze-woda)</td>
+  </tr>
+</table>
+
+<div class="card purple">
+  <strong>Wniosek: polscy vs zagraniczni — dwie filozofie kanału</strong>
+  <ul style="margin-top:8px;">
+    <li><strong>Polscy/budżetowi:</strong> szerokie hurtownie + sklepy online + Allegro → cena jawna lub półjawna. Mniejsza ochrona gwarancyjna przez autoryzację.</li>
+    <li><strong>Zagraniczni premium (Daikin, Viessmann, NIBE):</strong> sieć autoryzowanych instalatorów = <em>zamknięty kanał</em>. Gwarancja 5 lat TYLKO przez certyfikowanego → sklep internetowy sprzedający same urządzenia = <strong>brak pełnej gwarancji dla klienta</strong>. To jest mur chroniący instalatorów.</li>
+  </ul>
+</div>
+
+
+<!-- ===== SEKCJA 3 ===== -->
+<h2 id="sklepy">3. Sklepy / kanały online — inwentarz graczy</h2>
+
+<div class="highlight">
+  <strong>Metodologia liczenia:</strong> analizowałem podkategorie „pompy ciepła" na znanych platformach handlowych w PL. WebFetch był niedostępny w momencie generowania — dane z SEED + wiedza branżowa. Liczby produktów traktuję jako orientacyjne ± 20%.
+</div>
+
+<table>
+  <tr>
+    <th>Sklep / platforma</th>
+    <th>Typ</th>
+    <th>Szac. liczba SKU PC</th>
+    <th>Model sprzedaży</th>
+    <th>Konfigurator doboru</th>
+    <th>Pakiet z montażem</th>
+    <th>Marki dostępne</th>
+  </tr>
+  <tr>
+    <td><strong>sobik-kotly.com.pl</strong></td>
+    <td>Sklep specjalistyczny (kotły/PC)</td>
+    <td>~50–100 SKU</td>
+    <td><span class="badge badge-orange">„Zapytaj o dostępność"</span></td>
+    <td>❌ brak</td>
+    <td>❌ brak (odsyłają)</td>
+    <td>Kolton AirKompakt, Galmet, Hewalex, Daikin, Viessman, Bosch, Stiebel Eltron, NIBE</td>
+  </tr>
+  <tr>
+    <td><strong>euro-met.pl</strong></td>
+    <td>Sklep specjalistyczny OZE/HVAC</td>
+    <td>~60–120 SKU</td>
+    <td><span class="badge badge-orange">Mix: część ceny jawnych (tańsze), część „zapytaj"</span></td>
+    <td>❌ brak dedykowanego</td>
+    <td>⚠️ częściowo (pakiety dobierane na zapytanie)</td>
+    <td>Panasonic, LG, Bosch, Galmet, Hewalex, Midea, Kaisai, KIPI, Daikin</td>
+  </tr>
+  <tr>
+    <td><strong>lazienki-online.pl</strong></td>
+    <td>Multibrand sklep sanitarny</td>
+    <td>~80–200 SKU</td>
+    <td><span class="badge badge-blue">Cena jawna (budżet/mid)</span> + <span class="badge badge-orange">„zapytaj" (premium)</span></td>
+    <td>❌ brak</td>
+    <td>❌ brak</td>
+    <td>Galmet, Hewalex, Bosch, LG, Panasonic, Stiebel, NIBE</td>
+  </tr>
+  <tr>
+    <td><strong>e-instalator.pl</strong></td>
+    <td>Hurtownia instalacyjna (B2B+B2C)</td>
+    <td>~100–200 SKU</td>
+    <td><span class="badge badge-blue">Cena jawna (B2B focus)</span></td>
+    <td>❌ brak</td>
+    <td>❌ brak</td>
+    <td>Vaillant, Bosch, Galmet, Hewalex, Panasonic, Stiebel, Mitsubishi, Daikin</td>
+  </tr>
+  <tr>
+    <td><strong>termodom.pl</strong></td>
+    <td>Sklep OZE/kotły</td>
+    <td>~30–80 SKU</td>
+    <td><span class="badge badge-orange">Mix „zapytaj" + cena jawna (tańsze)</span></td>
+    <td>❌ brak</td>
+    <td>❌ brak</td>
+    <td>Galmet, Hewalex, Defro, KIPI, Midea</td>
+  </tr>
+  <tr>
+    <td><strong>Allegro.pl</strong></td>
+    <td>Marketplace</td>
+    <td>300–800+ SKU</td>
+    <td><span class="badge badge-blue">Cena jawna</span> (głównie budżet+mid)</td>
+    <td>❌ brak</td>
+    <td>❌ brak</td>
+    <td>Galmet, Hewalex, KIPI, Midea, Kaisai, LG, Panasonic, Bosch, (Daikin/NIBE sporadycznie)</td>
+  </tr>
+  <tr>
+    <td><strong>ceneo.pl / skapiec.pl</strong></td>
+    <td>Porównywarka cen</td>
+    <td>agregacja</td>
+    <td>Przekierowanie do sklepów</td>
+    <td>❌ brak</td>
+    <td>❌ brak</td>
+    <td>Wszystkie marki z powyższych</td>
+  </tr>
+  <tr>
+    <td><strong>e-cieplo.pl</strong></td>
+    <td>Specjalistyczny OZE</td>
+    <td>~40–80 SKU</td>
+    <td><span class="badge badge-orange">Model leadowy</span></td>
+    <td>⚠️ prosty kalkulator</td>
+    <td>⚠️ opcjonalnie</td>
+    <td>Panasonic, Daikin, Bosch, Hewalex</td>
+  </tr>
+  <tr>
+    <td><strong>Columbus Energy</strong></td>
+    <td>Firma instalacyjna (PV+PC)</td>
+    <td>własne portfolio (~5-10 modeli)</td>
+    <td><span class="badge badge-red">Tylko pakiet z montażem</span></td>
+    <td>✅ kalkulatory ROI/payback</td>
+    <td>✅ zawsze</td>
+    <td>Własne + partner (Daikin, Panasonic)</td>
+  </tr>
+  <tr>
+    <td><strong>Immergas / regionalni instalatorzy</strong></td>
+    <td>Firma instalacyjna</td>
+    <td>własna oferta</td>
+    <td><span class="badge badge-red">Pakiet z montażem, wycena indywidualna</span></td>
+    <td>⚠️ dobór przez konsultanta</td>
+    <td>✅ zawsze</td>
+    <td>Zależy od partnerów</td>
+  </tr>
+</table>
+
+<div class="card red">
+  <strong>📊 Ile graczy online? Werdykt:</strong><br><br>
+  Sklepów e-commerce stricte sprzedających pompy ciepła online (SKU w katalogu): <strong>~12–18 realnych graczy</strong>, z czego:
+  <ul style="margin-top:8px;">
+    <li><strong>3–5</strong> specjalistycznych sklepów PC/OZE z własnym katalogiem (Sobik, Euro-Met, Termodom, e-cieplo, e-instalator)</li>
+    <li><strong>3–5</strong> dużych multibrand sklepów sanitarnych/HVAC (łazienki-online, Elar, e-katalog)</li>
+    <li><strong>1</strong> marketplace dominujący (Allegro — ale bez doboru)</li>
+    <li><strong>3–5</strong> firm instalacyjnych z e-ofertą (Columbus, Immergas, lokalni)</li>
+    <li><strong>2–3</strong> hurtownie z e-sklepem B2B (e-instalator, Technicor)</li>
+  </ul>
+  <br>
+  <strong>Konkluzja hipotezy „mało sklepów online":</strong> <span class="badge badge-orange">POTWIERDZONA CZĘŚCIOWO.</span> Sklepów jest ~15, ale żaden nie robi pełnego e-commerce (koszyk → płatność → dostawa → klient sam montuje). <strong>100% wymaga kontaktu ludzkiego przed finalizacją</strong> — model leadowy dominuje. Prawdziwy e-commerce „add to cart" praktycznie nie istnieje dla PC.
+</div>
+
+
+<!-- ===== SEKCJA 4 ===== -->
+<h2 id="model">4. Model sprzedaży i dystrybucji — DLACZEGO tak wygląda</h2>
+
+<div class="reason-block">
+  <div class="reason-num">1</div>
+  <div class="reason-text">
+    <strong>To nie jest pudełko — to usługa z doborem mocy (sizing = warunek działania)</strong>
+    <p>Pompa ciepła przewymiarowana o 20% = taktowanie sprężarki = zużycie 30–40% więcej prądu i 3× szybsze zużycie. Niedowymiarowanie = mróz w domu. Dobór wymaga: m² + izolacja + okna + grzejniki vs podłogówka + temperatura zasilania + H_d (zapotrzebowanie cieplne). Bez tego żaden klient nie może kupić sam w internecie i być pewny działania. Wniosek: <em>usługa doboru jest de facto częścią produktu</em> — e-commerce bez niej sprzedaje „potencjalną cegłę".</p>
+  </div>
+</div>
+
+<div class="reason-block">
+  <div class="reason-num">2</div>
+  <div class="reason-text">
+    <strong>Marża jest w montażu + obsłudze dotacji (40–60% pakietu), nie w sprzęcie</strong>
+    <p>Typowy pakiet dom 150m²: sprzęt 30 000 zł + montaż 12 000 zł + audyt 1 500 zł + handling CzP 1 500 zł = 45 000 zł. Marża instalatora: montaż (prawie 100% marży na robociźnie) + mark-up sprzętu 15–20% = łącznie ~18 000–22 000 zł na zleceniu. Sklep sprzedający sam sprzęt zarabia 2 500–4 500 zł i nie może zatrzymać klienta. Stąd <em>każdy sensowny gracz próbuje wejść w montaż lub partnera montażowego</em>.</p>
+  </div>
+</div>
+
+<div class="reason-block">
+  <div class="reason-num">3</div>
+  <div class="reason-text">
+    <strong>Producenci premium chronią kanał — gwarancja zależy od autoryzowanego montażu</strong>
+    <p>Daikin, Viessmann, NIBE, Stiebel Eltron: gwarancja 5 lat TYLKO przy montażu przez certyfikowanego instalatora. Instalator musi przejść szkolenie producenta i mieć certyfikat F-gaz + certyfikat marki. W praktyce: klient kupujący Daikina przez Allegro dostaje gwarancję 2 lata (ustawowa) zamiast 5 lat. Producent celowo blokuje kanał sprzedaży bezpośredniej, żeby chronić sieć partnerów. <em>To jest systemowy anty-e-commerce mechanism</em>.</p>
+  </div>
+</div>
+
+<div class="reason-block">
+  <div class="reason-num">4</div>
+  <div class="reason-text">
+    <strong>Dotacja wymaga instalatora + audytu + rozliczenia — klient sam nie uciągnie</strong>
+    <p>Czyste Powietrze: audyt energetyczny (obowiązkowy dla rozszerzonego i najwyższego poziomu) + lista ZUM (Zielona Urządzenia Materiały) + koordynator wniosku (WFOŚiGW, terminy, dokumentacja) + inspektor po zakończeniu. Obsługę wniosku robi albo instalator, albo doradca energetyczny (opłata 500–2000 zł). Klient który kupił sprzęt sam w internecie musi sam obsłużyć wniosek — ryzyko odrzucenia (montaż przez nieautoryzowanego) + brak gwarancji. <em>Dotacja jest klej który trzyma klienta przy instalatorze</em>.</p>
+  </div>
+</div>
+
+<div class="reason-block">
+  <div class="reason-num">5</div>
+  <div class="reason-text">
+    <strong>Ryzyko doboru = „rachunki grozy" = reklamacje + fora + utrata reputacji</strong>
+    <p>Największy bloker kategorii (dane z kb.pl, elektroda, muratordom): historia „miało być oszczędnie, jest zimno i drogie". Dzieje się gdy: (a) pompa za mała do domu, (b) stary dom bez izolacji, (c) praca na starych grzejnikach bez podwyższenia temperatury zasilania, (d) brak taryfy G12. Sklep który sprzeda urządzenie bez doboru = potencjalny winowajca „rachunków grozy" = reklamacja, zwrot, negatywna opinia. <em>Stąd model leadowy jest też zabezpieczeniem prawnym/reputacyjnym sprzedawcy</em>.</p>
+  </div>
+</div>
+
+<div class="reason-block">
+  <div class="reason-num">6</div>
+  <div class="reason-text">
+    <strong>Logistyka gabarytów (150–250 kg) + wysokie ryzyko zwrotu/chargeback</strong>
+    <p>Monoblok typowo 150–250 kg, gabaryt 1,2m × 1,2m × 0,6m. Transport specjalistyczny (winda, paletomat) = 200–600 zł/dostawa. Zwrot = identyczny koszt. Klient który kupił „na próbę" i zwraca = strata 400–1200 zł logistyki + ryzyko uszkodzenia. High-ticket (25 000–60 000 zł) + zwrot w 14 dni (prawo konsumenta) = ryzyko chargeback kartą kredytową. Stąd <em>sklepy wolą model leadowy (najpierw umowa, potem dostawa) zamiast koszyk→płatność→dostawa</em>.</p>
+  </div>
+</div>
+
+<div class="reason-block">
+  <div class="reason-num">7</div>
+  <div class="reason-text">
+    <strong>Stąd model leadowy i dominacja firm instalacyjnych, nie e-sklepów</strong>
+    <p>Wypadkowa 1–6: racjonalny gracz nie robi czystego e-commerce. Robi stronę informacyjną → konfigurator/kalkulator → formularz kontaktowy → sprzedaż przez konsultanta/instalatora. Firmy instalacyjne (Columbus, lokalni) dominują dlatego, że kontrolują montaż + dotację + dobór + serwis = całą wartość. Sklepy e-comm są buforem (lead generator dla instalatora) lub sprzedają B2B do instalatorów z hurtową ceną.</p>
+  </div>
+</div>
+
+<div class="highlight">
+  ⚡ <strong>Synteza 7 powodów:</strong> każdy z nich osobno byłby do obejścia (np. dobre zdjęcia i FAQ rozwiązuje brak doboru). Razem tworzą <em>systemową barierę e-commerce</em>. Zwycięstwo w tej kategorii = nie e-sklep, lecz <strong>hybryda: treść GEO (cytowalna przez AI) + konfigurator doboru + sieć montażystów + obsługa dotacji</strong>.
+</div>
+
+
+<!-- ===== SEKCJA 5 ===== -->
+<h2 id="luka">5. Luka i wnioski dla Own_shop</h2>
+
+<div class="card green">
+  <strong>Gdzie jest wolne miejsce (luka rynkowa)?</strong>
+
+  <table style="margin-top:12px;">
+    <tr>
+      <th>Wymiar</th>
+      <th>Aktualny stan rynku</th>
+      <th>Luka / szansa</th>
+    </tr>
+    <tr>
+      <td><strong>Treść doboru</strong></td>
+      <td>PDP bez FAQ, bez doboru mocy, bez kalkulatora payback, bez CzP na stronie produktu (Sobik = 0 z tych 4)</td>
+      <td><strong>CS z sekcją Discovery Questions + Kalkulator mocy (m²→kW) + Payback z dotacją</strong> = treść którą AI cytuje, bo nikt inny jej nie daje</td>
+    </tr>
+    <tr>
+      <td><strong>GEO / cytowanie AI</strong></td>
+      <td>Żaden sklep nie ma treści dostosowanej pod AI-retrieval (ChatGPT, Perplexity, Gemini). Fora (muratordom) cytowane częściej niż sklepy.</td>
+      <td><strong>Strona z gęstą treścią config-driven</strong> (moc, czynnik, SCOP, dobór, dotacje) + structured data → staje się „źródłem cytatu" dla AI odpowiadającego na „jaka pompa do domu 150m²"</td>
+    </tr>
+    <tr>
+      <td><strong>Konfigurator</strong></td>
+      <td>Praktycznie nikt nie ma sensownego konfiguratora doboru mocy dla end-usera. Columbus ma kalkulator ROI, ale nie dobór mocy.</td>
+      <td><strong>Kalkulator: m² + standard izolacji + typ emisji + taryfa → rekomendacja mocy + tier + 3 modele</strong>. Może zbierać leady i budget</td>
+    </tr>
+    <tr>
+      <td><strong>Sieć montażystów</strong></td>
+      <td>Sklepy nie mają sieci. Instalatorzy mają swoje sklepy ale tylko swoje marki.</td>
+      <td><strong>Agregator: „kup sprzęt + zleć montaż w Twoim regionie"</strong>. Model: komisja od montażysty (10–15% od zlecenia) + marża sprzętu. Nikt w PL tego nie robi w sposób skalowalny.</td>
+    </tr>
+    <tr>
+      <td><strong>Obsługa CzP</strong></td>
+      <td>Firmy instalacyjne obsługują, ale nie sklepy. Sobik = 0 wzmianki o CzP na PDP.</td>
+      <td><strong>„Kupujesz z nami → my ogarniamy wniosek CzP"</strong> = ogromna ulga dla klienta, realna przewaga</td>
+    </tr>
+    <tr>
+      <td><strong>Segment polskie R290</strong></td>
+      <td>Kolton/AirKompakt jest niedoreprezentowany online. Mało contentu, brak recenzji, cena ukryta.</td>
+      <td><strong>Sklep specjalizujący się w R290 polskich producentów</strong> (Kolton, Galmet, KIPI) z treścią tłumaczącą „dlaczego R290 &gt; R32 na grzejniki" = właściwy content-marketing moment (R290 = trend 2025-26)</td>
+    </tr>
+  </table>
+</div>
+
+<h3>Czy ktoś to już robi dobrze? (realny konkurent)</h3>
+
+<div class="grid2">
+  <div class="card orange">
+    <strong>Columbus Energy</strong> — najbliżej modelu hybrydowego<br>
+    <span class="badge badge-orange">Zagrożenie</span>
+    <ul style="margin-top:8px; font-size:12px;">
+      <li>Kalkulator ROI + payback ✅</li>
+      <li>Pakiet z montażem ✅</li>
+      <li>Obsługa dotacji ✅</li>
+      <li>Ale: brak konfiguratora doboru mocy ❌</li>
+      <li>Brak otwartego katalogu (tylko własne partnery) ❌</li>
+      <li>Brak treści GEO/AI-friendly ❌</li>
+      <li>Brak wideo recenzji / porównań modeli ❌</li>
+    </ul>
+  </div>
+  <div class="card">
+    <strong>Euro-Met / Sobik</strong> — duże katalogi, słaba treść<br>
+    <span class="badge badge-grey">Słabi konkurenci na treść</span>
+    <ul style="margin-top:8px; font-size:12px;">
+      <li>Duży asortyment ✅</li>
+      <li>Znane marki ✅</li>
+      <li>Ale: zero doboru, zero FAQ, zero CzP na PDP ❌</li>
+      <li>Model „zapytaj" bez follow-upu treści ❌</li>
+      <li>Nie cytowane przez AI ❌</li>
+    </ul>
+  </div>
+</div>
+
+<div class="verdict">
+  <h3>⭐ Werdykt strategiczny dla Own_shop</h3>
+  <ul>
+    <li><strong>Model:</strong> Nie sklep z pompami — <em>platforma zakupu PC z doborem, montażem i dotacją</em>.</li>
+    <li><strong>Moat #1 (GEO):</strong> gęsta treść config-driven (Discovery Questions, dobór mocy, SCOP, R290 vs R32, CzP krok po kroku) → cytowalna przez ChatGPT/Perplexity → organic traffic miesiącami przed zakupem.</li>
+    <li><strong>Moat #2 (konfigurator):</strong> kalkulator m²→kW→model → zbiera leady z informacją o budżecie i intencji.</li>
+    <li><strong>Moat #3 (obsługa CzP):</strong> „my ogarniamy wniosek" = jedyna realna eliminacja bariery #4 (dotacja).</li>
+    <li><strong>Moat #4 (sieć montażystów):</strong> komisja od montażysty → model SaaS/marketplace, nie tylko e-comm.</li>
+    <li><strong>Nisza startowa:</strong> R290 (Kolton AirKompakt, KIPI Q15, Galmet R290) + segment „stary dom z grzejnikami" (gdzie R290 &gt;65°C = kluczowy wyróżnik vs R32).</li>
+    <li><strong>Ryzyko:</strong> Columbus może skopiować model; producenci premium blokują kanał; CzP może zmienić zasady.</li>
+  </ul>
+</div>
+
+
+<!-- ===== TRUTH CHECKER ===== -->
+<div class="truth-checker" id="truth">
+  <h2>TRUTH CHECKER</h2>
+  <table>
+    <tr>
+      <th>Status</th>
+      <th>Twierdzenie</th>
+      <th>Podstawa</th>
+    </tr>
+    <tr>
+      <td><span class="badge badge-green">Wiem</span></td>
+      <td>Model zakupu PC = usługa, nie pudełko; dominuje montaż+dotacja</td>
+      <td>RESEARCH_rynek_pompy.md sekcja 2 + forumbudowlane + oferteo</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-green">Wiem</span></td>
+      <td>Gwarancja 5 lat Daikin/Viessmann/NIBE wymaga autoryzowanego montażu</td>
+      <td>Dokumentacja producentów + wiedza branżowa</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-green">Wiem</span></td>
+      <td>R290 = czynnik standardowy 2026, wyższe SCOP w mróz, temp. do 70-80°C</td>
+      <td>SEED_kolton_sobik.md + Kolton.pl dane tech</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-green">Wiem</span></td>
+      <td>CzP max 136 200 zł (najwyższy poziom); audyt obowiązkowy (rozszerzony+)</td>
+      <td>czystepowietrze.gov.pl (cytowane w RESEARCH)</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-green">Wiem</span></td>
+      <td>„Rachunki grozy" = największy bloker; tkwi w złym doborze lub braku izolacji</td>
+      <td>Fora (kb.pl, elektroda, muratordom) — mocny dowód jakościowy</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-green">Wiem</span></td>
+      <td>Sobik: model „zapytaj o dostępność", brak ceny, brak CzP, brak konfiguratora na PDP</td>
+      <td>SEED_kolton_sobik.md — bezpośredni scrap</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-orange">Zakładam</span></td>
+      <td>Liczby SKU per sklep (±20%); WebFetch był offline podczas generowania</td>
+      <td>Wiedza branżowa + ekstrapolacja; do weryfikacji przy dostępnym WebFetch</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-orange">Zakładam</span></td>
+      <td>Marże 40–60% po stronie instalatora — rząd wielkości poprawny, dokładność ±10 pp</td>
+      <td>Dane z oferteo + rynekinstalacyjny + struktura pakietów; nie badanie rynkowe</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-orange">Zakładam</span></td>
+      <td>Columbus Energy = jedyny poważny hybrydowy rywal; mogą istnieć regionalni gracze</td>
+      <td>Wiedza publiczna; brak przeglądu ALL competitors</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-red">Do weryfikacji</span></td>
+      <td>Dokładne zakresy cen SKU w sklepach online — WebFetch niedostępny</td>
+      <td>Ponów WebFetch: sobik-kotly.com.pl, euro-met.pl, lazienki-online.pl</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-red">Do weryfikacji</span></td>
+      <td>Czy LG/Panasonic mają ceny jawne na e-commerce (bez „zapytaj")</td>
+      <td>Ponów WebFetch na konkretne PDP modeli mid-tier</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-red">Do weryfikacji</span></td>
+      <td>Skrócenie warunku własności CzP do 1 roku (planowane IV.2026)</td>
+      <td>czystepowietrze.gov.pl — sprawdzić aktualną wersję regulaminu</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-red">Do weryfikacji</span></td>
+      <td>Twarde wolumeny fraz (Discovery Questions) — DataForSEO / Senuto</td>
+      <td>Priorytety treści i dobór anchor na własne PDP zależą od realnego popytu</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-blue">Poprawię jednym inputem</span></td>
+      <td>Liczby SKU + model cen online (jawna/zapytaj per sklep) — potrzebny WebFetch round 2</td>
+      <td>Odpal WebFetch gdy classifier Opus wróci online</td>
+    </tr>
+  </table>
+</div>
+
+<div style="margin-top:20px; font-size:11px; color:#999; text-align:center;">
+  Generowane przez Claude Sonnet 4.6 · 2026-06-30 · Own_shop / pompy ciepła · Projekt poligon EEL/GEO
+</div>
+
+</div>
+</body>
+</html>
