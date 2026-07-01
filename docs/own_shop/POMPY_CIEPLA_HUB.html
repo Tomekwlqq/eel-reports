@@ -25,7 +25,7 @@ footer{padding:18px 36px;color:#868e96;font-size:12px;border-top:1px solid #e9ec
 <nav>
 <button class="active" onclick="showTab('cs',this)">Category Standard</button>
 <button onclick="showTab('rynek',this)">Jak działa rynek</button>
-<button disabled>Konkurencja — wkrótce</button>
+<button onclick="showTab('konkurencja',this)">Konkurencja</button>
 <button disabled>Magazyny energii — wkrótce</button>
 </nav>
 <div id="cs" class="tab active"><h1>Pompy ciepła — Category Standard v3.1 RICH (oś kanału B2B/Enduser)</h1>
@@ -126,6 +126,68 @@ footer{padding:18px 36px;color:#868e96;font-size:12px;border-top:1px solid #e9ec
 <hr>
 <p><em>Status: szkielet pełny z research głównego (FAZA 0). Czeka na wzbogacenie: <code>[scrap]</code> producenci/sklepy (walidacja KCF filtrami + ceny jawne/zapytaniowe + drzewo podkategorii handlowych) + pipeline V4 dla §13. Config-vs-brand: CONFIG-DRIVEN na wejściu (teza GEO potwierdzona), BRAND na finale lejka.</em></p></div>
 <div id="rynek" class="tab"><iframe src="JAK_DZIALA_RYNEK_pompy.html" title="Jak działa rynek"></iframe></div>
+<div id="konkurencja" class="tab"><h1>Analiza konkurencji — pompy ciepła online PL 2026</h1>
+<p><em>Wygenerowano: 2026-07-01 | Projekt: Own_shop | Strategia: GEO</em></p>
+<hr>
+<h2>Kontekst (nie powtarzamy, budujemy)</h2>
+<p>Rynek leadowy — ceny za zapytaniem to NORMA, nie wyjątek. ~15-18 graczy online. Sprzedaż przez instalatora. Dotacja 40-60% wartości (Czyste Powietrze do 136 200 zł, Moje Ciepło do 21 000 zł). Rynek rośnie: ~80 tys. jednostek sprzedanych w 2025, Q1 2026 +20% r/r wg PORT PC.</p>
+<hr>
+<h2>1. GRACZE ONLINE — kto realnie sprzedaje</h2>
+<h3>(a) Sklepy e-commerce / dystrybutorzy z koszem zakupowym</h3>
+<table><thead><tr><th>Gracz</th><th>Model cen</th><th>Asortyment</th><th>Konfigurator</th><th>Dotacja</th><th>B2B/B2C</th></tr></thead><tbody><tr><td><strong>KupPanPompe.pl</strong></td><td>✅ Jawne (z VAT 8% i 23%)</td><td>Split, monoblok, hydrosplit, gruntowe, CWU. Marki: Galmet</td><td>Tak — kalkulator przez cieplo.app, ale po formularzu → kontakt specjalisty</td><td>✅ 5 programów (CP, Moje Ciepło, Mój Prąd, Ciepłe Mieszkanie, Energia dla Wsi)</td><td>B2C</td></tr><tr><td><strong>Bridom.pl</strong></td><td>✅ Jawne, przeceny -29% do -60%</td><td>51 SKU powietrze-woda. Marki: Kospel, Ariston, Atlantic, Beretta, Galmet</td><td>❌ Brak — kategorie wg mocy (2-19 kW) jako substytut</td><td>❌ Brak narzędzia</td><td>B2C + B2B (footer)</td></tr><tr><td><strong>Łazienki Online</strong></td><td>✅ Jawne (16 195–75 253 zł)</td><td>16 SKU — Termet, Saunier Duval, Bosch, Ariston</td><td>❌ Brak</td><td>❌ Brak</td><td>B2C</td></tr><tr><td><strong>Sklep Soltech</strong></td><td>✅ Jawne</td><td>268 SKU (3-30 kW). Marki: Panasonic, Hitachi, Gree, Rotenso, KaiSai, Bosch, Viessmann</td><td>✅ Kalkulator + "Poradnik Instalatora"</td><td>❌ Brak</td><td>B2C + B2B wholesale</td></tr><tr><td><strong>E-instalator.pl</strong></td><td>✅ Jawne (17 500–75 000 zł)</td><td>NIBE, Buderus, Panasonic (Aquarea), Bosch, Kaisai</td><td>❌ Brak konfiguratora</td><td>❌ Brak</td><td>B2C + B2B</td></tr><tr><td><strong>Armatura24.pl</strong></td><td>✅ Jawne (~20 000–50 000 zł)</td><td>Szeroka baza HVAC, pompy jako kategoria</td><td>❌ Brak</td><td>❌ Brak</td><td>B2C</td></tr><tr><td><strong>Sklep-pompy-ciepla.pl</strong> (ekocieplotech)</td><td>✅ Jawne (1 520–20 839 zł)</td><td>Monoblock, split, niskotemp., basenowe. LG, Haier, Kaisai, Viessmann</td><td>✅ Kalkulator mocy + kalkulator kosztów</td><td>❌ Brak</td><td>B2C</td></tr><tr><td><strong>Sklep Elar</strong></td><td>✅ Jawne</td><td>Hurtownia — głównie B2B instalatorzy</td><td>❌ Brak</td><td>❌ Brak</td><td>B2B</td></tr><tr><td><strong>Allegro.pl</strong></td><td>✅ Jawne (od ~14 000 zł)</td><td>Mix marek i sprzedawców, głównie powietrze-woda</td><td>❌ Brak</td><td>❌ Brak</td><td>B2C marketplace</td></tr></tbody></table>
+<h3>(b) Firmy instalacyjne z ofertą online</h3>
+<table><thead><tr><th>Gracz</th><th>Model cen</th><th>Asortyment</th><th>Konfigurator</th><th>Dotacja</th><th>B2B/B2C</th></tr></thead><tbody><tr><td><strong>Columbus Energy</strong></td><td>❌ Zapytanie — lead gen (kalkulator → kontakt)</td><td>Własna marka PC powietrze-woda, PV, magazyny energii</td><td>✅ Kalkulator ROI (15 sek) — moc, oszczędności, zwrot. Nie dobiera modelu, prowadzi do kontaktu</td><td>✅ CP + Moje Ciepło w kalkulatorze</td><td>B2C masowy</td></tr><tr><td><strong>Sunday Polska</strong></td><td>❌ Zapytanie / oferta</td><td>Pompy + PV jako pakiet</td><td>❌ Brak konfiguratora</td><td>✅ CP do 18 500 zł</td><td>B2C</td></tr><tr><td><strong>Euros Energy</strong></td><td>❌ "Oferta w 24h" — lead gen</td><td>Powietrzne, gruntowe, PRO + PV + EMS</td><td>❌ Brak</td><td>✅ UE co-financing</td><td>B2C + B2B</td></tr><tr><td><strong>GeoPower</strong></td><td>✅ E-shop z cenami + konfigurator</td><td>Gruntowe i powietrzne</td><td>✅ NAJLEPSZY na rynku: metraż, izolacja, strefa, typ budynku → moc + reko modelu + PDF + link do sklepu</td><td>✅ Informacje o dotacjach</td><td>B2C (DIY + z montażem)</td></tr><tr><td><strong>INERGIS S.A.</strong></td><td>❌ Zapytanie / wycena</td><td>Montaż pomp ciepła, 35 lat doświadczenia</td><td>❌ Brak online</td><td>❌ Brak</td><td>B2C instalacja</td></tr></tbody></table>
+<h3>(c) Marketplace</h3>
+<p><strong>Allegro</strong> — ~100+ ofert pomp ciepła powietrze-woda. Ceny jawne od ~14 000 zł. Brak doradztwa, brak dotacji, brak konfiguratora. Głównie rynek wtórny i znane marki bez wsparcia technicznego.</p>
+<hr>
+<h2>2. WARSTWA TREŚCI / GEO — kto jest cytowalny przez AI</h2>
+<h3>Gracze z realną treścią GEO</h3>
+<p><strong>pompy.app</strong> (Sp. z o.o., Wrocław, inżynier Paweł Serwa)</p>
+<ul><li>Najgłębsza treść techniczna: OZC, punkt biwalentny, SCOP, strefy klimatyczne, normy budowlane</li><li>Case study framework (Warszawa, 10 kW, 4 osoby) — modelowy format dla AI</li><li>Kalkulator mocy, ranking modeli, porównywarka</li><li>Model: lead gen + reklamy + platforma dla instalatorów</li><li><strong>Ryzyko dla Own_shop</strong>: to jest de facto niesprzedający agregator — ale ze świetnym contentem GEO</li></ul>
+<p><strong>czysteogrzewanie.pl</strong></p>
+<ul><li>Redakcyjny portal OZE, głęboka warstwa techniczna o doborze mocy</li><li>Nie sprzedaje — czysty editorial</li></ul>
+<p><strong>Columbus Energy — blog</strong></p>
+<ul><li>Treść B2C-oriented, szerokie zasięgi PV+PC</li><li>Dobrze optymalizowany, ale zorientowany na lead capture</li></ul>
+<p><strong>Producenci (De Dietrich, Ariston, Hitachi)</strong></p>
+<ul><li>Poradniki doboru "dla domu 150m²" — wiele artykułów w SERP dla tego zapytania</li><li>Treść brand-oriented, nie parametryczna</li><li>Producenci odpowiadają na pytania AI — <strong>ale nie sprzedają bezpośrednio konsumentowi</strong></li></ul>
+<h3>Kto będzie cytowany przez ChatGPT/Perplexity na pytanie "jaka pompa do domu 150 m²"?</h3>
+<p><strong>Wysoka szansa cytowania (2026):</strong></p>
+<ol><li>pompy.app — depth + parametric + neutral authority</li><li>Columbus Energy — breadth + brand trust</li><li>De Dietrich / Ariston / Hitachi — producenci z poradnikami (Google trust)</li><li>czysteogrzewanie.pl — edukacyjny, niezależny</li></ol>
+<p><strong>Nikt z dystrybutorów e-commerce NIE produkuje treści GEO-ready.</strong> KupPanPompe, Bridom, Łazienki Online, Soltech — mają listingi produktów, max. krótkie intro kategorii. Żaden nie ma poradnika "jak dobrać pompę do domu 150 m²" z parametryczną logiką doboru.</p>
+<h3>Treściowa pustka (luka GEO)</h3>
+<ul><li>Brak porównywarek parametrycznych (marka A vs B w strefie klimatycznej III, izolacja lata 90.)</li><li>Brak treści "Czyste Powietrze krok po kroku z zakupem urządzenia w jednym miejscu"</li><li>Brak content hub łączącego: dobór → produkt → dotacja → montaż → weryfikacja po roku</li></ul>
+<hr>
+<h2>3. CENY / TRANSPARENTNOŚĆ</h2>
+<table><thead><tr><th>Kategoria gracza</th><th>Ceny jawne</th><th>Model</th></tr></thead><tbody><tr><td>E-sklepy (Bridom, KupPanPompe, Soltech, E-instalator)</td><td>✅ TAK</td><td>Klasyczny e-commerce</td></tr><tr><td>Firmy instalacyjne (Columbus, Sunday, Euros)</td><td>❌ NIE</td><td>Lead gen + wycena</td></tr><tr><td>GeoPower</td><td>✅ TAK</td><td>Hybrid: konfigurator + sklep</td></tr><tr><td>Allegro</td><td>✅ TAK</td><td>Marketplace</td></tr><tr><td>Producenci (Hewalex, Galmet, Defro, Hitachi)</td><td>❌ NIE bezpośrednio</td><td>Dealer network</td></tr></tbody></table>
+<p><strong>Wniosek:</strong> ceny jawne istnieją — ale głównie u "czystych" dystrybutorów bez doradztwa i montażu. Firmy z kompleksową ofertą (montaż + dotacja) chowają ceny. <strong>To wyróżnik: sklep z cenami jawnymi + obsługą dotacji + konfiguratorem = białe pole.</strong></p>
+<hr>
+<h2>4. MOCNE / SŁABE STRONY TOP 5</h2>
+<table><thead><tr><th>Konkurent</th><th>Mocne</th><th>Słabe</th><th>Czego NIE robi</th></tr></thead><tbody><tr><td><strong>Columbus Energy</strong></td><td>Zasięg (lider PV→PC cross-sell), kalkulator ROI, marka ogólnopolska, 5 lat gwarancji</td><td>Lead-only (brak add-to-cart), brak doboru mocy per model, brak porównywarki, treść promocyjna nie edukacyjna</td><td>Nie sprzedaje z ceną jawną, brak konfiguratora model-level, brak obsługi DIY</td></tr><tr><td><strong>GeoPower</strong></td><td>Najlepszy konfigurator doboru na rynku (metraż→moc→model→sklep), e-shop z cenami, blog techniczny</td><td>Mała skala, nieznana marka poza branżą, UI staromodne [do weryfikacji]</td><td>Brak dużego budżetu contentowego, brak kanału Czyste Powietrze z pomocą wniosku</td></tr><tr><td><strong>Soltech</strong></td><td>268 SKU, szeroka baza dostawców, B2B + B2C, szybka dostawa</td><td>Brak kompletnego konfiguratora doboru (kalkulator jest ale ograniczony), treść dla instalatora nie dla końcowego klienta</td><td>Brak obsługi Czyste Powietrze, brak doradztwa "dla nowicjusza"</td></tr><tr><td><strong>KupPanPompe</strong></td><td>5 programów dotacyjnych, kalkulator (przez cieplo.app), gwarancja + OC</td><td>Mała baza SKU (wąski asortyment), kalkulator kończy na kontakcie ze specjalistą, brak buy-flow</td><td>Brak add-to-cart dla pomp głównych CO, brak treści GEO</td></tr><tr><td><strong>Bridom.pl</strong></td><td>Ceny jawne, duże przeceny (-40-60%), znana marka (łazienki/ogrzewanie), dobre UX</td><td>Brak konfiguratora doboru, mała baza PC (51 SKU), brak obsługi dotacji, brak treści edukacyjnej</td><td>Nie obsługuje Czyste Powietrze, brak montażu</td></tr></tbody></table>
+<hr>
+<h2>5. LUKA DLA OWN_SHOP — precyzyjnie</h2>
+<h3>Potwierdzenie tezy wejściowej</h3>
+<p>Teza <strong>potwierdzona i rozszerzona</strong>:</p>
+<p><strong>Sklep-GEO + konfigurator + dotacja + montaż</strong> = luka realna. Żaden gracz nie łączy tych 4 elementów w jednym miejscu.</p>
+<p>Precyzyjne białe pola:</p>
+<p><strong>A. Model (unikalne połączenie):</strong><br>Ceny jawne + add-to-cart + konfigurator doboru modelu (nie tylko mocy) + obsługa wniosku Czyste Powietrze + sieć instalatorów</p>
+<p><strong>B. Warstwa treści (GEO moat):</strong></p>
+<ul><li>Parametryczne poradniki doboru (strefa klimatyczna × izolacja × powierzchnia = konkretny model)</li><li>"Czyste Powietrze — co, jak, ile krok po kroku" z linkiem do produktu na liście ZUM</li><li>Porównywarka modeli powietrze-woda w warunkach polskich</li></ul>
+<p><strong>C. Segment wejścia — najsłabiej obsłużony:</strong></p>
+<ul><li><strong>Pompy powietrze-woda 6-12 kW</strong> dla domów 100-200 m² (termomodernizacja + nowe budownictwo) — to 80% wolumenu rynku</li><li><strong>Klient-samodzielny (prosument)</strong>: wie że chce PC, szuka doboru + ceny + dotacji w jednym miejscu — dziś musi odwiedzić 3-5 stron</li><li><strong>Segment "bez montażu" (DIY + własny instalator)</strong>: NIKT nie obsługuje — wszyscy instalacyjni graczy wymagają montażu przez siebie</li></ul>
+<p><strong>D. Nisza wejścia rekomendowana:</strong><br>Monobloki powietrze-woda 6-14 kW (prostszy montaż, niższy próg, największa sprzedaż wg PORT PC) + obsługa Czyste Powietrze (dokumentacja + lista ZUM) + konfigurator doboru modelu (nie tylko mocy) + treść GEO parametryczna</p>
+<hr>
+<h2>6. ŹRÓDŁA</h2>
+<ul><li>https://kuppanpompe.pl/</li><li>https://www.bridom.pl/pompy-ciepla/pompy-ciepla-powietrze-woda</li><li>https://lazienkionline.pl/pl/menu/pompy-ciepla-316.html</li><li>https://sklepsoltech.pl/pl/c/Pompy-ciepla-i-zbiorniki/144</li><li>https://e-instalator.pl/produkty/pompy-ciepla/powietrzne-pompy-ciepla/</li><li>https://armatura24.pl/pompy-ciepla</li><li>https://sklep-pompy-ciepla.pl/</li><li>https://columbusenergy.pl/kalkulator-pompy-ciepla/</li><li>https://geopower.pl/program-doboru-pompy-ciepla</li><li>https://www.eurosenergy.com/produkty/pompy-ciepla/</li><li>https://pompyciepla.pl/publikacje/jaka-pompa-ciepla-do-domu-150-m2/ (INERGIS)</li><li>https://pompy.app/poradniki/jak-dobrac-pompe-ciepla/</li><li>https://cieplo.net/ (Fundacja Zero Emisji)</li><li>https://allegro.pl/kategoria/ogrzewanie-pompy-ciepla-257641</li><li>https://portpc.pl/w-2025-roku-polacy-kupili-niemal-tyle-samo-pomp-ciepla-co-w-2024/</li><li>https://www.ekspertbudowlany.pl/artykul/aktualnosci/348980,rynek-pomp-ciepla-w-polsce-2026-wzrost-sprzedazy-srednio-o-20</li><li>https://czystepowietrze.gov.pl/wez-dofinansowanie/na-co-i-ile</li><li>https://budotom.pl/koszt-pompy-ciepla-do-domu-150m2/</li></ul>
+<hr>
+<h2>TRUTH CHECKER</h2>
+<p><strong>Co wiem (zweryfikowane w live):</strong></p>
+<ul><li>GeoPower ma najlepszy konfigurator doboru na rynku (metraż → moc → model → sklep z cenami)</li><li>Columbus Energy = lead gen, nie add-to-cart; kalkulator ROI, nie dobór modelu</li><li>Soltech ma 268 SKU, ceny jawne, B2B+B2C; treść dla instalatora</li><li>PORT PC: ~80 tys. jednostek w 2025, Q1 2026 +20% r/r</li><li>Czyste Powietrze: do 136 200 zł, wymaga listy ZUM</li><li>Monobloki tracą, splity rosną wg PORT PC 2025 [dane z Gramwzielone]</li><li>pompy.app = najlepsza treść GEO-ready na rynku (neutral, parametric, deep)</li><li>Żaden dystrybutor e-commerce nie ma poradnika doboru "dom 150 m²"</li></ul>
+<p><strong>Co zakładam:</strong></p>
+<ul><li>GeoPower ma małą skalę i niewielki budżet marketingowy (UI wyglądało na starsze)</li><li>Klienci DIY (zakup bez montażu u sprzedającego) istnieją i nie są obsłużeni</li><li>pompy.app nie sprzedaje i nie będzie sprzedawać (model monetyzacji przez reklamy/instalatorów)</li></ul>
+<p><strong>Co może być błędne:</strong></p>
+<ul><li>GeoPower mógł w 2026 mocno zainwestować w marketing i skalę [do weryfikacji: sprawdź ruch SEMrush/Ahrefs]</li><li>Sunday Polska może mieć konfigurator schowany głębiej (strona nie wczytała się przez błąd TLS) [do weryfikacji]</li><li>Bridom może obsługiwać dotacje przez telefon, nie online [do weryfikacji: telefon 84 534 80 80]</li><li>Procent sprzedaży "DIY" (bez montażu sprzedającego) — brak danych ilościowych [do weryfikacji: PORT PC raporty]</li></ul>
+<p><strong>Co zweryfikować (jeden input):</strong><br>Sprawdź ruch organiczny GeoPower (Ahrefs/SEMrush) — jeśli ruch &lt;5k/mies., luka content GEO jest otwarta. Jeśli &gt;20k — mają już pozycję.</p>
+<p><strong>Co poprawić z jednym inputem:</strong><br>Dane PORT PC za H1 2026 (jeśli opublikowane) — doprecyzują split monoblok/split i trendy cenowe.</p></div>
 <footer>Own_shop · pompy ciepła · 2026-06-30 · metodologia CS v3.1 RICH</footer>
 </div><script>
 function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
