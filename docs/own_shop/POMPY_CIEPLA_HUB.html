@@ -26,7 +26,7 @@ footer{padding:18px 36px;color:#868e96;font-size:12px;border-top:1px solid #e9ec
 <button class="active" onclick="showTab('cs',this)">Category Standard</button>
 <button onclick="showTab('rynek',this)">Jak działa rynek</button>
 <button onclick="showTab('konkurencja',this)">Konkurencja</button>
-<button disabled>Magazyny energii — wkrótce</button>
+<button onclick="showTab('idee',this)">💡 Idee</button>
 </nav>
 <div id="cs" class="tab active"><h1>Pompy ciepła — Category Standard v3.1 RICH (oś kanału B2B/Enduser)</h1>
 <p><em>Budowa wg <code>METODOLOGIA_CS_v3.1_RICH.md</code> (źródła pierwotne + weryfikator sensu CEP) + format 14 sekcji wzorzec <code>WPIS_CS_sejfy_domowe_V2.md</code>. Projekt: Own_shop. Źródła FAZY 0: <code>Own_shop/research/pompy_ciepla/</code> (RESEARCH_rynek_pompy + SEED_kolton_sobik; scrap producentów/sklepów dosypuje walidację KCF — oznaczone <code>[scrap]</code>). Oś nadrzędna: kanał zakupowy — <strong>[Enduser]=primary</strong>, <strong>[B2B]=dodatkowy</strong>.</em></p>
@@ -188,6 +188,18 @@ footer{padding:18px 36px;color:#868e96;font-size:12px;border-top:1px solid #e9ec
 <ul><li>GeoPower mógł w 2026 mocno zainwestować w marketing i skalę [do weryfikacji: sprawdź ruch SEMrush/Ahrefs]</li><li>Sunday Polska może mieć konfigurator schowany głębiej (strona nie wczytała się przez błąd TLS) [do weryfikacji]</li><li>Bridom może obsługiwać dotacje przez telefon, nie online [do weryfikacji: telefon 84 534 80 80]</li><li>Procent sprzedaży "DIY" (bez montażu sprzedającego) — brak danych ilościowych [do weryfikacji: PORT PC raporty]</li></ul>
 <p><strong>Co zweryfikować (jeden input):</strong><br>Sprawdź ruch organiczny GeoPower (Ahrefs/SEMrush) — jeśli ruch &lt;5k/mies., luka content GEO jest otwarta. Jeśli &gt;20k — mają już pozycję.</p>
 <p><strong>Co poprawić z jednym inputem:</strong><br>Dane PORT PC za H1 2026 (jeśli opublikowane) — doprecyzują split monoblok/split i trendy cenowe.</p></div>
+<div id="idee" class="tab"><h1>💡 Idee &amp; backlog — Pompy ciepła</h1>
+<p><em>Miejsce na pomysły — nic tu nie jest decyzją, to pula do wyboru w swoim czasie. Rośnie z każdą sesją.</em></p>
+<h2>🚀 Produkty do zbudowania (przewaga)</h2>
+<ul><li><strong>Konfigurator doboru mocy</strong> — flow: <code>dom [m²] × izolacja × instalacja (grzejniki/podłogówka) × strefa klimatyczna → moc [kW] + typ + konkretny model + cena + dotacja + montaż</code>. <strong>Nikt na rynku PL nie ma pełnego flow</strong> — GeoPower ma dobór (bez ceny end-to-end), Columbus ma ROI-kalkulator (bez doboru mocy). To rdzeń przewagi Own_shop, nie „kolejny sklep".</li><li><strong>Segment DIY / własny instalator</strong> — NIKT nie obsługuje (wszyscy wymagają swojego montażu). Sklep + dobór + opcja „przyjdź z własnym instalatorem / kup sam sprzęt z certyfikatem do dotacji".</li></ul>
+<h2>🎯 Nisze wejścia (gdzie zacząć)</h2>
+<ul><li><strong>Monoblok powietrze-woda 6-14 kW</strong> (≈80% wolumenu rynku) — rdzeń.</li><li><strong>„Stary dom z grzejnikami"</strong> → R290 wysokotemp (70-80°C). Tu config-driven jest najostrzejszy (temp zasilania = krytyczny wyróżnik), a strach „rachunki grozy" największy → treść, która to rozbraja, wygrywa.</li></ul>
+<h2>💡 Content GEO (moat)</h2>
+<ul><li>Parametryczne poradniki „strefa × izolacja × metraż → model" = white space. pompy.app / cieplo.net mają treść GEO-ready, ale <strong>nie sprzedają</strong> — parasol informacyjny nad pustym polem sprzedaży. Wejść treścią config-driven + sprzedażą.</li></ul>
+<h2>⚠️ Do rozstrzygnięcia (przed decyzją o asortymencie)</h2>
+<ul><li><strong>Rozbieżność monoblok vs split:</strong> research rynku „monoblok +42%, dominanta" vs konkurencja „splity rosną, monobloki tracą". Zweryfikować twardo (PORT PC / raport branżowy).</li></ul>
+<h2>🔩 Techniczne / CS</h2>
+<ul><li>Rozważyć wzbogacenie §4 KCF o realną zależność binarną (np. „Gruntowa → typ kolektora poziomy/pionowy") → engine da rozgałęzienie L2 jak w rowerze. Dziś L2 płaski (świadomie — rozgałęzienie w L1 sytuacja→typ).</li></ul></div>
 <footer>Own_shop · pompy ciepła · 2026-06-30 · metodologia CS v3.1 RICH</footer>
 </div><script>
 function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));

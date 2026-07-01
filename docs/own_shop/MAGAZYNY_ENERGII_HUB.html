@@ -25,6 +25,7 @@ footer{padding:18px 36px;color:#868e96;font-size:12px;border-top:1px solid #e9ec
 <button class="active" onclick="showTab('cs',this)">Category Standard</button>
 <button onclick="showTab('rynek',this)">Jak działa rynek</button>
 <button onclick="showTab('konkurencja',this)">Konkurencja</button>
+<button onclick="showTab('idee',this)">💡 Idee</button>
 </nav>
 <div id="cs" class="tab active"><h1>Magazyny energii (domowe, do PV) — Category Standard v3.1 RICH (oś kanału B2B/Bezpośredni)</h1>
 <p><em>Budowa wg <code>METODOLOGIA_CS_v3.1_RICH.md</code> (źródła pierwotne + weryfikator sensu CEP) + format 14 sekcji wzorzec <code>WPIS_CS_pompa_ciepla_V2.md</code>. Projekt: Own_shop. Źródła FAZY 0: <code>Own_shop/research/magazyny_energii/RESEARCH_rynek_magazyny.md</code> (RESEARCH_rynek_magazyny; WebSearch/WebFetch PL 2026-06-30). Oś nadrzędna: kanał zakupowy — <strong>[Bezpośredni]=primary</strong>, <strong>[B2B]=dodatkowy</strong>.</em></p>
@@ -300,6 +301,18 @@ footer{padding:18px 36px;color:#868e96;font-size:12px;border-top:1px solid #e9ec
 <p><strong>Co zweryfikować przed decyzją:</strong></p>
 <ol><li>Czy PME Część 2 (Fundusz Modernizacyjny) już wystartował? — sprawdź przydomowemagazyny.gov.pl</li><li>Czy konfigurator Energii Nowej Ery obsługuje tylko Deye/Sofar czy szerszą bazę?</li><li>Czy Corab program.corab.pl jest dostępny publicznie czy wymaga logowania?</li><li>Rzeczywiste dane URE o liczbie instalacji PV bez hybryd w Polsce</li></ol>
 <p><strong>Co poprawić z jednym inputem:</strong><br>Dostęp do danych URE/POBE o strukturze falowników zainstalowanych w Polsce (ile % to string vs hybrid) — precyzyjnie określi wielkość segmentu retrofit.</p></div>
+<div id="idee" class="tab"><h1>💡 Idee &amp; backlog — Magazyny energii</h1>
+<p><em>Miejsce na pomysły — nic tu nie jest decyzją, to pula do wyboru w swoim czasie. Rośnie z każdą sesją.</em></p>
+<h2>🚀 Produkty do zbudowania (przewaga)</h2>
+<ul><li><strong>Konfigurator kompatybilności</strong> — flow: <code>mam falownik [marka/model] → które magazyny pasują (CAN/RS485) + pojemność do dobowego zużycia [kWh] + kwalifikacja PME + montaż</code>. <strong>Nikt nie ma pełnego flow</strong> — Energia Nowej Ery ma konfigurator kompatybilności ale tylko Deye/Sofar; NEXBE ma ROI-kalkulator bez kompatybilności. Kompatybilność falownika = twardy gate (niekompatybilny traci EMS i może nie łapać dotacji) → idealny problem do rozwiązania konfiguratorem.</li><li><strong>Segment retrofit AC-coupling</strong> — 1,5-2 mln istniejących instalacji PV bez hybryd, nieobsłużony jako <strong>dedykowany sklep</strong>. „Dołóż magazyn bez wymiany falownika".</li></ul>
+<h2>🎯 Nisze wejścia</h2>
+<ul><li><strong>10-20 kWh pod PME Część 2</strong> (Fundusz Modernizacyjny, wymóg 10 kWh + EPS) — żaden sklep nie ma dedykowanego flow pod ten program.</li><li>Prosument po net-billingu (2022-2024 instalacje) — oddawanie przestało się opłacać, dokłada magazyn na autokonsumpcję.</li></ul>
+<h2>💡 Content GEO (moat)</h2>
+<ul><li>„AC czy DC do mojego falownika", „ile kWh do mojego zużycia (nie do powierzchni!)", „czy mój magazyn ma backup/EPS", kalkulator kompatybilności — pustka treściowa. Config-driven na wejściu potwierdzony.</li></ul>
+<h2>⚠️ Do rozstrzygnięcia</h2>
+<ul><li><strong>Dotacje = 2 programy</strong> (nie mylić): <strong>KPO</strong> (aktywny, min 2 kWh, do 50%/16 000 zł) vs <strong>Fundusz Modernizacyjny</strong> (start 2026, min 10 kWh, 30%/800 zł/kWh + wymóg backup EPS). Doprecyzować w CS + komunikacji sklepu — klient je myli.</li></ul>
+<h2>🔧 Wyrównanie do standardu pomp</h2>
+<ul><li>Zakładka „Jak działa rynek" = teraz surowy research md. <strong>Zrobić dedykowaną analizę jak dla pomp</strong> (struktura kanału + dlaczego leadowy + kto jak sprzedaje + luka) — spójność obu kategorii.</li></ul></div>
 <footer>Own_shop · magazyny energii · 2026-07-01 · metodologia CS v3.1 RICH · §8 z decision_tree_v4 (v5)</footer>
 </div><script>
 function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
