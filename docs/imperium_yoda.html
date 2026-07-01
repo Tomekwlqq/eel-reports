@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecommerce Yoda — Imperium (manifest + plan + strona)</title>
+<style>
+
+  :root{
+    --bg:#f5f6f8; --panel:#ffffff; --panel2:#eef1f5; --line:#e2e5ec;
+    --ink:#1a1d24; --mut:#4d5462; --dim:#828a99;
+    --gold:#a8761f; --gold2:#8a6118; --blue:#2360c0; --green:#1d7a4f; --red:#c0466e; --violet:#5847c0;
+    --r:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
+    line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 28px 80px}
+  h1{font-size:40px;line-height:1.1;margin:0 0 6px;letter-spacing:-.5px}
+  h1 .sub{display:block;font-size:16px;font-weight:500;color:var(--gold);margin-top:12px;letter-spacing:.3px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:2px;color:var(--dim);
+    margin:54px 0 18px;font-weight:700;border-bottom:1px solid var(--line);padding-bottom:10px}
+  h3{font-size:18px;margin:0 0 8px}
+  p{margin:0 0 12px}
+  .lead{font-size:18px;color:var(--mut);max-width:760px}
+  .meta{color:var(--dim);font-size:13px;margin-top:18px}
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:760px){.g2,.g3{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px}
+  .card.accent{border-left:3px solid var(--gold)}
+  .pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+    padding:3px 9px;border-radius:20px;margin:0 6px 6px 0}
+  .p-done{background:rgba(84,192,138,.14);color:var(--green)}
+  .p-build{background:rgba(90,162,255,.14);color:var(--blue)}
+  .p-idea{background:rgba(155,140,255,.14);color:var(--violet)}
+  .p-gold{background:rgba(212,162,78,.16);color:var(--gold)}
+  .quote{font-size:21px;line-height:1.45;color:var(--ink);font-weight:500;
+    border-left:3px solid var(--gold);padding:6px 0 6px 22px;margin:16px 0;max-width:820px}
+  .quote .src{display:block;font-size:13px;color:var(--dim);font-weight:400;margin-top:8px}
+  ul.tight{margin:6px 0 0;padding-left:18px}
+  ul.tight li{margin-bottom:6px}
+  .kv{color:var(--mut);font-size:14px}
+  .kv b{color:var(--ink)}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:700}
+  td.nm{color:var(--ink);font-weight:600;white-space:nowrap}
+  .num{color:var(--gold);font-weight:700}
+  /* timeline */
+  .phase{position:relative;padding:18px 22px 18px 26px;background:var(--panel);
+    border:1px solid var(--line);border-radius:var(--r);border-left:4px solid var(--line)}
+  .phase.f0{border-left-color:var(--dim)}
+  .phase.f1{border-left-color:var(--gold)}
+  .phase.f2{border-left-color:var(--blue)}
+  .phase.f3{border-left-color:var(--green)}
+  .phase.f4{border-left-color:var(--violet)}
+  .phase.f5{border-left-color:var(--red)}
+  .phase .tag{font-size:12px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;font-weight:700}
+  .phase .when{float:right;font-size:12px;color:var(--gold);font-weight:600}
+  .phase h3{margin-top:4px}
+  .ship{font-size:13px;color:var(--mut);margin-top:8px}
+  .ship b{color:var(--ink)}
+  .gate{font-size:12.5px;color:var(--red);margin-top:8px;font-weight:600}
+  .fly{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:14px;color:var(--mut);margin-top:4px}
+  .fly span{background:var(--panel2);border:1px solid var(--line);padding:7px 13px;border-radius:8px;color:var(--ink);font-weight:600}
+  .fly .ar{color:var(--gold);font-weight:700}
+  .tc{background:#f6f2fb;border:1px solid #e3dcf2;border-radius:var(--r);padding:22px 24px;margin-top:18px}
+  .tc h3{color:var(--violet);font-size:13px;text-transform:uppercase;letter-spacing:2px}
+  .tc dt{color:var(--gold);font-weight:700;font-size:13.5px;margin-top:12px}
+  .tc dd{margin:2px 0 0;color:var(--mut);font-size:14px}
+  .foot{color:var(--dim);font-size:12.5px;margin-top:50px;border-top:1px solid var(--line);padding-top:18px}
+  .big{font-size:15px;color:var(--mut)}
+  .big b{color:var(--ink)}
+  .hl{color:var(--gold);font-weight:600}
+
+/* --- strona --- */
+
+  :root{
+    --bg:#f5f6f8; --panel:#ffffff; --panel2:#eef1f5; --line:#e2e5ec;
+    --ink:#1a1d24; --mut:#4d5462; --dim:#828a99;
+    --gold:#a8761f; --blue:#2360c0; --green:#1d7a4f; --red:#c0466e; --violet:#5847c0;
+    --r:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
+    line-height:1.6;font-size:15px}
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 28px 80px}
+  h1{font-size:38px;line-height:1.12;margin:0 0 6px;letter-spacing:-.5px}
+  h1 .sub{display:block;font-size:16px;font-weight:500;color:var(--gold);margin-top:12px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:2px;color:var(--dim);
+    margin:54px 0 18px;font-weight:700;border-bottom:1px solid var(--line);padding-bottom:10px}
+  h3{font-size:18px;margin:0 0 8px}
+  p{margin:0 0 12px}
+  .lead{font-size:18px;color:var(--mut);max-width:780px}
+  .meta{color:var(--dim);font-size:13px;margin-top:18px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+  .card.accent{border-left:3px solid var(--gold)}
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:760px){.g2,.g3{grid-template-columns:1fr}}
+  .verdict{background:#fbf6ec;border:1px solid #ecdcbf;border-radius:var(--r);padding:24px 26px}
+  .verdict .badge{display:inline-block;background:var(--gold);color:#fff;font-weight:800;font-size:12px;
+    letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-bottom:12px}
+  .pro{color:var(--green);font-weight:700}
+  .con{color:var(--red);font-weight:700}
+  ul.tight{margin:6px 0 0;padding-left:18px}
+  ul.tight li{margin-bottom:6px}
+  .kv{color:var(--mut)}.kv b{color:var(--ink)}
+  /* wireframe */
+  .wf{background:var(--panel2);border:1px dashed #d4d9e2;border-radius:12px;padding:0;overflow:hidden;margin:10px 0 4px}
+  .wf .bar{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--dim);
+    background:#f3f5f8;padding:7px 14px;border-bottom:1px dashed #d4d9e2;font-weight:700}
+  .wf .body{padding:18px 18px}
+  .blk{background:#f3f5f8;border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+  .blk .role{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);font-weight:700;display:block;margin-bottom:5px}
+  .copy{color:var(--ink);font-size:14.5px}
+  .copy.h{font-size:22px;font-weight:700;line-height:1.25;letter-spacing:-.3px}
+  .copy.s{color:var(--mut);font-size:15px}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .btn{font-size:13px;font-weight:700;padding:9px 16px;border-radius:8px;display:inline-block}
+  .btn.pri{background:var(--gold);color:#1a1206}
+  .btn.sec{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  .cols2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  @media(max-width:600px){.cols2,.cols3{grid-template-columns:1fr}}
+  .mini{background:#f3f5f8;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--mut)}
+  .mini b{color:var(--ink);display:block;margin-bottom:3px}
+  .why{font-size:13px;color:var(--dim);margin-top:8px;border-top:1px solid var(--line);padding-top:8px}
+  .why b{color:var(--gold)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:1px}
+  td.nm{color:var(--ink);font-weight:600;white-space:nowrap}
+  .swatch{display:inline-block;width:16px;height:16px;border-radius:4px;vertical-align:middle;margin-right:6px;border:1px solid #0006}
+  .tc{background:#f6f2fb;border:1px solid #e3dcf2;border-radius:var(--r);padding:22px 24px;margin-top:24px}
+  .tc h3{color:var(--violet);font-size:13px;text-transform:uppercase;letter-spacing:2px}
+  .tc dt{color:var(--gold);font-weight:700;font-size:13.5px;margin-top:12px}
+  .tc dd{margin:2px 0 0;color:var(--mut);font-size:14px}
+  .foot{color:var(--dim);font-size:12.5px;margin-top:50px;border-top:1px solid var(--line);padding-top:18px}
+  code{background:#f3eee2;padding:2px 6px;border-radius:5px;color:var(--gold2,#8a6118);font-size:13px}
+
+
+  html{scroll-behavior:smooth}
+  .topnav{position:sticky;top:0;z-index:50;display:flex;gap:20px;align-items:center;flex-wrap:wrap;
+    background:rgba(245,246,248,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+    padding:12px 28px;font-size:14px}
+  .topnav .brand{font-weight:800;color:var(--gold);margin-right:auto;letter-spacing:.3px}
+  .topnav a{color:var(--mut);text-decoration:none;font-weight:600}
+  .topnav a:hover{color:var(--ink)}
+  .doc + .doc{border-top:8px solid #e8ebf1}
+  /* manifest */
+  .manifesto{max-width:760px;padding-top:64px;padding-bottom:72px}
+  .manifesto p{font-size:18px;line-height:1.75;color:#2b303b;margin:0 0 20px}
+  .eyebrow{font-size:12px!important;letter-spacing:2px;text-transform:uppercase;color:var(--dim)!important;font-weight:700;margin-bottom:14px!important}
+  .mf-title{font-size:52px;line-height:1.05;letter-spacing:-1px;margin:0 0 10px;color:#14171d}
+  .mf-accent{color:#3f7d4e}
+  .mf-sub{font-size:15px!important;color:var(--dim)!important;letter-spacing:1px;margin-bottom:40px!important}
+  .mf-lead{font-size:24px!important;font-weight:600;color:#14171d!important;margin-bottom:24px!important}
+  .mf-punch{font-size:22px!important;font-weight:700;color:#3f7d4e!important;margin:8px 0 24px!important}
+  .manifesto hr{border:none;border-top:1px solid #dfe3ea;margin:34px 0}
+  .mf-signoff{font-size:20px!important;font-weight:600;color:#14171d!important;margin-top:36px!important}
+  .mf-name{color:#3f7d4e}
+  .mf-real{font-size:15px;color:var(--dim);font-weight:400}
+  @media(max-width:600px){.mf-title{font-size:38px}}
+
+</style>
+</head>
+<body>
+
+  <nav class="topnav">
+    <span class="brand">Ecommerce Yoda · imperium</span>
+    <a href="#manifest">Manifest</a>
+    <a href="#plan">Plan Imperium</a>
+    <a href="#strona">Strona &amp; Persona</a>
+  </nav>
+
+
+  <section id="manifest" class="doc">
+   <div class="wrap manifesto">
+    <p class="eyebrow">Manifest · tekst otwierający</p>
+    <h1 class="mf-title">Nauczę cię Mocy.<br><span class="mf-accent">Za grosze.</span></h1>
+    <p class="mf-sub">— Ecommerce Yoda</p>
+
+    <p class="mf-lead">Powiedzieli ci, że jesteś za mały.</p>
+
+    <p>Że e-commerce na poważnie to agencje na retainer, SaaS-y po 500 zł miesięcznie, analityk na etacie i budżet reklamowy jak u sieciówki. Że AI to zabawka dla wielkich. Że twoje 200 zamówień na miesiąc to jeszcze nie ten poziom.</p>
+
+    <p><b>Kłamstwo to jest.</b> Wygodne dla tych, co ci fakturę wystawiają.</p>
+
+    <p>Bo prawda jest taka: sprzedaż nie bierze się z budżetu. Bierze się z <b>głowy kupującego</b>. Z tego jednego ułamka sekundy, w którym ktoś patrzy na twój produkt i decyduje — biorę albo idę dalej. I ten moment wygląda tak samo w sklepie za dziesięć milionów i w twoim, który prowadzisz po nocach. Te same mechanizmy. Ta sama psychologia. Ten sam strach, ta sama pokusa, to samo „może później".</p>
+
+    <p>Dwadzieścia pięć lat patrzyłem, jak kupują ludzie. Dla P&amp;G, Mars, Lindt. Wielkie marki, wielkie pieniądze. I wiesz, co odkryłem? Że oni nie mają magii. Mają procesy. Mają wiedzę o kliencie, którą pilnie trzymają za drzwiami zarządów.</p>
+
+    <p class="mf-punch">Drzwi te — otwieram.</p>
+
+    <hr>
+
+    <p>Nie sprzedam ci kolejnej fortuny w konsultingu. Nie tego chcę.</p>
+
+    <p>Chcę zrobić coś, czego nikt małym ecommerce nie robi: <b>dać ci narzędzie do ręki i nauczyć cię go używać.</b> Nie wynająć ci rycerza — wykuć miecz i włożyć go w twoją dłoń. Bo rycerz odejdzie, gdy skończy się umowa. Umiejętność zostaje z tobą na zawsze.</p>
+
+    <p class="mf-punch">Miecz świetlny padawan sam buduje. To pierwsza lekcja.</p>
+
+    <p>Dostaniesz ode mnie narzędzia — takie, za które inni każą płacić jak za analityka na pełen etat. Za grosze. Dostaniesz inspirację — konkretne zmiany, taktyki, mechanizmy z głów kupujących, nie akademicki bełkot. I dostaniesz coś ważniejszego niż jedno i drugie: <b>zrozumienie, dlaczego to działa.</b> Bo kto rozumie mechanizm, ten nie potrzebuje mnie za miesiąc.</p>
+
+    <p>To nie jest błąd w moim modelu. To jest cały model.</p>
+
+    <hr>
+
+    <p>Boisz się AI? Nie bój się. AI to najlepsze, co ci się przydarzyło.</p>
+
+    <p>Kiedyś, żeby zrobić to, co robili wielcy, potrzebowałeś pięciu osób i pół roku. Dziś potrzebujesz dobrego narzędzia i kogoś, kto pokaże, gdzie kliknąć. Wielcy stracili przewagę. Bariera runęła. Pierwszy raz od dwudziestu pięciu lat mały gracz może grać w tej samej lidze — jeśli tylko wie, jak patrzeć.</p>
+
+    <p class="mf-punch">A patrzeć trzeba oczami kupującego. Nie oczami agencji.</p>
+
+    <hr>
+
+    <p>Więc tak. Prosta umowa między nami.</p>
+
+    <p>Ja nie będę udawał guru na scenie. Mędrca u twojego boku będę — takiego, co pokazuje, a potem odsuwa się i patrzy, jak radzisz sobie sam. Bo mistrz nie ten, co robi za ciebie. Mistrz ten, po którym już go nie potrzebujesz.</p>
+
+    <p>Ty — usiądziesz, spojrzysz na swój sklep jak twój klient, weźmiesz narzędzie do ręki i zaczniesz. Nie „spróbujesz". Spróbować — nie ma czego. Zrobisz albo nie zrobisz.</p>
+
+    <p>Reszty nauczę cię po drodze.</p>
+
+    <p class="mf-signoff">Niech konwersja będzie z tobą.<br><span class="mf-name">— Ecommerce Yoda</span> <span class="mf-real">(prywatnie: Tomasz Waligóra)</span></p>
+   </div>
+  </section>
+
+<section id="plan" class="doc">
+<div class="wrap">
+
+  <h1>Plan Imperium
+    <span class="sub">Tomasz Waligóra — strategia, fizyczne elementy, kolejność działań</span>
+  </h1>
+  <p class="lead">Jeden spójny obraz: kim jesteś, dokąd zmierzasz, z czego zbudowane jest imperium, w jakiej kolejności je stawiamy — i gdzie jest jedyne wąskie gardło, które trzyma resztę.</p>
+  <p class="meta">Synteza z całego folderu <code>Me_Myself_and_I</code> (5 doków strategicznych + CV + Erbacher deck + tezy 2030 + research kanałów) · złożone Opus 4.8 · 2026-06-30</p>
+
+  <!-- ========== KIM JESTEŚ ========== -->
+  <h2>1 · Kim jesteś — fundament, na którym stoi premium</h2>
+  <div class="grid g2">
+    <div class="card accent">
+      <h3>Trajektoria — enterprise, nie garaż</h3>
+      <p class="kv">Media/reklama → co-owner agencji shopper-marketingu → <b>Global E-commerce Director, Saatchi &amp; Saatchi</b> → co-founder &amp; CSO <b>Bureau New Galaxy</b> → <b>MD agencji 250 osób</b> → VP Aptego → Senior Consultant Papstar → <b>obecnie rola C-level / board w e-commerce</b>.</p>
+      <p class="kv" style="margin-top:10px">CPG enterprise: <b>P&amp;G, Mars, Lindt, Bayer, Royal Canin, 3M</b>. Wymentorował <b>200+ talentów</b>.</p>
+    </div>
+    <div class="card">
+      <h3>Moaty wiarygodności (rzadkie połączenie)</h3>
+      <ul class="tight">
+        <li><b>Credential arbitrage</b> — Fortune 500 + agencja 250 osób = zaufanie, którego freelancer nie kupi.</li>
+        <li><b>P&amp;L i RASCI na poziomie Boardroomu</b> — a jednocześnie <b>sam konfiguruje AI, pisze skrypty, wdraża</b>.</li>
+        <li><b>Frameworki autorskie</b> — 3D Commerce (~2013), SPACE — wyprzedziły branżę o dekadę.</li>
+        <li><b>Proof-of-work</b> — działające systemy AI, które sam zbudował i wdrożył; dowód = artefakt, nie pitch deck.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <p class="kv"><b>Filozofia operacyjna (Erbacher):</b> Total Adaptability &gt; strategia · Always start with the consumer · One consumer, one journey · Test–Learn–Scale or Drop Fast · Ecosystem Approach. <span class="hl">Lider transformacji organizacyjnej, nie taktyk kampanii.</span></p>
+  </div>
+
+  <!-- ========== DOKĄD ========== -->
+  <h2>2 · Dokąd zmierzasz — pozycjonowanie i wizja</h2>
+  <div class="quote">„Architekt procesu zakupowego konsumenta — w epoce, w której kupującym coraz częściej jest algorytm."
+    <span class="src">Jedno zdanie spinające 3D Commerce (consumer journey) z tezą 2030 (AI jako kupujący / B2Machine). To Twoje one-of-one — nikt inny nie ma tego skrzyżowania.</span>
+  </div>
+  <div class="grid g3">
+    <div class="card"><h3>North Star</h3><p class="kv">Premium thought leadership <b>pod własnym nazwiskiem</b> → komercjalizacja przez usługi (AIcommerce) → produkty wiedzy. Wiedza i frameworki = centrum grawitacji; biznesy są ich pochodnymi, nie odwrotnie.</p></div>
+    <div class="card"><h3>Okno czasu</h3><p class="kv"><b>18–24 miesiące</b> zanim wbudowane AI (Shopify Magic, Klaviyo AI) zetrze marżę na pojedynczym pillarze. Moat nie do skopiowania: orkiestracja narzędzi + 25 lat domeny + track record. <span class="hl">Działać teraz.</span></p></div>
+    <div class="card"><h3>Tryb pracy</h3><p class="kv">Cel: <b>168h/tydzień</b>, nie 40h. System ma być infrastrukturą działającą 24/7, nie asystentem przy włączonym Macu. Tomek przy 3 przejściach: plan, akceptacja treści, decyzja o nowym pillarze.</p></div>
+  </div>
+
+  <!-- ========== ARCHITEKTURA ========== -->
+  <h2>3 · Architektura imperium — jedna marka-matka, nie federacja</h2>
+  <p class="big"><b>Rozstrzygnięcie strategiczne:</b> masz ~10 wątków (AIcommerce, EEL, GEO, think tank, newsletter, BIG, Ciekawski, mini-apps). To pułapka rozproszenia. Imperium NIE jest federacją równorzędnych marek. Jest <span class="hl">jedno nazwisko jako warstwa autorytetu</span>, pod nim komercyjne ramię i laboratorium wiedzy. Reszta to produkty/pillary, nie osobne marki.</p>
+  <table>
+    <tr><th>Warstwa</th><th>Co to</th><th>Rola w imperium</th><th>Status</th></tr>
+    <tr><td class="nm">Nazwisko<br>Tomasz Waligóra</td><td>Person brand: frameworki, tezy 2030, manifest, think tank</td><td>Grawitacja. Buduje autorytet → zaufanie → leady. Twarz wszystkiego.</td><td><span class="pill p-build">do zbudowania online</span></td></tr>
+    <tr><td class="nm">AIcommerce</td><td>Ramię usługowe B2B — 5 pillarów AI dla e-shopów (Analytics, GEO, Content/ContentPilot, Meta/Google, CS)</td><td>Silnik przychodu. Done-for-you. Pod foundingiem Tomka.</td><td><span class="pill p-done">Analytics ✅</span><span class="pill p-done">GEO ✅</span><span class="pill p-build">reszta 🔧</span></td></tr>
+    <tr><td class="nm">Ecomms Lab<br>(EEL)</td><td>Laboratorium wiedzy + community: 200 taktyk, plan 100 treści, 20 artykułów</td><td>Paliwo contentowe + przyszłe membership. Zasila brand i sprzedaż dowodami.</td><td><span class="pill p-build">zasób gotowy</span></td></tr>
+    <tr><td class="nm">Produkty</td><td>GEO Optimizer SaaS · E-comms University (kurs) · BIG (walidator) · Mini-apps</td><td>Skalowalne strumienie. Uruchamiane po ustabilizowaniu usług.</td><td><span class="pill p-idea">później</span></td></tr>
+  </table>
+
+  <!-- ========== FIZYCZNE ELEMENTY ========== -->
+  <h2>4 · Fizyczne elementy — co konkretnie stoi w sieci</h2>
+  <table>
+    <tr><th>Element</th><th>Adres / forma</th><th>Co robi</th><th>Faza</th></tr>
+    <tr><td class="nm">Strona-hub</td><td><code>tomekwaligora.com</code> (jedna domena-parasol)</td><td>Manifest + frameworki + Raport 2030 (lead magnet) + oferta AIcommerce + zapis do newslettera. Centrum, do którego prowadzi wszystko.</td><td class="num">1</td></tr>
+    <tr><td class="nm">LinkedIn</td><td>Profil osobisty — home platform</td><td>Headline V5 + About V3 + cadence 2–3 posty/tydz z banku 8 tez i 59 trendów. B2B: właściciele e-commerce — start PL, ekspansja globalnie po angielsku.</td><td class="num">1</td></tr>
+    <tr><td class="nm">Lead magnet</td><td>Raport „E-commerce 2030" (PDF/gated)</td><td><b>Już gotowy</b> (Ecommerce_2030 — 59 trendów). Zamienia ruch w adresy e-mail. Zero pracy twórczej — tylko opakowanie.</td><td class="num">1</td></tr>
+    <tr><td class="nm">Newsletter</td><td>Beehiiv · <code>newsletter.tomekwaligora.com</code></td><td>Bi-weekly, free tier (do 2,5k subs), 3-bullet insighty. Recykling LinkedIn + 20 artykułów EEL = 6 mies. treści w zapasie.</td><td class="num">2</td></tr>
+    <tr><td class="nm">Strona usługowa</td><td>Sekcja AIcommerce na hubie</td><td>Oferta done-for-you, ContentPilot + Review Intelligence, proof-of-work (live demo / audyt) jako dowód zamykający.</td><td class="num">2</td></tr>
+    <tr><td class="nm">Think tank</td><td>Future of Sales Institute — manifest + „Death of the SDR" + YouTube/Telegram</td><td>Górna półka autorytetu. Alpha Circle (subskrypcja). Startuje DOPIERO na zbudowanym fundamencie brandu.</td><td class="num">4</td></tr>
+    <tr><td class="nm">Community</td><td>Ecomms Lab — membership wokół 200 taktyk</td><td>Powtarzalny przychód od rynku, nie od pojedynczego klienta. Decyzja o formie po 3 klientach.</td><td class="num">4</td></tr>
+    <tr><td class="nm">E-comms University</td><td>Kurs (6+ rozdziałów, baza już istnieje)</td><td>Produkt edukacyjny pozycjonujący jako thought leader, nie trenera. Monetyzacja wiedzy root.</td><td class="num">4</td></tr>
+    <tr><td class="nm">Agent Ciekawski</td><td>Serendipity engine (wewnętrzny)</td><td>Karmi Cię unikalnym kątem → świeży materiał na LinkedIn/newsletter. Przewaga treściowa, nie produkt.</td><td class="num">4</td></tr>
+  </table>
+
+  <!-- ========== KOLEJNOŚĆ ========== -->
+  <h2>5 · Kolejność działań — sześć faz, twarde zależności</h2>
+
+  <div class="grid" style="gap:14px">
+    <div class="phase f0">
+      <span class="when">tydzień 1–2</span><span class="tag">Faza 0 · Tożsamość</span>
+      <h3>Zamknij pozycjonowanie, zanim wyjdziesz na scenę</h3>
+      <p class="ship"><b>Fizycznie:</b> domena kupiona · LinkedIn headline V5 + About V3 zatwierdzone · jedno zdanie-parasol imperium ustalone · prosty hosting hubu postawiony.</p>
+      <p class="gate">⛔ Wymaga 1 decyzji Tomka: finalne brzmienie headline/About (mam rekomendację gotową).</p>
+    </div>
+    <div class="phase f1">
+      <span class="when">tydzień 2–6</span><span class="tag">Faza 1 · Wyjście publiczne</span>
+      <h3>Brand-first: autorytet zanim sprzedaż</h3>
+      <p class="ship"><b>Fizycznie:</b> hub v1 live (manifest + Raport 2030 jako lead magnet) · LinkedIn relaunch + pierwsze 3 posty (97% nie kupuje / zielone KPI a płaska konwersja / zmiana bez developera) · cadence 2–3/tydz z banku tez.</p>
+      <p class="ship"><b>Kamień milowy:</b> 100 zapisów na raport, pierwszy post &gt;10k wyświetleń.</p>
+    </div>
+    <div class="phase f2">
+      <span class="when">tydzień 4–10 · równolegle</span><span class="tag">Faza 2 · Dwa tory naraz</span>
+      <h3>Newsletter (brand) + dowód komercyjny (kasa)</h3>
+      <p class="ship"><b>Fizycznie:</b> Beehiiv live · pierwszy newsletter · <span class="hl">pierwszy proof-of-work (live demo narzędzia / publiczny audyt na żywo)</span> · strona usługowa AIcommerce z ContentPilot.</p>
+      <p class="gate">✅ Proof-of-work kontrolujesz w 100% — nie czekasz na cudzą zgodę na liczby. Tor komercyjny rusza, gdy shippujesz pierwszy działający artefakt.</p>
+    </div>
+    <div class="phase f3">
+      <span class="when">miesiąc 3–5</span><span class="tag">Faza 3 · Pierwszy przychód</span>
+      <h3>10 rozmów → 1 pilot → 2. case study</h3>
+      <p class="ship"><b>Fizycznie:</b> 10 rozmów diagnostycznych (zero cold, sieć) · 1 płatny pilot 30-dni · GEO Optimizer demo dla klienta #1 · drugi case study z nazwą klienta.</p>
+      <p class="ship"><b>Kamień milowy:</b> pierwszy retainer 2,5–5k EUR/mies. podpisany.</p>
+    </div>
+    <div class="phase f4">
+      <span class="when">miesiąc 6+</span><span class="tag">Faza 4 · Produkty wiedzy + skala</span>
+      <h3>Górna półka: think tank, community, kurs</h3>
+      <p class="ship"><b>Fizycznie:</b> Future of Sales Institute (manifest + „Death of the SDR" + YouTube) · Ecomms Lab membership · E-comms University · Agent Ciekawski jako silnik treści · Config Layer AIcommerce (client_id — odcina Tomka od wąskiego gardła operacyjnego).</p>
+    </div>
+    <div class="phase f5">
+      <span class="when">2027</span><span class="tag">Faza 5 · Niezależność infry</span>
+      <h3>Imperium, które nie zależy od jednego Maca</h3>
+      <p class="ship"><b>Fizycznie:</b> VPS (Discord bot + automaty 24/7) · NAS + cloud mirror (storage resilience) · docelowo lokalny LLM jako opcja. Compute / Storage / LLM — każdy filar wymienialny.</p>
+    </div>
+  </div>
+
+  <!-- ========== FLYWHEEL ========== -->
+  <h2>6 · Flywheel — dlaczego to się napędza samo</h2>
+  <div class="card accent">
+    <div class="fly">
+      <span>Własny projekt / pierwszy klient</span><span class="ar">→</span>
+      <span>case study (dowód)</span><span class="ar">→</span>
+      <span>content: LinkedIn + newsletter</span><span class="ar">→</span>
+      <span>autorytet</span><span class="ar">→</span>
+      <span>leady</span><span class="ar">→</span>
+      <span>nowy klient</span><span class="ar">↺</span>
+    </div>
+    <p class="kv" style="margin-top:14px">Pod spodem: <b>wiedza root</b> (3D Commerce, SPACE, 200 taktyk, tezy 2030) zasila każdy obrót koła. Każdy klient generuje dowód; każdy dowód generuje treść; każda treść generuje leady. Im dłużej kręcisz, tym tańszy każdy kolejny klient.</p>
+  </div>
+
+  <!-- ========== NASTĘPNY RUCH ========== -->
+  <h2>7 · Następny ruch — gdzie przyłożyć dźwignię w tym tygodniu</h2>
+  <div class="grid g2">
+    <div class="card">
+      <h3>🟢 Zero blokady — rusza dziś</h3>
+      <ul class="tight">
+        <li><b>Opakuj Raport 2030</b> jako lead magnet — treść gotowa, brakuje tylko PDF + strona zapisu.</li>
+        <li><b>Wyciągnij 5 tez</b> z 2030 jako pierwsze posty LinkedIn — bank materiału już istnieje.</li>
+        <li><b>Zarejestruj domenę</b> + postaw hub v1 (one-pager).</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🔴 Krytyczny klocek — odblokowuje resztę</h3>
+      <p class="kv"><b>Pierwszy proof-of-work.</b> Działający, publiczny artefakt, który kontrolujesz w 100% — live demo narzędzia albo audyt sklepu na żywo. Zastępuje pożyczone case study: nie czekasz na cudzą zgodę na liczby. Najwyższa dźwignia — mała robota, otwiera cały tor komercyjny.</p>
+    </div>
+  </div>
+
+  <!-- ========== TRUTH CHECKER ========== -->
+  <div class="tc">
+    <h3>Truth Checker</h3>
+    <dl>
+      <dt>Co wiem (z folderu)</dt>
+      <dd>Przeczytany cały folder: 5 doków strategicznych + CV + Erbacher deck + tezy 2030 + research kanałów. Trajektoria, frameworki, 5 pillarów AIcommerce, gotowe assety contentowe i status „case study zamraża komercjalizację" — wszystko potwierdzone w źródłach.</dd>
+      <dt>Co zakładam</dt>
+      <dd>Że imperium = jedna marka-matka pod nazwiskiem (nie federacja). Że brand-first (autorytet przed sprzedażą) to właściwa kolejność. Że domena typu tomekwaligora.com jest do wzięcia. Że masz przepustowość na jeden tor brandowy + jeden komercyjny równolegle (nie 10 naraz).</dd>
+      <dt>Co może być błędne</dt>
+      <dd>Może chcesz AIcommerce jako osobną markę odciętą od nazwiska (B2B-safe), nie pod Tobą. Może masz mniej czasu i trzeba wybrać JEDEN tor zamiast dwóch równoległych. Daty z doków są z maja '26 — część statusów mogła się ruszyć. „Future of Sales Institute" może być nazwą roboczą, nie finalną.</dd>
+      <dt>Co zweryfikować, zanim ruszysz</dt>
+      <dd>(1) Dostępność i wybór domeny-parasola. (2) Czy AIcommerce idzie pod nazwiskiem czy osobno. (3) Realny budżet czasu/tygodień — to determinuje czy Faza 1 i 2 idą równolegle. (4) Jaki pierwszy proof-of-work shippujesz (live demo / audyt na żywo) — to teraz dowód, nie cudze case study.</dd>
+      <dt>Co poprawiłbym z jednym inputem</dt>
+      <dd>Powiedz, ile godzin/tydzień realnie dajesz temu imperium — przeliczę fazy na konkretny kalendarz z datami i przytnę zakres do Twojej przepustowości, zamiast idealnej sekwencji.</dd>
+    </dl>
+  </div>
+
+  <p class="foot">Plan Imperium · synteza całego folderu <code>Me_Myself_and_I</code> · złożone autonomicznie, Opus 4.8 · 2026-06-30 · dokument żywy — aktualizuj po każdej decyzji kierunkowej.</p>
+
+</div>
+</section>
+<section id="strona" class="doc">
+<div class="wrap">
+
+  <h1>tomekwaligora.com
+    <span class="sub">Projekt strony — treść, layout, system wizualny · persona Ecommerce Yoda</span>
+  </h1>
+  <p class="lead">Hub całego imperium. Jeden adres, do którego prowadzi LinkedIn, newsletter i oferta. Premium-editorial, nie agencyjny landing. Poniżej: decyzja o ksywce, mapa strony i każda sekcja z gotowym copy.</p>
+  <p class="meta">Opus 4.8 · 2026-06-30 · uzupełnienie do <code>PLAN_IMPERIUM.html</code></p>
+
+  <!-- ===== KSYWKA ===== -->
+  <h2>0 · Persona marki — Ecommerce Yoda</h2>
+  <div class="verdict">
+    <span class="badge">Werdykt: Ecommerce Yoda — persona i motyw przewodni</span>
+    <p class="kv"><b>Dwie warstwy.</b> Legalnie i handlowo gra <b>Tomasz Waligóra · AIcommerce</b> (premium, enterprise, faktura). Jako twarz, ton i wizual — <b>Ecommerce Yoda</b>: mistrz, nie guru. Mędrzec, który widzi przyszłość, uczy padawanów i mówi przekornie. Domyka lukę „Packaging / Aura" z Kallaway, której samo nazwisko nie wypełnia — a Twój <b>realny tatuaż Yody</b> daje autentyczność nie do podrobienia.</p>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card" style="margin:0">
+        <p class="pro">✓ Za</p>
+        <ul class="tight">
+          <li><b>Działa globalnie</b> — Star Wars jest uniwersalne, niesie PL i EN równie mocno.</li>
+          <li>Mistrz + 25 lat + „widzi przyszłość" (tezy 2030) = spójna, premium-kompatybilna narracja.</li>
+          <li>Daje cały system: zieleń, ton („zrób albo nie — testu A/B nie ma"), easter eggi.</li>
+          <li>Autentyczne — tatuaż to dowód, nie kostium dobrany pod kampanię.</li>
+        </ul>
+      </div>
+      <div class="card" style="margin:0">
+        <p class="con">✗ Ryzyka / strażnik</p>
+        <ul class="tight">
+          <li><b>„Yoda" to IP Lucasfilm/Disney</b> — bierzemy jako personę/ton/wizual, NIGDY jako legalną nazwę firmy, domenę ani znak towarowy.</li>
+          <li>Ton Jedi przedawkowany = cringe i podcina premium. Inwersja składni w 2–3 miejscach, nie w każdym zdaniu.</li>
+          <li>Nie zastępuje nazwiska w ofercie/kontrakcie — tam zawsze Tomasz Waligóra.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card accent" style="margin:14px 0 0">
+      <h3>Jak użyć — konkretnie</h3>
+      <table>
+        <tr><th>Warstwa</th><th>Nazwa</th><th>Gdzie</th></tr>
+        <tr><td class="nm">Legal / oferta / faktura</td><td>Tomasz Waligóra · AIcommerce</td><td>Strona-hub, deck, kontrakty, domena, znak towarowy</td></tr>
+        <tr><td class="nm">Persona / ton / wizual</td><td><b>Ecommerce Yoda</b></td><td>Sygnatura serii, podpis newslettera, ton głosu, zieleń, mem</td></tr>
+        <tr><td class="nm">Rezerwa (PL)</td><td>Pan Konwersja</td><td>Wariant zapasowy, gdyby motyw Yoda trzeba było wyciszyć</td></tr>
+      </table>
+      <p class="why"><b>Rekomendacja:</b> Newsletter i seria contentu noszą personę <b>Ecommerce Yoda</b>; podpis „— Ecommerce Yoda (prywatnie: Tomasz Waligóra)". Domena i marka legalna = <code>tomekwaligora.com</code> / AIcommerce — żadnego „yoda" w nazwie domeny ani firmy. <b>Pan Konwersja</b> czeka w rezerwie. „Pan Ekomers" — odrzucony.</p>
+    </div>
+  </div>
+
+  <!-- ===== MAPA ===== -->
+  <h2>1 · Architektura strony — co i w jakiej kolejności</h2>
+  <p class="kv">Jeden long-scroll na start (szybciej do live niż multi-page). Dwa cele jednocześnie: <b>złapać e-mail</b> (lead magnet) i <b>pokazać ofertę</b> (AIcommerce). Podstrony <code>/oferta</code>, <code>/wiedza</code>, <code>/o-mnie</code> dochodzą w Fazie 2.</p>
+  <table>
+    <tr><th>#</th><th>Sekcja</th><th>Zadanie</th><th>Konwersja</th></tr>
+    <tr><td>1</td><td class="nm">Hero</td><td>W 5 sek. mówi kim jesteś i dla kogo</td><td>→ raport / oferta</td></tr>
+    <tr><td>2</td><td class="nm">Dowód (logo + liczby)</td><td>Buduje zaufanie zanim cokolwiek przeczyta</td><td>trust</td></tr>
+    <tr><td>3</td><td class="nm">Manifest</td><td>Twój unikalny punkt widzenia — proces zakupowy</td><td>resonance</td></tr>
+    <tr><td>4</td><td class="nm">Frameworki</td><td>Autorytet intelektualny: 3D Commerce + SPACE</td><td>authority</td></tr>
+    <tr><td>5</td><td class="nm">Lead magnet — Raport 2030</td><td>Zamienia ruch w adresy e-mail</td><td>→ e-mail</td></tr>
+    <tr><td>6</td><td class="nm">AIcommerce — oferta</td><td>Co robisz dla sklepów, 5 pillarów</td><td>→ rozmowa</td></tr>
+    <tr><td>7</td><td class="nm">Proof-of-work</td><td>Działające demo / audyt na żywo — Twój dowód, nie cudzy</td><td>proof</td></tr>
+    <tr><td>8</td><td class="nm">Newsletter (Ecommerce Yoda)</td><td>Łapie tych, co jeszcze nie kupią</td><td>→ subskrypcja</td></tr>
+    <tr><td>9</td><td class="nm">Kontakt / praca ze mną</td><td>Domyka decyzję</td><td>→ kontakt</td></tr>
+  </table>
+
+  <!-- ===== LAYOUT + COPY ===== -->
+  <h2>2 · Layout sekcja po sekcji + gotowy copy</h2>
+
+  <!-- HERO -->
+  <div class="wf">
+    <div class="bar">① Hero — above the fold</div>
+    <div class="body">
+      <div class="blk">
+        <span class="role">Nadtytuł (mały, rozstrzelony)</span>
+        <span class="copy">TOMASZ WALIGÓRA &nbsp;·&nbsp; <span style="color:var(--gold)">Ecommerce Yoda</span></span>
+      </div>
+      <div class="blk">
+        <span class="role">H1 (wielki nagłówek)</span>
+        <span class="copy h">E-commerce widziany oczami kupującego — nie oczami agencji.</span>
+      </div>
+      <div class="blk">
+        <span class="role">Podtytuł</span>
+        <span class="copy s">25 lat budowałem sprzedaż dla P&amp;G, Mars, Lindt i własnej agencji 250 osób. Dziś stawiam e-sklepom infrastrukturę AI, która naprawdę sprzedaje — i pokazuję, co dzieje się w głowie klienta, zanim kliknie „kup".</span>
+      </div>
+      <div class="btnrow">
+        <span class="btn pri">Pobierz raport „E-commerce 2030"</span>
+        <span class="btn sec">Zobacz, co robię dla sklepów</span>
+      </div>
+    </div>
+  </div>
+  <p class="why"><b>Dlaczego:</b> nagłówek to gotowy, sprawdzony tagline z briefu. Dwa CTA = dwie ścieżki (brand-curious → raport, kupujący → oferta). Ksywka mrugnięciem, nie krzykiem.</p>
+
+  <!-- DOWÓD -->
+  <div class="wf">
+    <div class="bar">② Pasek dowodu — tuż pod fold</div>
+    <div class="body">
+      <div class="blk"><span class="role">Logo-wall (szare logotypy)</span><span class="copy s">P&amp;G · Mars · Lindt · Bayer · Royal Canin · 3M · Saatchi &amp; Saatchi</span></div>
+      <div class="cols3">
+        <div class="mini"><b>25 lat</b>na styku marki, e-commerce i psychologii zakupów</div>
+        <div class="mini"><b>250 osób</b>agencja, którą prowadził jako MD</div>
+        <div class="mini"><b>200+ talentów</b>wymentorowanych, dziś w topowych firmach</div>
+      </div>
+    </div>
+  </div>
+  <p class="why"><b>Dlaczego:</b> credential arbitrage. Zaufanie zanim ktokolwiek przeczyta zdanie o ofercie. Logotypy enterprise robią robotę za Ciebie.</p>
+
+  <!-- MANIFEST -->
+  <div class="wf">
+    <div class="bar">③ Manifest — Twój punkt widzenia</div>
+    <div class="body">
+      <div class="blk"><span class="role">Nagłówek sekcji</span><span class="copy h">97% wchodzących do Twojego sklepu nie kupuje. I dobrze.</span></div>
+      <div class="blk"><span class="role">Treść (2–3 akapity)</span><span class="copy s">Większość agencji optymalizuje jeden element: ruch, kartę produktu albo koszyk. A transakcja zachodzi tylko wtedy, gdy w jednym miejscu i czasie spotykają się trzy rzeczy — gotowy kupujący, gotowy produkt i wygrana przestrzeń zakupowa. Nazwałem to 3D Commerce, zanim branża zaczęła o tym mówić.<br><br>Nie buduję sklepów. Ustawiam cały proces zakupowy tak, żeby trafił klienta dokładnie tam, gdzie jest w swojej decyzji. Zaczynam od zmian, które nie wymagają developera, agencji ani dużego budżetu.</span></div>
+    </div>
+  </div>
+  <p class="why"><b>Dlaczego:</b> prowokacyjny nagłówek (z behavioral economics) = scroll-stopper. Zamienia „doradcę" w „kogoś, kto myśli inaczej". Płynnie wprowadza framework.</p>
+
+  <!-- FRAMEWORKI -->
+  <div class="wf">
+    <div class="bar">④ Frameworki — autorytet intelektualny</div>
+    <div class="body">
+      <div class="cols2">
+        <div class="blk"><span class="role">Karta 1</span><span class="copy">3D Commerce</span><span class="copy s">Fizyka transakcji (~2013). Ready Shopper + Ready Product + Owned Space — wszystkie trzy naraz, albo sprzedaży nie ma.</span></div>
+        <div class="blk"><span class="role">Karta 2</span><span class="copy">SPACE</span><span class="copy s">Mapa ekosystemu zakupowego: Shopper · Player · Ambience · Category · Environment. Ruszasz jeden element — reagują pozostałe.</span></div>
+      </div>
+      <div class="blk"><span class="role">CTA tekstowy</span><span class="copy s">→ Przeczytaj manifest: jak naprawdę podejmowana jest decyzja zakupowa (1 500 słów)</span></div>
+    </div>
+  </div>
+  <p class="why"><b>Dlaczego:</b> to Twoja intelektualna bariera wejścia. Konkurent ma „doświadczenie", Ty masz <b>własne teorie z 2013 r.</b> Premium pricing bierze się stąd.</p>
+
+  <!-- LEAD MAGNET -->
+  <div class="wf">
+    <div class="bar">⑤ Lead magnet — Raport 2030 (sekcja-pułapka na e-mail)</div>
+    <div class="body">
+      <div class="blk"><span class="role">Nagłówek</span><span class="copy h">E-commerce 2030: 59 trendów, które zdecydują, kto przetrwa.</span></div>
+      <div class="blk"><span class="role">Bullety-zajawki</span><span class="copy s">• Dlaczego środek rynku umiera (92% do 2030) &nbsp; • Jak AI przejmuje rolę kupującego (B2Machine) &nbsp; • Dlaczego SEO ustępuje AIO i ruch spada 30–60%</span></div>
+      <div class="blk"><span class="role">Formularz</span><span class="copy s">[ e-mail ] &nbsp; <span class="btn pri" style="font-size:12px">Wyślij mi raport</span> &nbsp;— trafiasz też do newslettera Ecommerce Yoda</span></div>
+    </div>
+  </div>
+  <p class="why"><b>Dlaczego:</b> raport <b>już istnieje</b> (Ecommerce_2030). Zero pracy twórczej — tylko PDF + formularz. Najszybszy zwrot w całym planie. Łapie e-mail = budujesz aktywo niezależne od algorytmu LinkedIna.</p>
+
+  <!-- OFERTA -->
+  <div class="wf">
+    <div class="bar">⑥ AIcommerce — oferta</div>
+    <div class="body">
+      <div class="blk"><span class="role">Nagłówek</span><span class="copy h">Zamieniam Twój stack e-commerce w maszynę, która raportuje i optymalizuje sama.</span></div>
+      <div class="blk"><span class="role">Podtytuł</span><span class="copy s">Bez nowego zespołu. Bez kolejnego SaaS-a. AI jako infrastruktura operacyjna — nie jako kolejny projekt.</span></div>
+      <div class="cols3">
+        <div class="mini"><b>Analytics</b>Auto-raporty co poniedziałek rano ✓</div>
+        <div class="mini"><b>SEO / GEO</b>Opisy pod AI Overviews ✓</div>
+        <div class="mini"><b>Content</b>ContentPilot + Review Intelligence</div>
+        <div class="mini"><b>Meta / Google</b>Optymalizacja kampanii AI</div>
+        <div class="mini"><b>Customer Service</b>Automatyzacja obsługi</div>
+        <div class="mini"><b>Dla kogo</b>e-shop 2–15M EUR, 2+ rynki, bez analityka</div>
+      </div>
+    </div>
+  </div>
+  <p class="why"><b>Dlaczego:</b> pozycjonowanie jednozdaniowe wprost z konceptu. Pillary jako siatka — klient widzi szerokość, ale wejście sprzedażowe to Analytics (mierzalne ROI).</p>
+
+  <!-- CASE -->
+  <div class="wf">
+    <div class="bar">⑦ Proof-of-work — pokaż, że działa, zamiast opowiadać</div>
+    <div class="body">
+      <div class="blk"><span class="role">Nagłówek</span><span class="copy h">Nie mówię „umiem AI". <span style="color:var(--gold)">Pokazuję działające narzędzie i robię audyt na żywo.</span></span></div>
+      <div class="blk"><span class="role">Treść</span><span class="copy s">Zamiast cudzego case study — własny dowód, który kontrolujesz w 100%: live demo narzędzia, audyt sklepu na żywo, działający system. Klient widzi efekt, nie slajd. Pierwszy płatny pilot = pierwszy nazwany case study — budujesz go od zera, nie czekasz na cudzą zgodę na liczby.</span></div>
+      <div class="btnrow"><span class="btn sec">Zobacz demo na żywo</span><span class="btn sec">Zrób mi darmowy audyt</span></div>
+    </div>
+  </div>
+  <p class="why"><b>Dlaczego:</b> proof-of-work bije pożyczone case studies — jest Twój, natychmiastowy i niezależny od cudzej zgody. To „nowe myślenie": dowód = działający artefakt, nie PDF o kimś innym.</p>
+
+  <!-- NEWSLETTER -->
+  <div class="wf">
+    <div class="bar">⑧ Newsletter — Ecommerce Yoda</div>
+    <div class="body">
+      <div class="blk"><span class="role">Nagłówek</span><span class="copy h">Co dwa tygodnie: 3 rzeczy o e-commerce i AI, których nie przeczytasz na korpo-LinkedInie.</span></div>
+      <div class="blk"><span class="role">Podpis-sygnatura <span style="color:var(--dim);font-weight:400">(tu ton Yody — dawkowany)</span></span><span class="copy s">— Ecommerce Yoda (prywatnie: Tomasz Waligóra)</span></div>
+      <div class="blk"><span class="role">Formularz Beehiiv</span><span class="copy s">[ e-mail ] <span class="btn pri" style="font-size:12px">Zapisz mnie</span> &nbsp; <span style="color:var(--dim)">free · bez spamu · wypisać się — możesz zawsze</span></span></div>
+    </div>
+  </div>
+  <p class="why"><b>Dlaczego:</b> tu persona pracuje najmocniej — newsletter to relacja, a Ecommerce Yoda daje jej osobowość i ton. Beehiiv, własna domena, free tier.</p>
+
+  <!-- KONTAKT -->
+  <div class="wf">
+    <div class="bar">⑨ Kontakt / praca ze mną — stopka-zamknięcie</div>
+    <div class="body">
+      <div class="blk"><span class="role">Nagłówek</span><span class="copy h">Prowadzisz e-shop i wiesz, że dane mówią więcej, niż zdążysz przeczytać?</span></div>
+      <div class="btnrow"><span class="btn pri">Umów 20-min rozmowę diagnostyczną</span><span class="btn sec">LinkedIn</span></div>
+      <div class="blk" style="margin-top:10px"><span class="role">Stopka</span><span class="copy s">Tomasz Waligóra · AIcommerce · LinkedIn · Newsletter Ecommerce Yoda · © 2026</span></div>
+    </div>
+  </div>
+  <p class="why"><b>Dlaczego:</b> CTA = „rozmowa diagnostyczna", nie „kup". Zgodne z GTM: najpierw diagnoza bólu, dopiero potem oferta.</p>
+
+  <!-- ===== SYSTEM WIZUALNY ===== -->
+  <h2>3 · System wizualny — premium-editorial</h2>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Paleta — jasna editorial + motyw Yody</h3>
+      <p class="kv"><span class="swatch" style="background:#f7f6f2"></span> Tło kość słoniowa <code>#f7f6f2</code><br>
+      <span class="swatch" style="background:#ffffff"></span> Karty białe <code>#ffffff</code><br>
+      <span class="swatch" style="background:#3f7d4e"></span> Akcent <b>Yoda-green</b> <code>#3f7d4e</code> — jeden, charakterny<br>
+      <span class="swatch" style="background:#1a1d24"></span> Tekst grafit <code>#1a1d24</code></p>
+      <p class="why">Jasny, dużo światła, dorosły — nie „startupowy gradient". Jeden akcent (zieleń Yody) niesie <b>motyw przewodni</b> i buduje Aurę z Kallaway. Tatuaż = gotowy, autentyczny element wizualny marki.</p>
+    </div>
+    <div class="card">
+      <h3>Typografia i ton</h3>
+      <ul class="tight">
+        <li><b>Nagłówki:</b> grotesk, ciasny tracking, duże (serif opcjonalnie dla manifestu — editorial feel).</li>
+        <li><b>Tekst:</b> system sans, 16–18px, dużo światła.</li>
+        <li><b>Ton copy:</b> direct, bez fluffu, jeden hak na sekcję. Zero „synergii" i „rozwiązań szytych na miarę".</li>
+        <li><b>Zdjęcie:</b> jedno mocne, kontrastowe foto Tomka (premium portret) w hero lub manifeście — twarz buduje zaufanie B2B.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card accent">
+    <h3>Stack techniczny (rekomendacja)</h3>
+    <p class="kv">Framer albo Astro + Tailwind na <code>tomekwaligora.com</code>. Formularze → Beehiiv API (newsletter) + prosty mailer (raport). Hosting: Vercel/Netlify. <b>Faza 1 = long-scroll one-pager</b> (dni, nie tygodnie). Podstrony <code>/oferta</code> <code>/wiedza</code> <code>/o-mnie</code> dokładasz w Fazie 2, gdy ruch to uzasadni.</p>
+  </div>
+
+  <!-- ===== TC ===== -->
+  <div class="tc">
+    <h3>Truth Checker</h3>
+    <dl>
+      <dt>Co wiem</dt>
+      <dd>Copy i sekcje zbudowane z potwierdzonych assetów: tagline, frameworki, tezy 2030, oferta AIcommerce, rekomendacja Beehiiv — wszystko jest w folderze. Analiza Kallaway wprost wskazuje lukę „Packaging/Aura", którą ksywka domyka.</dd>
+      <dt>Co zakładam</dt>
+      <dd>Że domena <code>tomekwaligora.com</code> i handle Ecommerce Yoda (IG/LinkedIn/YT) są wolne. Że jasna paleta + akcent Yoda-green pasuje. Że one-pager-first jest OK zamiast od razu multi-page. Że chcesz raport jako gated lead magnet, nie open access.</dd>
+      <dt>Co może być błędne</dt>
+      <dd>Motyw Yoda dobrany dawkowaniem — przegięty ton Jedi w każdym zdaniu = cringe i podcina premium. Ryzyko IP: „Yoda" jako persona/ton jest OK, ale nazwa firmy/domena/znak towarowy z „Yoda" to proszenie się o list od Disneya. Możliwe, że anglojęzyczny enterprise powinien widzieć głównie nazwisko, a Yoda-ość dozować w contencie.</dd>
+      <dt>Co zweryfikować</dt>
+      <dd>(1) Domena <code>tomekwaligora.com</code> + handle Ecommerce Yoda wolne na IG/LinkedIn/YT. (2) Czy gated raport, czy open. (3) Jaki pierwszy proof-of-work artefakt shippujemy (live demo / audyt na żywo). (4) Konsultacja IP: jak daleko można pójść z motywem Yoda bez ryzyka prawnego.</dd>
+      <dt>Co poprawiłbym z jednym inputem</dt>
+      <dd>Wybierz: <b>one-pager teraz</b> czy <b>od razu multi-page</b> — i jak mocno dawkować ton Yoda (od subtelnego akcentu po pełną personę). Wtedy doprecyzuję wireframe do realnego buildu i napiszę pełny copy każdej podstrony w tym tonie.</dd>
+    </dl>
+  </div>
+
+  <p class="foot">Projekt strony tomekwaligora.com + ksywka · uzupełnienie do Planu Imperium · Opus 4.8 · 2026-06-30</p>
+
+</div>
+</section>
+</body>
+</html>
