@@ -1337,6 +1337,22 @@ SPRAWDZENIE PRAWDY
 <p>To NIE marketing. To <strong>empiryczny fakt</strong>. Dane do pitchu Plichta + Setup Boy Pro+.</p>` },
 
 // =========== DECISIONS & TODOS ===========
+{ id: "d-eel-samouczenie", category: "decision", title: "⭐ EEL — Samouczenie (self-learning loop reguł)", tags: ["eel", "samouczenie", "rules-loop", "05.07.2026"], status: "research-preview", hot: true,
+  relevance: ["Tomek", "EEL"],
+  summary: "Pętla która karmi bazę reguł z każdego audytu, nie z teorii. 6 kroków: SKAN → OBSERWACJA → LUKA → CHWYTANIE → COMMIT → WZROST. Reguła ma dom, jest czytana, rośnie z pracy — nie gnije.",
+  source: "Projects/Ecomms_Activation_Agency/ALGORYTM_REKO.md",
+  body: `<h4>6 kroków pętli</h4>
+<ol><li><strong>SKAN</strong> — audyt klienta jak zwykle</li><li><strong>OBSERWACJA</strong> — pole = werdykty wg reguł, nie puste</li><li><strong>LUKA</strong> — obserwacja-sierota (nie pasuje do żadnej reguły)</li><li><strong>CHWYTANIE</strong> — <code>@reg</code> hook, w locie</li><li><strong>COMMIT</strong> — do rejestru z polem <code>krok</code></li><li><strong>WZROST</strong> — następny skan już używa + zwrotka nudge do eel-po</li></ol>
+<h4>4 filary</h4>
+<ul><li><strong>Rejestr reguł</strong> <code>rules.json</code> — klucz zarządzania = KROK/funkcja algorytmu który regułę czyta</li><li><strong>Konsumpcja</strong> — reguły wpięte w krok 2 jako checklista obserwacji + mapa wsadów per krok (nie leżą martwe)</li><li><strong>Chwytanie luk</strong> — <code>@reg</code> hook → kolejka</li><li><strong>Zwrotka</strong> — nudge do eel-po żeby nie gniło (jak preference_signals)</li></ul>
+<h4>Różnica od stanu sprzed</h4>
+<p>Reguła ma dom → jest czytana → rośnie z pracy → nie gnije. Samouczenie = pętla, nie jednorazowa naprawa.</p>
+<h4>Stan (05.07.2026)</h4>
+<p><strong>Zbudowane:</strong> <code>rules.json</code> + <code>rules_loop.py</code> + testy 4/4, <code>@reg</code> hook w <code>promote-knowledge.js</code> (e2e OK), research 5× <code>EXTERNAL_*.md</code>, <code>DEMO_OBSERWACJE.html</code>.</p>
+<p><strong>Zaprojektowane (koncepcja w algorytmie):</strong> mechanizm obserwacje=ocena, konsolidacja ~600 reguł, skala 0-100+próg+waga, dwa widoki (klient/Tomek).</p>
+<h4>Linki</h4>
+<ul><li><code>Projects/Ecomms_Activation_Agency/ALGORYTM_REKO.md</code></li><li><code>Projects/Ecomms_Activation_Agency/NOTKA_SP_ROZWIAZANE_ALGORYTMEM.md</code></li><li><code>Projects/Ecomms_Activation_Agency/scripts/rules_loop.py</code></li></ul>` },
+
 { id: "d-cortex-arch", category: "decision", title: "Cortex v2 architektura — Lab vs Production", tags: ["cortex", "architecture", "decision"], status: "live",
   relevance: ["Tomek", "Cortex"],
   summary: "Decyzja v6: Lab w Agent Teams CLI (debugowalne) + Production w Agent SDK Python (deployment).",
