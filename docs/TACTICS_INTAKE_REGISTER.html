@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>EEL Tactics Intake Register</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f8f6;color:#1a1a1a;font-size:14px;line-height:1.55}
+.top-bar{background:#1a1a1a;color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.top-bar h1{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.top-bar .meta{font-size:12px;color:#aaa}
+.container{max-width:1100px;margin:0 auto;padding:24px 20px}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#888;margin:28px 0 10px}
+.source-card{background:#fff;border:1px solid #e8e8e8;border-radius:8px;margin-bottom:16px;overflow:hidden}
+.source-header{padding:14px 18px;border-bottom:1px solid #f0f0f0;display:flex;gap:12px;align-items:flex-start}
+.source-badge{background:#1a1a1a;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;margin-top:2px}
+.source-badge.yt{background:#c4262e}
+.source-badge.article{background:#2563eb}
+.source-title{font-size:15px;font-weight:700;line-height:1.3}
+.source-meta{font-size:12px;color:#666;margin-top:3px}
+.source-meta a{color:#2563eb;text-decoration:none}
+.tactics-list{padding:0}
+.tactic-row{border-bottom:1px solid #f4f4f4;display:grid;grid-template-columns:1fr 90px 90px 90px;gap:0}
+.tactic-row:last-child{border-bottom:none}
+.tactic-main{padding:12px 18px}
+.tactic-name{font-size:13px;font-weight:700;margin-bottom:4px}
+.tactic-desc{font-size:12px;color:#555;line-height:1.5}
+.tactic-tags{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.tag{font-size:10px;padding:2px 7px;border-radius:3px;font-weight:600;background:#f0f0f0;color:#555}
+.tag.aov{background:#fef3c7;color:#92400e}
+.tag.cr{background:#dbeafe;color:#1e40af}
+.tag.discovery{background:#d1fae5;color:#065f46}
+.tag.atf{background:#ede9fe;color:#5b21b6}
+.tag.images{background:#fce7f3;color:#9d174d}
+.tag.psychology{background:#fff7ed;color:#9a3412}
+.tag.lp{background:#ecfdf5;color:#064e3b}
+.tag.new{background:#fef08a;color:#713f12;border:1px solid #eab308}
+.tactic-cell{padding:12px 10px;display:flex;align-items:flex-start;justify-content:center;border-left:1px solid #f4f4f4}
+.status-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;text-align:center;white-space:nowrap}
+.status-badge.backlog{background:#f1f5f9;color:#64748b}
+.status-badge.do-testu{background:#fef3c7;color:#92400e}
+.status-badge.testuje{background:#dbeafe;color:#1e40af}
+.status-badge.ok{background:#d1fae5;color:#065f46}
+.status-badge.odrzucone{background:#fee2e2;color:#991b1b}
+.eel-badge{font-size:10px;padding:2px 6px;background:#ede9fe;color:#5b21b6;border-radius:3px;font-weight:600;white-space:nowrap}
+.article-seed{font-size:10px;padding:2px 6px;background:#fff7ed;color:#9a3412;border-radius:3px;font-weight:600;white-space:nowrap;cursor:default}
+.col-header{padding:8px 10px;font-size:10px;font-weight:700;text-transform:uppercase;color:#999;border-left:1px solid #f4f4f4;text-align:center}
+.col-header:first-child{border-left:none;padding-left:18px;text-align:left}
+.table-header{display:grid;grid-template-columns:1fr 90px 90px 90px;background:#fafafa;border-bottom:2px solid #eee}
+.filters{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.filter-btn{padding:6px 14px;border:1px solid #ddd;border-radius:20px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;color:#444}
+.filter-btn:hover,.filter-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px}
+.stat-box{background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:14px 16px}
+.stat-num{font-size:24px;font-weight:800;line-height:1}
+.stat-label{font-size:11px;color:#888;margin-top:4px}
+.note{background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:10px 14px;font-size:12px;color:#78350f;margin-bottom:20px}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>EEL · Tactics Intake Register</h1>
+  <span class="meta">Rejestr zewnętrznych taktyk → eksperymenty · artykuły · nowe kryteria</span>
+</div>
+
+<div class="container">
+
+  <div class="note">📥 <strong>Cel:</strong> każde wartościowe video/artykuł/case study → taktyki tutaj. Status: backlog → do testu → testuje → OK/odrzucone. Kolumna EEL mapuje gdzie wchodzi do kryteriów. Kolumna Artykuł = seed do własnego contentu.</div>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num">11</div><div class="stat-label">taktyk łącznie</div></div>
+    <div class="stat-box"><div class="stat-num">11</div><div class="stat-label">backlog</div></div>
+    <div class="stat-box"><div class="stat-num">0</div><div class="stat-label">w teście</div></div>
+    <div class="stat-box"><div class="stat-num">0</div><div class="stat-label">zwalidowane</div></div>
+    <div class="stat-box"><div class="stat-num">1</div><div class="stat-label">źródeł</div></div>
+  </div>
+
+  <!-- SOURCE 01 -->
+  <div class="section-label">Źródło #001 · 2026-07-14</div>
+  <div class="source-card">
+    <div class="source-header">
+      <span class="source-badge yt">YT</span>
+      <div>
+        <div class="source-title">I Studied 1,000 Shopify Stores, Here's What Works in 2026</div>
+        <div class="source-meta">Arsh Sanwarwala (ThrillX) · 15:05 · <a href="https://www.youtube.com/watch?v=2Azr4Cihay4" target="_blank">youtube.com/watch?v=2Azr4Cihay4</a> · 2026-06-11</div>
+      </div>
+    </div>
+
+    <div class="table-header">
+      <div class="col-header">Taktyka</div>
+      <div class="col-header">Status</div>
+      <div class="col-header">EEL →</div>
+      <div class="col-header">Artykuł seed</div>
+    </div>
+
+    <!-- TACTIC 01 -->
+    <div class="tactics-list">
+
+      <div class="tactic-row">
+        <div class="tactic-main">
+          <div class="tactic-name">T001 · Dedykowana LP zamiast product page dla zimnego ruchu</div>
+          <div class="tactic-desc">Reklamy skalowane powyżej ~mid 5-fig/mies → zimna audience nie konwertuje na product page. LP = salesperson: 3-4 sekcje value prop (dlaczego klient ma dbać) + masywny social proof + FAQ (objections) + FUD reducer (gwarancja, zwroty). Jedna LP per wygrywająca reklama / offer angle / segment.</div>
+          <div class="tactic-tags"><span class="tag lp">LP</span><span class="tag cr">CR</span><span class="tag new">NEW</span></div>
+        </div>
+        <div class="tactic-cell"><span class="status-badge backlog">backlog</span></div>
+        <div class="tactic-cell"><span class="eel-badge">LP audit</span></div>
+        <div class="tactic-cell"><span class="article-seed">LP vs PDP</span></div>
+      </div>
+
+      <div class="tactic-row">
+        <div class="tactic-main">
+          <div class="tactic-name">T002 · Wiele LP jednocześnie (per ad, per angle, per audience)</div>
+          <div class="tactic-desc">Największe sklepy mają 100+ LP live. Nie jedna LP na sklep — osobna na każdą wygrywającą reklamę, każdy offer angle, każdy segment. Więcej LP = więcej danych, więcej testów, wyższy łączny ROAS.</div>
+          <div class="tactic-tags"><span class="tag lp">LP</span><span class="tag cr">CR</span></div>
+        </div>
+        <div class="tactic-cell"><span class="status-badge backlog">backlog</span></div>
+        <div class="tactic-cell"><span class="eel-badge">LP audit</span></div>
+        <div class="tactic-cell"><span class="article-seed">LP scaling</span></div>
+      </div>
+
+      <div class="tactic-row">
+        <div class="tactic-main">
+          <div class="tactic-name">T003 · "Metric on fire" — GA4 funnel view product rate</div>
+          <div class="tactic-desc">Raport GA4: landing → view product → add to cart → checkout. Benchmark view product rate: 50–70%. Jeśli poniżej → fix product discovery FIRST, nie checkout. Poprawa view product rate → naturalny lift CR przez większy wolumen downstream. Najczęściej przeoczany wyciek.</div>
+          <div class="tactic-tags"><span class="tag discovery">discovery</span><span class="tag cr">CR</span><span class="tag new">NEW</span></div>
+        </div>
+        <div class="tactic-cell"><span class="status-badge backlog">backlog</span></div>
+        <div class="tactic-cell"><span class="eel-badge">GA4 [4]</span></div>
+        <div class="tactic-cell"><span class="article-seed">funnel leak</span></div>
+      </div>
+
+      <div class="tactic-row">
+        <div class="tactic-main">
+          <div class="tactic-name">T004 · Nawigacja: visual icons + secondary nav dla non-shop linków</div>
+          <div class="tactic-desc">Top nav: tylko shop-related items (kategorie, bestsellery). About / blog / reviews / kontakt → przenieść do secondary nav lub footer. Ikony/obrazki przy kategoriach zamiast czystego tekstu. Przykład klienta: gas mask store → +60.7% CR po nawigacji.</div>
+          <div class="tactic-tags"><span class="tag discovery">discovery</span><span class="tag cr">CR</span></div>
+        </div>
+        <div class="tactic-cell"><span class="status-badge backlog">backlog</span></div>
+        <div class="tactic-cell"><span class="eel-badge">nav element</span></div>
+        <div class="tactic-cell"><span class="article-seed">nav CRO</span></div>
+      </div>
+
+      <div class="tactic-row">
+        <div class="tactic-main">
+          <div class="tactic-name">T005 · Eksponuj search bar (nie chowaj)</div>
+          <div class="tactic-desc">Wyszukujący kupują 2–4× częściej niż nieszukający. Wyeksponowanie search bar = więcej wyszukiwań = wyższy CR. Klient medical (3000+ produktów): +48% CR samym expose search bar. Szczególnie ważne dla sklepów z dużym katalogiem.</div>
+          <div class="tactic-tags"><span class="tag discovery">discovery</span><span class="tag cr">CR</span></div>
+        </div>
+        <div class="tactic-cell"><span class="status-badge backlog">backlog</span></div>
+        <div class="tactic-cell"><span class="eel-badge">search elem</span></div>
+        <div class="tactic-cell"><span class="article-seed">search CR</span></div>
+      </div>
+
+      <div class="tactic-row">
+        <div class="tactic-main">
+          <div class="tactic-name">T006 · Headline z języka klientów (post-purchase surveys)</div>
+          <div class="tactic-desc">Najlepsze headline to nie copywriting z głowy — to dosłowne frazy klientów. Metoda: post-purchase survey (Akendo) — "co Cię zmotywowało?" + "co prawie Cię powstrzymało?" + "jakie info było brakujące?". Alternatywa: UserBrain (real user testing) lub po prostu telefon do klienta. Inject dosłownych słów do headline/sub-headline.</div>
+          <div class="tactic-tags"><span class="tag atf">ATF</span><span class="tag cr">CR</span><span class="tag new">NEW</span></div>
+        </div>
+        <div class="tactic-cell"><span class="status-badge backlog">backlog</span></div>
+        <div class="tactic-cell"><span class="eel-badge">ATF / copy</span></div>
+        <div class="tactic-cell"><span class="article-seed">VOC copy</span></div>
+      </div>
+
+      <div class="tactic-row">
+        <div class="tactic-main">
+          <div class="tactic-name">T007 · Social proof ponad ATF (nie w środku, nie na dole)</div>
+          <div class="tactic-desc">Reviews / testimonials / press logos ZAWSZE first position — widoczne above the fold. 60% użytkowników nie scrolluje — jeśli social proof jest "gdzieś niżej", 60% go nie zobaczy. Mental model: gdyby salesman miał 30 sekund, zacząłby od dowodu społecznego.</div>
+          <div class="tactic-tags"><span class="tag atf">ATF</span><span class="tag cr">CR</span></div>
+        </div>
+        <div class="tactic-cell"><span class="status-badge backlog">backlog</span></div>
+        <div class="tactic-cell"><span class="eel-badge">ATF elem</span></div>
+        <div class="tactic-cell"><span class="article-seed">social proof</span></div>
+      </div>
+
+      <div class="tactic-row">
+        <div class="tactic-main">
+          <div class="tactic-name">T008 · 3 soczewki zakupu: Functional × Social × Emotional</div>
+          <div class="tactic-desc">Ludzie kupują przez 3 soczewki jednocześnie. Functional: co robi, mechanizm, dane. Social: jak będę postrzegany (status). Emotional: jak się będę czuć. Mental check per element strony — każda sekcja value prop, każdy testimonial, każde zdjęcie: "czy trafiam w F+S+E?". Słabe sklepy = jedna soczewka. Najlepsze = wszystkie trzy wszędzie.</div>
+          <div class="tactic-tags"><span class="tag psychology">psychologia</span><span class="tag cr">CR</span><span class="tag new">NEW</span></div>
+        </div>
+        <div class="tactic-cell"><span class="status-badge backlog">backlog</span></div>
+        <div class="tactic-cell"><span class="eel-badge">vision check</span></div>
+        <div class="tactic-cell"><span class="article-seed">3 lens copy</span></div>
+      </div>
+
+      <div class="tactic-row">
+        <div class="tactic-main">
+          <div class="tactic-name">T009 · Cart drawer: dwa progi (shipping + free gift)</div>
+          <div class="tactic-desc">Standard: jeden próg (free shipping). Upgrade: drugi próg = free gift (high-margin produkt z katalogu). Klient odblokuje prezent dodając więcej do koszyka. "Jeden z największych AOV moverów." Implementacja: dowolna Shopify cart upsell app z multi-threshold support.</div>
+          <div class="tactic-tags"><span class="tag aov">AOV</span><span class="tag new">NEW</span></div>
+        </div>
+        <div class="tactic-cell"><span class="status-badge backlog">backlog</span></div>
+        <div class="tactic-cell"><span class="eel-badge">cart elem</span></div>
+        <div class="tactic-cell"><span class="article-seed">AOV cart</span></div>
+      </div>
+
+      <div class="tactic-row">
+        <div class="tactic-main">
+          <div class="tactic-name">T010 · Post-purchase upsell (wyższy take rate niż pre-checkout)</div>
+          <div class="tactic-desc">Pop-up z ofertą dodatkowego produktu 30–40% taniej — pojawia się PO zakupie, w trakcie/zaraz po checkout. Take rate wyższy niż pre-checkout popup bo klient jest "już hot" — przełamał opór zakupowy. Zaskakująco wysoki % akceptacji nawet na droższych ofertach.</div>
+          <div class="tactic-tags"><span class="tag aov">AOV</span></div>
+        </div>
+        <div class="tactic-cell"><span class="status-badge backlog">backlog</span></div>
+        <div class="tactic-cell"><span class="eel-badge">post-purch</span></div>
+        <div class="tactic-cell"><span class="article-seed">upsell timing</span></div>
+      </div>
+
+      <div class="tactic-row">
+        <div class="tactic-main">
+          <div class="tactic-name">T011 · Karuzela produktowa jako pełna historia (7 elementów)</div>
+          <div class="tactic-desc">Karuzela = element najczęściej klikany na PDP. Kupujący przeglądają karuzele → decyzja bez czytania tekstu. Kolejność (elastyczna): (1) clean product shot → (2) pain point visualization → (3) comparison vs alternatywy → (4) how it works graphic → (5) social proof grafiki (customer photos) → (6) reviews grafika → (7) lifestyle → (8) risk reversal/guarantee. Cel: "po przejściu karuzeli klient sprzedany bez jednej linii tekstu".</div>
+          <div class="tactic-tags"><span class="tag images">images</span><span class="tag cr">CR</span><span class="tag new">NEW</span></div>
+        </div>
+        <div class="tactic-cell"><span class="status-badge backlog">backlog</span></div>
+        <div class="tactic-cell"><span class="eel-badge">SI audit</span></div>
+        <div class="tactic-cell"><span class="article-seed">image story</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="margin-top:32px;padding:16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-size:12px;color:#14532d">
+    <strong>Jak dodawać nowe źródło:</strong> Skopiuj blok SOURCE CARD z tactics-list. Zmień numer źródła i numer taktyki (T012, T013...). Zaktualizuj statystyki ręcznie (lub poproś Claude). Każda taktyka → status backlog → po teście zmień na OK/odrzucone.
+  </div>
+
+</div>
+</body>
+</html>
