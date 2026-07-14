@@ -265,7 +265,10 @@ function aggregateRange(s,e){
       m.viewed+=p.viewed||0;m.atc+=p.atc||0;m.purchased+=p.purchased||0;m.revenue+=p.revenue||0;
     });
     (d.landing_atc||[]).forEach(p=>{
-      const m=out.landingMap[p.page]||(out.landingMap[p.page]={page:p.page,sessions:0,atc:0,transactions:0,revenue:0});
+      if(/-kopia/i.test(p.page))return; // testowe produkty → skip
+      // normalizuj /collections/X/products/Y → /products/Y (dedup duplikatów URL)
+      const pg=p.page.replace(/\/collections\/[^/]+\/products\//,'/products/');
+      const m=out.landingMap[pg]||(out.landingMap[pg]={page:pg,sessions:0,atc:0,transactions:0,revenue:0});
       m.sessions+=p.sessions||0;m.atc+=p.atc||0;m.transactions+=p.transactions||0;m.revenue+=p.revenue||0;
     });
     (d.newret||[]).forEach(nr=>{
@@ -449,8 +452,8 @@ function renderLanding(d){
     return ['• OK','b-blue'];
   };
   let h=`<h2><span class="r">R04</span> Strony wejścia &amp; ATC%</h2>
-  <div class="what">Które landingi budują intencję zakupową? ATC% = sesje z koszykiem / sesje.</div>
-  <span class="dl">landingPagePlusQueryString · sessions · addToCarts · transactions · revenue · country=Poland</span>
+  <div class="what">Które landingi budują intencję zakupową? ATC% = addToCarts / sesje (zdarzenia, nie unikalne sesje).</div>
+  <span class="dl">landingPagePlusQueryString · sessions · addToCarts · transactions · revenue · country=Poland · URL znormalizowane (/collections/X/products/Y → /products/Y)</span>
   <table><tr><th>Strona</th><th>Sesje</th><th>ATC</th><th>ATC%</th><th>Zakupy</th><th>CR</th><th>Ocena</th></tr>`;
   lp.forEach(x=>{
     const atcp=x.sessions?x.atc/x.sessions*100:0;
