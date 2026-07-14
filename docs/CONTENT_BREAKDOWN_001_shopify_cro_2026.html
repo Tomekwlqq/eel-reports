@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Content Breakdown #001 — Shopify CRO 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;color:#1a1a1a;font-size:14px;line-height:1.6}
+.top{background:#1a1a1a;color:#fff;padding:16px 28px;position:sticky;top:0;z-index:100}
+.top h1{font-size:15px;font-weight:700}
+.top .sub{font-size:12px;color:#aaa;margin-top:2px}
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.sidebar{background:#f8f8f6;border-right:1px solid #eee;padding:20px 16px;position:sticky;top:49px;height:calc(100vh - 49px);overflow-y:auto}
+.sidebar-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#999;margin:18px 0 8px}
+.sidebar-label:first-child{margin-top:0}
+.nav-item{display:block;padding:6px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#555;text-decoration:none;margin-bottom:2px;cursor:pointer;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover,.nav-item.active{background:#1a1a1a;color:#fff}
+.main{padding:32px 36px;max-width:820px}
+.source-meta{background:#f8f8f6;border:1px solid #eee;border-radius:8px;padding:16px 20px;margin-bottom:28px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.source-meta .row{font-size:12px;color:#555}
+.source-meta .row strong{color:#1a1a1a}
+.source-meta a{color:#2563eb;text-decoration:none}
+.pattern{margin-bottom:36px;border:1px solid #eee;border-radius:10px;overflow:hidden}
+.pattern-header{padding:14px 20px;background:#1a1a1a;color:#fff;display:flex;align-items:center;gap:12px}
+.pattern-num{font-size:10px;font-weight:700;background:#fff;color:#1a1a1a;padding:3px 8px;border-radius:4px}
+.pattern-title{font-size:15px;font-weight:700}
+.pattern-ts{font-size:11px;color:#888;margin-left:auto}
+.pattern-body{padding:0}
+.block{padding:14px 20px;border-bottom:1px solid #f4f4f4}
+.block:last-child{border-bottom:none}
+.block-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:6px}
+.block-content{font-size:13px;color:#333;line-height:1.65}
+.block-content ul{margin:6px 0 0 16px}
+.block-content ul li{margin-bottom:4px}
+.block-content strong{color:#1a1a1a}
+.block-content em{color:#555;font-style:normal;background:#fffbeb;padding:1px 4px;border-radius:3px}
+.quote{background:#f8f8f6;border-left:3px solid #ddd;padding:10px 14px;margin:8px 0;font-size:13px;color:#555;font-style:italic}
+.data-point{display:inline-flex;align-items:center;gap:6px;background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;margin:2px}
+.data-point.green{background:#d1fae5;color:#065f46}
+.data-point.amber{background:#fef3c7;color:#92400e}
+.tool-chip{display:inline-block;background:#ede9fe;color:#5b21b6;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin:2px}
+.eel-map{background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:12px 16px;margin-top:10px}
+.eel-map-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#92400e;margin-bottom:6px}
+.eel-map-content{font-size:12px;color:#78350f;line-height:1.6}
+.eel-map-content ul{margin:4px 0 0 14px}
+.divider{border:none;border-top:2px solid #1a1a1a;margin:32px 0}
+h2.section{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#888;margin:32px 0 16px}
+.criteria-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:28px}
+.criteria-table th{background:#1a1a1a;color:#fff;padding:8px 12px;text-align:left;font-weight:700}
+.criteria-table td{padding:8px 12px;border-bottom:1px solid #f0f0f0;vertical-align:top}
+.criteria-table tr:nth-child(even) td{background:#fafafa}
+.priority{font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px}
+.p0{background:#fee2e2;color:#991b1b}
+.p1{background:#fef3c7;color:#92400e}
+.p2{background:#dbeafe;color:#1e40af}
+.footer{padding:32px 36px;border-top:2px solid #eee;font-size:11px;color:#999}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>Content Breakdown #001 — Shopify CRO 2026</h1>
+  <div class="sub">Pełny transkrypt po kolei + mapowanie EEL</div>
+</div>
+
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-label">Wzorce</div>
+  <a class="nav-item" href="#p1">P1 · LP > Product Page</a>
+  <a class="nav-item" href="#p2">P2 · Product Discovery</a>
+  <a class="nav-item" href="#p3">P3 · Above the Fold</a>
+  <a class="nav-item" href="#p4">P4 · 3 Lenses of Buying</a>
+  <a class="nav-item" href="#p5">P5 · AOV Optimization</a>
+  <a class="nav-item" href="#p6">P6 · Product Images Story</a>
+  <div class="sidebar-label">Analiza</div>
+  <a class="nav-item" href="#eel-mapping">Mapowanie EEL</a>
+  <a class="nav-item" href="#narzedzia">Narzędzia</a>
+</nav>
+
+<div class="main">
+
+  <div class="source-meta">
+    <div class="row"><strong>Tytuł:</strong> I Studied 1,000 Shopify Stores, Here's What Works in 2026</div>
+    <div class="row"><strong>Autor:</strong> Arsh Sanwarwala (ThrillX)</div>
+    <div class="row"><strong>Data:</strong> 2026-06-11 · Czas: 15:05</div>
+    <div class="row"><strong>URL:</strong> <a href="https://www.youtube.com/watch?v=2Azr4Cihay4" target="_blank">youtube.com/watch?v=2Azr4Cihay4</a></div>
+    <div class="row"><strong>Intake:</strong> 2026-07-14 · Taktyki: T001–T011</div>
+    <div class="row"><strong>Kontekst:</strong> Agencja LP/CRO, klienci mid-6-fig/mies ad spend</div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="block" style="background:#f8f8f6;border-radius:8px;margin-bottom:20px;border:1px solid #eee">
+    <div class="block-label">Intro (0:00–0:25)</div>
+    <div class="block-content">
+      <ul>
+        <li>Arsh badał 1000+ Shopify stores przez kilka lat</li>
+        <li>Podział: sklepy 8–10 figure vs "bleeding money for every visit they pay for"</li>
+        <li>Wzorce powtarzają się u wygrywających</li>
+        <li><strong>Kluczowa teza:</strong> większość porad CRO pochodzi z 2022 — rynek funkcjonuje zupełnie inaczej teraz</li>
+        <li>6 wzorców = co odróżnia konwertujące sklepy w 2026</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PATTERN 1 -->
+  <div class="pattern" id="p1">
+    <div class="pattern-header">
+      <span class="pattern-num">WZORZEC 1</span>
+      <span class="pattern-title">LP > Product Page dla zimnego ruchu</span>
+      <span class="pattern-ts">0:25</span>
+    </div>
+    <div class="pattern-body">
+
+      <div class="block">
+        <div class="block-label">Problem — co robią małe marki</div>
+        <div class="block-content">
+          <ul>
+            <li>Wysyłają ruch z reklam wprost na product page</li>
+            <li>Na niskich budżetach: Meta targetuje hot leads (ludzie aktywnie szukający produktu) → działa</li>
+            <li>Przy skalowaniu (mid 5-fig, 6-fig/mies): trafiasz na coraz zimniejszą audience</li>
+            <li>Zimny użytkownik kliknął bo coś przykuło uwagę w feedzie — nie szuka produktu</li>
+            <li>Generic product page = "asking people to make a buying decision with almost nothing to go off of"</li>
+            <li>Market 2026: hiperkonkurencyjny, klient bombardowany dziesiątkami reklam dziennie</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Rozwiązanie — LP jako salesperson</div>
+        <div class="block-content">
+          <ul>
+            <li><strong>Step 1:</strong> Dedykowana landing page dla każdego zimnego ruchu</li>
+            <li><strong>Step 2:</strong> Traktuj LP jak sprzedawcę — musi przekonać, nie tylko pokazać</li>
+            <li>Minimum 3–4 sekcje value prop: dlaczego klient powinien dbać, co unikalne w produkcie, pozycja "z perspektywy dlaczego klient ma dbać"</li>
+            <li>Masywny social proof: video testimonials + UGC content + zwykłe reviews</li>
+            <li>Obsługa obiekcji: sekcja FAQ</li>
+            <li>Redukcja FUD (Fear, Uncertainty, Doubt): return policy, money-back guarantee</li>
+          </ul>
+          <div class="quote">"A landing page is like a salesperson. And if you're going to spend thousands upon thousands of dollars on ads, why would you not spend thousands on optimizing your landing pages?"</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Matematyka — dlaczego to krytyczne</div>
+        <div class="block-content">
+          <ul>
+            <li>Ty i konkurent: obaj $100K/mies na reklamy</li>
+            <li>Ty: 2% CR → X klientów</li>
+            <li>Konkurent: 4% CR → 2× więcej klientów za ten sam budżet</li>
+            <li>Długoterminowo: konkurent outscaluje i outcompetuje cię z rynku</li>
+          </ul>
+          <span class="data-point amber">2% vs 4% CR = 2× różnica przy tym samym spend</span>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Wielokrotne LP — advanced</div>
+        <div class="block-content">
+          <ul>
+            <li>Nie jedna LP na sklep — to minimum</li>
+            <li>Osobna LP per: wygrywająca reklama / offer angle / segment audiencji</li>
+            <li>Duzi klienci agencji: <strong>100+ LP live jednocześnie</strong></li>
+            <li>Stała produkcja i testowanie nowych LP</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="eel-map">
+        <div class="eel-map-label">📋 Mapowanie EEL</div>
+        <div class="eel-map-content">
+          <ul>
+            <li>Nowe kryterium: czy sklep ma dedykowane LP per ad/angle? (warstwa ads/paid)</li>
+            <li>LP audit checklist: value props (min 3) · social proof (3 typy) · FAQ (min 5 Q) · FUD reducer</li>
+            <li>Pytanie auditowe: "skąd idzie paid traffic — bezpośrednio na PDP?" → flag jeśli tak przy dużym spend</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PATTERN 2 -->
+  <div class="pattern" id="p2">
+    <div class="pattern-header">
+      <span class="pattern-num">WZORZEC 2</span>
+      <span class="pattern-title">Product Discovery — "Metric on Fire"</span>
+      <span class="pattern-ts">1:36</span>
+    </div>
+    <div class="pattern-body">
+
+      <div class="block">
+        <div class="block-label">Stary mindset (2022) — błąd</div>
+        <div class="block-content">
+          <ul>
+            <li>Fokus na: product page, checkout, add to cart → bottom of funnel</li>
+            <li>Teza Arsha: "contrary to popular belief, this is NEVER where the actual leak is"</li>
+            <li>Marketing = ecosystem, nie single touchpoint</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Buyer journey — realna ścieżka</div>
+        <div class="block-content">
+          <ul>
+            <li>Instagram ad → klik → nie konwertuje</li>
+            <li>Potem: Google (wyszukanie marki) → homepage → paid retargeting → YouTube review → LP → PDP → zakup</li>
+            <li>Konwersja nigdy nie dzieje się na pierwszym touchpoincie</li>
+            <li>Optymalizując tylko LP lub PDP: tracisz kupujących bo nie optymalizujesz wszystkich touchpointów</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Framework "Metric on Fire"</div>
+        <div class="block-content">
+          <ul>
+            <li>Każda marka ma <em>jedną metrykę</em> w której jest underindexed — to jest "metric on fire"</li>
+            <li>GA4 raport: landing → view product → add to cart → checkout</li>
+            <li>Benchmark: <strong>View Product Rate = 50–70%</strong></li>
+            <li>View product rate jest najczęściej underperforming metryką w Shopify stores</li>
+            <li>Mechanizm: jeśli więcej ludzi widzi produkty → więcej wolumenu w add to cart i checkout → CR rośnie naturalnie</li>
+            <li>"If you're able to get more people to view your product, your conversion rate will go up as a natural byproduct"</li>
+          </ul>
+          <span class="data-point">View Product Rate benchmark: 50–70%</span>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Dźwignia 1: Nawigacja</div>
+        <div class="block-content">
+          <ul>
+            <li>Użyj visual icons i imagery zamiast czystego tekstu przy kategoriach</li>
+            <li>Restructuryzuj top nav: TYLKO shop-related items</li>
+            <li>About / blog / reviews → przenieś do secondary navigation</li>
+          </ul>
+          <span class="data-point green">Gas mask klient: +60.7% CR po rewampie nawigacji</span>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Dźwignia 2: Search</div>
+        <div class="block-content">
+          <ul>
+            <li>Ludzie którzy wyszukują: <strong>2–4× bardziej skłonni do zakupu</strong> vs nieszukający</li>
+            <li>Więcej wyszukiwań = więcej konwersji</li>
+            <li>Akcja: expose search bar — wyeksponuj (nie chowaj w hamburgerze)</li>
+            <li>Szczególnie krytyczne dla sklepów z dużym katalogiem</li>
+          </ul>
+          <span class="data-point green">Medical klient (3000+ SKU): +48% CR po expose search bar</span>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Dźwignia 3: Collection Pages</div>
+        <div class="block-content">
+          <ul>
+            <li>Dodaj więcej zdjęć produktów w listingu → wyższy CTR w produkt</li>
+            <li>Scannable specs lub badges → pomagają userowi znaleźć właściwy produkt</li>
+            <li>Cel: zredukuj friction przy wyborze — user ma podjąć decyzję "który chcę" szybciej</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="eel-map">
+        <div class="eel-map-label">📋 Mapowanie EEL</div>
+        <div class="eel-map-content">
+          <ul>
+            <li><strong>GA4:</strong> dodać standardowy raport "metric on fire" — view product rate benchmark 50–70% dla każdego klienta</li>
+            <li><strong>Nav element:</strong> kryterium "nav tylko shop-items + visual icons"</li>
+            <li><strong>Search element:</strong> kryterium "czy search bar jest widoczny bez klikania?"</li>
+            <li><strong>Collection:</strong> kryterium "obrazki produktów + badges/specs w listingu"</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PATTERN 3 -->
+  <div class="pattern" id="p3">
+    <div class="pattern-header">
+      <span class="pattern-num">WZORZEC 3</span>
+      <span class="pattern-title">Killer Above the Fold</span>
+      <span class="pattern-ts">~4:00</span>
+    </div>
+    <div class="pattern-body">
+
+      <div class="block">
+        <div class="block-label">Dlaczego ATF krytyczny</div>
+        <div class="block-content">
+          <ul>
+            <li>ATF = top-most sekcja widoczna od razu po wejściu bez scrollu</li>
+            <li><strong>100% użytkowników widzi ATF</strong></li>
+            <li><strong>60% nigdy nie scrolluje dalej</strong></li>
+            <li>Dla 60% = jedyna szansa na konwersję</li>
+          </ul>
+          <span class="data-point amber">60% nie scrolluje past ATF</span>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Biggest mistake: Headline</div>
+        <div class="block-content">
+          <ul>
+            <li>Najczęstszy błąd: vague headline z jargon</li>
+            <li>Błędne podejście: opisuje kim są i co robią</li>
+            <li><strong>Prawidłowe podejście:</strong> jedna jasna odpowiedź na "why should I care?"</li>
+            <li>Jedna obietnica + jeden tangible benefit = koniec</li>
+            <li>Nie próbuj powiedzieć więcej niż jedno → dilutes the message</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Jak pisać headline — VOC (Voice of Customer)</div>
+        <div class="block-content">
+          <ul>
+            <li><strong>Metoda 1 — Post-purchase surveys:</strong> <span class="tool-chip">Akendo</span></li>
+            <li>Pytania: "Co Cię zmotywowało do zakupu dziś?" + "Co prawie Cię powstrzymało?" + "Jakie informacje były brakujące?"</li>
+            <li><strong>Metoda 2 — User testing z target demographic:</strong> <span class="tool-chip">UserBrain</span></li>
+            <li>Test z realnym target demographic klienta</li>
+            <li><strong>Metoda 3 — telefon do klienta</strong> (dla marek pod kilkuset klientów)</li>
+            <li>Pytania identyczne: motywacja + stopper + brakujące info</li>
+            <li><strong>Krok kluczowy:</strong> zbierz frazy i dosłowne słowa które się powtarzają → inject je bezpośrednio w copy</li>
+          </ul>
+          <div class="quote">"It's so simple, but it's super effective. Take all that customer feedback and the exact phrases they commonly use, and just inject it back into your copy."</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Elementy ATF — kompletna lista</div>
+        <div class="block-content">
+          <ul>
+            <li><strong>Headline:</strong> jedna obietnica z języka klientów</li>
+            <li><strong>Sub-headline:</strong> jak osiągamy co headline obiecuje (uzupełnienie, nie powielenie)</li>
+            <li><strong>Social proof:</strong> reviews / testimonials / featured in logos — zawsze NA GÓRZE, pierwsza pozycja</li>
+            <li><strong>Jeden produkt image:</strong> wizualizacja produktu LUB pożądanego outcome</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="eel-map">
+        <div class="eel-map-label">📋 Mapowanie EEL</div>
+        <div class="eel-map-content">
+          <ul>
+            <li>ATF checklist: headline (jedna obietnica?) · sub-headline (jak osiągamy?) · social proof (na górze?) · product image</li>
+            <li>Nowe kryterium: "czy headline odpowiada 'why should I care?' vs 'kim jesteśmy'?"</li>
+            <li>Nowe kryterium: "czy social proof jest above the fold, nie w środku/na dole?"</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PATTERN 4 -->
+  <div class="pattern" id="p4">
+    <div class="pattern-header">
+      <span class="pattern-num">WZORZEC 4</span>
+      <span class="pattern-title">3 Lenses of Buying: Functional × Social × Emotional</span>
+      <span class="pattern-ts">~7:00</span>
+    </div>
+    <div class="pattern-body">
+
+      <div class="block">
+        <div class="block-label">Framework — trzy soczewki zakupu</div>
+        <div class="block-content">
+          Ludzie nie kupują przez jedną soczewkę — kupują przez trzy jednocześnie.
+          Słabe sklepy trafią w jedną. Najlepsze sklepy trafiają we wszystkie trzy, w każdym elemencie strony.
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Soczewka 1: Functional (logiczna)</div>
+        <div class="block-content">
+          <ul>
+            <li>Pytanie klienta: <em>"Co to robi? Jaki problem rozwiązuje? Jaki mechanizm?"</em></li>
+            <li>Jak trafić: statystyki, before/after, clinical data, składniki, "inner workings"</li>
+            <li>Przykład skincare: dane kliniczne, składniki aktywne, mechanizm działania</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Soczewka 2: Social (status)</div>
+        <div class="block-content">
+          <ul>
+            <li>Pytanie klienta: <em>"Jak będę postrzegany przez innych po zakupie?"</em></li>
+            <li>Generalnie: ludzie chcą być postrzegani jako wyższy status</li>
+            <li>Jak trafić: group photos, lifestyle imagery, testimoniale "dostałem komplement / zostałem zauważony"</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Soczewka 3: Emotional (wewnętrzna)</div>
+        <div class="block-content">
+          <ul>
+            <li>Pytanie klienta: <em>"Jak będę się czuć? (pewniej, spokojniej, w kontroli?)"</em></li>
+            <li>Zależy od oferty</li>
+            <li>Przykład weight-loss: testimoniale "czuję się lepiej w swoim ciele, pewniej w skórze"</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Implementacja — mental check</div>
+        <div class="block-content">
+          <ul>
+            <li>Per każdy element strony: sekcja value prop, każdy testimonial blok, każde zdjęcie</li>
+            <li>Check: <em>"Czy trafiam w Functional + Social + Emotional?"</em></li>
+            <li>Realizowane przez copy i imagery razem</li>
+            <li>"At every nook and corner, you want to try to appeal to all three"</li>
+          </ul>
+          <div class="quote">"Every single value prop section, every image cluster, every testimonial block — always do a mental check comparing it to those three different lenses."</div>
+        </div>
+      </div>
+
+      <div class="eel-map">
+        <div class="eel-map-label">📋 Mapowanie EEL</div>
+        <div class="eel-map-content">
+          <ul>
+            <li>Nowe kryterium vision report: "3-lens check" per sekcja — Functional / Social / Emotional obecne?</li>
+            <li>Obecny audit sprawdza VALUE PROP obecność — nowe kryterium sprawdza JAKOŚĆ (which lens?)</li>
+            <li>Może wejść do checklist_compiler jako warstwa LLM-slot (nie DOM)</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PATTERN 5 -->
+  <div class="pattern" id="p5">
+    <div class="pattern-header">
+      <span class="pattern-num">WZORZEC 5</span>
+      <span class="pattern-title">AOV Optimization — Revenue Per Visitor</span>
+      <span class="pattern-ts">~10:00</span>
+    </div>
+    <div class="pattern-body">
+
+      <div class="block">
+        <div class="block-label">Formuła</div>
+        <div class="block-content">
+          <ul>
+            <li>Większość sklepów optymalizuje tylko CR</li>
+            <li><strong>RPV = CR × AOV</strong> (Revenue Per Visitor)</li>
+            <li>Podnosząc CR i AOV jednocześnie → massive multiplication efekt na revenue</li>
+          </ul>
+          <span class="data-point">RPV = CR × AOV</span>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Strategia 1: Podnieś ceny (AB test)</div>
+        <div class="block-content">
+          <ul>
+            <li>Kontrintuicyjne: podwyżka cen często nie zmienia CR znacząco</li>
+            <li>Wzrost AOV i zysku przewyższa ewentualny spadek CR</li>
+            <li><strong>Kluczowe: ZAWSZE AB test</strong> w kontrolowanym środowisku</li>
+            <li>Narzędzie: <span class="tool-chip">Intelligems</span> — price A/B test z full KPI impact (CR, AOV, revenue)</li>
+            <li>Nigdy nie wdrażaj ceny willy-nilly bez testu</li>
+          </ul>
+          <span class="data-point green">Biżuteria high-end: +$10 → negligible CR impact → +$120K/mies zysku</span>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Strategia 2: Bundles — jak robić dobrze</div>
+        <div class="block-content">
+          <ul>
+            <li>Pokaż image co konkretnie dostajesz w każdym bundle (nie tekst)</li>
+            <li>Pokaż savings w <strong>dolarach ($)</strong>, nie procentach → nie zmuszaj do matematyki</li>
+            <li>Badge "most popular" przy jednym bundle → guiding efekt (social proof)</li>
+            <li>Dodaj warranty do bundle (~100% margin, wysoki take rate szczególnie na drogich produktach)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Strategia 3: Cart Drawer — dwa progi</div>
+        <div class="block-content">
+          <ul>
+            <li>Standard (co wszyscy mają): jeden próg free shipping</li>
+            <li><strong>Upgrade:</strong> dodaj drugi próg = free gift</li>
+            <li>Free gift = high-margin produkt z katalogu klienta</li>
+            <li>"This has been one of the biggest AOV movers for a lot of our clients"</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Strategia 4: Post-Purchase Upsell</div>
+        <div class="block-content">
+          <ul>
+            <li>Pop-up pojawia się <strong>PO zakupie</strong> (w checkout confirmation), nie przed</li>
+            <li>Oferta: inny produkt 30–40% off</li>
+            <li><strong>Take rate wyższy niż pre-checkout</strong> — klient jest "hot", już kupił, przełamał opór</li>
+            <li>"So many people will take you up on this offer, even more so than before checkout"</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="eel-map">
+        <div class="eel-map-label">📋 Mapowanie EEL</div>
+        <div class="eel-map-content">
+          <ul>
+            <li>Cart drawer audit: czy są DWA progi (shipping + gift)? → nowe kryterium</li>
+            <li>Post-purchase upsell: czy istnieje? → nowe kryterium checkout flow</li>
+            <li>Bundle display: czy savings w $ (nie %)? → kryterium jakości bundles</li>
+            <li>Narzędzie Intelligems → dodać do toolbox rekomendacji dla klientów testujących ceny</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PATTERN 6 -->
+  <div class="pattern" id="p6">
+    <div class="pattern-header">
+      <span class="pattern-num">WZORZEC 6</span>
+      <span class="pattern-title">Product Images = Pełna Historia</span>
+      <span class="pattern-ts">~12:30</span>
+    </div>
+    <div class="pattern-body">
+
+      <div class="block">
+        <div class="block-label">Dlaczego images są krytyczne</div>
+        <div class="block-content">
+          <ul>
+            <li><strong>Najczęściej klikany element na product page</strong> (heat map data)</li>
+            <li>Większość kupujących: scrolluje karuzele → decyzja buy/exit → bez czytania tekstu</li>
+            <li>"They will make a buying decision right there and then whether to scroll down or exit your site altogether"</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Poziom 1 (błąd) — różne kąty produktu</div>
+        <div class="block-content">
+          <ul>
+            <li>Product w różnych kątach + lifestyle imagery</li>
+            <li>Problem: "add no contextual relevance or value"</li>
+            <li>Najczęstszy błąd małych marek</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Poziom 2 (lepiej, ale suboptymalnie) — infografiki</div>
+        <div class="block-content">
+          <ul>
+            <li>Combine product image z product text (value props)</li>
+            <li>"Killing two birds with one stone"</li>
+            <li>Co robią established brands</li>
+            <li>Ograniczenie: to wciąż tylko value props — brak pełnej historii</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Poziom 3 (najlepszy) — karuzela jako pełna historia</div>
+        <div class="block-content">
+          Sekwencja (elastyczna kolejność):
+          <ol style="margin:8px 0 0 18px">
+            <li style="margin-bottom:4px"><strong>Clean product shot</strong> — jeden czysty shot produktu</li>
+            <li style="margin-bottom:4px"><strong>Pain point visualization</strong> — wizualizacja problemu który produkt rozwiązuje</li>
+            <li style="margin-bottom:4px"><strong>Comparison vs alternatywy</strong> — dlaczego nasz produkt lepszy od konkurencji/status quo</li>
+            <li style="margin-bottom:4px"><strong>How it works graphic</strong> — mechanizm działania wizualnie</li>
+            <li style="margin-bottom:4px"><strong>Social proof grafiki</strong> — customer photos + reviews (2–3 grafiki)</li>
+            <li style="margin-bottom:4px"><strong>Lifestyle imagery</strong> — produkt w użyciu, aspiracyjny kontekst</li>
+            <li style="margin-bottom:4px"><strong>Risk reversal / guarantee</strong> — grafika z gwarancją</li>
+          </ol>
+          <div class="quote">"By the time somebody goes through your full product image carousel, they should already be sold just by looking through those without even reading a single line of text."</div>
+        </div>
+      </div>
+
+      <div class="eel-map">
+        <div class="eel-map-label">📋 Mapowanie EEL</div>
+        <div class="eel-map-content">
+          <ul>
+            <li><strong>SI audit checklist (Shot Intelligence):</strong> czy karuzela zawiera pain point / comparison / how it works / social proof / guarantee?</li>
+            <li>Obecne SI kategorie (23 typy) uzupełnić o: "Comparison vs competitor", "Pain point visualization", "Risk reversal/guarantee"</li>
+            <li>Nowe kryterium: "czy karuzela opowiada pełną historię (7 elementów) vs same kąty?"</li>
+            <li>Vision report: ocena karuzeli jako "poziom 1 / 2 / 3" per Arsh framework</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider" id="eel-mapping">
+
+  <h2 class="section">Mapowanie na kryteria EEL — co dodać</h2>
+
+  <table class="criteria-table">
+    <thead>
+      <tr>
+        <th>Priorytet</th>
+        <th>Nowe kryterium</th>
+        <th>Gdzie w EEL</th>
+        <th>Źródło</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="priority p0">P0</span></td>
+        <td><strong>GA4 "metric on fire":</strong> view product rate benchmark 50–70%. Raport standard per klient.</td>
+        <td>GA4 warstwa [4], raport standardowy</td>
+        <td>T003</td>
+      </tr>
+      <tr>
+        <td><span class="priority p0">P0</span></td>
+        <td><strong>SI karuzela — 7-elementowa historia.</strong> Checklist: pain point / comparison / how it works / social proof / guarantee</td>
+        <td>SI audit, vision report element</td>
+        <td>T011</td>
+      </tr>
+      <tr>
+        <td><span class="priority p0">P0</span></td>
+        <td><strong>3-lens check per sekcja.</strong> Functional + Social + Emotional w każdym bloku value prop / testimonial</td>
+        <td>Vision report, LLM-slot warstwa</td>
+        <td>T008</td>
+      </tr>
+      <tr>
+        <td><span class="priority p1">P1</span></td>
+        <td><strong>Search bar widoczność.</strong> Czy eksponowany bez klikania? (szczególnie katalog 100+ SKU)</td>
+        <td>Element: header_search_bar, Discovery warstwa</td>
+        <td>T005</td>
+      </tr>
+      <tr>
+        <td><span class="priority p1">P1</span></td>
+        <td><strong>Social proof pozycja.</strong> Czy jest above the fold? (nie środek, nie dół)</td>
+        <td>ATF element, vision report</td>
+        <td>T007</td>
+      </tr>
+      <tr>
+        <td><span class="priority p1">P1</span></td>
+        <td><strong>Cart drawer: dwa progi.</strong> Shipping threshold + free gift threshold</td>
+        <td>Cart/checkout warstwa, AOV element</td>
+        <td>T009</td>
+      </tr>
+      <tr>
+        <td><span class="priority p1">P1</span></td>
+        <td><strong>Post-purchase upsell.</strong> Czy istnieje? (wyższy take rate niż pre-checkout)</td>
+        <td>Checkout flow, AOV warstwa</td>
+        <td>T010</td>
+      </tr>
+      <tr>
+        <td><span class="priority p1">P1</span></td>
+        <td><strong>Nawigacja: top nav tylko shop-items.</strong> O nas / blog / kontakt → secondary</td>
+        <td>Navigation element, Discovery warstwa</td>
+        <td>T004</td>
+      </tr>
+      <tr>
+        <td><span class="priority p2">P2</span></td>
+        <td><strong>Headline VOC check.</strong> Czy odpowiada "why should I care?" vs "kim jesteśmy"?</td>
+        <td>ATF element, copy quality</td>
+        <td>T006</td>
+      </tr>
+      <tr>
+        <td><span class="priority p2">P2</span></td>
+        <td><strong>Bundle display jakość.</strong> Czy savings w $ (nie %?)? Image co dostajesz? "Most popular" badge?</td>
+        <td>Bundle element, AOV warstwa</td>
+        <td>T009</td>
+      </tr>
+      <tr>
+        <td><span class="priority p2">P2</span></td>
+        <td><strong>LP audit: czy paid traffic → dedykowana LP?</strong> (flag jeśli idzie wprost na PDP przy dużym spend)</td>
+        <td>Paid traffic warstwa, zewnętrzne pytanie auditowe</td>
+        <td>T001</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="divider" id="narzedzia">
+
+  <h2 class="section">Narzędzia wymienione w video</h2>
+
+  <table class="criteria-table">
+    <thead>
+      <tr><th>Narzędzie</th><th>Do czego</th><th>Kiedy rekomendować klientowi</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Akendo</strong></td>
+        <td>Post-purchase surveys (VOC)</td>
+        <td>Każdy klient przed rewampem copy/headline — zbierz VOC najpierw</td>
+      </tr>
+      <tr>
+        <td><strong>UserBrain</strong></td>
+        <td>User testing z target demographic</td>
+        <td>Przed rebuildowaniem ATF lub LP — zrozum jak real users widzą stronę</td>
+      </tr>
+      <tr>
+        <td><strong>Intelligems</strong></td>
+        <td>A/B testing cen z full KPI impact</td>
+        <td>Klient chce podnieść ceny — zawsze AB test przed wdrożeniem</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+</div>
+
+<div class="footer">
+  EEL Content Breakdown #001 · 2026-07-14 · Źródło: <a href="https://www.youtube.com/watch?v=2Azr4Cihay4">youtube.com/watch?v=2Azr4Cihay4</a> · Taktyki T001–T011 → TACTICS_INTAKE_REGISTER.html
+</div>
+
+</body>
+</html>
