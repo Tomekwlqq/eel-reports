@@ -116,27 +116,22 @@ tr.hot td{background:rgba(22,163,74,.05)}tr.danger td{background:rgba(220,38,38,
 .plan .pi{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
 .plan .pi .pr{font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px;white-space:nowrap;margin-top:2px}
 .plan .pi .pv{font-size:13px;font-weight:800;color:var(--good);white-space:nowrap;margin-left:auto;text-align:right}
-.chat-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;
-  align-items:center;justify-content:center}
-.chat-modal.open{display:flex}
-.chat-box{background:var(--card);border:1px solid var(--line);border-radius:16px;
-  width:min(680px,95vw);max-height:85vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.chat-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
-.chat-head h3{font-size:15px;font-weight:700}
-.chat-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
-.chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;min-height:200px}
-.msg{max-width:80%;padding:10px 13px;border-radius:10px;font-size:13px;line-height:1.5;white-space:pre-wrap}
-.msg.user{background:var(--accent);color:#fff;align-self:flex-end;border-radius:10px 10px 2px 10px}
-.msg.ai{background:var(--card2);color:var(--txt);align-self:flex-start;border-radius:10px 10px 10px 2px}
-.chat-inp{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--line)}
-.chat-inp textarea{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:8px;
-  padding:8px 10px;color:var(--txt);font-size:13px;resize:none;height:64px;font-family:inherit}
-.chat-send{background:var(--accent);color:#fff;border:none;border-radius:8px;
-  padding:8px 14px;cursor:pointer;font-weight:600;font-size:13px;align-self:flex-end}
-.chat-key-row{padding:8px 14px 12px;display:flex;gap:8px;align-items:center;border-top:1px solid var(--line)}
-.chat-key-row input{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:7px;
-  padding:6px 10px;color:var(--txt);font-size:12px}
-.chat-key-row label{font-size:11px;color:var(--muted);white-space:nowrap}
+.ask-widget{position:fixed;bottom:20px;right:20px;z-index:200;display:flex;flex-direction:column;align-items:flex-end;gap:0}
+.ask-panel{width:360px;background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.18);display:flex;flex-direction:column;overflow:hidden;max-height:0;transition:max-height .3s ease;margin-bottom:8px}
+.ask-panel.open{max-height:500px}
+.ask-head{padding:12px 16px;background:#2C3E50;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ask-head h3{font-size:14px;font-weight:700;color:#fff;margin:0}
+.ask-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:18px;cursor:pointer;line-height:1;padding:0}
+.ask-msgs{overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:160px;max-height:280px;background:#fff;flex-shrink:0}
+.msg{max-width:85%;padding:8px 12px;border-radius:10px;font-size:12.5px;line-height:1.5;white-space:pre-wrap}
+.msg.user{background:#6044e0;color:#fff;align-self:flex-end;border-radius:10px 10px 2px 10px}
+.msg.ai{background:#f1f3f5;color:#1a1d23;align-self:flex-start;border-radius:10px 10px 10px 2px}
+.ask-inp{display:flex;gap:8px;padding:10px 12px;border-top:1px solid #e5e7eb;background:#fff;flex-shrink:0}
+.ask-inp textarea{flex:1;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:7px 9px;color:#1a1d23;font-size:12.5px;resize:none;height:56px;font-family:inherit}
+.ask-send{background:#2C3E50;color:#fff;border:none;border-radius:8px;padding:7px 12px;cursor:pointer;font-weight:600;font-size:12px;align-self:flex-end}
+.ask-key-row{padding:7px 12px 10px;display:flex;gap:7px;align-items:center;border-top:1px solid #e5e7eb;background:#fff;flex-shrink:0}
+.ask-key-row input{flex:1;background:#f9fafb;border:1px solid #e5e7eb;border-radius:7px;padding:5px 9px;color:#1a1d23;font-size:12px}
+.ask-key-row label{font-size:11px;color:#6b7280;white-space:nowrap}
 .src{font-size:10.5px;color:var(--muted);margin-top:32px;padding-top:12px;border-top:1px solid var(--line)}
 </style>
 </head>
@@ -144,7 +139,7 @@ tr.hot td{background:rgba(22,163,74,.05)}tr.danger td{background:rgba(220,38,38,
 <div class="topbar">
   <div class="logo">glov<b>.</b>live <span class="flag">🇵🇱 PL only</span></div>
   <div class="topright">
-    <button class="chat-btn" id="chatBtn">💬 DeepSeek</button>
+    <button class="chat-btn" id="chatBtn">💬 Ask Assistant</button>
     <button class="theme-btn" id="themeBtn">🌙</button>
   </div>
 </div>
@@ -190,23 +185,23 @@ tr.hot td{background:rgba(22,163,74,.05)}tr.danger td{background:rgba(220,38,38,
   <div class="src">Źródło: GA4 342844459, filtr <b>country=Poland</b>. Dane: 2026-01-01 → 2026-07-13 (194 dni). Aktualizacja: 2026-07-14. Boty/zagranica wykluczone. PL ≈ 81% sesji, 99% przychodu. INTERNAL.</div>
 </div>
 
-<div class="chat-modal" id="chatModal">
-  <div class="chat-box">
-    <div class="chat-head">
-      <h3>💬 DeepSeek — Analityk GLOV PL</h3>
-      <button class="chat-close" id="chatClose">✕</button>
+<div class="ask-widget">
+  <div class="ask-panel" id="askPanel">
+    <div class="ask-head">
+      <h3>💬 Ask Assistant</h3>
+      <button class="ask-close" id="askClose">×</button>
     </div>
-    <div class="chat-msgs" id="chatMsgs">
+    <div class="ask-msgs" id="chatMsgs">
       <div class="msg ai">Cześć! Jestem analitykiem GLOV PL. Pytaj o dane GA4 z bieżącego zakresu — kanały, produkty, lejek, trendy, rekomendacje.</div>
     </div>
-    <div class="chat-inp">
+    <div class="ask-inp">
       <textarea id="chatInput" placeholder="Pytaj o dane... (Ctrl+Enter = wyślij)"></textarea>
-      <button class="chat-send" id="chatSend">Wyślij</button>
+      <button class="ask-send" id="chatSend">Wyślij</button>
     </div>
-    <div class="chat-key-row">
+    <div class="ask-key-row" id="askKeyRow" style="display:none">
       <label>DeepSeek API Key:</label>
-      <input type="password" id="dsKey" placeholder="sk-... (zapisuje się w localStorage)">
-      <button id="saveKey" style="background:var(--accent);color:#fff;border:none;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px;white-space:nowrap">Zapisz klucz</button>
+      <input type="password" id="dsKey" placeholder="sk-...">
+      <button id="saveKey" style="background:#2C3E50;color:#fff;border:none;border-radius:6px;padding:4px 9px;cursor:pointer;font-size:11px;white-space:nowrap">Zapisz</button>
     </div>
   </div>
 </div>
@@ -738,17 +733,22 @@ document.getElementById('cmpOn').addEventListener('change',function(){
   if(this.checked)autoCmp();
 });
 
-// DeepSeek Chat
-const modal=document.getElementById('chatModal');
-document.getElementById('chatBtn').onclick=()=>modal.classList.add('open');
-document.getElementById('chatClose').onclick=()=>modal.classList.remove('open');
-modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open');});
+// Ask Assistant widget
+const askPanel=document.getElementById('askPanel');
+document.getElementById('chatBtn').onclick=()=>{
+  askPanel.classList.toggle('open');
+  if(askPanel.classList.contains('open')){
+    const hasKey=!!localStorage.getItem('glov_ds_key');
+    document.getElementById('askKeyRow').style.display=hasKey?'none':'flex';
+  }
+};
+document.getElementById('askClose').onclick=()=>askPanel.classList.remove('open');
 
 async function sendChat(){
   const inp=document.getElementById('chatInput');
   const msg=inp.value.trim();if(!msg)return;
-  const apiKey=localStorage.getItem('ds-key')||'';
-  if(!apiKey){alert('Wpisz DeepSeek API Key poniżej i kliknij Zapisz.');return;}
+  const apiKey=localStorage.getItem('glov_ds_key')||'';
+  if(!apiKey){document.getElementById('askKeyRow').style.display='flex';return;}
   const msgs=document.getElementById('chatMsgs');
   msgs.innerHTML+=`<div class="msg user">${msg.replace(/</g,'&lt;')}</div>`;
   inp.value='';msgs.scrollTop=msgs.scrollHeight;
@@ -771,7 +771,7 @@ async function sendChat(){
     const reply=data.choices?.[0]?.message?.content||'Brak odpowiedzi';
     msgs.innerHTML+=`<div class="msg ai">${reply.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>`;
   }catch(err){
-    msgs.innerHTML+=`<div class="msg ai" style="color:var(--bad)">Błąd: ${err.message}</div>`;
+    msgs.innerHTML+=`<div class="msg ai" style="color:#dc2626">Błąd: ${err.message}</div>`;
   }
   msgs.scrollTop=msgs.scrollHeight;
 }
@@ -779,8 +779,7 @@ document.getElementById('chatSend').onclick=sendChat;
 document.getElementById('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();sendChat();}});
 document.getElementById('saveKey').onclick=()=>{
   const k=document.getElementById('dsKey').value.trim();
-  if(k){localStorage.setItem('ds-key',k);document.getElementById('dsKey').value='';
-    document.getElementById('dsKey').placeholder='✓ Klucz zapisany';}
+  if(k){localStorage.setItem('glov_ds_key',k);document.getElementById('askKeyRow').style.display='none';}
 };
 
 // Init
