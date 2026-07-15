@@ -273,7 +273,7 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
   <div class="rev">
     <!-- LEWA KOLUMNA -->
     <div>
-      <h2 id="hReadyCnt" class="sec"><span class="b"></span>Gotowe do akceptu (5)</h2>
+      <h2 id="hReadyCnt" class="sec"><span class="b"></span>Gotowe do akceptu</h2>
       <div id="readyList"></div>
 
       <h2 class="sec"><span class="b"></span>Tematy do akceptu</h2><div class="note" style="margin-bottom:10px">Pokazujemy tematy zaplanowane na <b>najbliższe 2 tygodnie</b> (T1–T2). Temat niezatwierdzony i tak idzie do pisania wg planu — zatwierdzenie/uwaga pomaga nam ustawić priorytety.</div>
@@ -373,6 +373,9 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
 
   <h2 class="sec"><span class="b"></span>Status według typu pozycji</h2>
   <div id="byStan" class="grid k4"></div>
+
+  <h2 class="sec"><span class="b"></span>Status wg tygodnia (pozycji)</h2>
+  <div id="byWk" class="grid k4" style="gap:8px"></div>
 
   <h2 class="sec"><span class="b"></span>Status wg tygodnia (pozycji)</h2>
   <div id="byWk" class="grid k4" style="gap:8px"></div>
@@ -1102,7 +1105,7 @@ function render(){
       +'<td><b>'+r.ind+'</b></td>'
       +'<td>'+rCellT(r)+'</td>'+'<td>'+rCellB(r)+'</td>'+'<td>'+rLinkBadge(r)+'</td>'
       +'<td style="font-size:12px;color:#667">'+resc(r.sc)+'</td>'
-      +'<td>'+((r.lk&&r.lk.blog_url)?'<a href="'+r.lk.blog_url+'" target="_blank" style="font-size:11px;font-weight:700;color:#1A6EF4;text-decoration:none;white-space:nowrap">sejfzone →</a>':'')+'</td>'+'<td style="width:28px;text-align:center">'+((r.lk&&r.lk.blog_url)?'<a href="'+r.lk.blog_url+'" target="_blank" title="sejfzone.pl" style="font-size:13px;text-decoration:none">🔗</a>':'')+'</td>'+'<td class="ttl">'+ttl+'</td>'
+      +'<td>'+((r.lk&&r.lk.blog_url)?'<a href="'+r.lk.blog_url+'" target="_blank" style="font-size:11px;font-weight:700;color:#1A6EF4;text-decoration:none;white-space:nowrap">sejfzone →</a>':'')+'</td>'+'<td style="width:28px;text-align:center">'+((r.lk&&r.lk.blog_url)?'<a href="'+r.lk.blog_url+'" target="_blank" title="sejfzone.pl" style="font-size:13px;text-decoration:none">🔗</a>':'')+'</td>'+'<td style="width:28px;text-align:center">'+((r.lk&&r.lk.blog_url)?'<a href="'+r.lk.blog_url+'" target="_blank" title="sejfzone.pl" style="font-size:13px;text-decoration:none">🔗</a>':'')+'</td>'+'<td class="ttl">'+ttl+'</td>'
       +'<td><button class="bgbtn" data-id="'+resc(r.id)+'" title="Brief graficzny">🖼️</button></td></tr>';
   }).join('') || '<tr><td colspan="11" style="color:var(--mut);padding:16px">Brak wyników.</td></tr>';
   bindRowBriefs();
