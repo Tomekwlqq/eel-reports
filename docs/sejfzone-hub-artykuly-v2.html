@@ -294,6 +294,7 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
     <!-- LEWA KOLUMNA -->
     <div>
       <h2 id="hReadyCnt" class="sec"><span class="b"></span>Gotowe do akceptu</h2>
+      <input id="revSearch" type="search" placeholder="Szukaj artykułu…" oninput="renderReadyList()" style="width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;margin-bottom:10px;outline:none">
       <div id="readyList"></div>
 
       <h2 class="sec"><span class="b"></span>Tematy do akceptu</h2><div class="note" style="margin-bottom:10px">Pokazujemy tematy zaplanowane na <b>najbliższe 2 tygodnie</b> (T1–T2). Temat niezatwierdzony i tak idzie do pisania wg planu — zatwierdzenie/uwaga pomaga nam ustawić priorytety.</div>
@@ -313,7 +314,7 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
           <div class="arthead">
             <h3 id="artTitle"></h3>
             <span class="pill p-pis" id="artStatus">napisany do akceptu</span>
-            <button class="minibtn" id="editBtn">✏️ Edytuj</button>
+            <button id="editBtn" style="background:#1A6EF4;color:#fff;font-weight:700;padding:9px 20px;border-radius:8px;font-size:13.5px;border:none;cursor:pointer;letter-spacing:.02em">✏️ EDYCJA HTML</button>
           </div>
           <div id="editBar" class="hidden">
             <span class="ebl">Tryb edycji treści — WYSIWYG</span>
@@ -321,7 +322,7 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
             <button class="minibtn act-ok" id="editSaveBtn">💾 Gotowe</button>
             <button class="minibtn warn" id="editRestoreBtn">↩︎ Przywróć oryginał</button>
             <button class="minibtn ghost" id="editCopyHTMLBtn">📋 Kopiuj HTML</button>
-            <button class="minibtn ghost" id="editDeployBtn">✅ Wdrożone u mnie</button>
+            <button class="minibtn ghost" id="editDeployBtn">✅ Wdrożony w CMS</button>
             <button class="minibtn" id="editCancelBtn">✗ Anuluj</button>
           </div>
           <div id="editErr" class="hidden" style="color:#c0392b;font-weight:600;padding:6px 10px;font-size:12.5px"></div>
@@ -696,7 +697,7 @@ const Store=(function(){
     // sync (z cache) — {status, content_html, flag_updated} lub null
     getReview:function(id){
       const rev=rd(K_R).find(x=>String(x.article_id)===String(id));
-      return rev ? {status:rev.status, content_html:rev.content_html, flag_updated:rev.flag_updated} : null;
+      return rev ? {status:rev.status, content_html:rev.content_html, flag_updated:rev.flag_updated, deployed_at:rev.deployed_at||null, updated_at:rev.updated_at||null} : null;
     },
     // upsert samego statusu (deployed_at przy 'wdrozony', started_at przy pierwszym wejściu w 'w_edycji')
     setStatus:async function(id,status){
@@ -822,13 +823,15 @@ function _revInfo(id){
   try{ rev=Store.getReview(id); }catch(e){ rev=null; }
   const status=(rev&&rev.status)?rev.status:"do_recenzji";
   const flag=!!(rev&&rev.flag_updated);
-  return {status:status, flag:flag};
+  const deployedAt=(rev&&rev.deployed_at)||null;
+  const updatedAt=(rev&&rev.updated_at)||null;
+  return {status, flag, deployedAt, updatedAt};
 }
 const REV_ORDER={do_recenzji:0,w_edycji:1,wdrozony:2};
 const REV_BADGE={
   do_recenzji:["rev-st-new","🟡 do recenzji"],
   w_edycji:["rev-st-edit","🔵 w edycji"],
-  wdrozony:["rev-st-done","🟢 wdrożony"]
+  wdrozony:["rev-st-done","🟢 wdrożony w CMS"]
 };
 function _revBadgeHtml(id){
   const info=_revInfo(id);
@@ -840,22 +843,34 @@ function _revBadgeHtml(id){
 function renderReadyList(){
   const _acc=(Store.getArticleAccept?Store.getArticleAccept():{});
   function _isAcc(id){ const v=_acc[String(id)]||""; return v==="oba"||v==="admin"||v==="klient"; }
-  const ready=DATA.filter(r=>r.st==="NAPISANY"&&ARTICLES[r.id]&&!_isAcc(r.id));
+  // wyklucz wdrożone w CMS — trafiają do kanbanu Live, nie do tej listy
+  let ready=DATA.filter(r=>r.st==="NAPISANY"&&ARTICLES[r.id]&&!_isAcc(r.id)&&_revInfo(r.id).status!=="wdrozony");
+  // wyszukiwarka
+  const q=(document.getElementById("revSearch")||{}).value||"";
+  if(q.trim()) ready=ready.filter(r=>esc(r.t).toLowerCase().includes(q.toLowerCase())||String(r.id).includes(q));
   const hCnt=document.getElementById("hReadyCnt");
   if(hCnt) hCnt.innerHTML='<span class="b"></span>Gotowe do akceptu ('+ready.length+')';
-  // sort: do_recenzji (nowe) na górze → w_edycji → wdrożony na końcu. Stabilny sort (V8) zachowuje kolejność w obrębie grupy.
-  ready.sort((a,b)=>(REV_ORDER[_revInfo(a.id).status]||0)-(REV_ORDER[_revInfo(b.id).status]||0));
+  // sort: po dacie updated_at od najnowszej; brak daty → na końcu
+  ready.sort((a,b)=>{
+    const da=_revInfo(a.id).updatedAt||"";
+    const db=_revInfo(b.id).updatedAt||"";
+    if(!da&&!db) return 0; if(!da) return 1; if(!db) return -1;
+    return db.localeCompare(da);
+  });
   const el=document.getElementById("readyList");
   el.innerHTML=ready.map(r=>{
     const n=Store.getComments(r.id).length;
-    // dociagnij tydzien + sciezke z ROWS (po nr+klaster) — wiecej info, spojnie z zakladka Artykuly
-    const rw=(typeof ROWS!=="undefined")?ROWS.find(x=>String(x.nr)===String(r.id) && (r.seg==="Broń"?x.kl==="bron":x.kl==="dom")):null;
+    const rw=(typeof ROWS!=="undefined")?ROWS.find(x=>String(x.nr)===String(r.id)&&(r.seg==="Broń"?x.kl==="bron":x.kl==="dom")):null;
     const wk=rw&&rw.wk>0?(' · <b style="color:#1A6EF4">T'+rw.wk+'</b>'):'';
     const sc=r.sc?(' · '+esc(r.sc)):'';
+    const info=_revInfo(r.id);
+    const dateStr=info.updatedAt?new Date(info.updatedAt).toLocaleDateString("pl-PL",{day:"2-digit",month:"2-digit",year:"numeric"}):"";
     return '<div class="revcard'+(currentArticle&&String(currentArticle.id)===String(r.id)?" sel":"")+'" data-id="'+esc(r.id)+'">'
       +'<div class="t">#'+esc(r.id)+' '+esc(r.t)+'</div>'
       +'<div class="m" style="flex-wrap:wrap">'+segPill(r.seg)+'<span style="font-size:11px;color:#789">'+sc.replace(/^ · /,'')+wk+'</span><span class="pill p-pis">napisany do akceptu</span>'+_revBadgeHtml(r.id)
-      +(n>0?'<span class="cmtbadge">💬 '+n+'</span>':'')+'</div></div>';
+      +(n>0?'<span class="cmtbadge">💬 '+n+'</span>':'')
+      +(dateStr?'<span style="font-size:10.5px;color:#aab;margin-left:auto">'+dateStr+'</span>':'')
+      +'</div></div>';
   }).join("");
   el.querySelectorAll(".revcard").forEach(c=>c.onclick=()=>loadArticle(c.dataset.id));
 }
@@ -1725,12 +1740,20 @@ function renderArticles(){
   const blog=ROWS.filter(r=>r.typ!=="nieblog");
   function accOf(r){ return acc[String(r.nr)]||acc[String(r.id)]||acc[r.kl+r.nr]||""; }
   function isAccepted(r){ const a=accOf(r); return a==="oba"||a==="admin"||a==="klient"; }
+  // pomocnik: czy artykuł (nr) ma review status wdrozony
+  const isWdrCMS=(nr)=>{ try{ return (Store.getReview(String(nr))||{}).status==="wdrozony"; }catch(e){ return false; } };
+  // data wdrożenia: deployed_at z review lub fallback 2026-06-01 dla artykułów LIVE z ROWS
+  const deployDate=(r,fromRows)=>{
+    try{ const rv=Store.getReview(String(r.nr||r.id)); if(rv&&rv.deployed_at) return new Date(rv.deployed_at).toLocaleDateString("pl-PL",{day:"2-digit",month:"2-digit",year:"numeric"}); }catch(e){}
+    return fromRows?"01.06.2026":"";
+  };
   // kategorie
   const live=blog.filter(r=>r.st==="LIVE");
   const napisane=blog.filter(r=>r.st==="NAPISANY");
-  // ROZLACZNE: zaakceptowany -> Do wdrozenia; napisany ale niezaakceptowany -> Do akceptu
-  const doWdrozenia=napisane.filter(r=>isAccepted(r));
-  const doAkceptu=napisane.filter(r=>!isAccepted(r));
+  // ROZLACZNE: wdrożony w CMS → do Live; zaakceptowany → do wdrożenia; niezaakceptowany → do akceptu
+  const liveWdrCMS=napisane.filter(r=>isWdrCMS(r.nr));
+  const doWdrozenia=napisane.filter(r=>isAccepted(r)&&!isWdrCMS(r.nr));
+  const doAkceptu=napisane.filter(r=>!isAccepted(r)&&!isWdrCMS(r.nr));
   // najblizsze 2 tyg = zaplanowane (NOWY, jeszcze nie napisane), wk<=2
   const nextWk=blog.filter(r=>r.st==="NOWY" && r.wk>0 && r.wk<=2);
   function card(r,extra){
@@ -1757,8 +1780,15 @@ function renderArticles(){
     return card(r,'<span style="font-size:11px;color:#888">'+(a?("akcept: "+a):"czeka na akceptację (zakładka Do recenzji)")+'</span>');
   });
   const cNext=col("📅 Najbliższe 2 tygodnie",nextWk,"#d9821a",r=>card(r,'<span style="font-size:11px;color:#b5751a">zaplanowany na T'+r.wk+' — do napisania</span>'));
-  const cLive=col("🌐 Live",live,"#667",r=>{const burl=r.lk&&r.lk.blog_url;return card(r,burl?'<a href="'+burl+'" target="_blank" style="display:inline-block;margin-top:5px;font-size:11px;font-weight:700;color:#1A6EF4;text-decoration:none;white-space:nowrap">sejfzone →</a>':'');});
-  document.getElementById("kanban").innerHTML=cWdr+cAkc+cNext+cLive;
+  const allLive=[...live, ...liveWdrCMS];
+  const cLive=col("🌐 Live",allLive,"#1f9e6e",r=>{
+    const burl=r.lk&&r.lk.blog_url;
+    const fromRows=r.st==="LIVE"; // artykuły z ROWS.st=LIVE dostaną fallback daty
+    const d=deployDate(r,fromRows);
+    return card(r,(d?'<div style="font-size:10.5px;color:#667;margin-bottom:4px">wdrożony: '+d+'</div>':'')
+      +(burl?'<a href="'+burl+'" target="_blank" style="display:inline-block;font-size:11px;font-weight:700;color:#1A6EF4;text-decoration:none;white-space:nowrap">sejfzone →</a>':'<span style="font-size:11px;color:#aab">brak linku</span>'));
+  });
+  document.getElementById("kanban").innerHTML=cLive+cWdr+cAkc+cNext;
   // generator paczki
   document.querySelectorAll(".artprev").forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); podgladHTML(b.dataset.nr,b.dataset.kl); });
   document.querySelectorAll(".artcopy").forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); kopiujHTML(b.dataset.nr,b.dataset.kl,b); });
