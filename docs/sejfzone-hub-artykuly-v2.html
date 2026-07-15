@@ -571,6 +571,10 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
 </table>
 </div>
 
+<h2 class="sec" style="margin-top:28px"><span class="b"></span>Quick Wins — największy potencjał do poprawy</h2>
+<div class="note" style="margin-bottom:14px">Artykuły posortowane wg <b>straconego ruchu</b> = impressions × (benchmark CTR − aktualny CTR). Benchmark: pozycja 1–5 → 5%, 6–10 → 2%, 11–20 → 1%. Kolor = łatwość wdrożenia (poprawa tytułu/meta = tydzień).</div>
+<div id="qwCards" style="display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));margin-bottom:28px"></div>
+
 <h2 class="sec" style="margin-top:28px"><span class="b"></span>Top keywordy — 90 dni</h2>
 <div style="overflow-x:auto">
 <table>
@@ -705,6 +709,41 @@ function sortGSC(key){
   });
   renderGSC();
 }
+function renderQW(){
+  const el=document.getElementById('qwCards'); if(!el) return;
+  const benchCTR=p=>p<=5?5:p<=10?2:p<=20?1:0.5;
+  const action=p=>p<=5?'Popraw title + meta description':'Popraw title + meta — rozważ linkowanie wewnętrzne';
+  let wins=GSC_DATA.rows
+    .filter(r=>!r.url.includes('#'))
+    .map(r=>{
+      const bench=benchCTR(r.position);
+      const lost=Math.round(r.impressions*(bench-r.ctr)/100);
+      const pd=getDate(r.url), da=daysAgo(pd);
+      return {...r,bench,lost,pubDate:pd,daysActive:da};
+    })
+    .filter(r=>r.lost>0 && r.impressions>=100)
+    .sort((a,b)=>b.lost-a.lost)
+    .slice(0,8);
+  el.innerHTML=wins.map(r=>{
+    const slug=shortUrl(r.url).replace('blog/','');
+    const urgColor=r.lost>200?'#c0395a':r.lost>50?'#d9821a':'#1f9e6e';
+    const daysStr=r.daysActive!==null?`${r.daysActive} dni aktywny`:'';
+    return `<div class="card" style="border-left:4px solid ${urgColor}">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:${urgColor};margin-bottom:6px">+${r.lost} kliknięć potencjał</div>
+      <div style="font-weight:700;font-size:13px;margin-bottom:8px"><a href="${r.url}" target="_blank" style="color:var(--go);text-decoration:none">${slug}</a></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;font-size:11px;margin-bottom:10px">
+        <div style="text-align:center"><div style="color:var(--mut)">Klik.</div><div style="font-weight:700">${r.clicks}</div></div>
+        <div style="text-align:center"><div style="color:var(--mut)">Imp.</div><div style="font-weight:700">${r.impressions.toLocaleString('pl')}</div></div>
+        <div style="text-align:center"><div style="color:var(--mut)">CTR</div><div style="font-weight:700">${r.ctr.toFixed(1)}%</div></div>
+        <div style="text-align:center"><div style="color:var(--mut)">Poz.</div><div>${posBadge(r.position)}</div></div>
+      </div>
+      <div style="font-size:11px;background:#f6fafa;border-radius:6px;padding:7px 10px;color:#33434c">
+        <b>Akcja:</b> ${action(r.position)}<br>
+        <span style="color:var(--mut)">Benchmark CTR dla poz. ${r.position.toFixed(1)}: ${r.bench}% · ${daysStr}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
 function renderKeywords(){
   const tbody=document.getElementById('kwBody');
   if(!tbody) return;
@@ -718,6 +757,7 @@ function renderKeywords(){
 }
 document.addEventListener('DOMContentLoaded',()=>{
   if(document.getElementById('gscBody')) renderGSC();
+  renderQW();
   renderKeywords();
 });
 </script>
