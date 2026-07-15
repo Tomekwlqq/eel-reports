@@ -559,18 +559,102 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
 <div style="overflow-x:auto">
 <table id="gscTable">
 <thead><tr>
-  <th onclick="sortGSC('url')" style="width:44%">URL <span id="gsc-sort-url"></span></th>
+  <th onclick="sortGSC('url')" style="width:38%">URL <span id="gsc-sort-url"></span></th>
   <th onclick="sortGSC('clicks')" style="text-align:right">Klik. <span id="gsc-sort-clicks">▼</span></th>
   <th onclick="sortGSC('impressions')" style="text-align:right">Imp. <span id="gsc-sort-impressions"></span></th>
   <th onclick="sortGSC('ctr')" style="text-align:right">CTR% <span id="gsc-sort-ctr"></span></th>
   <th onclick="sortGSC('position')" style="text-align:right">Pozycja <span id="gsc-sort-position"></span></th>
+  <th onclick="sortGSC('pubDate')" style="text-align:right">Publ. <span id="gsc-sort-pubDate"></span></th>
+  <th onclick="sortGSC('daysActive')" style="text-align:right">Dni <span id="gsc-sort-daysActive"></span></th>
 </tr></thead>
 <tbody id="gscBody"></tbody>
 </table>
 </div>
+
+<h2 class="sec" style="margin-top:28px"><span class="b"></span>Top keywordy — 90 dni</h2>
+<div style="overflow-x:auto">
+<table>
+<thead><tr>
+  <th style="width:38%">Keyword</th>
+  <th style="text-align:right">Imp.</th>
+  <th style="text-align:right">Klik.</th>
+  <th style="text-align:right">Pozycja</th>
+  <th>Artykuł</th>
+</tr></thead>
+<tbody id="kwBody"></tbody>
+</table>
+</div>
+
 <script>
 const GSC_DATA = {"generated":"2026-07-15 16:19","period":"2026-04-16 – 2026-07-15","rows":[{"url":"https://sejfzone.pl/pl/blog/czy-mozna-przechowywac-bron-i-amunicje-w-tym-samym-sejfie","clicks":150,"impressions":7653,"ctr":2.0,"position":5.7},{"url":"https://sejfzone.pl/blog/czy-sejf-na-bron-musi-byc-przytwierdzony-do-podlogi-lub-sciany-praktyczny-przewodnik","clicks":76,"impressions":3269,"ctr":2.3,"position":6.4},{"url":"https://sejfzone.pl/pl/blog/klasy-bezpieczenstwa-sejfow","clicks":46,"impressions":5480,"ctr":0.8,"position":8.8},{"url":"https://sejfzone.pl/pl/blog/jak-ukryc-sejf-w-domu","clicks":42,"impressions":5509,"ctr":0.8,"position":10.7},{"url":"https://sejfzone.pl/pl/blog/jak-zamontowac-sejf-w-scianie","clicks":39,"impressions":4394,"ctr":0.9,"position":9.8},{"url":"https://sejfzone.pl/pl/blog/sejf-domowy-czy-warto-go-miec","clicks":32,"impressions":1942,"ctr":1.6,"position":8.2},{"url":"https://sejfzone.pl/pl/blog/nie-pamietasz-kodu-do-sejfu","clicks":22,"impressions":1822,"ctr":1.2,"position":7.0},{"url":"https://sejfzone.pl/pl/blog/jak-zamontowac-sejf-w-domu-montaz-sejfu-wolnostojacego","clicks":15,"impressions":1703,"ctr":0.9,"position":14.1},{"url":"https://sejfzone.pl/pl/blog/czy-sejf-na-bron-musi-byc-przytwierdzony-do-podlogi-lub-sciany-praktyczny-przewodnik-1775843735.html","clicks":13,"impressions":655,"ctr":2.0,"position":6.5},{"url":"https://sejfzone.pl/pl/blog/czy-zamek-kluczowy-jest-bezpieczny","clicks":13,"impressions":758,"ctr":1.7,"position":7.7},{"url":"https://sejfzone.pl/pl/blog/klasa-s1-wg-en-14450-co-oznacza-i-dlaczego-jest-wymagana-dla-broni","clicks":13,"impressions":462,"ctr":2.8,"position":5.7},{"url":"https://sejfzone.pl/pl/blog/jak-zamontowac-sejf-w-szafie","clicks":11,"impressions":814,"ctr":1.4,"position":12.6},{"url":"https://sejfzone.pl/pl/blog/jaki-sejf-na-bron-mysliwska-wybrac-najlepsze-szafy-na-bron-dluga","clicks":11,"impressions":3087,"ctr":0.4,"position":18.8},{"url":"https://sejfzone.pl/pl/blog/co-warto-przechowywac-w-sejfie","clicks":7,"impressions":1062,"ctr":0.7,"position":6.6},{"url":"https://sejfzone.pl/pl/blog/czy-tani-sejf-to-dobry-pomysl","clicks":6,"impressions":331,"ctr":1.8,"position":10.7},{"url":"https://sejfzone.pl/pl/blog/dostales-pozwolenie-na-bron-co-teraz-kompletny-przewodnik-po-obowiazkach","clicks":6,"impressions":252,"ctr":2.4,"position":7.0},{"url":"https://sejfzone.pl/pl/blog/rodzaje-sejfow-domowych-jaki-wybrac","clicks":6,"impressions":631,"ctr":1.0,"position":21.1},{"url":"https://sejfzone.pl/pl/blog/co-powinien-miec-dobry-sejf-domowy","clicks":5,"impressions":1439,"ctr":0.3,"position":19.1},{"url":"https://sejfzone.pl/pl/blog/najdrozsze-sejfy-na-swiecie-luksus-i-bezpieczenstwo-w-jednym-1746692957.html","clicks":5,"impressions":845,"ctr":0.6,"position":17.1},{"url":"https://sejfzone.pl/pl/blog/sejf-elektroniczny-czy-kluczowy","clicks":4,"impressions":1161,"ctr":0.3,"position":15.2},{"url":"https://sejfzone.pl/pl/blog/przed-czym-chroni-sejf-ognioodporny-zalety-sejfow-ogniotrwalych","clicks":3,"impressions":569,"ctr":0.5,"position":8.1},{"url":"https://sejfzone.pl/pl/blog/rozladowana-bateria-w-zamku-elektronicznym","clicks":3,"impressions":114,"ctr":2.6,"position":5.5},{"url":"https://sejfzone.pl/pl/blog/siegen-max-vs-siegen-max-kombi-1778750172.html","clicks":3,"impressions":73,"ctr":4.1,"position":4.7},{"url":"https://sejfzone.pl/pl/blog/najlepsze-sejfy-domowe-2026-ranking-i-porownanie","clicks":2,"impressions":36,"ctr":5.6,"position":6.2},{"url":"https://sejfzone.pl/pl/blog.html","clicks":1,"impressions":333,"ctr":0.3,"position":16.7},{"url":"https://sejfzone.pl/pl/blog/czy-warto-miec-sejf-w-domu","clicks":1,"impressions":371,"ctr":0.3,"position":14.5},{"url":"https://sejfzone.pl/pl/blog/ile-kosztuje-sejf-domowy-co-wplywa-na-jego-cene","clicks":1,"impressions":811,"ctr":0.1,"position":9.6},{"url":"https://sejfzone.pl/pl/blog/jaki-sejf-na-bron-wymagania-sejfow-do-przechowywania-broni","clicks":0,"impressions":39,"ctr":0,"position":1.3},{"url":"https://sejfzone.pl/pl/blog/jakie-cechy-sejfu-na-bron-naprawde-sie-licza","clicks":0,"impressions":973,"ctr":0,"position":15.1},{"url":"https://sejfzone.pl/pl/blog/rodzaje-sejfow-na-bron-szafy-na-bron-dluga-i-sejfy-na-bron-krotka","clicks":0,"impressions":1092,"ctr":0,"position":15.9},{"url":"https://sejfzone.pl/pl/blog/jaki-sejf-wybrac","clicks":0,"impressions":2,"ctr":0,"position":13.5},{"url":"https://sejfzone.pl/pl/blog/jak-ukryc-sejf-w-domu#dlaczego-warto","clicks":1,"impressions":1024,"ctr":0.1,"position":9.0},{"url":"https://sejfzone.pl/pl/blog/jak-ukryc-sejf-w-domu#aranzacja","clicks":0,"impressions":1092,"ctr":0,"position":9.3},{"url":"https://sejfzone.pl/pl/blog/jak-ukryc-sejf-w-domu#bledy","clicks":0,"impressions":823,"ctr":0,"position":9.2},{"url":"https://sejfzone.pl/pl/blog/jak-ukryc-sejf-w-domu#bron","clicks":0,"impressions":817,"ctr":0,"position":9.2},{"url":"https://sejfzone.pl/pl/blog/jak-ukryc-sejf-w-domu#mebel","clicks":0,"impressions":901,"ctr":0,"position":9.3},{"url":"https://sejfzone.pl/pl/blog/jak-ukryc-sejf-w-domu#montaz","clicks":0,"impressions":1134,"ctr":0,"position":9.2},{"url":"https://sejfzone.pl/pl/blog/jak-ukryc-sejf-w-domu#sciana-vs-podloga","clicks":0,"impressions":853,"ctr":0,"position":9.3},{"url":"https://sejfzone.pl/pl/blog/klasy-bezpieczenstwa-sejfow#bledy","clicks":0,"impressions":368,"ctr":0,"position":8.8},{"url":"https://sejfzone.pl/pl/blog/klasy-bezpieczenstwa-sejfow#certyfikat","clicks":0,"impressions":119,"ctr":0,"position":10.0},{"url":"https://sejfzone.pl/pl/blog/klasy-bezpieczenstwa-sejfow#czym-jest-klasa","clicks":0,"impressions":427,"ctr":0,"position":8.8},{"url":"https://sejfzone.pl/pl/blog/klasy-bezpieczenstwa-sejfow#jak-wybrac","clicks":0,"impressions":399,"ctr":0,"position":9.1},{"url":"https://sejfzone.pl/pl/blog/klasy-bezpieczenstwa-sejfow#klasa-0","clicks":0,"impressions":393,"ctr":0,"position":8.9},{"url":"https://sejfzone.pl/pl/blog/klasy-bezpieczenstwa-sejfow#normy-en","clicks":0,"impressions":223,"ctr":0,"position":8.7},{"url":"https://sejfzone.pl/pl/blog/klasy-bezpieczenstwa-sejfow#s1-s2","clicks":0,"impressions":551,"ctr":0,"position":8.9},{"url":"https://sejfzone.pl/pl/blog/klasy-bezpieczenstwa-sejfow#szafy-bron","clicks":0,"impressions":395,"ctr":0,"position":8.9},{"url":"https://sejfzone.pl/pl/blog/co-warto-przechowywac-w-sejfie#bron","clicks":0,"impressions":3,"ctr":0,"position":8.3},{"url":"https://sejfzone.pl/pl/blog/co-warto-przechowywac-w-sejfie#dokumenty","clicks":0,"impressions":3,"ctr":0,"position":8.3},{"url":"https://sejfzone.pl/pl/blog/czy-warto-miec-sejf-w-domu#co-przechowywac","clicks":0,"impressions":4,"ctr":0,"position":6.5},{"url":"https://sejfzone.pl/pl/blog/czy-warto-miec-sejf-w-domu#czy-warto","clicks":0,"impressions":6,"ctr":0,"position":7.3},{"url":"https://sejfzone.pl/pl/blog/jaki-sejf-na-bron-mysliwska-wybrac-najlepsze-szafy-na-bron-dluga#dlaczego-warto-miec-sejf-lub-szafe-na-bron-mysliwska","clicks":0,"impressions":6,"ctr":0,"position":8.0},{"url":"https://sejfzone.pl/pl/blog/dostales-pozwolenie-na-bron-co-teraz-kompletny-przewodnik-po-obowiazkach-1782295665.html","clicks":0,"impressions":96,"ctr":0,"position":7.3},{"url":"https://sejfzone.pl/pl/blog/klasa-s1-wg-en-14450-co-oznacza-i-dlaczego-jest-wymagana-dla-broni-1782379472.html","clicks":0,"impressions":51,"ctr":0,"position":6.1},{"url":"https://sejfzone.pl/pl/blog/rozladowana-bateria-w-zamku-elektronicznym-1777971937.html","clicks":0,"impressions":38,"ctr":0,"position":6.0},{"url":"https://sejfzone.pl/pl/blog/najdrozsze-sejfy-na-swiecie-luksus-i-bezpieczenstwo-w-jednym-1746692957.html#luksusowe-sejfy","clicks":0,"impressions":24,"ctr":0,"position":5.1},{"url":"https://sejfzone.pl/pl/blog/najdrozsze-sejfy-na-swiecie-luksus-i-bezpieczenstwo-w-jednym-1746692957.html#najdrozsze-sejfy","clicks":0,"impressions":26,"ctr":0,"position":5.1},{"url":"https://sejfzone.pl/pl/blog-categories/bezpieczenstwo-i-klasy-odpornosci-8.html","clicks":0,"impressions":2,"ctr":0,"position":9.5},{"url":"https://sejfzone.pl/pl/blog-categories/montaz-i-uzytkowanie-9.html","clicks":0,"impressions":194,"ctr":0,"position":35.8},{"url":"https://sejfzone.pl/pl/blog-categories/poradniki-1.html","clicks":0,"impressions":32,"ctr":0,"position":46.2},{"url":"https://sejfzone.pl/pl/blog-categories/przechowywanie-broni-i-amunicji-7.html","clicks":0,"impressions":30,"ctr":0,"position":13.0},{"url":"https://sejfzone.pl/pl/blog-categories/przewodnik-zakupowy-6.html","clicks":0,"impressions":7,"ctr":0,"position":13.7}]};
 
+const DATES_MAP = {
+  "czy-mozna-przechowywac-bron-i-amunicje-w-tym-samym-sejfie":"2025-09-18",
+  "czy-sejf-na-bron-musi-byc-przytwierdzony-do-podlogi-lub-sciany-praktyczny-przewodnik":"2026-04-10",
+  "klasy-bezpieczenstwa-sejfow":"2025-08-31",
+  "jak-ukryc-sejf-w-domu":"2025-09-18",
+  "jak-zamontowac-sejf-w-scianie":"2025-08-31",
+  "sejf-domowy-czy-warto-go-miec":"2026-01-27",
+  "nie-pamietasz-kodu-do-sejfu":"2025-02-03",
+  "jak-zamontowac-sejf-w-domu-montaz-sejfu-wolnostojacego":"2025-09-18",
+  "czy-zamek-kluczowy-jest-bezpieczny":"2026-01-23",
+  "jaki-sejf-na-bron-mysliwska-wybrac-najlepsze-szafy-na-bron-dluga":"2025-09-22",
+  "co-warto-przechowywac-w-sejfie":"2025-01-19",
+  "jak-zamontowac-sejf-w-szafie":"2026-04-06",
+  "sejf-elektroniczny-czy-kluczowy":"2025-03-10",
+  "co-powinien-miec-dobry-sejf-domowy":"2025-09-21",
+  "rodzaje-sejfow-domowych-jaki-wybrac":"2025-09-21",
+  "klasa-s1-wg-en-14450-co-oznacza-i-dlaczego-jest-wymagana-dla-broni":"2026-06-13",
+  "przed-czym-chroni-sejf-ognioodporny-zalety-sejfow-ogniotrwalych":"2026-06-24",
+  "rozladowana-bateria-w-zamku-elektronicznym":"2026-06-24",
+  "siegen-max-vs-siegen-max-kombi":"2026-06-24",
+  "najlepsze-sejfy-domowe-2026-ranking-i-porownanie":"2026-06-14",
+  "dostales-pozwolenie-na-bron-co-teraz-kompletny-przewodnik-po-obowiazkach":"2026-06-24",
+  "czy-tani-sejf-to-dobry-pomysl":"2026-06-14",
+  "rodzaje-sejfow-na-bron-szafy-na-bron-dluga-i-sejfy-na-bron-krotka":"2026-06-24",
+  "jakie-cechy-sejfu-na-bron-naprawde-sie-licza":"2026-06-24",
+  "jaki-sejf-na-bron-wymagania-sejfow-do-przechowywania-broni":"2026-06-24"
+};
+const GSC_KEYWORDS = [
+  {kw:"ukryty sejf",imp:364,clicks:1,pos:7.9,page:"jak-ukryc-sejf-w-domu"},
+  {kw:"sejf domowy",imp:283,clicks:5,pos:7.2,page:"jak-ukryc-sejf-w-domu"},
+  {kw:"jak zamontować sejf w ścianie",imp:201,clicks:2,pos:11.2,page:"jak-zamontowac-sejf-w-scianie"},
+  {kw:"czy sejf na broń musi być przytwierdzony",imp:197,clicks:3,pos:6.2,page:"czy-sejf-na-bron-musi-byc-przytwierdzony"},
+  {kw:"gdzie zamontować sejf w domu",imp:192,clicks:1,pos:11.2,page:"jak-zamontowac-sejf-w-scianie"},
+  {kw:"bezpieczny sejf domowy",imp:159,clicks:0,pos:10.7,page:"czy-tani-sejf-to-dobry-pomysl"},
+  {kw:"jak ukryć sejf w domu",imp:145,clicks:1,pos:7.8,page:"jak-ukryc-sejf-w-domu"},
+  {kw:"sejf klasy",imp:144,clicks:1,pos:12.9,page:"klasy-bezpieczenstwa-sejfow"},
+  {kw:"jak zamontować sejf w domu",imp:96,clicks:1,pos:33.3,page:"jak-zamontowac-sejf-w-domu"},
+  {kw:"amunicję można przechowywać",imp:81,clicks:1,pos:3.2,page:"czy-mozna-przechowywac-bron-i-amunicje"},
+  {kw:"sejf zamek kluczowy czy elektroniczny",imp:64,clicks:1,pos:6.2,page:"sejf-elektroniczny-czy-kluczowy"},
+  {kw:"jaki sejf na broń myśliwską",imp:62,clicks:1,pos:6.2,page:"jaki-sejf-na-bron-mysliwska"},
+  {kw:"en 14450",imp:61,clicks:1,pos:7.4,page:"klasy-bezpieczenstwa-sejfow"},
+  {kw:"dobry sejf domowy",imp:60,clicks:1,pos:24.4,page:"co-powinien-miec-dobry-sejf-domowy"},
+  {kw:"przechowywanie amunicji w magazynkach",imp:52,clicks:4,pos:4.7,page:"czy-mozna-przechowywac-bron-i-amunicje"},
+  {kw:"sejf kamuflażowy",imp:49,clicks:1,pos:11.3,page:"jak-ukryc-sejf-w-domu"},
+  {kw:"blok skrytek na broń",imp:41,clicks:0,pos:11.0,page:"rodzaje-sejfow-na-bron"},
+  {kw:"5 popularnych rodzajów sejfów",imp:40,clicks:0,pos:7.0,page:"rodzaje-sejfow-domowych"},
+  {kw:"sejf na pieniądze",imp:39,clicks:1,pos:2.5,page:"jak-ukryc-sejf-w-domu"},
+  {kw:"zabudowa sejfu",imp:38,clicks:1,pos:14.1,page:"jak-ukryc-sejf-w-domu"},
+  {kw:"czy sejf na broń musi być zakotwiczony",imp:36,clicks:1,pos:6.6,page:"czy-sejf-na-bron-musi-byc-przytwierdzony"},
+  {kw:"sejf s1 czy s2",imp:26,clicks:1,pos:7.4,page:"klasy-bezpieczenstwa-sejfow"},
+  {kw:"kosztowności w sejfie",imp:21,clicks:2,pos:6.4,page:"co-warto-przechowywac-w-sejfie"},
+  {kw:"mały sejf domowy",imp:18,clicks:1,pos:2.8,page:"sejf-domowy-czy-warto-go-miec"},
+  {kw:"sejfy na broń myśliwską",imp:13,clicks:1,pos:13.0,page:"jaki-sejf-na-bron-mysliwska"}
+];
+
+function getDate(url){
+  const slug = url.replace(/https?:\/\/sejfzone\.pl\/(pl\/)?blog\//,'').replace(/\?.*$/,'').replace(/#.*$/,'').replace(/\.html$/,'').replace(/-\d{10}$/,'');
+  for(const [key,val] of Object.entries(DATES_MAP)){
+    if(slug===key || slug.startsWith(key)) return val;
+  }
+  return null;
+}
+function daysAgo(dateStr){
+  if(!dateStr) return null;
+  const d = new Date(dateStr), now = new Date();
+  return Math.floor((now - d)/(1000*60*60*24));
+}
 let gscSortKey='clicks', gscSortDir=-1;
 function posBadge(p){
   if(p<=5) return `<span class="ring rf">${p.toFixed(1)}</span>`;
@@ -585,7 +669,10 @@ function renderGSC(){
   const hideFrags=document.getElementById('gscHideFrags').checked;
   const onlyClicks=document.getElementById('gscOnlyClicks').checked;
   const q=(document.getElementById('gscSearch').value||'').toLowerCase();
-  let rows=GSC_DATA.rows.filter(r=>{
+  let rows=GSC_DATA.rows.map(r=>{
+    const pd=getDate(r.url), da=daysAgo(pd);
+    return {...r, pubDate:pd||'', daysActive:da===null?-1:da};
+  }).filter(r=>{
     if(hideFrags && r.url.includes('#')) return false;
     if(onlyClicks && r.clicks===0) return false;
     if(q && !r.url.toLowerCase().includes(q)) return false;
@@ -598,22 +685,41 @@ function renderGSC(){
   });
   document.getElementById('gscCount').textContent=`${rows.length} URL-i`;
   const tbody=document.getElementById('gscBody');
-  tbody.innerHTML=rows.map(r=>`<tr>
+  tbody.innerHTML=rows.map(r=>{
+    const dateCell = r.pubDate ? `<span style="color:var(--mut);font-size:11px">${r.pubDate}</span>` : `<span style="color:#ccc">—</span>`;
+    const daysCell = r.daysActive>=0 ? `<span style="font-weight:600">${r.daysActive}</span>` : `<span style="color:#ccc">—</span>`;
+    return `<tr>
     <td class="ttl"><a href="${r.url}" target="_blank" rel="noopener">${shortUrl(r.url)}</a></td>
     <td style="text-align:right;font-weight:700">${r.clicks}</td>
     <td style="text-align:right;color:var(--mut)">${r.impressions.toLocaleString('pl')}</td>
     <td style="text-align:right">${r.ctr.toFixed(1)}%</td>
     <td style="text-align:right">${posBadge(r.position)}</td>
-  </tr>`).join('');
+    <td style="text-align:right">${dateCell}</td>
+    <td style="text-align:right">${daysCell}</td>
+  </tr>`;}).join('');
 }
 function sortGSC(key){
-  if(gscSortKey===key) gscSortDir*=-1; else {gscSortKey=key;gscSortDir=key==='url'?1:-1;}
-  ['url','clicks','impressions','ctr','position'].forEach(k=>{
-    document.getElementById('gsc-sort-'+k).textContent=k===key?(gscSortDir===-1?'▼':'▲'):'';
+  if(gscSortKey===key) gscSortDir*=-1; else {gscSortKey=key;gscSortDir=key==='url'||key==='pubDate'?1:-1;}
+  ['url','clicks','impressions','ctr','position','pubDate','daysActive'].forEach(k=>{
+    const el=document.getElementById('gsc-sort-'+k); if(el) el.textContent=k===key?(gscSortDir===-1?'▼':'▲'):'';
   });
   renderGSC();
 }
-document.addEventListener('DOMContentLoaded',()=>{ if(document.getElementById('gscBody')) renderGSC(); });
+function renderKeywords(){
+  const tbody=document.getElementById('kwBody');
+  if(!tbody) return;
+  tbody.innerHTML=GSC_KEYWORDS.map(r=>`<tr>
+    <td style="font-weight:600">${r.kw}</td>
+    <td style="text-align:right">${r.imp.toLocaleString('pl')}</td>
+    <td style="text-align:right;font-weight:700">${r.clicks}</td>
+    <td style="text-align:right">${posBadge(r.pos)}</td>
+    <td style="color:var(--mut);font-size:11px">${r.page}</td>
+  </tr>`).join('');
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  if(document.getElementById('gscBody')) renderGSC();
+  renderKeywords();
+});
 </script>
 </section>
 
