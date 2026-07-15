@@ -374,6 +374,9 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
   <h2 class="sec"><span class="b"></span>Status według typu pozycji</h2>
   <div id="byStan" class="grid k4"></div>
 
+  <h2 class="sec"><span class="b"></span>Status wg tygodnia (pozycji)</h2>
+  <div id="byWk" class="grid k4" style="gap:8px"></div>
+
   <h2 class="sec"><span class="b"></span>Najbliższe kroki (z STATUS.md)</h2>
   <div class="card">
     <ol style="margin:0;padding-left:20px;font-size:13px;line-height:1.9">
@@ -951,42 +954,72 @@ function renderPhotos(){
 }
 
 
-/* ===== KPI / PODSUMOWANIE ===== */
+/* ===== KPI / PODSUMOWANIE — źródło: ROWS (jedyne) ===== */
 function renderKpis(){
-const tot=DATA.length;
-  // --- pasek statusów pipeline ---
-  (function(){
-    const order=[["BRIEF","brief","p-zbr"],["NAPISANY","napisany do akceptu","p-pis"],["ZAAKCEPTOWANY","zaakceptowany","p-go"],["LIVE","live","p-wdr"],["PLAN","plan (bez briefu)","p-back"]];
-    const sb=document.getElementById("stBar");
-    if(sb){ sb.innerHTML=order.map(([k,lab,cls])=>{
-      const n=DATA.filter(r=>r.st===k).length;
-      const b=DATA.filter(r=>r.st===k&&r.seg==="Broń").length;
-      const d=n-b;
-      return `<div class="card kpi"><div class="l"><span class="pill ${cls}">${lab}</span></div><div class="v">${n}</div><div class="d">broń ${b} · dom ${d}</div></div>`;
-    }).join(""); }
-  })();
-const wdr=DATA.filter(r=>r.st==="NAPISANY"||r.st==="ZAAKCEPTOWANY"||r.st==="LIVE").length;
-  const live=DATA.filter(r=>r.st==="LIVE").length;
-const liveI=DATA.reduce((a,r)=>a+(r.ci||0),0), liveR=DATA.reduce((a,r)=>a+(r.cr||0),0);
-const goalI=tot*3, goalR=tot*3;
+const blog=ROWS.filter(r=>r.typ!=="nieblog");
+const tot=blog.length;
+// pipeline statusów
+(function(){
+const order=[
+  ["NOWY","nowy","p-back"],
+  ["NAPISANY","napisany do akceptu","p-pis"],
+  ["LIVE","wdrożony live","p-wdr"]
+];
+const sb=document.getElementById("stBar");
+if(sb){ sb.innerHTML=order.map(([k,lab,cls])=>{
+  const n=blog.filter(r=>r.st===k).length;
+  const b=blog.filter(r=>r.st===k&&r.kl==="bron").length;
+  const d=n-b;
+  return `<div class="card kpi"><div class="l"><span class="pill ${cls}">${lab}</span></div><div class="v">${n}</div><div class="d">broń ${b} · dom ${d}</div></div>`;
+}).join(""); }
+})();
+const napisane=blog.filter(r=>r.st==="NAPISANY").length;
+const live=blog.filter(r=>r.st==="LIVE").length;
+const liveUrl=blog.filter(r=>r.st==="LIVE"&&r.lk&&r.lk.blog_url).length;
 document.getElementById("kTot").textContent=tot;
-document.getElementById("kWdr").innerHTML=wdr+' <small>/ '+tot+'</small>';
-const pct=Math.round(wdr/tot*100);
+document.getElementById("kWdr").innerHTML=napisane+' <small>/ '+tot+'</small>';
+const pct=Math.round(live/tot*100);
 document.getElementById("kPct").textContent=pct+"%";
 document.getElementById("kBar").style.width=pct+"%";
-document.getElementById("kLnk").innerHTML=(liveI+liveR)+' <small>/ '+(goalI+goalR)+'</small>';
-
-// status by stan
-const byStan={};DATA.forEach(r=>byStan[r.stan]=(byStan[r.stan]||0)+1);
-document.getElementById("byStan").innerHTML=Object.entries(byStan).sort((a,b)=>b[1]-a[1])
-  .map(([k,v])=>`<div class="card kpi"><div class="l">${k}</div><div class="v">${v}</div></div>`).join("");
-const segs=[...new Set(DATA.map(r=>r.seg))];
-document.getElementById("bySeg").innerHTML=segs.map(sg=>{
-  const rs=DATA.filter(r=>r.seg===sg); const w=rs.filter(r=>r.st==="NAPISANY"||r.st==="ZAAKCEPTOWANY"||r.st==="LIVE").length;
-  const zb=rs.filter(r=>r.st==="BRIEF").length;
-  return `<div class="card kpi"><div class="l">${sg}</div><div class="v">${rs.length} <small>art.</small></div><div class="d">napisane ${w} · brief ${zb} · plan ${rs.length-w-zb}</div></div>`;
+document.getElementById("kLnk").innerHTML=liveUrl+' <small>/ '+live+'</small>';
+// rozbicie wg kategorii
+const kls=["bron","dom"];
+const segEl=document.getElementById("bySeg");
+if(segEl) segEl.innerHTML=kls.map(kl=>{
+  const sg=kl==="bron"?"Broń":"Domowe";
+  const rs=blog.filter(r=>r.kl===kl);
+  const w=rs.filter(r=>r.st==="LIVE").length;
+  const nap=rs.filter(r=>r.st==="NAPISANY").length;
+  const zb=rs.filter(r=>r.st==="NOWY").length;
+  return `<div class="card kpi"><div class="l">${sg}</div><div class="v">${rs.length} <small>art.</small></div><div class="d">live ${w} · do akceptu ${nap} · plan ${zb}</div></div>`;
 }).join("");
+// status wg typu pozycji (stan)
+const byStan={};ROWS.forEach(r=>byStan[r.stan]=(byStan[r.stan]||0)+1);
+const stanEl=document.getElementById("byStan");
+if(stanEl) stanEl.innerHTML=Object.entries(byStan).sort((a,b)=>b[1]-a[1])
+  .map(([k,v])=>`<div class="card kpi"><div class="l">${k}</div><div class="v">${v}</div></div>`).join("");
+// status wg tygodnia (pozycji)
+renderWkStatus();
 }
+function renderWkStatus(){
+const el=document.getElementById("byWk"); if(!el) return;
+const blog=ROWS.filter(r=>r.typ!=="nieblog"&&r.wk>0);
+const byW={};
+blog.forEach(r=>{
+  const w=r.wk; if(!byW[w]) byW[w]={tot:0,live:0,napisane:0};
+  byW[w].tot++;
+  if(r.st==="LIVE") byW[w].live++;
+  else if(r.st==="NAPISANY") byW[w].napisane++;
+});
+const wks=Object.keys(byW).map(Number).sort((a,b)=>a-b);
+el.innerHTML=wks.map(w=>{
+  const {tot,live,napisane}=byW[w];
+  const done=live+napisane;
+  const cls=live===tot?'lk-ok':done>0?'lk-fix':'';
+  return `<div class="card kpi"><div class="l">T${w}</div><div class="v"><span class="${cls}">${live}</span>/${tot}</div><div class="d">${napisane>0?napisane+' do akceptu · ':''}<span style="color:#aab">plan</span></div></div>`;
+}).join("") || '<p style="color:var(--mut);font-size:12px">—</p>';
+}
+
 
 /* ===== PLAN PUBLIKACJI / TABELA WDROŻENIOWA (źródło: ROWS) ===== */
 const R_PILL={NOWY:"p-back","NIE-BLOG":"p-zbr",NAPISANY:"p-pis",LIVE:"p-wdr"};
@@ -1064,7 +1097,7 @@ function render(){
       +'<td><b>'+r.ind+'</b></td>'
       +'<td>'+rCellT(r)+'</td>'+'<td>'+rCellB(r)+'</td>'+'<td>'+rLinkBadge(r)+'</td>'
       +'<td style="font-size:12px;color:#667">'+resc(r.sc)+'</td>'
-      +'<td class="ttl">'+ttl+'</td>'
+      +'<td style="width:28px;text-align:center">'+((r.lk&&r.lk.blog_url)?'<a href="'+r.lk.blog_url+'" target="_blank" title="sejfzone.pl" style="font-size:13px;text-decoration:none">🔗</a>':'')+'</td>'+'<td class="ttl">'+ttl+'</td>'
       +'<td><button class="bgbtn" data-id="'+resc(r.id)+'" title="Brief graficzny">🖼️</button></td></tr>';
   }).join('') || '<tr><td colspan="11" style="color:var(--mut);padding:16px">Brak wyników.</td></tr>';
   bindRowBriefs();
@@ -1213,7 +1246,7 @@ function renderArticles(){
     return card(r,'<span style="font-size:11px;color:#888">'+(a?("akcept: "+a):"czeka na akceptację (zakładka Do recenzji)")+'</span>');
   });
   const cNext=col("📅 Najbliższe 2 tygodnie",nextWk,"#d9821a",r=>card(r,'<span style="font-size:11px;color:#b5751a">zaplanowany na T'+r.wk+' — do napisania</span>'));
-  const cLive=col("🌐 Live",live,"#667",r=>card(r,''));
+  const cLive=col("🌐 Live",live,"#667",r=>{const burl=r.lk&&r.lk.blog_url;return card(r,burl?'<a href="'+burl+'" target="_blank" style="display:inline-block;margin-top:5px;font-size:11px;color:#1A6EF4;text-decoration:none;font-weight:600">🔗 sejfzone.pl →</a>':'');});
   document.getElementById("kanban").innerHTML=cWdr+cAkc+cNext+cLive;
   // generator paczki
   document.querySelectorAll(".artprev").forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); podgladHTML(b.dataset.nr,b.dataset.kl); });
