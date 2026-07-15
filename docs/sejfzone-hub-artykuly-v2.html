@@ -1600,7 +1600,7 @@ function render(){
       +'<td><b>'+r.ind+'</b></td>'
       +'<td>'+rCellT(r)+'</td>'+'<td>'+rCellB(r)+'</td>'+'<td>'+rLinkBadge(r)+'</td>'
       +'<td style="font-size:12px;color:#667">'+resc(r.sc)+'</td>'
-      +'<td style="width:28px;text-align:center">'+((r.lk&&r.lk.blog_url)?'<a href="'+r.lk.blog_url+'" target="_blank" title="sejfzone.pl" style="font-size:13px;text-decoration:none">🔗</a>':'')+'</td>'+'<td class="ttl">'+ttl+'</td>'
+      +'<td>'+((r.lk&&r.lk.blog_url)?'<a href="'+r.lk.blog_url+'" target="_blank" style="font-size:11px;font-weight:700;color:#1A6EF4;text-decoration:none;white-space:nowrap">sejfzone →</a>':'')+'</td>'+'<td class="ttl">'+ttl+'</td>'
       +'<td><button class="bgbtn" data-id="'+resc(r.id)+'" title="Brief graficzny">🖼️</button></td></tr>';
   }).join('') || '<tr><td colspan="11" style="color:var(--mut);padding:16px">Brak wyników.</td></tr>';
   bindRowBriefs();
@@ -1749,7 +1749,7 @@ function renderArticles(){
     return card(r,'<span style="font-size:11px;color:#888">'+(a?("akcept: "+a):"czeka na akceptację (zakładka Do recenzji)")+'</span>');
   });
   const cNext=col("📅 Najbliższe 2 tygodnie",nextWk,"#d9821a",r=>card(r,'<span style="font-size:11px;color:#b5751a">zaplanowany na T'+r.wk+' — do napisania</span>'));
-  const cLive=col("🌐 Live",live,"#667",r=>{const burl=r.lk&&r.lk.blog_url;return card(r,burl?'<a href="'+burl+'" target="_blank" style="display:inline-block;margin-top:5px;font-size:11px;color:#1A6EF4;text-decoration:none;font-weight:600">🔗 sejfzone.pl →</a>':'');});
+  const cLive=col("🌐 Live",live,"#667",r=>{const burl=r.lk&&r.lk.blog_url;return card(r,burl?'<a href="'+burl+'" target="_blank" style="display:inline-block;margin-top:5px;font-size:11px;font-weight:700;color:#1A6EF4;text-decoration:none;white-space:nowrap">sejfzone →</a>':'');});
   document.getElementById("kanban").innerHTML=cWdr+cAkc+cNext+cLive;
   // generator paczki
   document.querySelectorAll(".artprev").forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); podgladHTML(b.dataset.nr,b.dataset.kl); });
