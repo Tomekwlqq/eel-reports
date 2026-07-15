@@ -98,8 +98,9 @@ button.btn.ghost{background:#fff;color:var(--go);border-color:var(--line)}
 .tab.tabhide{display:none}
 
 /* ----- Do recenzji ----- */
-.rev{display:block}
-#revLeftCol{display:none}
+.rev{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
+.rev.edit-full{grid-template-columns:1fr}
+@media(max-width:820px){.rev{grid-template-columns:1fr}}
 .revcard{background:#fff;border:1px solid var(--line);border-radius:11px;padding:13px 15px;cursor:pointer;transition:.12s;margin-bottom:10px}
 .revcard:hover{border-color:var(--tur);box-shadow:0 3px 12px rgba(31,185,170,.12)}
 .revcard.sel{border-color:var(--tur);box-shadow:0 0 0 2px rgba(64,224,208,.35)}
@@ -221,11 +222,12 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
 /* ----- ETAP 3: edytor WYSIWYG + panel kodu ----- */
 #editBar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:0 0 14px;padding:10px 14px;background:#eafbfa;border:1px solid var(--tur);border-radius:10px;position:sticky;top:8px;z-index:50}
 #editBar .ebl{font-size:12px;color:var(--ink2);font-weight:700;margin-right:auto}
-#editLayout{display:flex;gap:18px;align-items:flex-start}
-#artContent{flex:1;min-width:0;background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 20px;min-height:520px;max-height:82vh;overflow:auto}
+#editLayout.editing-layout{display:flex;gap:18px;align-items:flex-start}
+#editLayout.editing-layout>#artContent{flex:1;min-width:0;background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 20px;max-height:82vh;overflow:auto}
+#editLayout.editing-layout>#codePanel{flex:1;min-width:0}
 #artContent.editing{outline:2px solid var(--tur);cursor:text;background:#fdfffe}
-#codePanel{flex:1;min-width:0;background:#0f1c24;color:#8be9d8;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.65;padding:16px 18px;border-radius:10px;border:1px solid var(--ink2);white-space:pre-wrap;word-break:break-word;min-height:520px;max-height:82vh;overflow:auto;margin:0}
-@media(max-width:900px){#editLayout{flex-direction:column}}
+#codePanel{background:#0f1c24;color:#8be9d8;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.65;padding:16px 18px;border-radius:10px;border:1px solid var(--ink2);white-space:pre-wrap;word-break:break-word;min-height:520px;max-height:82vh;overflow:auto;margin:0}
+@media(max-width:820px){#editLayout.editing-layout{flex-direction:column}}
 #liveHint{margin:0 0 14px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:12.5px}
 #liveHint .lh-badge{display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:12.5px;padding:2px 0}
 #liveHint.lh-ok{border-color:#bfe6d4;background:var(--okbg)}
@@ -307,15 +309,8 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
     <!-- PRAWA KOLUMNA -->
     <div>
       <div class="artpanel" id="artPanel">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-          <label style="font-size:12px;font-weight:700;color:var(--ink2);white-space:nowrap">Artykuł:</label>
-          <select id="artSelect" onchange="if(this.value)loadArticle(this.value)" style="flex:1;min-width:200px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff;cursor:pointer">
-            <option value="">— wybierz artykuł —</option>
-          </select>
-          <span id="artSelectCnt" style="font-size:11.5px;color:var(--mut)"></span>
-        </div>
         <div id="artEmpty" style="color:var(--mut);text-align:center;padding:40px 10px">
-          Wybierz artykuł z listy powyżej.
+          ← Wybierz artykuł z listy po lewej.
         </div>
         <div id="artView" class="hidden">
           <div class="arthead">
@@ -364,7 +359,7 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
             </div>
             <div id="editLayout">
               <div id="artContent"></div>
-              <pre id="codePanel"></pre>
+              <pre id="codePanel" class="hidden"></pre>
             </div>
           </div>
 
@@ -880,17 +875,6 @@ function renderReadyList(){
       +'</div></div>';
   }).join("");
   el.querySelectorAll(".revcard").forEach(c=>c.onclick=()=>loadArticle(c.dataset.id));
-  // aktualizuj dropdown selektor
-  const sel=document.getElementById("artSelect");
-  const cnt=document.getElementById("artSelectCnt");
-  if(sel){
-    const cur=sel.value;
-    sel.innerHTML='<option value="">— wybierz artykuł —</option>'
-      +ready.map(r=>'<option value="'+esc(r.id)+'"'+(String(r.id)===String(cur)?' selected':'')+'>'+esc('#'+r.id+' '+r.t)+'</option>').join('');
-    if(cnt) cnt.textContent=ready.length+' artykułów';
-    // auto-załaduj pierwszy jeśli nic nie wybrane i jest co ładować
-    if(!cur && !currentArticle && ready.length) loadArticle(ready[0].id);
-  }
 }
 
 let topicExpanded=false;
@@ -937,7 +921,6 @@ function loadArticle(id){
   document.getElementById("artTitle").textContent=rec.t;
   if(typeof _exitEditModeUI==="function") _exitEditModeUI(); // wyjdź z edycji przy zmianie artykułu (bez utraty draftu)
   document.getElementById("artContent").innerHTML=getClientDraft(id)||ARTICLES[id].html;
-  if(typeof _updateCodePanel==="function") _updateCodePanel();
   renderReadyList();
   applyHighlights();
   renderHistory(),renderCommentList();
@@ -1288,6 +1271,8 @@ async function enterEditMode(){
   document.getElementById("editBar").classList.remove("hidden");
   document.getElementById("codePanel").classList.remove("hidden");
   document.getElementById("editLayout").classList.add("editing-layout");
+  const _rv=document.querySelector(".rev"); if(_rv) _rv.classList.add("edit-full");
+  const _rlc=document.getElementById("revLeftCol"); if(_rlc) _rlc.classList.add("hidden");
   const btn=document.getElementById("editBtn"); if(btn) btn.classList.add("hidden");
   _updateCodePanel();
   _lhBaseline={links:_lhSnapshotLinks(ac)}; // migawka linków na start sesji edycji
@@ -1307,7 +1292,10 @@ function _exitEditModeUI(){
   const ac=document.getElementById("artContent");
   if(ac){ ac.contentEditable="false"; ac.classList.remove("editing"); }
   const eb=document.getElementById("editBar"); if(eb) eb.classList.add("hidden");
+  const cp=document.getElementById("codePanel"); if(cp) cp.classList.add("hidden");
   const el=document.getElementById("editLayout"); if(el) el.classList.remove("editing-layout");
+  const _rv=document.querySelector(".rev"); if(_rv) _rv.classList.remove("edit-full");
+  const _rlc=document.getElementById("revLeftCol"); if(_rlc) _rlc.classList.remove("hidden");
   const btn=document.getElementById("editBtn"); if(btn) btn.classList.remove("hidden");
   const lh=document.getElementById("liveHint"); if(lh) lh.classList.add("hidden");
   _lhBaseline=null;
