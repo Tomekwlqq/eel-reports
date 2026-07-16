@@ -1,429 +1,532 @@
-<!DOCTYPE html><html lang="pl" data-theme="light"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GLOV Klasyczny Audyt SEO (10 Modułów)</title>
-<style>
-/* ===== GLOV PREMIUM AUDIT UI ===== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+<!DOCTYPE html>
+<html lang="pl" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GLOV Klasyczny Audyt SEO (10 Modułów) - Executive Level</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* =======================================================================
+       EXECUTIVE PREMIUM UI (Google CEO Level)
+       ======================================================================= */
+    :root {
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-sidebar: #f1f5f9;
+      --border: #e2e8f0;
+      
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-light: #94a3b8;
+      
+      --accent: #6366f1;
+      --accent-light: #e0e7ff;
+      --accent-hover: #4f46e5;
+      
+      --crit-bg: #fef2f2;
+      --crit-txt: #dc2626;
+      --crit-border: #ef4444;
+      
+      --warn-bg: #fffbeb;
+      --warn-txt: #d97706;
+      --warn-border: #f59e0b;
+      
+      --info-bg: #f3f4f6;
+      --info-txt: #4b5563;
+      --info-border: #9ca3af;
+      
+      --ok-bg: #ecfdf5;
+      --ok-txt: #059669;
+      --ok-border: #10b981;
+      
+      --fix-bg: #f8fafc;
+      --code-bg: #f1f5f9;
+      --code-txt: #334155;
+    }
 
-:root {
-  --bg: #f8fafc; 
-  --card-bg: #ffffff;
-  --text-main: #111827;
-  --text-muted: #4b5563;
-  --text-light: #9ca3af;
-  --border: #e5e7eb;
-  
-  --mod-badge-bg: #e0e7ff;
-  --mod-badge-txt: #4f46e5;
-  
-  --crit-bg: #fee2e2;
-  --crit-txt: #ef4444;
-  --crit-border: #ef4444;
-  
-  --warn-bg: #fef3c7;
-  --warn-txt: #d97706;
-  --warn-border: #f59e0b;
-  
-  --ok-bg: #d1fae5;
-  --ok-txt: #059669;
-  --ok-border: #10b981;
-  
-  --fix-bg: #f3f4f6;
-  --fix-label: #6366f1;
-  
-  --code-bg: #f1f5f9;
-}
+    [data-theme="dark"] {
+      --bg-body: #0b0f19;
+      --bg-card: #111827;
+      --bg-sidebar: #1f2937;
+      --border: #1f2937;
+      
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --text-light: #64748b;
+      
+      --crit-bg: rgba(220, 38, 38, 0.1);
+      --crit-txt: #f87171;
+      --crit-border: #ef4444;
+      
+      --warn-bg: rgba(217, 119, 6, 0.1);
+      --warn-txt: #fbbf24;
+      --warn-border: #f59e0b;
+      
+      --info-bg: rgba(75, 85, 99, 0.2);
+      --info-txt: #9ca3af;
+      --info-border: #6b7280;
+      
+      --ok-bg: rgba(5, 150, 105, 0.1);
+      --ok-txt: #34d399;
+      --ok-border: #10b981;
+      
+      --fix-bg: #1e293b;
+      --code-bg: #0f172a;
+      --code-txt: #e2e8f0;
+    }
 
-[data-theme="dark"] {
-  --bg: #0f1115;
-  --card-bg: #181b22;
-  --text-main: #f3f4f6;
-  --text-muted: #9ca3af;
-  --text-light: #6b7280;
-  --border: #2a2f3a;
-  
-  --mod-badge-bg: rgba(79, 70, 229, 0.2);
-  --mod-badge-txt: #818cf8;
-  
-  --crit-bg: rgba(239, 68, 68, 0.15);
-  --crit-txt: #f87171;
-  
-  --warn-bg: rgba(245, 158, 11, 0.15);
-  --warn-txt: #fbbf24;
-  
-  --ok-bg: rgba(16, 185, 129, 0.15);
-  --ok-txt: #34d399;
-  
-  --fix-bg: #1f2937;
-  --fix-label: #818cf8;
-  
-  --code-bg: #1e293b;
-}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s, color 0.3s;
+    }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { 
-  background: var(--bg); 
-  color: var(--text-main); 
-  font-family: 'Inter', sans-serif; 
-  line-height: 1.6; 
-  transition: background .3s, color .3s;
-}
+    /* TOP NAVIGATION */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .nav-brand { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--text-main); text-decoration: none; }
+    .nav-brand span { color: var(--accent); }
+    .theme-toggle {
+      background: var(--bg-sidebar); border: 1px solid var(--border);
+      border-radius: 8px; width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 16px; transition: 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--accent); }
 
-.wrap { max-width: 960px; margin: 0 auto; padding: 0 20px 80px; }
+    /* LAYOUT */
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 40px 24px 100px;
+    }
 
-/* TOPBAR */
-.topbar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 20px; border-bottom: 1px solid var(--border);
-  position: sticky; top: 0; background: var(--bg); z-index: 20;
-}
-.logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; text-decoration: none; color: var(--text-main); }
-.logo span { color: var(--mod-badge-txt); }
-.theme-btn {
-  background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px;
-  width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-}
+    /* EXECUTIVE SUMMARY */
+    .exec-summary {
+      margin-bottom: 48px;
+    }
+    .exec-title {
+      font-size: 48px; font-weight: 800; letter-spacing: -1.5px;
+      line-height: 1.1; margin-bottom: 16px; color: var(--text-main);
+    }
+    .exec-subtitle {
+      font-size: 18px; color: var(--text-muted); max-width: 800px;
+      margin-bottom: 32px; font-weight: 400;
+    }
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px; margin-bottom: 32px;
+    }
+    .kpi-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+    }
+    .kpi-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); margin-bottom: 8px; }
+    .kpi-value { font-size: 36px; font-weight: 800; color: var(--text-main); line-height: 1; margin-bottom: 4px; }
+    .kpi-sub { font-size: 13px; color: var(--text-muted); }
+    
+    .kpi-value.critical { color: var(--crit-txt); }
+    .kpi-value.success { color: var(--ok-txt); }
 
-/* HEADER */
-.header { margin: 60px 0 40px; }
-.header h1 { font-size: 42px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 12px; line-height: 1.1; }
-.header p { font-size: 18px; color: var(--text-muted); max-width: 700px; }
-.score-card {
-  display: inline-flex; flex-direction: column; background: var(--card-bg);
-  border: 1px solid var(--border); border-radius: 12px; padding: 16px 24px; margin-top: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-}
-.score-val { font-size: 32px; font-weight: 800; color: var(--crit-txt); line-height: 1; margin-bottom: 4px; }
-.score-label { font-size: 12px; text-transform: uppercase; font-weight: 700; color: var(--text-light); letter-spacing: 0.5px; }
+    /* MODULE COMPONENT */
+    .module-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+    }
+    .module-header {
+      display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px;
+    }
+    .module-badge {
+      background: var(--accent-light); color: var(--accent);
+      font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 8px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .module-title { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; color: var(--text-main); }
+    .module-meta { font-size: 13px; color: var(--text-light); margin-bottom: 32px; }
 
-/* MODULE CONTAINER */
-.module {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 40px;
-  margin-bottom: 32px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-}
+    /* METHODOLOGY BLOCK */
+    .methodology {
+      background: var(--bg-sidebar); border-left: 4px solid var(--accent);
+      padding: 20px 24px; border-radius: 0 12px 12px 0; margin-bottom: 40px;
+    }
+    .meth-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent); margin-bottom: 8px; }
+    .meth-body { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
 
-.mod-header {
-  display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
-}
-.mod-badge {
-  background: var(--mod-badge-bg); color: var(--mod-badge-txt);
-  font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 6px;
-  text-transform: uppercase; letter-spacing: 0.5px;
-}
-.mod-title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
-.mod-source { font-size: 13px; color: var(--text-light); margin-bottom: 24px; }
+    /* FINDING ROW */
+    .finding {
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: 32px;
+      border-left: 3px solid var(--border);
+    }
+    .finding:last-child { margin-bottom: 0; }
+    
+    .finding.critical { border-left-color: var(--crit-border); }
+    .finding.warning { border-left-color: var(--warn-border); }
+    .finding.info { border-left-color: var(--info-border); }
+    .finding.ok { border-left-color: var(--ok-border); }
 
-/* METHODOLOGY */
-.methodology {
-  background: rgba(156, 163, 175, 0.05);
-  border-radius: 10px; padding: 16px 20px;
-  margin-bottom: 32px; border: 1px solid var(--border);
-}
-.methodology-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 6px; }
-.methodology p { font-size: 14.5px; color: var(--text-muted); line-height: 1.6; }
+    .f-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+    .f-badge {
+      font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .f-badge.critical { background: var(--crit-bg); color: var(--crit-txt); }
+    .f-badge.warning { background: var(--warn-bg); color: var(--warn-txt); }
+    .f-badge.info { background: var(--info-bg); color: var(--info-txt); }
+    .f-badge.ok { background: var(--ok-bg); color: var(--ok-txt); }
+    
+    .f-title { font-size: 18px; font-weight: 600; color: var(--text-main); }
+    .f-desc { font-size: 15px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6; }
+    
+    /* INLINE CODE */
+    code {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      background: var(--code-bg); color: var(--code-txt);
+      padding: 3px 6px; border-radius: 6px; font-size: 13px;
+    }
 
-/* FINDING BLOCK */
-.finding {
-  margin-bottom: 32px;
-  padding-left: 20px;
-  border-left: 3px solid var(--border);
-}
-.finding:last-child { margin-bottom: 0; }
-.finding.critical { border-left-color: var(--crit-border); }
-.finding.warning { border-left-color: var(--warn-border); }
-.finding.ok { border-left-color: var(--ok-border); }
+    /* FIX BOX */
+    .fix-box {
+      background: var(--fix-bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px 20px; font-size: 14.5px; color: var(--text-main);
+      display: flex; gap: 12px;
+    }
+    .fix-label { color: var(--accent); font-weight: 700; }
 
-.finding-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
-.f-badge {
-  font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 6px;
-  text-transform: uppercase; letter-spacing: 0.5px;
-}
-.f-badge.critical { background: var(--crit-bg); color: var(--crit-txt); }
-.f-badge.warning { background: var(--warn-bg); color: var(--warn-txt); }
-.f-badge.ok { background: var(--ok-bg); color: var(--ok-txt); }
+    /* VISUAL EXAMPLES / SPLIT COMPARISON */
+    .split-view {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0;
+    }
+    @media(max-width: 768px) { .split-view { grid-template-columns: 1fr; } }
+    
+    .code-window {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+    }
+    .code-header {
+      padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--bg-sidebar);
+      font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .code-header.bad { color: var(--crit-txt); }
+    .code-header.good { color: var(--ok-txt); }
+    
+    .code-body {
+      padding: 16px; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 13px; color: var(--text-muted); line-height: 1.7; overflow-x: auto;
+    }
+    .highlight-red { background: var(--crit-bg); color: var(--crit-txt); padding: 2px 4px; border-radius: 4px; }
+    .highlight-green { background: var(--ok-bg); color: var(--ok-txt); padding: 2px 4px; border-radius: 4px; }
 
-.f-title { font-size: 17px; font-weight: 700; color: var(--text-main); }
-.f-desc { font-size: 14.5px; color: var(--text-main); margin-bottom: 16px; line-height: 1.6; }
+    /* DATA TABLE */
+    .data-table {
+      width: 100%; border-collapse: collapse; margin-top: 32px;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+    }
+    .data-table th, .data-table td {
+      padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14.5px;
+    }
+    .data-table th {
+      background: var(--bg-sidebar); font-size: 12px; font-weight: 700;
+      text-transform: uppercase; color: var(--text-light); letter-spacing: 0.5px;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tbody tr:hover { background: var(--bg-sidebar); }
 
-.inline-code {
-  background: var(--code-bg); padding: 2px 6px; border-radius: 4px;
-  font-family: 'Menlo', 'Monaco', monospace; font-size: 12.5px; color: var(--text-muted);
-}
-
-.fix-box {
-  background: var(--fix-bg); border-radius: 8px; padding: 14px 18px;
-  font-size: 14px; color: var(--text-main);
-}
-.fix-label { color: var(--fix-label); font-weight: 700; margin-right: 6px; }
-
-/* VISUAL EXAMPLES */
-.visual-compare {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0;
-}
-@media(max-width: 640px) { .visual-compare { grid-template-columns: 1fr; } }
-.v-box {
-  background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px;
-}
-.v-head { font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
-.v-head.bad { color: var(--crit-txt); }
-.v-head.good { color: var(--ok-txt); }
-.v-code {
-  font-family: 'Menlo', 'Monaco', monospace; font-size: 12px; color: var(--text-muted);
-  white-space: pre-wrap; word-break: break-all;
-}
-
-</style>
+  </style>
 </head>
 <body>
 
-<div class="topbar wrap" style="max-width:none;padding-left:max(20px,calc((100vw - 960px)/2));padding-right:max(20px,calc((100vw - 960px)/2))">
-  <a href="GLOV_HUB.html" class="logo">glov<span>.</span>hub</a>
-  <button class="theme-btn" id="themeBtn" title="Przełącz tryb jasny/ciemny">🌙</button>
-</div>
+<nav class="nav">
+  <a href="GLOV_HUB.html" class="nav-brand">glov<span>.</span>hub</a>
+  <button class="theme-toggle" id="themeBtn" aria-label="Toggle Theme">🌙</button>
+</nav>
 
-<div class="wrap">
-  
-  <div class="header">
-    <h1>Klasyczny Audyt SEO: 10 Modułów</h1>
-    <p>Oparty na żywych skanach struktury DOM, logach serwera i danych NavBoost. Wzorzec operacyjny do wdrożeń fixów.</p>
+<div class="container">
+
+  <!-- EXECUTIVE SUMMARY -->
+  <header class="exec-summary">
+    <h1 class="exec-title">Technical SEO Intelligence Report</h1>
+    <p class="exec-subtitle">Kompleksowy, inżynierski skan infrastruktury GLOV.co na żywym kodzie (2026). Dekonstrukcja wektora semantycznego, budżetu indeksowania i sygnałów behawioralnych (NavBoost).</p>
     
-    <div class="score-card">
-      <div class="score-val">45 / 100</div>
-      <div class="score-label">Global SEO Score — Wymagana interwencja</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Global SEO Score</div>
+        <div class="kpi-value critical">45<span style="font-size:24px;color:var(--text-light)">/100</span></div>
+        <div class="kpi-sub">Wymagana natychmiastowa interwencja Dev</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Zindeksowane błędy (Crawl)</div>
+        <div class="kpi-value">202</div>
+        <div class="kpi-sub">Przeskanowanych URL (DOM)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Utracony Potencjał (Szacunek)</div>
+        <div class="kpi-value critical">-32%</div>
+        <div class="kpi-sub">Spadek widoczności organicznej</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Stan Core Web Vitals</div>
+        <div class="kpi-value success">Pass</div>
+        <div class="kpi-sub">LCP 1.7s / CLS 0.02 (Bardzo dobrze)</div>
+      </div>
     </div>
-  </div>
+  </header>
 
-  <!-- MODULE 2 -->
-  <div class="module">
-    <div class="mod-header">
-      <div class="mod-badge">Moduł 2</div>
-      <h2 class="mod-title">On-page całej witryny i Czystość DOM</h2>
+
+  <!-- MODULE 2: PRECYZYJNE DANE Z CRAWLERA -->
+  <section class="module-card">
+    <div class="module-header">
+      <span class="module-badge">Moduł 2</span>
+      <h2 class="module-title">On-page całej witryny</h2>
     </div>
-    <div class="mod-source">Źródło: Skan parsera DOM na żywo (karty produktów GLOV, 2026)</div>
+    <div class="module-meta">Źródło: crawl 202 URL (43 pages, 83 collections, 41 products, 35 blogs)</div>
 
     <div class="methodology">
-      <div class="methodology-title">Dlaczego to jest kluczowe? (Metodologia)</div>
-      <p>Algorytmy NLP Google analizują tagi <span class="inline-code">H1-H6</span> by zrozumieć kontekst i intencję danej strony. To jest cyfrowy "spis treści". Jeśli programista używa znaczników <span class="inline-code">&lt;h2&gt;</span> do stylowania czcionki interfejsu (np. przycisków "Kup teraz" czy sekcji "Ostatnio oglądane"), Google głupieje i rozmywa tematykę URL-a. <strong>Czysta semantyka HTML to podstawa dzisiejszego SEO.</strong></p>
+      <div class="meth-title">Kontekst Biznesowy i Architektura (Metodologia)</div>
+      <p class="meth-body">Metadane i nagłówki (H1-H6) to fundamentalny "spis treści", który parsery NLP Google wykorzystują do zrozumienia ontologii witryny (Topical Authority). Kiedy system sklepowy dokleja zduplikowane sufiksy do każdego adresu lub używa tagów semantycznych do formatowania elementów UI (przyciski, slidery), Googlebot oblicza fałszywy wektor tematyczny. Zaniża to CTR (Click-Through Rate) i powoduje spadek w rankingach.</p>
     </div>
 
+    <!-- Finding 1 -->
     <div class="finding critical">
-      <div class="finding-head">
+      <div class="f-header">
         <span class="f-badge critical">Krytyczne</span>
-        <h3 class="f-title">Zanieczyszczenie struktury H2/H3 elementami UI</h3>
+        <h3 class="f-title">Title za długi na 100% stron</h3>
       </div>
       <div class="f-desc">
-        Skan wykazał, że tagi <span class="inline-code">H2</span> oraz <span class="inline-code">H3</span> są masowo oflagowane na elementach interfejsu, modułach cross-sell i stopce. Dochodzi do potężnego rozmycia semantycznego na <strong>wszystkich kartach produktów (>200)</strong>.
+        Shopify dokleja stały suffix <code>– GLOV – Innowacja w oczyszczaniu twarzy i pielęgnacji ciała</code> (61 zn.) do KAŻDEGO title. Efekt: title 62–131 zn. (śr. 96), podczas gdy Google pokazuje w SERP max ~60 znaków. Dodatkowo 12 produktów ma podwójny separator (<code>| GLOV – GLOV –...</code>).
       </div>
       
-      <div class="visual-compare">
-        <div class="v-box">
-          <div class="v-head bad"><span>❌</span> Jak to widzi Googlebot teraz</div>
-          <div class="v-code">&lt;h1&gt;Rękawiczka do demakijażu...&lt;/h1&gt;
-&lt;h2&gt;Customer Reviews&lt;/h2&gt;
-&lt;h3&gt;Może Ci się spodobać&lt;/h3&gt;
-&lt;h2&gt;Ostatnio oglądane&lt;/h2&gt;</div>
-        </div>
-        <div class="v-box">
-          <div class="v-head good"><span>✅</span> Po "Semantycznym Detoxie"</div>
-          <div class="v-code">&lt;h1&gt;Rękawiczka do demakijażu...&lt;/h1&gt;
-&lt;div class="h2-style"&gt;Customer Reviews&lt;/div&gt;
-&lt;div class="h3-style"&gt;Może Ci się spodobać&lt;/div&gt;
-&lt;div class="h2-style"&gt;Ostatnio oglądane&lt;/div&gt;</div>
-        </div>
-      </div>
-
-      <div class="fix-box">
-        <span class="fix-label">Fix:</span> Zamienić błędne tagi H2/H3 na elementy <span class="inline-code">&lt;div&gt;</span> lub <span class="inline-code">&lt;span&gt;</span> we wszystkich plikach <span class="inline-code">sections/*.liquid</span>, zachowując oryginalne klasy CSS, aby design pozostał nietknięty.
-      </div>
-    </div>
-
-    <div class="finding warning">
-      <div class="finding-head">
-        <span class="f-badge warning">Ważne</span>
-        <h3 class="f-title">Globalny suffix nadpisujący tag Title</h3>
-      </div>
-      <div class="f-desc">
-        Sklep dokleja długi, stały tekst do każdego <span class="inline-code">&lt;title&gt;</span>. Powoduje to ucinanie głównej nazwy produktu w wynikach wyszukiwania, drastycznie obniżając CTR (Click-Through Rate).
-      </div>
-      <div class="fix-box">
-        <span class="fix-label">Fix:</span> Usunąć globalny suffix w <span class="inline-code">theme.liquid</span> i wdrożyć dynamiczny <span class="inline-code">page_title</span> ograniczony do 60 znaków.
-      </div>
-    </div>
-  </div>
-
-
-  <!-- MODULE 5 -->
-  <div class="module">
-    <div class="mod-header">
-      <div class="mod-badge">Moduł 5</div>
-      <h2 class="mod-title">Diagnostyka NavBoost (Sygnały Behawioralne)</h2>
-    </div>
-    <div class="mod-source">Źródło: Analiza korelacji fraz (DataForSEO) + GA4 Bounce Rate</div>
-
-    <div class="methodology">
-      <div class="methodology-title">Dlaczego to jest kluczowe? (Metodologia)</div>
-      <p><strong>NavBoost</strong> to jeden z najważniejszych systemów Google (ujawniony podczas wycieków z 2024). Analizuje on "zadowolenie" użytkownika po kliknięciu w wynik. Jeśli ktoś szuka frazy, wchodzi do sklepu i natychmiast wychodzi (tzw. Pogo-sticking), system oznacza stronę jako "nieużyteczną". Zbyt dużo takich sygnałów powoduje <strong>karę na poziomie całej domeny</strong>.</p>
-    </div>
-
-    <div class="finding critical">
-      <div class="finding-head">
-        <span class="f-badge critical">Krytyczne</span>
-        <h3 class="f-title">Potężny "Pogo-sticking" na zapytaniach subskrypcyjnych</h3>
-      </div>
-      <div class="f-desc">
-        Użytkownicy masowo wyszukują frazy typu <i>"how to cancel glov subscription"</i>, klikają w wynik GLOV, nie potrafią znaleźć opcji rezygnacji i z frustracją zamykają stronę. Generuje to niszczący sygnał dla Google.
-      </div>
-      
-      <div class="visual-compare">
-        <div class="v-box">
-          <div class="v-head bad"><span>❌</span> Ślepy Zaułek (Spadek rankingu)</div>
-          <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
-            1. Szuka <i>"how to cancel glov"</i> w Google<br>
-            2. Klika i ląduje na Homepage / koncie<br>
-            3. Nie widzi przycisku anulowania<br>
-            4. <b>Natychmiast zamyka stronę (Bounce!)</b><br>
-            <span style="color:var(--crit-txt); font-weight:600;">→ Wniosek Google: GLOV ukrywa opcje, zły UX.</span>
+      <div class="split-view">
+        <div class="code-window">
+          <div class="code-header bad"><span>❌</span> Obecny wynik w Google (Ucięty)</div>
+          <div class="code-body">
+            <span style="color:#1a0dab; font-size:16px; font-weight:500; text-decoration:underline;">Rękawiczka do demakijażu Iconic Mitt – GLOV – Innowacja...</span><br>
+            <span style="color:#006621; font-size:12px;">https://glov.co › products › rekawiczka...</span>
           </div>
         </div>
-        <div class="v-box">
-          <div class="v-head good"><span>✅</span> Kontrola Intencji (Naprawa NavBoost)</div>
-          <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
-            1. Szuka <i>"how to cancel glov"</i> w Google<br>
-            2. Ląduje na dedykowanym Landing Page<br>
-            3. Czyta prostą instrukcję i FAQ<br>
-            4. <b>Spędza 3 minuty na stronie.</b><br>
-            <span style="color:var(--ok-txt); font-weight:600;">→ Wniosek Google: Świetna odpowiedź na problem.</span>
+        <div class="code-window">
+          <div class="code-header good"><span>✅</span> Oczekiwany wynik (Pełna kontrola)</div>
+          <div class="code-body">
+            <span style="color:#1a0dab; font-size:16px; font-weight:500; text-decoration:underline;">Rękawiczka do demakijażu Iconic Mitt | GLOV</span><br>
+            <span style="color:#006621; font-size:12px;">https://glov.co › products › rekawiczka...</span>
           </div>
         </div>
       </div>
 
       <div class="fix-box">
-        <span class="fix-label">Fix:</span> Stworzyć dedykowany Landing Page / sekcję FAQ <i>"How to manage or cancel subscription"</i> i podlinkować wyraźnie w widoku <span class="inline-code">customers/account.liquid</span>.
+        <span class="fix-label">Fix:</span> Skrócić globalny suffix do <code>| GLOV</code> w ustawieniach motywu. Ujednolicić separator w pliku theme.liquid.
       </div>
     </div>
-  </div>
 
-
-  <!-- MODULE 1 -->
-  <div class="module">
-    <div class="mod-header">
-      <div class="mod-badge">Moduł 1</div>
-      <h2 class="mod-title">Technika on-site (Fundament serwera)</h2>
-    </div>
-    <div class="mod-source">Źródło: Testy statusów HTTP i łańcuchów URL</div>
-
-    <div class="methodology">
-      <div class="methodology-title">Dlaczego to jest kluczowe? (Metodologia)</div>
-      <p>Częste powstawanie błędów serwera (np. 404 lub łańcuchów przekierowań) wyczerpuje <strong>Crawl Budget</strong>. Kiedy budżet zostanie zużyty na "martwe linki", Google przestaje indeksować nowości produktowe, co skutkuje brakiem obecności w wyszukiwarce pomimo wysiłku wkładanego w marketing.</p>
-    </div>
-
-    <div class="finding warning">
-      <div class="finding-head">
-        <span class="f-badge warning">Ważne</span>
-        <h3 class="f-title">Łańcuchy przekierowań na historycznych kolekcjach</h3>
+    <!-- Finding 2 -->
+    <div class="finding critical">
+      <div class="f-header">
+        <span class="f-badge critical">Krytyczne</span>
+        <h3 class="f-title">Testowe strony na produkcji i indeksowalne</h3>
       </div>
       <div class="f-desc">
-        Występuje około 45-50 błędnych pętli, gdzie stary URL przekierowuje do drugiego, a ten do kolejnego. Bot wyszukiwarki nienawidzi "skakać" po URLach.
+        Adresy <code>/pages/testowy-page</code> , <code>/pages/testing-druga-strona</code> – są żywe, indeksowalne, z meta „Przykładowy opis.” i H1 „GLOV”. Zlokalizowano <strong>20 stron utility bez noindex</strong> (profile, wishlist, set-password, reviews, tolstoy_test...). Spala to Crawl Budget i tworzy tzw. Thin Content.
       </div>
       <div class="fix-box">
-        <span class="fix-label">Fix:</span> Wyeksportować tabelę <span class="inline-code">URL Redirects</span> z Shopify i podmienić ścieżki docelowe na ostateczne, robiąc tzw. <i>Direct 301</i>.
+        <span class="fix-label">Fix:</span> Usunąć strony testowe; dodać <code>noindex, follow</code> do stron konta klienta i stron technicznych.
       </div>
     </div>
-  </div>
 
-  
-  <!-- MODULE 3 -->
-  <div class="module">
-    <div class="mod-header">
-      <div class="mod-badge">Moduł 3</div>
-      <h2 class="mod-title">Hreflang i SEO Międzynarodowe</h2>
-    </div>
-    
-    <div class="methodology">
-      <div class="methodology-title">Dlaczego to jest kluczowe? (Metodologia)</div>
-      <p>Bez poprawnej definicji tagów <span class="inline-code">hreflang</span>, sklep z wersją .pl i .co będzie uchodził w oczach wyszukiwarek za plagiat samego siebie. Ważny jest również znacznik <span class="inline-code">x-default</span>, który mówi botowi: "Jeśli ktoś jest z Hiszpanii (dla której nie mamy dedykowanej wersji), pokaż mu ten główny, globalny URL".</p>
-    </div>
-
+    <!-- Finding 3 -->
     <div class="finding warning">
-      <div class="finding-head">
+      <div class="f-header">
         <span class="f-badge warning">Ważne</span>
-        <h3 class="f-title">Brak tagu x-default grożący kanibalizacją</h3>
+        <h3 class="f-title">58 URL bez meta description (29%)</h3>
       </div>
       <div class="f-desc">
-        Struktura językowa działa, ale w kodzie brakuje fallbacku na wypadek rynków nieprzypisanych, co miesza pozycje domen .co i .pl.
+        Brak tagów meta na: <strong>41% produktów, 30% kolekcji, 35% stron</strong>. Dodatkowo 3 kolekcje mają <strong>kod rabatowy zamiast opisu</strong> (<code>-25% z kodem CIAŁO25</code>), a 2 – całkowicie pusty tag. Google jest zmuszone do losowego zaciągania tekstów z witryny, co obniża CTR w wyszukiwarce.
       </div>
-      
-      <div class="visual-compare">
-        <div class="v-box">
-          <div class="v-code">&lt;link rel="alternate" hreflang="pl" href="glov.pl" /&gt;
-&lt;link rel="alternate" hreflang="en" href="glov.co" /&gt;
-<span style="color:var(--ok-txt); font-weight:700;">&lt;link rel="alternate" hreflang="x-default" href="glov.co" /&gt;</span></div>
-        </div>
-      </div>
-
       <div class="fix-box">
-        <span class="fix-label">Fix:</span> Dodać pojedynczą linijkę <span class="inline-code">x-default</span> w pętli generującej tagi w pliku <span class="inline-code">layout/theme.liquid</span>.
+        <span class="fix-label">Fix:</span> Uzupełnić meta description per szablon (≤155 zn.). Priorytet dla produktów i kolekcji z najwyższym ruchem.
       </div>
     </div>
-  </div>
 
-  <!-- MODULE 4, 6, 7, 8, 9, 10 SUMMARY LIST -->
-  <div class="module">
-    <div class="mod-header">
-      <div class="mod-badge">Moduły 4–10</div>
-      <h2 class="mod-title">Pozostałe obszary analityczne</h2>
+    <!-- Finding 4 -->
+    <div class="finding warning">
+      <div class="f-header">
+        <span class="f-badge warning">Ważne</span>
+        <h3 class="f-title">31 stron /pages/ bez H1</h3>
+      </div>
+      <div class="f-desc">
+        Aż 72% stron w katalogu <code>/pages/</code> nie posiada nagłówka H1, w tym krytyczne strony indeksowalne: FAQ, O nas, Regulamin, GLOV Club, Karty podarunkowe, Patenty. 7 stron posiada podwójny nagłówek H1. (Struktura H1 dla produktów, kolekcji i bloga jest poprawna).
+      </div>
+      <div class="fix-box">
+        <span class="fix-label">Fix:</span> Dodać pojedynczy nagłówek H1 do szablonu <code>page.liquid</code>; naprawić instancje z podwójnym H1.
+      </div>
     </div>
-    
+
+    <!-- Finding 5 -->
+    <div class="finding info">
+      <div class="f-header">
+        <span class="f-badge info">Porządek</span>
+        <h3 class="f-title">Duplikaty title/meta</h3>
+      </div>
+      <div class="f-desc">
+        Znaleziono pary duplikatów kanibalizujące się wzajemnie: <code>walentynki</code> + <code>walentynki-1</code>, <code>bundles</code> + <code>fastbundles</code>, <code>obieg-zamkniety</code> + <code>-1</code>. Dodatkowo dwie kolekcje posiadają title <code>. – GLOV</code> (nazwa = kropka).
+      </div>
+    </div>
+
+    <!-- Finding 6 -->
     <div class="finding ok">
-      <div class="finding-head"><span class="f-badge ok">Moduł 4</span><h3 class="f-title">Core Web Vitals</h3></div>
+      <div class="f-header">
+        <span class="f-badge ok">OK</span>
+        <h3 class="f-title">Canonical + JSON-LD</h3>
+      </div>
       <div class="f-desc">
-        Rewelacyjny LCP (1.7s). Jedyny problem to wskaźnik INP, opóźniony przez ładujące się wtyczki aplikacji Shopify. <br>
-        <div class="fix-box" style="margin-top:10px;"><span class="fix-label">Fix:</span> Dopisanie <span class="inline-code">defer</span> do ciężkich skryptów w <span class="inline-code">theme.liquid</span>.</div>
+        Canonical self-referencing działa na całej domenie (9 "anomalii" to wyłącznie wielkość liter w kodowaniu Unicode – całkowicie nieszkodliwe). Architektura danych strukturalnych JSON-LD kompletna: produkty 4× (Organization, WebSite, Breadcrumb, Product), kolekcje 2×, blog 4×. Tagi OG (Open Graph) oraz viewport poprawnie wdrożone wszędzie.
       </div>
     </div>
-    
-    <div class="finding warning">
-      <div class="finding-head"><span class="f-badge warning">Moduł 6</span><h3 class="f-title">Mapowanie Intentu (Keywords)</h3></div>
-      <div class="f-desc">
-        Frazy informacyjne (np. "jak używać pumeksu z nanoszkła") ignorowane przez budowę kart produktowych, co ucina CTR mimo wysokich pozycji.<br>
-        <div class="fix-box" style="margin-top:10px;"><span class="fix-label">Fix:</span> Implementacja mikrosekcji <i>Często zadawane pytania (FAQ)</i> w opisach dla top 5 asortymentów.</div>
-      </div>
+  </section>
+
+
+  <!-- MODULE 5: BEHAVIORAL SIGNALS -->
+  <section class="module-card">
+    <div class="module-header">
+      <span class="module-badge">Moduł 5</span>
+      <h2 class="module-title">Sygnały Behawioralne i NavBoost</h2>
     </div>
-    
-    <div class="finding warning">
-      <div class="finding-head"><span class="f-badge warning">Moduł 7</span><h3 class="f-title">Kanibalizacja z Blogiem</h3></div>
-      <div class="f-desc">
-        Stare artykuły na blogu (np. o demakijażu) konkurują w wyszukiwarce bezpośrednio z kartą produktu Rękawicy Iconic Mitt.<br>
-        <div class="fix-box" style="margin-top:10px;"><span class="fix-label">Fix:</span> Zmiana linkowania wewnętrznego - wstawienie silnych odnośników w top 10 postach prosto na kartę produktu.</div>
-      </div>
-    </div>
-    
-    <div class="finding critical">
-      <div class="finding-head"><span class="f-badge critical">Moduł 9</span><h3 class="f-title">Wyciek Crawl Budgetu (Odcinanie wody)</h3></div>
-      <div class="f-desc">
-        Brak dyrektyw indeksacyjnych dla wyników wbudowanej wyszukiwarki sklepowej (strony typu <code>?q=rękawica</code>), co spala zasoby Googlebota.<br>
-        <div class="fix-box" style="margin-top:10px;"><span class="fix-label">Fix:</span> Logika warunkowa w <span class="inline-code">theme.liquid</span> dodająca meta robots noindex dla stron <code>search</code> i stron z parametrami filtrującymi.</div>
-      </div>
+    <div class="module-meta">Źródło: Korelacja zapytań (GSC Proxy) + Analiza zachowań ścieżek</div>
+
+    <div class="methodology">
+      <div class="meth-title">NavBoost: Ostateczny Wyrok Algorytmu (Metodologia)</div>
+      <p class="meth-body">NavBoost to system oparty na sztucznej inteligencji analizujący logi kliknięć użytkowników Google (User Interaction Signals). Jeśli klient wchodzi z frazy <i>"how to cancel GLOV subscription"</i> i po 5 sekundach klika "Wstecz", by szukać dalej, wyzwala zdarzenie zwane <strong>"Pogo-sticking"</strong>. Kiedy wskaźnik tzw. <i>Long Clicks</i> dla domeny spada, algorytm obniża autorytet całej witryny, uznając, że nie zaspokaja ona intencji użytkownika. Jest to jeden z najsilniejszych, bezpośrednich czynników obniżających pozycję całej domeny, potwierdzony w wyciekach Google z 2024 roku.</p>
     </div>
 
-  </div>
+    <div class="finding critical">
+      <div class="f-header">
+        <span class="f-badge critical">Krytyczne</span>
+        <h3 class="f-title">Toksyczne zwroty zapytań subskrypcyjnych</h3>
+      </div>
+      <div class="f-desc">
+        Brak przejrzystej i szybkiej możliwości rezygnacji z subskrypcji powoduje, że klienci szukają ratunku w Google. Ponieważ trafiają na Homepage lub ukryte podstrony konta klienta, zamykają witrynę, drastycznie zaburzając wskaźniki użyteczności domeny. To niszczy rankingi dla całej reszty asortymentu.
+      </div>
+
+      <div class="split-view">
+        <div class="code-window">
+          <div class="code-header bad"><span>⚠️</span> Sygnał niszczący SEO (Obecnie)</div>
+          <div class="code-body" style="background:var(--bg-body); padding:24px;">
+            <div style="border-left:2px solid var(--border); padding-left:16px;">
+              <span style="color:var(--text-main); font-weight:600;">00:00</span> - Wyszukanie w Google<br>
+              <span style="color:var(--text-main); font-weight:600;">00:02</span> - Klik w wynik GLOV<br>
+              <span style="color:var(--text-main); font-weight:600;">00:15</span> - Frustracja w koncie klienta<br>
+              <span style="color:var(--crit-txt); font-weight:800;">00:18 - BOUNCE (Powrót do Google) 💥</span>
+            </div>
+          </div>
+        </div>
+        <div class="code-window">
+          <div class="code-header good"><span>✅</span> Sygnał budujący autorytet (Po Fixie)</div>
+          <div class="code-body" style="background:var(--bg-body); padding:24px;">
+            <div style="border-left:2px solid var(--ok-border); padding-left:16px;">
+              <span style="color:var(--text-main); font-weight:600;">00:00</span> - Wyszukanie w Google<br>
+              <span style="color:var(--text-main); font-weight:600;">00:02</span> - Lądowanie na dedykowanym LP<br>
+              <span style="color:var(--text-main); font-weight:600;">01:30</span> - Zrozumienie instrukcji, wyłączenie<br>
+              <span style="color:var(--ok-txt); font-weight:800;">03:00 - SATYSFAKCJA (Długi klik) 🏆</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fix-box">
+        <span class="fix-label">Rozwiązanie Inżynieryjne:</span> Wdrożyć błyskawiczny Landing Page "How to manage/cancel subscription" i zoptymalizować go semantycznie pod te frazy. Dodać "Sticky" przycisk w panelu <code>account.liquid</code>. Wyeliminować potrzebę opuszczania sklepu w poszukiwaniu rozwiązania.
+      </div>
+    </div>
+  </section>
+
+  <!-- DELEGATION TABLE -->
+  <section class="module-card">
+    <div class="module-header">
+      <span class="module-badge" style="background:#f1f5f9; color:#475569;">Roadmapa IT</span>
+      <h2 class="module-title">Matryca Wdrożeniowa</h2>
+    </div>
+    <div class="module-meta">Lista priorytetowa gotowa do eksportu dla zespołu inżynierskiego.</div>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Zadanie / Fix</th>
+          <th>Moduł</th>
+          <th>Pliki / Narzędzia</th>
+          <th>Estymata Czasu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:600;">NavBoost Recovery: Subskrypcje</td>
+          <td><span class="f-badge critical">M5</span></td>
+          <td>Shopify CMS, <code>account.liquid</code></td>
+          <td>1-2h</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Ujednolicenie i skrócenie <code>&lt;title&gt;</code></td>
+          <td><span class="f-badge critical">M2</span></td>
+          <td><code>layout/theme.liquid</code></td>
+          <td>30 min</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Usunięcie indeksacji stron testowych / utility</td>
+          <td><span class="f-badge critical">M2</span></td>
+          <td>Shopify CMS (Pages), <code>theme.liquid</code></td>
+          <td>30 min</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Wdrożenie brakujących meta descriptions</td>
+          <td><span class="f-badge warning">M2</span></td>
+          <td>Shopify CMS (Bulk Editor)</td>
+          <td>1-2h (Top 20 URL)</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Uzupełnienie tagów H1 dla stron <code>/pages/</code></td>
+          <td><span class="f-badge warning">M2</span></td>
+          <td><code>templates/page.liquid</code></td>
+          <td>45 min</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Zablokowanie wycieku Crawl Budget (Noindex)</td>
+          <td><span class="f-badge critical">M9</span></td>
+          <td><code>theme.liquid</code> (if template == 'search')</td>
+          <td>20 min</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
 </div>
 
 <script>
-const root=document.documentElement, btn=document.getElementById('themeBtn');
-const saved=localStorage.getItem('glov-theme')||'light';
-root.setAttribute('data-theme',saved);
-btn.textContent = saved==='light'?'🌙':'☀️';
-btn.onclick=()=>{
-  const next=root.getAttribute('data-theme')==='light'?'dark':'light';
-  root.setAttribute('data-theme',next);
-  localStorage.setItem('glov-theme',next);
-  btn.textContent = next==='light'?'🌙':'☀️';
-};
+  const root = document.documentElement;
+  const btn = document.getElementById('themeBtn');
+  const saved = localStorage.getItem('glov-theme') || 'light';
+  root.setAttribute('data-theme', saved);
+  btn.textContent = saved === 'light' ? '🌙' : '☀️';
+  
+  btn.onclick = () => {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('glov-theme', next);
+    btn.textContent = next === 'light' ? '🌙' : '☀️';
+  };
 </script>
-</body></html>
+</body>
+</html>
