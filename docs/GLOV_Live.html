@@ -132,7 +132,7 @@ tr.hot td{background:rgba(22,163,74,.05)}tr.danger td{background:rgba(220,38,38,
 .msg.typing span:nth-child(3){animation-delay:.4s}
 @keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-4px);opacity:1}}
 .ask-inp{display:flex;gap:8px;padding:10px 12px;border-top:1px solid #e5e7eb;background:#fff;flex-shrink:0}
-.ask-inp textarea{flex:1;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:7px 9px;color:#1a1d23;font-size:12.5px;resize:none;height:56px;font-family:inherit}
+.ask-inp input[type=text]{flex:1;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:7px 9px;color:#1a1d23;font-size:12.5px;font-family:inherit}
 .ask-send{background:#2C3E50;color:#fff;border:none;border-radius:8px;padding:7px 14px;cursor:pointer;font-weight:600;font-size:12px;align-self:flex-end;transition:transform .15s,background .15s}
 .ask-send:active{transform:scale(.92)}
 .ask-send.sending{animation:sendbounce .4s ease}
@@ -235,7 +235,7 @@ tr.hot td{background:rgba(22,163,74,.05)}tr.danger td{background:rgba(220,38,38,
       <div class="msg ai">Cześć! Jestem analitykiem GLOV PL. Pytaj o dane GA4 z bieżącego zakresu — kanały, produkty, lejek, trendy, rekomendacje.</div>
     </div>
     <div class="ask-inp">
-      <textarea id="chatInput" placeholder="Pytaj o dane... (Enter = wyślij, Shift+Enter = nowa linia)"></textarea>
+      <input type="text" id="chatInput" placeholder="Pytaj o dane... (Enter = wyślij)">
       <button class="ask-send" id="chatSend">Wyślij</button>
     </div>
     <div class="ask-key-row" id="askKeyRow" style="display:none">
@@ -1032,7 +1032,7 @@ async function sendChat(){
 }
 document.getElementById('chatSend').onclick=sendChat;
 document.getElementById('chatInput').addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}
+  if(e.key==='Enter'){e.preventDefault();sendChat();}
 });
 function saveApiKey(){
   const k=document.getElementById('dsKey').value.trim();
