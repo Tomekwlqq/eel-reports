@@ -163,16 +163,16 @@ tr.hot td{background:rgba(22,163,74,.05)}tr.danger td{background:rgba(220,38,38,
 .lcol-head{font-size:11px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:5px}
 .live-nodata{color:var(--muted);font-size:12px;padding:12px 0;text-align:center}
 .g4funnel{margin:4px 0 8px}
-.gfrow{display:grid;grid-template-columns:auto 58px 1fr 115px;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+.gfrow{display:grid;grid-template-columns:120px 58px 1fr 115px;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
 .gfrow:last-child{border-bottom:none}
-.gfname{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap}
+.gfname{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gfcnt{font-size:13px;font-weight:800;text-align:right;color:var(--text);font-variant-numeric:tabular-nums}
 .gfbar-wrap{height:22px;background:var(--card2);border-radius:5px;overflow:hidden}
 .gfbar{height:100%;border-radius:5px;transition:width .3s ease}
 .gfpct{font-size:14px;font-weight:800;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .gfpct-lbl{font-size:9px;font-weight:500;color:var(--muted);margin-left:3px}
 .gfpct-sub{font-size:10.5px;font-weight:600;color:var(--muted);text-align:right;white-space:nowrap;margin-top:1px;font-variant-numeric:tabular-nums}
-@media(max-width:640px){.gfrow{grid-template-columns:80px 42px 1fr 90px;gap:6px}}
+@media(max-width:640px){.gfrow{grid-template-columns:90px 42px 1fr 90px;gap:6px}}
 </style>
 </head>
 <body>
@@ -562,11 +562,11 @@ function renderKPI(d,cmp){
 function renderFunnel(d){
   const f=d.funnel||{};
   const steps=[
-    ['session_start','Wejście','#5b8def'],
-    ['view_item','PDP (view_item)','#7c5cff'],
-    ['add_to_cart','Koszyk (ATC)','#d97706'],
-    ['begin_checkout','Checkout','#ec4899'],
-    ['purchase','Zakup','#16a34a']
+    ['session_start','Wejście','#5b8def','sesji'],
+    ['view_item','PDP (view_item)','#7c5cff','Wejście'],
+    ['add_to_cart','Koszyk (ATC)','#d97706','PDP'],
+    ['begin_checkout','Checkout','#ec4899','ATC'],
+    ['purchase','Zakup','#16a34a','Checkout']
   ];
   const fmax=f.session_start||1;
   let h='',atcDrop=0;
@@ -575,14 +575,21 @@ function renderFunnel(d){
     const prev=i>0?(f[steps[i-1][0]]||0):v;
     const drop=i>0&&prev>0?(1-v/prev)*100:0;
     if(i===2)atcDrop=drop;
-    const barW=Math.max(v/fmax*100,1).toFixed(0);
     const isAtc=i===2;
-    const pctStr=i>0?('−'+drop.toFixed(2)+'%'):'—';
+    const barW=Math.max(v/fmax*100,1).toFixed(0);
+    // PRIMARY (kolorowa): % ze sesji
+    const pctSess=i>0?(v/fmax*100).toFixed(2)+'%':'—';
+    // SECONDARY (szara): % ze poprzedniego kroku, tylko i>=2
+    const pctPrev=i>=2&&prev>0?((v/prev*100).toFixed(2)+'%'):'';
     h+=`<div class="gfrow">
       <div class="gfname">${s[1]}</div>
       <div class="gfcnt">${n(v)}</div>
       <div class="gfbar-wrap"${isAtc?' style="outline:2px solid var(--bad);outline-offset:-2px"':''}><div class="gfbar" style="width:${barW}%;background:${s[2]}"></div></div>
-      <div class="gfpct" style="color:${isAtc?'var(--bad)':s[2]}">${pctStr}</div>
+      <div>
+        <div class="gfpct" style="color:${s[2]}">${pctSess}${i>0?`<span class="gfpct-lbl">ze&nbsp;sesji</span>`:''}
+        </div>
+        ${pctPrev?`<div class="gfpct-sub">${pctPrev}<span class="gfpct-lbl">ze&nbsp;${s[3]}</span></div>`:''}
+      </div>
     </div>`;
   });
   const c2p=f.begin_checkout>0?((f.purchase||0)/f.begin_checkout*100).toFixed(0):0;
