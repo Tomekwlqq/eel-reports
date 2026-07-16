@@ -156,6 +156,7 @@ tr.hot td{background:rgba(22,163,74,.05)}tr.danger td{background:rgba(220,38,38,
 .lkcard{background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:9px 11px}
 .lkcard .ll{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
 .lkcard .lv{font-size:17px;font-weight:800;line-height:1.2}
+.lkcard .ls{font-size:11px;color:var(--muted);margin-top:2px}
 .lsep{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:10px 0 6px;display:flex;align-items:center;gap:6px}
 .lsep::after{content:'';flex:1;height:1px;background:var(--line)}
 .lcols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
@@ -310,7 +311,7 @@ function renderLive(key){
   h+=`<div class="lsep"><span class="sbadge sbadge-ga4">GA4</span>Ruch &amp; Zachowanie — filtr 🇵🇱 PL</div>
   <div class="lkgrid lkgrid-4">
     <div class="lkcard"><div class="ll">Sesje PL</div><div class="lv">${n(g4k.sessions)}</div></div>
-    <div class="lkcard"><div class="ll">Bounce (GA4)</div><div class="lv">${pct(g4k.bounce_rate)}</div></div>
+    <div class="lkcard"><div class="ll">Bounce (GA4)</div><div class="lv">${pct(g4k.bounce_rate)}</div><div class="ls">${pct(1-(g4k.bounce_rate||0))} engaged</div></div>
     <div class="lkcard"><div class="ll">ATC</div><div class="lv">${n(g4k.atc)}</div></div>
     <div class="lkcard"><div class="ll">Avg. Sesja</div><div class="lv">${durFmt(g4k.avg_session_s)}</div></div>
   </div>`;
