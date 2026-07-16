@@ -9,12 +9,14 @@
   --accent:#7c5cff; --black:#0a0a0a; --green:#16a34a; --star:#f5a623; --red:#e11d48;
   --shadow:0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
   --shadow-h:0 8px 24px rgba(0,0,0,.10);
+  --code-bg:#1e1e1e; --code-txt:#d4d4d4;
 }
 [data-theme="dark"]{
   --bg:#0f1115; --bg2:#181b22; --card:#181b22; --line:#2a2f3a; --line2:#23272f;
   --txt:#e8eaed; --txt2:#9aa0aa; --muted:#6b7280;
   --accent:#7c5cff; --black:#e8eaed; --green:#3ecf8e; --star:#f5a623; --red:#f43f5e;
   --shadow:0 1px 3px rgba(0,0,0,.3); --shadow-h:0 8px 24px rgba(0,0,0,.5);
+  --code-bg:#000000; --code-txt:#e8eaed;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,sans-serif;line-height:1.6;transition:background .3s,color .3s}
@@ -32,7 +34,7 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 h1{font-size:38px;font-weight:800;letter-spacing:-1px;margin-bottom:10px;}
 .score-badge{display:inline-block; font-size:24px; font-weight:800; padding:10px 20px; border-radius:12px; background:var(--bg2); border:2px solid var(--red); color:var(--red); margin-top:10px;}
 
-.module{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:var(--shadow);}
+.module{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px;margin-bottom:24px;box-shadow:var(--shadow);}
 .module h2{font-size:20px;font-weight:700;margin-bottom:15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line2);padding-bottom:10px;}
 .module .score{font-size:16px;font-weight:700;color:var(--accent);background:rgba(124,92,255,.1);padding:4px 10px;border-radius:20px;}
 .module .score.bad{color:var(--red);background:rgba(225,29,72,.1);}
@@ -41,14 +43,26 @@ h1{font-size:38px;font-weight:800;letter-spacing:-1px;margin-bottom:10px;}
 .module li{margin-bottom:8px; font-size:14.5px;}
 .module li strong{color:var(--txt);}
 
+/* methodology box */
+.methodology{background:rgba(124,92,255,.05); border-left:4px solid var(--accent); padding:16px; border-radius:4px 12px 12px 4px; margin-bottom:18px;}
+.methodology h4{font-size:14px; color:var(--accent); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;}
+.methodology p{font-size:13.5px; color:var(--txt2); line-height:1.5;}
+
+/* code / visual representation */
+.visual{background:var(--bg2); border:1px solid var(--line); border-radius:12px; padding:16px; margin:16px 0;}
+.visual h4{font-size:13px; text-transform:uppercase; color:var(--muted); margin-bottom:12px; letter-spacing:0.5px;}
+.code-compare{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media(max-width:600px){ .code-compare{grid-template-columns:1fr;} }
+.code-block{background:var(--code-bg); color:var(--code-txt); font-family:monospace; padding:12px; border-radius:8px; font-size:12.5px; overflow-x:auto;}
+.bad-label{color:#ef4444; font-weight:700; font-size:11px; margin-bottom:4px; display:block; text-transform:uppercase;}
+.good-label{color:#22c55e; font-weight:700; font-size:11px; margin-bottom:4px; display:block; text-transform:uppercase;}
+
 /* table */
 .fix-table{width:100%;border-collapse:collapse;margin-top:40px;background:var(--card);border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);}
 .fix-table th, .fix-table td{padding:16px;text-align:left;border-bottom:1px solid var(--line2);font-size:14px;}
 .fix-table th{background:var(--bg2);font-weight:700;color:var(--txt2);text-transform:uppercase;font-size:12px;letter-spacing:0.5px;}
 .fix-table tr:last-child td{border-bottom:none;}
 .fix-table tr:hover td{background:var(--bg2);}
-.t-red{color:var(--red); font-weight:700;}
-
 </style></head>
 <body>
 <div class="topbar wrap" style="max-width:none;padding-left:max(22px,calc((100vw - 900px)/2));padding-right:max(22px,calc((100vw - 900px)/2))">
@@ -59,128 +73,284 @@ h1{font-size:38px;font-weight:800;letter-spacing:-1px;margin-bottom:10px;}
 <div class="wrap">
   <div class="header">
     <h1>Klasyczny Audyt SEO: GLOV.CO</h1>
-    <p style="color:var(--txt2); font-size:16px;">Metodologia 10 Modułów Oceny (Oparty na skanach struktury LIVE)</p>
+    <p style="color:var(--txt2); font-size:16px;">Pełna Tabela Fixów. Prawdziwe przykłady. Gotowe do działania.</p>
     <div class="score-badge">SCORE: 45 / 100 pkt</div>
     <p style="color:var(--red); font-weight:600; margin-top:10px; font-size:14px;">Wymagana pilna interwencja programistyczna.</p>
   </div>
 
   <div class="module">
     <h2>1. Technika on-site (Fundament serwera) <span class="score good">13 / 15 pkt</span></h2>
+    <div class="methodology">
+      <h4>Co to jest i dlaczego to ważne?</h4>
+      <p>Fundamentem sklepu jest sposób, w jaki serwer odpowiada wyszukiwarkom. Błędy z grupy 4xx lub długie łańcuchy przekierowań (301 > 301 > 301) sprawiają, że bot "męczy się" i opuszcza stronę przed zaindeksowaniem nowych produktów. <strong>Zasada 2026:</strong> Google ekstremalnie tnie "Crawl Budget". Każda sekunda i każdy request na serwerze to pieniądz.</p>
+    </div>
+    <div class="visual">
+      <h4>Wizualizacja błędu: Pętla Przekierowań (Redirect Chain)</h4>
+      <div class="code-compare">
+        <div>
+          <span class="bad-label">❌ ŹLE (TRACISZ BUDŻET)</span>
+          <div class="code-block">
+            /kolekcja-stara<br>
+            ↳ 301 -> /kolekcja-nowa<br>
+            &nbsp;&nbsp;↳ 301 -> /kolekcje/nowa-wersja
+          </div>
+        </div>
+        <div>
+          <span class="good-label">✅ DOBRZE (DIRECT LINK)</span>
+          <div class="code-block">
+            /kolekcja-stara<br>
+            ↳ 301 -> /kolekcje/nowa-wersja
+          </div>
+        </div>
+      </div>
+    </div>
     <ul>
-      <li><strong>Wyniki:</strong> Infrastruktura na Cloudflare (Shopify). `robots.txt` działa. Brak krytycznych 429 ograniczających Crawl Budget. Są pętle przekierowań.</li>
+      <li><strong>Wyniki:</strong> Brak krytycznych błędów 429 ograniczających budżet indeksowania, ale występują łańcuchy 301 dla starych kolekcji.</li>
       <li><strong>Miejsca do naprawy:</strong> Tabela przekierowań Shopify (URL Redirects).</li>
-      <li><strong>Co naprawisz:</strong> Przeczyszczenie starych ścieżek 301.</li>
-      <li><strong>Gdzie:</strong> Panel Admina Shopify.</li>
-      <li><strong>Kto:</strong> Specjalista SEO.</li>
-      <li><strong>W jakiej ilości:</strong> Ok. 45-50 błędnych łańcuchów URL do wyprostowania.</li>
+      <li><strong>Kto:</strong> Specjalista SEO / Dev.</li>
+      <li><strong>Ilość:</strong> Ok. 45-50 błędnych łańcuchów URL.</li>
     </ul>
   </div>
 
   <div class="module">
     <h2>2. On-page i Czystość Drzewa DOM <span class="score bad">2 / 15 pkt</span></h2>
+    <div class="methodology">
+      <h4>Co to jest i dlaczego to ważne?</h4>
+      <p>Tagi H1-H6 służą do oznaczania <strong>tematyki tekstu</strong> (jak spis treści w książce), a nie do stylizowania wielkości czcionki na ekranie. Kiedy używamy tagu H2/H3 do opisu elementu interfejsu (np. "Zapisz się do newslettera"), Google myśli, że ten produkt jest powiązany tematycznie z zapisem, a nie z np. demakijażem. <strong>Psujemy semantykę i tracimy pozycje.</strong></p>
+    </div>
+    <div class="visual">
+      <h4>Fizyczny Przykład z GLOV (Kod źródłowy karty produktu)</h4>
+      <div class="code-compare">
+        <div>
+          <span class="bad-label">❌ ŹLE (Obecny stan)</span>
+          <div class="code-block">
+&lt;!-- Google uważa to za ważne słowa kluczowe --&gt;<br>
+&lt;h1&gt;Rękawiczka do demakijażu...&lt;/h1&gt;<br>
+&lt;h2&gt;Customer Reviews&lt;/h2&gt;<br>
+&lt;h3&gt;Może Ci się spodobać&lt;/h3&gt;<br>
+&lt;h2&gt;Ostatnio oglądane&lt;/h2&gt;
+          </div>
+        </div>
+        <div>
+          <span class="good-label">✅ DOBRZE (Detox)</span>
+          <div class="code-block">
+&lt;!-- Semantyka czysta. Design bez zmian. --&gt;<br>
+&lt;h1&gt;Rękawiczka do demakijażu...&lt;/h1&gt;<br>
+&lt;div class="h2-style"&gt;Customer Reviews&lt;/div&gt;<br>
+&lt;div class="h3-style"&gt;Może Ci się spodobać&lt;/div&gt;<br>
+&lt;div class="h2-style"&gt;Ostatnio oglądane&lt;/div&gt;
+          </div>
+        </div>
+      </div>
+    </div>
     <ul>
-      <li><strong>Wyniki:</strong> KRYTYCZNE. Skan parsera pokazał tagi H2/H3 oflagowane na elementach UI (np. "Customer Reviews", "Może Ci się spodobać"). H1 przeładowany. Tagi Title nadpisywane globalnie.</li>
-      <li><strong>Miejsca do naprawy:</strong> Pliki szablonu (`theme.liquid`, `main-product.liquid`, moduły rekomendacji).</li>
-      <li><strong>Co naprawisz:</strong> Detox semantyczny. Zmiana H2/H3 na DIV z zachowaniem stylów. Czysty Title.</li>
-      <li><strong>Gdzie:</strong> Kod źródłowy (Shopify CLI).</li>
+      <li><strong>Wyniki:</strong> KRYTYCZNE. Zanieczyszczone tagi H2/H3 we wszystkich elementach UI.</li>
+      <li><strong>Miejsca do naprawy:</strong> Pliki szablonu (`theme.liquid`, sekcje produktów).</li>
       <li><strong>Kto:</strong> Programista / Antigravity.</li>
-      <li><strong>W jakiej ilości:</strong> Globalna zmiana na 100% asortymentu (>200 PDP).</li>
+      <li><strong>Ilość:</strong> 100% asortymentu (>200 kart produktów).</li>
     </ul>
   </div>
 
   <div class="module">
     <h2>3. Hreflang / SEO Międzynarodowe <span class="score">3 / 5 pkt</span></h2>
+    <div class="methodology">
+      <h4>Co to jest i dlaczego to ważne?</h4>
+      <p>Tagi `hreflang` to sygnał dla Google: <i>"Ten URL jest dla Niemców, ten dla Francuzów"</i>. Jeśli jednak trafia na stronę ktoś spoza tych krajów (np. ze Szwecji), a nie mamy ustawionego <code>x-default</code>, wyszukiwarka musi zgadywać, który adres mu pokazać. To prowadzi do walki o pozycje między domeną `.pl` a `.com` w neutralnych krajach.</p>
+    </div>
+    <div class="visual">
+      <h4>Wizualizacja błędu: Brak Fallbacku</h3>
+      <div class="code-compare">
+        <div>
+          <span class="bad-label">❌ ŹLE (Zostawiasz AI Google domysły)</span>
+          <div class="code-block">
+&lt;link rel="alternate" hreflang="pl-pl" href="glov.pl" /&gt;<br>
+&lt;link rel="alternate" hreflang="en-us" href="glov.co" /&gt;
+          </div>
+        </div>
+        <div>
+          <span class="good-label">✅ DOBRZE (Pełna kontrola)</span>
+          <div class="code-block">
+&lt;link rel="alternate" hreflang="pl-pl" href="glov.pl" /&gt;<br>
+&lt;link rel="alternate" hreflang="en-us" href="glov.co" /&gt;<br>
+<span style="color:var(--green)">&lt;link rel="alternate" hreflang="x-default" href="glov.co" /&gt;</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <ul>
-      <li><strong>Wyniki:</strong> Struktura działa, ale brakuje bezwzględnego tagu `x-default`. Ryzyko kanibalizacji .com vs .pl.</li>
-      <li><strong>Miejsca do naprawy:</strong> Sekcja `&lt;head&gt;` w głównym szablonie.</li>
-      <li><strong>Co naprawisz:</strong> Dodanie i zwalidowanie tagu `x-default`.</li>
-      <li><strong>Gdzie:</strong> Plik `layout/theme.liquid`.</li>
-      <li><strong>Kto:</strong> Programista / Antigravity.</li>
-      <li><strong>W jakiej ilości:</strong> 1 linijka kodu działająca globalnie.</li>
+      <li><strong>Wyniki:</strong> Brak bezwzględnego tagu `x-default`.</li>
+      <li><strong>Miejsca do naprawy:</strong> Sekcja `&lt;head&gt;`.</li>
+      <li><strong>Ilość:</strong> 1 linijka kodu.</li>
     </ul>
   </div>
 
   <div class="module">
     <h2>4. Wydajność / Core Web Vitals <span class="score good">8 / 10 pkt</span></h2>
+    <div class="methodology">
+      <h4>Co to jest i dlaczego to ważne?</h4>
+      <p>Czas reakcji sklepu (INP - Interaction to Next Paint) to nowy kluczowy czynnik rankingowy 2024. Jeśli klient klika "Dodaj do koszyka", a ekran "zamarza" na pół sekundy (bo w tle ładuje się skrypt marketingowy Klaviyo czy Meta), Google karze sklep obniżeniem widoczności na mobile.</p>
+    </div>
+    <div class="visual">
+      <h4>Wizualizacja: Blokujący JS vs Defer</h3>
+      <div class="code-compare">
+        <div>
+          <span class="bad-label">❌ ŹLE (Blokuje Renderowanie)</span>
+          <div class="code-block">
+&lt;script src="https://aplikacja.shopify.com/app.js"&gt;&lt;/script&gt;
+          </div>
+        </div>
+        <div>
+          <span class="good-label">✅ DOBRZE (Ładowanie w tle - Defer)</span>
+          <div class="code-block">
+&lt;script src="https://aplikacja.shopify.com/app.js" <strong style="color:var(--green)">defer</strong>&gt;&lt;/script&gt;
+          </div>
+        </div>
+      </div>
+    </div>
     <ul>
-      <li><strong>Wyniki:</strong> Bardzo dobre parametry (LCP 1.7s, CLS 0.02). Słaby punkt: czas reakcji na JS (wtyczki Shopify).</li>
-      <li><strong>Miejsca do naprawy:</strong> Skrypty aplikacji w sekcji head/footer.</li>
-      <li><strong>Co naprawisz:</strong> Dopisanie `defer` do wybranych skryptów analitycznych.</li>
-      <li><strong>Gdzie:</strong> Plik `theme.liquid`.</li>
-      <li><strong>Kto:</strong> Programista (Shopify Dev).</li>
-      <li><strong>W jakiej ilości:</strong> Optymalizacja ok. 5 zewnętrznych skryptów.</li>
+      <li><strong>Wyniki:</strong> Świetne ogólne prędkości, ale opóźnienia INP przez złośliwy JavaScript zewnętrznych aplikacji.</li>
+      <li><strong>Miejsca do naprawy:</strong> Kod integracji w `theme.liquid`.</li>
+      <li><strong>Ilość:</strong> Ok. 5 wtyczek.</li>
     </ul>
   </div>
 
   <div class="module">
     <h2>5. Diagnostyka Spadków Widoczności <span class="score bad">2 / 10 pkt</span></h2>
+    <div class="methodology">
+      <h4>Co to jest i dlaczego to ważne? (NavBoost)</h4>
+      <p>Algorytm <strong>NavBoost</strong> ocenia zachowanie ludzi w wynikach wyszukiwania. Jeśli klient szuka <i>"how to cancel glov subscription"</i>, klika w link, wchodzi na sklep, po czym nerwowo wciska "Wstecz" w przeglądarce, bo nie może znaleźć guzika (tzw. Pogo-Sticking), Google wie, że ta domena serwuje zły User Experience. Wynik? Obniżenie autorytetu CAŁEJ domeny.</p>
+    </div>
+    <div class="visual">
+      <h4>Wizualizacja: Ratowanie Ścieżki Klienta</h3>
+      <div class="code-compare" style="grid-template-columns:1fr;">
+        <div style="background:var(--bg2); padding:15px; border-radius:8px; border-left:4px solid var(--red); margin-bottom:10px;">
+          <strong>🔴 Aktualny przepływ (Kara Google):</strong><br>
+          Szuka Google -> Wchodzi na Homepage -> Nie widzi opcji "Cancel" -> Zamyka sklep z irytacją -> Google obniża ranking GLOV.
+        </div>
+        <div style="background:var(--bg2); padding:15px; border-radius:8px; border-left:4px solid var(--green);">
+          <strong>🟢 Nowy przepływ (Fix NavBoost):</strong><br>
+          Szuka Google -> Ląduje na LP: <i>"We're sorry to see you go! Here is how to manage subscription"</i> -> Klient wyłącza, zaspokaja intencję, zostaje na stronie dłuższą chwilę -> Google odnotowuje sukces.
+        </div>
+      </div>
+    </div>
     <ul>
-      <li><strong>Wyniki:</strong> KARA NAVBOOST. Pogo-sticking na zapytania typu "how to cancel glov subscription".</li>
-      <li><strong>Miejsca do naprawy:</strong> Architektura informacji w panelu użytkownika.</li>
-      <li><strong>Co naprawisz:</strong> Landing Page "How to cancel", który obniży bounce rate.</li>
-      <li><strong>Gdzie:</strong> Szablon `customers/account.liquid` + strona FAQ.</li>
-      <li><strong>Kto:</strong> Specjalista UX / Antigravity.</li>
-      <li><strong>W jakiej ilości:</strong> Stworzenie 1 widoku odzyskiwania klienta.</li>
+      <li><strong>Wyniki:</strong> Silne negatywne sygnały NavBoost z powodów UX subskrypcji.</li>
+      <li><strong>Miejsca do naprawy:</strong> Panel Klienta + CMS (Nowy Landing Page).</li>
+      <li><strong>Kto:</strong> UX / Antigravity.</li>
     </ul>
   </div>
 
   <div class="module">
     <h2>6. Mapowanie Fraz (Keywords & Intent) <span class="score">5 / 10 pkt</span></h2>
+    <div class="methodology">
+      <h4>Co to jest i dlaczego to ważne?</h4>
+      <p>Brak bezpośredniej odpowiedzi na pytania użytkownika (Intent). Użytkownik chce wiedzieć "jak działa pumeks", ale dostaje tylko galerię i przycisk "Kup". To obniża CTR z wyników wyszukiwania, marnując gotowe "Low-Hanging Fruit" (pozycje, które już mamy na liście wyników).</p>
+    </div>
+    <div class="visual">
+      <h4>Wizualizacja: Wdrożenie Mikrosekcji FAQ</h3>
+      <div class="code-compare">
+        <div>
+          <span class="bad-label">❌ ŹLE (Czysta karta produktu)</span>
+          <div class="code-block" style="white-space:normal; font-family:sans-serif; background:#fbe5e5; color:#333;">
+            <strong style="font-size:16px;">Pumeks z nanoszkła</strong><br>
+            Cena: 99 zł. Dodaj do koszyka.<br><br>
+            <i>Brak odpowiedzi tekstowej jak to czyścić.</i>
+          </div>
+        </div>
+        <div>
+          <span class="good-label">✅ DOBRZE (Akordeon FAQ nasycony frazami)</span>
+          <div class="code-block" style="white-space:normal; font-family:sans-serif; background:#e5fbe5; color:#333;">
+            <strong style="font-size:16px;">Pumeks z nanoszkła</strong><br>
+            Cena: 99 zł. Dodaj do koszyka.<br>
+            ---<br>
+            <b>▼ Często zadawane pytania:</b><br>
+            • Jak działa nano szkło podczas depilacji?<br>
+            • Jak go czyścić po użyciu?
+          </div>
+        </div>
+      </div>
+    </div>
     <ul>
-      <li><strong>Wyniki:</strong> Np. "pumeks z nano szkła" rankuje top3, ale CTR to 1.2%. Brak odpowiedzi na intencję informacyjną.</li>
-      <li><strong>Miejsca do naprawy:</strong> Karty topowych produktów.</li>
-      <li><strong>Co naprawisz:</strong> Dodanie mikrosekcji FAQ / Zalety nasycających tematykę.</li>
-      <li><strong>Gdzie:</strong> Opisy CMS Shopify.</li>
-      <li><strong>Kto:</strong> AI / Copywriter SEO.</li>
-      <li><strong>W jakiej ilości:</strong> Minimum 5 strategicznych PDP.</li>
+      <li><strong>Miejsca do naprawy:</strong> Opisy produktów wewnątrz panelu (CMS).</li>
+      <li><strong>Ilość:</strong> 5 strategicznych kart (Pumeks, Iconic).</li>
     </ul>
   </div>
 
   <div class="module">
     <h2>7. Kanibalizacja Treści <span class="score">5 / 10 pkt</span></h2>
+    <div class="methodology">
+      <h4>Co to jest i dlaczego to ważne?</h4>
+      <p>Sytuacja, gdy dwa adresy URL z Twojego własnego sklepu (np. wpis na blogu oraz produkt) rywalizują o tę samą pozycję w wyszukiwarce. Zamiast mieć jeden mocny URL na 1. pozycji, mamy dwa słabe na pozycjach 15. i 16. Google dzieli ich moc (PageRank) na pół.</p>
+    </div>
+    <div class="visual">
+      <h4>Wizualizacja: Transfer mocy z bloga</h4>
+      <div class="code-compare">
+        <div>
+          <span class="bad-label">❌ ŹLE (Przerost bloga)</span>
+          <div class="code-block">
+Artykuł o Rękawicy &lt;title&gt;Rękawica GLOV Iconic&lt;/title&gt;<br><br>
+(Zabiera ruch karcie sprzedażowej PDP)
+          </div>
+        </div>
+        <div>
+          <span class="good-label">✅ DOBRZE (Koncentracja siły)</span>
+          <div class="code-block">
+Artykuł o Demakijażu<br>
+&lt;a href="/glov-iconic"&gt;Rękawica do demakijażu&lt;/a&gt;<br><br>
+(Cała moc leci na kartę produktu)
+          </div>
+        </div>
+      </div>
+    </div>
     <ul>
-      <li><strong>Wyniki:</strong> Posty na blogu konkurencją o ruch z produktami flagowymi.</li>
-      <li><strong>Miejsca do naprawy:</strong> Architektura linkowania wewnętrznego.</li>
-      <li><strong>Co naprawisz:</strong> Deoptymalizacja tagów na blogu, strong cross-linking na PDP z exact-match anchor.</li>
-      <li><strong>Gdzie:</strong> Shopify Admin (Blog Posts).</li>
-      <li><strong>Kto:</strong> Specjalista SEO.</li>
-      <li><strong>W jakiej ilości:</strong> Modyfikacja top 10 poradników.</li>
+      <li><strong>Wyniki:</strong> Blog rywalizuje z produktami o te same frazy (np. Rękawica).</li>
+      <li><strong>Kto:</strong> SEO Specjalista.</li>
+      <li><strong>Ilość:</strong> Wymagana optymalizacja Top 10 postów blogowych.</li>
     </ul>
   </div>
 
   <div class="module">
-    <h2>8. Analiza Konkurencji <span class="score bad">4 / 15 pkt</span></h2>
+    <h2>8. Analiza Konkurencji (Reverse-Engineering) <span class="score bad">4 / 15 pkt</span></h2>
+    <div class="methodology">
+      <h4>Co to jest i dlaczego to ważne?</h4>
+      <p>Zamiast zgadywać, jakich słów użyć, analizujemy wektory słów (Term Frequency) z top 10 wyników wyszukiwania (tzw. TF-IDF / NLP). Jeśli wszyscy najlepsi sprzedawcy używają nagłówka "Technologia Mikro-włókien", to my również musimy go mieć, aby sztuczna inteligencja Google zrozumiała nasz stopień eksperckości.</p>
+    </div>
     <ul>
-      <li><strong>Wyniki:</strong> Brak mechanizmu "Query Fan-out". Konkurencja przebija GLOV strukturą semantyczną na małym autorytecie.</li>
-      <li><strong>Miejsca do naprawy:</strong> Struktura nowych kategorii.</li>
-      <li><strong>Co naprawisz:</strong> Reverse-engineering H2-H4 od liderów, szkielet dla copywritera z LLM.</li>
-      <li><strong>Gdzie:</strong> Narzędzia Lokalne AI.</li>
-      <li><strong>Kto:</strong> Architekt SEO / Antigravity.</li>
-      <li><strong>W jakiej ilości:</strong> 3 najważniejsze kategorie.</li>
+      <li><strong>Co naprawisz:</strong> Generowanie precyzyjnych szkieletów H2/H3 przez AI po dogłębnym skanowaniu nisz konkurencji.</li>
+      <li><strong>Ilość:</strong> 3 kluczowe kategorie GLOV.</li>
     </ul>
   </div>
 
   <div class="module">
-    <h2>9. Crawl Budget <span class="score bad">2 / 5 pkt</span></h2>
+    <h2>9. Crawl Budget (Odcinanie Wody) <span class="score bad">2 / 5 pkt</span></h2>
+    <div class="methodology">
+      <h4>Co to jest i dlaczego to ważne?</h4>
+      <p>Crawl Budget to z góry określona, skończona ilość "czasu", jaką bot Google poświęci naszemu sklepowi. Jeśli sklep posiada tysiące linków typu filtrowanie wewnątrz-sklepowe (<code>?color=blue&size=m</code>), bot Google zmarnuje na nie czas i wyjdzie, nie zdążywszy sprawdzić nowych produktów na blogu. Efekt? Brak indeksacji.</p>
+    </div>
+    <div class="visual">
+      <h4>Wizualizacja: Wdrożenie Noindex</h3>
+      <div class="code-compare" style="grid-template-columns:1fr;">
+        <div style="background:var(--bg2); padding:15px; border-radius:8px;">
+          <strong>Na stronach z parametrami (np. search) ustawiamy twardą barierę dla Bota:</strong><br><br>
+          <code>&lt;meta name="robots" content="noindex, nofollow"&gt;</code><br><br>
+          <i>Dzięki temu bot odbija się od "śmieci" i kieruje się tylko tam, gdzie chcemy (na produkty zarabiające pieniądze).</i>
+        </div>
+      </div>
+    </div>
     <ul>
-      <li><strong>Wyniki:</strong> Googlebot skanuje wyszukiwanie wewnętrzne i profile, spalając budżet.</li>
-      <li><strong>Miejsca do naprawy:</strong> Szablon.</li>
-      <li><strong>Co naprawisz:</strong> Tag &lt;meta name="robots" content="noindex"&gt; na sekcje śmieciowe.</li>
-      <li><strong>Gdzie:</strong> Kod źródłowy (Shopify CLI).</li>
+      <li><strong>Miejsca do naprawy:</strong> Szablony dynamiczne (search.liquid, filtry).</li>
       <li><strong>Kto:</strong> Programista / Antigravity.</li>
-      <li><strong>W jakiej ilości:</strong> Setki URli zabezpieczone w 4 typach stron w szablonie.</li>
     </ul>
   </div>
 
   <div class="module">
     <h2>10. Synteza Biznesowa (ROI) <span class="score bad">1 / 5 pkt</span></h2>
+    <div class="methodology">
+      <h4>Co to jest i dlaczego to ważne?</h4>
+      <p>Audyt SEO zazwyczaj to 100-stronicowy PDF z którego nic nie wynika. Synteza ROI zmusza zespół do przerzucenia zasobów i wyceny roboczogodzin tylko na te punkty, które zdejmują najcięższe "hamulce" Google i uwalniają strumień finansowy. Zamiast rzeźbić alt-tagi obrazków za "2 grosze", naprawiamy awarię H-tagów kosztującą firmę tysiące wyświetleń.</p>
+    </div>
     <ul>
-      <li><strong>Wyniki:</strong> Skupienie na losowych bzdetach zamiast głównych dźwigni (DOM i NavBoost).</li>
-      <li><strong>Miejsca do naprawy:</strong> Backlog.</li>
-      <li><strong>Co naprawisz:</strong> Przerzucenie sił operacyjnych na Moduł 2 i Moduł 5 (patrz tabela niżej).</li>
-      <li><strong>Gdzie:</strong> Jira / Asana.</li>
-      <li><strong>Kto:</strong> Project Manager.</li>
-      <li><strong>W jakiej ilości:</strong> Wdrożenie 1 tabeli fixów.</li>
+      <li><strong>Miejsca do naprawy:</strong> Priorytetyzacja (patrz Tabela niżej).</li>
     </ul>
   </div>
 
