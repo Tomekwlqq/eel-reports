@@ -300,18 +300,18 @@ function renderLive(key){
 
   // Shopify KPI
   h+=`<div class="lsep"><span class="sbadge sbadge-shp">SHOPIFY</span>Zamówienia &amp; Przychód — source of truth</div>
-  <div class="lkgrid lkgrid-3">
+  <div class="lkgrid lkgrid-4">
     <div class="lkcard"><div class="ll">Zamówienia</div><div class="lv">${n(shk.orders)}</div></div>
     <div class="lkcard"><div class="ll">Total Sales</div><div class="lv">${money(shk.gross_sales)}</div></div>
     <div class="lkcard"><div class="ll">AOV</div><div class="lv">${n(shk.aov)} zł</div></div>
+    <div class="lkcard"><div class="ll">Bounce Rate</div><div class="lv">${pct(shk.bounce_rate||0)}</div><div class="ls">${pct(g4k.bounce_rate)} GA4</div></div>
   </div>`;
 
   // GA4 KPI
   const durFmt=s=>s?Math.floor(s/60)+':'+String(Math.round(s%60)).padStart(2,'0'):'—';
   h+=`<div class="lsep"><span class="sbadge sbadge-ga4">GA4</span>Ruch &amp; Zachowanie — filtr 🇵🇱 PL</div>
-  <div class="lkgrid lkgrid-4">
+  <div class="lkgrid lkgrid-3">
     <div class="lkcard"><div class="ll">Sesje PL</div><div class="lv">${n(g4k.sessions)}</div></div>
-    <div class="lkcard"><div class="ll">Bounce Rate</div><div class="lv">${pct(shk.bounce_rate||0)} <span style="font-size:10px;font-weight:500;color:var(--muted)">Shopify</span></div><div class="ls">${pct(g4k.bounce_rate)} GA4</div></div>
     <div class="lkcard"><div class="ll">ATC</div><div class="lv">${n(g4k.atc)}</div></div>
     <div class="lkcard"><div class="ll">Avg. Sesja</div><div class="lv">${durFmt(g4k.avg_session_s)}</div></div>
   </div>`;
