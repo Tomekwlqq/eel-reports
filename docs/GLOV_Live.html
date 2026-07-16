@@ -165,6 +165,16 @@ tr.hot td{background:rgba(22,163,74,.05)}tr.danger td{background:rgba(220,38,38,
 .lbtn{order:999;border:none;background:transparent;cursor:pointer;color:var(--muted);font-size:11px;padding:0 4px;flex-shrink:0}
 .lbtn:hover{color:var(--text)}
 .live-blk.lcol .live-blk-body{display:none}
+.g4funnel{margin:4px 0 8px}
+.gfrow{display:grid;grid-template-columns:auto 54px 1fr 54px;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+.gfrow:last-child{border-bottom:none}
+.gfname{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap}
+.gfcnt{font-size:13px;font-weight:800;text-align:right;color:var(--text)}
+.gfbar-wrap{height:22px;background:var(--card2);border-radius:5px;overflow:hidden}
+.gfbar{height:100%;border-radius:5px;transition:width .3s ease}
+.gfpct{font-size:13px;font-weight:800;text-align:right}
+.gfpct-sub{font-size:10px;font-weight:500;color:var(--muted);text-align:right;margin-top:-2px}
+@media(max-width:640px){.gfrow{grid-template-columns:90px 44px 1fr 42px;gap:6px}}
 </style>
 </head>
 <body>
@@ -311,14 +321,25 @@ function renderLive(key){
   const gfun=g4.funnel||{};
   if(gfun.session_start){
     const fmax=gfun.session_start||1;
-    const fsteps=[['session_start','Sesje','#5b8def'],['add_to_cart','Koszyk (ATC)','#d97706'],['begin_checkout','Checkout','#ec4899'],['purchase','Zakup','#16a34a']];
-    h+=`<div class="lsep"><span class="sbadge sbadge-ga4">GA4</span>Lejek konwersji</div><div>`;
+    const fsteps=[
+      ['session_start','Sesje','#5b8def'],
+      ['add_to_cart','Koszyk (ATC)','#d97706'],
+      ['begin_checkout','Checkout','#ec4899'],
+      ['purchase','Zakup','#16a34a']
+    ];
+    h+=`<div class="lsep"><span class="sbadge sbadge-ga4">GA4</span>Lejek konwersji</div><div class="g4funnel">`;
     fsteps.forEach((s,i)=>{
       const v=gfun[s[0]]||0;
       const prev=i>0?(gfun[fsteps[i-1][0]]||0):v;
-      const drop=i>0&&prev>0?((v/prev*100).toFixed(0)+'%'):'';
-      const bw=Math.max(v/fmax*100,8);
-      h+=`<div class="fbar"><span style="width:${bw}%;background:${s[2]}">${s[1]}: ${n(v)}${i>0?' · '+drop:''}</span></div>`;
+      const pctPrev=i>0&&prev>0?((v/prev*100).toFixed(0)+'%'):'—';
+      const pctTotal=Math.max(v/fmax*100,1).toFixed(0);
+      const subLabel=i>0?'ze&nbsp;'+n(prev):'sesji';
+      h+=`<div class="gfrow">
+        <div class="gfname">${s[1]}</div>
+        <div class="gfcnt">${n(v)}</div>
+        <div class="gfbar-wrap"><div class="gfbar" style="width:${pctTotal}%;background:${s[2]}"></div></div>
+        <div><div class="gfpct" style="color:${s[2]}">${pctPrev}</div>${i>0?`<div class="gfpct-sub">${subLabel}</div>`:''}</div>
+      </div>`;
     });
     h+='</div>';
   }
