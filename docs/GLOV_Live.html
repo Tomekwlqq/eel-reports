@@ -988,8 +988,12 @@ Dane: GA4 + Shopify, tylko Polska (filtr country=Poland). Masz dostęp do danych
 async function sendChat(){
   const inp=document.getElementById('chatInput');
   const msg=inp.value.trim();if(!msg)return;
-  const apiKey=localStorage.getItem('glov_ds_key')||'';
-  if(!apiKey){document.getElementById('askKeyRow').style.display='flex';return;}
+  let apiKey=localStorage.getItem('glov_ds_key')||'';
+  if(!apiKey){
+    const typed=document.getElementById('dsKey')?.value.trim();
+    if(typed){localStorage.setItem('glov_ds_key',typed);apiKey=typed;document.getElementById('askKeyRow').style.display='none';}
+    else{document.getElementById('askKeyRow').style.display='flex';return;}
+  }
   const msgs=document.getElementById('chatMsgs');
   const sendBtn=document.getElementById('chatSend');
   msgs.innerHTML+=`<div class="msg user">${msg.replace(/</g,'&lt;')}</div>`;
@@ -1030,10 +1034,15 @@ document.getElementById('chatSend').onclick=sendChat;
 document.getElementById('chatInput').addEventListener('keydown',e=>{
   if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}
 });
-document.getElementById('saveKey').onclick=()=>{
+function saveApiKey(){
   const k=document.getElementById('dsKey').value.trim();
-  if(k){localStorage.setItem('glov_ds_key',k);document.getElementById('askKeyRow').style.display='none';}
-};
+  if(k){localStorage.setItem('glov_ds_key',k);document.getElementById('askKeyRow').style.display='none';return true;}
+  return false;
+}
+document.getElementById('saveKey').onclick=saveApiKey;
+document.getElementById('dsKey').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){e.preventDefault();saveApiKey();}
+});
 
 // Init
 document.getElementById('dateS').value=LAST30;
