@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="pl"><head><meta charset="UTF-8">
+<html lang="pl" data-theme="dark"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GLOV — Raport GA4 R01–R09 (miesięczny)</title>
 <style>
-:root{--bg:#0f1115;--card:#181b22;--card2:#1f232c;--line:#2a2f3a;--txt:#e8eaed;--muted:#9aa0aa;--accent:#7c5cff;--good:#3ecf8e;--warn:#f5a623;--bad:#ff5c7c;--blue:#5b8def;--pink:#ec4899;}
+[data-theme="dark"]{--bg:#0f1115;--card:#181b22;--card2:#1f232c;--line:#2a2f3a;--txt:#e8eaed;--muted:#9aa0aa;--accent:#7c5cff;--good:#3ecf8e;--warn:#f5a623;--bad:#ff5c7c;--blue:#5b8def;--pink:#ec4899;}
+[data-theme="light"]{--bg:#ffffff;--card:#ffffff;--card2:#f4f4f6;--line:#e6e6e9;--txt:#0a0a0a;--muted:#6b6b76;--accent:#7c5cff;--good:#16a34a;--warn:#d97706;--bad:#dc2626;--blue:#2563eb;--pink:#ec4899;}
+.theme-btn{position:fixed;top:12px;right:12px;z-index:999;background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:9px;width:38px;height:38px;cursor:pointer;font-size:16px}
+.theme-btn:hover{border-color:var(--accent)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.55;padding:26px 20px;max-width:1180px;margin:0 auto}
 h1{font-size:23px;font-weight:700}
@@ -38,7 +41,24 @@ tr:hover td{background:var(--card2)}
 .src{font-size:11px;color:#6b7280;margin-top:26px;padding-top:13px;border-top:1px solid var(--line)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+/* bloki objaśnień „po ludzku" */
+.explain{border:1px solid var(--line);border-radius:13px;overflow:hidden;margin:6px 0 14px}
+.explain .row{padding:11px 15px;border-bottom:1px solid rgba(255,255,255,.04)}
+.explain .row:last-child{border-bottom:none}
+.explain .lab{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px}
+.explain .row p{font-size:13px;color:#d7dbe2;margin:0}
+.explain .e1{background:rgba(91,141,239,.07)} .explain .e1 .lab{color:#5b8def}
+.explain .e2{background:rgba(124,92,255,.07)} .explain .e2 .lab{color:#9d7cff}
+.explain .e3{background:rgba(62,207,142,.07)} .explain .e3 .lab{color:#3ecf8e}
+.explain .e4{background:rgba(245,166,35,.07)} .explain .e4 .lab{color:#f5a623}
+.explain .e5{background:rgba(255,92,124,.08);border-top:2px solid var(--bad)} .explain .e5 .lab{color:#ff5c7c}
+details.explain-wrap{margin:4px 0 16px}
+details.explain-wrap > summary{cursor:pointer;font-size:12px;color:var(--muted);padding:6px 0;list-style:none;user-select:none}
+details.explain-wrap > summary::-webkit-details-marker{display:none}
+details.explain-wrap > summary:before{content:"💡 ";}
+details.explain-wrap[open] > summary{color:var(--accent)}
 </style></head><body><a href="GLOV_HUB.html" style="position:fixed;top:12px;left:12px;z-index:999;background:#7c5cff;color:#fff;text-decoration:none;padding:7px 13px;border-radius:8px;font:600 12px -apple-system,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.4)">← HUB</a>
+<button class="theme-btn" id="themeBtn" title="Tryb jasny/ciemny">🌙</button>
 
 <h1>GLOV — Raport GA4 · R01–R09</h1>
 <div class="sub">glov.co · property 342844459 · PLN · przełącznik miesięczny (wzór: raport Plichta) · <span id="periodLabel"></span></div>
@@ -61,6 +81,77 @@ function cr(t,s){return s>0?(t/s*100).toFixed(2)+'%':'—';}
 
 let cur = PERIODS[PERIODS.length-1][0]; // domyślnie Σ90d
 
+// ── Bloki objaśnień „po ludzku" — żeby wykresy przestały straszyć ──
+const EXPLAIN = {
+  r01: {
+    widzisz: "Najważniejsze liczby całego sklepu w danym miesiącu: ile osób weszło (sesje), ile kupiło (transakcje), jaki procent kupił (konwersja), ile zarobiłeś (przychód), średnia wartość zamówienia (AOV), ile dodań do koszyka i rozpoczętych płatności.",
+    wazne: "To jest jednozdaniowe zdrowie biznesu. Jeśli sesje rosną, a przychód nie — coś nie działa po drodze. Jeśli przychód rośnie szybciej niż sesje — sklep sprzedaje coraz lepiej tym samym ludziom.",
+    dowiadujesz: "Czy miesiąc był lepszy czy gorszy od poprzedniego — i CO go napędziło. Wzrost przychodu może wynikać z większego ruchu ALBO z lepszej konwersji/wyższego AOV. To dwie różne historie.",
+    czytaj: "Patrz na konwersję i AOV, nie tylko na sesje. Sklep e-commerce zwykle konwertuje 1–3%. Bounce poniżej 50% jest zdrowy. AOV mówi czy ludzie kupują pojedyncze sztuki czy zestawy.",
+    wynika: "Jeśli konwersja spada przy stałym ruchu — problem jest na stronie (cena, zaufanie, koszyk), nie w reklamie. Jeśli AOV spada — warto pchać zestawy i progi darmowej dostawy."
+  },
+  funnel: {
+    widzisz: "Drogę klienta krok po kroku: wszedł → obejrzał produkt → dodał do koszyka → zaczął płatność → kupił. Każdy słupek jest krótszy, bo na każdym etapie część ludzi odpada. Procent obok to ilu odpadło.",
+    wazne: "Tu widać GDZIE tracisz pieniądze. Każdy duży spadek między krokami to wyciek — ludzie, którzy byli zainteresowani, ale coś ich zatrzymało.",
+    dowiadujesz: "Który krok jest najsłabszy. W GLOV największy wyciek jest zwykle między „obejrzał produkt” a „dodał do koszyka” — czyli strona produktu nie przekonuje wystarczająco.",
+    czytaj: "Szukaj najdłuższego skoku w dół. To NIE musi być ostatni krok. Czasem checkout działa dobrze, a problem jest dużo wcześniej — na karcie produktu.",
+    wynika: "Napraw najpierw ten krok z największym spadkiem — da najwięcej. Jeśli to view→koszyk: popraw zdjęcia, opis, cenę, dowód społeczny. Jeśli koszyk→checkout: uprość koszyk, pokaż koszty wcześniej."
+  },
+  r03: {
+    widzisz: "Skąd przychodzą ludzie: z reklam w social (Paid Social), z reklam w Google (Paid Search), z darmowego wyszukiwania (Organic Search), z wpisania adresu wprost (Direct) itd. Dla każdego kanału: ile sesji, ile zakupów, jaka konwersja, ile przychodu.",
+    wazne: "To mówi, który kanał naprawdę zarabia, a nie tylko przyciąga ruch. Płacisz za reklamy — chcesz wiedzieć, czy się zwracają, czy może darmowy ruch robi robotę.",
+    dowiadujesz: "Że ruch i pieniądze to dwie różne rzeczy. Kanał może dawać dużo sesji, ale słabą konwersję (drogi, nietrafiony ruch) — albo mało sesji, ale świetną konwersję (niedoceniony, wart skalowania).",
+    czytaj: "Nie patrz na same sesje — patrz na kolumnę CR (konwersja) i przychód. Kanał z wysokim CR przy małym ruchu to ukryta szansa. Kanał z dużym ruchem i niskim CR przepala budżet.",
+    wynika: "GLOV mocno zależy od Paid Social — jeśli wyłączysz reklamy, ruch siądzie. Warto budować Organic Search (darmowy, trwały) i sprawdzać, czy płatne kanały mają konwersję wyższą niż organic, bo inaczej dopłacasz do ruchu gorszego niż darmowy."
+  },
+  r02: {
+    widzisz: "Na czym ludzie wchodzą: telefon (mobile), komputer (desktop), tablet. Sesje i konwersja osobno dla każdego.",
+    wazne: "Jeśli 75% ruchu jest z telefonu, a sklep źle działa na telefonie — tracisz większość klientów. Mobile i desktop to dwa różne sklepy dla tego samego użytkownika.",
+    dowiadujesz: "Gdzie naprawdę dzieje się sprzedaż. W GLOV mobile to ~75% sesji i większość zakupów — telefon jest najważniejszy, mimo że na komputerze wygodniej się projektuje.",
+    czytaj: "Porównaj konwersję mobile vs desktop. Jeśli desktop konwertuje dużo lepiej, a ruch jest głównie mobilny — to znak, że doświadczenie na telefonie kuleje (za małe przyciski, wolne ładowanie, trudny koszyk).",
+    wynika: "Optymalizuj najpierw pod telefon. Każda poprawka na mobile dotyka 3 na 4 klientów. Test: przejdź przez zakup na własnym telefonie i policz, gdzie się irytujesz."
+  },
+  r05: {
+    widzisz: "Produkty po liczbie zakupów. Dla każdego: ile razy obejrzany, ile dodań do koszyka, jaki procent oglądających dodało (view→ATC), ile kupiono, ile przychodu. Zielony znacznik = produkt świetnie zamienia oglądających w koszyk, czerwony = słabo.",
+    wazne: "To pokazuje, które produkty same się sprzedają, a które są oglądane, ale nie kupowane. Produkt z dużym ruchem i niskim view→ATC marnuje uwagę klientów.",
+    dowiadujesz: "Bohaterów i rozczarowania. W GLOV pumeks nano szkło i LED LUNA EYE to filary. Produkt oglądany tysiące razy z niskim ATC ma problem: cena, opis albo zdjęcia nie domykają.",
+    czytaj: "Patrz na kolumnę view→ATC. Wysoki % przy dużym ruchu = maszynka do pieniędzy, eksponuj ją. Niski % przy dużym ruchu = pilna naprawa karty produktu. „Free gift” mają sztucznie wysoki ATC — to gratisy, pomiń.",
+    wynika: "Produkty z wysokim view→ATC wrzuć na stronę główną i do reklam. Produkty z dużym ruchem i niskim ATC — popraw kartę (zdjęcia, cena, opinie) zanim wydasz więcej na ich promocję."
+  },
+  r04: {
+    widzisz: "Strony, na które ludzie wchodzą jako pierwsze (z reklamy, z Google). Dla każdej: ile sesji, jaki bounce (% osób, które od razu wyszły) i ile zakupów z niej poszło.",
+    wazne: "Pierwsza strona decyduje o pierwszym wrażeniu. Jeśli kierujesz reklamę na stronę z wysokim bounce — palisz budżet, bo ludzie uciekają od razu.",
+    dowiadujesz: "Które wejścia działają, a które są przeciekające. Wysoki bounce (>60%) na płatnym wejściu to czerwona flaga. „(not set)” i „(empty)” to ruch bez przypisanej strony — często reklama Meta z aplikacji, warto to naprawić w tagowaniu.",
+    czytaj: "Zestaw bounce z liczbą transakcji. Strona z niskim bounce i dużą sprzedażą to dobre miejsce do kierowania ruchu. Kolekcja zwykle bounce ma niski, pojedynczy produkt wyższy — to normalne.",
+    wynika: "Reklamy kieruj na strony o sprawdzonej konwersji (u GLOV: /collections/sklep). Strony z wysokim bounce, na które płacisz, albo popraw, albo przestań na nie kierować ruch."
+  },
+  r06: {
+    widzisz: "Podział na nowych klientów (pierwszy raz) i wracających (już byli). Sesje, zakupy, konwersja i przychód dla obu grup.",
+    wazne: "Pozyskanie nowego klienta kosztuje kilka razy więcej niż sprzedaż wracającemu. Jeśli żyjesz tylko z nowych — masz drogi, kruchy biznes.",
+    dowiadujesz: "Czy budujesz bazę lojalnych klientów. Wracający zwykle konwertują dużo lepiej niż nowi (znają markę, ufają). Jeśli wracających jest mało, ale konwertują świetnie — jest potencjał w retencji (mail, SMS, lojalność).",
+    czytaj: "Porównaj konwersję: wracający niemal zawsze mają wyższą. Patrz na ich UDZIAŁ — jeśli to tylko 15–20% sesji, masz dużo do ugrania na powrotach.",
+    wynika: "Jeśli wracający konwertują 2–3× lepiej, a jest ich mało — zainwestuj w e-mail/SMS i program lojalnościowy. Tani kanał, wysoki zwrot. To dźwignia, której reklama nie zastąpi."
+  },
+  r09: {
+    widzisz: "Ruch i sprzedaż w rozbiciu na dni tygodnia. Który dzień przynosi najwięcej sesji, zakupów i jaką ma konwersję.",
+    wazne: "Pokazuje, kiedy Twoi klienci realnie kupują. Reklama wyświetlana w słaby dzień kosztuje tyle samo, a sprzedaje mniej.",
+    dowiadujesz: "Rytm tygodnia sklepu. Niektóre dni mają więcej ruchu, ale gorszą konwersję (przeglądanie), inne mniej ruchu, ale ludzie kupują (decyzja). To nie zawsze ten sam dzień.",
+    czytaj: "Szukaj dni z wysoką konwersją — tam warto dolać budżet reklamowy. Dni z dużym ruchem i niską konwersją to przeglądacze, nie kupujący.",
+    wynika: "Przesuń budżet reklam i wysyłki maili na dni o najlepszej konwersji. Jeśli np. środa sprzedaje najlepiej — to wtedy promocje i newslettery, nie w martwy weekend."
+  }
+};
+function explain(key){
+  const e = EXPLAIN[key]; if(!e) return '';
+  return `<details class="explain-wrap"><summary>Jak czytać ten wykres? (kliknij)</summary>
+  <div class="explain">
+    <div class="row e1"><div class="lab">Co tu widzisz</div><p>${e.widzisz}</p></div>
+    <div class="row e2"><div class="lab">Dlaczego to ważne</div><p>${e.wazne}</p></div>
+    <div class="row e3"><div class="lab">Dowiadujesz się że</div><p>${e.dowiadujesz}</p></div>
+    <div class="row e4"><div class="lab">Czytaj to tak</div><p>${e.czytaj}</p></div>
+    <div class="row e5"><div class="lab">Co z tego wynika i co zrobić</div><p>${e.wynika}</p></div>
+  </div></details>`;
+}
+
 function render(){
   const d = DATA[cur];
   const k = d.kpi||{};
@@ -70,8 +161,9 @@ function render(){
   // R01 KPI
   const crv = k.sessions>0 ? (k.transactions/k.sessions*100).toFixed(2)+'%' : '—';
   const aov = k.transactions>0 ? Math.round(k.revenue/k.transactions) : 0;
-  h += `<h2><span class="r">R01</span> Kluczowe metryki</h2>
-  <div class="kpis">
+  h += `<h2><span class="r">R01</span> Kluczowe metryki</h2>`;
+  h += explain('r01');
+  h += `<div class="kpis">
     <div class="kpi"><div class="l">Sesje</div><div class="v">${n(k.sessions)}</div></div>
     <div class="kpi"><div class="l">Transakcje</div><div class="v">${n(k.transactions)}</div></div>
     <div class="kpi"><div class="l">Konwersja</div><div class="v">${crv}</div></div>
@@ -88,6 +180,7 @@ function render(){
   const fmax = f.session_start||1;
   const cols=['#5b8def','#7c5cff','#f5a623','#ec4899','#3ecf8e'];
   h+=`<h2><span class="r">R-FUNNEL</span> Lejek konwersji</h2><div class="h2sub">drop% = 1 − (krok / poprzedni)</div>`;
+  h+=explain('funnel');
   steps.forEach((s,i)=>{
     const v=f[s[0]]||0; const prev=i>0?(f[steps[i-1][0]]||0):v;
     const drop=i>0&&prev>0?(1-v/prev):0;
@@ -96,17 +189,17 @@ function render(){
 
   h+='<div class="grid2">';
   // R_CHANNELS
-  h+='<div><h2><span class="r">R03</span> Kanały</h2><table><tr><th>Kanał</th><th>Sesje</th><th>Trans.</th><th>CR</th><th>Przychód</th></tr>';
+  h+='<div><h2><span class="r">R03</span> Kanały</h2>'+explain('r03')+'<table><tr><th>Kanał</th><th>Sesje</th><th>Trans.</th><th>CR</th><th>Przychód</th></tr>';
   (d.channels||[]).slice(0,8).forEach(c=>{h+=`<tr><td>${c.channel}</td><td>${n(c.sessions)}</td><td>${n(c.transactions)}</td><td>${cr(c.transactions,c.sessions)}</td><td>${money(c.revenue)}</td></tr>`;});
   h+='</table></div>';
   // R_DEVICES
-  h+='<div><h2><span class="r">R02</span> Urządzenia</h2><table><tr><th>Urządzenie</th><th>Sesje</th><th>Trans.</th><th>CR</th></tr>';
+  h+='<div><h2><span class="r">R02</span> Urządzenia</h2>'+explain('r02')+'<table><tr><th>Urządzenie</th><th>Sesje</th><th>Trans.</th><th>CR</th></tr>';
   (d.devices||[]).forEach(c=>{h+=`<tr><td>${c.device}</td><td>${n(c.sessions)}</td><td>${n(c.transactions)}</td><td>${cr(c.transactions,c.sessions)}</td></tr>`;});
   h+='</table></div>';
   h+='</div>';
 
   // R_PRODUCTS
-  h+='<h2><span class="r">R05</span> Produkty (top wg zakupów)</h2><table><tr><th>Produkt</th><th>Wyśw.</th><th>ATC</th><th>view→ATC</th><th>Kupiono</th><th>Przychód</th></tr>';
+  h+='<h2><span class="r">R05</span> Produkty (top wg zakupów)</h2>'+explain('r05')+'<table><tr><th>Produkt</th><th>Wyśw.</th><th>ATC</th><th>view→ATC</th><th>Kupiono</th><th>Przychód</th></tr>';
   (d.products||[]).slice(0,12).forEach(p=>{
     const r=p.viewed>0?(p.atc/p.viewed*100).toFixed(0)+'%':'—';
     const tag=p.viewed>0&&(p.atc/p.viewed)>=0.4?'t-good':(p.viewed>0&&(p.atc/p.viewed)<0.1?'t-bad':'');
@@ -116,17 +209,17 @@ function render(){
 
   h+='<div class="grid2">';
   // R_LANDING
-  h+='<div><h2><span class="r">R04</span> Landing pages</h2><table><tr><th>Strona</th><th>Sesje</th><th>Bounce</th><th>Trans.</th></tr>';
+  h+='<div><h2><span class="r">R04</span> Landing pages</h2>'+explain('r04')+'<table><tr><th>Strona</th><th>Sesje</th><th>Bounce</th><th>Trans.</th></tr>';
   (d.landing||[]).slice(0,10).forEach(l=>{h+=`<tr><td style="max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.landing||l.page||'—'}</td><td>${n(l.sessions)}</td><td>${pct(l.bounce_rate)}</td><td>${n(l.transactions)}</td></tr>`;});
   h+='</table></div>';
   // R_NEWRET
-  h+='<div><h2><span class="r">R06</span> Nowi vs wracający</h2><table><tr><th>Segment</th><th>Sesje</th><th>Trans.</th><th>CR</th><th>Przychód</th></tr>';
+  h+='<div><h2><span class="r">R06</span> Nowi vs wracający</h2>'+explain('r06')+'<table><tr><th>Segment</th><th>Sesje</th><th>Trans.</th><th>CR</th><th>Przychód</th></tr>';
   (d.newret||[]).forEach(s=>{if(s.segment==='(not set)'||s.segment==='(empty)')return;h+=`<tr><td>${s.segment==='new'?'Nowi':'Wracający'}</td><td>${n(s.sessions)}</td><td>${n(s.transactions)}</td><td>${cr(s.transactions,s.sessions)}</td><td>${money(s.revenue)}</td></tr>`;});
   h+='</table></div>';
   h+='</div>';
 
   // R_DAYOFWEEK
-  h+='<h2><span class="r">R09</span> Dni tygodnia</h2><table><tr><th>Dzień</th><th>Sesje</th><th>Trans.</th><th>CR</th></tr>';
+  h+='<h2><span class="r">R09</span> Dni tygodnia</h2>'+explain('r09')+'<table><tr><th>Dzień</th><th>Sesje</th><th>Trans.</th><th>CR</th></tr>';
   const dw=(d.dayofweek||[]).slice().sort((a,b)=>(a.day||a.dow||0)-(b.day||b.dow||0));
   dw.forEach(x=>{const idx=parseInt(x.day!=null?x.day:(x.dow!=null?x.dow:0));h+=`<tr><td>${DOW[idx]||x.day}</td><td>${n(x.sessions)}</td><td>${n(x.transactions)}</td><td>${cr(x.transactions,x.sessions)}</td></tr>`;});
   h+='</table>';
@@ -143,6 +236,9 @@ PERIODS.forEach(([k,label])=>{
   b.onclick=()=>{cur=k;document.querySelectorAll('.month-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();};
   mc.appendChild(b);
 });
+(function(){const root=document.documentElement,btn=document.getElementById('themeBtn');
+ const saved=localStorage.getItem('glov-theme')||'dark';root.setAttribute('data-theme',saved);btn.textContent=saved==='light'?'☀️':'🌙';
+ btn.onclick=()=>{const nx=root.getAttribute('data-theme')==='light'?'dark':'light';root.setAttribute('data-theme',nx);localStorage.setItem('glov-theme',nx);btn.textContent=nx==='light'?'☀️':'🌙';};})();
 render();
 </script>
 </body></html>

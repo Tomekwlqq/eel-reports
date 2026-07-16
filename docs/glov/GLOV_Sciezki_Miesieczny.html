@@ -1,10 +1,29 @@
-<!DOCTYPE html><html lang="pl"><head><meta charset="UTF-8">
+<!DOCTYPE html><html lang="pl" data-theme="dark"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GLOV — Ścieżki zakupowe (miesięczny)</title>
 <style>
-:root{--bg:#0f1115;--card:#181b22;--card2:#1f232c;--line:#2a2f3a;--txt:#e8eaed;--muted:#9aa0aa;--accent:#7c5cff;--good:#3ecf8e;--warn:#f5a623;--bad:#ff5c7c;--blue:#5b8def;--pink:#ec4899;}
+[data-theme="dark"]{--bg:#0f1115;--card:#181b22;--card2:#1f232c;--line:#2a2f3a;--txt:#e8eaed;--muted:#9aa0aa;--accent:#7c5cff;--good:#3ecf8e;--warn:#f5a623;--bad:#ff5c7c;--blue:#5b8def;--pink:#ec4899;}
+[data-theme="light"]{--bg:#ffffff;--card:#ffffff;--card2:#f4f4f6;--line:#e6e6e9;--txt:#0a0a0a;--muted:#6b6b76;--accent:#7c5cff;--good:#16a34a;--warn:#d97706;--bad:#dc2626;--blue:#2563eb;--pink:#ec4899;}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.55;padding:26px 20px;max-width:1180px;margin:0 auto}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.55;padding:26px 20px;max-width:1180px;margin:0 auto;transition:background .25s,color .25s}
+.theme-btn{position:fixed;top:12px;right:12px;z-index:999;background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:9px;width:38px;height:38px;cursor:pointer;font-size:16px}
+.theme-btn:hover{border-color:var(--accent)}
+/* bloki objaśnień „po ludzku" */
+.explain{border:1px solid var(--line);border-radius:13px;overflow:hidden;margin:6px 0 16px}
+.explain .row{padding:11px 15px;border-bottom:1px solid var(--line)}
+.explain .row:last-child{border-bottom:none}
+.explain .lab{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px}
+.explain .row p{font-size:13px;color:var(--txt);margin:0;opacity:.92}
+.explain .e1{background:rgba(91,141,239,.08)} .explain .e1 .lab{color:var(--blue)}
+.explain .e2{background:rgba(124,92,255,.08)} .explain .e2 .lab{color:var(--accent)}
+.explain .e3{background:rgba(62,207,142,.08)} .explain .e3 .lab{color:var(--good)}
+.explain .e4{background:rgba(245,166,35,.08)} .explain .e4 .lab{color:var(--warn)}
+.explain .e5{background:rgba(255,92,124,.09);border-top:2px solid var(--bad)} .explain .e5 .lab{color:var(--bad)}
+details.explain-wrap{margin:4px 0 14px}
+details.explain-wrap > summary{cursor:pointer;font-size:12px;color:var(--muted);padding:6px 0;list-style:none;user-select:none}
+details.explain-wrap > summary::-webkit-details-marker{display:none}
+details.explain-wrap > summary:before{content:"💡 "}
+details.explain-wrap[open] > summary{color:var(--accent)}
 h1{font-size:23px;font-weight:700}
 .sub{color:var(--muted);font-size:13px;margin-bottom:16px}
 .months{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;position:sticky;top:0;background:var(--bg);padding:12px 0;z-index:10;border-bottom:1px solid var(--line)}
@@ -33,6 +52,7 @@ tr:hover td{background:var(--card2)}
 .lstep .ll{color:var(--muted);font-size:10.5px}
 .lstep .ld{color:var(--bad);font-size:10px}
 </style></head><body><a href="GLOV_HUB.html" style="position:fixed;top:12px;left:12px;z-index:999;background:#7c5cff;color:#fff;text-decoration:none;padding:7px 13px;border-radius:8px;font:600 12px -apple-system,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.4)">← HUB</a>
+<button class="theme-btn" id="themeBtn" title="Tryb jasny/ciemny">🌙</button>
 <h1>GLOV — Ścieżki zakupowe konsumentów</h1>
 <div class="sub">glov.co · 342844459 · typy ścieżek wg wejścia → zakup, per miesiąc · twarde dane GA4 · <b>tylko ścieżki z zakupem</b> · INTERNAL</div>
 <div class="months" id="months"></div>
@@ -55,6 +75,33 @@ const PATHS=[
  {key:'landing',label:'Landing /pages',steps:'→ ATC/PDP → Koszyk → Checkout → Zakup', note:'dedykowane strony kampanijne'},
 ];
 
+const EXPLAIN={
+ types:{
+   widzisz:'Lista dróg, jakimi klient dochodzi do zakupu — wg tego, gdzie wszedł na sklep. Listing (wszedł na kolekcję), PDP (wprost na kartę produktu z reklamy), Homepage (strona główna), Landing (strona kampanijna). Dla każdej: ile wejść, jaki % dodał do koszyka (ATC%), ile zakupów, konwersja (CR%) i przychód.',
+   wazne:'Pokazuje, która droga wejścia naprawdę sprzedaje, a nie tylko przyciąga. Płacisz za kierowanie ludzi w konkretne miejsce — chcesz wiedzieć, czy wejście na kartę produktu konwertuje lepiej niż na kolekcję.',
+   dowiadujesz:'Że nie każde wejście jest równe. W GLOV Homepage ma najwyższą konwersję (3–4%), choć mało ruchu — ludzie, którzy zaczynają od strony głównej, są bardziej zdecydowani. Listing daje dużo ruchu, ale słabszą konwersję.',
+   czytaj:'Patrz na CR% (zielony = najlepszy, czerwony = słaby) zestawiony z liczbą wejść. 🟢 to najlepsza droga, 🔥 to dużo ruchu przy słabej konwersji — czyli wejście, które przepala uwagę. Kolejność ścieżek jest zawsze ta sama, żeby dało się porównywać miesiące.',
+   wynika:'Kieruj reklamy na drogi o wysokiej konwersji (u GLOV: Homepage i PDP wprost). Jeśli Listing ma dużo ruchu i niski CR — popraw kolekcje (sortowanie, opisy, filtry) albo kieruj ruch raczej na konkretne karty produktu.'
+ },
+ ogon:{
+   widzisz:'Wspólny koniec wszystkich dróg: ile osób weszło (z tych, co kupiły) → ile dodało do koszyka → ile finalnie kupiło → ile przychodu. Każdy krok mniejszy, bo część odpada.',
+   wazne:'To zsumowany lejek — pokazuje, jak mocno topnieje grupa między „dodał do koszyka" a „kupił". Tu uciekają pieniądze tuż przed kasą.',
+   dowiadujesz:'Skalę odpadania na końcu drogi. Spadek od ATC do zakupu mówi, ilu ludzi rozmyśliło się w koszyku/checkout — to często kwestia kosztów dostawy, formularza albo zaufania.',
+   czytaj:'Patrz na procent spadku przy „Zakup" (−% od ATC). Im większy, tym więcej tracisz na ostatniej prostej. To inny problem niż słaba karta produktu — to checkout i koszyk.',
+   wynika:'Jeśli spadek ATC→zakup jest duży: pokaż koszt dostawy wcześniej, skróć checkout, dodaj zaufanie (opinie, gwarancje, bezpieczne płatności). Uwaga na ślepe pola pomiaru opisane w żółtej ramce niżej — część „wejść" to artefakt atrybucji GA4, nie realna ścieżka.'
+ }
+};
+function explain(key){
+ const e=EXPLAIN[key]; if(!e) return '';
+ return '<details class="explain-wrap"><summary>Jak czytać ten wykres? (kliknij)</summary>'+
+ '<div class="explain">'+
+ '<div class="row e1"><div class="lab">Co tu widzisz</div><p>'+e.widzisz+'</p></div>'+
+ '<div class="row e2"><div class="lab">Dlaczego to ważne</div><p>'+e.wazne+'</p></div>'+
+ '<div class="row e3"><div class="lab">Dowiadujesz się że</div><p>'+e.dowiadujesz+'</p></div>'+
+ '<div class="row e4"><div class="lab">Czytaj to tak</div><p>'+e.czytaj+'</p></div>'+
+ '<div class="row e5"><div class="lab">Co z tego wynika i co zrobić</div><p>'+e.wynika+'</p></div>'+
+ '</div></details>';
+}
 function render(){
  const d=DATA[cur];
  const types={};(d.types||[]).forEach(t=>types[t.type]=t);
@@ -65,6 +112,7 @@ function render(){
  }).filter(Boolean);
 
  let h='<h2>Typy ścieżek zakupowych — stała kolejność</h2><div class="h2sub">Każda ścieżka kończy się zakupem. Kolejność ZAWSZE ta sama (niezależnie od miesiąca). 🟢 najlepszy CR · 🔥 dużo ruchu, słaby CR</div>';
+ h+=explain('types');
  const maxS=Math.max(...rows.map(r=>r.sessions),1);
  const bestCR=Math.max(...rows.filter(r=>r.sessions>300).map(r=>r.cr));
  h+='<table><tr><th>Ścieżka</th><th>Wejść</th><th>ATC%</th><th>Zakupy</th><th>CR%</th><th>Przychód</th></tr>';
@@ -80,6 +128,7 @@ function render(){
  // wspolny lejek ogona (z danych miesiaca jesli sa - tu pokazujemy zsumarycznie z typow)
  const totS=rows.reduce((s,r)=>s+r.sessions,0), totA=rows.reduce((s,r)=>s+r.atc,0), totT=rows.reduce((s,r)=>s+r.transactions,0), totR=rows.reduce((s,r)=>s+r.revenue,0);
  h+='<h2>Wspólny ogon: ATC → Koszyk → Checkout → Zakup</h2><div class="h2sub">Zsumowane kroki wszystkich ścieżek zakupowych tego miesiąca</div>';
+ h+=explain('ogon');
  h+='<div class="lejek">';
  h+=`<div class="lstep"><span class="lv">${n(totS)}</span><span class="ll">Wejść (z zakupem)</span></div>`;
  h+=`<div class="lstep"><span class="lv">${n(totA)}</span><span class="ll">ATC</span><span class="ld">−${(100-totA/totS*100).toFixed(0)}%</span></div>`;
@@ -94,5 +143,9 @@ function render(){
 }
 const mc=document.getElementById('months');
 PERIODS.forEach(([k,label])=>{const b=document.createElement('button');b.className='month-btn'+(k===cur?' active':'');b.textContent=label;b.onclick=()=>{cur=k;document.querySelectorAll('.month-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();};mc.appendChild(b);});
+// toggle jasny/ciemny
+(function(){const root=document.documentElement,btn=document.getElementById('themeBtn');
+ const saved=localStorage.getItem('glov-theme')||'dark';root.setAttribute('data-theme',saved);btn.textContent=saved==='light'?'☀️':'🌙';
+ btn.onclick=()=>{const nx=root.getAttribute('data-theme')==='light'?'dark':'light';root.setAttribute('data-theme',nx);localStorage.setItem('glov-theme',nx);btn.textContent=nx==='light'?'☀️':'🌙';};})();
 render();
 </script></body></html>

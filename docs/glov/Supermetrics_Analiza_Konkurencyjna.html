@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supermetrics — analiza konkurencyjna pod budowę alternatywy</title>
+<style>
+  :root{
+    --bg:#0f1117; --card:#181b24; --card2:#1f2330; --ink:#e8ebf2; --muted:#9aa3b5;
+    --line:#2a2f3d; --accent:#4f8cff; --good:#36d399; --warn:#fbbd23; --bad:#f87272; --pill:#262b3a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 24px 80px}
+  header h1{font-size:30px;margin:0 0 6px;letter-spacing:-.4px}
+  .sub{color:var(--muted);font-size:15px;margin-bottom:8px}
+  .meta{color:var(--muted);font-size:13px;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:32px}
+  h2{font-size:21px;margin:42px 0 14px;letter-spacing:-.3px;border-left:3px solid var(--accent);padding-left:12px}
+  h3{font-size:16px;margin:24px 0 8px;color:#cdd4e3}
+  p{margin:8px 0}
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr 1fr}
+  @media(max-width:760px){.g2,.g3{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .card h3{margin-top:0}
+  .pill{display:inline-block;background:var(--pill);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;margin:2px 4px 2px 0}
+  .lead{background:linear-gradient(135deg,#1a2438,#181b24);border:1px solid #2c3a55}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px}
+  tr:hover td{background:#1c202b}
+  .tag{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:600}
+  .t-good{background:rgba(54,211,153,.15);color:var(--good)}
+  .t-warn{background:rgba(251,189,35,.15);color:var(--warn)}
+  .t-bad{background:rgba(248,114,114,.15);color:var(--bad)}
+  ul{margin:8px 0;padding-left:20px}
+  li{margin:5px 0}
+  .gap{border-left:3px solid var(--good);background:var(--card2)}
+  .num{font-size:26px;font-weight:700;color:var(--accent);line-height:1}
+  .kpi{display:flex;gap:18px;flex-wrap:wrap;margin:8px 0}
+  .kpi .card{flex:1;min-width:150px}
+  .src{font-size:13px;color:var(--muted)}
+  .src a{color:var(--accent);text-decoration:none}
+  .src a:hover{text-decoration:underline}
+  .foot{margin-top:48px;border-top:1px solid var(--line);padding-top:20px;color:var(--muted);font-size:13px}
+  .callout{background:#20283b;border:1px solid #324a6e;border-radius:10px;padding:14px 18px;margin:14px 0}
+  strong{color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Supermetrics — analiza konkurencyjna</h1>
+  <div class="sub">Rozpoznanie produktu i rynku pod budowę lepszej alternatywy</div>
+  <div class="meta">Opracowano: 2026-06-24 · Projekt: Ecomms Activation / GLOV · Źródła: web (G2, Trustpilot, dokumentacja Supermetrics, analizy konkurencji) — linki na końcu</div>
+</header>
+
+<div class="card lead">
+  <h3 style="margin-top:0">TL;DR — gdzie jest szansa</h3>
+  <p>Supermetrics to dojrzały, drogi „middleman" do danych marketingowych: świetny w Google Sheets / Looker Studio, ale <strong>nie wizualizuje danych</strong>, ma <strong>nieprzejrzysty, eskalujący pricing</strong> (add-ony za każde źródło, usera, destynację), <strong>per-user pricing dławiący rosnące zespoły</strong>, <strong>słaby support</strong> (Trustpilot 1,9/5) i <strong>rozjazdy danych</strong>. Najmocniejsze pola do ataku: transparentny pricing flat, all-connectors-in-every-plan, własna warstwa wizualizacji/insightów (AI), oraz model agencyjny z własnością danych po stronie klienta.</p>
+</div>
+
+<h2>1. Co właściwie robi Supermetrics</h2>
+<p>Pozycjonuje się dziś jako <strong>„Marketing Intelligence Platform"</strong>, ale rdzeń to no-code ETL: wyciąga dane z rozproszonych platform reklamowych/marketingowych i przerzuca je do arkuszy, BI i hurtowni. Marketer (nie inżynier danych) konfiguruje to w kilka kliknięć.</p>
+
+<div class="grid g3">
+  <div class="card">
+    <h3>Źródła danych</h3>
+    <p>100+ konektorów (Meta Ads, GA4, Instagram, LinkedIn Ads, retail media, CRM, programmatic). Od lutego 2026 <em>Connector Builder</em> do własnych integracji.</p>
+  </div>
+  <div class="card">
+    <h3>Destynacje</h3>
+    <p>Google Sheets, Looker Studio, Excel, BigQuery, Snowflake, Azure Synapse, Amazon Redshift i inne hurtownie.</p>
+  </div>
+  <div class="card">
+    <h3>Skala / kierunek</h3>
+    <p>200 000+ firm w 120 krajach. W 2025: 500+ aktualizacji, AI Agents, Data Explorer, własny Dashboard, API; przejęcie <strong>Relay42</strong> (CDP) — ruch w stronę aktywacji danych.</p>
+  </div>
+</div>
+
+<h2>2. Pricing — i dlaczego boli</h2>
+<div class="kpi">
+  <div class="card"><div class="num">€29</div><div class="src">cena bazowa „od" (Looker Studio, Starter, rocznie)</div></div>
+  <div class="card"><div class="num">€600–1400</div><div class="src">realny miesięczny koszt większości zespołów z add-onami</div></div>
+  <div class="card"><div class="num">€99</div><div class="src">za każdego dodatkowego usera (Pro)</div></div>
+  <div class="card"><div class="num">€149</div><div class="src">za każdą dodatkową destynację</div></div>
+</div>
+<p>Plany Starter / Growth / Pro różnią się głównie limitem userów (1/2/3) i źródeł (3/7/10). Wszystko ponad limit to dopłaty: <span class="pill">+€29 źródło</span><span class="pill">+€29–99 user</span><span class="pill">+€149 destynacja</span><span class="pill">+€10 konto reklamowe</span>. Tylko roczne zobowiązania — <strong>brak opcji miesiąc-do-miesiąca</strong>. Efekt: 10-osobowy zespół płaci ~€693/mc za samych userów.</p>
+<div class="callout"><strong>Punkt bólu #1:</strong> cena startowa wygląda atrakcyjnie, ale rachunek puchnie przez add-ony, których nie komunikuje się z góry. „Zaczęło się od $49, skończyło ponad $300." To najczęstszy zarzut w recenzjach 2025.</div>
+
+<h2>3. Słabe strony (= nasze wektory ataku)</h2>
+<table>
+  <tr><th>Obszar</th><th>Problem u Supermetrics</th><th>Severity</th></tr>
+  <tr><td>Pricing</td><td>Nieprzejrzysty, eskalujący, add-ony za wszystko, tylko roczny commit</td><td><span class="tag t-bad">krytyczny</span></td></tr>
+  <tr><td>Per-user</td><td>€99/user dławi rosnące zespoły i agencje</td><td><span class="tag t-bad">krytyczny</span></td></tr>
+  <tr><td>Support</td><td>Wolny / brak odpowiedzi; Trustpilot 1,9/5 (vs G2 4,4/5)</td><td><span class="tag t-bad">krytyczny</span></td></tr>
+  <tr><td>Brak wizualizacji</td><td>„Middleman" — trzeba dokładać Looker/BI, by cokolwiek zobaczyć</td><td><span class="tag t-warn">wysoki</span></td></tr>
+  <tr><td>Rozjazdy danych</td><td>Niespójności z GA4 / DV360 / Branch, limity API, opóźnienia 24–48h</td><td><span class="tag t-warn">wysoki</span></td></tr>
+  <tr><td>Model agencyjny</td><td>Klienci chcą własności danych ze swojego konta — Supermetrics to utrudnia</td><td><span class="tag t-warn">wysoki</span></td></tr>
+  <tr><td>Rozdzielone konektory</td><td>Sheets vs Looker to osobne produkty — utrudnia pracę cross-funkcyjną</td><td><span class="tag t-warn">średni</span></td></tr>
+</table>
+
+<h2>4. Krajobraz konkurencji</h2>
+<p>Rynek jest zatłoczony, ale rozwarstwiony — nikt nie wygrywa jednocześnie na cenie, prostocie i głębi. To zostawia środek otwarty.</p>
+<table>
+  <tr><th>Gracz</th><th>Pozycja</th><th>Konektory</th><th>Cena / atut</th></tr>
+  <tr><td><strong>Supermetrics</strong></td><td>Dojrzały lider, Sheets/Looker</td><td>~100–176+</td><td>Drogi, add-ony</td></tr>
+  <tr><td>Windsor.ai</td><td>Tani, dużo źródeł</td><td>325+</td><td>Wszystkie konektory w każdym planie, ~½ ceny</td></tr>
+  <tr><td>Dataslayer.ai</td><td>Budżetowy</td><td>—</td><td>od ~€25, unlimited users</td></tr>
+  <tr><td>Funnel.io</td><td>Enterprise ETL</td><td>590+</td><td>Transformacje, drogi</td></tr>
+  <tr><td>Improvado</td><td>Enterprise full-ETL</td><td>500+</td><td>Dla dużych zespołów danych</td></tr>
+  <tr><td>Adverity</td><td>High-end</td><td>363–1000+</td><td>od $500/mc, dla IT/analityków</td></tr>
+  <tr><td>AgencyAnalytics</td><td>Agencyjny reporting</td><td>—</td><td>White-label, dashboardy, PDF</td></tr>
+  <tr><td>Whatagraph</td><td>Wizualizacja + blending</td><td>—</td><td>Lżejszy, ładny output</td></tr>
+</table>
+<div class="callout"><strong>Wniosek:</strong> tanio+dużo źródeł zajęte (Windsor, Dataslayer); enterprise-ETL zajęte (Funnel, Improvado, Adverity); agencyjny white-label zajęty (AgencyAnalytics). <strong>Wolne pole:</strong> połączenie taniego/transparentnego pipeline'u Z warstwą insightów/AI i wizualizacją — czyli „od surowych danych do gotowej rekomendacji" bez doklejania trzech narzędzi.</div>
+
+<h2>5. Kto kupuje (segmenty)</h2>
+<div class="grid g2">
+  <div class="card">
+    <h3>Agencje</h3>
+    <p>Chcą: white-label, portale klienckie, multi-client, automatyczne raporty PDF, <strong>własność danych po stronie klienta</strong>. Per-user pricing Supermetrics ich boli najbardziej.</p>
+  </div>
+  <div class="card">
+    <h3>In-house</h3>
+    <p>Chcą: głębi analizy i integracji ze stackiem danych. Część ma już Looker/BigQuery i traktuje pipeline jako commodity — wrażliwi na cenę za „rurę".</p>
+  </div>
+</div>
+
+<h2>6. Rekomendacje pod budowę lepszej alternatywy</h2>
+<div class="grid g2">
+  <div class="card gap"><h3>① Pricing flat & transparentny</h3><p>Jedna cena, wszystkie konektory, unlimited users, opcja miesięczna. Zabija najczęstszy zarzut wprost. (Windsor/Dataslayer już to robią — trzeba przebić prostotą + wartością.)</p></div>
+  <div class="card gap"><h3>② Insight layer, nie tylko rura</h3><p>Wbudowana wizualizacja + AI, które samo wskazuje anomalie i rekomendacje (np. „CPA wzrósł 30% — kreacja X się wypaliła"). To zgodne z wizją Ecomms „trener, nie lekarz".</p></div>
+  <div class="card gap"><h3>③ Zaufanie do danych</h3><p>Transparentne raportowanie rozjazdów, statusy świeżości, fallbacki przy limitach API. Skoro discrepancies to powszechny ból — uczciwość = przewaga.</p></div>
+  <div class="card gap"><h3>④ Model agencyjny first</h3><p>Dane zostają na koncie klienta, white-label, multi-client w cenie. Bezpośrednio adresuje lukę agencyjną Supermetrics.</p></div>
+  <div class="card gap"><h3>⑤ Support jako produkt</h3><p>Szybki, ludzki support / wbudowany asystent. Trustpilot 1,9 pokazuje, jak nisko zawieszona jest poprzeczka.</p></div>
+  <div class="card gap"><h3>⑥ Wąska nisza na start</h3><p>Nie atakować 100 konektorów naraz. Wejść mocno w e-commerce/performance (Meta+Google+GA4+Shopify+GSC) z najlepszym UX i AI — dokładnie stack, który już ogrywamy na GLOV.</p></div>
+</div>
+
+<div class="card lead" style="margin-top:24px">
+  <h3 style="margin-top:0">Pozycjonowanie jednym zdaniem (propozycja)</h3>
+  <p>„Pipeline danych marketingowych z wbudowanym mózgiem — od podłączenia źródeł do gotowych rekomendacji, w jednej przejrzystej cenie, bez doklejania Lookera i bez rachunku, który puchnie z każdym userem."</p>
+</div>
+
+<h2>Źródła</h2>
+<div class="src">
+<p>Produkt / konektory / destynacje:
+<a href="https://supermetrics.com/connectors">Supermetrics Connectors</a> ·
+<a href="https://docs.supermetrics.com/docs/about-data-source-connector-types">Docs: connector types</a> ·
+<a href="https://supermetrics.com/blog/supermetrics-wrapped-2025">Supermetrics Wrapped 2025</a> ·
+<a href="https://en.wikipedia.org/wiki/Supermetrics">Wikipedia</a> ·
+<a href="https://whatagraph.com/blog/articles/supermetrics-connectors">Whatagraph: connectors, pricing & limitations</a></p>
+<p>Pricing:
+<a href="https://supermetrics.com/pricing">Supermetrics Pricing</a> ·
+<a href="https://www.dataslayer.ai/blog/supermetrics-pricing-in-2025-is-there-a-better-alternative">Dataslayer: pricing breakdown</a> ·
+<a href="https://whatagraph.com/blog/articles/supermetrics-pricing">Whatagraph: pricing 2026</a> ·
+<a href="https://www.bestever.ai/post/supermetrics-pricing">Bestever: pricing</a> ·
+<a href="https://coefficient.io/supermetrics-pricing">Coefficient: pricing & reviews</a></p>
+<p>Recenzje / słabości:
+<a href="https://www.g2.com/products/supermetrics/reviews">G2 Reviews</a> ·
+<a href="https://www.trustpilot.com/review/supermetrics.com">Trustpilot</a> ·
+<a href="https://whatagraph.com/reviews/supermetrics">Whatagraph: honest review</a> ·
+<a href="https://portermetrics.com/en/compare/supermetrics-overview/">Portermetrics: review</a></p>
+<p>Konkurencja / segmenty:
+<a href="https://windsor.ai/top-supermetrics-alternatives-competitors/">Windsor.ai: alternatives</a> ·
+<a href="https://improvado.io/blog/supermetrics-alternatives-competitors">Improvado: alternatives</a> ·
+<a href="https://www.g2.com/products/supermetrics/competitors/alternatives">G2: competitors</a> ·
+<a href="https://agencyanalytics.com/competitors/supermetrics-alternative">AgencyAnalytics</a> ·
+<a href="https://funnel.io/blog/supermetrics-alternatives">Funnel.io: alternatives for agencies & brands</a></p>
+<p>Rozjazdy danych / limity:
+<a href="https://support.supermetrics.com/support/solutions/articles/19000156870-about-discrepancies-in-google-analytics-4-data">Discrepancies GA4</a> ·
+<a href="https://support.supermetrics.com/support/discussions/topics/19000015590">Forum: Data Discrepancies</a> ·
+<a href="https://support.supermetrics.com/support/solutions/articles/19000126531-how-to-solve-daily-quota-errors-in-google-display-video-360-queries">Quota errors DV360</a></p>
+</div>
+
+<div class="foot">
+  Raport roboczy — surowiec do dalszej destylacji. Liczby (pricing, oceny) zmienne w czasie; przed decyzjami biznesowymi zweryfikować aktualne cenniki bezpośrednio u źródła. Następny krok do rozważenia: deep-dive w jeden segment (np. agencje e-commerce) + szkic MVP feature setu.
+</div>
+</div>
+</body>
+</html>
