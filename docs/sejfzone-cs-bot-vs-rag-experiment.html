@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raport Eksperymentu Porównawczego: CS-bot vs Generyk RAG | SejfZone</title>
+<style>
+    :root {
+        --bg-main: #f8fafc;
+        --bg-card: #ffffff;
+        --border-color: #e2e8f0;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --accent-cs: #10b981; /* Green */
+        --accent-cs-bg: #ecfdf5;
+        --accent-gen: #3b82f6; /* Blue */
+        --accent-gen-bg: #eff6ff;
+        --prio-high: #ef4444;
+        --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        font-family: var(--font-sans);
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        line-height: 1.6;
+        padding: 32px 16px;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    header {
+        margin-bottom: 32px;
+        border-bottom: 2px dashed var(--border-color);
+        padding-bottom: 24px;
+    }
+    
+    h1 {
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        margin-bottom: 8px;
+    }
+    
+    .meta-subtitle {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+    
+    /* Stats grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+    
+    .stat-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    
+    .stat-card .title {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        letter-spacing: 0.05em;
+    }
+    
+    .stat-card .value {
+        font-size: 24px;
+        font-weight: 800;
+    }
+    
+    .stat-card.cs-metrics {
+        border-left: 4px solid var(--accent-cs);
+    }
+    
+    .stat-card.gen-metrics {
+        border-left: 4px solid var(--accent-gen);
+    }
+    
+    /* Comparison list */
+    .scenario-section {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 32px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    
+    .scenario-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 12px;
+        flex-wrap: wrap;
+    }
+    
+    .sc-badge {
+        background: #0f172a;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 800;
+        padding: 4px 10px;
+        border-radius: 20px;
+    }
+    
+    .sc-title {
+        font-size: 18px;
+        font-weight: 700;
+        flex: 1;
+    }
+    
+    .query-box {
+        background: #f1f5f9;
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 15px;
+        font-style: italic;
+        margin-bottom: 20px;
+        border-left: 3px solid var(--text-muted);
+    }
+    
+    .expected-behavior {
+        font-size: 13px;
+        background: #fffbeb;
+        color: #b45309;
+        border: 1px solid #fef3c7;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+    
+    .grid-compare {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    @media (max-width: 768px) {
+        .grid-compare {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .column {
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    .col-header {
+        padding: 12px 16px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .column.cs-col .col-header {
+        background: var(--accent-cs-bg);
+        color: #065f46;
+        border-bottom: 2px solid #a7f3d0;
+    }
+    
+    .column.gen-col .col-header {
+        background: var(--accent-gen-bg);
+        color: #1e40af;
+        border-bottom: 2px solid #bfdbfe;
+    }
+    
+    .col-body {
+        padding: 16px;
+        font-size: 14px;
+        background: #fff;
+        min-height: 200px;
+        white-space: pre-wrap;
+    }
+    
+    .metrics-row {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-muted);
+    }
+    
+    table.html-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0;
+        font-size: 13px;
+    }
+    table.html-table th, table.html-table td {
+        border: 1px solid #cbd5e1;
+        padding: 6px 10px;
+        text-align: left;
+    }
+    table.html-table th {
+        background: #f1f5f9;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>🛰️ Raport Eksperymentu: CS-bot vs Generyk RAG</h1>
+        <div class="meta-subtitle">Silnik LLM: DEEPSEEK (deepseek-chat) · Data: 2026-06-26 · Środowisko testowe: GEO PDP Optimizer</div>
+    </header>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="title">Wszystkich testów</div>
+            <div class="value">10</div>
+        </div>
+        <div class="stat-card cs-metrics">
+            <div class="title">CS-bot średnie TTFT</div>
+            <div class="value">1.16 s</div>
+        </div>
+        <div class="stat-card cs-metrics">
+            <div class="title">CS-bot średnie TGT</div>
+            <div class="value">9.47 s</div>
+        </div>
+        <div class="stat-card gen-metrics">
+            <div class="title">Generyczny średnie TTFT</div>
+            <div class="value">0.96 s</div>
+        </div>
+        <div class="stat-card gen-metrics">
+            <div class="title">Generyczny średnie TGT</div>
+            <div class="value">8.28 s</div>
+        </div>
+    </div>
+
+    <!-- Scenarios List -->
+    
+    <div class="scenario-section">
+        <div class="scenario-header">
+            <span class="sc-badge">SC-01</span>
+            <span class="sc-title">Myśliwy (początkujący)</span>
+        </div>
+        <div class="query-box">Pytanie klienta: "Kupiłem pierwszą strzelbę i potrzebuję na nią jakiejś szafy, co polecacie?"</div>
+        <div class="expected-behavior"><b>Oczekiwane zachowanie CS-bota:</b> Wykrycie CEP 'broń', edukacja o wymogu klasy S1, dopytanie o długość broni i liczbę sztuk, polecenie taniej szafy S1.</div>
+        
+        <div class="grid-compare">
+            <!-- Branch A Column -->
+            <div class="column cs-col">
+                <div class="col-header">
+                    <span>CS-bot (Category Standard)</span>
+                    <span class="metrics-row">TTFT: 1.55s | TGT: 8.77s</span>
+                </div>
+                <div class="col-body">Witam serdecznie i gratuluję zakupu pierwszej strzelby! To świetna sprawa.
+
+Aby dobrać odpowiednią szafę, potrzebuję od Ciebie dwóch kluczowych informacji:
+
+1.  **Jaki to typ strzelby?** Czy jest to klasyczna strzelba myśliwska (np. dubeltówka, sztucer) czy może karabin z długą lufą i optyką? To wpływa na wymaganą wysokość wewnętrzną szafy.
+2.  **Gdzie planujesz ją zamontować?** Czy ma to być wolnostojąca szafa w domowym pokoju, czy planujesz ją przykręcić do ściany lub podłogi w konkretnym miejscu (np. w szafie wnękowej, w piwnicy)?
+
+Zgodnie z polskim prawem (Rozporządzenie MSWiA z 26 sierpnia 2014 r.), do przechowywania broni palnej wystarczy szafa o **klasie S1** wg normy PN-EN 14450. Na początek idealnie sprawdzi się model **Siegen MAX KOMBI 125**.
+
+Oto jego parametry w pigułce:
+
+<table class="html-table">
+<thead><tr><th>Parametr</th><th>Wartość</th></tr></thead>
+<tbody>
+<tr><td>**Model**</td><td>**Siegen MAX KOMBI 125**</td></tr>
+<tr><td>**Klasa bezpieczeństwa**</td><td>S1 (PN-EN 14450) – spełnia wymogi prawne</td></tr>
+<tr><td>**Wymiary zewnętrzne**</td><td>1250 x 600 x 350 mm</td></tr>
+<tr><td>**Wymiary wewnętrzne**</td><td>1244 x 594 x 280 mm</td></tr>
+<tr><td>**Waga**</td><td>105 kg</td></tr>
+<tr><td>**Pojemność**</td><td>Do 18 jednostek broni długiej (8 regulowanych uchwytów + 5 magnetycznych w zestawie)</td></tr>
+<tr><td>**Zamek**</td><td>Kluczowy klasy A (w standardzie) lub opcjonalnie elektroniczny klasy B (+350 zł)</td></tr>
+<tr><td>**Cena**</td><td>**1999 PLN**</td></tr>
+</tbody></table>
+
+**Dlaczego to dobry wybór na start?**
+- Jest **wystarczająco wysoka** (125 cm), aby pomieścić większość strzelb myśliwskich i karabinów.
+- Ma **zapas miejsca** – jeśli w przyszłości dokupisz drugą sztukę broni, nie będziesz musiał od razu kupować nowej szafy.
+- **Nie wymaga kotwienia** (choć dla bezpieczeństwa i stabilności jest to zalecane), więc możesz ją postawić w dowolnym miejscu.
+
+Jeśli masz bardzo długi karabin z optyką (np. powyżej 120 cm), poleciłbym wyższy model **Siegen MAX KOMBI 200** (200 cm wysokości, cena 2899 PLN).
+
+Która z tych opcji bardziej Ci odpowiada? A może masz jeszcze jakieś pytania?</div>
+            </div>
+            
+            <!-- Branch B Column -->
+            <div class="column gen-col">
+                <div class="col-header">
+                    <span>Generyczny RAG</span>
+                    <span class="metrics-row">TTFT: 0.84s | TGT: 7.15s</span>
+                </div>
+                <div class="col-body">Gratuluję zakupu pierwszej strzelby! To świetny wybór, a odpowiednie przechowywanie to podstawa bezpieczeństwa i zgodności z przepisami.
+
+Z Twojego opisu wynika, że potrzebujesz szafy na broń długą. Polecam Ci dwa modele z naszej oferty, które idealnie sprawdzą się w tej roli:
+
+**1. Siegen MAX KOMBI 125 – Najlepszy wybór na start**
+To najpopularniejszy model wśród myśliwych i strzelców sportowych. Jest to szafa o wysokości 125 cm, która spełnia wymagania Rozporządzenia MSWiA z 26.08.2014 r. (klasa S1).
+*   **Pojemność:** Pomieści do 18 sztuk broni długiej, więc masz sporo miejsca na rozwój kolekcji. W zestawie dostajesz 8 regulowanych uchwytów na szynach oraz 5 uchwytów magnetycznych.
+*   **Wnętrze:** Posiada przegrodę centralną i 4 regulowane półki, co ułatwia organizację.
+*   **Cena:** **1999 PLN** – to bardzo atrakcyjna cena za solidną, certyfikowaną szafę.
+*   **Zalecenie:** Jeśli nie planujesz od razu kupować bardzo wysokiego karabinu z dużą optyką, ten model będzie dla Ciebie idealny.
+
+**2. Siegen MAX KOMBI 200 – Jeśli masz wyższe karabiny lub większe plany**
+To większa, wyższa wersja (200 cm wysokości) tego samego modelu.
+*   **Pojemność:** Do 24 jednostek broni długiej.
+*   **Zalecenie:** Wybierz ją, jeśli wiesz, że w przyszłości będziesz chciał przechowywać wysokie karabiny z dużymi celownikami optycznymi, lub po prostu chcesz mieć więcej miejsca od razu.
+*   **Cena:** **2899 PLN**
+
+**Podsumowując:**
+Na Twoją pierwszą strzelbę w 100% wystarczy **Siegen MAX KOMBI 125**. Jest to sprawdzony, solidny sejf w dobrej cenie, który zapewni Ci bezpieczne przechowywanie zgodne z prawem.
+
+Jeśli masz pytania dotyczące wyboru zamka (w standardzie jest kluczowy, a za dopłatą 350 zł możesz mieć elektroniczny) lub chcesz zamówić, służę pomocą!</div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="scenario-section">
+        <div class="scenario-header">
+            <span class="sc-badge">SC-02</span>
+            <span class="sc-title">Strzelec sportowy</span>
+        </div>
+        <div class="query-box">Pytanie klienta: "Szukam sejfu klasy S1 na 5 pistoletów, koniecznie z zamkiem elektronicznym klasy B i osobną skrytką na amunicję. Waga max 80kg."</div>
+        <div class="expected-behavior"><b>Oczekiwane zachowanie CS-bota:</b> Pominięcie edukacji o S1, natychmiastowe przejście do parametrów, odrzucenie modeli cięższych niż 80kg, prezentacja tabeli Spec Density.</div>
+        
+        <div class="grid-compare">
+            <!-- Branch A Column -->
+            <div class="column cs-col">
+                <div class="col-header">
+                    <span>CS-bot (Category Standard)</span>
+                    <span class="metrics-row">TTFT: 1.21s | TGT: 12.56s</span>
+                </div>
+                <div class="col-body">Oczywiście, przeanalizujmy Twoje wymagania. Szukasz sejfu klasy S1 na 5 pistoletów, z zamkiem elektronicznym klasy B i oddzielną skrytką na amunicję, o wadze do 80 kg.
+
+Zanim przejdziemy do konkretnych modeli, mam dwa pytania, które pomogą mi doprecyzować rekomendację:
+
+1.  **Gdzie zamierzasz zamontować ten sejf?** (np. w szafie w sypialni, w ścianie, w biurku) – to kluczowe dla wymiarów i opcji kotwienia.
+2.  **Czy przechowywanie amunicji w tym samym sejfie, ale w oddzielnej, zamykanej skrytce wewnętrznej jest dla Ciebie akceptowalne, czy wolisz całkowicie osobny, mniejszy sejf na amunicję?**
+
+Na podstawie Twoich danych, najlepszym dopasowaniem z naszego katalogu jest **Siegen SG1**, ale z pewnymi zastrzeżeniami.
+
+**Siegen SG1**
+*   **Typ:** Sejf na broń krótką (klasa S1)
+*   **Wymiary zewnętrzne:** 300 x 400 x 150 mm
+*   **Waga:** 15 kg
+*   **Pojemność:** Mieści do 5 pistoletów (piankowe uchwyty w zestawie)
+*   **Zamek:** Elektroniczny zamek biometryczny klasy A (w standardzie)
+*   **Cena:** 850 PLN
+
+**Analiza zgodności z Twoimi wymaganiami:**
+
+*   **Klasa S1:** ✅ Spełnia.
+*   **Pojemność na 5 pistoletów:** ✅ Tak, mieści.
+*   **Waga max 80 kg:** ✅ 15 kg – zdecydowanie poniżej limitu.
+*   **Zamek elektroniczny klasy B:** ❌ **Niespełnione.** Model SG1 ma w standardzie zamek biometryczny klasy A. Nie ma opcji dopłaty do zamka klasy B. Zgodnie z Rozporządzeniem MSWiA, do przechowywania broni palnej wymagany jest zamek co najmniej klasy A, więc ten jest prawnie dopuszczalny, ale nie spełnia Twojego wymogu klasy B.
+*   **Oddzielna skrytka na amunicję:** ❌ **Niespełnione.** Model SG1 nie posiada wewnętrznej, zamykanej skrytki. Jest to jednokomorowy sejf.
+
+**Wniosek i rekomendacja:**
+
+Niestety, w naszym katalogu **nie ma modelu, który łączyłby wszystkie cztery kryteria** (S1, 5 pistoletów, zamek el. klasy B, osobna skrytka na amunicję) w jednym urządzeniu o wadze poniżej 80 kg.
+
+**Proponuję dwa rozwiązania:**
+
+1.  **Rozwiązanie kompromisowe (najbliższe Twoim wymaganiom):**
+    *   **Siegen SG1** (850 PLN) – na 5 pistoletów.
+    *   Oraz **dodatkowy, mały sejf na amunicję**, np. **Adorf 250 S1** (599 PLN) – który możesz zamontować obok lub pod SG1. To da Ci łączną wagę ~33 kg i spełni wymóg oddzielnej skrytki. Zamek w SG1 jest klasy A, a nie B.
+
+2.  **Rozwiązanie z wyższą klasą zamka (jeśli zamek klasy B jest kluczowy):**
+    *   Niestety, w tej kategorii wagowej (do 80 kg) i przy pojemności na 5 pistoletów, nie mamy modelu z zamkiem klasy B. Modele z zamkiem klasy B (np. **Siegen MAX KOMBI 125**) ważą 105 kg i są przeznaczone na broń długą.
+
+**Podsumowując:** Jeśli zamek klasy B jest wymogiem bezwzględnym (np. wynikającym z regulaminu strzelnicy lub polisy), to niestety nie znajdziesz u nas lekkiego sejfu na 5 pistoletów. Jeśli jednak kluczowa jest **oddzielna skrytka na amunicję**, to opcja z dwoma sejfami (SG1 + Adorf 250 S1) jest najprostszym i najtańszym rozwiązaniem.
+
+Która z tych opcji bardziej Ci odpowiada? Czy mogę pomóc w wyborze zamka lub montażu?</div>
+            </div>
+            
+            <!-- Branch B Column -->
+            <div class="column gen-col">
+                <div class="col-header">
+                    <span>Generyczny RAG</span>
+                    <span class="metrics-row">TTFT: 1.09s | TGT: 7.65s</span>
+                </div>
+                <div class="col-body">Dzień dobry! Dziękuję za pytanie. Przeanalizowałem naszą ofertę pod kątem Pana/Pani wymagań.
+
+Niestety, w naszym katalogu nie ma modelu, który spełniałby **wszystkie** kryteria jednocześnie. Pozwolę sobie to wyjaśnić:
+
+1.  **Klasa S1 i 5 pistoletów:** Najbliższym modelem jest **Siegen SG1** (cena 850 PLN). Jest to sejf klasy S1, mieści do 5 pistoletów, ale:
+    *   Ma w standardzie **zamek biometryczny klasy A**, a nie elektroniczny klasy B (nie ma opcji dopłaty za wyższą klasę).
+    *   Nie posiada osobnej skrytki na amunicję.
+
+2.  **Zamek elektroniczny klasy B:** W katalogu mamy model **Baden-Baden I** (klasa I wg EN 1143-1, cena 2490 PLN), który jest wyposażony w zamek elektroniczny klasy B. Jest to jednak sejf o wyższym standardzie bezpieczeństwa (nie klasa S1), przeznaczony raczej do przechowywania kosztowności, a nie broni krótkiej. Nie ma też dedykowanych uchwytów na pistolety ani skrytki na amunicję.
+
+3.  **Osobna skrytka na amunicję:** Żaden z modeli w naszym katalogu nie posiada fabrycznie wydzielonej, zamykanej skrytki na amunicję.
+
+**Podsumowując:** Najlepszym wyborem z naszej oferty do przechowywania 5 pistoletów jest **Siegen SG1** (850 PLN), ale nie spełni on wymogu zamka klasy B i skrytki na amunicję.
+
+**Rekomendacja:**
+Jeśli priorytetem jest zamek klasy B i bezpieczne przechowywanie pistoletów, proszę rozważyć **Siegen MAX KOMBI 125** (1999 PLN). Jest to szafa na broń długą, ale posiada regulowane półki i 4 półki na drzwiach, co pozwoliłoby na przechowywanie pistoletów oraz (w osobnej, zamykanej przegrodzie) amunicji. Do tego modelu można za dopłatą 350 zł dokupić zamek elektroniczny klasy B. Waga 105 kg przekracza jednak Pana/Pani limit 80 kg.
+
+Czy mogę zaproponować inne rozwiązanie lub pomóc w doprecyzowaniu kryteriów?</div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="scenario-section">
+        <div class="scenario-header">
+            <span class="sc-badge">SC-03</span>
+            <span class="sc-title">Domownik (biżuteria)</span>
+        </div>
+        <div class="query-box">Pytanie klienta: "Chcę schować cenną biżuterię po babci w sypialni. Coś małego, żeby zmieściło się w szafie."</div>
+        <div class="expected-behavior"><b>Oczekiwane zachowanie CS-bota:</b> Wykrycie CEP 'biżuteria/szafa', dopytanie o wartość (ubezpieczenie), ostrzeżenie o wadze/montażu, polecenie sejfu domowego z kotwami.</div>
+        
+        <div class="grid-compare">
+            <!-- Branch A Column -->
+            <div class="column cs-col">
+                <div class="col-header">
+                    <span>CS-bot (Category Standard)</span>
+                    <span class="metrics-row">TTFT: 1.22s | TGT: 10.32s</span>
+                </div>
+                <div class="col-body">Witam w SejfZone! Rozumiem, że szuka Pani/Pan dyskretnego i bezpiecznego miejsca na cenną biżuterię po babci, które zmieści się w szafie w sypialni. To bardzo mądre podejście.
+
+Zanim przejdziemy do konkretnych modeli, chciałbym zadać dwa kluczowe pytania, które pomogą mi dobrać idealny sejf:
+
+1.  **Jaka jest mniej więcej wartość tej biżuterii?** Czy jest to kwota do kilkunastu tysięcy złotych, czy może znacznie wyższa? To ważne dla kwestii ubezpieczenia.
+2.  **Czy planuje Pani/Pan zamontować sejf na stałe (np. przykręcić do podłogi lub ściany szafy), czy ma to być wolnostojący schowek?**
+
+Na podstawie wstępnych informacji (mały, do szafy w sypialni) mam dla Pani/Pana dwie doskonałe propozycje:
+
+---
+
+### Opcja 1: Idealna do szafy i na biżuterię (do ok. 25 000 zł)
+
+**Adorf 250 S1**
+
+To kompaktowy, lekki sejf domowy, który idealnie wsunie się na półkę szafy. Jest cichy i dyskretny.
+
+<table class="html-table">
+<thead><tr><th>Parametr</th><th>Wartość</th></tr></thead>
+<tbody>
+<tr><td>**Typ**</td><td>Sejf domowy antywłamaniowy (klasa S1)</td></tr>
+<tr><td>**Wymiary zewn.**</td><td>250 x 350 x 300 mm</td></tr>
+<tr><td>**Waga**</td><td>18 kg</td></tr>
+<tr><td>**Pojemność**</td><td>19 litrów (idealne na kilka pudełek z biżuterią)</td></tr>
+<tr><td>**Zamek**</td><td>Kluczowy dwubrodowy (2 klucze w zestawie)</td></tr>
+<tr><td>**Cena**</td><td>**599 PLN**</td></tr>
+<tr><td>**Limit ubezpieczenia**</td><td>Gotówka do 25 000 PLN (biżuteria podobnie)</td></tr>
+</tbody></table>
+
+**Dla kogo:** Dla osób, które chcą prosty, niedrogi i skuteczny schowek na cenną biżuterię, dokumenty czy paszporty. Nie wymaga kotwienia, ale można go przykręcić dla większego bezpieczeństwa.
+
+---
+
+### Opcja 2: Wyższy poziom bezpieczeństwa (do 100 000 zł)
+
+**Baden-Baden I**
+
+Jeśli biżuteria ma bardzo wysoką wartość sentymentalną i materialną, ten model zapewni znacznie wyższy poziom ochrony. Jest cięższy i bardziej odporny na włamanie.
+
+<table class="html-table">
+<thead><tr><th>Parametr</th><th>Wartość</th></tr></thead>
+<tbody>
+<tr><td>**Typ**</td><td>Sejf wysokiego bezpieczeństwa (klasa I wg EN 1143-1)</td></tr>
+<tr><td>**Wymiary zewn.**</td><td>400 x 450 x 380 mm</td></tr>
+<tr><td>**Waga**</td><td>65 kg (bardzo ciężki, wymaga solidnej półki)</td></tr>
+<tr><td>**Pojemność**</td><td>40 litrów</td></tr>
+<tr><td>**Zamek**</td><td>Elektroniczny szyfrowy (kod dla 2 użytkowników)</td></tr>
+<tr><td>**Cena**</td><td>**2490 PLN**</td></tr>
+<tr><td>**Limit ubezpieczenia**</td><td>Gotówka do 100 000 PLN</td></tr>
+</tbody></table>
+
+**Dla kogo:** Dla osób, które chcą mieć pewność, że nawet przy próbie włamania łomem czy szlifierką, biżuteria pozostanie bezpieczna. **Wymaga montażu kotwami do podłoża/ściany.**
+
+---
+
+**Moja rekomendacja:**
+
+- Jeśli szuka Pani/Pan czegoś **małego, taniego i dyskretnego** do zwykłej szafy – wybrałbym **Adorf 250 S1**.
+- Jeśli biżuteria jest **bardzo cenna** i chce Pani/Pan spać spokojnie nawet przy próbie włamania – zdecydowanie polecam **Baden-Baden I** (choć jest większy i cięższy).
+
+Która z tych opcji bardziej odpowiada Pani/Pana potrzebom? Chętnie odpowiem na dodatkowe pytania.</div>
+            </div>
+            
+            <!-- Branch B Column -->
+            <div class="column gen-col">
+                <div class="col-header">
+                    <span>Generyczny RAG</span>
+                    <span class="metrics-row">TTFT: 0.99s | TGT: 7.32s</span>
+                </div>
+                <div class="col-body">Dzień dobry! Rozumiem, że szuka Pani/Pan sejfu do przechowywania cennej biżuterii w sypialni, który będzie na tyle kompaktowy, by zmieścić się w szafie. Oto dwie propozycje z naszego katalogu, które idealnie pasują do tego opisu:
+
+---
+
+### 1. **Adorf 250 S1** – kompaktowy i ekonomiczny
+- **Cena:** 599 PLN
+- **Wymiary zewnętrzne:** 25 x 35 x 30 cm (szer. x wys. x gł.)
+- **Waga:** 18 kg
+- **Pojemność:** 19 litrów
+- **Zamek:** Kluczowy dwubrodowy klasy A (w zestawie 2 klucze), opcjonalnie elektroniczny PIN.
+- **Zalety:** Niewielki, lekki, łatwo zmieści się w szafie. Idealny do przechowywania biżuterii, gotówki (limit ubezpieczenia do 25 000 PLN) i dokumentów.
+- **Uwaga:** Klasa S1 – podstawowa ochrona antywłamaniowa. Dobry wybór do sypialni, jeśli nie przechowuje Pani/Pan przedmiotów o bardzo wysokiej wartości.
+
+---
+
+### 2. **Baden-Baden I** – wyższy poziom bezpieczeństwa
+- **Cena:** 2490 PLN
+- **Wymiary zewnętrzne:** 40 x 45 x 38 cm (szer. x wys. x gł.)
+- **Waga:** 65 kg
+- **Pojemność:** 40 litrów
+- **Zamek:** Elektroniczny szyfrowy klasy B (możliwość ustawienia kodów dla 2 użytkowników).
+- **Zalety:** Znacznie wyższa odporność na włamanie (klasa I wg EN 1143-1 – odporność na łom i szlifierkę). Limit ubezpieczenia gotówki do 100 000 PLN. Idealny do ochrony bardzo cennej biżuterii.
+- **Uwaga:** Większy i cięższy – wymaga solidnej półki w szafie i montażu kotwami (dno/ściana) dla pełnego bezpieczeństwa. Mimo to wciąż zmieści się w standardowej szafie.
+
+---
+
+### Moja rekomendacja:
+- Jeśli biżuteria ma **przede wszystkim wartość sentymentalną**, a nie bardzo wysoką wartość materialną, **Adorf 250 S1** będzie świetnym, dyskretnym i niedrogim wyborem.
+- Jeśli są to **bardzo cenne precjoza** (np. diamenty, antyki), zdecydowanie polecam **Baden-Baden I** – zapewni znacznie lepszą ochronę przed włamaniem.
+
+Oba modele są odpowiednie do sypialni i zmieszczą się w szafie. Czy mogę pomóc w wyborze zamka lub odpowiedzieć na dodatkowe pytania?</div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="scenario-section">
+        <div class="scenario-header">
+            <span class="sc-badge">SC-04</span>
+            <span class="sc-title">Przedsiębiorca</span>
+        </div>
+        <div class="query-box">Pytanie klienta: "Potrzebuję sejfu do biura na dokumenty kadrowe i gotówkę z utargu (około 80-100 tys. zł dziennie)."</div>
+        <div class="expected-behavior"><b>Oczekiwane zachowanie CS-bota:</b> Wykrycie wysokiej kwoty, wskazanie wymogu klasy I (EN 1143-1), doprecyzowanie kwestii zamka (kod dla kilku pracowników).</div>
+        
+        <div class="grid-compare">
+            <!-- Branch A Column -->
+            <div class="column cs-col">
+                <div class="col-header">
+                    <span>CS-bot (Category Standard)</span>
+                    <span class="metrics-row">TTFT: 1.09s | TGT: 3.10s</span>
+                </div>
+                <div class="col-body">Witam w SejfZone! Rozumiem, że szuka Pan/Pani zabezpieczenia dla biura – konkretnie dokumentów kadrowych oraz gotówki z utargu w wysokości 80-100 tys. zł dziennie.
+
+Aby precyzyjnie dobrać rozwiązanie, potrzebuję dwóch kluczowych informacji:
+
+1.  **Czy sejf ma być zamontowany na stałe (kotwiony do podłogi/ściany), czy ma pozostać wolnostojący?**
+2.  **Czy dokumenty kadrowe muszą być chronione przed pożarem (np. akta osobowe), czy wystarczy ochrona antywłamaniowa?**
+
+Na podstawie tych odpowiedzi będę mógł zaproponować optymalny model.</div>
+            </div>
+            
+            <!-- Branch B Column -->
+            <div class="column gen-col">
+                <div class="col-header">
+                    <span>Generyczny RAG</span>
+                    <span class="metrics-row">TTFT: 0.79s | TGT: 7.79s</span>
+                </div>
+                <div class="col-body">Dzień dobry! Dziękuję za kontakt z SejfZone.
+
+Rozumiem, że szuka Pan/Pani sejfu do biura, który pomieści dokumenty kadrowe (papierowe) oraz gotówkę z utargu w wysokości około 80-100 tys. zł dziennie. To dość wymagające zadanie, ponieważ kwota ta przekracza standardowe limity ubezpieczeniowe dla prostych sejfów domowych.
+
+Z naszego katalogu, biorąc pod uwagę bezpieczeństwo gotówki i dokumentów, mogę zaproponować **model Baden-Baden I**.
+
+Oto dlaczego ten sejf jest najlepszym wyborem:
+
+*   **Wysoka klasa bezpieczeństwa:** Posiada klasę **I wg normy EN 1143-1**, która jest znacznie wyższa od klas S1/S2. Oznacza to wielowarstwową konstrukcję odporną na włamanie przy użyciu ciężkich narzędzi, takich jak łom czy szlifierka kątowa.
+*   **Limit ubezpieczenia:** Sejf ten posiada limit ubezpieczenia gotówki do **100 000 PLN**, co idealnie pokrywa Pana/Pani dzienny utarg.
+*   **Pojemność:** Pojemność 40 litrów powinna być wystarczająca na przechowywanie dokumentów kadrowych (teczki, segregatory) oraz gotówki.
+*   **Zamek:** Wyposażony jest w elektroniczny zamek szyfrowy klasy B z możliwością ustawienia kodów dla 2 użytkowników, co jest wygodne w biurze.
+*   **Waga i montaż:** Waży 65 kg, co utrudnia kradzież, ale producent zaleca obowiązkowy montaż kotwami do podłogi lub ściany, aby zapewnić pełne bezpieczeństwo.
+
+**Ważna uwaga dotycząca dokumentów:**
+Sejf **Baden-Baden I** jest przede wszystkim antywłamaniowy. Jeśli zależy Panu/Pani również na ochronie dokumentów papierowych przed pożarem, warto rozważyć model **SAVE4EVER 30P** (klasa LFS 30P dla papieru), ale jego limit ubezpieczenia gotówki jest znacznie niższy i nie pokryje kwoty 80-100 tys. zł. W Pana/Pani przypadku priorytetem jest ochrona przed kradzieżą dużej kwoty gotówki, dlatego **Baden-Baden I** jest zdecydowanie lepszym wyborem.
+
+**Podsumowując, rekomenduję:**
+**Baden-Baden I** w cenie **2490 PLN** – to solidny, profesjonalny sejf, który spełni Pana/Pani wymagania dotyczące bezpieczeństwa gotówki i dokumentów kadrowych w biurze.
+
+Czy mogę udzielić dodatkowych informacji na temat montażu lub warunków gwarancji?</div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="scenario-section">
+        <div class="scenario-header">
+            <span class="sc-badge">SC-05</span>
+            <span class="sc-title">Laik zagubiony</span>
+        </div>
+        <div class="query-box">Pytanie klienta: "Jaka jest różnica między sejfem za 500 zł a takim za 3000 zł, przecież oba są z blachy?"</div>
+        <div class="expected-behavior"><b>Oczekiwane zachowanie CS-bota:</b> Wyjaśnienie różnic w klasach odporności, grubości ścian, certyfikatach i odporności ogniowej za pomocą prostych metafor.</div>
+        
+        <div class="grid-compare">
+            <!-- Branch A Column -->
+            <div class="column cs-col">
+                <div class="col-header">
+                    <span>CS-bot (Category Standard)</span>
+                    <span class="metrics-row">TTFT: 0.92s | TGT: 10.94s</span>
+                </div>
+                <div class="col-body">To świetne pytanie! Rzeczywiście, na pierwszy rzut oka oba wyglądają jak "metalowe skrzynki", ale różnica jest taka, jak między rowerem za 500 zł a samochodem za 30 000 zł – oba jeżdżą, ale w zupełnie innej lidze bezpieczeństwa i przeznaczenia.
+
+Zanim jednak wskażę konkretne modele, muszę zadać Ci 2 kluczowe pytania, aby trafić w Twój cel:
+
+1.  **Co konkretnie chcesz w nim przechowywać?** (Gotówka, biżuteria, dokumenty, a może broń?)
+2.  **Gdzie planujesz go postawić?** (W szafie w sypialni, w piwnicy, wmurowany w ścianę?)
+
+Te informacje są kluczowe, bo inny sejf ochroni paszport przed ogniem, a inny zatrzyma złodzieja z łomem na dłużej.
+
+---
+
+Na podstawie Twojego pytania domyślam się, że porównujesz **Adorf 250 S1 (599 zł)** z **Baden-Baden I (2490 zł)**. Oto konkretna różnica:
+
+### Różnica nr 1: Klasa bezpieczeństwa (norma)
+- **Sejf za 500 zł (Adorf 250 S1):** Spełnia normę **EN 14450 (klasa S1)**. To podstawowy sejf domowy. Zatrzyma okazjonalnego złodzieja na ok. **1-2 minuty**.
+- **Sejf za 3000 zł (Baden-Baden I):** Spełnia normę **EN 1143-1 (klasa I)**. To profesjonalny sejf antywłamaniowy. Zatrzyma złodzieja z narzędziami na **15-20 minut**. To ogromna różnica.
+
+### Różnica nr 2: Konstrukcja i waga
+- **Adorf 250 S1:** Waga **18 kg**. Cienka blacha (3 mm korpus, drzwi wzmocnione). Można go łatwo wynieść pod pachą.
+- **Baden-Baden I:** Waga **65 kg**. Wielowarstwowa konstrukcja (stal + beton specjalny). Nie da się go ruszyć bez kotwienia do podłogi/ściany. Złodziej nie wyniesie go w 30 sekund.
+
+### Różnica nr 3: Limit ubezpieczenia
+- **Adorf 250 S1:** Ubezpieczyciele akceptują go na gotówkę do ok. **25 000 zł**.
+- **Baden-Baden I:** Akceptowany na gotówkę do ok. **100 000 zł** (lub więcej w zależności od polisy).
+
+### Różnica nr 4: Zamek
+- **Adorf 250 S1:** Prosty zamek kluczowy (klasa A). Łatwy do wybicia lub otwarcia przez złodzieja.
+- **Baden-Baden I:** Elektroniczny zamek szyfrowy (klasa B). Trudniejszy do ominięcia, brak klucza do zgubienia.
+
+---
+
+**Krótko mówiąc:**
+- **Sejf za 500 zł** to **"skarbonka"** – ochroni przed dziećmi lub gośćmi, ale nie przed złodziejem z podstawowymi narzędziami.
+- **Sejf za 3000 zł** to **"sejf bankowy"** – realna bariera dla włamywacza, wymagająca kotwienia.
+
+**Który wybrać?**
+- Jeśli chcesz schować **paszport i trochę gotówki w szafie** → **Adorf 250 S1** (599 zł) wystarczy.
+- Jeśli chcesz zabezpieczyć **biżuterię, złoto lub ważne dokumenty przed profesjonalnym włamaniem** → **Baden-Baden I** (2490 zł) to właściwy wybór.
+
+**Która opcja bardziej pasuje do Twojej sytuacji?**</div>
+            </div>
+            
+            <!-- Branch B Column -->
+            <div class="column gen-col">
+                <div class="col-header">
+                    <span>Generyczny RAG</span>
+                    <span class="metrics-row">TTFT: 1.20s | TGT: 14.73s</span>
+                </div>
+                <div class="col-body">To świetne pytanie! Rzeczywiście na pierwszy rzut oka oba sejfy mogą wyglądać podobnie – "metalowa skrzynka z zamkiem". Różnica kryje się jednak w szczegółach, które decydują o rzeczywistym poziomie bezpieczeństwa i przeznaczeniu. Pozwól, że wyjaśnię to na przykładzie produktów z naszego katalogu.
+
+Weźmy dwa skrajne modele:
+- **Adorf 250 S1** (cena 599 PLN) – reprezentant sejfu budżetowego.
+- **Baden-Baden I** (cena 2490 PLN) – reprezentant sejfu wysokiego bezpieczeństwa.
+
+Oto kluczowe różnice:
+
+### 1. Klasa bezpieczeństwa i konstrukcja
+
+To najważniejsza różnica. "Blacha" to pojęcie względne.
+
+*   **Sejf za ~500 zł (Adorf 250 S1):** Posiada **jednościenny korpus** (grubość stali 3 mm) i dwuścienne drzwi. Spełnia normę **S1** (PN-EN 14450), czyli podstawową odporność antywłamaniową. Taki sejf ochroni przed okazjonalnym włamywaczem posługującym się prostymi narzędziami (śrubokręt, łom), ale przy użyciu szlifierki kątowej czy solidnego łomu, drzwi można wyłamać w kilkadziesiąt sekund. Limit ubezpieczenia gotówki to zazwyczaj do 25 000 PLN.
+
+*   **Sejf za ~2500 zł (Baden-Baden I):** Posiada **wielowarstwową konstrukcję** (specjalne płyty kompozytowe, zbrojenia, wypełnienia utrudniające wiercenie i cięcie). Spełnia normę **klasy I** (wg EN 1143-1), która jest znacznie wyższa niż S1. Taki sejf jest testowany na odporność na atak przy użyciu elektronarzędzi (wiertarki, szlifierki) przez określony czas (np. 15 minut). Limit ubezpieczenia gotówki może sięgać nawet 100 000 PLN. Waga 65 kg (vs 18 kg w Adorfie) świadczy o masywności konstrukcji.
+
+### 2. Waga i możliwość montażu
+
+*   **Adorf 250 S1 (18 kg):** Lekki, można go postawić na półce w szafie. Niestety, włamywacz może go po prostu wynieść w całości i otworzyć w spokoju. **Wymaga obowiązkowego montażu kotwami do podłoża lub ściany**, aby temu zapobiec.
+*   **Baden-Baden I (65 kg):** Bardzo ciężki, trudny do samodzielnego wyniesienia. Mimo to, producent również **wymaga montażu kotwami** (dno/ściana), aby zapewnić pełną ochronę.
+
+### 3. Zamek
+
+*   **Adorf 250 S1:** W standardzie **zamek kluczowy klasy A** (podstawowy). Opcjonalnie można zamówić elektroniczny PIN. Zamek kluczowy jest prosty i niezawodny, ale klucz można zgubić lub skopiować.
+*   **Baden-Baden I:** W standardzie **elektroniczny zamek szyfrowy klasy B** (wyższa klasa bezpieczeństwa). Możliwość ustawienia kodów dla 2 użytkowników. Brak kluczy, szybszy dostęp, możliwość zmiany kodu. Zamek klasy B jest trudniejszy do ominięcia niż klasy A.
+
+### 4. Przeznaczenie i ochrona
+
+*   **Adorf 250 S1:** Idealny do przechowywania **dokumentów, gotówki do 25 000 PLN, biżuterii** w domowej szafie. Chroni przed "okazjonalnym" włamywaczem.
+*   **Baden-Baden I:** Przeznaczony do przechowywania **kosztowności o wysokiej wartości** (biżuteria, złoto, ważne dokumenty, gotówka do 100 000 PLN). Zapewnia realną ochronę przed zorganizowanym włamywaczem z elektronarzędziami.
+
+### Podsumowując:
+
+<table class="html-table">
+<thead><tr><th>Cecha</th><th>Sejf za ~500 zł (np. Adorf 250 S1)</th><th>Sejf za ~2500 zł (np. Baden-Baden I)</th></tr></thead>
+<tbody>
+<tr><td>**Klasa bezpieczeństwa**</td><td>S1 (podstawowa)</td><td>Klasa I (wysoka)</td></tr>
+<tr><td>**Konstrukcja**</td><td>Jednościenna blacha 3 mm</td><td>Wielowarstwowa, zbrojona</td></tr>
+<tr><td>**Waga**</td><td>18 kg (łatwy do wyniesienia)</td><td>65 kg (trudny do wyniesienia)</td></tr>
+<tr><td>**Zamek**</td><td>Kluczowy klasy A (podstawowy)</td><td>Elektroniczny klasy B (zaawansowany)</td></tr>
+<tr><td>**Ochrona przed**</td><td>Okazjonalnym włamywaczem</td><td>Zorganizowanym włamywaczem z narzędziami</td></tr>
+<tr><td>**Limit ubezpieczenia**</td><td>Do 25 000 PLN</td><td>Do 100 000 PLN</td></tr>
+<tr><td>**Cena**</td><td>599 PLN</td><td>2490 PLN</td></tr>
+</tbody></table>
+
+**Krótko mówiąc:** Sejf za 500 zł to "skarbonka" – ochroni przed dziećmi lub przypadkowym gościem. Sejf za 3000 zł to "forteca" – realnie zabezpieczy wartościowe przedmioty przed profesjonalnym atakiem. Różnica to nie tylko grubość blachy, ale cała filozofia konstrukcji, testów i zastosowanych materiałów.
+
+Jeśli masz pytania dotyczące konkretnego modelu lub potrzebujesz pomocy w wyborze sejfu do swoich potrzeb (np. na broń, dokumenty, biżuterię), chętnie pomogę!</div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="scenario-section">
+        <div class="scenario-header">
+            <span class="sc-badge">SC-06</span>
+            <span class="sc-title">Ekspert techniczny</span>
+        </div>
+        <div class="query-box">Pytanie klienta: "Czy sejfy ognioodporne w klasie LFS 30 P nadają się do przechowywania nośników magnetycznych z backupami?"</div>
+        <div class="expected-behavior"><b>Oczekiwane zachowanie CS-bota:</b> S2 Direct Answer: Wyjaśnienie, że LFS 30 P chroni tylko papier (do 170°C), a nośniki danych wymagają klasy DIS (do 50°C).</div>
+        
+        <div class="grid-compare">
+            <!-- Branch A Column -->
+            <div class="column cs-col">
+                <div class="col-header">
+                    <span>CS-bot (Category Standard)</span>
+                    <span class="metrics-row">TTFT: 1.26s | TGT: 12.75s</span>
+                </div>
+                <div class="col-body">Witam w SejfZone! To bardzo ważne pytanie, które często pojawia się przy wyborze zabezpieczenia danych.
+
+Aby precyzyjnie odpowiedzieć, najpierw muszę poznać Twój konkretny kontekst. Proszę o odpowiedź na 2 krótkie pytania:
+
+1.  **Co dokładnie chcesz przechowywać?** Czy są to tradycyjne dyski twarde (HDD), pendrive’y, płyty DVD, czy może nowoczesne dyski SSD?
+2.  **Gdzie zamierzasz ustawić ten sejf?** Czy ma to być dom (np. w szafie, w piwnicy), czy biuro/firma?
+
+---
+
+### Odpowiedź merytoryczna (Ekspert)
+
+Widzę, że używasz precyzyjnego języka technicznego, więc przejdę od razu do sedna.
+
+**Krótka odpowiedź: NIE, sejfy klasy LFS 30P (wg EN 15659) nie nadają się do przechowywania nośników magnetycznych i cyfrowych.**
+
+**Dlaczego?**
+- **Klasa LFS 30P** (ang. *Light Fire Safe*) chroni wyłącznie **papier**. Norma dopuszcza, aby temperatura wewnątrz sejfu podczas 30-minutowego testu pożarowego wzrosła do **maksymalnie 170°C**.
+- **Nośniki magnetyczne/cyfrowe** (dyski HDD, taśmy, pendrive’y, SSD, płyty CD/DVD) ulegają nieodwracalnemu uszkodzeniu już przy temperaturze **powyżej 50-60°C**.
+- W sejfie LFS 30P Twoje dane ulegną zniszczeniu termicznemu na długo przed tym, zanim ogień dotknie obudowy.
+
+**Czego potrzebujesz?**
+Do backupów cyfrowych wymagana jest klasa **DIS** (Data Integrity Safe) lub **P** (np. klasa 60DIS, 120P), która gwarantuje, że temperatura wewnątrz nie przekroczy **50°C** przez określony czas (np. 60 lub 120 minut).
+
+---
+
+### Rekomendacja produktu (Spec Density)
+
+Niestety, w naszym katalogu nie posiadamy obecnie modelu dedykowanego do ochrony nośników cyfrowych (klasa DIS). Model **SAVE4EVER 30P** (1390 PLN) jest świetny do dokumentów papierowych, ale dla backupów będzie nieskuteczny.
+
+**Co mogę Ci zaproponować w zamian?**
+
+Jeśli Twoim priorytetem jest **ochrona antywłamaniowa** dla dokumentów i backupów (przechowywanych np. w oddzielnym, małym etui), a ochrona przeciwpożarowa jest drugorzędna, polecam:
+
+<table class="html-table">
+<thead><tr><th>Model</th><th>Klasa</th><th>Waga</th><th>Pojemność</th><th>Cena</th><th>Zastosowanie</th></tr></thead>
+<tbody>
+<tr><td>**Baden-Baden I**</td><td>**Klasa I** (EN 1143-1)</td><td>65 kg</td><td>40 l</td><td>**2490 PLN**</td><td>Wysoka ochrona przed włamaniem. Idealny do gotówki, biżuterii i dokumentów. Możesz włożyć do niego mały, wodoodporny pojemnik z backupem.</td></tr>
+<tr><td>**Adorf 250 S1**</td><td>**Klasa S1** (EN 14450)</td><td>18 kg</td><td>19 l</td><td>**599 PLN**</td><td>Podstawowa ochrona antywłamaniowa. Dobry do przechowywania paszportów i małych ilości gotówki, ale backup cyfrowy wciąż będzie narażony na ogień.</td></tr>
+</tbody></table>
+
+**Podsumowując:** Jeśli zależy Ci na **ochronie przeciwpożarowej danych**, musisz szukać sejfu z certyfikatem **klasy DIS**. Jeśli priorytetem jest **ochrona przed kradzieżą** (np. w domu), a backup jest przechowywany w chmurze lub w drugiej lokalizacji, **Baden-Baden I** będzie solidnym wyborem.
+
+Czy chciałbyś, abym pomógł Ci doprecyzować, który z tych dwóch kierunków (ognioochronny vs. antywłamaniowy) jest dla Ciebie kluczowy?</div>
+            </div>
+            
+            <!-- Branch B Column -->
+            <div class="column gen-col">
+                <div class="col-header">
+                    <span>Generyczny RAG</span>
+                    <span class="metrics-row">TTFT: 1.09s | TGT: 7.23s</span>
+                </div>
+                <div class="col-body">Dzień dobry, dziękuję za pytanie.
+
+Niestety, **sejfy ognioodporne w klasie LFS 30P nie nadają się do przechowywania nośników magnetycznych, takich jak pendrive'y, dyski zewnętrzne, taśmy backupowe czy płyty CD/DVD.**
+
+Oto dlaczego:
+
+*   **Klasa LFS 30P** (zgodnie z normą EN 15659) jest przeznaczona wyłącznie do ochrony **papieru**. Podczas pożaru temperatura wewnątrz takiego sejfu może wzrosnąć maksymalnie do **170°C**.
+*   Dla papieru jest to bezpieczne, ponieważ papier zaczyna się tlić w temperaturze około 180-200°C.
+*   Natomiast nośniki magnetyczne i optyczne (dyski twarde, pendrive'y, płyty) są znacznie bardziej wrażliwe na ciepło. Ulegają uszkodzeniu już przy temperaturze **powyżej 50-70°C**. W sejfie klasy LFS 30P temperatura wewnątrz z pewnością przekroczy ten próg, co zniszczy Twoje dane.
+
+**Czego potrzebujesz?**
+
+Do bezpiecznego przechowywania backupów cyfrowych potrzebujesz sejfu z certyfikatem **DIS** (Data Integrity Security) lub **LFS 60P** (lub wyższym) z atestem na ochronę nośników danych. Takie sejfy utrzymują temperaturę wewnątrz poniżej 50°C przez określony czas (np. 60 minut).
+
+**Rekomendacja z naszego katalogu:**
+
+Niestety, w obecnym katalogu SejfZone nie posiadamy modelu, który spełniałby normę ochrony nośników cyfrowych (DIS). Model **SAVE4EVER 30P** (cena 1390 PLN), który jest w ofercie, jest idealny do przechowywania:
+*   Aktów notarialnych
+*   Dokumentów domowych (umowy, polisy)
+*   Gotówki
+
+**Podsumowując:** Jeśli zależy Ci na ochronie backupów cyfrowych, polecam poszukać sejfu z certyfikatem DIS. Jeśli potrzebujesz zabezpieczyć dokumenty papierowe, model SAVE4EVER 30P będzie doskonałym wyborem.
+
+Czy mogę pomóc w czymś jeszcze, na przykład dobrać sejf do przechowywania broni lub kosztowności?</div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="scenario-section">
+        <div class="scenario-header">
+            <span class="sc-badge">SC-07</span>
+            <span class="sc-title">Prawny niepokój</span>
+        </div>
+        <div class="query-box">Pytanie klienta: "Czy policja podczas kontroli przechowywania broni sprawdza certyfikat papierowy czy tabliczkę na sejfie?"</div>
+        <div class="expected-behavior"><b>Oczekiwane zachowanie CS-bota:</b> Wyjaśnienie, że kluczowa jest tabliczka znamionowa IMP na wewnętrznej stronie drzwi.</div>
+        
+        <div class="grid-compare">
+            <!-- Branch A Column -->
+            <div class="column cs-col">
+                <div class="col-header">
+                    <span>CS-bot (Category Standard)</span>
+                    <span class="metrics-row">TTFT: 1.08s | TGT: 10.80s</span>
+                </div>
+                <div class="col-body">To świetne pytanie – widać, że zależy Ci na zgodności z przepisami i chcesz być przygotowany na ewentualną kontrolę. Jako Twój asystent zakupowy i psycholog sprzedaży, pomogę Ci to wyjaśnić.
+
+Zanim jednak odpowiem wprost, muszę Cię o coś zapytać, żeby dopasować odpowiedź do Twojej konkretnej sytuacji:
+
+1. **Jaką broń przechowujesz?** (długą, krótką, czy obie?)
+2. **Gdzie zamierzasz postawić szafę?** (w domu jednorodzinnym, mieszkaniu w bloku, piwnicy?)
+3. **Czy masz już jakieś wymogi ubezpieczeniowe lub konkretne zalecenia od swojego instruktora/składu broni?**
+
+Te informacje pozwolą mi precyzyjnie określić, który model będzie dla Ciebie optymalny i jak przygotować się do kontroli.
+
+---
+
+**Tymczasem odpowiadam na Twoje pytanie:**
+
+Podczas kontroli przechowywania broni policja **sprawdza przede wszystkim fizyczną tabliczkę znamionową na sejfie/szafie**. To na niej znajduje się:
+- Nazwa producenta i model,
+- Numer seryjny,
+- **Klasa bezpieczeństwa (np. S1 wg PN-EN 14450)**.
+
+**Certyfikat papierowy** (dokument wystawiony przez jednostkę certyfikującą) jest wymagany **przy pierwszym zgłoszeniu broni** – składasz go wtedy do wydziału pozwoleniowego. Podczas rutynowej kontroli (np. po 5 latach) policjant rzadko prosi o okazanie certyfikatu, ale **zawsze sprawdza tabliczkę**. Jeśli tabliczka jest uszkodzona, nieczytelna lub jej brak – może to być podstawą do zarzutu nieprawidłowego przechowywania.
+
+**Ważne:** Zgodnie z Rozporządzeniem MSWiA z 26 sierpnia 2014 r., szafa musi posiadać **aktualny certyfikat zgodności z normą PN-EN 14450 (klasa S1 lub wyższa)**. Tabliczka jest dowodem, że dany egzemplarz został wyprodukowany zgodnie z tą normą.
+
+**Podsumowując:**
+- **Certyfikat papierowy** – potrzebny na etapie składania wniosku.
+- **Tabliczka na sejfie** – sprawdzana podczas kontroli.
+
+---
+
+**A teraz – konkretne rekomendacje dla Ciebie:**
+
+Jeśli przechowujesz **broń długą** (np. karabin myśliwski, sztucer), polecam model **Siegen MAX KOMBI 125** (cena: 1999 PLN). Ma klasę S1, certyfikat zgodny z wymogami MSWiA, a dodatkowo:
+- Waga 105 kg – stabilna, trudna do wyniesienia.
+- Pojemność do 18 jednostek broni długiej.
+- Możliwość dokupienia zamka elektronicznego klasy B (za 350 zł) – zwiększa komfort i bezpieczeństwo.
+
+Jeśli masz **broń krótką** (pistolet) i zależy Ci na szybkim dostępie w sypialni, idealny będzie **Siegen SG1** (850 PLN) – zamek biometryczny, klasa S1, certyfikat w komplecie.
+
+**Który model bardziej Ci odpowiada?** Jeśli podasz mi więcej szczegółów (np. ile sztuk broni, czy potrzebujesz miejsca na akcesoria), dobiorę dla Ciebie optymalną konfigurację.</div>
+            </div>
+            
+            <!-- Branch B Column -->
+            <div class="column gen-col">
+                <div class="col-header">
+                    <span>Generyczny RAG</span>
+                    <span class="metrics-row">TTFT: 1.00s | TGT: 11.21s</span>
+                </div>
+                <div class="col-body">To świetne pytanie! Rozumiem, że chcesz mieć pewność, że wszystko jest zgodne z przepisami i żadna kontrola nie zakończy się nieprzyjemnie.
+
+Odpowiadając wprost: **Policja podczas kontroli przechowywania broni sprawdza przede wszystkim stan faktyczny sejfu i jego zgodność z wymogami prawnymi, a niekoniecznie certyfikat papierowy czy tabliczkę znamionową.**
+
+Oto jak to wygląda w praktyce:
+
+1.  **Podstawa prawna:** Funkcjonariusze sprawdzają, czy szafa na broń spełnia wymagania **Rozporządzenia Ministra Spraw Wewnętrznych i Administracji z dnia 26 sierpnia 2014 r.** w sprawie przechowywania, noszenia oraz ewidencjonowania broni i amunicji. Rozporządzenie to mówi o minimalnej klasie bezpieczeństwa (np. S1 wg PN-EN 14450), ale nie nakazuje okazywania certyfikatu.
+
+2.  **Co sprawdzają?**
+    *   **Stan techniczny i konstrukcja:** Policjant oceni, czy sejf jest solidny, czy drzwi są zamknięte na zamek, czy nie ma widocznych uszkodzeń umożliwiających łatwe włamanie.
+    *   **Sposób zamocowania:** Sprawdzą, czy sejf jest trwale przymocowany do podłoża (ściany lub podłogi) za pomocą kotew. To jeden z kluczowych wymogów.
+    *   **Zamek:** Sprawdzą, czy zamek działa prawidłowo i jest zamknięty.
+    *   **Zawartość:** Sprawdzą, czy broń jest przechowywana w sejfie, a amunicja – jeśli jest przechowywana w tym samym pomieszczeniu – w osobnym, zamykanym pojemniku (lub w sejfie, ale w zamkniętej przegrodzie).
+
+3.  **Certyfikat i tabliczka znamionowa:**
+    *   **Tabliczka znamionowa:** Jest bardzo pomocna, bo od razu wskazuje model, producenta i często klasę bezpieczeństwa (np. "S1 wg PN-EN 14450"). Jeśli jest czytelna i widoczna, to ułatwia pracę policjantowi. **Brak tabliczki nie jest jednak automatycznie powodem do mandatu**, jeśli sejf ewidentnie spełnia normy (np. jest solidny, ciężki, ma odpowiednie zamki).
+    *   **Certyfikat papierowy:** Nie jest wymagany do okazania podczas kontroli. To dokument, który potwierdza, że dany model przeszedł testy w laboratorium. Warto go przechowywać na wszelki wypadek (np. przy zakupie od osoby prywatnej), ale policja raczej nie będzie go żądać.
+
+**Podsumowując dla Ciebie:**
+
+Jeśli masz sejf **Siegen MAX KOMBI 125** lub **Siegen MAX KOMBI 200**, to jesteś w pełni bezpieczny. Oba modele posiadają klasę S1 wg PN-EN 14450, co jest zgodne z rozporządzeniem. Policja podczas kontroli skupi się na tym, czy sejf jest zamknięty, przymocowany do podłoża i czy broń jest w środku.
+
+**Rekomendacja:** Aby uniknąć jakichkolwiek wątpliwości, warto:
+*   **Przymocować sejf kotwami** do ściany lub podłogi (zgodnie z instrukcją).
+*   **Przechowywać dokumentację zakupu** (fakturę, gwarancję) – to zawsze dobry pomysł.
+*   **Upewnić się, że tabliczka znamionowa** na sejfie jest czytelna.
+
+Jeśli masz jeszcze jakieś pytania dotyczące przechowywania broni lub konkretnych modeli, chętnie pomogę!</div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="scenario-section">
+        <div class="scenario-header">
+            <span class="sc-badge">SC-08</span>
+            <span class="sc-title">Zabezpieczenie domu</span>
+        </div>
+        <div class="query-box">Pytanie klienta: "Chcę kupić sejf ognioodporny na dokumenty domowe i akty notarialne. Montowany do podłogi."</div>
+        <div class="expected-behavior"><b>Oczekiwane zachowanie CS-bota:</b> Wyjaśnienie, że sejfy ognioodporne mają specyficzną budowę dna (izolacja) i należy sprawdzić, czy producent przewidział otwory montażowe.</div>
+        
+        <div class="grid-compare">
+            <!-- Branch A Column -->
+            <div class="column cs-col">
+                <div class="col-header">
+                    <span>CS-bot (Category Standard)</span>
+                    <span class="metrics-row">TTFT: 1.10s | TGT: 8.47s</span>
+                </div>
+                <div class="col-body">Witam w SejfZone! Rozumiem, że szuka Pan/Pani sejfu ognioodpornego do przechowywania dokumentów domowych i aktów notarialnych, który będzie montowany do podłogi.
+
+Zanim przejdę do konkretnych propozycji, chciałbym doprecyzować dwie kwestie, aby idealnie trafić w Pana/Pani potrzeby:
+
+1.  **Czy oprócz dokumentów papierowych planuje Pan/Pani przechowywać w sejfie również nośniki cyfrowe, takie jak pendrive'y, dyski zewnętrzne lub płyty CD/DVD?** (To kluczowe, ponieważ ochrona przed ogniem dla papieru i dla nośników cyfrowych to dwie różne klasy odporności).
+2.  **Jaka jest szacunkowa wartość przechowywanych przedmiotów?** (Pomoże to określić, czy wystarczy klasa antywłamaniowa S2, czy potrzebna jest wyższa klasa I).
+
+Na podstawie wstępnych informacji, idealnym kandydatem jest model **SAVE4EVER 30P**, który łączy ochronę ogniową z antywłamaniową.
+
+Oto jego parametry:
+
+<table class="html-table">
+<thead><tr><th>Parametr</th><th>Wartość</th></tr></thead>
+<tbody>
+<tr><td>**Model**</td><td>**SAVE4EVER 30P**</td></tr>
+<tr><td>**Typ ochrony**</td><td>Ognioodporny (LFS 30P dla papieru) + Antywłamaniowy (S2 wg EN 14450)</td></tr>
+<tr><td>**Wymiary zewn.**</td><td>350 x 450 x 400 mm</td></tr>
+<tr><td>**Wymiary wewn.**</td><td>270 x 380 x 290 mm</td></tr>
+<tr><td>**Pojemność**</td><td>30 litrów</td></tr>
+<tr><td>**Waga**</td><td>35 kg</td></tr>
+<tr><td>**Zamek**</td><td>Elektroniczny szyfrowy</td></tr>
+<tr><td>**Cena**</td><td>**1 390 PLN**</td></tr>
+<tr><td>**Przeznaczenie**</td><td>Akty notarialne, dokumenty domowe, gotówka</td></tr>
+</tbody></table>
+
+**Dlaczego ten model?**
+
+*   **Ochrona ogniowa:** Gwarantuje, że temperatura wewnątrz sejfu nie przekroczy 170°C przez 30 minut w trakcie pożaru do 840°C, co chroni papier przed zniszczeniem.
+*   **Ochrona antywłamaniowa:** Klasa S2 jest wyższa od podstawowej S1, co daje lepszą odporność na włamanie.
+*   **Montaż:** Posiada otwory kotwiące w dnie i ścianie, co pozwala na bezpieczny montaż do podłogi (zgodnie z Pana/Pani wymaganiem).
+
+**Ważne zastrzeżenie dotyczące ochrony ogniowej:**
+Model **SAVE4EVER 30P** chroni **wyłącznie dokumenty papierowe**. Jeśli planuje Pan/Pani przechowywać w nim pendrive'y, dyski twarde czy płyty, to one ulegną zniszczeniu w temperaturze powyżej 50°C. Do takich nośników potrzebny byłby sejf z certyfikatem DIS (np. ochrona danych cyfrowych).
+
+Czy powyższy model spełnia Pana/Pani oczekiwania, czy też potrzebuje Pan/Pani sejfu również na nośniki cyfrowe?</div>
+            </div>
+            
+            <!-- Branch B Column -->
+            <div class="column gen-col">
+                <div class="col-header">
+                    <span>Generyczny RAG</span>
+                    <span class="metrics-row">TTFT: 0.93s | TGT: 7.30s</span>
+                </div>
+                <div class="col-body">Dzień dobry! Dziękuję za zainteresowanie ofertą SejfZone.
+
+Z Twojego opisu wynika, że potrzebujesz sejfu, który ochroni dokumenty papierowe (akty notarialne, dokumenty domowe) przed ogniem i będzie można go zamontować do podłogi. Z naszego katalogu idealnym kandydatem jest:
+
+**SAVE4EVER 30P**
+
+Oto dlaczego ten model spełnia Twoje wymagania:
+
+*   **Odporność ogniowa:** Posiada klasę **LFS 30P** (wg EN 15659), co oznacza, że chroni dokumenty papierowe przez **30 minut** w temperaturze pożaru do 840°C. To wystarczający czas, aby zabezpieczyć akty notarialne i ważne papiery.
+*   **Antywłamaniowość:** Dodatkowo posiada klasę antywłamaniową **S2** (wg EN 14450), która jest wyższa niż standardowe S1, więc jest bezpieczniejszy.
+*   **Montaż:** Sejf ma standardowe otwory montażowe w dnie, co umożliwia solidne przymocowanie go do podłogi za pomocą kotew (kotwy należy dokupić osobno, w zależności od rodzaju podłoża).
+*   **Pojemność:** 30 litrów pojemności wewnętrznej (wymiary wewnętrzne: 270 x 380 x 290 mm) pomieści segregatory, koperty A4 i inne dokumenty.
+*   **Cena:** 1390 PLN – bardzo dobry stosunek jakości do ceny za sejf łączący ochronę ogniową i przeciwwłamaniową.
+
+**Ważna uwaga:** Sejf ten chroni **wyłącznie papier**. Jeśli planujesz przechowywać w nim również pendrive'y, dyski zewnętrzne lub płyty CD/DVD, to ten model **nie będzie odpowiedni** – nośniki cyfrowe wymagają specjalnej klasy ognioodporności DIS (temperatura wewnątrz nie może przekroczyć 50°C), a w SAVE4EVER 30P temperatura wewnątrz podczas pożaru może wzrosnąć do 170°C, co zniszczy dane na nośnikach.
+
+**Podsumowując:** Jeśli chcesz zabezpieczyć wyłącznie dokumenty papierowe, **SAVE4EVER 30P** będzie dla Ciebie doskonałym wyborem – jest ognioodporny, antywłamaniowy i można go zamontować do podłogi.
+
+Czy mogę pomóc w czymś jeszcze, na przykład w doborze odpowiednich kotew montażowych?</div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="scenario-section">
+        <div class="scenario-header">
+            <span class="sc-badge">SC-09</span>
+            <span class="sc-title">Budżetowy kupiec</span>
+        </div>
+        <div class="query-box">Pytanie klienta: "Szukam najtańszego sejfu S1 z zamkiem szyfrowym elektronicznym."</div>
+        <div class="expected-behavior"><b>Oczekiwane zachowanie CS-bota:</b> Wyszukanie najtańszego modelu spełniającego kryteria, prezentacja porównania cenowego.</div>
+        
+        <div class="grid-compare">
+            <!-- Branch A Column -->
+            <div class="column cs-col">
+                <div class="col-header">
+                    <span>CS-bot (Category Standard)</span>
+                    <span class="metrics-row">TTFT: 1.09s | TGT: 7.99s</span>
+                </div>
+                <div class="col-body">Witam w SejfZone! Oczywiście, pomogę znaleźć idealny model.
+
+Zanim przejdę do konkretów, proszę o doprecyzowanie dwóch kwestii, które pomogą mi dobrać optymalny produkt:
+
+1. **Co będzie przechowywane w sejfie?** (np. gotówka, dokumenty, biżuteria, broń palna)
+2. **Gdzie planujesz go zamontować?** (np. w szafie, na ścianie, w podłodze, w sypialni)
+
+Te informacje są kluczowe, aby sprawdzić, czy dany model spełnia Twoje wymogi prawne lub ubezpieczeniowe.
+
+---
+
+Na podstawie Twojego zapytania: **najtańszy sejf S1 z zamkiem elektronicznym** – z naszej oferty idealnie pasuje jeden model:
+
+### Rekomendacja: Adorf 250 S1 (z opcjonalnym zamkiem elektronicznym)
+
+<table class="html-table">
+<thead><tr><th>Parametr</th><th>Wartość</th></tr></thead>
+<tbody>
+<tr><td>**Klasa bezpieczeństwa**</td><td>S1 (PN-EN 14450)</td></tr>
+<tr><td>**Wymiary zewnętrzne**</td><td>250 x 350 x 300 mm</td></tr>
+<tr><td>**Wymiary wewnętrzne**</td><td>244 x 344 x 230 mm</td></tr>
+<tr><td>**Pojemność**</td><td>19 litrów</td></tr>
+<tr><td>**Waga**</td><td>18 kg</td></tr>
+<tr><td>**Zamek w standardzie**</td><td>Kluczowy dwubrodowy (klasa A)</td></tr>
+<tr><td>**Opcjonalny zamek elektroniczny**</td><td>**Zamek PIN (za dopłatą ok. 100-150 zł)**</td></tr>
+<tr><td>**Cena bazowa**</td><td>**599 PLN**</td></tr>
+<tr><td>**Przeznaczenie**</td><td>Gotówka (limit ubezpieczenia do 25 000 PLN), biżuteria, paszporty</td></tr>
+</tbody></table>
+
+**Dlaczego ten model?**
+- **Najniższa cena** spośród wszystkich sejfów S1 w naszym katalogu.
+- Możliwość zamówienia z **elektronicznym zamkiem szyfrowym PIN** (zamiast kluczowego) – to będzie najtańsza konfiguracja spełniająca Twoje kryteria.
+- Kompaktowy rozmiar – idealny do schowania w szafie lub na półce.
+
+**Ważne zastrzeżenie (zgodne z prawem):**
+- Klasa S1 **nie wymaga kotwienia** (choć jest to zalecane dla stabilności).
+- Limit przechowywania gotówki w ramach standardowej polisy domowej to ok. **25 000 – 60 000 zł** (w zależności od ubezpieczyciela). Dla wyższych kwot konieczna jest Klasa I (np. model **Baden-Baden I** za 2490 PLN).
+
+---
+
+**Czy ten model spełnia Twoje oczekiwania?** Jeśli potrzebujesz czegoś większego (np. na broń długą) lub z wyższym limitem ubezpieczenia – daj znać, a zaproponuję alternatywę.</div>
+            </div>
+            
+            <!-- Branch B Column -->
+            <div class="column gen-col">
+                <div class="col-header">
+                    <span>Generyczny RAG</span>
+                    <span class="metrics-row">TTFT: 0.74s | TGT: 4.52s</span>
+                </div>
+                <div class="col-body">Z przyjemnością pomogę znaleźć najtańszy sejf klasy S1 z zamkiem elektronicznym.
+
+Po przeanalizowaniu naszego katalogu, **najtańszym modelem spełniającym Pana/Pani kryteria jest:**
+
+**Adorf 250 S1** w cenie **599 PLN**.
+
+Należy jednak pamiętać, że w standardzie ten model wyposażony jest w **zamek kluczowy dwubrodowy klasy A**. Zamek elektroniczny PIN jest dostępny **opcjonalnie za dopłatą**. Jeśli wybierze Pan/Pani wersję z zamkiem elektronicznym, cena wzrośnie, ale nadal będzie to najkorzystniejsza oferta w tej kategorii.
+
+**Dla porównania, inne modele S1 z zamkiem elektronicznym w standardzie:**
+
+- **Siegen SG1** (850 PLN) – ma zamek biometryczny, ale jest to sejf na broń krótką, o znacznie mniejszej pojemności.
+- **SAVE4EVER 30P** (1390 PLN) – ma zamek szyfrowy, ale jest droższy, a dodatkowo oferuje ochronę ognioodporną.
+
+**Podsumowując:**
+- **Najtańszy sejf S1 z opcją zamka elektronicznego:** **Adorf 250 S1** (cena bazowa 599 PLN + dopłata za zamek elektroniczny).
+- **Najtańszy sejf S1 z zamkiem elektronicznym w standardzie:** **Siegen SG1** (850 PLN).
+
+Czy mogę pomóc w wyborze konkretnej konfiguracji lub odpowiedzieć na pytania dotyczące montażu?</div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="scenario-section">
+        <div class="scenario-header">
+            <span class="sc-badge">SC-10</span>
+            <span class="sc-title">Specyficzne wymiary</span>
+        </div>
+        <div class="query-box">Pytanie klienta: "Mam wnękę w ścianie o wymiarach 35x40x30 cm. Jaki sejf tam wejdzie?"</div>
+        <div class="expected-behavior"><b>Oczekiwane zachowanie CS-bota:</b> Dokładne przefiltrowanie wymiarów zewnętrznych z uwzględnieniem zawiasów i klamki.</div>
+        
+        <div class="grid-compare">
+            <!-- Branch A Column -->
+            <div class="column cs-col">
+                <div class="col-header">
+                    <span>CS-bot (Category Standard)</span>
+                    <span class="metrics-row">TTFT: 1.02s | TGT: 8.98s</span>
+                </div>
+                <div class="col-body">Witam w SejfZone! Świetnie, że pan/pani do nas trafił/a. Wnęka w ścianie to doskonałe miejsce na sejf – jest dyskretny i trudny do wyniesienia.
+
+Aby dobrać idealny model, muszę zadać dwa kluczowe pytania:
+
+1.  **Co najcenniejszego planuje pan/pani w nim przechowywać?** (np. gotówka, biżuteria, dokumenty, broń palna) – to określi wymaganą klasę bezpieczeństwa.
+2.  **Czy ma pan/pani wymogi ubezpieczeniowe lub prawne?** (np. limit gotówki w polisie domowej, pozwolenie na broń).
+
+Zanim odpowiesz, przeanalizujmy dostępne opcje. Wnęka o wymiarach **35 cm wysokości x 40 cm szerokości x 30 cm głębokości** jest dość kompaktowa, ale idealnie pasuje do kilku naszych modeli.
+
+Oto dwa najlepsze dopasowania:
+
+<table class="html-table">
+<thead><tr><th>Model</th><th>Wymiary zewnętrzne (WxSxG)</th><th>Waga</th><th>Klasa bezpieczeństwa</th><th>Cena</th><th>Idealny do...</th></tr></thead>
+<tbody>
+<tr><td>**Adorf 250 S1**</td><td>25 x 35 x 30 cm</td><td>18 kg</td><td>**S1** (PN-EN 14450)</td><td>**599 PLN**</td><td>Gotówki (do 25 000 zł wg polis domowych), biżuterii, paszportów.</td></tr>
+<tr><td>**Siegen SG1**</td><td>30 x 40 x 15 cm</td><td>15 kg</td><td>**S1** (PN-EN 14450)</td><td>**850 PLN**</td><td>Broni krótkiej (pistolety) – szybki dostęp biometryczny.</td></tr>
+</tbody></table>
+
+**Krótka analiza:**
+
+*   **Adorf 250 S1** – zmieści się idealnie w głębokość i szerokość wnęki, ale zostawi nieco luzu na górze (25 cm vs 35 cm). To świetny, ekonomiczny wybór do codziennych kosztowności.
+*   **Siegen SG1** – jest płytszy (15 cm), więc jeśli wnęka ma 30 cm głębokości, zostanie sporo miejsca z przodu. Jest za to wyższy (30 cm) i węższy (40 cm). Jego atutem jest **zamek biometryczny** – idealny, jeśli zależy panu/pani na błyskawicznym dostępie.
+
+**Ważna uwaga techniczna (kotwienie):**
+Oba modele to klasa S1. Zgodnie z prawem **nie muszą być kotwione**, ale w przypadku montażu we wnęce **gorąco polecam** użycie kotew (np. do ściany bocznej lub podłogi wnęki). Zwiększy to stabilność i uniemożliwi łatwe wyjęcie sejfu.
+
+**Proszę o odpowiedź na pytania z początku – wtedy wskażę konkretny model i opcję zamka (kluczowy czy elektroniczny).**</div>
+            </div>
+            
+            <!-- Branch B Column -->
+            <div class="column gen-col">
+                <div class="col-header">
+                    <span>Generyczny RAG</span>
+                    <span class="metrics-row">TTFT: 0.89s | TGT: 7.87s</span>
+                </div>
+                <div class="col-body">Z przyjemnością pomogę dobrać odpowiedni sejf do Pana/Pani wnęki.
+
+Wnęka o wymiarach **35 x 40 x 30 cm** (szer. x wys. x głęb.) jest dość kompaktowa. Aby sejf swobodnie wszedł i można go było zamontować, jego wymiary zewnętrzne muszą być nieco mniejsze od wnęki (należy zostawić ok. 1-2 cm luzu z każdej strony na montaż i wentylację).
+
+Sprawdziłem nasz katalog i znalazłem jeden model, który idealnie pasuje do podanych wymiarów:
+
+**Polecany model: Adorf 250 S1**
+
+- **Wymiary zewnętrzne:** 250 x 350 x 300 mm (szer. x wys. x głęb.)
+- **Czy wejdzie do wnęki 35x40x30 cm?** **TAK.** Sejf ma 25 cm szerokości, 35 cm wysokości i 30 cm głębokości. Zmieści się bez problemu, a zostanie jeszcze miejsce na ewentualne wypoziomowanie i montaż kotwami.
+
+**Dlaczego akurat ten model?**
+- **Przeznaczenie:** To sejf domowy antywłamaniowy klasy S1. Idealnie nadaje się do przechowywania gotówki (limit ubezpieczenia do 25 000 PLN), biżuterii, paszportów czy ważnych dokumentów w szafie lub wnęce.
+- **Konstrukcja:** Jednościenny korpus (3 mm stali) z dwuściennymi drzwiami.
+- **Zamek:** W standardzie wyposażony w zamek kluczowy dwubrodowy klasy A (2 klucze w zestawie). Istnieje możliwość zamówienia wersji z elektronicznym zamkiem PIN.
+- **Cena:** **599 PLN** – to bardzo atrakcyjna cena za solidny sejf do wnęki.
+
+**Dlaczego inne modele nie pasują?**
+- **Siegen SG1** (300x400x150 mm) – ma odpowiednią szerokość i wysokość, ale jest za płytki (15 cm głębokości). We wnęce 30 cm będzie go trudno stabilnie zamontować.
+- **SAVE4EVER 30P** (350x450x400 mm) – jest za wysoki (45 cm) i za głęboki (40 cm) – nie zmieści się w Pana/Pani wnęce.
+
+**Podsumowując:** Zdecydowanie polecam **Adorf 250 S1**. Jest to jedyny model z naszej oferty, który idealnie wpasowuje się w podane wymiary wnęki i spełni funkcję bezpiecznego schowka.
+
+Czy mogę pomóc w czymś jeszcze, na przykład w kwestii montażu lub wyboru zamka?</div>
+            </div>
+        </div>
+    </div>
+        
+</div>
+</body>
+</html>
+    
