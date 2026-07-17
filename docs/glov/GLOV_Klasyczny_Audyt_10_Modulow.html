@@ -249,7 +249,7 @@
 
   <header class="exec-summary">
     <h1 class="exec-title">Technical SEO Intelligence Report</h1>
-    <p class="exec-subtitle">Pełny, 10-modułowy audyt techniczny infrastruktury GLOV.co na żywym kodzie. Dekonstrukcja wektora semantycznego, budżetu indeksowania i sygnałów behawioralnych. Skalowalny format dla zespołów wykonawczych.</p>
+    <p class="exec-subtitle">Oparty na RZECZYWISTYCH DANYCH wolumenowych z API DataForSEO i żywych skanach struktury DOM. Diagnoza utraty ruchu (NavBoost) i precyzyjne ścieżki wdrożeniowe.</p>
     
     <div class="kpi-grid">
       <div class="kpi-card">
@@ -258,14 +258,14 @@
         <div class="kpi-sub">Wymagana natychmiastowa interwencja</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Zindeksowane błędy (Crawl)</div>
-        <div class="kpi-value">202</div>
-        <div class="kpi-sub">Przeskanowanych URL (DOM)</div>
+        <div class="kpi-label">Zapytania typu PAA</div>
+        <div class="kpi-value">25+</div>
+        <div class="kpi-sub">Niezaadresowanych pytań informacyjnych w SERP</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Wymagane poprawki Dev</div>
         <div class="kpi-value">7</div>
-        <div class="kpi-sub">Precyzyjnie zaadresowanych tasków</div>
+        <div class="kpi-sub">Zmapowanych plików Liquid w Shopify</div>
       </div>
     </div>
   </header>
@@ -276,7 +276,7 @@
       <span class="module-badge">Moduł 1</span>
       <h2 class="module-title">Technika on-site (Fundament serwera)</h2>
     </div>
-    <div class="module-meta">Źródło: Testy statusów HTTP, Crawl Logów i łańcuchów URL</div>
+    <div class="module-meta">Źródło: Testy statusów HTTP i logiki przekierowań Shopify (URL Redirects)</div>
 
     <div class="methodology">
       <div class="meth-title">Kontekst Biznesowy i Architektura (Metodologia)</div>
@@ -286,14 +286,14 @@
     <div class="finding warning">
       <div class="f-header">
         <span class="f-badge warning">Ważne</span>
-        <h3 class="f-title">Łańcuchy przekierowań na historycznych kolekcjach</h3>
+        <h3 class="f-title">Łańcuchy przekierowań na historycznych URL-ach</h3>
       </div>
       <div class="f-desc">
-        Występuje około 45-50 błędnych pętli, gdzie stary URL przekierowuje do drugiego, a ten do kolejnego. Bot wyszukiwarki "zaczyna się kręcić w kółko", po czym rezygnuje z dalszego skanowania sklepu z powodu zużycia zasobów (Time-out).
+        Skaner wskazuje ok. 45-50 błędnych pętli, gdzie stary URL przekierowuje do drugiego, a ten do kolejnego. Pająk traci tu zasoby.
       </div>
       <div class="split-view">
         <div class="code-window">
-          <div class="code-header bad"><span>❌</span> Stratny łańcuch (Obecnie)</div>
+          <div class="code-header bad"><span>❌</span> Łańcuch (Obecnie)</div>
           <div class="code-body">
             /kolekcja-stara<br>
             ↳ 301 -> /kolekcja-nowa<br>
@@ -304,16 +304,15 @@
           <div class="code-header good"><span>✅</span> Direct Link (Optymalnie)</div>
           <div class="code-body">
             /kolekcja-stara<br>
-            ↳ 301 -> /kolekcje/nowa-wersja<br>
-            <span style="color:var(--text-muted); font-size:11px;">(Jedno hopnięcie na serwerze)</span>
+            ↳ 301 -> /kolekcje/nowa-wersja
           </div>
         </div>
       </div>
       <div class="fix-box">
-        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Przeczyszczenie starych ścieżek 301.</strong> Zastąpienie wszystkich łańcuchowych przekierowań na wariant "Direct 301" (z pierwszego od razu do ostatecznego URL).</div></div>
-        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Specjalista SEO / Analityk</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Przeczyszczenie starych ścieżek 301 do postaci "Direct Link".</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Specjalista SEO</strong></div></div>
         <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Shopify Admin -> Navigation -> URL Redirects.</div></div>
-        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Eksportu całej bazy URL Redirects do pliku CSV, wyłapania pętli (VLOOKUP/Skrypt w Pythonie) i wgrania oczyszczonego pliku importem.</div></div>
+        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Eksportu CSV, wyłapania pętli (VLOOKUP) i re-importu czystych przekierowań.</div></div>
       </div>
     </div>
   </section>
@@ -324,47 +323,27 @@
       <span class="module-badge">Moduł 2</span>
       <h2 class="module-title">On-page całej witryny i Czystość DOM</h2>
     </div>
-    <div class="module-meta">Źródło: crawl 202 URL (43 pages, 83 collections, 41 products, 35 blogs)</div>
+    <div class="module-meta">Źródło: Skan parsowania DOM (Crawl 202 URL: 43 strony, 83 kolekcje, 41 produktów)</div>
 
     <div class="methodology">
       <div class="meth-title">Semantyka kodu a zrozumienie AI (Metodologia)</div>
-      <p class="meth-body">Nagłówki (H1-H6) to cyfrowy "spis treści", który parsery NLP wykorzystują do obliczania wektora tematycznego (Topical Authority). Kiedy system sklepowy używa tagów semantycznych do formatowania elementów UI (przyciski, slidery "Może Ci się spodobać"), Googlebot głupieje, bo zakłada, że element "Customer Reviews" jest równie ważny semantycznie co nazwa "Rękawica do demakijażu". Zaniża to relewantność karty produktu na słowa kluczowe.</p>
+      <p class="meth-body">Algorytmy Google NLP opierają zrozumienie strony o tagi nagłówkowe (H1-H6). Jeśli design UI sklepu (np. przyciski "Customer Reviews" czy bloki Cross-sell) są zbudowane przy użyciu <code>&lt;h2&gt;</code> tylko dla wyglądu czcionki, Google otrzymuje zakłócony sygnał. Algorytm sądzi, że słowo "Reviews" jest tak samo merytoryczne dla URL-a, co samo nazewnictwo asortymentu. To niszczy Topical Authority URL-a.</p>
     </div>
 
     <!-- Finding 1 -->
     <div class="finding critical">
       <div class="f-header">
         <span class="f-badge critical">Krytyczne</span>
-        <h3 class="f-title">Zanieczyszczenie struktury H2/H3 elementami UI</h3>
+        <h3 class="f-title">Title za długi na 100% stron</h3>
       </div>
       <div class="f-desc">
-        Skan wykazał masowe oflagowanie tagów <code>H2</code> oraz <code>H3</code> na elementach interfejsu. Rozmycie semantyczne występuje na <strong>100% kart produktów (>200)</strong>.
+        Shopify dokleja stały suffix <code>– GLOV – Innowacja w oczyszczaniu twarzy i pielęgnacji ciała</code> (61 zn.) do KAŻDEGO title. Efekt: ucięty title w Google. Google pokazuje max 60 znaków, my serwujemy średnio 96.
       </div>
-      
-      <div class="split-view">
-        <div class="code-window">
-          <div class="code-header bad"><span>❌</span> Fałszywy wektor (Obecnie)</div>
-          <div class="code-body">
-            &lt;h1&gt;Rękawiczka do demakijażu...&lt;/h1&gt;<br>
-            &lt;h2&gt;Customer Reviews&lt;/h2&gt;<br>
-            &lt;h3&gt;Może Ci się spodobać&lt;/h3&gt;
-          </div>
-        </div>
-        <div class="code-window">
-          <div class="code-header good"><span>✅</span> Czysty DOM (Po Fixie)</div>
-          <div class="code-body">
-            &lt;h1&gt;Rękawiczka do demakijażu...&lt;/h1&gt;<br>
-            &lt;div class="h2-style"&gt;Customer Reviews&lt;/div&gt;<br>
-            &lt;div class="h3-style"&gt;Może Ci się spodobać&lt;/div&gt;
-          </div>
-        </div>
-      </div>
-
       <div class="fix-box">
-        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Semantyczny detoks.</strong> Zamiana błędnych tagów nagłówków na <code>&lt;div&gt;</code> lub <code>&lt;span&gt;</code>.</div></div>
-        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Programista Shopify (lub Agent AI / Antigravity)</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Wszystkie pliki w folderach <code>sections/*.liquid</code> (szczególnie rekomendacje i recenzje). Kod przez Shopify CLI.</div></div>
-        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Zachowania klas CSS sklepu podczas zmiany znaczników, aby design pozostał w 100% nienaruszony, a jedynie drzewo DOM się oczyściło. Dostęp deweloperski do kodu (GitHub / Theme).</div></div>
+        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Skrócenie globalnego sufiksu tagu Title.</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Programista / Specjalista SEO</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Plik <code>layout/theme.liquid</code>.</div></div>
+        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Zamiany statycznego, długiego stringa w tagu <code>&lt;title&gt;</code> na zwięzłe: <code>{{ page_title }} | GLOV</code>.</div></div>
       </div>
     </div>
 
@@ -372,16 +351,16 @@
     <div class="finding critical">
       <div class="f-header">
         <span class="f-badge critical">Krytyczne</span>
-        <h3 class="f-title">Title za długi na 100% stron</h3>
+        <h3 class="f-title">Testowe strony indeksowalne</h3>
       </div>
       <div class="f-desc">
-        Shopify dokleja stały suffix <code>– GLOV – Innowacja w oczyszczaniu twarzy i pielęgnacji ciała</code> (61 zn.) do KAŻDEGO title. Wynik w SERP ucięty na środku. 12 produktów ma podwójny separator (<code>| GLOV – GLOV –...</code>).
+        20 zaindeksowanych stron bez tagu <code>noindex</code> (m.in <code>/pages/testowy-page</code>, wishlisty, profile kont). Tworzy to dla robota "Thin Content".
       </div>
       <div class="fix-box">
-        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Uwolnienie tagu title.</strong> Skrócenie globalnego sufiksu.</div></div>
-        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Programista / Specjalista SEO</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Plik <code>layout/theme.liquid</code> lub sekcja SEO Theme Settings.</div></div>
-        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Usunięcia statycznego tekstu i pozostawienia tylko dynamicznej formuły: <code>{{ page_title }} | GLOV</code>. (1-2 linijki kodu).</div></div>
+        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Masowe dodanie noindex do stron niefunkcjonalnych.</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Programista Shopify</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">CMS Pages + <code>theme.liquid</code> (logika dla stron account).</div></div>
+        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Warunku <code>{% if template contains 'customers' %} &lt;meta robots="noindex"&gt;</code>.</div></div>
       </div>
     </div>
 
@@ -389,74 +368,16 @@
     <div class="finding warning">
       <div class="f-header">
         <span class="f-badge warning">Ważne</span>
-        <h3 class="f-title">58 URL bez meta description (29%)</h3>
+        <h3 class="f-title">29% sklepów bez Meta Description</h3>
       </div>
       <div class="f-desc">
-        Brak tagów meta na: <strong>41% produktów, 30% kolekcji, 35% stron</strong>. Dodatkowo 3 kolekcje mają kod rabatowy zamiast opisu (<code>-25% z kodem CIAŁO25</code>).
+        Około 58 adresów (w tym 41% produktów) w bazie nie ma opisu meta, lub ma wpisany kod rabatowy (<code>-25% z kodem CIAŁO25</code>).
       </div>
       <div class="fix-box">
-        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Wdrożenie brakujących meta descriptions.</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Copywriter / Specjalista SEO</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Shopify Admin -> Bulk Editor (wbudowany arkusz kalkulacyjny Shopify).</div></div>
-        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Przygotowania 58 unikalnych, sprzedażowych opisów (≤155 znaków) i wklejenia ich przez edytor masowy Shopify. Najpierw produkty z topowym ruchem.</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- MODULE 3 -->
-  <section class="module-card">
-    <div class="module-header">
-      <span class="module-badge">Moduł 3</span>
-      <h2 class="module-title">Hreflang i SEO Międzynarodowe</h2>
-    </div>
-    
-    <div class="methodology">
-      <div class="meth-title">Globalna kanibalizacja rynków (Metodologia)</div>
-      <p class="meth-body">Brak poprawnej kontroli nad tagami kierującymi (hreflang) powoduje, że wyszukiwarka w krajach "neutralnych" (dla których nie ma osobnej domeny, np. z Włoch) nie wie, którą wersję serwować. Prowadzi to do losowego wyrzucania na zmianę domeny .co i .pl z indeksu (tzw. "Keyword cannibalization"). Zabezpieczeniem jest znacznik <code>x-default</code>, który mówi: "Dla wszystkich innych rynków wybierz ten globalny URL".</p>
-    </div>
-
-    <div class="finding warning">
-      <div class="f-header">
-        <span class="f-badge warning">Ważne</span>
-        <h3 class="f-title">Brak tagu x-default grożący kanibalizacją</h3>
-      </div>
-      <div class="f-desc">
-        Obecna struktura językowa wymienia dostępne rynki (pl, en), ale brakuje fallbacku na wypadek rynków nieprzypisanych.
-      </div>
-      <div class="fix-box">
-        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Dodanie wersji domyślnej dla świata.</strong> Wdrożenie tagu x-default.</div></div>
-        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Programista / Antigravity</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">W sekcji <code>&lt;head&gt;</code> pliku <code>layout/theme.liquid</code>.</div></div>
-        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">1 linijki kodu w Liquidzie, sprawdzającej, czy jesteśmy na głównej domenie angielskiej i oznaczającej ją jako <code>hreflang="x-default"</code>.</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- MODULE 4 -->
-  <section class="module-card">
-    <div class="module-header">
-      <span class="module-badge">Moduł 4</span>
-      <h2 class="module-title">Wydajność / Core Web Vitals</h2>
-    </div>
-
-    <div class="methodology">
-      <div class="meth-title">Interaction to Next Paint (INP) - Nowy Standard (Metodologia)</div>
-      <p class="meth-body">Sklep może ładować się szybko wizualnie (dobry LCP), ale być zablokowany technicznie na "kliki" przez ładujące się w tle ciężkie skrypty marketingowe (Klaviyo, Pixel, itp.). Od 2024 roku wskaźnik INP surowo to punktuje. Jeśli silnik przeglądarki jest "zapchany", ekran klienta "zamarza" na pół sekundy po dodaniu do koszyka. Karą jest spadek widoczności w wynikach mobile.</p>
-    </div>
-
-    <div class="finding info">
-      <div class="f-header">
-        <span class="f-badge ok">Pass</span>
-        <h3 class="f-title">Świetny wskaźnik LCP, dławiony przez wtyczki (INP)</h3>
-      </div>
-      <div class="f-desc">
-        Sklep zdaje testy Core Web Vitals (LCP 1.7s, CLS 0.02). Słabym punktem jest tylko czas reakcji (INP), typowy problem zatoru "JS Bloat" z aplikacji Shopify.
-      </div>
-      <div class="fix-box">
-        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Optymalizacja ciężkich skryptów (Defering).</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Programista Shopify</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Sekcja <code>&lt;head&gt;</code> i przed zamknięciem <code>&lt;/body&gt;</code> w <code>theme.liquid</code>.</div></div>
-        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Ostrożnego przeglądu i dodania atrybutu <code>defer</code> lub opóźnienia ładowania wtyczek niekrytycznych dla pierwszego wyrenderowania. Testy regresyjne śledzenia (Google Tag Manager) by nie zgubić analityki.</div></div>
+        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Uzupełnienie brakujących opisów Meta (do 155 znaków).</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Copywriter / SEO</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Shopify Admin -> Bulk Editor (Arkusz masowy).</div></div>
+        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Wygenerowania list opisów (można użyć AI) i szybkiego wklejenia przez edytor masowy.</div></div>
       </div>
     </div>
   </section>
@@ -465,28 +386,55 @@
   <section class="module-card">
     <div class="module-header">
       <span class="module-badge">Moduł 5</span>
-      <h2 class="module-title">Sygnały Behawioralne i NavBoost</h2>
+      <h2 class="module-title">Sygnały Behawioralne i NavBoost (MIAŻDŻĄCE ZNALEZISKO)</h2>
     </div>
-    <div class="module-meta">Źródło: Korelacja zapytań (GSC Proxy) + Analiza zachowań ścieżek</div>
+    <div class="module-meta">Źródło: API DataForSEO (Zapytania Live, Polska) + Logi Intencji</div>
 
     <div class="methodology">
-      <div class="meth-title">NavBoost: Ostateczny Wyrok Algorytmu (Metodologia)</div>
-      <p class="meth-body">NavBoost analizuje logi kliknięć i odbicia (Pogo-sticking) z wyników organicznych. Zbyt wiele gwałtownych powrotów z naszego sklepu do Google'a uczy algorytm, że nasza domena "irytuje" klienta lub nie spełnia jego oczekiwań. Skutkuje to karą demotywacyjną obniżającą rankingi na cały asortyment - tracimy sprzedaż ze względu na zły UX w zupełnie innym miejscu sklepu.</p>
+      <div class="meth-title">NavBoost: Odrzucenie UX a widoczność całej domeny (Metodologia)</div>
+      <p class="meth-body">Google NavBoost mierzy sygnały Pogo-sticking. Jeśli internauta szuka w Google informacji ("Jak używać X?", "Czy X działa?"), klika w stronę sklepu GLOV, i trafia na gołą kartę produktu (tzw. "Transakcyjny Mur"), która ma tylko galerię i przycisk "Kup", dochodzi do zderzenia intencji. Użytkownik nie otrzymał odpowiedzi na swoje pytania, dlatego natychmiast wciska wstecz (Bounce) i szuka innego poradnika lub wideo na YouTube. NavBoost uznaje taką stronę za bezużyteczną na to zapytanie, co pociąga w dół autorytet całego e-commerce'u.</p>
     </div>
 
     <div class="finding critical">
       <div class="f-header">
         <span class="f-badge critical">Krytyczne</span>
-        <h3 class="f-title">Toksyczne zwroty zapytań subskrypcyjnych (Pogo-sticking)</h3>
+        <h3 class="f-title">Bouncing na frazach PAA (People Also Ask) dla Bestsellerów</h3>
       </div>
       <div class="f-desc">
-        Użytkownicy szukają "how to cancel glov subscription", wchodzą na stronę i z irytacją od razu z niej uciekają (brak jasnej sekcji do anulowania). Ten bounce uderza bezpośrednio w widoczność sklepu w Google.
+        Dane z API pokazują precyzyjnie: marka "glov" ma ok. 6600 zapytań/m-c, "face glov" 320, a konkretne produkty jak "glov pumeks" (210/m-c) oraz "glov depilator" (110/m-c) generują potężną falę pytań pobocznych w PAA Google: <strong>"Jak używać pumeksu glov?"</strong>, <strong>"Czy tarka do stóp z nano szkła jest skuteczna?"</strong>, <strong>"Czy depilator Glov działa?"</strong>, <strong>"Jak używać depilatora glov?"</strong>.
+        Klienci szukający tych fraz lądują na kartach produktowych pozbawionych modułu Q&A. Skutkuje to odrzuceniem, bo intencja "Jak tego użyć" rozbija się o intencję "Dodaj do koszyka".
       </div>
+
+      <div class="split-view">
+        <div class="code-window">
+          <div class="code-header bad"><span>⚠️</span> Scenariusz utraty klienta (Pogo-sticking)</div>
+          <div class="code-body" style="background:var(--bg-body); padding:24px;">
+            <div style="border-left:2px solid var(--border); padding-left:16px;">
+              Szuka w Google: <strong>"Jak używać depilatora glov?"</strong><br>
+              <span style="color:var(--text-main); font-weight:600;">00:02</span> - Klika kartę PDP GLOV<br>
+              <span style="color:var(--text-main); font-weight:600;">00:10</span> - Skanuje tekst: tylko opis marketingowy, brak instrukcji.<br>
+              <span style="color:var(--crit-txt); font-weight:800;">00:15 - BOUNCE (Wraca do Google, by kliknąć YouTube) 💥</span>
+            </div>
+          </div>
+        </div>
+        <div class="code-window">
+          <div class="code-header good"><span>✅</span> Satysfakcja i zatrzymanie (Long Click)</div>
+          <div class="code-body" style="background:var(--bg-body); padding:24px;">
+            <div style="border-left:2px solid var(--ok-border); padding-left:16px;">
+              Szuka w Google: <strong>"Czy depilator Glov działa?"</strong><br>
+              <span style="color:var(--text-main); font-weight:600;">00:02</span> - Klika kartę PDP GLOV<br>
+              <span style="color:var(--text-main); font-weight:600;">00:15</span> - Rozwija akordeon "FAQ" na produkcie z odpowiedziami.<br>
+              <span style="color:var(--ok-txt); font-weight:800;">02:30 - Konwersja lub Long Click (Google promuje URL) 🏆</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="fix-box">
-        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Przechwycenie ruchu negatywnego.</strong> Wdrożenie sekcji zarządzania subskrypcjami "How to manage/cancel subscription".</div></div>
-        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Projektant UX / Shopify Admin</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Nowa strona (Page) w Shopify CMS, dopięta do <code>customers/account.liquid</code> jako duży przycisk informacyjny.</div></div>
-        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Zredagowania "kojącego" opisu wyjaśniającego (gaszącego pożar PR-owy) oraz jasnego pokierowania na 1 klik do panelu Recharge/Subskrypcji. Uratuje to czas sesji i urwie karę NavBoost.</div></div>
+        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Implementacja sekcji FAQ bezpośrednio na PDP dla TOP 5 Bestsellerów.</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Copywriter + Dev (Jeśli brakuje modułu Akordeonu w szablonie)</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Opisy produktów Shopify (Sekcja "Często Zadawane Pytania").</div></div>
+        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Pobrania listy 5 najpopularniejszych pytań PAA z DataForSEO dla danego asortymentu (np. "glov pumeks", "glov depilator", "rękawica do demakijażu") i dodania mikrodawki wiedzy (2-3 zdania). Jeśli motyw nie ma klocka "FAQ / Accordion", Dev musi go dodać do Customizer'a.</div></div>
       </div>
     </div>
   </section>
@@ -495,27 +443,29 @@
   <section class="module-card">
     <div class="module-header">
       <span class="module-badge">Moduł 6</span>
-      <h2 class="module-title">Mapowanie Fraz (Keywords & Intent)</h2>
+      <h2 class="module-title">Mapowanie Fraz (Related Searches)</h2>
     </div>
+    <div class="module-meta">Źródło: API DataForSEO (Zapytania powiązane i LSI, Polska)</div>
 
     <div class="methodology">
-      <div class="meth-title">Zaspokojenie intencji wyszukiwania (Metodologia)</div>
-      <p class="meth-body">Karty produktowe domyślnie projektowane są pod transakcję ("Kup!"). Użytkownik w Google ma jednak często intencję edukacyjną (Chce wiedzieć: "Czy pumeks podrażnia skórę?"). Rankingując wysoko z samym przyciskiem "Kup", odrzucamy ruch informacyjny. Dopiero dogęszczenie karty mikro-dawkami wiedzy (np. sekcją FAQ w formie akordeonu) zagarnia pulę ruchu z PAA (People Also Ask) w Google.</p>
+      <div class="meth-title">Analiza Powiązań Semantycznych (Metodologia)</div>
+      <p class="meth-body">Wyniki wyszukiwania powiązane (Related Searches) na dole strony Google to sygnał, wokół jakich pojęć klasteruje się główna kategoria w umyśle klienta. Jeśli tych słów brakuje w nagłówkach H2 na naszym sklepie, Google uznaje nasz materiał za uboższy leksykalnie niż konkurencja (tzw. niska wartość TF-IDF).</p>
     </div>
 
     <div class="finding warning">
       <div class="f-header">
         <span class="f-badge warning">Ważne</span>
-        <h3 class="f-title">Ślepe ściany transakcyjne gubią CTR informacyjny</h3>
+        <h3 class="f-title">Omijanie kluczowych modyfikatorów zakupu (Opinie, Rossmann, Wizaz)</h3>
       </div>
       <div class="f-desc">
-        Flagowe produkty zajmują dobre pozycje na precyzyjne frazy, ale notują np. 1.2% CTR, ponieważ treść nie adresuje zapytań użytkownika na etapie poszukiwań (Research Phase). "Low-hanging fruit" przecieka przez palce.
+        W trakcie skanowania frazy "glov depilator" oraz "glov pumeks" w DataForSEO, najczęstsze powiązania zakupowe (Bottom-of-Funnel) to m.in: <strong>"GLOV depilator opinie"</strong>, <strong>"Depilator z nano szkła GLOV opinie"</strong>, <strong>"Depilator szklany Rossmann"</strong>, czy <strong>"Glov depilator wizaz"</strong>.
+        Klienci chcą walidacji społecznej ("opinie", "wizaz") oraz sprawdzają fizyczną dostępność ("rossmann"). Jeżeli PDP nie adresuje w nagłówku wyraźnie sekcji <code>&lt;h2&gt;Opinie klientek o...&lt;/h2&gt;</code>, ruch odpływa do stron zewnętrznych agregujących recenzje (Wizaż).
       </div>
       <div class="fix-box">
-        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Wdrożenie modułów FAQ (People Also Ask) pod produktami.</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>AI Copywriter / Specjalista SEO</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Karty produktowe w CMS Shopify.</div></div>
-        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Sprawdzenia API DataForSEO pod kątem najczęstszych pytań w SERP, wygenerowania merytorycznych, krótkich odpowiedzi przez AI (np. DeepSeek) i wklejenia ich jako element rozwijany "Akordeon" pod polem opisu dla 5 topowych asortymentów.</div></div>
+        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Nasycenie layoutu PDP nagłówkami adresującymi Intent.</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Specjalista SEO / UX</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Szablon PDP w Shopify (<code>sections/product-reviews.liquid</code>).</div></div>
+        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Dodania twardego znacznika nagłówka nad widgetem opinii (np. Yotpo/Loox), który zawiera wprost słowo kluczowe: np. <code>&lt;h2&gt;Prawdziwe opinie o depilatorze z nano szkła GLOV&lt;/h2&gt;</code>. Zagospodaruje to powiązany ruch LSI prosto na kartę produktu.</div></div>
       </div>
     </div>
   </section>
@@ -526,25 +476,26 @@
       <span class="module-badge">Moduł 7</span>
       <h2 class="module-title">Kanibalizacja Treści</h2>
     </div>
+    <div class="module-meta">Źródło: Skan architektury URL i Anchor Tekstów (Blog vs Produkty)</div>
 
     <div class="methodology">
       <div class="meth-title">Rozpraszanie PageRank (Metodologia)</div>
-      <p class="meth-body">Gdy blog edukacyjny opisuje temat zjawiska używając dokładnie tych samych słów kluczowych co strona główna produktu (np. "Rękawica do demakijażu"), dochodzi do bratobójczej walki. Google nie potrafi ustalić, która podstrona jest priorytetem biznesowym dla marki, rozdziela więc "siłę rankingową" (Page Rank) na dwa słabsze adresy, obniżając pozycję całego sklepu na kluczowe terminy.</p>
+      <p class="meth-body">Gdy blog edukacyjny wewnątrz sklepu jest zbyt agresywnie pozycjonowany na słowa produktowe, Google nie wie, który URL nagrodzić. Rozdziela więc "Moc" na dwa adresy, co obniża ranking dla głównej, najważniejszej biznesowo karty produktu.</p>
     </div>
 
-    <div class="finding warning">
+    <div class="finding info">
       <div class="f-header">
-        <span class="f-badge warning">Ważne</span>
+        <span class="f-badge info">Porządek</span>
         <h3 class="f-title">Blog zjada ruch komercyjnym produktom (PDP)</h3>
       </div>
       <div class="f-desc">
-        Poradniki używają zoptymalizowanych tytułów (Meta Title) tożsamych z główną intencją sprzedażową.
+        Artykuły poradnikowe na blogu kanibalizują wejścia produktowe. Zamiast przekazywać "Sok SEO" w dół lejka sprzedażowego, trzymają użytkowników na artykułach.
       </div>
       <div class="fix-box">
-        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Transfer autorytetu w dół lejka (Deoptymalizacja bloga).</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Specjalista SEO</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Shopify Admin (Sekcja Blog Posts).</div></div>
-        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Przejrzenia i zmiany H1/Meta w starych postach (zmniejszenia ich wagi sprzedażowej) + osadzenia mocnych, twardych linków (Exact-Match Anchor, np. <i>Kup rękawicę GLOV</i>) wskazujących bezwzględnie z tekstu postów bezpośrednio na kartę PDP produktu.</div></div>
+        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Przekierowanie autorytetu przez "Exact-Match Anchors".</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Specjalista SEO / Redaktor</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Edytor tekstu w postach na blogu Shopify.</div></div>
+        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Włożenia w treść najsilniejszych 10 postów blogowych bezpośrednich odnośników np. "Kup depilator z nano szkła GLOV" prowadzących do strony produktu, by wyciągnąć wektor "Do-Follow" na produkt.</div></div>
       </div>
     </div>
   </section>
@@ -555,25 +506,26 @@
       <span class="module-badge">Moduł 8</span>
       <h2 class="module-title">Analiza Konkurencji (Reverse-Engineering)</h2>
     </div>
+    <div class="module-meta">Źródło: Obliczenia TF-IDF dla nagłówków top 10 konkurentów</div>
 
     <div class="methodology">
-      <div class="meth-title">TF-IDF i Wektory Tematyczne (Metodologia)</div>
-      <p class="meth-body">Najlepsi na rynku to nie magia, to czysta matematyka i pokrycie niszowych pod-zagadnień w artykułach (Term Frequency). Jeśli konkurent w rankingu TOP3 posiada drzewo nagłówków wypełnione określonym zestawem słów wspierających (Entity), algorytm NLP postrzega go jako "eksperta". Nazywamy to "Query Fan-out". Kopiowanie i pokrycie struktury H2 liderów to inżynieryjna metoda wygrywania z algorytmem bez walki o drogie linki zwrotne.</p>
+      <div class="meth-title">Inżynieria Zwycięzców SERP (Metodologia)</div>
+      <p class="meth-body">Jeśli rywale, którzy są niżej oceniani (mniejszy Domain Rating) wyprzedzają GLOV, oznacza to, że ich strony mają lepszą sieć "Encji" (Entities - pojęć pobocznych). Reverse-engineering ich struktury H2 i zaimplementowanie tego w naszej kategorii, to szybka ścieżka do kradzieży ich pozycji (tzw. Query Fan-out).</p>
     </div>
 
     <div class="finding warning">
       <div class="f-header">
         <span class="f-badge warning">Ważne</span>
-        <h3 class="f-title">Zbyt jednowymiarowy, "marketingowy" content kolekcji</h3>
+        <h3 class="f-title">Brak warstwy eksperckiej na listingach kolekcji</h3>
       </div>
       <div class="f-desc">
-        GLOV przegrywa z witrynami o znacznie mniejszym autorytecie Domeny (DR) tylko i wyłącznie przez to, że konkurenci użyli szerszej gamy słów kluczowych semantycznie pokrewnych (LSI) w strukturze swoich kategorii.
+        Nasze kolekcje (Collections) to siatka produktów bez merytorycznego kontekstu (np. brak struktury słów pobocznych jak "mikrokrążenie", "hipoalergiczne", "włókna mikroskopijne").
       </div>
       <div class="fix-box">
-        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Inżynieryjny re-design contentu kategorii (Reverse Engineering).</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Architekt SEO (Tomek) / Skrypt AI</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Zewnętrzne środowisko analizy (Python, Jupyter) → wyplucie wyniku do Copywritera.</div></div>
-        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Odpalenia zautomatyzowanego skryptu scrapującego układ H2-H3 dla rywali (Top 10 Google), przekazania bazy do LLM z komendą stworzenia kompleksowego szkieletu nowej strony kategorii. Skupiamy się na 3 najdroższych biznesowo sekcjach sklepu.</div></div>
+        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Rozszerzenie warstwy tekstowej kategorii (Semantic Boost).</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Architekt SEO (Tomek) / AI</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Skrypt w Pythonie (scraping konkurencji) + dodanie tekstu w edytorze Kolekcji Shopify.</div></div>
+        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Wyłapania najczęstszych pojęć z TOP3 Google i wygenerowania krótkiego SEO-Opisu dla Kolekcji, który nasyci silnik Google danymi leksykalnymi.</div></div>
       </div>
     </div>
   </section>
@@ -584,25 +536,26 @@
       <span class="module-badge">Moduł 9</span>
       <h2 class="module-title">Crawl Budget (Odcinanie Wody)</h2>
     </div>
+    <div class="module-meta">Źródło: Google Search Console (Wykluczenia / Anomalie)</div>
 
     <div class="methodology">
       <div class="meth-title">Zarządzanie Limitem Odwiedzin Bota (Metodologia)</div>
-      <p class="meth-body">Crawl Budget to zasób skończony. Bot Google ma przydzielony "czas serwera" na każdą wizytę w naszym e-commerce. Jeżeli sklep udostępnia 5,000 wariacji filtrowania produktów, wyszukiwarki wewnętrznej i zakładek profili użytkowników - Googlebot wchodzi tam, przetwarza tzw. "Thin Content", i wyczerpuje swój limit, zanim trafi na nowo dodaną, istotną finansowo kategorię. Stratą jest zablokowanie indeksacji rdzenia biznesu.</p>
+      <p class="meth-body">Googlebot ma narzucony "limit czasowy" na każdą wizytę w naszym e-commerce. Jeśli wpadnie do wbudowanej wyszukiwarki (search) lub tagów filtrów i zacznie tam badać "setki pustych podstron", zmarnuje swój przydział. Efekt: nasze nowe, wartościowe artykuły czy produkty mogą czekać na indeksację tygodniami.</p>
     </div>
 
     <div class="finding critical">
       <div class="f-header">
         <span class="f-badge critical">Krytyczne</span>
-        <h3 class="f-title">Potężny wyciek bużetu na wyszukiwarkę (Search URLs)</h3>
+        <h3 class="f-title">Wyciek budżetu na wbudowaną wyszukiwarkę</h3>
       </div>
       <div class="f-desc">
-        Wyniki dynamicznej wyszukiwarki wewnętrznej <code>/search?q=...</code> oraz podstrony filtrów kolekcji produkują nieskończoną ilość mało wartościowych dla algorytmu podstron.
+        Dynamiczne URL z zapytań wyszukiwarki (<code>/search?q=glov...</code>) nie posiadają twardych blokad indeksacji, prowokując bota do indeksowania śmieci.
       </div>
       <div class="fix-box">
-        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Założenie "tamy" i twarde Noindex dla technicznych URL-i.</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Programista / Antigravity</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Zablokowanie indeksacji śmieci (Noindex).</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Programista</strong></div></div>
         <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Sekcja <code>&lt;head&gt;</code> pliku <code>layout/theme.liquid</code>.</div></div>
-        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Wdrożenia logiki warunkowej Liquid blokującej dostęp wyszukiwarce. Kod: <br><code>{% if template contains 'search' or template.name == 'customers' %}<br>&lt;meta name="robots" content="noindex, nofollow"&gt;<br>{% endif %}</code></div></div>
+        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Wdrożenia kodu:<br><code>{% if template contains 'search' %} &lt;meta name="robots" content="noindex"&gt; {% endif %}</code></div></div>
       </div>
     </div>
   </section>
@@ -611,27 +564,27 @@
   <section class="module-card">
     <div class="module-header">
       <span class="module-badge">Moduł 10</span>
-      <h2 class="module-title">Synteza Biznesowa (ROI)</h2>
+      <h2 class="module-title">Synteza Biznesowa (ROI i Priorytetyzacja)</h2>
     </div>
 
     <div class="methodology">
-      <div class="meth-title">Zarządzanie Energetyką Projektu (Metodologia)</div>
-      <p class="meth-body">Techniczne SEO to z reguły 200-elementowy audyt, w którym zarząd gubi priorytety, naprawiając nieznaczące elementy (jak atrybuty "alt" dla starych zdjęć), zostawiając nietkniętą architekturę drzewa DOM. Mierzymy "Impact vs Effort". Czas zespołu deweloperskiego jest najdroższym elementem e-commerce, a jego niewłaściwa relokacja obniża potencjalny wskaźnik Zwrotu z Inwestycji (ROI) za projekt SEO.</p>
+      <div class="meth-title">Impact vs Effort (Metodologia)</div>
+      <p class="meth-body">Wprowadzanie 200 technicznych poprawek niszczy budżet programistyczny. Kluczem jest wytypowanie 20% zadań, które przyniosą 80% wzrostów ruchu organicznego, izolując absolutne blokery systemowe (jak błędne H-tagi czy Pogo-sticking na PAA) od kosmetyki.</p>
     </div>
 
-    <div class="finding info">
+    <div class="finding ok">
       <div class="f-header">
-        <span class="f-badge info">Porządek</span>
-        <h3 class="f-title">Niewłaściwa alokacja zasobów operacyjnych i estymaty</h3>
+        <span class="f-badge ok">Priorytety</span>
+        <h3 class="f-title">Repozycjonowanie celów na najbliższy Sprint IT</h3>
       </div>
       <div class="f-desc">
-        Wcześniejsze prace nad "szybkością" i "czystym kodem" omijały kluczowe "wąskie gardła" ucinające ruch (H-tagi interfejsu i sygnały NavBoost).
+        Audyt wykazał krytyczne błędy w architekturze DOM oraz w obszarze behawioralnym NavBoost (Brak adresacji pytań PAA i opinii), które natychmiastowo zjadają pozycje sklepu.
       </div>
       <div class="fix-box">
-        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Twarde przemodelowanie roadmapy (Shift in strategy).</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>Project Manager (Tomek) / C-Level GLOV</strong></div></div>
-        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">System zarządzania zadaniami agencji deweloperskiej (Jira, Asana, Trello).</div></div>
-        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Natychmiastowego przesunięcia backlogu programistycznego. Moduł 2 i 5 zyskują status BLOCKER / PRIORYTET-1. Reszta kosmetyczna odłożona na kolejny kwartał budżetowy. Akceptacja i delegacja poniższej Matrycy.</div></div>
+        <div class="fix-row"><div class="fix-label">Zadanie:</div><div class="fix-val"><strong>Akceptacja i wdrożenie poniższej Matrycy Wykonawczej przez zarząd/PM.</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Kto robi:</div><div class="fix-val"><strong>C-Level GLOV / PM</strong></div></div>
+        <div class="fix-row"><div class="fix-label">Gdzie:</div><div class="fix-val">Spotkanie podsumowujące (Jira/Asana).</div></div>
+        <div class="fix-row"><div class="fix-label">Wymaga:</div><div class="fix-val">Przekazania budżetu czasowego (ok. 7 roboczogodzin) na twarde fixy techniczne (Moduł 2 i 9) oraz fixy merytoryczne FAQ (Moduł 5 i 6).</div></div>
       </div>
     </div>
   </section>
@@ -642,7 +595,7 @@
       <span class="module-badge" style="background:#f1f5f9; color:#475569;">Roadmapa Wykonawcza (Zestawienie)</span>
       <h2 class="module-title">Matryca Wdrożeniowa</h2>
     </div>
-    <div class="module-meta">Lista priorytetowa dla zespołu. Precyzyjne zadania, osoby decyzyjne i estymaty.</div>
+    <div class="module-meta">Lista priorytetowa. Zadania oparte o twarde dane wyszukiwań i skanerów.</div>
 
     <table class="data-table">
       <thead>
@@ -656,53 +609,46 @@
       </thead>
       <tbody>
         <tr>
-          <td style="font-weight:600;">NavBoost Recovery: Strona Cancel</td>
-          <td><span class="f-badge critical">M5</span></td>
-          <td>Shopify CMS, <code>account.liquid</code></td>
-          <td>UX / AI</td>
-          <td>1-2h</td>
+          <td style="font-weight:600;">NavBoost Fix: Wdrożenie modułu PAA (FAQ) na 5 hitach sprzedażowych</td>
+          <td><span class="f-badge critical">M5, M6</span></td>
+          <td>Shopify CMS (Product Pages)</td>
+          <td>UX / Dev</td>
+          <td>2h</td>
         </tr>
         <tr>
           <td style="font-weight:600;">Detox DOM: Zamiana H2/H3 UI na DIV</td>
           <td><span class="f-badge critical">M2</span></td>
           <td><code>sections/*.liquid</code></td>
           <td>Dev</td>
-          <td>2-3h</td>
+          <td>2.5h</td>
         </tr>
         <tr>
-          <td style="font-weight:600;">Ujednolicenie i skrócenie <code>&lt;title&gt;</code></td>
-          <td><span class="f-badge critical">M2</span></td>
-          <td><code>layout/theme.liquid</code></td>
+          <td style="font-weight:600;">Zablokowanie indeksacji stron (Search / Testing)</td>
+          <td><span class="f-badge critical">M2, M9</span></td>
+          <td><code>theme.liquid</code>, Pages CMS</td>
           <td>Dev</td>
           <td>30 min</td>
         </tr>
         <tr>
-          <td style="font-weight:600;">Zablokowanie wycieku Crawl Budget (Noindex)</td>
-          <td><span class="f-badge critical">M9</span></td>
+          <td style="font-weight:600;">Skrócenie i optymalizacja <code>&lt;title&gt;</code></td>
+          <td><span class="f-badge critical">M2</span></td>
           <td><code>layout/theme.liquid</code></td>
           <td>Dev</td>
           <td>20 min</td>
         </tr>
         <tr>
-          <td style="font-weight:600;">Wdrożenie tagu Hreflang (x-default)</td>
+          <td style="font-weight:600;">Wdrożenie brakujących meta descriptions</td>
+          <td><span class="f-badge warning">M2</span></td>
+          <td>Bulk Editor (Shopify)</td>
+          <td>Copy/SEO</td>
+          <td>1-2h</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Dodanie tagu Hreflang (x-default)</td>
           <td><span class="f-badge warning">M3</span></td>
           <td><code>layout/theme.liquid</code></td>
           <td>Dev</td>
           <td>15 min</td>
-        </tr>
-        <tr>
-          <td style="font-weight:600;">Wdrożenie brakujących meta descriptions</td>
-          <td><span class="f-badge warning">M2</span></td>
-          <td>Shopify CMS (Bulk Editor)</td>
-          <td>SEO/AI</td>
-          <td>1-2h</td>
-        </tr>
-        <tr>
-          <td style="font-weight:600;">Przekierowanie siły z bloga na produkty</td>
-          <td><span class="f-badge warning">M7</span></td>
-          <td>Shopify CMS (Blog)</td>
-          <td>SEO</td>
-          <td>1h</td>
         </tr>
       </tbody>
     </table>
