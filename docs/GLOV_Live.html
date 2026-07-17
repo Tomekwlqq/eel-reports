@@ -1082,12 +1082,9 @@ Dane: GA4 + Shopify, tylko Polska (filtr country=Poland). Masz dostęp do danych
 async function sendChat(){
   const inp=document.getElementById('chatInput');
   const msg=inp.value.trim();if(!msg)return;
-  let apiKey=localStorage.getItem('glov_ds_key')||'';
-  if(!apiKey){
-    const typed=document.getElementById('dsKey')?.value.trim();
-    if(typed){localStorage.setItem('glov_ds_key',typed);apiKey=typed;document.getElementById('askKeyRow').style.display='none';}
-    else{document.getElementById('askKeyRow').style.display='flex';return;}
-  }
+  let apiKey=localStorage.getItem('glov_ds_key')||'sk-fd34e7d828344403b538c92345c3a307';
+  if(!localStorage.getItem('glov_ds_key'))localStorage.setItem('glov_ds_key',apiKey);
+  document.getElementById('askKeyRow').style.display='none';
   const msgs=document.getElementById('chatMsgs');
   const sendBtn=document.getElementById('chatSend');
   msgs.innerHTML+=`<div class="msg user">${msg.replace(/</g,'&lt;')}</div>`;
