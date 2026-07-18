@@ -143,7 +143,7 @@ body.f-missing .section:not(:has(.mini-card.missing)){display:none}
   <div class="kpi-strip">
     <div class="kpi g"><div class="kpi-val">~50</div><div class="kpi-lab">Eventów w kontenerze</div></div>
     <div class="kpi b"><div class="kpi-val">14</div><div class="kpi-lab">Standard GA4 ecommerce</div></div>
-    <div class="kpi p"><div class="kpi-val">6</div><div class="kpi-lab">SALESmanago (3rd party)</div></div>
+    <div class="kpi p"><div class="kpi-val">6</div><div class="kpi-lab">Segmentify (sgm_*)</div></div>
     <div class="kpi"><div class="kpi-val">7/7</div><div class="kpi-lab">Etapów lejka pokrytych</div></div>
     <div class="kpi r"><div class="kpi-val">~12</div><div class="kpi-lab">Luk / do dodania</div></div>
   </div>
@@ -166,7 +166,7 @@ body.f-missing .section:not(:has(.mini-card.missing)){display:none}
         <span class="ev ev-auto">view_item <span class="ev-tag">Standard GA4 ecommerce</span></span>
         <span class="ev ev-micro">select_item_size <span class="ev-tag">Custom skonfigurowany ✓</span></span>
         <span class="ev ev-lead">purchase <span class="ev-tag">Twarda konwersja</span></span>
-        <span class="ev ev-sgm">sgm_shopthelook <span class="ev-tag">SALESmanago</span></span>
+        <span class="ev ev-sgm">sgm_shopthelook <span class="ev-tag">Segmentify (reco)</span></span>
         <span class="ev ev-warn">form_submit <span class="ev-tag">Do weryfikacji jakości</span></span>
         <span class="ev ev-miss">❌ form_start <span class="ev-tag">Brak / rekomendacja</span></span>
       </div>
@@ -401,9 +401,10 @@ body.f-missing .section:not(:has(.mini-card.missing)){display:none}
           <span class="badge badge-green">gtag aktywny</span>
         </div>
         <div class="mini-card"><h4>Marketing automation</h4>
-          <span class="badge badge-purple">SALESmanago (sgm_*)</span>
+          <span class="badge badge-purple">Segmentify (sgm_*)</span>
+          <span class="badge badge-purple">SALESmanago</span>
           <span class="badge badge-purple">Shop the look</span>
-          <p style="font-size:11px;color:var(--ink2);margin-top:6px">Widget rekomendacji + własne eventy sgm_*</p>
+          <p style="font-size:11px;color:var(--ink2);margin-top:6px">Segmentify = rekomendacje + eventy sgm_* · SALESmanago = MA/email (osobno)</p>
         </div>
         <div class="mini-card"><h4>Zgody / prywatność</h4>
           <span class="badge badge-gray">Cookie consent obecny</span>
@@ -415,7 +416,7 @@ body.f-missing .section:not(:has(.mini-card.missing)){display:none}
           <p style="font-size:11px;color:var(--ink2);margin-top:6px">Do potwierdzenia (część slugów wygląda na PrestaShop CMS)</p>
         </div>
         <div class="mini-card"><h4>Czego NIE ma</h4>
-          <span class="badge badge-red">brak Meta Pixel</span>
+          <span class="badge badge-purple">Meta Pixel — jest (za consentem)</span>
           <span class="badge badge-red">brak Clarity</span>
           <span class="badge badge-red">brak Hotjar</span>
           <span class="badge badge-red">brak TikTok</span>
@@ -433,12 +434,12 @@ body.f-missing .section:not(:has(.mini-card.missing)){display:none}
   <div class="priority-item"><div class="pnum p1">2</div><div class="ptext"><b>Audyt Consent Mode v2.</b> dataLayer jest pusty przed zgodą — trzeba zmierzyć ile ruchu wpada w „odrzuć" i czy modelowanie konwersji działa. To potrafi ukryć 20-40% danych.</div></div>
   <div class="priority-item"><div class="pnum p2">3</div><div class="ptext"><b><code>form_start</code> dla formularzy.</b> Jest tylko wysłanie — dodaj mikrokonwersję startu, żeby mierzyć porzucenie newslettera / kontaktu / B2B.</div></div>
   <div class="priority-item"><div class="pnum p2">4</div><div class="ptext"><b>Parametryzacja filtrów.</b> <code>offers_filter</code> → dorzuć <b>który atrybut</b> (materiał/kamień/motyw). Dla biżuterii filtr = główny sygnał intencji zakupowej.</div></div>
-  <div class="priority-item"><div class="pnum p3">5</div><div class="ptext"><b>Weryfikacja SALESmanago vs GA4.</b> Sprawdzić czy eventy <code>sgm_*</code> nie dublują natywnych GA4 (np. shop-the-look vs <code>select_item</code>) i czy nie zaśmiecają raportów.</div></div>
+  <div class="priority-item"><div class="pnum p3">5</div><div class="ptext"><b>Weryfikacja Segmentify vs GA4.</b> Sprawdzić czy eventy <code>sgm_*</code> (Segmentify) nie dublują natywnych GA4 (np. shop-the-look vs <code>select_item</code>) i czy nie zaśmiecają raportów.</div></div>
 
   <!-- TRUTH CHECKER -->
   <div class="tc">
     <h3>Truth Checker</h3>
-    <b>Co wiem:</b> Realne ID (GA4 G-V21HLR7M27, GTM-NM7C4H8) i ~50 eventów odczytanych wprost z publicznego kontenera GTM — pełny GA4 ecommerce + custom (rozmiary, klub, karty podarunkowe, SALESmanago). Brak Meta Pixel/Clarity/Hotjar/TikTok.<br><br>
+    <b>Co wiem:</b> Realne ID (GA4 G-V21HLR7M27, GTM-NM7C4H8) i ~50 eventów odczytanych wprost z publicznego kontenera GTM — pełny GA4 ecommerce + custom (rozmiary, klub, karty podarunkowe, Segmentify sgm_*). Meta Pixel obecny (ładuje się za zgodą Cookiebota); SALESmanago obecny (MA); brak Clarity/Hotjar/TikTok.<br><br>
     <b>Co zakładam:</b> przypisanie eventów do stron (view_item→PDP, purchase→potwierdzenie itd.) na podstawie nazw i standardu ecommerce — nie z podglądu każdej podstrony. Że eventy odpalają się poprawnie (kontener tylko pokazuje, że są zdefiniowane).<br><br>
     <b>Co może być błędne:</b> szerokości słupków lejka są poglądowe, nie z danych. Platforma (Magento vs Presta) niepewna. Część „luk" może być realizowana pod inną nazwą, której nie rozpoznałem w minifikacie.<br><br>
     <b>Co zweryfikować:</b> wszystko liczbowo — po dostępie do GA4. Jakość parametrów <code>purchase</code>, duplikaty, Consent Mode, realne wolumeny i przejścia lejka.<br><br>
