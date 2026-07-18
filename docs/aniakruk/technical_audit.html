@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ania Kruk — Technical Audit</title>
+<style>
+:root{
+  --gold:#b8912f; --gold-deep:#8a6d1e; --ink:#1a1a1e; --ink2:#5c5c66;
+  --surface:#ffffff; --surface2:#f6f3ec; --bg:#f4f1ea; --border:#e4ddcf;
+  --blue:#2563eb; --blue-bg:#eff6ff; --green:#16a34a; --green-bg:#f0fdf4;
+  --red:#c02626; --red-bg:#fef2f2; --purple:#7c3aed; --purple-bg:#f5f3ff;
+  --yellow-bg:#fffbeb; --yellow-tx:#92400e; --gray-bg:#f1f1ef; --gray-tx:#6b6b6b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--ink)}
+/* HEADER */
+.header{background:var(--ink);color:#fff;padding:22px 32px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.header-left{display:flex;align-items:center;gap:16px}
+.brand-mark{font-size:13px;letter-spacing:.42em;font-weight:600;color:var(--gold);border:1px solid var(--gold);padding:8px 12px;border-radius:6px}
+.header h1{font-size:19px;font-weight:300;letter-spacing:.5px}
+.header h1 span{font-weight:700}
+.header-meta{font-size:11.5px;color:#b9b2a0;text-align:right;line-height:1.5}
+.header-meta code{color:var(--gold);font-family:monospace}
+/* SOURCE BANNER */
+.src-banner{background:linear-gradient(90deg,#fbf6e8,#fdfbf4);border-bottom:3px solid var(--gold);
+  padding:12px 32px;font-size:12.5px;color:#5a4d29;display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.src-banner b{color:var(--gold-deep)}
+.src-banner code{background:#fff;border:1px solid var(--border);border-radius:4px;padding:1px 7px;font-family:monospace;color:var(--ink)}
+/* CONTAINER */
+.container{max-width:1320px;margin:0 auto;padding:26px 24px 60px}
+/* TABS */
+.tabs{display:flex;gap:6px;padding:14px 32px 0;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.tab-btn{padding:10px 20px;border:1px solid var(--border);border-bottom:none;background:var(--surface2);border-radius:8px 8px 0 0;font-size:13px;font-weight:700;color:var(--ink2);cursor:pointer;transition:.15s}
+.tab-btn:hover{color:var(--gold-deep)}
+.tab-btn.active{background:var(--surface);color:var(--ink);border-color:var(--gold);position:relative;top:1px}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+/* KPI STRIP */
+.kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px}
+.kpi-strip.kpi-4{grid-template-columns:repeat(4,1fr)}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold)}
+.kpi.g::before{background:var(--green)} .kpi.r::before{background:var(--red)} .kpi.p::before{background:var(--purple)} .kpi.b::before{background:var(--blue)} .kpi.a::before{background:#d97706}
+.kpi-val{font-size:30px;font-weight:800;line-height:1;color:var(--ink)}
+.kpi-lab{font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--ink2);margin-top:7px}
+@media(max-width:820px){.kpi-strip{grid-template-columns:repeat(2,1fr)}}
+/* SECTION */
+h2.block{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--ink2);margin:30px 0 14px;padding-left:2px}
+.section{background:var(--surface);border-radius:10px;border:1px solid var(--border);margin-bottom:16px;overflow:hidden}
+.section-header{padding:12px 16px;font-weight:700;font-size:13px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.section-icon{font-size:16px}
+.section-title{font-size:13.5px;font-weight:700;flex-shrink:0}
+.section-count{margin-left:auto;font-size:11px;color:var(--ink2)}
+.section-body{padding:16px 18px}
+.section-body>p{font-size:12.5px;color:var(--ink2);margin-bottom:12px;line-height:1.5}
+/* TABLE */
+table.dt{width:100%;border-collapse:collapse;font-size:12.5px}
+table.dt th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--ink2);padding:8px 10px;border-bottom:2px solid var(--border)}
+table.dt td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5}
+table.dt tr:last-child td{border-bottom:none}
+table.dt tr:hover td{background:var(--surface2)}
+table.dt td.mono{font-family:monospace;font-size:11.5px;color:var(--ink2)}
+/* BADGES */
+.badge{display:inline-block;border-radius:5px;padding:3px 9px;font-size:11px;font-weight:600;white-space:nowrap}
+.badge-blue{background:var(--blue-bg);color:var(--blue);border:1px solid #bfdbfe}
+.badge-green{background:var(--green-bg);color:var(--green);border:1px solid #bbf7d0}
+.badge-purple{background:var(--purple-bg);color:var(--purple);border:1px solid #ddd6fe}
+.badge-red{background:var(--red-bg);color:var(--red);border:1px solid #fecaca}
+.badge-gray{background:var(--gray-bg);color:var(--gray-tx);border:1px solid var(--border)}
+.badge-amber{background:var(--yellow-bg);color:var(--yellow-tx);border:1px solid #fde68a}
+.badge-gold{background:#fdf6e3;color:var(--gold-deep);border:1px solid #e8d59a}
+/* PILLS (mega-menu / nav) */
+.pill-strip{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:14px;background:var(--surface2);color:var(--ink);border:1px solid var(--border)}
+.pill-group-label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gold-deep);margin:14px 0 8px}
+.pill-group-label:first-child{margin-top:0}
+/* NAV TREE */
+.nav-tree{display:flex;flex-direction:column;gap:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:6px;font-size:12.5px}
+.nav-item:hover{background:var(--surface2)}
+.nav-item .nnum{width:20px;color:var(--ink2);font-size:11px;font-family:monospace;flex-shrink:0}
+.nav-item .ntxt{font-weight:600;color:var(--ink)}
+.nav-item .nurl{margin-left:auto;font-family:monospace;font-size:11px;color:var(--ink2)}
+.nav-item.nav-sub{padding-left:34px;font-weight:400}
+.nav-item.nav-sub .ntxt{font-weight:500;color:var(--ink2)}
+/* ALERTS */
+.alert{border-radius:7px;padding:11px 14px;font-size:12px;margin-top:10px;line-height:1.55}
+.alert-blue{background:var(--blue-bg);border:1px solid #bfdbfe;color:#1e40af}
+.alert-yellow{background:var(--yellow-bg);border:1px solid #fde68a;color:var(--yellow-tx)}
+.alert-red{background:var(--red-bg);border:1px solid #fecaca;color:#991b1b}
+.alert code{background:#fff;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11px}
+/* CRITICAL CARDS */
+.bg-warm{background:linear-gradient(180deg,#fbf6e8,#f9f5ea);border:1px solid #ecdfb8;border-radius:10px;padding:18px 20px;margin-bottom:16px}
+.gap-card{background:#fff;border-radius:8px;padding:13px 15px;border:1px solid var(--border);margin-bottom:10px}
+.gap-card:last-child{margin-bottom:0}
+.gap-card .gc-title{font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.gap-card .gc-desc{font-size:12px;color:var(--ink2);line-height:1.55}
+/* GRID */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:820px){.grid3{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+.mini-card{background:#fff;border-radius:8px;padding:13px;border:1px solid var(--border)}
+.mini-card h4{font-size:11.5px;font-weight:700;margin-bottom:9px;color:var(--ink);text-transform:uppercase;letter-spacing:.4px}
+/* TC / FOOTER */
+.tc{background:var(--ink);color:#d8d2c4;border-radius:10px;padding:20px 24px;margin-top:26px;font-size:12.5px;line-height:1.7}
+.tc h3{color:var(--gold);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+.tc b{color:#fff}
+.footer{text-align:center;padding:26px;color:#a99;font-size:11.5px}
+code.inl{background:var(--surface2);padding:1px 6px;border-radius:4px;font-family:monospace;font-size:11.5px;color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="brand-mark">ANIA&nbsp;KRUK</div>
+    <div>
+      <h1><span>Technical</span> Audit</h1>
+      <div style="font-size:11.5px;color:#b9b2a0;margin-top:3px">aniakruk.pl · biżuteria e-commerce</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    2026-07-18<br>
+    <span style="color:#7d7663">EEL · Developer View</span>
+  </div>
+</div>
+
+<div class="src-banner">
+  <span>🔎 <b>Źródło:</b> scan strony aniakruk.pl (DOM + skrypty), 2026-07-18.</span>
+  <span>Pokazuje <b>co jest wpięte technicznie</b> — nie wolumeny ani jakość działania.</span>
+  <span>Elementy oznaczone <b>„do weryfikacji"</b> = sygnał wykryty, dostawca/wersja niepotwierdzone — nie zgadujemy.</span>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('overview',this)">Przegląd</button>
+  <button class="tab-btn" onclick="showTab('techstack',this)">Tech Stack</button>
+  <button class="tab-btn" onclick="showTab('nav',this)">Nawigacja</button>
+</div>
+
+<div class="container">
+
+  <!-- ================= TAB 1: PRZEGLĄD ================= -->
+  <div id="tab-overview" class="tab-panel active">
+
+    <div class="kpi-strip">
+      <div class="kpi g"><div class="kpi-val">8</div><div class="kpi-lab">Narzędzia wykryte</div></div>
+      <div class="kpi b"><div class="kpi-val">6</div><div class="kpi-lab">Domeny skryptów zewn.</div></div>
+      <div class="kpi b"><div class="kpi-val">2</div><div class="kpi-lab">Analytics ID (GA4+GTM)</div></div>
+      <div class="kpi p"><div class="kpi-val">2</div><div class="kpi-lab">3rd-party MA + reco</div></div>
+      <div class="kpi a"><div class="kpi-val">3</div><div class="kpi-lab">Do weryfikacji</div></div>
+    </div>
+
+    <h2 class="block">Szybki przegląd — co wykryto</h2>
+    <div class="section">
+      <div class="section-body" style="padding:0">
+        <table class="dt">
+          <tr><th style="width:20%">Obszar</th><th style="width:56%">Wykryto</th><th style="width:24%">Status</th></tr>
+          <tr><td>Platforma</td><td>Magento — sygnał <code class="inl">data-mage-init</code> w kodzie. Meta generator brak. Część slugów w stylu PrestaShop CMS (<code class="inl">/pl/content/...</code>)</td><td><span class="badge badge-amber">do weryfikacji</span></td></tr>
+          <tr><td>Analytics</td><td>GA4 <code class="inl">G-V21HLR7M27</code> · GTM <code class="inl">GTM-NM7C4H8</code> (3 skrypty googletagmanager.com) · gtag aktywny</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td>Email / Marketing automation</td><td>SALESmanago (app2.salesmanago.pl ×3)</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td>Rekomendacje produktowe</td><td>Segmentify (cdn.segmentify.com) — silnik reco + „shop the look", źródło eventów <code class="inl">sgm_*</code></td><td><span class="badge badge-green">confirmed</span> <span class="badge badge-amber">uwaga</span></td></tr>
+          <tr><td>Meta Pixel</td><td>connect.facebook.net (×2) — ładuje się dopiero po zgodzie w Cookiebocie (<code class="inl">window.fbq</code> pusty przed akceptacją)</td><td><span class="badge badge-green">confirmed</span> <span class="badge badge-amber">za consentem</span></td></tr>
+          <tr><td>Cookie consent</td><td>Cookiebot (consent.cookiebot.com ×2 + consentcdn.cookiebot.com) — CMP / Consent Mode. dataLayer pusty przed zgodą</td><td><span class="badge badge-green">confirmed</span> <span class="badge badge-amber">uwaga</span></td></tr>
+          <tr><td>Dostawa — paczkomaty</td><td>InPost geowidget (wybór paczkomatu w checkout)</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td>Bezpieczeństwo formularzy</td><td>reCAPTCHA na formularzach</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td>Reviews</td><td>Widget opinii (stopka „Przeczytaj opinie" + sortowanie najnowsze/najwyżej/najniżej oceniane) — dostawca nieznany</td><td><span class="badge badge-amber">do weryfikacji</span></td></tr>
+          <tr><td>Live chat</td><td>Link „Napisz na live chat" — dostawca nieznany, możliwe SALESmanago Live Chat</td><td><span class="badge badge-amber">do weryfikacji</span></td></tr>
+          <tr><td>Heatmaps / session replay</td><td>Microsoft Clarity, Hotjar — sprawdzone, nieobecne</td><td><span class="badge badge-gray">nieobecne</span></td></tr>
+          <tr><td>Chat / helpdesk (inne)</td><td>Tidio, Zendesk — sprawdzone, nieobecne</td><td><span class="badge badge-gray">nieobecne</span></td></tr>
+          <tr><td>Trust badge / marketplace reviews</td><td>TrustedShops, TrustMate, Ceneo, Opineo — sprawdzone, nieobecne</td><td><span class="badge badge-gray">nieobecne</span></td></tr>
+          <tr><td>Inne MA</td><td>Synerise, edrone — sprawdzone, nieobecne</td><td><span class="badge badge-gray">nieobecne</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <h2 class="block">Krytyczne / do uwagi</h2>
+    <div class="bg-warm">
+      <div class="gap-card critical">
+        <div class="gc-title"><span class="badge badge-amber">CONSENT MODE</span> Meta Pixel i GA4 za Cookiebot — utrata danych z „odrzuć"</div>
+        <div class="gc-desc">Meta Pixel ładuje się dopiero po akceptacji w Cookiebocie, a dataLayer jest pusty przed zgodą. Każdy „odrzuć" = brak sygnału do GA4/Meta z tej sesji. Do zweryfikowania: czy Consent Mode v2 (advanced) modeluje te odrzucone sesje, czy dane po prostu znikają.</div>
+      </div>
+      <div class="gap-card critical">
+        <div class="gc-title"><span class="badge badge-purple">ŹRÓDŁO EVENTÓW</span> <code class="inl">sgm_*</code> = Segmentify, NIE SALESmanago</div>
+        <div class="gc-desc">Eventy <code class="inl">sgm_shopthelook_view/open/impression/product_click/basket</code> i <code class="inl">sgm_page_view</code> pochodzą z silnika Segmentify (cdn.segmentify.com), a nie z SALESmanago — mimo że oba narzędzia obsługują marketing/rekomendacje. Łatwo pomylić przy analizie GA4/GTM.</div>
+      </div>
+      <div class="gap-card critical">
+        <div class="gc-title"><span class="badge badge-amber">DO POTWIERDZENIA</span> Dostawca live chatu i reviews niepewny</div>
+        <div class="gc-desc">Live chat (link „Napisz na live chat") i widget opinii w stopce nie mają jednoznacznego sygnału dostawcy w skanie. Możliwe że live chat to moduł SALESmanago — do potwierdzenia zanim padnie rekomendacja dot. tych narzędzi.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= TAB 2: TECH STACK ================= -->
+  <div id="tab-techstack" class="tab-panel">
+
+    <div class="kpi-strip kpi-4">
+      <div class="kpi g"><div class="kpi-val">8</div><div class="kpi-lab">Wykryte narzędzia</div></div>
+      <div class="kpi"><div class="kpi-val">8</div><div class="kpi-lab">Nieobecne (sprawdzone)</div></div>
+      <div class="kpi r"><div class="kpi-val">0</div><div class="kpi-lab">Duplikaty potwierdzone</div></div>
+      <div class="kpi a"><div class="kpi-val">3</div><div class="kpi-lab">Do weryfikacji dostawcy</div></div>
+    </div>
+
+    <h2 class="block">Platforma</h2>
+    <div class="section">
+      <div class="section-body">
+        <div class="grid3">
+          <div class="mini-card"><h4>Sygnał wykrycia</h4>
+            <span class="badge badge-gray">Magento — <code class="inl">data-mage-init</code></span>
+            <p style="font-size:11.5px;color:var(--ink2);margin-top:8px">Meta generator w HTML brak — sygnał pośredni, nie deklaracja wprost.</p>
+          </div>
+          <div class="mini-card"><h4>Niepewność</h4>
+            <span class="badge badge-amber">część slugów jak PrestaShop CMS</span>
+            <p style="font-size:11.5px;color:var(--ink2);margin-top:8px">Ścieżki typu <code class="inl">/pl/content/...</code> przypominają moduł CMS PrestaShop — może to warstwa treści osobna od silnika sklepu (headless/hybryda), do potwierdzenia.</p>
+          </div>
+          <div class="mini-card"><h4>Wersja / theme</h4>
+            <span class="badge badge-gray">nie ustalono</span>
+            <p style="font-size:11.5px;color:var(--ink2);margin-top:8px">Brak danych — nie zgadujemy wersji ani nazwy theme.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="block">Apps / Widgets</h2>
+    <div class="section">
+      <div class="section-body" style="padding:0">
+        <table class="dt">
+          <tr><th style="width:16%">Narzędzie</th><th style="width:26%">Domena / sygnał</th><th style="width:32%">Kategoria</th><th style="width:26%">Status</th></tr>
+          <tr><td><b>SALESmanago</b></td><td class="mono">app2.salesmanago.pl (×3)</td><td>Marketing automation / email</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td><b>Segmentify</b></td><td class="mono">cdn.segmentify.com</td><td>Rekomendacje produktowe / shop the look</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td><b>Meta Pixel</b></td><td class="mono">connect.facebook.net (×2)</td><td>Reklama / RTB</td><td><span class="badge badge-amber">za consentem</span></td></tr>
+          <tr><td><b>Cookiebot</b></td><td class="mono">consent.cookiebot.com (×2) + consentcdn.cookiebot.com</td><td>Cookie consent / CMP</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td><b>InPost geowidget</b></td><td class="mono">widget inline w checkout</td><td>Post-purchase / dostawa</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td><b>reCAPTCHA</b></td><td class="mono">na formularzach</td><td>Bezpieczeństwo formularzy</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td><b>Reviews widget</b></td><td class="mono">stopka „Przeczytaj opinie" + sortowanie</td><td>Reviews</td><td><span class="badge badge-amber">dostawca nieznany</span></td></tr>
+          <tr><td><b>Live chat</b></td><td class="mono">link „Napisz na live chat"</td><td>Chat / marketing automation</td><td><span class="badge badge-amber">dostawca nieznany</span></td></tr>
+        </table>
+        <div class="alert alert-yellow" style="margin:14px 16px 4px">Sprawdzone i nieobecne: Microsoft Clarity, Hotjar, Tidio, Zendesk, TrustedShops, TrustMate, Ceneo/Opineo, Synerise, edrone.</div>
+      </div>
+    </div>
+
+    <h2 class="block">Analytics Stack</h2>
+    <div class="section">
+      <div class="section-body" style="padding:0">
+        <table class="dt">
+          <tr><th style="width:16%">Tracker</th><th style="width:20%">ID</th><th style="width:38%">Ładowanie</th><th style="width:26%">Status</th></tr>
+          <tr><td><b>GA4</b></td><td class="mono">G-V21HLR7M27</td><td>przez GTM, gtag aktywny</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td><b>GTM</b></td><td class="mono">GTM-NM7C4H8</td><td>3 skrypty googletagmanager.com</td><td><span class="badge badge-green">confirmed</span></td></tr>
+          <tr><td><b>Meta Pixel</b></td><td class="mono">ID nieujawnione w skanie</td><td>connect.facebook.net — aktywny dopiero za zgodą Cookiebot</td><td><span class="badge badge-amber">za consentem</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <h2 class="block">Zewnętrzne skrypty (pogrupowane)</h2>
+    <div class="section">
+      <div class="section-body">
+        <div class="grid2">
+          <div class="mini-card"><h4>Analytics / Marketing</h4>
+            <table class="dt">
+              <tr><td class="mono">googletagmanager.com</td><td>3</td></tr>
+              <tr><td class="mono">app2.salesmanago.pl</td><td>3</td></tr>
+              <tr><td class="mono">connect.facebook.net</td><td>2</td></tr>
+            </table>
+          </div>
+          <div class="mini-card"><h4>Consent / CMP</h4>
+            <table class="dt">
+              <tr><td class="mono">consent.cookiebot.com</td><td>2</td></tr>
+              <tr><td class="mono">consentcdn.cookiebot.com</td><td>1</td></tr>
+            </table>
+          </div>
+          <div class="mini-card"><h4>CDN / Vendor-specific</h4>
+            <table class="dt">
+              <tr><td class="mono">cdn.segmentify.com</td><td>1</td></tr>
+            </table>
+          </div>
+          <div class="mini-card"><h4>Własna domena</h4>
+            <table class="dt">
+              <tr><td class="mono">aniakruk.pl</td><td>14</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= TAB 3: NAWIGACJA ================= -->
+  <div id="tab-nav" class="tab-panel">
+
+    <h2 class="block">Top nav — level 1</h2>
+    <div class="section">
+      <div class="section-header"><span class="section-icon">🧭</span><span class="section-title">Menu główne</span><span class="section-count"><span class="badge badge-gray">12 pozycji</span></span></div>
+      <div class="section-body">
+        <div class="nav-tree">
+          <div class="nav-item"><span class="nnum">01</span><span class="ntxt">Biżuteria</span></div>
+          <div class="nav-item"><span class="nnum">02</span><span class="ntxt">Kolczyki</span></div>
+          <div class="nav-item"><span class="nnum">03</span><span class="ntxt">Naszyjniki</span></div>
+          <div class="nav-item"><span class="nnum">04</span><span class="ntxt">Bransoletki</span></div>
+          <div class="nav-item"><span class="nnum">05</span><span class="ntxt">Pierścionki</span></div>
+          <div class="nav-item"><span class="nnum">06</span><span class="ntxt">Piercing</span></div>
+          <div class="nav-item"><span class="nnum">07</span><span class="ntxt">Nausznice</span></div>
+          <div class="nav-item"><span class="nnum">08</span><span class="ntxt">Akcesoria</span></div>
+          <div class="nav-item"><span class="nnum">09</span><span class="ntxt">Bestsellery <span class="badge badge-gold" style="margin-left:6px">menu górne</span></span></div>
+          <div class="nav-item"><span class="nnum">10</span><span class="ntxt">Nowości <span class="badge badge-gold" style="margin-left:6px">menu górne</span></span></div>
+          <div class="nav-item"><span class="nnum">11</span><span class="ntxt">Na prezent <span class="badge badge-gold" style="margin-left:6px">menu górne</span></span></div>
+          <div class="nav-item"><span class="nnum">12</span><span class="ntxt">SALE do -70% <span class="badge badge-gold" style="margin-left:6px">menu górne</span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="block">Mega-menu — podkategorie / kolekcje</h2>
+    <div class="section">
+      <div class="section-body">
+        <div class="pill-group-label">Kolekcje sezonowe</div>
+        <div class="pill-strip">
+          <span class="pill">Biżuteria na lato</span><span class="pill">Festival Vibe</span><span class="pill">Chokery</span>
+          <span class="pill">Naszyjniki pojedyncze</span><span class="pill">Bransoletki na nogę</span><span class="pill">Bransoletki sznurkowe</span>
+          <span class="pill">Kolczyki sztyfty</span><span class="pill">Kolczyki koła</span>
+        </div>
+        <div class="pill-group-label">Materiały</div>
+        <div class="pill-strip">
+          <span class="pill">Biżuteria pozłacana</span><span class="pill">Biżuteria ze złota</span>
+          <span class="pill">Biżuteria ze srebra</span><span class="pill">Mix Złota & Srebra</span>
+        </div>
+        <div class="pill-group-label">Motywy</div>
+        <div class="pill-strip">
+          <span class="pill">Serca</span><span class="pill">Perły</span><span class="pill">Kwiaty</span>
+          <span class="pill">Kamienie</span><span class="pill">Jasne kamienie</span>
+        </div>
+        <div class="pill-group-label">Inne</div>
+        <div class="pill-strip">
+          <span class="pill">Karty podarunkowe & e-voucher</span><span class="pill">Bestsellery</span>
+          <span class="pill">SPECIAL PRICE (wyprzedaż)</span>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="block">Subnavigation (collections browse / sliderule)</h2>
+    <div class="section">
+      <div class="section-body">
+        <p>Brak subnavigacji (sliderule) — pozioma pill-bar kategorii pod głównym menu nie została wykryta w danych ze skanu.</p>
+      </div>
+    </div>
+
+    <h2 class="block">Footer nav</h2>
+    <div class="section">
+      <div class="section-body">
+        <div class="grid3">
+          <div class="mini-card"><h4>Obsługa klienta</h4>
+            <div class="nav-tree">
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Napisz na live chat</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Tel. 885 777 772</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ E-mail infolinia@aniakruk.pl</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Kontakt przez formularz</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Infolinia pn–pt 8:00–16:00</span></div>
+            </div>
+          </div>
+          <div class="mini-card"><h4>Ania Kruk</h4>
+            <div class="nav-tree">
+              <div class="nav-item nav-sub"><span class="ntxt">↳ O nas</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Klub ANIA KRUK</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Newsletter</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Dołącz do nas (praca)</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ B2B (oferta dla firm)</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Kontakt</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Blog</span></div>
+            </div>
+          </div>
+          <div class="mini-card"><h4>Zakupy</h4>
+            <div class="nav-tree">
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Zwroty</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Reklamacje</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Dostawa i płatność</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Butiki</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ FAQ</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Kody rabatowe</span></div>
+            </div>
+          </div>
+          <div class="mini-card"><h4>Regulaminy</h4>
+            <div class="nav-tree">
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Regulamin</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Regulamin Klubu</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Regulamin kodów rabatowych</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Regulaminy promocji i konkursów</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Polityka prywatności</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Ustawienia plików cookies</span></div>
+              <div class="nav-item nav-sub"><span class="ntxt">↳ Deklaracja dostępności cyfrowej</span></div>
+            </div>
+          </div>
+          <div class="mini-card"><h4>Płatności</h4>
+            <div class="pill-strip">
+              <span class="pill">PayPal</span><span class="pill">Google Pay</span><span class="pill">Visa</span>
+              <span class="pill">Mastercard</span><span class="pill">Klarna</span><span class="pill">Apple Pay</span>
+            </div>
+          </div>
+          <div class="mini-card"><h4>Social</h4>
+            <div class="pill-strip">
+              <span class="pill">Facebook</span><span class="pill">Instagram</span><span class="pill">TikTok</span>
+              <span class="pill">YouTube</span><span class="pill">Pinterest</span>
+            </div>
+            <p style="font-size:11px;color:var(--ink2);margin-top:8px">Ikony w stopce, bez opisanych URL w danych ze skanu.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="block">Niestandardowe linki</h2>
+    <div class="section">
+      <div class="section-body">
+        <table class="dt">
+          <tr><th style="width:30%">Link</th><th style="width:70%">Co triggeruje</th></tr>
+          <tr><td class="mono">javascript:Cookiebot.renew()</td><td>„Ustawienia plików cookies" w stopce — otwiera ponownie banner zgody Cookiebot, nie przeładowuje strony</td></tr>
+          <tr><td class="mono">href="#" (live chat)</td><td>„Napisz na live chat" — prawdopodobnie JS trigger otwierający widget czatu (dostawca do weryfikacji)</td></tr>
+          <tr><td class="mono">href="#" (opinie)</td><td>„Przeczytaj opinie" + sortowanie (najnowsze/najwyżej/najniżej oceniane) — prawdopodobnie JS toggle/sort bez przeładowania strony</td></tr>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TRUTH CHECKER -->
+  <div class="tc">
+    <h3>Truth Checker</h3>
+    <b>Co wiem:</b> Realne ID (GA4 G-V21HLR7M27, GTM-NM7C4H8) i pełna lista script-domains z DOM: googletagmanager.com (×3), app2.salesmanago.pl (×3), connect.facebook.net (×2), consent.cookiebot.com (×2), consentcdn.cookiebot.com (×1), cdn.segmentify.com (×1), aniakruk.pl (×14). Sprawdzone i potwierdzone nieobecne: Clarity, Hotjar, Tidio/Zendesk, TrustedShops, TrustMate, Ceneo/Opineo, Synerise, edrone. Pełna struktura menu głównego, mega-menu i stopki z DOM.<br><br>
+    <b>Co zakładam:</b> że eventy <code class="inl">sgm_*</code> pochodzą z Segmentify na podstawie domeny cdn.segmentify.com i nazewnictwa — nie z bezpośredniego dostępu do panelu Segmentify. Że InPost geowidget i reCAPTCHA są aktywne na podstawie obserwacji funkcjonalnej (widget paczkomatu w checkout, pole reCAPTCHA na formularzach), nie z listy domen skryptów.<br><br>
+    <b>Co może być błędne:</b> platforma (Magento vs hybryda z modułem PrestaShop CMS) — sygnał pośredni, nie deklaracja wprost. Dostawca live chatu i widgetu opinii — brak jednoznacznego sygnału w skanie, mogło zostać błędnie przypisane jako „możliwe SALESmanago".<br><br>
+    <b>Co zweryfikować:</b> tożsamość CMS/platformy (np. przez nagłówki HTTP, meta generator ukryty głębiej, panel admina), dostawcę live chatu i reviews, czy Meta Pixel ma skonfigurowane standardowe eventy e-commerce, jakość Consent Mode (advanced vs basic) i realny procent sesji „odrzuconych".<br><br>
+    <b>Co poprawię z jednym inputem:</b> dostęp do panelu Cookiebot/GTM → potwierdzenie dokładnej konfiguracji Consent Mode i pełnej listy tagów w kontenerze, zamiast wnioskowania z zewnętrznych domen skryptów.
+  </div>
+
+</div>
+
+<div class="footer">Ania Kruk · Technical Audit · scan DOM + skrypty aniakruk.pl · <strong style="color:var(--gold-deep)">EEL / Developer View</strong></div>
+
+<script>
+function showTab(name, btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
