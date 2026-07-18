@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ania Kruk — Audyt EEL (Vision + Technical)</title>
+<style>
+  :root{--gold:#b8912f;--gold-deep:#8a6d1e;--ink:#1a1a1e;--bg:#f4f1ea;--border:#e4ddcf;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--ink);display:flex;flex-direction:column}
+  .hubbar{background:var(--ink);color:#fff;display:flex;align-items:center;gap:22px;padding:0 26px;flex-shrink:0;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:14px;padding:13px 0}
+  .brand .mark{font-size:12px;letter-spacing:.4em;font-weight:600;color:var(--gold);border:1px solid var(--gold);padding:7px 11px;border-radius:6px;white-space:nowrap}
+  .brand .t{font-size:15px;font-weight:300}.brand .t b{font-weight:700}
+  .tabs{display:flex;gap:2px;margin-left:8px}
+  .tab{padding:20px 22px;font-size:14px;font-weight:600;color:#9a948a;cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;transition:.15s;white-space:nowrap}
+  .tab:hover{color:#ded7c8}
+  .tab.active{color:#fff;border-bottom-color:var(--gold)}
+  .meta{margin-left:auto;font-size:11px;color:#9a948a;text-align:right;padding:10px 0;line-height:1.5}
+  .meta code{color:var(--gold);font-family:monospace}
+  .stage{flex:1;position:relative;min-height:0}
+  iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:none;background:#fff}
+  iframe.active{display:block}
+</style>
+</head>
+<body>
+  <div class="hubbar">
+    <div class="brand">
+      <span class="mark">ANIA&nbsp;KRUK</span>
+      <span class="t"><b>Audyt EEL</b> — Vision + Technical</span>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-p="vision" onclick="pick(this)">👁 Vision Audit</button>
+      <button class="tab" data-p="tech" onclick="pick(this)">🔧 Technical Audit</button>
+    </div>
+    <div class="meta">aniakruk.pl · 2026-07-18 · GA4 <code>G-V21HLR7M27</code><br>Ecomms Activation · Developer + Shopper View</div>
+  </div>
+  <div class="stage">
+    <iframe id="f-vision" class="active" src="vision_audit.html" title="Vision Audit"></iframe>
+    <iframe id="f-tech" src="technical_audit.html" title="Technical Audit"></iframe>
+  </div>
+  <script>
+    function pick(btn){
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      btn.classList.add('active');
+      const p=btn.dataset.p;
+      document.querySelectorAll('iframe').forEach(f=>f.classList.remove('active'));
+      document.getElementById('f-'+p).classList.add('active');
+    }
+  </script>
+</body>
+</html>
