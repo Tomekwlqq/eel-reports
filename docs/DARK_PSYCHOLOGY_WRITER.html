@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Psychology Writer — 10 Technik Narracji Sprzedażowej</title>
+<style>
+  :root {
+    --bg: #FFFFFF;
+    --surface: #F5F3FF;
+    --surface-2: #EDE9FE;
+    --border: #DDD6FE;
+    --text: #1A1523;
+    --text-muted: #6B6B8A;
+    --accent: #5B4397;
+    --accent-2: #7C3AED;
+    --orange: #E8650A;
+    --orange-light: #FFF5EE;
+    --green: #047857;
+    --red: #B91C1C;
+    --card-bg: #FEFEFE;
+    --mono: 'SF Mono','Fira Code','Cascadia Code',monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--accent);
+    color: white;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(91,67,151,0.25);
+  }
+
+  .topbar-title {
+    font-family: Georgia, serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .topbar-subtitle {
+    font-size: 12px;
+    opacity: 0.8;
+  }
+
+  .nav-dots {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .nav-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-dot:hover, .nav-dot.active { background: rgba(255,255,255,0.4); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--surface) 0%, #EEE8FF 100%);
+    border-bottom: 2px solid var(--border);
+    padding: 36px 32px 28px;
+  }
+
+  .hero h1 {
+    font-family: Georgia, serif;
+    font-size: clamp(22px, 3.5vw, 32px);
+    font-weight: 700;
+    color: var(--accent);
+    text-wrap: balance;
+    margin-bottom: 8px;
+  }
+
+  .hero-meta {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  .hero-ethical {
+    background: var(--orange-light);
+    border-left: 3px solid var(--orange);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #7C2D12;
+    max-width: 680px;
+  }
+
+  /* STACK RECIPES */
+  .recipes {
+    padding: 20px 32px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .recipes-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .recipe-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .recipe-tab {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-muted);
+  }
+
+  .recipe-tab.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .recipe-content { display: none; }
+  .recipe-content.active { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+  .recipe-step {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12.5px;
+  }
+
+  .recipe-step strong {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 2px;
+  }
+
+  .recipe-arrow {
+    color: var(--text-muted);
+    font-size: 16px;
+  }
+
+  /* MAIN CONTENT */
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 24px 0;
+  }
+
+  /* TECHNIQUE CARD */
+  .technique {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+
+  .technique:hover { border-color: var(--accent-2); }
+  .technique.open { border-color: var(--accent); }
+
+  .technique-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .technique-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+    border: 2px solid var(--border);
+  }
+
+  .technique.open .technique-num {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .technique-name {
+    font-family: Georgia, serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .technique-toggle {
+    font-size: 18px;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .technique.open .technique-toggle { transform: rotate(180deg); color: var(--accent); }
+
+  .technique-body {
+    display: none;
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .technique.open .technique-body { display: block; }
+
+  /* Body sections */
+  .body-section {
+    margin-top: 16px;
+  }
+
+  .body-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .mechanism {
+    background: var(--surface);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .examples-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .example {
+    background: #FAFAFA;
+    border: 1px solid #EBEBEB;
+    border-radius: 6px;
+    padding: 12px 14px;
+    position: relative;
+  }
+
+  .example-type {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .example-text {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .example-text em {
+    font-style: normal;
+    background: #EDE9FE;
+    padding: 0 3px;
+    border-radius: 3px;
+    font-size: 13px;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--surface-2);
+    border: none;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 11px;
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.15s;
+  }
+
+  .copy-btn:hover { background: var(--border); }
+  .copy-btn.copied { background: #DCFCE7; color: var(--green); }
+
+  .limits-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .limit-ok {
+    background: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: #064E3B;
+  }
+
+  .limit-no {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: #7F1D1D;
+  }
+
+  .limit-ok::before { content: '✓ '; font-weight: 700; }
+  .limit-no::before { content: '✗ '; font-weight: 700; }
+
+  /* BRIEF FORM */
+  .brief-section {
+    max-width: 900px;
+    margin: 32px auto 0;
+    padding: 0 24px 60px;
+  }
+
+  .brief-header {
+    text-align: center;
+    padding: 28px 0 20px;
+    border-top: 2px solid var(--border);
+  }
+
+  .brief-header h2 {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .brief-header p {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .brief-form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .form-field.full { grid-column: 1 / -1; }
+
+  .form-field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .form-field input,
+  .form-field textarea,
+  .form-field select {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: var(--text);
+    font-family: inherit;
+    transition: border-color 0.15s;
+    resize: vertical;
+  }
+
+  .form-field input:focus,
+  .form-field textarea:focus,
+  .form-field select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(91,67,151,0.1);
+  }
+
+  .form-field textarea { min-height: 80px; }
+
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+
+  .btn-generate {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: inherit;
+  }
+
+  .btn-generate:hover { background: var(--accent-2); }
+
+  .btn-reset {
+    background: white;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .form-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  /* OUTPUT */
+  .output-area {
+    margin-top: 16px;
+    display: none;
+  }
+
+  .output-area.visible { display: block; }
+
+  .output-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .output-copy {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .output-copy.copied { background: var(--green); }
+
+  .output-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  /* TECHNIQUE SELECTOR */
+  .technique-selector {
+    margin-top: 14px;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+  }
+
+  .selector-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  .tech-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tech-check-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .tech-check-label:has(input:checked) {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .tech-check-label input { display: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 620px) {
+    .topbar { flex-direction: column; align-items: flex-start; }
+    .nav-dots { display: none; }
+    .hero { padding: 20px 16px; }
+    .recipes { padding: 16px; }
+    .content { padding: 16px 12px 0; }
+    .brief-section { padding: 0 12px 40px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .limits-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="topbar-title">🧠 Dark Psychology Writer</div>
+    <div class="topbar-subtitle">Adam Erhart Framework · 10 technik · /dpw</div>
+  </div>
+  <div class="nav-dots" id="navDots"></div>
+</div>
+
+<div class="hero">
+  <h1>10 Technik Psychologicznych dla B2B Software</h1>
+  <div class="hero-meta">Źródło: Adam Erhart · 364k views · SaaS/software przykłady + mechanizmy psychologiczne · skill: <code style="background:#EDE9FE;padding:2px 6px;border-radius:4px;font-size:12px;">/dpw</code></div>
+  <div class="hero-ethical">
+    <strong>Etyczny compass:</strong> perswazja ≠ manipulacja. Techniki poniżej pomagają ludziom podjąć decyzję, która jest dla nich dobra. Granica: kiedy przekonujesz kogoś do czegoś złego dla niego — jesteś po złej stronie.
+  </div>
+</div>
+
+<!-- STACK RECIPES -->
+<div class="recipes">
+  <div class="recipes-label">Stack Recipes — gotowe kombinacje technik</div>
+  <div class="recipe-tabs">
+    <button class="recipe-tab active" onclick="showRecipe('landing')">Landing Page</button>
+    <button class="recipe-tab" onclick="showRecipe('email')">Cold Email</button>
+    <button class="recipe-tab" onclick="showRecipe('call')">Sales Call</button>
+  </div>
+
+  <div class="recipe-content active" id="recipe-landing">
+    <div class="recipe-step"><strong>Hero</strong>Dangerous Simplicity<br>+ Identity Activation</div>
+    <div class="recipe-arrow">→</div>
+    <div class="recipe-step"><strong>Problem</strong>Latent to Extreme Pain</div>
+    <div class="recipe-arrow">→</div>
+    <div class="recipe-step"><strong>Solution</strong>Future Pacing</div>
+    <div class="recipe-arrow">→</div>
+    <div class="recipe-step"><strong>About</strong>Pit of Darkness<br>+ Adventurer Frame</div>
+    <div class="recipe-arrow">→</div>
+    <div class="recipe-step"><strong>Proof</strong>Status Shift Framing</div>
+    <div class="recipe-arrow">→</div>
+    <div class="recipe-step"><strong>FAQ</strong>Objection Inversion</div>
+    <div class="recipe-arrow">→</div>
+    <div class="recipe-step"><strong>CTA</strong>Perceived Control</div>
+  </div>
+
+  <div class="recipe-content" id="recipe-email">
+    <div class="recipe-step"><strong>Opener</strong>Latent Pain<br>(cost of inaction)</div>
+    <div class="recipe-arrow">→</div>
+    <div class="recipe-step"><strong>Body</strong>Future Pacing<br>(Polaroid scene)</div>
+    <div class="recipe-arrow">→</div>
+    <div class="recipe-step"><strong>P.S.</strong>Identity Activation<br>("piszę bo...")</div>
+  </div>
+
+  <div class="recipe-content" id="recipe-call">
+    <div class="recipe-step"><strong>Intro</strong>Perceived Control<br>(micro-zgody)</div>
+    <div class="recipe-arrow">→</div>
+    <div class="recipe-step"><strong>Discovery</strong>Latent to Extreme Pain<br>(pytania)</div>
+    <div class="recipe-arrow">→</div>
+    <div class="recipe-step"><strong>Pitch</strong>Status Shift<br>+ Future Pacing</div>
+    <div class="recipe-arrow">→</div>
+    <div class="recipe-step"><strong>Close</strong>Objection Inversion</div>
+  </div>
+</div>
+
+<!-- TECHNIQUES -->
+<div class="content" id="techniquesArea">
+
+  <!-- T1 -->
+  <div class="technique" id="t1">
+    <div class="technique-header" onclick="toggle(this)">
+      <div class="technique-num">1</div>
+      <div class="technique-name">Latent to Realized to Extreme Pain</div>
+      <div class="technique-toggle">▾</div>
+    </div>
+    <div class="technique-body">
+      <div class="body-section">
+        <div class="body-label">Mechanizm psychologiczny</div>
+        <div class="mechanism">Większość klientów żyje z <strong>latentnym bólem</strong> — problemem, do którego się przyzwyczaili i uznali za normę. Nie kupią, dopóki koszt pozostania gdzie są nie stanie się bardziej bolesny niż koszt zmiany.<br><br>Mechanizm: <strong>dysonans poznawczy</strong> — kiedy ktoś uświadomi sobie rozbieżność między stanem aktualnym a możliwym, mózg natychmiast szuka rozwiązania. Twój produkt musi być tym rozwiązaniem. Kroki: latent (nieświadomy) → realized (uświadomiony) → extreme (pilność).</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Przykłady copy — SaaS/B2B Software</div>
+        <div class="examples-grid">
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Hook — koszt bezczynności</div>
+            <div class="example-text">"Twój zespół traci 10 godzin tygodniowo na ręczne wprowadzanie danych do CRM. To 40 godzin miesięcznie na osobę. Mnożysz przez 5 handlowców — dosłownie podpalacie $25k pensji każdego miesiąca, zamiast sprzedawać."</div>
+          </div>
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Email opener — pytania odkrywające ból</div>
+            <div class="example-text">"Ile czasu tygodniowo Twój team spędza na zadaniach, które mógłby robić automat? Jeśli nic się nie zmieni przez rok — jaki to ma wpływ na Twoje przychody?"</div>
+          </div>
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Cold email — social proof bólu</div>
+            <div class="example-text">"W zeszłym tygodniu rozmawiałem z 3 CTO-ami w Twojej branży. Wszyscy mówili to samo. Jedna firma postanowiła sprawdzić ile ich to kosztuje. Kwota ich zaskoczyła."</div>
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Granice</div>
+        <div class="limits-row">
+          <div class="limit-ok">Uświadamiaj realny problem i jego realne koszty</div>
+          <div class="limit-no">Wyolbrzymiaj, twórz strach przed nieprawdopodobnymi konsekwencjami</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- T2 -->
+  <div class="technique" id="t2">
+    <div class="technique-header" onclick="toggle(this)">
+      <div class="technique-num">2</div>
+      <div class="technique-name">Perceived Control</div>
+      <div class="technique-toggle">▾</div>
+    </div>
+    <div class="technique-body">
+      <div class="body-section">
+        <div class="body-label">Mechanizm psychologiczny</div>
+        <div class="mechanism"><strong>Psychological reactance:</strong> kiedy ludzie czują, że są sprzedawani, instynktownie się opierają. Perceived control dezaktywuje ten mechanizm — prospect myśli, że sam prowadzi.<br><br>Teoria autodeterminacji (Deci & Ryan): ludzie mają fundamentalną potrzebę autonomii. Decyzje podjęte "z własnej woli" są silniej internalizowane i rzadziej cofane.</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Przykłady copy — SaaS/B2B Software</div>
+        <div class="examples-grid">
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Discovery call opener</div>
+            <div class="example-text">"Zanim zacznę, czy byłoby OK gdybym zadał kilka pytań, żeby upewnić się, że mam sens na to Twoje 30 minut? Chcę się upewnić, że to co pokażę będzie relevantne dla Twojej sytuacji."</div>
+          </div>
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Email — wybór kontrolowany</div>
+            <div class="example-text">"Zależy mi, żebyś sam zdecydował czy to ma sens. Dlatego zamiast pitchować — wyślę Ci 3 rzeczy: case study firmy podobnej do Twojej, kalkulację ROI dla Twojej skali i 15-minutowe wideo z wdrożenia. Obejrzysz i powiesz czy warto rozmawiać?"</div>
+          </div>
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">CTA na landing page</div>
+            <div class="example-text">Zamiast "Kup teraz" → <em>"Sprawdź czy to dla mnie"</em> / <em>"Zdecyduj sam"</em> / <em>"Oceń na demo"</em></div>
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Granice</div>
+        <div class="limits-row">
+          <div class="limit-ok">Dawaj sensowne wybory, pozwalaj na autodeterminację</div>
+          <div class="limit-no">Fałszywe wybory (pytasz ale i tak nie reagujesz na "nie")</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- T3 -->
+  <div class="technique" id="t3">
+    <div class="technique-header" onclick="toggle(this)">
+      <div class="technique-num">3</div>
+      <div class="technique-name">The Pit of Darkness</div>
+      <div class="technique-toggle">▾</div>
+    </div>
+    <div class="technique-body">
+      <div class="body-section">
+        <div class="body-label">Mechanizm psychologiczny</div>
+        <div class="mechanism"><strong>Vulnerability paradox:</strong> im bardziej ktoś ukrywa swoje niepowodzenia, tym mniej mu ufamy. Autentyczny dołek uruchamia neurobiologiczny mechanizm empatii (neurony lustrzane).<br><br>Research Brené Brown: vulnerability buduje trust przez odwagę, nie słabość. Każda dobra historia zaczyna się od upadku — bohater musi spaść, zanim wzrośnie.</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Przykłady copy — SaaS/B2B Software</div>
+        <div class="examples-grid">
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">About page / founder story</div>
+            <div class="example-text">"W 2022 miałem agencję, 8 klientów i $0 na koncie, bo wszyscy płacili z 90-dniowym opóźnieniem. Sprzedałem auto, żeby wypłacić pensje. Wtedy zbudowałem [produkt] — żeby żaden właściciel agencji nigdy nie musiał robić tego co ja."</div>
+          </div>
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Email opener</div>
+            <div class="example-text">"Powiem Ci o momencie, który zmienił wszystko. Był poniedziałek rano, miałem 3 propozycje do wysłania i każda wymagała 4 godzin ręcznej roboty. Zdecydowałem się to zautomatyzować. Co odkryłem — w tej wiadomości."</div>
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Granice</div>
+        <div class="limits-row">
+          <div class="limit-ok">Autentyczne, konkretne historie które naprawdę się zdarzyły</div>
+          <div class="limit-no">Dramatyzowanie czegoś błahego, performatywna vulnerability bez lekcji</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- T4 -->
+  <div class="technique" id="t4">
+    <div class="technique-header" onclick="toggle(this)">
+      <div class="technique-num">4</div>
+      <div class="technique-name">The Adventurer Frame</div>
+      <div class="technique-toggle">▾</div>
+    </div>
+    <div class="technique-body">
+      <div class="body-section">
+        <div class="body-label">Mechanizm psychologiczny</div>
+        <div class="mechanism"><strong>Para-social relatability:</strong> guru jest aspired to (podziwiany z dystansu), adventurer jest followed (podąża się za nim w real-time).<br><br>Optimal expertise gap: 1-2 kroki do przodu to idealna pozycja. Za duży dystans = "to nie dla mnie". Za mały = "nie mam po co słuchać". Adventurer jest zawsze o krok ahead — wystarczająco by mieć wartość, dość blisko by być relatable.</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Przykłady copy — SaaS/B2B Software</div>
+        <div class="examples-grid">
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">LinkedIn / newsletter</div>
+            <div class="example-text">"Przez ostatnie 30 dni testowałem X sposobów na [problem]. Wyniki Cię zaskoczą — 6 z nich nie działało w ogóle, 2 działały gorzej niż myślałem, i jeden zmienił wszystko. Dzisiaj o tym piszę."</div>
+          </div>
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Landing page hero</div>
+            <div class="example-text">"Nie zbudowałem tej platformy jako ekspert. Zbudowałem ją bo sam jej potrzebowałem i nie znalazłem niczego, co działa."</div>
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Granice</div>
+        <div class="limits-row">
+          <div class="limit-ok">Learner ze specyficzną ekspertyzą i realnym doświadczeniem</div>
+          <div class="limit-no">Udawanie naivety kiedy faktycznie jesteś ekspertem (false modesty)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- T5 -->
+  <div class="technique" id="t5">
+    <div class="technique-header" onclick="toggle(this)">
+      <div class="technique-num">5</div>
+      <div class="technique-name">Throw Rocks at the Enemy</div>
+      <div class="technique-toggle">▾</div>
+    </div>
+    <div class="technique-body">
+      <div class="body-section">
+        <div class="body-label">Mechanizm psychologiczny</div>
+        <div class="mechanism"><strong>Social identity theory (Tajfel & Turner):</strong> ludzie definiują siebie przez grupy — "my" vs "oni". Kiedy brand staje po stronie "my" i atakuje "oni", tworzy tribal belonging.<br><br>Anger jako motivator: gniew (w przeciwieństwie do smutku) motywuje do działania. Wspólny wróg kanalizuje gniew w kierunku decyzji zakupowej. Przykłady: Apple vs Microsoft, Basecamp vs corporate culture.</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Przykłady copy — SaaS/B2B Software</div>
+        <div class="examples-grid">
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">vs legacy software</div>
+            <div class="example-text">"Platforma zbudowana dla roku 2010 przez firmę, która nie rozumie jak pracujesz w 2026. My zbudowaliśmy narzędzie dla teamów, które nie mogą sobie pozwolić na 18-miesięczne wdrożenie i 6-cyfrowy kontrakt."</div>
+          </div>
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">SaaS security niche</div>
+            <div class="example-text">"Większość firm od bezpieczeństwa zarabia na Twoim strachu — sprzedaje Ci raport, a potem zostawia z listą problemów do samodzielnego naprawienia. My naprawiamy, nie raportujemy."</div>
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Granice</div>
+        <div class="limits-row">
+          <div class="limit-ok">Atakuj systemy, praktyki, mentalności — nie konkretnych ludzi</div>
+          <div class="limit-no">Personal attacks, kłamstwa o konkurencji, stirring fear/hate</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- T6 -->
+  <div class="technique" id="t6">
+    <div class="technique-header" onclick="toggle(this)">
+      <div class="technique-num">6</div>
+      <div class="technique-name">Objection Inversion</div>
+      <div class="technique-toggle">▾</div>
+    </div>
+    <div class="technique-body">
+      <div class="body-section">
+        <div class="body-label">Mechanizm psychologiczny</div>
+        <div class="mechanism"><strong>Cognitive reframing:</strong> zamiast defensywnie odpierać obiekcję, zgadzasz się z jej premisą i pokazujesz, że ta sama premisa uzasadnia zakup. Mózg nie spodziewa się tego zwrotu — usuwa tarcie.<br><br>Formułka: <strong>"Dokładnie dlatego…"</strong> — absorbuj energię obiekcji i redirectuj ją zamiast walczyć.</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Przykłady copy — SaaS/B2B Software</div>
+        <div class="examples-grid">
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Inversions — gotowe formuły</div>
+            <div class="example-text">"Za drogo" → <em>"Dokładnie dlatego — jeśli zwiększenie przychodów to Twój problem, właśnie po to tu jesteśmy."</em><br><br>"Nie mamy teraz czasu" → <em>"Dokładnie dlatego — te narzędzia istnieją po to żebyś miał więcej czasu."</em><br><br>"Próbowałem czegoś podobnego" → <em>"Właśnie. I jak długo zamierzasz kontynuować to co nie działa?"</em></div>
+          </div>
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">FAQ na landing page</div>
+            <div class="example-text">"Ile czasu zajmuje wdrożenie?" → "Jeśli masz mało czasu — tym bardziej masz mało czasu na to żeby <em>nie</em> mieć tego narzędzia. Wdrożenie: 2 dni. Zysk: reszta roku."</div>
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Granice</div>
+        <div class="limits-row">
+          <div class="limit-ok">Pokazuj że obiekcja bazuje na założeniu, które twój produkt kwestionuje</div>
+          <div class="limit-no">Stosuj wobec deal-breakers i złego fitu — wtedy obiekcja jest słuszna</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- T7 -->
+  <div class="technique" id="t7">
+    <div class="technique-header" onclick="toggle(this)">
+      <div class="technique-num">7</div>
+      <div class="technique-name">Future Pacing</div>
+      <div class="technique-toggle">▾</div>
+    </div>
+    <div class="technique-body">
+      <div class="body-section">
+        <div class="body-label">Mechanizm psychologiczny</div>
+        <div class="mechanism">95% decyzji zakupowych podejmowanych podświadomie i emocjonalnie — future pacing transportuje prospect do emocjonalnego stanu "po zakupie" zanim jeszcze kupi.<br><br><strong>Polaroid language:</strong> opis powinien być tak konkretny i sensoryczny, że tworzy "fotografię" przyszłości. Mózg nie odróżnia żywo wyobrażonej przyszłości od rzeczywistości — aktywuje ten sam układ nagrody.</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Przykłady copy — SaaS/B2B Software</div>
+        <div class="examples-grid">
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Landing page — Polaroid scene</div>
+            <div class="example-text">"Wyobraź sobie, że otwierasz laptopa w poniedziałek rano i zamiast listy manualnych zadań — widzisz raport z tego co system zrobił za weekend. Leady posegregowane, follow-upy wysłane, pipeline zaktualizowany. Ty decydujesz o strategii, nie o logistyce."</div>
+          </div>
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Demo call outro</div>
+            <div class="example-text">"Zanim skończymy — wyobraź sobie, że masz to już od 3 miesięcy. Co się zmieniło? Co robiłeś inaczej? [pauza] To właśnie budujesz kiedy powiesz tak."</div>
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Granice</div>
+        <div class="limits-row">
+          <div class="limit-ok">Wyobrażenia oparte na realnych, udokumentowanych wynikach</div>
+          <div class="limit-no">"Pie in the sky" — obiecuj scenariusze bez podstawy w rzeczywistości</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- T8 -->
+  <div class="technique" id="t8">
+    <div class="technique-header" onclick="toggle(this)">
+      <div class="technique-num">8</div>
+      <div class="technique-name">Status Shift Framing</div>
+      <div class="technique-toggle">▾</div>
+    </div>
+    <div class="technique-body">
+      <div class="body-section">
+        <div class="body-label">Mechanizm psychologiczny</div>
+        <div class="mechanism">Ludzie kupują aby rozwiązać problemy, ale kupują <em>szybciej</em> gdy kupują identity upgrades.<br><br><strong>Framing Effect (Kahneman):</strong> "inwestycja tworząca autorytety" konwertuje lepiej niż "narzędzie do zarządzania contentem" — bo pierwsza mówi do tożsamości, druga do narzędzia.</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Przed / Po framings (SaaS)</div>
+        <div class="examples-grid">
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Email — dwa typy liderów</div>
+            <div class="example-text">"Są dwa typy liderów sprzedaży: ci, którzy zarządzają pipeline'em z Excela i mają niespodziankę na koniec kwartału. I ci, którzy widzą przyszłość w dashboardzie i działają tygodnie wcześniej. [Produkt] jest dla tych drugich."</div>
+          </div>
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Pricing page framing</div>
+            <div class="example-text">Zamiast <em>"Plan Pro za $299"</em> → <em>"Plan dla firm, które traktują growth serio. $299/mies."</em></div>
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Granice</div>
+        <div class="limits-row">
+          <div class="limit-ok">Aspirational framing oparty na realnej transformacji którą produkt umożliwia</div>
+          <div class="limit-no">Fałszywy prestige — produkt nie dostarcza obiecanego statusu</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- T9 -->
+  <div class="technique" id="t9">
+    <div class="technique-header" onclick="toggle(this)">
+      <div class="technique-num">9</div>
+      <div class="technique-name">Identity Activation</div>
+      <div class="technique-toggle">▾</div>
+    </div>
+    <div class="technique-body">
+      <div class="body-section">
+        <div class="body-label">Mechanizm psychologiczny</div>
+        <div class="mechanism"><strong>Consistency principle (Cialdini):</strong> ludzie robią wszystko żeby zachować spójność z tym, kim siebie uważają. Gdy messaging mówi "to dla kogoś takiego jak ty", uruchamia potrzebę spójności — zakup staje się dowodem tożsamości.<br><br>"The moment someone says 'yeah, that's me' — sale happens then, not in the pitch."</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Przykłady copy — SaaS/B2B Software</div>
+        <div class="examples-grid">
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Hero section</div>
+            <div class="example-text">"Dla tych, którzy traktują operacje poważnie. Nie dla tych, którym 'jakoś idzie' wystarczy."<br><br>"Jeśli jesteś typem osoby, która chce wiedzieć dlaczego — nie tylko co — zbudowaliśmy to dla Ciebie."</div>
+          </div>
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Cold email opener</div>
+            <div class="example-text">"Piszę do Ciebie, bo profil Twojej firmy pasuje do jednego konkretnego typu klienta: takiego, który już wie czego chce, ale szuka systemu żeby to osiągnąć. Mam przeczucie, że to Ty."</div>
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Granice</div>
+        <div class="limits-row">
+          <div class="limit-ok">Mów do aspiracyjnej tożsamości klienta</div>
+          <div class="limit-no">Flattery bez substancji, schlebianie żeby sprzedać zły fit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- T10 -->
+  <div class="technique" id="t10">
+    <div class="technique-header" onclick="toggle(this)">
+      <div class="technique-num">10</div>
+      <div class="technique-name">Dangerous Simplicity</div>
+      <div class="technique-toggle">▾</div>
+    </div>
+    <div class="technique-body">
+      <div class="body-section">
+        <div class="body-label">Mechanizm psychologiczny</div>
+        <div class="mechanism"><strong>Cognitive load theory:</strong> im więcej wysiłku umysłowego wymaga zrozumienie oferty, tym większa szansa na porzucenie.<br><br><strong>Processing fluency (Schwartz & Kim):</strong> im łatwiej przetworzyć informację, tym bardziej wiarygodna się wydaje. Slack, Basecamp, Notion — wszystkie rosły na prostym messagingu pomimo zaawansowanej technologii.</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Zamiast tech speak — przykłady transformacji</div>
+        <div class="examples-grid">
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Tech speak → Ludzki język</div>
+            <div class="example-text"><em>"Modularny framework do optymalizacji top-of-funnel"</em> → "Prosta droga do więcej właściwych zapytań"<br><br><em>"AI-powered revenue intelligence platform"</em> → "Wiesz co się stanie w tym kwartale — zanim się stanie"<br><br><em>"Full-stack observability solution"</em> → "Wiesz co się psuje zanim użytkownicy zgłoszą ticket"</div>
+          </div>
+          <div class="example">
+            <button class="copy-btn" onclick="copyEx(this)">Kopiuj</button>
+            <div class="example-type">Hero one-liner test</div>
+            <div class="example-text">"Zamień ręczne procesy na system, który pracuje kiedy Ty śpisz. Setup: 2 dni. Rezultat: cały rok."</div>
+          </div>
+        </div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Granice</div>
+        <div class="limits-row">
+          <div class="limit-ok">Upraszczaj komunikację, nie produkt</div>
+          <div class="limit-no">Oversimplification która ukrywa ważne ograniczenia lub złożoność wdrożenia</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BRIEF FORM -->
+<div class="brief-section">
+  <div class="brief-header">
+    <h2>🚀 Generuj narracje — /dpw</h2>
+    <p>Wypełnij brief → skopiuj prompt → wklej w Claude Code z <code>/dpw</code></p>
+  </div>
+
+  <div class="brief-form">
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Nazwa serwisu / produktu</label>
+        <input type="text" id="f-service" placeholder="np. SalesFlow CRM, AutoReport, PipelineAI">
+      </div>
+      <div class="form-field">
+        <label>Target / ICP</label>
+        <input type="text" id="f-icp" placeholder="np. CTO w SaaS 20-100 osób, CMO agencji">
+      </div>
+      <div class="form-field full">
+        <label>Główny ból który rozwiązujesz</label>
+        <textarea id="f-pain" placeholder="np. Handlowcy tracą 8h/tyg na ręczne raporty zamiast sprzedawać. Pipeline jest zawsze nieaktualny."></textarea>
+      </div>
+      <div class="form-field">
+        <label>Dowody (liczby, case studies)</label>
+        <textarea id="f-proof" placeholder="np. Klienci oszczędzają avg 6h/tyg, +34% close rate, 12 firm z Fortune 500"></textarea>
+      </div>
+      <div class="form-field">
+        <label>Ton</label>
+        <select id="f-tone">
+          <option value="profesjonalny, bezpośredni">Profesjonalny, bezpośredni</option>
+          <option value="konwersacyjny, friendly">Konwersacyjny, friendly</option>
+          <option value="challenger, prowokacyjny">Challenger, prowokacyjny</option>
+          <option value="founder, autentyczny">Founder, autentyczny</option>
+          <option value="ekspert, autorytatywny">Ekspert, autorytatywny</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="technique-selector">
+      <div class="selector-label">Techniki do uwzględnienia (domyślnie wszystkie)</div>
+      <div class="tech-checkboxes">
+        <label class="tech-check-label"><input type="checkbox" class="tech-cb" value="1. Latent to Realized to Extreme Pain" checked> T1: Pain</label>
+        <label class="tech-check-label"><input type="checkbox" class="tech-cb" value="2. Perceived Control" checked> T2: Control</label>
+        <label class="tech-check-label"><input type="checkbox" class="tech-cb" value="3. The Pit of Darkness" checked> T3: Pit</label>
+        <label class="tech-check-label"><input type="checkbox" class="tech-cb" value="4. The Adventurer Frame" checked> T4: Adventurer</label>
+        <label class="tech-check-label"><input type="checkbox" class="tech-cb" value="5. Throw Rocks at the Enemy" checked> T5: Enemy</label>
+        <label class="tech-check-label"><input type="checkbox" class="tech-cb" value="6. Objection Inversion" checked> T6: Objection</label>
+        <label class="tech-check-label"><input type="checkbox" class="tech-cb" value="7. Future Pacing" checked> T7: Future</label>
+        <label class="tech-check-label"><input type="checkbox" class="tech-cb" value="8. Status Shift Framing" checked> T8: Status</label>
+        <label class="tech-check-label"><input type="checkbox" class="tech-cb" value="9. Identity Activation" checked> T9: Identity</label>
+        <label class="tech-check-label"><input type="checkbox" class="tech-cb" value="10. Dangerous Simplicity" checked> T10: Simplicity</label>
+      </div>
+    </div>
+
+    <div class="form-actions" style="margin-top:16px;">
+      <button class="btn-generate" onclick="generatePrompt()">Generuj prompt /dpw</button>
+      <button class="btn-reset" onclick="resetForm()">Wyczyść</button>
+      <span class="form-hint">Prompt gotowy do wklejenia w Claude Code</span>
+    </div>
+
+    <div class="output-area" id="outputArea">
+      <div class="output-label">
+        <span>Gotowy prompt — skopiuj i wklej w Claude Code</span>
+        <button class="output-copy" id="copyPromptBtn" onclick="copyPrompt()">Kopiuj cały prompt</button>
+      </div>
+      <div class="output-box" id="outputBox"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // NAV DOTS
+  const dots = document.getElementById('navDots');
+  for (let i = 1; i <= 10; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'nav-dot';
+    btn.textContent = i;
+    btn.title = `Technika ${i}`;
+    btn.onclick = () => {
+      document.getElementById('t' + i).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    dots.appendChild(btn);
+  }
+
+  // TOGGLE TECHNIQUE
+  function toggle(header) {
+    const card = header.parentElement;
+    const wasOpen = card.classList.contains('open');
+    card.classList.toggle('open', !wasOpen);
+  }
+
+  // RECIPE TABS
+  function showRecipe(id) {
+    document.querySelectorAll('.recipe-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.recipe-content').forEach(c => c.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('recipe-' + id).classList.add('active');
+  }
+
+  // COPY EXAMPLE
+  function copyEx(btn) {
+    const text = btn.nextElementSibling.nextElementSibling.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Skopiowano!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Kopiuj'; btn.classList.remove('copied'); }, 1800);
+    });
+  }
+
+  // GENERATE PROMPT
+  function generatePrompt() {
+    const service = document.getElementById('f-service').value.trim() || '[Nazwa serwisu]';
+    const icp = document.getElementById('f-icp').value.trim() || '[Twój ICP]';
+    const pain = document.getElementById('f-pain').value.trim() || '[Główny ból]';
+    const proof = document.getElementById('f-proof').value.trim() || '[Dowody]';
+    const tone = document.getElementById('f-tone').value;
+
+    const selected = [...document.querySelectorAll('.tech-cb:checked')].map(c => c.value);
+    const techList = selected.length > 0 ? selected.join('\n- ') : 'wszystkie 10';
+
+    const prompt = `/dpw
+
+## Brief
+
+**Serwis / Produkt:** ${service}
+**Target / ICP:** ${icp}
+**Główny ból który rozwiązujemy:** ${pain}
+**Dowody (liczby, case studies):** ${proof}
+**Ton:** ${tone}
+
+## Techniki do wygenerowania
+
+- ${techList}
+
+## Instrukcja
+
+Dla każdej z powyższych technik wygeneruj 10 wariantów narracji sprzedażowej:
+- Hook (1–2 zdania otwarcia, gotowe do użycia)
+- Narracja (3–5 zdań rozwinięcia)
+- CTA (konkretne wezwanie do działania)
+
+Każdy wariant ma być:
+1. Dostosowany do podanego ICP i bólu
+2. Brzmiący jak człowiek (nie AI) — konkretny, specyficzny, z detalami
+3. Gotowy do copy-paste (bez placeholderów)
+4. W języku polskim (chyba że explicit EN)
+
+Format output: dla każdej techniki tabela 10 wariantów (hook | narracja | CTA).`;
+
+    document.getElementById('outputBox').textContent = prompt;
+    document.getElementById('outputArea').classList.add('visible');
+    document.getElementById('outputArea').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // COPY PROMPT
+  function copyPrompt() {
+    const text = document.getElementById('outputBox').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copyPromptBtn');
+      btn.textContent = '✓ Skopiowano!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Kopiuj cały prompt'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  // RESET
+  function resetForm() {
+    ['f-service','f-icp','f-pain','f-proof'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-tone').selectedIndex = 0;
+    document.querySelectorAll('.tech-cb').forEach(cb => cb.checked = true);
+    document.getElementById('outputArea').classList.remove('visible');
+  }
+</script>
+</body>
+</html>
