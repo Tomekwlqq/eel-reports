@@ -250,11 +250,6 @@ tr.hot td{background:rgba(22,163,74,.05)}tr.danger td{background:rgba(220,38,38,
       <input type="text" id="chatInput" placeholder="Pytaj o dane... (Enter = wyślij)">
       <button class="ask-send" id="chatSend">Wyślij</button>
     </div>
-    <div class="ask-key-row" id="askKeyRow" style="display:none">
-      <label>DeepSeek API Key:</label>
-      <input type="password" id="dsKey" placeholder="sk-...">
-      <button id="saveKey" style="background:#2C3E50;color:#fff;border:none;border-radius:6px;padding:4px 9px;cursor:pointer;font-size:11px;white-space:nowrap">Zapisz</button>
-    </div>
   </div>
 </div>
 
@@ -1060,8 +1055,6 @@ const askPanel=document.getElementById('askPanel');
 document.getElementById('chatBtn').onclick=()=>{
   askPanel.classList.toggle('open');
   if(askPanel.classList.contains('open')){
-    const hasKey=!!localStorage.getItem('glov_ds_key');
-    document.getElementById('askKeyRow').style.display=hasKey?'none':'flex';
   }
 };
 document.getElementById('askClose').onclick=()=>askPanel.classList.remove('open');
@@ -1082,8 +1075,6 @@ Dane: GA4 + Shopify, tylko Polska (filtr country=Poland). Masz dostęp do danych
 async function sendChat(){
   const inp=document.getElementById('chatInput');
   const msg=inp.value.trim();if(!msg)return;
-  let apiKey=localStorage.getItem('glov_ds_key')||'';
-  if(!apiKey){document.getElementById('askKeyRow').style.display='flex';return;}
   const msgs=document.getElementById('chatMsgs');
   const sendBtn=document.getElementById('chatSend');
   msgs.innerHTML+=`<div class="msg user">${msg.replace(/</g,'&lt;')}</div>`;
@@ -1104,7 +1095,7 @@ async function sendChat(){
   }):'(brak danych)';
   try{
     const r=await fetch('https://glov-chat.waleqq.workers.dev',{
-      method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
+      method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'deepseek-chat',messages:[
         {role:'system',content:GLOV_SYSTEM},
         {role:'user',content:`Dane bieżącego zakresu:\n${ctx}\n\nPytanie: ${msg}`}
@@ -1123,15 +1114,6 @@ async function sendChat(){
 document.getElementById('chatSend').onclick=sendChat;
 document.getElementById('chatInput').addEventListener('keydown',e=>{
   if(e.key==='Enter'){e.preventDefault();sendChat();}
-});
-function saveApiKey(){
-  const k=document.getElementById('dsKey').value.trim();
-  if(k){localStorage.setItem('glov_ds_key',k);document.getElementById('askKeyRow').style.display='none';return true;}
-  return false;
-}
-document.getElementById('saveKey').onclick=saveApiKey;
-document.getElementById('dsKey').addEventListener('keydown',e=>{
-  if(e.key==='Enter'){e.preventDefault();saveApiKey();}
 });
 
 // Init
