@@ -1950,7 +1950,7 @@ function openBrief(id, tr){
     const lkBroken=lk.broken||0;
     const lkWaiting=lk.waiting||(lk.fix-lkBroken)||0;
     let lkhtml='<div class="bgcard" style="margin-top:10px"><div class="bgh">🔗 Status linków przy publikacji</div>'
-      +'<div class="bgrow"><span class="bgk">Plan</span><span class="bgv">'+lk.n+' linków'+(lk.nT?' ('+lk.nT+' inline + '+lk.nB+' powiązane + 1 produkt)':'')+'</span></div>'
+      +'<div class="bgrow"><span class="bgk">Plan</span><span class="bgv">'+lk.n+' linków'+(lk.nT?' ('+lk.nT+' w treści [2 blog + 1 produkt] + '+lk.nB+' powiązane)':'')+'</span></div>'
       +'<div class="bgrow"><span class="bgk">Żywe teraz</span><span class="bgv" style="color:#1f9e6e;font-weight:700">'+lk.alive+' / '+lk.n+'</span></div>';
     if(lkWaiting>0){
       lkhtml+='<div class="bgrow"><span class="bgk">⏳ Czeka na publikację</span><span class="bgv" style="color:#d9821a">'+lkWaiting+' — OK, zadziała po wdrożeniu celu</span></div>';
