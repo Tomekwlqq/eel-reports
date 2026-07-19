@@ -1904,16 +1904,37 @@ function openBrief(id, tr){
   // --- sekcja: status linków (żywe vs do podmiany) ---
   const lk=r.lk;
   if(lk && lk.n>0){
+    const lkBroken=lk.broken||0;
+    const lkWaiting=lk.waiting||(lk.fix-lkBroken)||0;
     let lkhtml='<div class="bgcard" style="margin-top:10px"><div class="bgh">🔗 Status linków przy publikacji</div>'
-      +'<div class="bgrow"><span class="bgk">Linki w artykule</span><span class="bgv">'+lk.n+'</span></div>'
-      +'<div class="bgrow"><span class="bgk">Żywe od razu</span><span class="bgv" style="color:#1f9e6e;font-weight:700">'+lk.alive+' / '+lk.n+'</span></div>';
-    if(lk.fix>0){
-      lkhtml+='<div class="bgrow"><span class="bgk">Do podmiany później</span><span class="bgv" style="color:#d9821a;font-weight:700">'+lk.fix+'</span></div>';
-      if(lk.fixlist && lk.fixlist.length){
-        lkhtml+='<div class="lkfixrow"><b>Do podmiany na żywy filar do czasu publikacji celu:</b><br>'+lk.fixlist.map(x=>'• '+resc(x.t)+' <span style="color:#889;font-size:11px">('+(x.kl==='bron'?'broń':'dom')+' #'+x.nr+' · T'+x.wk+')</span>').join('<br>')+'</div>';
+      +'<div class="bgrow"><span class="bgk">Plan</span><span class="bgv">'+lk.n+' linków'+(lk.nT?' ('+lk.nT+' inline + '+lk.nB+' powiązane + 1 produkt)':'')+'</span></div>'
+      +'<div class="bgrow"><span class="bgk">Żywe teraz</span><span class="bgv" style="color:#1f9e6e;font-weight:700">'+lk.alive+' / '+lk.n+'</span></div>';
+    if(lkWaiting>0){
+      lkhtml+='<div class="bgrow"><span class="bgk">⏳ Czeka na publikację</span><span class="bgv" style="color:#d9821a">'+lkWaiting+' — OK, zadziała po wdrożeniu celu</span></div>';
+    }
+    if(lkBroken>0){
+      lkhtml+='<div class="bgrow"><span class="bgk">❌ Broken URL</span><span class="bgv" style="color:#c0392b;font-weight:700">'+lkBroken+' — wymaga poprawki w HTML artykułu</span></div>';
+    }
+    if(lk.fixlist && lk.fixlist.length){
+      const brokenItems=lk.fixlist.filter(x=>x.reason==='broken');
+      const waitingItems=lk.fixlist.filter(x=>x.reason==='waiting');
+      if(brokenItems.length){
+        lkhtml+='<div class="lkfixrow" style="border-left:3px solid #c0392b;margin-top:6px">'
+          +'<b style="color:#c0392b">❌ Broken — napraw URL w artykule:</b><br>'
+          +brokenItems.map(x=>'&bull; <b>['+resc(x.kind)+']</b> '+resc(x.t)
+            +' <span style="color:#c0392b;font-size:11px;margin-left:4px">HTTP '+x.code+'</span>'
+            +(x.url?'<br><span style="color:#889;font-size:10px;margin-left:12px">'+resc(x.url)+'</span>':'')).join('<br>')
+          +'</div>';
       }
-    } else {
-      lkhtml+='<div class="bgrow"><span class="bgk">Status</span><span class="bgv" style="color:#1f9e6e">✓ wszystkie linki żywe od razu</span></div>';
+      if(waitingItems.length){
+        lkhtml+='<div class="lkfixrow" style="margin-top:6px">'
+          +'<b style="color:#d9821a">⏳ Czeka na publikację celu:</b><br>'
+          +waitingItems.map(x=>'&bull; <span style="color:#889;font-size:11px">['+resc(x.kind)+']</span> '+resc(x.t)).join('<br>')
+          +'</div>';
+      }
+    }
+    if(lkBroken===0&&lkWaiting===0){
+      lkhtml+='<div class="bgrow"><span class="bgk">Status</span><span class="bgv" style="color:#1f9e6e">✓ wszystkie linki żywe</span></div>';
     }
     lkhtml+='</div>';
     inner+=lkhtml;
