@@ -1979,7 +1979,7 @@ function renderRKpi(){
     +'<div class="kb"><div class="l">Nie-blog</div><div class="v">'+nieblog+' <small>osobny tor (inline)</small></div></div>'
     +(function(){
       var tot=0,alive=0,fix=0;
-      ROWS.forEach(function(r){ if(r.lk){ tot+=r.lk.n; alive+=r.lk.alive; fix+=r.lk.fix; } });
+      ROWS.forEach(function(r){ if(r.lk&&r.lk.n!=null){ tot+=r.lk.n||0; alive+=r.lk.alive||0; fix+=r.lk.fix||0; } });
       var pct=tot?Math.round(alive/tot*100):0;
       return '<div class="kb"><div class="l">Linki żywe od razu</div><div class="v" style="color:#1f9e6e">'+pct+'% <small>'+alive+'/'+tot+'</small></div></div>'
         +'<div class="kb"><div class="l">Linki do podmiany</div><div class="v" style="color:#d9821a">'+fix+' <small>w '+ROWS.filter(function(r){return r.lk&&r.lk.fix>0}).length+' art.</small></div></div>';
