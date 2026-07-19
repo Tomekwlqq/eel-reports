@@ -786,6 +786,14 @@ function decodeArt(b64){ try{ return decodeURIComponent(escape(atob(b64))); }cat
 const ARTICLES={};
 for(var aid in ART_RAW){ ARTICLES[aid]={title:ART_RAW[aid].t, html:decodeArt(ART_RAW[aid].b)}; }
 
+/* ===== INDEKS WYNIKÓW SKANU (scan_links.py → DATA) ===== */
+const DATA_SCAN={};
+(function(){
+  if(typeof DATA==='undefined'||!Array.isArray(DATA)) return;
+  DATA.forEach(function(d){ if(d.lk && 'broken' in d.lk) DATA_SCAN[String(d.id)]=d.lk; });
+})();
+function getScanLk(r){ return (r.kl==='bron' && DATA_SCAN[String(r.nr)]) || r.lk; }
+
 /* ===== STORE / SUPABASE HOOK ===== */
 /* ====================================================================
    === SUPABASE HOOK ===
@@ -1813,8 +1821,10 @@ function rCellB(r){
   return '<span class="lkb" style="background:#eef3f7;color:#456" title="3 linki powiązane pod artykułem">3</span>';
 }
 function rLinkBadge(r){
-  const lk=r.lk; if(!lk||lk.n===0) return '<span style="color:#aab;font-size:11px">—</span>';
-  if(lk.fix===0) return '<span class="lkb lk-ok" title="wszystkie linki żywe od razu">'+lk.alive+'/'+lk.n+' ✓</span>';
+  const lk=getScanLk(r); if(!lk||lk.n===0) return '<span style="color:#aab;font-size:11px">—</span>';
+  const broken=lk.broken||0;
+  if(lk.fix===0&&broken===0) return '<span class="lkb lk-ok" title="wszystkie linki żywe od razu">'+lk.alive+'/'+lk.n+' ✓</span>';
+  if(broken>0) return '<span class="lkb" style="background:#fde8e8;color:#c0392b;font-weight:700" title="'+broken+' broken URL">'+lk.alive+'/'+lk.n+' ❌'+broken+'</span>';
   return '<span class="lkb lk-fix" title="'+lk.fix+' do podmiany później">'+lk.alive+'/'+lk.n+' · '+lk.fix+'⚠</span>';
 }
 function render(){
@@ -1902,7 +1912,7 @@ function openBrief(id, tr){
     inner+=th;
   }
   // --- sekcja: status linków (żywe vs do podmiany) ---
-  const lk=r.lk;
+  const lk=getScanLk(r);
   if(lk && lk.n>0){
     const lkBroken=lk.broken||0;
     const lkWaiting=lk.waiting||(lk.fix-lkBroken)||0;
