@@ -472,6 +472,39 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
 <!-- ============ TABELA WDROŻENIOWA ============ -->
 <section class="view" id="tab">
   <h2 class="sec"><span class="b"></span>Plan publikacji — 5 art./tydz wg ścieżek percepcji (broń↔dom)</h2>
+
+  <!-- PROCEDURA WDROŻENIOWA -->
+  <div style="background:#fffdf5;border:1.5px solid #e8c84a;border-radius:10px;padding:16px 20px;margin-bottom:16px;font-size:13px;line-height:1.7">
+    <div style="font-weight:700;font-size:14px;margin-bottom:10px;color:#7a5c00">⚙️ Procedura wdrożenia artykułu — krok po kroku</div>
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start">
+      <span style="color:#1f9e6e;font-weight:700">① Walidacja</span>
+      <span><code style="background:#f0f9f4;padding:2px 6px;border-radius:4px;font-size:11.5px">python3 scripts/validate_article.py artykuly_blog/art_NN_slug.html --config client_qa.json</code> → musi być RC=0 (zero blokerów P0)</span>
+      <span style="color:#1f9e6e;font-weight:700">② Inject do huba</span>
+      <span><code style="background:#f0f9f4;padding:2px 6px;border-radius:4px;font-size:11.5px">python3 scripts/inject_articles_hub.py</code> → ART_RAW + status BRIEF→NAPISANY + deploy</span>
+      <span style="color:#1f9e6e;font-weight:700">③ Publikacja CMS</span>
+      <span>Skopiuj HTML artykułu do IdoSell (blog → nowy wpis) i opublikuj. Skopiuj URL posta.</span>
+      <span style="color:#1f9e6e;font-weight:700">④ Oznacz LIVE</span>
+      <span><code style="background:#f0f9f4;padding:2px 6px;border-radius:4px;font-size:11.5px">python3 scripts/update_article_live.py &lt;nr&gt; &lt;blog_url&gt;</code> → aktualizuje plan, sprawdza linki, deployuje hub</span>
+    </div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid #e8c84a">
+      <span style="font-weight:700;color:#c0392b">🔗 Weryfikacja linków — kiedy i jak:</span>
+      <div style="margin-top:6px;display:grid;grid-template-columns:auto 1fr;gap:3px 12px">
+        <span style="color:#555;font-weight:600">Przy ④</span>
+        <span>Automatyczny rescan po każdym <code style="background:#f5f5f5;padding:1px 4px;border-radius:3px;font-size:11px">update_article_live.py</code> — wyniki widoczne w kolumnie "Status linków"</span>
+        <span style="color:#555;font-weight:600">Po ~30 dni</span>
+        <span>Ręczny rescan gdy opublikowano kolejne artykuły (ich linki powinny przejść z ⏳ na ✓): <code style="background:#f5f5f5;padding:1px 4px;border-radius:3px;font-size:11px">python3 scripts/scan_links.py --update-hub &amp;&amp; bash scripts/deploy_hub.sh</code></span>
+        <span style="color:#555;font-weight:600">Na żądanie</span>
+        <span>Po każdej zmianie URL produktu lub struktury sklepu — uruchom rescan ręcznie</span>
+      </div>
+      <div style="margin-top:8px;color:#666;font-size:12px">
+        <b>Status linków w tabeli:</b>
+        <span style="background:#e8f8f1;color:#1f9e6e;border-radius:4px;padding:1px 7px;margin:0 4px;font-size:11px">N/6 ✓</span> wszystkie żywe od razu &nbsp;·&nbsp;
+        <span style="background:#fff5e6;color:#d9821a;border-radius:4px;padding:1px 7px;margin:0 4px;font-size:11px">N/6 · K⚠</span> K linków czeka (cel nieopublikowany — OK) &nbsp;·&nbsp;
+        <span style="background:#fde8e8;color:#c0392b;border-radius:4px;padding:1px 7px;margin:0 4px;font-size:11px">N/6 ❌K</span> K broken URL — napraw w HTML artykułu
+      </div>
+    </div>
+  </div>
+
   <div class="kpibox" id="rKpi"></div>
   <div class="ctrl">
     <input type="text" id="rq" placeholder="Szukaj tytułu…">
