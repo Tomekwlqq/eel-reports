@@ -28,11 +28,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 /* SPLIT VIEW */
 .split-view{display:flex;flex:1;overflow:hidden}
 .split-list{flex:0 0 58%;overflow-y:auto;background:#fff;padding:8px 0}
-.split-shot{flex:0 0 auto;width:min(58%,840px);border-left:2px solid #e2e8f0;overflow:auto;background:#f8fafc;scroll-behavior:smooth}
+.split-shot{flex:0 0 auto;width:min(66%,960px);border-left:2px solid #e2e8f0;overflow:auto;background:#f8fafc;scroll-behavior:smooth;text-align:center}
 .shot-img{width:100%;display:block;margin:0 auto}
 
 /* MOBILE SCREEN — v5 SPEC: 390px strict, no upscaling */
-.split-shot .shot-img{width:400px;max-width:400px;margin:0 auto}
+.split-shot .shot-img{width:460px;max-width:460px;margin:0 auto}
 
 /* WNIOSKI BANNER */
 .wnioski-banner{margin:0 16px 12px;border-radius:8px;overflow:hidden;border:1px solid #fecaca}
@@ -476,12 +476,12 @@ function setVP(vp, btn) {
         img.src = vp === 'desktop' ? imgD : imgM;
         // v5 SPEC: mobile screen ZAWSZE 390px, nie upscaling
         if (vp === 'mobile') {
-            img.style.width = '400px';
-            img.style.maxWidth = '400px';
+            img.style.width = '460px';
+            img.style.maxWidth = '460px';
             img.style.margin = '0 auto';
         } else {
-            img.style.width = '800px';
-            img.style.maxWidth = '800px';
+            img.style.width = '100%';
+            img.style.maxWidth = '100%';
             img.style.margin = '';
         }
     }
