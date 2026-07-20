@@ -201,11 +201,11 @@ tr.hot td{background:rgba(22,163,74,.05)}tr.danger td{background:rgba(220,38,38,
     <div class="dpanel-row">
       <div class="dp-group">
         <label>Od</label>
-        <input type="date" id="dateS" min="2026-01-01" max="2026-07-14">
+        <input type="date" id="dateS" min="2026-01-01" max="2026-07-19">
       </div>
       <div class="dp-group">
         <label>Do</label>
-        <input type="date" id="dateE" min="2026-01-01" max="2026-07-14">
+        <input type="date" id="dateE" min="2026-01-01" max="2026-07-19">
       </div>
       <div class="dp-group">
         <label>Preset</label>
@@ -225,11 +225,11 @@ tr.hot td{background:rgba(22,163,74,.05)}tr.danger td{background:rgba(220,38,38,
     <div class="cmp-row" id="cmpRow">
       <div class="dp-group">
         <label>Porównanie Od</label>
-        <input type="date" id="cmpS" min="2026-01-01" max="2026-07-14">
+        <input type="date" id="cmpS" min="2026-01-01" max="2026-07-19">
       </div>
       <div class="dp-group">
         <label>Porównanie Do</label>
-        <input type="date" id="cmpE" min="2026-01-01" max="2026-07-14">
+        <input type="date" id="cmpE" min="2026-01-01" max="2026-07-19">
       </div>
     </div>
   </div>
@@ -752,6 +752,33 @@ function renderLanding(d){
   return h;
 }
 
+function renderLandingShopify(d){
+  const lp=(d.landing_shopify||[]).slice(0,15);if(!lp.length)return '';
+  const verdict=(x)=>{
+    const atcP=x.atc/x.sessions;const chkP=x.checkout/x.sessions;
+    if(/sleeping-beauty/i.test(x.page))return ['🔴 Porzucenie','b-bad'];
+    if(atcP>=0.3)return ['🌟 Top ATC%','b-good'];
+    if(chkP>=0.2)return ['✅ Checkout','b-good'];
+    if(/manage-subscriptions/.test(x.page))return ['ℹ️ Subskrypcje','b-blue'];
+    if(x.atc===0&&x.sessions>20)return ['⚠️ Zero ATC','b-warn'];
+    return ['• OK','b-blue'];
+  };
+  let h=`<h2><span class="r">R04.1</span> Strony wejścia — Shopify</h2>
+  <div class="what">Te same landingi co R04 ale z danych Shopify — czyste URLe, bez fbclid, bez (not set). ATC% = sessions_with_cart_additions / sessions.</div>
+  <span class="dl">Shopify ShopifyQL · landing_page_path · sessions · ATC · checkout · wszystkie kraje</span>
+  <table><tr><th>Strona</th><th>Sesje</th><th>ATC</th><th>ATC%</th><th>Checkout</th><th>Chk%</th><th>Ocena</th></tr>`;
+  lp.forEach(x=>{
+    const atcp=x.sessions?x.atc/x.sessions*100:0;
+    const chkp=x.sessions?x.checkout/x.sessions*100:0;
+    const[v,cl]=verdict(x);
+    const cls=/sleeping-beauty/i.test(x.page)?'danger':(atcp>=30?'hot':'');
+    h+=`<tr class="${cls}"><td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${x.page}">${x.page}</td><td>${n(x.sessions)}</td><td>${n(x.atc)}</td><td>${atcp.toFixed(1)}%</td><td>${n(x.checkout)}</td><td>${chkp.toFixed(1)}%</td><td><span class="badge ${cl}">${v}</span></td></tr>`;
+  });
+  h+='</table>';
+  h+=`<div class="concl c-blue"><span class="lab">Źródło</span>Shopify Analytics (wszystkie kraje). Brak transakcji per landing — użyj R04 (GA4) dla CR i przychodu.</div>`;
+  return h;
+}
+
 function renderNewRet(d){
   const nr=d.newret||[];
   const nw=nr.find(x=>x.segment==='new'),rt=nr.find(x=>x.segment==='returning');
@@ -900,6 +927,7 @@ function renderReport(s,e,cmpS,cmpE){
   h+=renderChannels(d);
   h+=renderRepeat(d);
   h+=renderLanding(d);
+  h+=renderLandingShopify(d);
   h+=renderNewRet(d);
   h+=renderDevices(d);
   h+=renderSearch(d);
