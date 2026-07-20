@@ -275,6 +275,7 @@ function delta(cur,prev){
 // ── Live section ──────────────────────────────────────────────────────────────
 
 function switchLiveTab(key,btn){
+  currentLiveTab=key;
   document.querySelectorAll('.live-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderLive(key);
@@ -394,13 +395,33 @@ function renderLive(key){
   initLiveCollapse();
 }
 
+// ── LIVE Shopify KPI przez Workera (Odśwież ściąga realne dane, nie snapshot) ──
+const CHAT_WORKER='https://glov-chat.waleqq.workers.dev';
+let currentLiveTab='today';
+function applyLiveKPI(k){
+  if(!k||!LIVE)return;
+  ['today','yesterday'].forEach(day=>{
+    if(k[day]&&LIVE[day]&&LIVE[day].shopify&&LIVE[day].shopify.kpi){
+      const kpi=LIVE[day].shopify.kpi;
+      kpi.orders=k[day].orders;
+      kpi.gross_sales=k[day].gross_sales;
+      kpi.aov=k[day].aov;
+    }
+  });
+}
+function fetchLiveKPI(){
+  return fetch(CHAT_WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'live_kpi'})})
+    .then(r=>r.ok?r.json():null).then(applyLiveKPI).catch(()=>{});
+}
+
 function initLive(){
   if(!LIVE)return;
   const td=document.getElementById('lt-today-date');
   const yd=document.getElementById('lt-yesterday-date');
   if(td&&LIVE.today)td.textContent=LIVE.today.date||'';
   if(yd&&LIVE.yesterday)yd.textContent=LIVE.yesterday.date||'';
-  renderLive('today');
+  renderLive(currentLiveTab);                                  // od razu ze snapshotu
+  fetchLiveKPI().then(()=>renderLive(currentLiveTab));         // potem nadpisz live z Shopify
 }
 
 function aggregateRange(s,e){
@@ -1188,7 +1209,11 @@ function loadData(showSpinner){
 function refreshData(){
   const rb=document.getElementById('refreshBtn');
   if(rb){rb.disabled=true;rb.textContent='⏳...';}
-  loadData(false);
+  // Odśwież = ściągnij LIVE Shopify KPI z Workera (realne dane), nie tylko snapshot
+  fetchLiveKPI().then(()=>{
+    renderLive(currentLiveTab);
+    if(rb){rb.disabled=false;rb.textContent='🔄 Odśwież';}
+  });
 }
 document.addEventListener('DOMContentLoaded',()=>loadData(true));
 
