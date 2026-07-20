@@ -1,559 +1,181 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Ania Kruk — Vision Scan v5</title><style>
+<!DOCTYPE html><html lang="pl"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Ania Kruk — Vision Scan</title>
+<style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#ffffff;color:#1e293b;font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
-
-/* TOPBAR */
-.topbar{padding:10px 20px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:12px;flex-shrink:0;flex-wrap:wrap}
-.client-name{font-size:16px;font-weight:800;color:#0f172a}
-.scan-meta{color:#94a3b8;font-size:11px}
-.scan-meta a{color:#3b82f6;text-decoration:none}
-.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.health-strip{display:flex;gap:10px;font-size:12px;font-weight:600;color:#334155}
-.health-item{display:inline-flex;align-items:center;gap:2px}
-
-/* TABS */
-.tabs-bar{padding:6px 20px;background:#f8fafc;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:6px;flex-shrink:0;overflow-x:auto}
-.tab-btn{padding:6px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;color:#64748b}
-.tab-btn.active{background:#0f172a;color:#fff;border-color:#0f172a}
-.tab-btn.disabled{color:#cbd5e1;cursor:not-allowed;background:#f8fafc}
-.tabs-spacer{margin-left:auto}
-
-.toggle-group{display:flex;border:1px solid #e2e8f0;border-radius:6px;overflow:hidden}
-.tbtn{padding:5px 12px;background:#fff;border:none;cursor:pointer;font-size:12px;font-weight:500;color:#64748b;border-right:1px solid #e2e8f0;transition:all .12s}
-.tbtn:last-child{border-right:none}
-.tbtn.active{background:#0f172a;color:#fff}
-
-/* SPLIT VIEW */
-.split-view{display:flex;flex:1;overflow:hidden}
-.split-list{flex:1 1 auto;overflow-y:auto;background:#fff;padding:8px 0}
-.split-shot{flex:0 0 auto;width:600px;border-left:2px solid #e2e8f0;overflow:auto;background:#f8fafc;scroll-behavior:smooth;text-align:center}
-.shot-img{width:100%;display:block;margin:0 auto}
-
-/* MOBILE SCREEN — v5 SPEC: 390px strict, no upscaling */
-.split-shot .shot-img{width:560px;max-width:560px;margin:0 auto}
-
-/* WNIOSKI BANNER */
-.wnioski-banner{margin:0 16px 12px;border-radius:8px;overflow:hidden;border:1px solid #fecaca}
-.wnioski-header{padding:10px 14px;background:#fef2f2;color:#991b1b;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
-.wnioski-body{padding:10px 14px;background:#fff}
-.alarm-card{border-left:3px solid #dc2626;background:#fef2f2;border-radius:0 6px 6px 0;padding:10px 12px;margin-bottom:10px}
-.alarm-problem{font-weight:700;color:#0f172a;margin-bottom:6px}
-.alarm-insight{color:#475569;font-size:12.5px;line-height:1.6;margin-bottom:4px}
-.alarm-ocena{color:#475569;font-size:12.5px;line-height:1.6}
-.dz-block{background:#eff6ff;border-left:3px solid #3b82f6;border-radius:0 6px 6px 0;padding:10px 12px}
-.dz-title{font-weight:700;color:#1e3a8a;margin-bottom:6px;font-size:12.5px}
-.dz-item{color:#1e40af;font-size:12.5px;line-height:1.7}
-
-/* EL ROW */
-.el-item{border-bottom:1px solid #f1f5f9}
-.el-row{cursor:pointer;padding:11px 16px;display:flex;align-items:center;gap:10px;transition:background .1s}
-.el-row:hover{background:#f0f9ff}
-.el-row.active{background:#e0f2fe}
-.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.dot-na{background:#cbd5e1}
-.el-name{font-weight:700;color:#0f172a;flex-shrink:0}
-.el-etyk{color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:40%;flex:1 1 auto}
-.zone-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;flex-shrink:0;white-space:nowrap}
-.el-top{color:#94a3b8;font-size:11px;flex-shrink:0;white-space:nowrap}
-.el-details{cursor:pointer;color:#64748b;font-size:14px;flex-shrink:0;transition:color .1s;margin-left:6px}
-.el-details:hover{color:#3b82f6}
-.baby{flex-shrink:0}
-.new-badge{background:#fde68a;color:#92400e;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;flex-shrink:0}
-.chevron{margin-left:auto;color:#94a3b8;flex-shrink:0;transition:transform .15s}
-.el-row.expanded .chevron{transform:rotate(180deg)}
-
-/* ACCORDION (4 pola v5) */
-.el-accordion{background:#fafafa;padding:4px 16px 12px 40px}
-.acc-section{padding:8px 0}
-.acc-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#94a3b8;margin-bottom:5px}
-.acc-content{font-size:13px;color:#334155;line-height:1.6}
-
-.acc-zaw{color:#334155;font-size:13px;line-height:1.6}
-
-/* Obserwacje — wyróżnione (insight, pełne zdania) */
-.obs-insight{background:#faf5ff;color:#4c1d95;padding:8px 10px;border-left:2px solid #a78bfa;border-radius:4px;font-size:13px;line-height:1.6;font-style:italic}
-.obs-empty{color:#94a3b8;font-size:12px;font-style:italic}
-
-/* Ocena — werdykt + opis */
-.ocena-item{display:flex;align-items:baseline;gap:6px;font-size:13px;color:#334155}
-.ocena-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:2px}
-.ocena-label{font-weight:600;flex-shrink:0}
-.ocena-empty{color:#94a3b8;font-size:12px}
-
-/* Developer (reguły + tech) */
-.dev-reguly{margin-bottom:8px}
-.dev-rule{font-size:12px;color:#475569;line-height:1.7;display:flex;align-items:baseline;gap:6px}
-.dev-badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;color:#fff;flex-shrink:0}
-.dev-tech{background:#fff;border:1px solid #e2e8f0;border-radius:4px;padding:8px 10px;margin-top:4px}
-.dev-tech-item{font-size:12px;color:#475569;line-height:1.6;margin-bottom:4px}
-.dev-tech-item code{background:#f1f5f9;border-radius:3px;padding:1px 4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px}
-
-/* Developer section toggle — domyślnie UKRYTY (Shopper view) */
-body:not(.dev) .acc-dev{display:none}
-
-.acc-footer{color:#94a3b8;font-size:10.5px;padding-top:6px}
-
-/* OVERLAY modal */
-.overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
-.overlay.active{display:flex}
-.overlay-box{background:#fff;border-radius:12px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;padding:24px;position:relative;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1)}
-.overlay-close{position:absolute;top:14px;right:18px;cursor:pointer;font-size:18px;color:#64748b;transition:color .1s}
-.overlay-close:hover{color:#0f172a}
-.overlay-title{font-size:16px;font-weight:800;color:#0f172a;margin-bottom:16px;word-break:break-word}
-
-@media (max-width: 899px){
-  .overlay-box{max-width:100%;max-height:100vh;border-radius:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff;color:#1e293b;font-size:14px}
+.top{padding:12px 22px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:0;background:#fff;z-index:20}
+.top b.cl{font-size:17px;color:#0f172a}
+.meta{color:#94a3b8;font-size:12px} .meta a{color:#3b82f6;text-decoration:none}
+.hstrip{margin-left:auto;display:flex;gap:10px;font-weight:600;font-size:13px;align-items:center;flex-wrap:wrap}
+.tg{display:flex;border:1px solid #e2e8f0;border-radius:7px;overflow:hidden}
+.tg button{padding:7px 15px;border:none;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:#64748b;border-right:1px solid #e2e8f0}
+.tg button:last-child{border-right:none} .tg button.on{background:#0f172a;color:#fff}
+/* GRID — lista | screen. Screen ZAWSZE width:100% kolumny → duży na każdym ekranie */
+.wrap{display:grid;grid-template-columns:1fr 1fr;align-items:start}
+.list{padding:14px 16px;min-width:0}
+.shot{position:sticky;top:57px;height:calc(100vh - 57px);overflow:auto;background:#f8fafc;border-left:2px solid #e2e8f0}
+.shot .bar{padding:8px 14px;font-size:12px;color:#64748b;border-bottom:1px solid #e2e8f0;background:#fff;position:sticky;top:0;display:flex;gap:10px;align-items:center}
+.shot img{width:100%;display:block}
+.shot a{display:block}
+@media(max-width:900px){
+  .wrap{grid-template-columns:1fr}
+  .shot{position:static;height:auto;order:-1;border-left:none;border-bottom:2px solid #e2e8f0}
+  .shot img{max-height:70vh;width:auto;max-width:100%;margin:0 auto}
 }
-
-/* RESPONSIVE < 900px */
-@media (max-width: 899px){
-  body{height:auto;overflow:visible}
-  .split-view{flex-direction:column;overflow:visible}
-  .split-shot{order:-1;flex:0 0 auto;width:100%;position:sticky;top:0;z-index:10;height:38vh;border-left:none;border-bottom:2px solid #e2e8f0}
-  .split-list{order:1;flex:0 0 auto;overflow:visible}
-  .el-etyk{max-width:100px}
-  .tabs-bar{flex-wrap:nowrap}
-}
-</style></head>
-<body>
-<div class="topbar">
-  <div>
-    <span class="client-name">Ania Kruk</span>
-    <span class="scan-meta"> — Vision Scan — 2026-07-18 — <a href="https://www.aniakruk.pl" target="_blank">https://www.aniakruk.pl</a> — platforma: Magento (sygnał) · GTM-NM7C4H8 · GA4 G-V21HLR7M27</span>
-  </div>
-  <div class="topbar-right">
-    <div class="health-strip"><span class="health-item">🔴0</span><span class="health-item">🟠5</span><span class="health-item">🟡4</span><span class="health-item">🟢2</span></div>
-    <div class="toggle-group">
-      <button class="tbtn active" data-view="shopper" onclick="setView('shopper',this)">🛍 Shopper</button>
-      <button class="tbtn" data-view="developer" onclick="setView('developer',this)">🔧 Developer</button>
-    </div>
-  </div>
-</div>
-<div class="tabs-bar">
-  <button class="tab-btn active" data-tab="hp" onclick="switchTab('hp',this)">HP</button>
-  <button class="tab-btn disabled" disabled title="wkrótce">PDP · wkrótce</button>
-  <button class="tab-btn disabled" disabled title="wkrótce">Kafelek · wkrótce</button>
-  <div class="tabs-spacer"></div>
-  <div class="toggle-group">
-    <button class="tbtn" data-vp="desktop" onclick="setVP('desktop',this)">🖥 Desktop</button>
-    <button class="tbtn active" data-vp="mobile" onclick="setVP('mobile',this)">📱 Mobile</button>
+.uzg{background:#eff6ff;border-left:3px solid #3b82f6;border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:14px}
+.uzg-t{font-weight:700;color:#1e3a8a;margin-bottom:6px} .uzg ul{margin:0 0 0 18px} .uzg li{margin:4px 0;color:#1e40af;font-size:13px;line-height:1.55}
+.card{border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px;margin-bottom:12px;background:#fff}
+.chead{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.cname{font-weight:700;color:#0f172a;font-size:15px}
+.zone{color:#fff;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:11px}
+.ctop{color:#94a3b8;font-size:11px;margin-left:auto;font-family:ui-monospace,monospace}
+.cetyk{color:#94a3b8;font-size:12.5px;margin:5px 0 9px}
+.czaw{color:#334155;font-size:13px;line-height:1.6;margin-bottom:9px}
+.cobs{background:#faf5ff;color:#4c1d95;padding:10px 12px;border-left:3px solid #a78bfa;border-radius:5px;font-size:13.5px;line-height:1.65;font-style:italic;margin-bottom:9px}
+.coc{display:flex;align-items:baseline;gap:7px;font-size:13px;color:#334155}
+.ocdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.dev{margin-top:9px;padding-top:9px;border-top:1px dashed #e2e8f0;font-size:12px}
+.dev-lab{color:#94a3b8;font-weight:600} .dev code{background:#f1f5f9;border-radius:4px;padding:2px 6px;font-family:ui-monospace,monospace;font-size:11px;margin-right:3px;color:#0369a1}
+body:not(.dev) .dev{display:none}
+</style></head><body>
+<div class="top">
+  <div><b class="cl">Ania Kruk</b> <span class="meta">Vision Scan · 2026-07-18 · <a href="https://www.aniakruk.pl" target="_blank">https://www.aniakruk.pl</a> · Magento (sygnał) · GTM-NM7C4H8 · GA4 G-V21HLR7M27</span></div>
+  <div class="hstrip">
+    <span>🔴0 🟠5 🟡4 🟢2</span>
+    <div class="tg"><button id="b-shop" class="on" onclick="mode('shop')">🛍 Shopper</button><button id="b-dev" onclick="mode('dev')">🔧 Developer</button></div>
   </div>
 </div>
-<div class="split-view">
-  <div class="split-list">
-    <div class="wnioski-banner">
-  <div class="wnioski-header" onclick="toggleWnioski(this)">⚠ Najważniejsze wnioski (0) <span class="chev">⌄</span></div>
-  <div class="wnioski-body" style="display:none">
-    
-    <div class="dz-block"><div class="dz-title">Do uzgodnienia (4)</div><div class="dz-item"><b>„SALE do -70%” w menu głównym</b> — Czerwony krzyk ceny obok delikatnych kategorii — złagodzić, żeby marka nie brzmiała jak dyskont?</div>
-<div class="dz-item"><b>Bransoletki na nogę — wysoko na HP</b> — Wąska sezonowa nisza na eksponowanym miejscu — czy zasługuje kosztem szerszych bestsellerów?</div>
-<div class="dz-item"><b>Sekcja Motywy — klimat vs produkt</b> — Mocny vibe, słaba czytelność produktu i nazw — dowieźć link do konkretu?</div>
-<div class="dz-item"><b>Blok prezentowy (szkatułki, vouchery)</b> — Duży use-case (prezent) schowany na scroll 3 — rozważyć wyżej?</div></div>
-  </div>
-</div>
-    <div class="el-item">
-  <div class="el-row" onclick="rowClick(this, 0, 0)">
-    <span class="dot" style="background:#f59e0b" title="POPRAW"></span>
-    <span class="el-name">Pasek promocyjny (topbar)</span>
-    <span class="el-etyk" title="LAST CALL SUMMER SALE + darmowa dostawa">LAST CALL SUMMER SALE + darmowa dostawa</span>
-    <span class="zone-badge" style="background:#64748b22;color:#64748b">above</span>
-    <span class="el-top">0px</span>
-    <span class="el-details" onclick="event.stopPropagation();openOverlay(this)" title="szczegóły">⛶</span>
-    
-    <span class="chevron">⌄</span>
-  </div>
-  <div class="el-accordion" style="display:none">
-    <div class="acc-section">
-  <div class="acc-title">Zawartość / akcje</div>
-  <div class="acc-content"><div class="acc-zaw">Górny pasek na neonowej zieleni: „LAST CALL SUMMER SALE” z licznikiem czasu (mobile), darmowa dostawa od progu, 30 dni na zwrot, karty podarunkowe.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Obserwacje</div>
-  <div class="acc-content"><div class="obs-insight">Marka premium-fashion wita klienta krzykiem wyprzedaży w neonowej zieleni — pierwszy komunikat to cena, nie pożądanie. Licznik odliczający buduje presję, ale biżuteria to zakup aspiracyjny, nie impulsowy, więc scarcity na progu raczej tanieje wizerunek niż napędza. Za to darmowa dostawa i 30 dni na zwrot słusznie na wierzchu — to realne bariery kupowania biżuterii online.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Ocena</div>
-  <div class="acc-content"><div class="ocena-item"><span class="ocena-dot" style="background:#f59e0b"></span><span class="ocena-label">POPRAW</span> Za dużo krzyku ceny na wejściu; przesuń akcent z rabatu na wartość.</div></div>
-</div><div class="acc-footer">Pozycja: above · 0px (desktop) / 0px (mobile)</div>
-  </div>
-</div>
-<div class="el-item">
-  <div class="el-row" onclick="rowClick(this, 40, 40)">
-    <span class="dot" style="background:#3b82f6" title="SPRAWDŹ"></span>
-    <span class="el-name">Header / nawigacja</span>
-    <span class="el-etyk" title="logo + menu + search + koszyk">logo + menu + search + koszyk</span>
-    <span class="zone-badge" style="background:#64748b22;color:#64748b">above</span>
-    <span class="el-top">40px</span>
-    <span class="el-details" onclick="event.stopPropagation();openOverlay(this)" title="szczegóły">⛶</span>
-    
-    <span class="chevron">⌄</span>
-  </div>
-  <div class="el-accordion" style="display:none">
-    <div class="acc-section">
-  <div class="acc-title">Zawartość / akcje</div>
-  <div class="acc-content"><div class="acc-zaw">Logo ANIA KRUK wyśrodkowane. Menu: Biżuteria, Bestsellery, Nowości, Na prezent, SALE do -70%. Search, profil, ulubione (schowek), koszyk. Mobile: hamburger + search.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Obserwacje</div>
-  <div class="acc-content"><div class="obs-insight">Czysty, jasny, wyśrodkowane logo jak w domu mody — to premium feel i dobrze. Ale w menu głównym „SALE do -70%” na czerwono krzyczy obok delikatnych kategorii; znów cena wygrywa z marką. Widoczny search to plus — przy biżuterii klientka szuka konkretu („koła”, „perła”). Schowek/ulubione wspiera długi namysł, naturalny przy tym produkcie.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Ocena</div>
-  <div class="acc-content"><div class="ocena-item"><span class="ocena-dot" style="background:#3b82f6"></span><span class="ocena-label">SPRAWDŹ</span> Rozważ złagodzenie „SALE -70%” w głównym menu.</div></div>
-</div><div class="acc-footer">Pozycja: above · 40px (desktop) / 40px (mobile)</div>
-  </div>
-</div>
-<div class="el-item">
-  <div class="el-row" onclick="rowClick(this, 90, 130)">
-    <span class="dot" style="background:#f59e0b" title="POPRAW"></span>
-    <span class="el-name">Hero slider — SALE -70%</span>
-    <span class="el-etyk" title="SALE do -70%, TYLKO DO 19.07, KUP TERAZ">SALE do -70%, TYLKO DO 19.07, KUP TERAZ</span>
-    <span class="zone-badge" style="background:#64748b22;color:#64748b">above</span>
-    <span class="el-top">90px</span>
-    <span class="el-details" onclick="event.stopPropagation();openOverlay(this)" title="szczegóły">⛶</span>
-    
-    <span class="chevron">⌄</span>
-  </div>
-  <div class="el-accordion" style="display:none">
-    <div class="acc-section">
-  <div class="acc-title">Zawartość / akcje</div>
-  <div class="acc-content"><div class="acc-zaw">Pełnoekranowy slider. Slajd: „SALE do -70%, TYLKO DO 19.07” na fioletowym tle z muszlami, CTA „KUP TERAZ”, strzałki + kropki. Mobile: pod nim drugi banner „SUMMER IN THE CITY — biżuteria na lato”.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Obserwacje</div>
-  <div class="acc-content"><div class="obs-insight">Najcenniejszy piksel strony — pierwszy ekran — oddany w całości wyprzedaży -70%. To mówi „jesteśmy tanie”, a nie „jesteś tego warta”. Przy biżuterii, gdzie sprzedajesz emocję i status, hero-rabat zjada i marżę, i pożądanie. Muszle jako letni motyw są ładne, ale przykryte wielkim SALE. Na mobile klientka przewija DWA bannery hero, zanim zobaczy pierwszy produkt — długa droga do towaru.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Ocena</div>
-  <div class="acc-content"><div class="ocena-item"><span class="ocena-dot" style="background:#f59e0b"></span><span class="ocena-label">POPRAW</span> Hero sprzedaje rabat zamiast marki/kolekcji; pierwszy ekran ma budować pożądanie.</div></div>
-</div><div class="acc-footer">Pozycja: above · 90px (desktop) / 130px (mobile)</div>
-  </div>
-</div>
-<div class="el-item">
-  <div class="el-row" onclick="rowClick(this, 1900, 2500)">
-    <span class="dot" style="background:#f59e0b" title="POPRAW"></span>
-    <span class="el-name">Wybrane dla Ciebie</span>
-    <span class="el-etyk" title="karuzela rekomendacji (Segmentify)">karuzela rekomendacji (Segmentify)</span>
-    <span class="zone-badge" style="background:#64748b22;color:#64748b">scroll1</span>
-    <span class="el-top">1900px</span>
-    <span class="el-details" onclick="event.stopPropagation();openOverlay(this)" title="szczegóły">⛶</span>
-    <span class="baby" title="personalizacja">👶</span>
-    <span class="chevron">⌄</span>
-  </div>
-  <div class="el-accordion" style="display:none">
-    <div class="acc-section">
-  <div class="acc-title">Zawartość / akcje</div>
-  <div class="acc-content"><div class="acc-zaw">Karuzela produktów personalizowanych (silnik Segmentify). Kafle z ikoną serca (ulubione). Pierwszy kafel: „e-voucher”.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Obserwacje</div>
-  <div class="acc-content"><div class="obs-insight">Rekomendacje zaraz po hero to dobra mechanika — relevance buduje zaangażowanie. Ale pierwszy kafel to „e-voucher”, nie produkt: otwierasz personalizację czymś, co nie wzbudza pożądania ani nie pokazuje estetyki marki — zmarnowany najlepszy slot. Serce/ulubione na kaflu słusznie wspiera „odłożę na później”, naturalne w biżuterii.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Ocena</div>
-  <div class="acc-content"><div class="ocena-item"><span class="ocena-dot" style="background:#f59e0b"></span><span class="ocena-label">POPRAW</span> Nie otwieraj rekomendacji e-voucherem; pierwszy kafel niech uwodzi produktem.</div></div>
-</div><div class="acc-footer">Pozycja: scroll1 · 1900px (desktop) / 2500px (mobile)</div>
-  </div>
-</div>
-<div class="el-item">
-  <div class="el-row" onclick="rowClick(this, 3550, 3675)">
-    <span class="dot" style="background:#16a34a" title="OK"></span>
-    <span class="el-name">Biżuteria — kafle kategorii</span>
-    <span class="el-etyk" title="Bransoletki · Piercing · Kolczyki koła · Nausznice">Bransoletki · Piercing · Kolczyki koła · Nausznice</span>
-    <span class="zone-badge" style="background:#64748b22;color:#64748b">scroll1</span>
-    <span class="el-top">3550px</span>
-    <span class="el-details" onclick="event.stopPropagation();openOverlay(this)" title="szczegóły">⛶</span>
-    
-    <span class="chevron">⌄</span>
-  </div>
-  <div class="el-accordion" style="display:none">
-    <div class="acc-section">
-  <div class="acc-title">Zawartość / akcje</div>
-  <div class="acc-content"><div class="acc-zaw">Siatka kafli kategorii ze zdjęciami lifestyle (ucho z piercingiem, nadgarstek): Bransoletki, Piercing, Kolczyki koła, Nausznice — każdy „POKAŻ WIĘCEJ”.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Obserwacje</div>
-  <div class="acc-content"><div class="obs-insight">Najmocniejsza sekcja strony — biżuteria pokazana na ciele, na modelce, w kontekście stylizacji. Tak właśnie kupuje się fashion jewellery: oczami, wyobrażając produkt na sobie. Zdjęcia ucha z nausznicą są aspiracyjne i konkretne zarazem. To powinien być kręgosłup HP, a nie pobocze między karuzelami.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Ocena</div>
-  <div class="acc-content"><div class="ocena-item"><span class="ocena-dot" style="background:#16a34a"></span><span class="ocena-label">OK</span> Silna, lifestyle'owa nawigacja wizualna — wzorzec dla reszty strony.</div></div>
-</div><div class="acc-footer">Pozycja: scroll1 · 3550px (desktop) / 3675px (mobile)</div>
-  </div>
-</div>
-<div class="el-item">
-  <div class="el-row" onclick="rowClick(this, 4900, 5130)">
-    <span class="dot" style="background:#3b82f6" title="SPRAWDŹ"></span>
-    <span class="el-name">Bransoletki na nogę</span>
-    <span class="el-etyk" title="sekcja sezonowa + karuzela">sekcja sezonowa + karuzela</span>
-    <span class="zone-badge" style="background:#64748b22;color:#64748b">scroll2</span>
-    <span class="el-top">4900px</span>
-    <span class="el-details" onclick="event.stopPropagation();openOverlay(this)" title="szczegóły">⛶</span>
-    
-    <span class="chevron">⌄</span>
-  </div>
-  <div class="el-accordion" style="display:none">
-    <div class="acc-section">
-  <div class="acc-title">Zawartość / akcje</div>
-  <div class="acc-content"><div class="acc-zaw">Nagłówek + „ZOBACZ WSZYSTKO”, duże zdjęcie lifestyle (kostka, sandał) i karuzela produktów z cenami.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Obserwacje</div>
-  <div class="acc-content"><div class="obs-insight">Wąska, sezonowa nisza (lato) dostała eksponowane miejsce wysoko na HP. Trafione pod moment (lipiec), ale to kategoria dla wąskiej grupy — zajmuje realny estate kosztem szerszych bestsellerów, po które przychodzi większość. Zdjęcie na ciele znów mocne i słuszne.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Ocena</div>
-  <div class="acc-content"><div class="ocena-item"><span class="ocena-dot" style="background:#3b82f6"></span><span class="ocena-label">SPRAWDŹ</span> Sezonowo OK, ale zweryfikuj czy nisza zasługuje na tak wysokie miejsce.</div></div>
-</div><div class="acc-footer">Pozycja: scroll2 · 4900px (desktop) / 5130px (mobile)</div>
-  </div>
-</div>
-<div class="el-item">
-  <div class="el-row" onclick="rowClick(this, 6400, 7160)">
-    <span class="dot" style="background:#3b82f6" title="SPRAWDŹ"></span>
-    <span class="el-name">Motywy</span>
-    <span class="el-etyk" title="Kamienie · Lato · Serca — kafle klimatyczne">Kamienie · Lato · Serca — kafle klimatyczne</span>
-    <span class="zone-badge" style="background:#64748b22;color:#64748b">scroll2</span>
-    <span class="el-top">6400px</span>
-    <span class="el-details" onclick="event.stopPropagation();openOverlay(this)" title="szczegóły">⛶</span>
-    
-    <span class="chevron">⌄</span>
-  </div>
-  <div class="el-accordion" style="display:none">
-    <div class="acc-section">
-  <div class="acc-title">Zawartość / akcje</div>
-  <div class="acc-content"><div class="acc-zaw">Kafle lifestyle wg motywu (Kamienie, Lato, Serca/zwierzęta) — klimatyczne foto (aparat jednorazowy, nasycony kolor), przycisk „SPRAWDŹ”.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Obserwacje</div>
-  <div class="acc-content"><div class="obs-insight">Buduje klimat młodej, festiwalowej marki — aparat jednorazowy, nasycone kolory, wakacyjny mood; emocjonalnie to działa. Ale kafle są bardziej „vibe” niż sprzedaż: słabo widać sam produkt i jego nazwę. Ładny oddech marki, który w ciągu karuzel produktowych gubi jednak funkcję prowadzenia do zakupu.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Ocena</div>
-  <div class="acc-content"><div class="ocena-item"><span class="ocena-dot" style="background:#3b82f6"></span><span class="ocena-label">SPRAWDŹ</span> Mocny klimat, słaba czytelność produktu — dowieź link do konkretu.</div></div>
-</div><div class="acc-footer">Pozycja: scroll2 · 6400px (desktop) / 7160px (mobile)</div>
-  </div>
-</div>
-<div class="el-item">
-  <div class="el-row" onclick="rowClick(this, 8300, 7720)">
-    <span class="dot" style="background:#f59e0b" title="POPRAW"></span>
-    <span class="el-name">Bransoletki sznurkowe</span>
-    <span class="el-etyk" title="czwarta karuzela produktowa z rzędu">czwarta karuzela produktowa z rzędu</span>
-    <span class="zone-badge" style="background:#64748b22;color:#64748b">scroll2</span>
-    <span class="el-top">8300px</span>
-    <span class="el-details" onclick="event.stopPropagation();openOverlay(this)" title="szczegóły">⛶</span>
-    
-    <span class="chevron">⌄</span>
-  </div>
-  <div class="el-accordion" style="display:none">
-    <div class="acc-section">
-  <div class="acc-title">Zawartość / akcje</div>
-  <div class="acc-content"><div class="acc-zaw">Kolejna karuzela produktów (bransoletki sznurkowe, kolorowe) z cenami, sercem, „ZOBACZ WSZYSTKO”.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Obserwacje</div>
-  <div class="acc-content"><div class="obs-insight">To już czwarta karuzela produktowa z rzędu — HP zamienia się w taśmę jednakowych przewijanych pasów. Brak hierarchii: nic nie mówi „to jest najważniejsze”. Klientka nie dostaje prowadzenia, tylko kolejne „przesuń i patrz” — to zmęczenie decyzyjne zamiast prowadzenia do zakupu. Największa słabość architektury tej strony.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Ocena</div>
-  <div class="acc-content"><div class="ocena-item"><span class="ocena-dot" style="background:#f59e0b"></span><span class="ocena-label">POPRAW</span> Monotonia karuzel bez hierarchii — główny problem układu HP.</div></div>
-</div><div class="acc-footer">Pozycja: scroll2 · 8300px (desktop) / 7720px (mobile)</div>
-  </div>
-</div>
-<div class="el-item">
-  <div class="el-row" onclick="rowClick(this, 9800, 10080)">
-    <span class="dot" style="background:#3b82f6" title="SPRAWDŹ"></span>
-    <span class="el-name">Prezenty — szkatułki i vouchery</span>
-    <span class="el-etyk" title="Szkatułki · Butik · Karty podarunkowe">Szkatułki · Butik · Karty podarunkowe</span>
-    <span class="zone-badge" style="background:#64748b22;color:#64748b">scroll3</span>
-    <span class="el-top">9800px</span>
-    <span class="el-details" onclick="event.stopPropagation();openOverlay(this)" title="szczegóły">⛶</span>
-    
-    <span class="chevron">⌄</span>
-  </div>
-  <div class="el-accordion" style="display:none">
-    <div class="acc-section">
-  <div class="acc-title">Zawartość / akcje</div>
-  <div class="acc-content"><div class="acc-zaw">Duże kafle: Szkatułki, Butik stacjonarny, Karty podarunkowe &amp; vouchery — zdjęcia pakowania/prezentu.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Obserwacje</div>
-  <div class="acc-content"><div class="obs-insight">Trafia w realny i duży use-case biżuterii: prezent. Szkatułka i voucher to sprzedaż okazji („nie wiesz co kupić — daj wybór”). Dobrze, że jest — ale schowane głęboko (scroll 3), gdzie dociera ułamek ruchu. Motyw prezentowy przy biżuterii zasługuje na wyższą ekspozycję, zwłaszcza w sezonach prezentowych.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Ocena</div>
-  <div class="acc-content"><div class="ocena-item"><span class="ocena-dot" style="background:#3b82f6"></span><span class="ocena-label">SPRAWDŹ</span> Wartościowy blok prezentowy zbyt nisko — rozważ wyżej.</div></div>
-</div><div class="acc-footer">Pozycja: scroll3 · 9800px (desktop) / 10080px (mobile)</div>
-  </div>
-</div>
-<div class="el-item">
-  <div class="el-row" onclick="rowClick(this, 12697, 11700)">
-    <span class="dot" style="background:#f59e0b" title="POPRAW"></span>
-    <span class="el-name">Newsletter — 20 zł rabatu</span>
-    <span class="el-etyk" title="ODBIERZ 20 ZŁ RABATU NA ZAKUPY">ODBIERZ 20 ZŁ RABATU NA ZAKUPY</span>
-    <span class="zone-badge" style="background:#64748b22;color:#64748b">scroll3</span>
-    <span class="el-top">12697px</span>
-    <span class="el-details" onclick="event.stopPropagation();openOverlay(this)" title="szczegóły">⛶</span>
-    
-    <span class="chevron">⌄</span>
-  </div>
-  <div class="el-accordion" style="display:none">
-    <div class="acc-section">
-  <div class="acc-title">Zawartość / akcje</div>
-  <div class="acc-content"><div class="acc-zaw">Blok „ODBIERZ 20 ZŁ RABATU NA ZAKUPY!” — pole e-mail, checkbox zgody, przycisk DOŁĄCZ, zdjęcie lifestyle.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Obserwacje</div>
-  <div class="acc-content"><div class="obs-insight">Klasyczny lead-capture za rabat 20 zł. Mechanika w porządku, ale umieszczony na samym dole, po czterech karuzelach i wszystkich kaflach — realnie zobaczy go ułamek ruchu. Baza mailowa w biżuterii to pieniądz (cykl decyzji długi, dużo powrotów), więc zapis zasługuje też na lżejszy punkt styku wyżej — pasek albo exit-intent.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Ocena</div>
-  <div class="acc-content"><div class="ocena-item"><span class="ocena-dot" style="background:#f59e0b"></span><span class="ocena-label">POPRAW</span> Zbyt nisko jak na wartość bazy mailowej; dodaj wcześniejszy punkt zapisu.</div></div>
-</div><div class="acc-footer">Pozycja: scroll3 · 12697px (desktop) / 11700px (mobile)</div>
-  </div>
-</div>
-<div class="el-item">
-  <div class="el-row" onclick="rowClick(this, 13231, 14095)">
-    <span class="dot" style="background:#16a34a" title="OK"></span>
-    <span class="el-name">Footer</span>
-    <span class="el-etyk" title="obsługa klienta · klub · płatności · zaufanie">obsługa klienta · klub · płatności · zaufanie</span>
-    <span class="zone-badge" style="background:#64748b22;color:#64748b">scroll3</span>
-    <span class="el-top">13231px</span>
-    <span class="el-details" onclick="event.stopPropagation();openOverlay(this)" title="szczegóły">⛶</span>
-    
-    <span class="chevron">⌄</span>
-  </div>
-  <div class="el-accordion" style="display:none">
-    <div class="acc-section">
-  <div class="acc-title">Zawartość / akcje</div>
-  <div class="acc-content"><div class="acc-zaw">Stopka: Obsługa klienta (live chat, tel 885 777 772, mail, formularz, godziny infolinii), Klub Ania Kruk, Newsletter, B2B, Blog, regulaminy, płatności (PayPal, GPay, Visa, Klarna, Apple Pay), social. Mobile: accordion.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Obserwacje</div>
-  <div class="acc-content"><div class="obs-insight">Kompletny, uczciwy footer — jest wszystko, czego szuka niezdecydowany kupujący biżuterię: kontakt z człowiekiem (chat + telefon + infolinia z godzinami), zwroty, reklamacje, klub lojalnościowy. To buduje zaufanie, kluczowe przy droższym zakupie online. Klarna (raty/BNPL) obniża barierę ceny. Drobiazg: live chat jako link „#” — sprawdź czy realnie działa.</div></div>
-</div><div class="acc-section">
-  <div class="acc-title">Ocena</div>
-  <div class="acc-content"><div class="ocena-item"><span class="ocena-dot" style="background:#16a34a"></span><span class="ocena-label">OK</span> Solidny, budujący zaufanie; zweryfikuj tylko działanie live chatu.</div></div>
-</div><div class="acc-footer">Pozycja: scroll3 · 13231px (desktop) / 14095px (mobile)</div>
-  </div>
-</div>
-  </div>
-  <div class="split-shot">
-    <img id="shot-img" class="shot-img" src="vision_audit_img/1.jpg" alt="screenshot">
+<div class="wrap">
+  <div class="list"><div class="uzg"><div class="uzg-t">Do uzgodnienia (4)</div><ul><li><b>„SALE do -70%” w menu głównym</b> — Czerwony krzyk ceny obok delikatnych kategorii — złagodzić, żeby marka nie brzmiała jak dyskont?</li><li><b>Bransoletki na nogę — wysoko na HP</b> — Wąska sezonowa nisza na eksponowanym miejscu — czy zasługuje kosztem szerszych bestsellerów?</li><li><b>Sekcja Motywy — klimat vs produkt</b> — Mocny vibe, słaba czytelność produktu i nazw — dowieźć link do konkretu?</li><li><b>Blok prezentowy (szkatułki, vouchery)</b> — Duży use-case (prezent) schowany na scroll 3 — rozważyć wyżej?</li></ul></div><div class="card">
+      <div class="chead"><span class="dot" style="background:#f59e0b"></span>
+        <span class="cname">Pasek promocyjny (topbar)</span>
+        <span class="zone" style="background:#16a34a">above</span>
+        <span class="ctop">0px / 0px</span></div>
+      <div class="cetyk">LAST CALL SUMMER SALE + darmowa dostawa</div>
+      <div class="czaw">Górny pasek na neonowej zieleni: „LAST CALL SUMMER SALE” z licznikiem czasu (mobile), darmowa dostawa od progu, 30 dni na zwrot, karty podarunkowe.</div>
+      <div class="cobs">Marka premium-fashion wita klienta krzykiem wyprzedaży w neonowej zieleni — pierwszy komunikat to cena, nie pożądanie. Licznik odliczający buduje presję, ale biżuteria to zakup aspiracyjny, nie impulsowy, więc scarcity na progu raczej tanieje wizerunek niż napędza. Za to darmowa dostawa i 30 dni na zwrot słusznie na wierzchu — to realne bariery kupowania biżuterii online.</div>
+      <div class="coc"><span class="ocdot" style="background:#f59e0b"></span><b>POPRAW</b> — Za dużo krzyku ceny na wejściu; przesuń akcent z rabatu na wartość.</div>
+      <div class="dev"><span class="dev-lab">Eventy GA4:</span> <code>view_promotion</code></div>
+    </div><div class="card">
+      <div class="chead"><span class="dot" style="background:#3b82f6"></span>
+        <span class="cname">Header / nawigacja</span>
+        <span class="zone" style="background:#16a34a">above</span>
+        <span class="ctop">40px / 40px</span></div>
+      <div class="cetyk">logo + menu + search + koszyk</div>
+      <div class="czaw">Logo ANIA KRUK wyśrodkowane. Menu: Biżuteria, Bestsellery, Nowości, Na prezent, SALE do -70%. Search, profil, ulubione (schowek), koszyk. Mobile: hamburger + search.</div>
+      <div class="cobs">Czysty, jasny, wyśrodkowane logo jak w domu mody — to premium feel i dobrze. Ale w menu głównym „SALE do -70%” na czerwono krzyczy obok delikatnych kategorii; znów cena wygrywa z marką. Widoczny search to plus — przy biżuterii klientka szuka konkretu („koła”, „perła”). Schowek/ulubione wspiera długi namysł, naturalny przy tym produkcie.</div>
+      <div class="coc"><span class="ocdot" style="background:#3b82f6"></span><b>SPRAWDŹ</b> — Rozważ złagodzenie „SALE -70%” w głównym menu.</div>
+      <div class="dev"><span class="dev-lab">Eventy GA4:</span> <code>main_menu</code> <code>search</code> <code>view_search_results</code></div>
+    </div><div class="card">
+      <div class="chead"><span class="dot" style="background:#f59e0b"></span>
+        <span class="cname">Hero slider — SALE -70%</span>
+        <span class="zone" style="background:#16a34a">above</span>
+        <span class="ctop">90px / 130px</span></div>
+      <div class="cetyk">SALE do -70%, TYLKO DO 19.07, KUP TERAZ</div>
+      <div class="czaw">Pełnoekranowy slider. Slajd: „SALE do -70%, TYLKO DO 19.07” na fioletowym tle z muszlami, CTA „KUP TERAZ”, strzałki + kropki. Mobile: pod nim drugi banner „SUMMER IN THE CITY — biżuteria na lato”.</div>
+      <div class="cobs">Najcenniejszy piksel strony — pierwszy ekran — oddany w całości wyprzedaży -70%. To mówi „jesteśmy tanie”, a nie „jesteś tego warta”. Przy biżuterii, gdzie sprzedajesz emocję i status, hero-rabat zjada i marżę, i pożądanie. Muszle jako letni motyw są ładne, ale przykryte wielkim SALE. Na mobile klientka przewija DWA bannery hero, zanim zobaczy pierwszy produkt — długa droga do towaru.</div>
+      <div class="coc"><span class="ocdot" style="background:#f59e0b"></span><b>POPRAW</b> — Hero sprzedaje rabat zamiast marki/kolekcji; pierwszy ekran ma budować pożądanie.</div>
+      <div class="dev"><span class="dev-lab">Eventy GA4:</span> <code>view_promotion</code> <code>select_promotion</code></div>
+    </div><div class="card">
+      <div class="chead"><span class="dot" style="background:#f59e0b"></span>
+        <span class="cname">Wybrane dla Ciebie <span title="personalizowany">👶</span></span>
+        <span class="zone" style="background:#2563eb">scroll1</span>
+        <span class="ctop">1900px / 2500px</span></div>
+      <div class="cetyk">karuzela rekomendacji (Segmentify)</div>
+      <div class="czaw">Karuzela produktów personalizowanych (silnik Segmentify). Kafle z ikoną serca (ulubione). Pierwszy kafel: „e-voucher”.</div>
+      <div class="cobs">Rekomendacje zaraz po hero to dobra mechanika — relevance buduje zaangażowanie. Ale pierwszy kafel to „e-voucher”, nie produkt: otwierasz personalizację czymś, co nie wzbudza pożądania ani nie pokazuje estetyki marki — zmarnowany najlepszy slot. Serce/ulubione na kaflu słusznie wspiera „odłożę na później”, naturalne w biżuterii.</div>
+      <div class="coc"><span class="ocdot" style="background:#f59e0b"></span><b>POPRAW</b> — Nie otwieraj rekomendacji e-voucherem; pierwszy kafel niech uwodzi produktem.</div>
+      <div class="dev"><span class="dev-lab">Eventy GA4:</span> <code>view_item_list_recommended</code> <code>select_item_recommended</code> <code>add_to_wishlist</code></div>
+    </div><div class="card">
+      <div class="chead"><span class="dot" style="background:#16a34a"></span>
+        <span class="cname">Biżuteria — kafle kategorii</span>
+        <span class="zone" style="background:#2563eb">scroll1</span>
+        <span class="ctop">3550px / 3675px</span></div>
+      <div class="cetyk">Bransoletki · Piercing · Kolczyki koła · Nausznice</div>
+      <div class="czaw">Siatka kafli kategorii ze zdjęciami lifestyle (ucho z piercingiem, nadgarstek): Bransoletki, Piercing, Kolczyki koła, Nausznice — każdy „POKAŻ WIĘCEJ”.</div>
+      <div class="cobs">Najmocniejsza sekcja strony — biżuteria pokazana na ciele, na modelce, w kontekście stylizacji. Tak właśnie kupuje się fashion jewellery: oczami, wyobrażając produkt na sobie. Zdjęcia ucha z nausznicą są aspiracyjne i konkretne zarazem. To powinien być kręgosłup HP, a nie pobocze między karuzelami.</div>
+      <div class="coc"><span class="ocdot" style="background:#16a34a"></span><b>OK</b> — Silna, lifestyle&#x27;owa nawigacja wizualna — wzorzec dla reszty strony.</div>
+      <div class="dev"><span class="dev-lab">Eventy GA4:</span> <code>select_item</code> <code>product_click</code></div>
+    </div><div class="card">
+      <div class="chead"><span class="dot" style="background:#3b82f6"></span>
+        <span class="cname">Bransoletki na nogę</span>
+        <span class="zone" style="background:#7c3aed">scroll2</span>
+        <span class="ctop">4900px / 5130px</span></div>
+      <div class="cetyk">sekcja sezonowa + karuzela</div>
+      <div class="czaw">Nagłówek + „ZOBACZ WSZYSTKO”, duże zdjęcie lifestyle (kostka, sandał) i karuzela produktów z cenami.</div>
+      <div class="cobs">Wąska, sezonowa nisza (lato) dostała eksponowane miejsce wysoko na HP. Trafione pod moment (lipiec), ale to kategoria dla wąskiej grupy — zajmuje realny estate kosztem szerszych bestsellerów, po które przychodzi większość. Zdjęcie na ciele znów mocne i słuszne.</div>
+      <div class="coc"><span class="ocdot" style="background:#3b82f6"></span><b>SPRAWDŹ</b> — Sezonowo OK, ale zweryfikuj czy nisza zasługuje na tak wysokie miejsce.</div>
+      <div class="dev"><span class="dev-lab">Eventy GA4:</span> <code>view_item_list</code> <code>select_item</code> <code>add_to_wishlist</code></div>
+    </div><div class="card">
+      <div class="chead"><span class="dot" style="background:#3b82f6"></span>
+        <span class="cname">Motywy</span>
+        <span class="zone" style="background:#7c3aed">scroll2</span>
+        <span class="ctop">6400px / 7160px</span></div>
+      <div class="cetyk">Kamienie · Lato · Serca — kafle klimatyczne</div>
+      <div class="czaw">Kafle lifestyle wg motywu (Kamienie, Lato, Serca/zwierzęta) — klimatyczne foto (aparat jednorazowy, nasycony kolor), przycisk „SPRAWDŹ”.</div>
+      <div class="cobs">Buduje klimat młodej, festiwalowej marki — aparat jednorazowy, nasycone kolory, wakacyjny mood; emocjonalnie to działa. Ale kafle są bardziej „vibe” niż sprzedaż: słabo widać sam produkt i jego nazwę. Ładny oddech marki, który w ciągu karuzel produktowych gubi jednak funkcję prowadzenia do zakupu.</div>
+      <div class="coc"><span class="ocdot" style="background:#3b82f6"></span><b>SPRAWDŹ</b> — Mocny klimat, słaba czytelność produktu — dowieź link do konkretu.</div>
+      <div class="dev"><span class="dev-lab">Eventy GA4:</span> <code>select_promotion</code> <code>select_item</code></div>
+    </div><div class="card">
+      <div class="chead"><span class="dot" style="background:#f59e0b"></span>
+        <span class="cname">Bransoletki sznurkowe</span>
+        <span class="zone" style="background:#7c3aed">scroll2</span>
+        <span class="ctop">8300px / 7720px</span></div>
+      <div class="cetyk">czwarta karuzela produktowa z rzędu</div>
+      <div class="czaw">Kolejna karuzela produktów (bransoletki sznurkowe, kolorowe) z cenami, sercem, „ZOBACZ WSZYSTKO”.</div>
+      <div class="cobs">To już czwarta karuzela produktowa z rzędu — HP zamienia się w taśmę jednakowych przewijanych pasów. Brak hierarchii: nic nie mówi „to jest najważniejsze”. Klientka nie dostaje prowadzenia, tylko kolejne „przesuń i patrz” — to zmęczenie decyzyjne zamiast prowadzenia do zakupu. Największa słabość architektury tej strony.</div>
+      <div class="coc"><span class="ocdot" style="background:#f59e0b"></span><b>POPRAW</b> — Monotonia karuzel bez hierarchii — główny problem układu HP.</div>
+      <div class="dev"><span class="dev-lab">Eventy GA4:</span> <code>view_item_list</code> <code>select_item</code></div>
+    </div><div class="card">
+      <div class="chead"><span class="dot" style="background:#3b82f6"></span>
+        <span class="cname">Prezenty — szkatułki i vouchery</span>
+        <span class="zone" style="background:#64748b">scroll3</span>
+        <span class="ctop">9800px / 10080px</span></div>
+      <div class="cetyk">Szkatułki · Butik · Karty podarunkowe</div>
+      <div class="czaw">Duże kafle: Szkatułki, Butik stacjonarny, Karty podarunkowe &amp; vouchery — zdjęcia pakowania/prezentu.</div>
+      <div class="cobs">Trafia w realny i duży use-case biżuterii: prezent. Szkatułka i voucher to sprzedaż okazji („nie wiesz co kupić — daj wybór”). Dobrze, że jest — ale schowane głęboko (scroll 3), gdzie dociera ułamek ruchu. Motyw prezentowy przy biżuterii zasługuje na wyższą ekspozycję, zwłaszcza w sezonach prezentowych.</div>
+      <div class="coc"><span class="ocdot" style="background:#3b82f6"></span><b>SPRAWDŹ</b> — Wartościowy blok prezentowy zbyt nisko — rozważ wyżej.</div>
+      <div class="dev"><span class="dev-lab">Eventy GA4:</span> <code>gift_cart</code> <code>select_promotion</code></div>
+    </div><div class="card">
+      <div class="chead"><span class="dot" style="background:#f59e0b"></span>
+        <span class="cname">Newsletter — 20 zł rabatu</span>
+        <span class="zone" style="background:#64748b">scroll3</span>
+        <span class="ctop">12697px / 11700px</span></div>
+      <div class="cetyk">ODBIERZ 20 ZŁ RABATU NA ZAKUPY</div>
+      <div class="czaw">Blok „ODBIERZ 20 ZŁ RABATU NA ZAKUPY!” — pole e-mail, checkbox zgody, przycisk DOŁĄCZ, zdjęcie lifestyle.</div>
+      <div class="cobs">Klasyczny lead-capture za rabat 20 zł. Mechanika w porządku, ale umieszczony na samym dole, po czterech karuzelach i wszystkich kaflach — realnie zobaczy go ułamek ruchu. Baza mailowa w biżuterii to pieniądz (cykl decyzji długi, dużo powrotów), więc zapis zasługuje też na lżejszy punkt styku wyżej — pasek albo exit-intent.</div>
+      <div class="coc"><span class="ocdot" style="background:#f59e0b"></span><b>POPRAW</b> — Zbyt nisko jak na wartość bazy mailowej; dodaj wcześniejszy punkt zapisu.</div>
+      <div class="dev"><span class="dev-lab">Eventy GA4:</span> <code>sign_up_newsletter</code> <code>form_submitted_newsletter</code></div>
+    </div><div class="card">
+      <div class="chead"><span class="dot" style="background:#16a34a"></span>
+        <span class="cname">Footer</span>
+        <span class="zone" style="background:#64748b">scroll3</span>
+        <span class="ctop">13231px / 14095px</span></div>
+      <div class="cetyk">obsługa klienta · klub · płatności · zaufanie</div>
+      <div class="czaw">Stopka: Obsługa klienta (live chat, tel 885 777 772, mail, formularz, godziny infolinii), Klub Ania Kruk, Newsletter, B2B, Blog, regulaminy, płatności (PayPal, GPay, Visa, Klarna, Apple Pay), social. Mobile: accordion.</div>
+      <div class="cobs">Kompletny, uczciwy footer — jest wszystko, czego szuka niezdecydowany kupujący biżuterię: kontakt z człowiekiem (chat + telefon + infolinia z godzinami), zwroty, reklamacje, klub lojalnościowy. To buduje zaufanie, kluczowe przy droższym zakupie online. Klarna (raty/BNPL) obniża barierę ceny. Drobiazg: live chat jako link „#” — sprawdź czy realnie działa.</div>
+      <div class="coc"><span class="ocdot" style="background:#16a34a"></span><b>OK</b> — Solidny, budujący zaufanie; zweryfikuj tylko działanie live chatu.</div>
+      <div class="dev"><span class="dev-lab">Eventy GA4:</span> <code>footer</code> <code>klub</code> <code>sign_up_newsletter</code></div>
+    </div></div>
+  <div class="shot">
+    <div class="bar"><div class="tg"><button id="v-d" class="on" onclick="view('d')">🖥 Desktop</button><button id="v-m" onclick="view('m')">📱 Mobile</button></div>
+      <span>↗ klik obraz = pełny rozmiar</span></div>
+    <a id="shot-a" href="vision_audit_img/0.jpg" target="_blank"><img id="shot-img" src="vision_audit_img/0.jpg" alt="screen"></a>
   </div>
 </div>
 <script>
-var imgD = "vision_audit_img/0.jpg";
-var imgM = "vision_audit_img/1.jpg";
-var currentVP = 'mobile';
-var VP_DESKTOP = 1440;
-var VP_MOBILE = 390;
-
-// Initialize viewport style on page load
-window.addEventListener('DOMContentLoaded', function() {
-    var img = document.getElementById('shot-img');
-    if (img && currentVP === 'desktop') {
-        img.style.width = '100%';
-        img.style.maxWidth = '100%';
-        img.style.margin = '0 auto';
-    }
-});
-
-// scrollShot — matematyka VERBATIM ze speca v5 (UI_SPEC_VISION_REPORT.md sekcja JS)
-function scrollShot(top, topMobile, el) {
-    var img = document.getElementById('shot-img');
-    var vp  = document.querySelector('.split-shot');
-    if (!img || !vp) return;
-    document.querySelectorAll('.el-row').forEach(r => r.classList.remove('active'));
-    var target = el || (typeof event !== 'undefined' ? event.currentTarget : null);
-    if (target) target.classList.add('active');
-    var pageW = currentVP === 'desktop' ? VP_DESKTOP : VP_MOBILE;
-    var scale = img.offsetWidth / pageW;
-    var actualTop = currentVP === 'desktop' ? top : topMobile;
-    var offset = Math.max(0, actualTop * scale - vp.offsetHeight * 0.15);
-    vp.scrollTo({ top: offset, behavior: 'smooth' });
+function view(v){
+  var img=document.getElementById('shot-img'), a=document.getElementById('shot-a');
+  var src = v==='d' ? 'vision_audit_img/0.jpg' : 'vision_audit_img/1.jpg';
+  img.src=src; a.href=src;
+  document.getElementById('v-d').classList.toggle('on', v==='d');
+  document.getElementById('v-m').classList.toggle('on', v==='m');
 }
-
-function rowClick(rowEl, top, topMobile) {
-    toggleRow(rowEl);
-    scrollShot(top, topMobile, rowEl);
+function mode(m){
+  document.body.classList.toggle('dev', m==='dev');
+  document.getElementById('b-shop').classList.toggle('on', m==='shop');
+  document.getElementById('b-dev').classList.toggle('on', m==='dev');
 }
-
-function toggleRow(rowEl) {
-    var acc = rowEl.nextElementSibling;
-    if (!acc || !acc.classList.contains('el-accordion')) return;
-    var open = acc.style.display !== 'none';
-    acc.style.display = open ? 'none' : 'block';
-    rowEl.classList.toggle('expanded', !open);
-}
-
-function setVP(vp, btn) {
-    currentVP = vp;
-    document.querySelectorAll('.tbtn[data-vp]').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    var img = document.getElementById('shot-img');
-    var panel = document.querySelector('.split-shot');
-    if (panel) panel.style.width = (vp === 'mobile') ? '600px' : 'min(64%,1120px)';
-    if (img) {
-        img.src = vp === 'desktop' ? imgD : imgM;
-        // panel zwężony do screena (mobile) / szeroki (desktop) — bez tonięcia w pustce
-        if (vp === 'mobile') {
-            img.style.width = '560px';
-            img.style.maxWidth = '560px';
-            img.style.margin = '0 auto';
-        } else {
-            img.style.width = '100%';
-            img.style.maxWidth = '100%';
-            img.style.margin = '';
-        }
-    }
-}
-
-function setView(view, btn) {
-    document.querySelectorAll('.tbtn[data-view]').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.body.classList.toggle('dev', view === 'developer');
-}
-
-function switchTab(tab, btn) {
-    document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-}
-
-function toggleWnioski(headerEl) {
-    var body = headerEl.nextElementSibling;
-    if (!body) return;
-    body.style.display = body.style.display === 'none' ? 'block' : 'none';
-}
-
-// Overlay functions
-function openOverlay(btn) {
-    var item = btn.closest('.el-item');
-    if (!item) return;
-    var row = item.querySelector('.el-row');
-    var acc = item.querySelector('.el-accordion');
-    if (!row || !acc) return;
-
-    var overlay = document.getElementById('overlay');
-    if (!overlay) return;
-
-    var title = row.querySelector('.el-name')?.textContent || '—';
-    var content = acc.innerHTML;
-
-    document.getElementById('overlay-title').textContent = title;
-    document.getElementById('overlay-content').innerHTML = content;
-    overlay.classList.add('active');
-}
-
-function closeOverlay() {
-    var overlay = document.getElementById('overlay');
-    if (overlay) overlay.classList.remove('active');
-}
-
-// Klik na tło (overlay) zamyka
-document.addEventListener('click', function(e) {
-    var overlay = document.getElementById('overlay');
-    if (e.target === overlay) closeOverlay();
-});
-
-// ESC — close accordion wszystko + overlay
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        var overlay = document.getElementById('overlay');
-        if (overlay && overlay.classList.contains('active')) {
-            closeOverlay();
-        } else {
-            document.querySelectorAll('.el-accordion').forEach(a => a.style.display = 'none');
-            document.querySelectorAll('.el-row').forEach(r => r.classList.remove('active', 'expanded'));
-        }
-    }
-});
 </script>
-<div id="overlay" class="overlay">
-  <div class="overlay-box">
-    <span class="overlay-close" onclick="closeOverlay()">✕</span>
-    <div class="overlay-title" id="overlay-title">—</div>
-    <div id="overlay-content"></div>
-  </div>
-</div>
 </body></html>
