@@ -408,7 +408,7 @@ function aggregateRange(s,e){
     kpi:{sessions:0,transactions:0,totalRevenue:0,bounceSum:0,bounceSess:0,
          addToCarts:0,checkouts:0,durSum:0,durSess:0},
     channelsMap:{},channelsDetailMap:{},devicesMap:{},funnel:{},productsMap:{},shpProductsMap:{},
-    landingMap:{},newretMap:{},searchMap:{},hourMap:{},dowMap:{},
+    landingMap:{},landingShopifyMap:{},newretMap:{},searchMap:{},hourMap:{},dowMap:{},
     repeat_buyers:META.repeat_buyers||[]
   };
   const dkeys=Object.keys(DAILY).filter(dk=>dk>=s&&dk<=e).sort();
@@ -461,6 +461,10 @@ function aggregateRange(s,e){
       const key=(p.name||'').toLowerCase().trim();
       const m=out.shpProductsMap[key]||(out.shpProductsMap[key]={name:p.name,qty:0,revenue:0});
       m.qty+=p.qty||0;m.revenue+=p.revenue||0;
+    });
+    (d.landing_shopify||[]).forEach(p=>{
+      const m=out.landingShopifyMap[p.page]||(out.landingShopifyMap[p.page]={page:p.page,sessions:0,visitors:0,atc:0,checkout:0});
+      m.sessions+=p.sessions||0;m.visitors+=p.visitors||0;m.atc+=p.atc||0;m.checkout+=p.checkout||0;
     });
     (d.landing_atc||[]).forEach(p=>{
       if(/-kopia/i.test(p.page))return; // testowe produkty → skip
@@ -525,6 +529,7 @@ function aggregateRange(s,e){
       shp_match:shp!=null};
   }).sort((a,b)=>b.purchased-a.purchased).slice(0,15);
   out.landing_atc=Object.values(out.landingMap).sort((a,b)=>b.sessions-a.sessions).slice(0,15);
+  out.landing_shopify=Object.values(out.landingShopifyMap).sort((a,b)=>b.sessions-a.sessions).slice(0,15);
   out.newret=Object.values(out.newretMap);
   out.search_terms=Object.values(out.searchMap).sort((a,b)=>b.count-a.count).slice(0,10);
   out.hour=Object.values(out.hourMap).sort((a,b)=>a.h-b.h);
