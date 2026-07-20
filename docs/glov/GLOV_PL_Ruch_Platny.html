@@ -148,8 +148,6 @@ function renderAll(){document.getElementById('tinfo').textContent='— '+TINFO[T
 document.querySelectorAll('.tbtn').forEach(b=>b.onclick=()=>{TT=b.dataset.t;document.querySelectorAll('.tbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderAll();});
 
 function initWithData(data, lbl){
-  DATA = data;
-  LBL = lbl;
   MONTHS.length = 0;
   MONTHS_ORDER.forEach(m=>{ if(DATA[m]) MONTHS.push(m); });
   if(MONTHS.length === 0){
