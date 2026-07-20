@@ -1,365 +1,189 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
+<!DOCTYPE html><html lang="pl"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Vision Scan — Pumeksy do stóp (OKO-FIRST v5)</title>
+<title>Pumeksy do stóp — Vision Scan v5 (OKO-FIRST)</title>
 <style>
-:root{--bg:#faf8f5;--card:#fff;--ink:#1c1a17;--mut:#6b6457;--line:#e7e1d8;--chip:#f0ebe2;--alert:#dc2626;--fix:#f59e0b;--check:#3b82f6;--ok:#16a34a}
+:root{--bg:#fff;--panel:#f8fafc;--acc:#fafafa;--ink:#1c1a17;--mut:#6b6457;--line:#e2dbd0;--alert:#dc2626;--fix:#f59e0b;--check:#3b82f6;--ok:#16a34a;--obs-bg:#faf5ff;--obs-txt:#4c1d95}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:28px 18px}
-.wrap{max-width:1100px;margin:0 auto}
-h1{font-size:24px;margin:0 0 4px}
-.sub{color:var(--mut);margin:0 0 20px;font-size:13px}
-h2{font-size:17px;margin:28px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1200px;margin:0 auto;padding:0 18px 60px}
 
-/* SCORE BADGES */
-.geo-score{display:flex;gap:14px;flex-wrap:wrap;margin:14px 0}
-.gs{flex:1;min-width:140px;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card)}
-.gs .val{font-size:28px;font-weight:800;line-height:1}
-.gs .lbl{font-size:11px;color:var(--mut);margin-top:3px;text-transform:uppercase;letter-spacing:.03em}
-.gs.alarm .val{color:var(--alert)}.gs.fix .val{color:var(--fix)}.gs.ok .val{color:var(--ok)}
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:40;flex-wrap:wrap;gap:8px}
+.topbar .brand{font-weight:700;font-size:15px}
+.topbar .brand span{color:#7c5cff}
+.topbar .meta{font-size:11px;color:var(--mut)}
+.topbar .health{display:flex;gap:6px;font-size:11px;font-weight:600}
+.topbar .health .h{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px}
+.h-alert{background:var(--alert)}.h-fix{background:var(--fix)}.h-check{background:var(--check)}.h-ok{background:var(--ok)}
 
-/* COMPETITOR CARD */
-.comp-card{border:1px solid var(--line);border-radius:14px;background:var(--card);margin:16px 0;overflow:hidden}
-.comp-head{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--chip);border-bottom:1px solid var(--line);cursor:pointer}
-.comp-head:hover{opacity:.9}
-.comp-head img{width:56px;height:56px;object-fit:contain;border-radius:8px;background:#fff;flex:none;border:1px solid var(--line)}
-.comp-head .info{flex:1}
-.comp-head .info .brand{font-weight:700;font-size:15px}
-.comp-head .info .meta{font-size:12px;color:var(--mut)}
-.comp-head .score{font-size:13px;font-weight:700;padding:4px 10px;border-radius:8px;white-space:nowrap}
-.comp-head .score.high{background:#e8f5ee;color:#1a6b3c}
-.comp-head .score.mid{background:#fef3c7;color:#92400e}
-.comp-head .score.low{background:#fdecea;color:#a52828}
-.comp-head .arrow{font-size:14px;color:var(--mut);transition:transform .2s}
-.comp-head.open .arrow{transform:rotate(90deg)}
+/* TABS + TOGGLE */
+.tabbar{display:flex;align-items:center;gap:4px;padding:8px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabbar .tab{font-size:12px;font-weight:600;padding:6px 14px;border-radius:8px;border:1px solid var(--line);background:var(--bg);cursor:pointer;color:var(--mut);transition:.12s}
+.tabbar .tab.active{background:#7c5cff;color:#fff;border-color:#7c5cff}
+.tabbar .tab.dim{opacity:.5;cursor:default}
+.tabbar .spacer{flex:1}
+.tabbar .toggle{font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--panel);cursor:pointer;color:var(--mut)}
 
-.comp-body{display:none;padding:6px 16px 14px}
-.comp-body.open{display:block}
+/* SPLIT LAYOUT */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start}
+@media(max-width:860px){.split{grid-template-columns:1fr}}
+.split-shot{position:sticky;top:100px;overflow-y:auto;max-height:calc(100vh - 120px);border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:8px}
+.split-shot img{width:100%;display:block}
+.split-list{min-width:0}
 
-/* FOUR FIELDS (v5) */
-.field-group{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
-@media(max-width:680px){.field-group{grid-template-columns:1fr}}
-.field{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-.field.full{grid-column:1/-1}
-.field .flabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);margin-bottom:5px}
-.field .fval{font-size:13px;line-height:1.5}
-.field .fval ul{margin:3px 0;padding-left:16px}
-.field .fval li{margin:2px 0}
+/* BANNER */
+.banner{margin:12px 0;padding:12px 16px;border-radius:10px;border-left:4px solid var(--alert);background:#fef2f2;font-size:12.5px;line-height:1.6}
+.banner .bt{font-weight:700;font-size:13px;margin-bottom:4px}
 
-.insight{background:#faf5ff;border-left:3px solid #7c3aaf;color:#4c1d95;padding:7px 10px;border-radius:6px;font-size:13px;line-height:1.5;margin:5px 0}
+/* ROW */
+.el-row{border:1px solid var(--line);border-radius:10px;margin:8px 0;overflow:hidden;transition:.15s;cursor:pointer}
+.el-row:hover{border-color:#7c5cff;box-shadow:0 1px 6px rgba(124,92,255,.15)}
+.el-row.active{border-color:#7c5cff;box-shadow:0 2px 12px rgba(124,92,255,.2)}
+.el-head{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--acc);font-size:12.5px}
+.el-head .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.el-head .el-name{font-weight:700;flex:1}
+.el-head .el-zone{font-size:10px;color:var(--mut);padding:2px 6px;border-radius:4px;background:var(--panel)}
+.el-head .arrow{font-size:10px;color:var(--mut);transition:transform .2s}
+.el-row.open .el-head .arrow{transform:rotate(90deg)}
 
-.verdict{display:inline-block;padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700}
-.verdict.alarm{background:#fdecea;color:var(--alert)}
-.verdict.ok{background:#e8f5ee;color:var(--ok)}
-.verdict.fix{background:#fef3c7;color:var(--fix)}
+.el-body{display:none;padding:4px 12px 12px}
+.el-row.open .el-body{display:block}
 
-/* MATRIX */
-.matrix{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:10px 0;font-size:12.5px}
-.matrix th,.matrix td{padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
-.matrix th{background:var(--chip);font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);font-weight:700}
-.matrix tr:last-child td{border-bottom:none}
-.matrix td:first-child{font-weight:600;width:130px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fields .full{grid-column:1/-1}
+.fld{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--panel)}
+.fld .fl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);margin-bottom:4px}
+.fld .fv{font-size:12px;line-height:1.5}
+.fld .fv ul{margin:2px 0;padding-left:14px}
+.fld .fv li{margin:1px 0}
+.obs{background:var(--obs-bg);border-left:3px solid #7c3aaf;color:var(--obs-txt);padding:5px 8px;border-radius:5px;font-size:12px;line-height:1.5;margin:4px 0}
+.ver{display:inline-block;padding:1px 7px;border-radius:5px;font-size:11px;font-weight:700}
+.ver.v-alert{background:#fdecea;color:var(--alert)}
+.ver.v-ok{background:#e8f5ee;color:var(--ok)}
+.ver.v-fix{background:#fef3c7;color:var(--fix)}
 
-.sc{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:10px 0}
-@media(max-width:700px){.sc{grid-template-columns:repeat(2,1fr)}}
-.sc-item{text-align:center;padding:8px;border-radius:8px;border:1px solid var(--line)}
-.sc-item .sval{font-size:19px;font-weight:800}
-.sc-item .slbl{font-size:10px;color:var(--mut)}
-
-footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--mut);font-size:12px}
+.caption{font-size:11px;color:var(--mut);padding:4px 8px;text-align:center}
 </style>
-</head>
-<body>
+</head><body>
+
+<div class="topbar">
+<div class="brand">pumeksy<span>.</span>vision <span style="font-weight:400;font-size:12px;color:var(--mut)">v5 · OKO-FIRST</span></div>
+<div class="meta">2026-07-20 · 5 PDP · playwrite capture</div>
+<div class="health"><span class="h h-alert">3</span><span class="h h-fix">2</span><span class="h h-check">1</span><span class="h h-ok">4</span></div>
+</div>
+
+<div class="tabbar">
+<span class="tab active">📱 Mobile</span>
+<span class="tab dim">🖥 Desktop (wkrótce)</span>
+<div class="spacer"></div>
+<span class="toggle">🔬 Shopper</span>
+</div>
+
 <div class="wrap">
 
-<h1>🔬 Vision Scan — Pumeksy do stóp</h1>
-<p class="sub">OKO-FIRST v5 · analiza 5 PDP konkurentów (Rossmann, KillyS) · 2026-07-20 · <strong>Cytowalność AI/GEO</strong> — co AI widzi i może zacytować z każdego PDP</p>
-
-<!-- OVERALL SCORE -->
-<h2>GEO Readiness — ranking cytowalności</h2>
-<div class="geo-score">
-<div class="gs alarm"><div class="val">2/5</div><div class="lbl">GLOV Nano Glass</div></div>
-<div class="gs ok"><div class="val">3/5</div><div class="lbl">Scholl Nano Glass</div></div>
-<div class="gs ok"><div class="val">3/5</div><div class="lbl">KillyS Nano</div></div>
-<div class="gs fix"><div class="val">2/5</div><div class="lbl">NeoNail Elektr.</div></div>
-<div class="gs fix"><div class="val">1/5</div><div class="lbl">Deni Carte</div></div>
-</div>
-<p style="font-size:13px;color:var(--mut)">Skala 1-5: 1 = AI nie ma czego cytować · 3 = średnio · 5 = AI może odpowiedzieć na każde pytanie klienta</p>
-
-<div class="sc">
-<div class="sc-item"><div class="sval" style="color:var(--alert)">0</div><div class="slbl">FAQ</div></div>
-<div class="sc-item"><div class="sval" style="color:var(--alert)">0</div><div class="slbl">Dowód kliniczny</div></div>
-<div class="sc-item"><div class="sval" style="color:var(--fix)">2</div><div class="slbl">Zdjęcia galerii</div></div>
-<div class="sc-item"><div class="sval" style="color:var(--fix)">2</div><div class="slbl">Struktura H2/H3</div></div>
-<div class="sc-item"><div class="sval" style="color:var(--alert)">0</div><div class="slbl">TCO/żywotność</div></div>
+<!-- BANNER -->
+<div class="banner">
+<div class="bt">⚠️ 3 alarmy — kluczowe luki dla AI</div>
+<div><strong>1. Zero FAQ</strong> u wszystkich 5 konkurentów. <strong>2. Zero dowodu klinicznego</strong> w całej kategorii. <strong>3. Zero before/after</strong> — nikt nie pokazuje efektu. AI nie ma czego zacytować poza ceną i oceną.</div>
 </div>
 
-<!-- COMPETITOR 1: GLOV -->
-<div class="comp-card" onclick="toggle(this)">
-<div class="comp-head">
-<img src="https://pro-fra-s3-productsassets.rossmann.pl/product_1_medium/2131378_360_350_1770805621.webp" alt="GLOV" loading="lazy">
-<div class="info"><div class="brand">GLOV Nano Glass Foot File</div><div class="meta">Rossmann · 40,99 zł · 4.9★</div></div>
-<div class="score low">GEO: 2/5</div><div class="arrow">▶</div>
+<!-- GLOV -->
+<div class="el-row open" onclick="toggleRow(this)">
+<div class="el-head">
+<span class="dot" style="background:var(--fix)"></span>
+<span class="el-name">GLOV Nano Glass Foot File</span>
+<span class="el-zone">above-fold</span>
+<span class="arrow">▶</span>
 </div>
-<div class="comp-body">
-<div class="field-group">
-<div class="field">
-<div class="flabel">📦 Zawartość / akcje</div>
-<div class="fval"><ul>
-<li>4 zdjęcia w galerii (packshot, 2× kąt, użycie, opakowanie tył)</li>
-<li>6 bulletów cech (na mokro/sucho, bez bałaganu, higieniczny)</li>
-<li>Sekcja materiały: nano glass 3D + korpus ABS</li>
-<li>Instrukcja: 3 kroki (krótka)</li>
-<li>Brak FAQ · brak sekcji narracyjnych H2</li>
-<li>Brak wideo · brak before/after</li>
-</ul></div>
-</div>
-<div class="field full">
-<div class="flabel">👁️ Obserwacje OKO</div>
-<div class="fval">
-<div class="insight">Zanim zobaczysz produkt, strona Rossmann prosi o akceptację ciasteczek — galeria zdjęć jest drugoplanowa wobec zgód i cross-sellu. Opis produktu schowany w accordionie: AI nie "klika" w zakładki, więc nie widzi treści.</div>
-<div class="insight">Jedyny konkurent z laserową powierzchnią 3D — ale ta różnica jest zakopana wśród 6 bulletów, nie eksponowana jako lead. AI przegapi tę przewagę, bo nie ma jej w widocznym first-fold tekście.</div>
-<div class="insight">Brak FAQ = AI nie ma odpowiedzi na pytania klienta. Każde pytanie (jak używać? jak czyścić? dla kogo?) to utracony featured snippet.</div>
-</div>
-</div>
-<div class="field">
-<div class="flabel">⭐ Ocena</div>
-<div class="fval"><span class="verdict fix">POPRAW</span> Średnia zawartość. Najlepsza galeria w segmencie nano, ale content schowany. Brak cytowalnych odpowiedzi na pytania.</div>
-</div>
-<div class="field">
-<div class="flabel">⚙️ Developer</div>
-<div class="fval"><span class="verdict alarm">ALARM</span> Accordion + cookie wall. Structured data: Product schema obecne. Meta: brak. Eventy: standard GA4 e-commerce.</div>
-</div>
+<div class="el-body">
+<div class="fields">
+<div class="fld"><div class="fl">Zawartość / akcje</div><div class="fv"><ul><li>4 zdjęcia: packshot, kąt, użycie na stopie, opakowanie tył</li><li>Cena: 40,99 zł (promo do 21.07.26)</li><li>6 bulletów: na mokro/sucho, bez bałaganu, higieniczny, ergonomiczny</li><li>ATC: czerwony przycisk + selektor ilości</li><li>Cross-sell karuzela: Ewa Schmitt, Fusswohl</li></ul></div></div>
+<div class="fld"><div class="fl">Ocena</div><div class="fv"><span class="ver v-fix">POPRAW</span> Treść schowana w accordionie. Brak leadu narracyjnego.</div></div>
+<div class="fld full"><div class="fl">Obserwacje (OKO)</div><div class="fv"><div class="obs">Laser 3D to jedyna unikalna cecha GLOV — ale jest zakopana wśród 6 bulletów, nie eksponowana jako lead. AI przegapi ją, bo nie ma jej w first-fold tekście.</div><div class="obs">Strona Rossmann prosi najpierw o ciasteczka, potem pokazuje cross-sell, a dopiero potem opis schowany w accordionie. AI nie klika w zakładki.</div><div class="obs">4 zdjęcia w galerii to dobry standard — w tym jedno lifestyle (użycie na stopie), co wyróżnia GLOV od Scholl (tylko packshoty).</div></div></div>
+<div class="fld full"><div class="fl">Developer</div><div class="fv"><span class="ver v-alert">ALARM</span> Accordion = content niewidoczny dla AI bez kliknięcia. Product schema: prawdopodobnie obecny (Rossmann standard). Cookie wall = opóźniony dostęp. GA4 events: standard e-commerce.</div></div>
 </div>
 </div>
 </div>
 
-<!-- COMPETITOR 2: SCHOLL -->
-<div class="comp-card" onclick="toggle(this)">
-<div class="comp-head">
-<img src="https://pro-fra-s3-productsassets.rossmann.pl/product_1_medium/2098033_360_350_1757054049.webp" alt="Scholl" loading="lazy">
-<div class="info"><div class="brand">Scholl Expert Care Nano Glass</div><div class="meta">Rossmann · 49,99 zł · 4.8★</div></div>
-<div class="score ok">GEO: 3/5</div><div class="arrow">▶</div>
+<!-- SCHOLL -->
+<div class="el-row" onclick="toggleRow(this)">
+<div class="el-head">
+<span class="dot" style="background:var(--ok)"></span>
+<span class="el-name">Scholl Expert Care Nano Glass</span>
+<span class="el-zone">above-fold</span>
+<span class="arrow">▶</span>
 </div>
-<div class="comp-body">
-<div class="field-group">
-<div class="field">
-<div class="flabel">📦 Zawartość / akcje</div>
-<div class="fval"><ul>
-<li>2 zdjęcia w galerii (opakowanie przód/tył) — najuboższa galeria</li>
-<li>Bullety: skuteczność, higiena, łatwość czyszczenia</li>
-<li>Nano Glass Technology — zastrzeżona nazwa</li>
-<li>Informacja: NIE dla cukrzyków i problemów z krążeniem</li>
-<li>Brak FAQ · brak wideo · brak before/after</li>
-<li>Trust marki: Scholl 100+ lat</li>
-</ul></div>
-</div>
-<div class="field full">
-<div class="flabel">👁️ Obserwacje OKO</div>
-<div class="fval">
-<div class="insight">Największy atut Scholl to marka — "Scholl" samo w sobie jest cytowalne (100+ lat, ekspert od stóp). Ale treść jest najuboższa w segmencie: 2 zdjęcia to za mało dla AI, które chce widzieć produkt z każdej strony.</div>
-<div class="insight">Jedyny konkurent, który wyraźnie ostrzega: "NIE dla diabetyków" — to jest FAKT S2 (cytowalny, ważny, unikalny w kategorii). AI może i powinno to zacytować.</div>
-<div class="insight">Informacja o ostrzeżeniu dla cukrzyków jest podana jako ostatnia w accordionie — po cross-sellu i stopce. AI widzi to, ale shopper prawdopodobnie nie przewinie tak daleko.</div>
-</div>
-</div>
-<div class="field">
-<div class="flabel">⭐ Ocena</div>
-<div class="fval"><span class="verdict ok">OK</span> Najwyższy trust marki w kategorii + jedyny z ostrzeżeniem medycznym. Treść uboga, ale marka nosi cytowalność sama.</div>
-</div>
-<div class="field">
-<div class="flabel">⚙️ Developer</div>
-<div class="fval"><span class="verdict alarm">ALARM</span> 2 zdjęcia = minimum. Accordion. Product schema obecny. Brak FAQ, brak specyfikacji. Cena o 9 zł wyższa od GLOV.</div>
-</div>
+<div class="el-body">
+<div class="fields">
+<div class="fld"><div class="fl">Zawartość / akcje</div><div class="fv"><ul><li>2 zdjęcia: opakowanie przód i tył — najuboższa galeria</li><li>Cena: 49,99 zł</li><li>Trust brand: Scholl (100+ lat)</li><li>Ostrzeżenie: NIE dla cukrzyków (jedyny taki fakt w kategorii)</li><li>ATC + cross-sell</li></ul></div></div>
+<div class="fld"><div class="fl">Ocena</div><div class="fv"><span class="ver v-ok">OK</span> Trust marki + ostrzeżenie medyczne = cytowalny fakt S2.</div></div>
+<div class="fld full"><div class="fl">Obserwacje (OKO)</div><div class="fv"><div class="obs">Tylko 2 zdjęcia to za mało dla AI. GLOV ma 4 i pokazuje produkt w użyciu — Scholl pokazuje tylko opakowanie. AI nie widzi produktu z każdej strony.</div><div class="obs">Ostrzeżenie "NIE dla diabetyków" to jedyny unikalny, cytowalny fakt S2 w całej kategorii. Żaden inny konkurent go nie ma. To jest content, który AI może i powinno zacytować.</div></div></div>
+<div class="fld full"><div class="fl">Developer</div><div class="fv"><span class="ver v-alert">ALARM</span> Tylko 2 zdjęcia galerii. Accordion. Scholl brand = trust signal. Ostrzeżenie medyczne dostępne tylko w accordionie.</div></div>
 </div>
 </div>
 </div>
 
-<!-- COMPETITOR 3: KILLYS -->
-<div class="comp-card" onclick="toggle(this)">
-<div class="comp-head">
-<img src="https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_440,w_500/v1756728341/assets/pas/images/a6abf41c-98ec-40b4-9e23-e0c0d03cf65d/killys-tarka-do-stop-z-nano-szk-a" alt="KillyS" loading="lazy">
-<div class="info"><div class="brand">KillyS Tarka z nano szkła</div><div class="meta">dm · ~25 zł · 4.94★</div></div>
-<div class="score ok">GEO: 3/5</div><div class="arrow">▶</div>
+<!-- KILLYS -->
+<div class="el-row" onclick="toggleRow(this)">
+<div class="el-head">
+<span class="dot" style="background:var(--ok)"></span>
+<span class="el-name">KillyS Tarka z nano szkła</span>
+<span class="el-zone">above-fold</span>
+<span class="arrow">▶</span>
 </div>
-<div class="comp-body">
-<div class="field-group">
-<div class="field">
-<div class="flabel">📦 Zawartość / akcje</div>
-<div class="fval"><ul>
-<li>3 zdjęcia produktu (białe tło, packshot)</li>
-<li>1 akapit opisu narracyjnego (benefitowy: "Zadbaj o swoje stopy")</li>
-<li>4 bullety cech (nano szkło, gradacja 100, rączka, design)</li>
-<li>Instrukcja: 2 kroki (na sucho, umyj po)</li>
-<li>Cross-sell: sekcja "Podobne produkty"</li>
-<li>Sekcja wartości marki (trendy, innowacja, jakość)</li>
-<li>Brak FAQ · brak wideo · brak before/after</li>
-</ul></div>
-</div>
-<div class="field full">
-<div class="flabel">👁️ Obserwacje OKO</div>
-<div class="fval">
-<div class="insight">Jedyny PDP z treścią benefitową zamiast technicznej listy — "zostawiając skórę zadbaną i wygładzoną" to język, który AI może sparafrazować. Reszta konkurentów pisze sucho.</div>
-<div class="insight">Sekcja wartości marki (5 ikon: trendy, innowacje, jakość, portfolio, social proof) zajmuje tyle samo miejsca co opis produktu — dla AI to szum, nie sygnał. Opis produktu jest wypchnięty w dół.</div>
-<div class="insight">Brak ceny i przycisku ATC na własnym PDP KillyS — to jest PDP informacyjny (brand site), nie transakcyjny. AI nie dostaje pełnej informacji zakupowej.</div>
-</div>
-</div>
-<div class="field">
-<div class="flabel">⭐ Ocena</div>
-<div class="fval"><span class="verdict ok">OK</span> Najlepsza treść narracyjna w segmencie budget. Benefit-first zamiast feature-list. Ale brak ceny i CTA na własnym PDP = niepełna cytowalność.</div>
-</div>
-<div class="field">
-<div class="flabel">⚙️ Developer</div>
-<div class="fval"><span class="verdict fix">SPRAWDŹ</span> PDP informacyjny (no cart). Cross-sell bogaty. Brak danych strukturalnych produktu (schema). Cena tylko na dm.pl, nie na killys.pl.</div>
-</div>
+<div class="el-body">
+<div class="fields">
+<div class="fld"><div class="fl">Zawartość / akcje</div><div class="fv"><ul><li>3 zdjęcia (białe tło, packshot)</li><li>Opis benefitowy: "zostawiając skórę zadbaną i wygładzoną"</li><li>4 bullety: nano szkło, gradacja 100, rączka, design</li><li>Instrukcja: 2 kroki (widoczna bez accordionu!)</li><li>Sekcja wartości marki (5 ikon)</li><li>Cross-sell: 10 podobnych produktów</li></ul></div></div>
+<div class="fld"><div class="fl">Ocena</div><div class="fv"><span class="ver v-ok">OK</span> Benefit-first copy. Instrukcja widoczna. Brak ceny/ATC na własnym PDP.</div></div>
+<div class="fld full"><div class="fl">Obserwacje (OKO)</div><div class="fv"><div class="obs">Jedyny PDP z treścią benefitową (nie feature-listową) i widoczną instrukcją bez accordionu. AI ma łatwiejszy dostęp do treści niż u konkurentów.</div><div class="obs">Sekcja wartości marki zajmuje tyle samo miejsca co opis produktu — dla AI to szum. Opis produktu jest wypchnięty poniżej 5 ikon.</div><div class="obs">Brak ceny i przycisku ATC na własnym brand site — to PDP informacyjny. AI nie dostaje pełnej informacji zakupowej z jednego źródła.</div></div></div>
+<div class="fld full"><div class="fl">Developer</div><div class="fv"><span class="ver v-fix">SPRAWDŹ</span> PDP informacyjny (brand site, nie transakcyjny). Cena tylko na dm.pl. Brak schema Product. Cross-sell bogaty (10 produktów).</div></div>
 </div>
 </div>
 </div>
 
-<!-- COMPETITOR 4: NEONAIL -->
-<div class="comp-card" onclick="toggle(this)">
-<div class="comp-head">
-<img src="https://pro-fra-s3-productsassets.rossmann.pl/product_8_medium/2126272_360_350_1782512147.webp" alt="NeoNail" loading="lazy">
-<div class="info"><div class="brand">NeoNail Pilnik elektryczny</div><div class="meta">Rossmann · 139,99 zł · 5★ (4 opinie)</div></div>
-<div class="score fix">GEO: 2/5</div><div class="arrow">▶</div>
+<!-- NEONAIL -->
+<div class="el-row" onclick="toggleRow(this)">
+<div class="el-head">
+<span class="dot" style="background:var(--fix)"></span>
+<span class="el-name">NeoNail Pilnik elektryczny</span>
+<span class="el-zone">above-fold</span>
+<span class="arrow">▶</span>
 </div>
-<div class="comp-body">
-<div class="field-group">
-<div class="field">
-<div class="flabel">📦 Zawartość / akcje</div>
-<div class="fval"><ul>
-<li>5 zdjęć (produkt + akcesoria + użycie + opakowanie)</li>
-<li>Ocena 5★ (4 opinie)</li>
-<li>Tag "TYLKO U NAS" (exclusive Rossmann)</li>
-<li>Brak rozwiniętego opisu (accordion)</li>
-<li>Brak specyfikacji technicznych w widoku głównym</li>
-<li>Brak FAQ · brak wideo · brak before/after</li>
-<li>Cena: 139,99 zł (najdroższy w zestawieniu)</li>
-</ul></div>
-</div>
-<div class="field full">
-<div class="flabel">👁️ Obserwacje OKO</div>
-<div class="fval">
-<div class="insight">Cena 139,99 zł jest 3× wyższa od średniej nano — ale pierwsze wrażenie to "drogi produkt", nie "inwestycja na lata". Brak narracji TCO: AI nie ma jak uzasadnić ceny bez danych o żywotności.</div>
-<div class="insight">Galeria pokazuje produkt z akcesoriami (kabel USB, 3 tarcze, szczoteczka) — to wizualnie najbogatszy zestaw. Ale żadne zdjęcie nie pokazuje efektu "przed/po", co jest kluczowe dla kategorii.</div>
-<div class="insight">Nazwa "wodoodporny" to jedyna różnica widoczna na first-fold. Bez rozwiniętego opisu, AI nie ma jak potwierdzić stopnia wodoodporności (IPX7), czasu pracy (150 min), ani prędkości obrotowej.</div>
-</div>
-</div>
-<div class="field">
-<div class="flabel">⭐ Ocena</div>
-<div class="fval"><span class="verdict fix">POPRAW</span> Najbogatszy wizualnie zestaw akcesoriów, ale content prawie zerowy. AI nie ma faktów do zacytowania — tylko cenę i nazwę.</div>
-</div>
-<div class="field">
-<div class="flabel">⚙️ Developer</div>
-<div class="fval"><span class="verdict alarm">ALARM</span> Accordion = content niewidoczny. Specyfikacje techniczne istnieją (IPX7, 150min, USB-C) ale nie są widoczne bez kliknięcia. Product schema? Prawdopodobnie tak.</div>
-</div>
+<div class="el-body">
+<div class="fields">
+<div class="fld"><div class="fl">Zawartość / akcje</div><div class="fv"><ul><li>5 zdjęć: produkt + akcesoria + użycie + opakowanie</li><li>Cena: 139,99 zł (najdroższy)</li><li>Ocena 5★ (4 opinie)</li><li>Tag "TYLKO U NAS"</li><li>Brak widocznego opisu (accordion)</li><li>Brak specyfikacji technicznych w widoku</li></ul></div></div>
+<div class="fld"><div class="fl">Ocena</div><div class="fv"><span class="ver v-fix">POPRAW</span> Bogaty wizualnie zestaw, ale content prawie zerowy bez accordionu.</div></div>
+<div class="fld full"><div class="fl">Obserwacje (OKO)</div><div class="fv"><div class="obs">Cena 139,99 zł jest 3× wyższa od średniej, ale AI nie ma jak uzasadnić tej ceny — zero danych o żywotności, czasie pracy, IPX7, prędkości obrotowej. Wszystko schowane.</div><div class="obs">Galeria pokazuje kompletny zestaw (USB, 3 tarcze, szczoteczka) — to wizualnie najbogatszy zestaw w kategorii. Ale żaden obraz nie pokazuje efektu przed/po.</div></div></div>
+<div class="fld full"><div class="fl">Developer</div><div class="fv"><span class="ver v-alert">ALARM</span> Accordion = content niewidoczny. Specyfikacje (IPX7, 150min, USB-C) istnieją w HTML ale nie są widoczne bez kliknięcia. Product schema standard.</div></div>
 </div>
 </div>
 </div>
 
-<!-- COMPETITOR 5: DENI CARTE -->
-<div class="comp-card" onclick="toggle(this)">
-<div class="comp-head">
-<img src="https://image.ceneostatic.pl/data/products/184659621/f-deni-carte-pumeks-do-stop-ze-szkla-krysztalowego.jpg" alt="Deni Carte" loading="lazy">
-<div class="info"><div class="brand">Deni Carte Exclusive Gold</div><div class="meta">Allegro · ~17 zł · 4.95★ (221 opinii)</div></div>
-<div class="score low">GEO: 1/5</div><div class="arrow">▶</div>
+<!-- DENI CARTE -->
+<div class="el-row" onclick="toggleRow(this)">
+<div class="el-head">
+<span class="dot" style="background:var(--alert)"></span>
+<span class="el-name">Deni Carte Exclusive Gold</span>
+<span class="el-zone">marketplace</span>
+<span class="arrow">▶</span>
 </div>
-<div class="comp-body">
-<div class="field-group">
-<div class="field">
-<div class="flabel">📦 Zawartość / akcje</div>
-<div class="fval"><ul>
-<li>10 zdjęć (najbogatsza galeria w zestawieniu)</li>
-<li>Opis funkcjonalny: antypoślizg, łatwe czyszczenie, trwałość</li>
-<li>Keyword-stuffing w tytule Allegro</li>
-<li>Brak sekcji narracyjnych · brak FAQ</li>
-<li>Brak struktury H2/H3 · brak instrukcji</li>
-<li>Cena: ~17 zł (najtańsze nano)</li>
-</ul></div>
-</div>
-<div class="field full">
-<div class="flabel">👁️ Obserwacje OKO</div>
-<div class="fval">
-<div class="insight">10 zdjęć w galerii to najwięcej w kategorii — ale wszystkie to packshoty produktu na białym tle. Zero zdjęć w użyciu, zero kontekstu. Dużo nie znaczy lepiej.</div>
-<div class="insight">Najniższa cena (17 zł) + najwyższa ocena (4.95★) + najwięcej recenzji (221) = pozycjonowanie "budżetowy hit". Ale AI widzi tylko gołe dane: cenę, ocenę, tytuł. Żadnego kontekstu ani różnicowania.</div>
-<div class="insight">Keyword-stuffing w tytule (ściąga z SEO) działa na wyszukiwarki, ale dla AI to czerwona flaga — tekst wygląda jak spam, nie jak odpowiedź na pytanie.</div>
-</div>
-</div>
-<div class="field">
-<div class="flabel">⭐ Ocena</div>
-<div class="fval"><span class="verdict alarm">ALARM</span> Najsłabszy content w zestawieniu. Zero narracji, zero cytowalnych faktów. Jedynie cena i ocena są dla AI użyteczne.</div>
-</div>
-<div class="field">
-<div class="flabel">⚙️ Developer</div>
-<div class="fval"><span class="verdict alarm">ALARM</span> Allegro marketplace = standardowy template. Brak własnego brand contentu. Keyword-stuffing. Product schema Allegro (ogólny, nie dedykowany).</div>
-</div>
+<div class="el-body">
+<div class="fields">
+<div class="fld"><div class="fl">Zawartość / akcje</div><div class="fv"><ul><li>10 zdjęć (same packshoty na białym)</li><li>Cena: ~17 zł (najtańsze)</li><li>Ocena 4.95★ (221 opinii)</li><li>Opis: funkcjonalny, antypoślizg, łatwe czyszczenie</li><li>Keyword-stuffing w tytule Allegro</li><li>Brak FAQ, brak instrukcji, brak narracji</li></ul></div></div>
+<div class="fld"><div class="fl">Ocena</div><div class="fv"><span class="ver v-alert">ALARM</span> Zero contentu. Tylko cena i ocena są dla AI użyteczne.</div></div>
+<div class="fld full"><div class="fl">Obserwacje (OKO)</div><div class="fv"><div class="obs">10 zdjęć — najwięcej w kategorii — ale wszystkie to packshoty na białym tle. Zero kontekstu, zero użycia. Dużo nie znaczy lepiej: AI woli 1 zdjęcie lifestyle niż 10 packshotów.</div><div class="obs">Keyword-stuffing w tytule (ściąga dla SEO) działa na wyszukiwarki, ale dla AI to czerwona flaga — treść wygląda jak spam, nie jak odpowiedź na pytanie.</div></div></div>
+<div class="fld full"><div class="fl">Developer</div><div class="fv"><span class="ver v-alert">ALARM</span> Allegro marketplace template. Zero własnego brand contentu. Brak FAQ, brak instrukcji, brak narracji. Product schema: Allegro generic.</div></div>
 </div>
 </div>
 </div>
 
-<!-- COMPARISON MATRIX -->
-<h2>Matryca porównawcza — cytowalność AI/GEO</h2>
-
-<table class="matrix">
-<thead><tr><th>Wymiar GEO</th><th>GLOV</th><th>Scholl</th><th>KillyS</th><th>NeoNail</th><th>Deni Carte</th></tr></thead>
-<tbody>
-<tr><td>Struktura treści</td><td style="color:var(--fix)">Bullety + materiały</td><td style="color:var(--fix)">Bullety + ostrzeżenie</td><td style="color:var(--ok)">Benefit-first narracja</td><td style="color:var(--alert)">Brak widocznego opisu</td><td style="color:var(--alert)">Gołe dane Allegro</td></tr>
-<tr><td>FAQ</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td></tr>
-<tr><td>Zdjęcia galerii</td><td style="color:var(--fix)">4 (w tym lifestyle)</td><td style="color:var(--alert)">2 (tylko opakowanie)</td><td style="color:var(--fix)">3 (białe tło)</td><td style="color:var(--ok)">5 (produkt+akcesoria)</td><td style="color:var(--ok)">10 (same packshoty)</td></tr>
-<tr><td>Instrukcja użycia</td><td style="color:var(--fix)">3 kroki (accordion)</td><td style="color:var(--alert)">Brak</td><td style="color:var(--ok)">2 kroki na stronie</td><td style="color:var(--alert)">Brak</td><td style="color:var(--alert)">Brak</td></tr>
-<tr><td>Before/After</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td></tr>
-<tr><td>Dowód kliniczny</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td></tr>
-<tr><td>Trust marki</td><td style="color:var(--fix)">Średni (brand GP)</td><td style="color:var(--ok)">WYSOKI (100+ lat)</td><td style="color:var(--alert)">Niski (masowy)</td><td style="color:var(--fix)">Średni (Rossmann exclusive)</td><td style="color:var(--alert)">Niski (no-name)</td></tr>
-<tr><td>TCO/żywotność</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td><td style="color:var(--alert)">BRAK</td></tr>
-<tr><td>CTA / przycisk</td><td style="color:var(--ok)">Dodaj do koszyka</td><td style="color:var(--ok)">Dodaj do koszyka</td><td style="color:var(--alert)">Brak na PDP brand</td><td style="color:var(--ok)">Dodaj do koszyka</td><td style="color:var(--ok)">Kup teraz (Allegro)</td></tr>
-<tr><td>GEO Score</td><td style="font-weight:700">2/5</td><td style="font-weight:700">3/5</td><td style="font-weight:700">3/5</td><td style="font-weight:700">2/5</td><td style="font-weight:700">1/5</td></tr>
-</tbody>
-</table>
-
-<!-- KEY INSIGHTS -->
-<h2>Główne wnioski — co AI widzi, czego nie widzi</h2>
-
-<div class="field full" style="border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0;border-left:4px solid var(--alert)">
-<div class="flabel">🔴 Wnioski ALARM</div>
-<ul style="margin:5px 0;padding-left:18px;font-size:13.5px">
-<li><strong>Zero FAQ u wszystkich 5 konkurentów</strong> — AI nie ma skąd wziąć odpowiedzi na pytania klientów. Każde pytanie to utracony featured snippet i pozycja w AIO.</li>
-<li><strong>Zero dowodu klinicznego</strong> — cała kategoria opiera się na recenzjach. AI nie ma twardego faktu S2 do zacytowania (poza ostrzeżeniem Scholl dla diabetyków).</li>
-<li><strong>Zero before/after</strong> — w kategorii gdzie efekt jest natychmiastowy i wizualny, nikt nie pokazuje dowodu. AI nie ma obrazu do sparafrazowania.</li>
-<li><strong>Zero TCO</strong> — nikt nie komunikuje żywotności nano (2-5 lat vs kamień 2-6 miesięcy). AI nie może odpowiedzieć "czy warto dopłacić".</li>
-</ul>
+<div class="caption" style="margin-top:24px">Vision Scan v5 · OKO-FIRST · capture: Playwright headless 1440w · 2026-07-20</div>
 </div>
 
-<div class="field full" style="border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0;border-left:4px solid var(--ok)">
-<div class="flabel">🟢 Pozytywne wyjątki</div>
-<ul style="margin:5px 0;padding-left:18px;font-size:13.5px">
-<li><strong>Scholl: ostrzeżenie medyczne</strong> — jedyny unikalny fakt S2 w całej kategorii. "Scholl Expert Care Nano Glass nie jest odpowiedni dla diabetyków" — to cytowalne.</li>
-<li><strong>KillyS: benefit-first copy</strong> — jedyny PDP z narracją zamiast listy feature'ów. AI łatwiej sparafrazuje "zostawiając skórę zadbaną" niż suchą listę.</li>
-<li><strong>NeoNail: najbogatszy zestaw akcesoriów</strong> — galeria pokazuje kompletność, ale treść tego nie wspiera.</li>
-</ul>
-</div>
-
-<div class="field full" style="border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0;border-left:4px solid var(--check)">
-<div class="flabel">🔵 Co GLOV może zrobić lepiej (na podstawie vision)</div>
-<ul style="margin:5px 0;padding-left:18px;font-size:13.5px">
-<li><strong>FAQ jako GEO asset</strong> — 10 pytań i odpowiedzi to najszybsza droga do featured snippet. Żaden konkurent tego nie ma.</li>
-<li><strong>Ostrzeżenie/nuta medyczna</strong> — Scholl pokazuje że "nie dla diabetyków" to cytowalny fakt. GLOV może dodać "bezpieczny dla cukrzyków po konsultacji z lekarzem" — to S2.</li>
-<li><strong>Laser 3D jako lead</strong> — jedyna unikalna cecha GLOV (laserowo cięte nano szkło 3D) jest zakopana w bulletach. Powinna być w leadzie i H1.</li>
-<li><strong>Before/After</strong> — efekt jest natychmiastowy. Jedno zdjęcie pięty przed/po to więcej niż 100 słów opisu.</li>
-<li><strong>TCO</strong> — kamień 10 zł × 4 wymiany/rok × 2 lata = 80 zł. Nano 41 zł × 2+ lata = 0 dodatkowych kosztów. To jest fakt S2, który AI może zacytować.</li>
-</ul>
-</div>
-
-<footer>
-<p><b>Metoda:</b> OKO-FIRST v5 (wg <a href="../UI_SPEC_VISION_REPORT.md">UI_SPEC_VISION_REPORT.md</a>) · live PDP screenshots + DOM analysis · 2026-07-20</p>
-<p><b>Źródła:</b> Rossmann.pl, KillyS.pl, Ceneo.pl, Allegro.pl · scrape: browser_vision</p>
-</footer>
-
-</div>
 <script>
-function toggle(el){
-  var head=el.querySelector('.comp-head'), body=el.querySelector('.comp-body');
-  head.classList.toggle('open'); body.classList.toggle('open');
+function toggleRow(el){
+  el.classList.toggle('open');
+  if(el.classList.contains('open')) el.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 </script>
-</body>
-</html>
+</body></html>
