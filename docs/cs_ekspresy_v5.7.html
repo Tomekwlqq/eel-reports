@@ -1,0 +1,1301 @@
+<!DOCTYPE html><html lang=pl><head><meta charset=UTF-8><title>Ekspresy CS v5.7</title><style>body{font-family:-apple-system,sans-serif;max-width:860px;margin:40px auto;padding:20px}h2{color:#2563eb;border-bottom:1px solid #ddd}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:4px 6px;border-bottom:1px solid #eee}th{background:#f5f3ef;font-size:10px;text-transform:uppercase}</style></head><body><a href="MAPA_PERCEPCJI_ekspresy_v5.5.html" style="display:inline-block;padding:8px 20px;background:#0969da;color:#fff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;margin-bottom:16px">Mapa percepcji</a><h1>Ekspresy do kawy — Category Standard v2 (nadbudowa)</h1>
+<p><em>Fundament (0/0b/2) z <code>FUND_ekspresy_do_kawy.md</code> — wklejony 1:1. Sekcje matrycowe z referencji 06.md #15. Sloty &lt;<LLM>&gt; = myślące. assemble_v2 · 2026-06-10.</em></p>
+<hr />
+<h2>0. Opis kategorii</h2>
+<p>Ekspres do kawy — urządzenie AGD do parzenia kawy (espresso, filtrowanej, kapsułkowej) w domu lub biurze. Klient wchodzi w kategorię rzadko (zakup trwa 3–10 lat) — przy pierwszym zakupie, wymianie zepsutego sprzętu lub chęci przejścia na wyższy poziom kawy.</p>
+<hr />
+<h2>0b. Problemy, które kategoria załatwia</h2>
+<p><strong>🎯 Primary (rdzeń — po co kategoria powstała):</strong></p>
+<blockquote>
+<p><strong>Parzy kawę.</strong> Dostarcza gotowy napój kawowy bez wychodzenia do kawiarni. Tyle.</p>
+</blockquote>
+<p><strong>Secondary (rynek pociął rdzeń „parzenie kawy" na węższe pod-potrzeby):</strong></p>
+<ul>
+<li><strong>rano w biegu / bez wysiłku</strong> — kawa ma być gotowa szybko, bez znajomości baristyki → ekspres kapsułkowy / w pełni automatyczny</li>
+<li><strong>espresso jak z kawiarni</strong> — chcę jakościowe espresso z prawdziwej kawy mielonej → ekspres kolbowy (semi-auto) z portafiltrem</li>
+<li><strong>napoje mleczne (cappuccino, latte, flat white)</strong> — nie wystarczy samo espresso, potrzebuję pianki → spieniacze + fully-auto z mlecznikiem</li>
+<li><strong>dla biura / większej grupy</strong> — kilkanaście kaw dziennie, niski koszt per kawa, łatwa obsługa → ekspres filtrowy large-batch lub kapsułkowy office</li>
+<li><strong>mała kuchnia / brak miejsca</strong> — kompaktowe urządzenie, nie za duże → rozmiar / footprint jako constraint</li>
+<li><strong>łatwość i zero obsługi</strong> — nie chcę uczyć się spieniania, mielenia, ustawiania ciśnienia → fully automatic, one-touch</li>
+<li><strong>pierwszy ekspres / wejście w kawę</strong> — odchodzę od Nescafé, nie wiem od czego zacząć → prosty onboarding, kapsułki jako most</li>
+<li><strong>wymiana zepsutego ekspresu</strong> — stary padł, szukam zamiennika (ryzyko: lock-in kapsułkowy) → porównanie systemów</li>
+<li><strong>prezent dla kawoszy</strong> — kupuję coś wartościowego dla kogoś, muszę nie wyjść na laika → WOW factor, opis zestawu</li>
+</ul>
+<blockquote>
+<p>⚠️ „Ciśnienie 15 bar", „pojemność 1.8L", „czas nagrzewania 25s" — NIE problemy. To atrybuty. Idą do filtrów/KCF.</p>
+</blockquote>
+<hr />
+<h2>1. CEV — Category Emotional Valuation (Schwartz z wagami)</h2>
+<p><strong>Pasek CEV — profil emocjonalny (10 cech):</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">ryzyko</th>
+<th style="text-align: center;">lęk</th>
+<th style="text-align: center;">widoczność</th>
+<th style="text-align: center;">impuls</th>
+<th style="text-align: center;">sexy</th>
+<th style="text-align: center;">aspiracja</th>
+<th style="text-align: center;">tożsamość</th>
+<th style="text-align: center;">zmysłowość</th>
+<th style="text-align: center;">pilność</th>
+<th style="text-align: center;">moralność</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">0.45</td>
+<td style="text-align: center;">0.35</td>
+<td style="text-align: center;">0.45</td>
+<td style="text-align: center;">0.30</td>
+<td style="text-align: center;">0.55</td>
+<td style="text-align: center;">0.55</td>
+<td style="text-align: center;">0.45</td>
+<td style="text-align: center;">0.40</td>
+<td style="text-align: center;">0.25</td>
+<td style="text-align: center;">0.10</td>
+</tr>
+</tbody>
+</table>
+<p><code>apply_physics</code> → fork <strong>POTRZEBA</strong>, research <strong>2.6</strong> (średnia).</p>
+<p><strong>Schwartz — 8 stanów świadomości + wagi:</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Stan</th>
+<th style="text-align: center;">Waga</th>
+<th>Co znaczy dla treści</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Nie wiem</td>
+<td style="text-align: center;">◔ L</td>
+<td>pomijalny</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Potrzeba</td>
+<td style="text-align: center;">◑ M</td>
+<td>trigger problemu</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CEP</td>
+<td style="text-align: center;">● H</td>
+<td>routing do podtypu</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Nauka kategorii</td>
+<td style="text-align: center;">◑ M</td>
+<td>edukacja parametrów</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Preselekcja</td>
+<td style="text-align: center;">● H</td>
+<td>mój przypadek→typ</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Porównywanie</td>
+<td style="text-align: center;">◑ M</td>
+<td>marka A vs B</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Wybór sklepu</td>
+<td style="text-align: center;">◔ L</td>
+<td>gdzie kupić/gwarancja</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Zakup</td>
+<td style="text-align: center;">◔ L</td>
+<td>raty/zwrot/zestaw</td>
+</tr>
+</tbody>
+</table>
+<p>Ścieżka zakupowa ma dwa wyraźne garby: <strong>stan 3 (CEP)</strong> i <strong>stan 5 (Preselekcja)</strong> — oba ● H — co oznacza, że klient spędza najwięcej energii na dwóch fundamentalnych pytaniach: „który TYP ekspresu pasuje do mojego życia" (routing kapsułkowy/automat/kolbowy) oraz „który konkretny model w tym typie wybrać". Stąd 50–60% budżetu treści powinno obsługiwać routing CEP i preselekcję modelu, a nie generyczne opisy marki. Asymetria wysoki ryzyko/aspiracja (0.45/0.55) przy niskiej pilności (0.25) sygnalizuje, że klient nie kupi pod presją czasu — kupi gdy poczuje że „rozumie co robi", więc treść musi budować pewność decyzji, nie CTA-pressure.</p>
+<h2>2. CEP — Consumer Entry Points</h2>
+<table>
+<thead>
+<tr>
+<th>Fraza / bucket</th>
+<th>Wolumen</th>
+<th>Sytuacja</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>„jaki ekspres do kawy" / „jaki ekspres polecacie"</td>
+<td>~6 400</td>
+<td>Pierwszy zakup, brak wiedzy — „coś dobrego do domu"</td>
+</tr>
+<tr>
+<td>„jaki ekspres do kawy do domu"</td>
+<td>1 300</td>
+<td>Szukam dla siebie, pytam o typ</td>
+</tr>
+<tr>
+<td>„jaki ekspres automatyczny do domu"</td>
+<td>(w bucket where_do_domu: 1 440)</td>
+<td>Wygoda — fully auto</td>
+</tr>
+<tr>
+<td>„jaki ekspres ciśnieniowy do domu"</td>
+<td>(w bucket)</td>
+<td>Chcę espresso, nie wiem jaki</td>
+</tr>
+<tr>
+<td>„przenośny ekspres do kawy"</td>
+<td>1 600</td>
+<td>Wyjazdy, kamping, podróże</td>
+</tr>
+<tr>
+<td>„profesjonalny automatyczny ekspres do kawy"</td>
+<td>70</td>
+<td>Pasjonat / barista home</td>
+</tr>
+<tr>
+<td>Discovery: „jak spieniać mleko do kawy"</td>
+<td>880</td>
+<td>Napoje mleczne (latte/cappuccino)</td>
+</tr>
+<tr>
+<td>Discovery: „jaka kawa do ekspresu"</td>
+<td>1 000</td>
+<td>Nowy ekspres, nie wiem jak używać</td>
+</tr>
+<tr>
+<td>Discovery: „jaki ekspress do kawy"</td>
+<td>2 900</td>
+<td>Forma pytaniowa — orientacja</td>
+</tr>
+<tr>
+<td>Discovery: „jak odkamienić ekspres [marka]"</td>
+<td>~5 360 (Delonghi x3 + Philips + ogólne)</td>
+<td>Utrzymanie po zakupie</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Suma wolumenu sytuacyjnych frases: ~21 000 (bez <code>_other</code> brandów)</strong></p>
+<h3>Frazy ATRYBUTOWE → harvest filtrów (NIE CEP)</h3>
+<table>
+<thead>
+<tr>
+<th>Atrybut</th>
+<th>Wolumen</th>
+<th>Idzie do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mały / mini ekspres</td>
+<td>13 740</td>
+<td>Filter: rozmiar</td>
+</tr>
+<tr>
+<td>tani / budżetowy ekspres</td>
+<td>1 490</td>
+<td>Filter: cena</td>
+</tr>
+<tr>
+<td>kolbowy / ciśnieniowy (15 bar)</td>
+<td>— w <code>_other</code></td>
+<td>Filter: typ ekspresu</td>
+</tr>
+<tr>
+<td>z młynkiem</td>
+<td>(w „mały ekspres z młynkiem" 13 740)</td>
+<td>Filter: funkcja</td>
+</tr>
+<tr>
+<td>ekspres Delonghi / Philips</td>
+<td>669 040</td>
+<td>Filter: marka</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ „15 bar", „pojemność zbiornika", „czas nagrzewania" — to atrybuty/specy. Nie mieszamy z CEP.</p>
+</blockquote>
+<h2>4. KCF — Key Category Features</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Zakres rynkowy</th>
+<th>Tier relevance</th>
+<th>Uwaga</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Typ ekspresu</td>
+<td>kapsułkowy / automatyczny / kolbowy / filtrowy</td>
+<td>T1</td>
+<td>konsument myli "automatyczny" z "kapsułkowym"; to fundamentalnie różne produkty</td>
+</tr>
+<tr>
+<td>Ciśnienie parzenia</td>
+<td>9–19 bar (deklarowane)</td>
+<td>T1</td>
+<td>deklarowane 15 bar ≠ realne ciśnienie przy parzeniu; 9 bar to minimum dla espresso</td>
+</tr>
+<tr>
+<td>Zbiornik wody (ml)</td>
+<td>600–3000 ml</td>
+<td>T1</td>
+<td>mały zbiornik = ciągłe uzupełnianie; biuro min. 1.5L</td>
+</tr>
+<tr>
+<td>Spieniacz mleka</td>
+<td>brak / ręczny parowy / automatyczny / latteGo</td>
+<td>T2</td>
+<td>konsument chce cappuccino ale nie sprawdza czy spieniacza jest w zestawie</td>
+</tr>
+<tr>
+<td>Czas nagrzewania</td>
+<td>20–60 sek.</td>
+<td>T2</td>
+<td>termoblok = szybszy; bojler = wolniejszy ale stała temperatura</td>
+</tr>
+<tr>
+<td>Wbudowany młynek</td>
+<td>TAK (stopni mielenia 5–20) / NIE</td>
+<td>T2</td>
+<td>bez młynka do automatu = ziarna nie wejdą</td>
+</tr>
+<tr>
+<td>Kompatybilność kapsułek</td>
+<td>Nespresso / Dolce Gusto / K-Cup / własny system</td>
+<td>T1</td>
+<td>lock-in na droższe kapsułki = wyższy TCO</td>
+</tr>
+<tr>
+<td>Typ grzałki / bojlera</td>
+<td>termoblock / single boiler / dual boiler / heat-exchange</td>
+<td>T2</td>
+<td>dual boiler = espresso + parowanie jednocześnie; termoblock = szybki rozruch</td>
+</tr>
+<tr>
+<td>Rozmiar / footprint</td>
+<td>szerokość cm × głębokość cm × wysokość cm</td>
+<td>T1</td>
+<td>standardowa szafka kuchenna = min. 40 cm wysokości prześwitu; ekspres &gt;35 cm szerokości = problem blatowy</td>
+</tr>
+<tr>
+<td>Pojemnik na fusy</td>
+<td>wyjmowany TAK/NIE + pojemność (porcje)</td>
+<td>T2</td>
+<td>automatyczny bez pojemnika = mycie przez dno; małe pojemniki = codzienne opróżnianie</td>
+</tr>
+<tr>
+<td>Tryb parzenia</td>
+<td>espresso / lungo / americano / ristretto / cold brew</td>
+<td>T2</td>
+<td>cold brew = nisza barista; americano = parzenie do większej pojemności</td>
+</tr>
+<tr>
+<td>Łączność / smart</td>
+<td>brak / WiFi / Bluetooth / dedykowana aplikacja</td>
+<td>T3</td>
+<td>app = profile użytkowników + zdalne uruchamianie; przydatne w multi-person household</td>
+</tr>
+<tr>
+<td>Zestaw zawartości</td>
+<td>ekspres body only / z spieniaczem / z zestawem startowym (kapsułki/ziarna)</td>
+<td>T1</td>
+<td>klient kupuje „ekspres do cappuccino" ale spieniacz często osobno — ukryty koszt</td>
+</tr>
+<tr>
+<td>Serwis i odkamienienie</td>
+<td>program odkamienienia wbudowany TAK/NIE + sygnalizacja</td>
+<td>T2</td>
+<td>brak lampki = konsument nie odkamienia = skrócona żywotność o 30–50%</td>
+</tr>
+<tr>
+<td>Gwarancja producenta</td>
+<td>12 / 24 / 36 miesięcy</td>
+<td>T2</td>
+<td>przy zakupie 1500+ zł gwarancja 24 mies. to standard; 12 mies. = pytanie „dlaczego tak mało?"</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Analiza KW fundamentu (źródło atrybutów): <strong>Łączny wolumen: ~700 620 (zdominowany przez brandy — patrz <code>_other</code>).</strong></p>
+</blockquote>
+<h3>Frazy SYTUACYJNE (wsad do CEP)</h3>
+<table>
+<thead>
+<tr>
+<th>Fraza / bucket</th>
+<th>Wolumen</th>
+<th>Sytuacja</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>„jaki ekspres do kawy" / „jaki ekspres polecacie"</td>
+<td>~6 400</td>
+<td>Pierwszy zakup, brak wiedzy — „coś dobrego do domu"</td>
+</tr>
+<tr>
+<td>„jaki ekspres do kawy do domu"</td>
+<td>1 300</td>
+<td>Szukam dla siebie, pytam o typ</td>
+</tr>
+<tr>
+<td>„jaki ekspres automatyczny do domu"</td>
+<td>(w…</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>5. Typowy Produkt</h2>
+<table>
+<thead>
+<tr>
+<th>Cecha</th>
+<th>Norma kategorii</th>
+<th>Red flag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Format</td>
+<td>wolnostojący blat (25–40 cm szerokości)</td>
+<td>ekspres większy niż 40 cm = nie mieści się pod standardową szafką</td>
+</tr>
+<tr>
+<td>Tacka ociekowa</td>
+<td>wyjmowana metalowa</td>
+<td>brak tacy = kawa na blacie</td>
+</tr>
+<tr>
+<td>Wskaźnik odkamieniania</td>
+<td>TAK (lampka)</td>
+<td>brak = konsument nigdy nie odkamieni = uszkodzenie</td>
+</tr>
+<tr>
+<td>Pobór mocy</td>
+<td>900–1800 W</td>
+<td>&lt;900 W = słabe nagrzewanie; &gt;1800 W = ograniczenia instalacji</td>
+</tr>
+<tr>
+<td>Pojemnik na fusy (automaty)</td>
+<td>wyjmowany</td>
+<td>brak = czyszczenie przez dno maszyny = mało wygodne</td>
+</tr>
+<tr>
+<td>Kompatybilność</td>
+<td>standard Nespresso / własny</td>
+<td>własny system bez popularnych kapsułek = drogi lock-in</td>
+</tr>
+</tbody>
+</table>
+<h2>6. Tier Specs</h2>
+<p><strong>Tier-1 Universal</strong> (musi być w PDP każdego ekspresu):
+- Ciśnienie pompy — format: <code>X bar</code>
+- Pojemność zbiornika na wodę — format: <code>X L</code>
+- Typ systemu — format: <code>kapsułkowy Nespresso / automatyczny z młynkiem / kolbowy / filtrowy</code>
+- Moc grzewcza — format: <code>X W</code> (kontekst: czas nagrzewania)
+- Wymiary — format: <code>X × Y × Z cm</code> (czy mieści się pod szafką?)</p>
+<p><strong>Tier-2 Differentiator:</strong>
+- Wbudowany młynek TAK/NIE + liczba poziomów mielenia
+- Spieniacz mleka: brak / ręczna różdżka / automatyczny carafe
+- Programowalne profile użytkownika: X profili
+- Smart / app: WiFi TAK/NIE</p>
+<p><strong>Tier-3 / CEP-Specific:</strong>
+- Cold brew / cold extraction — <code>cep_barista_at_home</code>
+- Tryb eko / auto-standby po X min — <code>cep_office_team</code>
+- Dedykowany dzbanek termos — <code>cep_office_team</code></p>
+<h2>7. 💰 Tier Pricing — PLN, Polska 2026</h2>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Widełki (PLN)</th>
+<th>Co dostajesz (parametry / KCF)</th>
+<th>Typowe modele</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Budżet</strong></td>
+<td>250–699 zł</td>
+<td>Ekspres kapsułkowy (Nespresso lub DG) lub prosty ciśnieniowy bez młynka. Ciśnienie 15–19 bar (deklarowane). Zbiornik 0.6–1.0 L — wystarcza na 2–3 kawy. Brak spieniacza lub spieniacz ręczny dokupowany osobno (+100–150 zł). Czas nagrzewania 25–45 sek. Plastik, brak LCD. Roczny koszt eksploatacji kapsułek (2 kawy/dzień): ok. 900–1 200 zł.</td>
+<td>Nespresso Essenza Mini, DeLonghi Nespresso Inissia, Dolce Gusto Genio S</td>
+</tr>
+<tr>
+<td><strong>Średni</strong></td>
+<td>700–1 999 zł</td>
+<td>Ekspres automatyczny z wbudowanym młynkiem (5–12 stopni mielenia) LUB kolbowy semi-auto z pompą 15 bar. Zbiornik 1.2–1.8 L. Automatyczny lub parowy spieniacz mleka w komplecie (cappuccino bez dodatkowego zakupu). Termoblock — nagrzewanie 30–40 sek. Programowalne: moc, temp, ilość wody. Ekran LCD lub przyciski dotykowe. Stal nierdzewna lub ABS premium. Odkamienienie automatyczne z sygnalizacją.</td>
+<td>DeLonghi Magnifica Start, Philips 3200 Series, Melitta Barista TS Smart, Sage Bambino Plus</td>
+</tr>
+<tr>
+<td><strong>Premium</strong></td>
+<td>2 000–5 000+ zł</td>
+<td>W pełni automatyczny z dual boilerem LUB kolbowy profesjonalny. Młynek ceramiczny 20+ stopni mielenia. Spieniacz automatyczny carafe (cappuccino jednym przyciskiem). Zbiornik 1.8–3.0 L. Profile użytkownika (4–15 profili). WiFi / app. Wyświetlacz kolorowy OLED/TFT. Pobór mocy 1450–1600 W (szybki rozruch + stała temp). Dual boiler = espresso + mleko jednocześnie. Serwis i dostępność części po 5–8 latach. Gwarancja 24–36 miesięcy.</td>
+<td>Jura E8, DeLonghi La Specialista Arte, Sage Oracle Touch, Philips 5400 LatteGo</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Oś #1 (budżet):</strong> dla większości kupujących po raz pierwszy kluczowe pytanie to „ile wydam i co dostanę?". Budżet do 700 zł = realna alternatywa dla Nescafé; 700–2000 zł = skok jakościowy z młynkiem; 2000+ zł = pasja lub biuro.</p>
+</blockquote>
+<h2>8. Consumer Decision Tree</h2>
+<pre><code>[L1 — Routing: jaki typ ekspresu?]
+
+Q1. Co ważniejsze — wygoda czy jakość kawy?
+  consumer_language: &quot;Chcę coś prostego&quot; vs &quot;Zależy mi żeby kawa była naprawdę dobra&quot;
+  → Wygoda (nie chcę się bawić) → [Ekspres kapsułkowy] → Q1-L2-kapsulkowy
+  → Jakość + komfort → [Ekspres automatyczny] → Q1-L2-automat
+  → Jakość + chcę się nauczyć → [Ekspres kolbowy] → Q1-L2-kolbowy
+  → Dużo osób / biuro → [Ekspres filtrowy large-batch] → Q1-L2-filtrowy
+
+Q2. (jeśli niejednoznaczne) Ile osób pije kawę dziennie?
+  → 1-2 osoby → compact, zbiornik &lt;1.5L
+  → 3-5 osób → średni, 1.5-2L
+  → 5+ osób → office tier, podgrzewacz karafki
+
+[L2 — Ekspres kapsułkowy]
+Q1. Masz już kapsułki konkretnego systemu?
+  consumer_language: &quot;Mam kapsułki Nespresso od kolegi i chcę kupić ekspres&quot;
+  → TAK (Nespresso) → tylko Nespresso-compatible
+  → TAK (Dolce Gusto) → tylko DG-compatible
+  → NIE → wybór systemu: Nespresso Original (espresso/lungo) vs Vertuo (porcjowane)
+
+Q2. Czy chcesz też mleko / cappuccino?
+  → Tylko espresso/lungo → Original Line Nespresso bez spieniacza
+  → Chcę mleko → Nespresso Lattissima LUB Vertuo LUB Dolce Gusto Genio S Touch
+
+Q3. Design i rozmiar ważne?
+  → Mała kuchnia (&lt;30 cm szerokości) → compact footprint
+  → Design ważny → premium finish (Creatista, Artisan)
+
+mandatory_in_PDP: system kapsułek + kompatybilność + pojemność zbiornika [L] + wymiary [cm] + ciśnienie [bar]
+
+[L2 — Ekspres automatyczny (fully auto)]
+Q1. Jaki smak kawy? Mocne espresso / długa kawa czarna / mix
+  consumer_language: &quot;Piję głównie cafe crema a partner ristretto&quot;
+  → Mix profili → regulacja stopnia mielenia + programowalne profile
+  → Tylko espresso → prostszy model, stały stopień mielenia
+
+Q2. Chcesz podgrzewane mleko / piankę?
+  → TAK → zintegrowany spieniacz (carafe) lub LatteCrema
+  → NIE → bez spieniacza, niższy model
+
+Q3. Ziarno czy czasem mielona (np. decaf)?
+  → Tylko ziarno → standardowy hopper
+  → Czasem mielona → bypass hopper (dual use)
+
+Q4. Programowanie / app?
+  → TAK → smart connectivity, profile per użytkownik
+  → NIE → prostsze UI, niższa cena
+
+Q5. Budżet?
+  → 800-1500 zł → entry (DeLonghi Magnifica, Philips 3200)
+  → 1500-3000 zł → mid (Eletta Explore, Melitta Barista)
+  → 3000+ zł → premium (Jura, DeLonghi La Specialista)
+
+mandatory_in_PDP: typ młynka + liczba poziomów mielenia + spieniacz TAK/NIE + pojemność zbiornika [L] + liczba profili
+
+[L2 — Ekspres kolbowy (semi-auto espresso)]
+Q1. Masz już młynek do kawy?
+  consumer_language: &quot;Kupuję tylko ekspres&quot; vs &quot;Szukam zestawu ekspres + młynek&quot;
+  → TAK → fokus na ekspres, sprawdź kompatybilność portafiltra (58mm standard)
+  → NIE → potrzebujesz zestawu lub ekspresu z wbudowanym młynkiem
+
+Q2. Chcesz robić espresso i parować mleko równocześnie?
+  consumer_language: &quot;Żona pije cappuccino a ja espresso, chcę obie naraz&quot;
+  → TAK → dual boiler (&gt;3000 zł) lub heat-exchange
+  → NIE (kolejno) → single boiler lub thermoblock
+
+Q3. Poziom doświadczenia?
+  → Początkujący → automatyczna tamperka + gotowe profile ciśnienia
+  → Zaawansowany → regulacja ciśnienia / temperatury / pre-infusion
+
+Q4. Ciśnienie pompy?
+  → Minimum 15 bar (standard), optimum 18-20 bar dla espresso
+
+mandatory_in_PDP: ciśnienie pompy [bar] + typ grzałki (termoblock/single/dual boiler) + rozmiar portafiltra [mm] + wymiary [cm]
+</code></pre>
+<h2>9. Forbidden Patterns</h2>
+<table>
+<thead>
+<tr>
+<th>❌ Zakazane</th>
+<th>✅ Poprawne</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"doskonały smak kawy"</td>
+<td>"18-barowe ciśnienie + temperatura 90°C — ekstrakcja jak w kawiarni"</td>
+</tr>
+<tr>
+<td>"intuicyjna obsługa"</td>
+<td>"3 przyciski + ekran LCD — gotowe bez czytania instrukcji"</td>
+</tr>
+<tr>
+<td>"wyjątkowe doznania"</td>
+<td>"regulacja mielenia w 12 krokach — od delikatnego po ristretto"</td>
+</tr>
+<tr>
+<td>"nowoczesny design"</td>
+<td>"stal nierdzewna, wymiary 25×35×31 cm — mieści się pod standardową szafką"</td>
+</tr>
+</tbody>
+</table>
+<h2>10. Ścieżki percepcji &amp; persony</h2>
+<h4>ŚCIEŻKA A — Pierwsza prawdziwa kawa (porzucenie Nescafé)</h4>
+<p><strong>Persona:</strong> Monika, 31 lat, nauczycielka, pije 3 kawy dziennie z Nescafé, koleżanka zaparzyła jej prawdziwą kawę na kolacji i teraz nie może wrócić do instant
+<strong>CEP:</strong> <code>cep_first_machine</code>
+<strong>Trigger:</strong> "Chcę przestać pić Nescafé — ale nie wiem gdzie zacząć i jak działają ekspresy"
+<strong>Długość procesu:</strong> 1-3 tygodnie</p>
+<table>
+<thead>
+<tr>
+<th>Stan</th>
+<th>Nazwa</th>
+<th>Pytania w głowie</th>
+<th>Intencja</th>
+<th>Typ treści</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td>Odkrycie kategorii</td>
+<td>"Jakie są rodzaje ekspresów do kawy? Czym różni się kapsułkowy od automatycznego?"</td>
+<td>informacyjna</td>
+<td>artykuł poradnikowy "rodzaje ekspresów"</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>Uproszczenie wyboru</td>
+<td>"Który ekspres jest najprostszy w obsłudze? Czy kapsułkowy wystarczy dla kogoś kto zaczyna?"</td>
+<td>komercyjna</td>
+<td>comparison entry-level</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>Lock-in awareness</td>
+<td>"Ile kosztują kapsułki? Czy będę uzależniona od jednego systemu?"</td>
+<td>komercyjna</td>
+<td>artykuł TCO kapsułki vs ziarna</td>
+</tr>
+<tr>
+<td>A4</td>
+<td>Decyzja modelu</td>
+<td>"Nespresso Essenza vs DeLonghi — który lepszy na start?"</td>
+<td>transakcyjna</td>
+<td>PDP + reviews</td>
+</tr>
+<tr>
+<td>A5</td>
+<td>Zakup</td>
+<td>"Gdzie kupić ekspres z dostawą? Czy jest gwarancja serwisowa?"</td>
+<td>transakcyjna</td>
+<td>PDP checkout</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pytania ścieżkowe CEP <code>cep_first_machine</code>:</strong>
+- "Jaki ekspres polecacie dla osoby która nigdy nie miała ekspresu do kawy?"
+- "Kapsułkowy czy automatyczny — który łatwiejszy na start?"
+- "Czy kawa z ekspresu kapsułkowego smakuje lepiej niż Nescafé?"
+- "Ile miesięcznie wydaje się na kapsułki Nespresso?"
+- "Czy muszę kupić coś jeszcze oprócz ekspresu żeby zrobić kawę?"</p>
+<hr />
+<h4>ŚCIEŻKA B — Barista w domu (pasja kawy)</h4>
+<p><strong>Persona:</strong> Radek, 36 lat, programista, w kawiarniach zawsze zamawia flat white i cortado, chce odtworzyć to w domu i nie rozumie czemu każda kawa smakuje inaczej
+<strong>CEP:</strong> <code>cep_barista_at_home</code>
+<strong>Trigger:</strong> "Chcę robić kawę jak w kawiarni — flatwhite, cortado, nie wiem jak to osiągnąć"
+<strong>Długość procesu:</strong> 2-6 tygodni</p>
+<table>
+<thead>
+<tr>
+<th>Stan</th>
+<th>Nazwa</th>
+<th>Pytania w głowie</th>
+<th>Intencja</th>
+<th>Typ treści</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B1</td>
+<td>Zrozumienie procesu</td>
+<td>"Czym jest espresso? Czemu ciśnienie 9 bar ma znaczenie? Czym jest portafilter?"</td>
+<td>informacyjna</td>
+<td>artykuł "podstawy espresso"</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>Ekspres vs kapsułki</td>
+<td>"Czy ekspres kapsułkowy robi prawdziwe espresso? Czy warto kupić kolbowy?"</td>
+<td>komercyjna</td>
+<td>comparison kolbowy vs kapsułkowy</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>Zestaw ekspres + młynek</td>
+<td>"Czy muszę kupić też młynek? Co to jest doser?"</td>
+<td>komercyjna</td>
+<td>artykuł "zestaw do espresso"</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>Wybór modelu</td>
+<td>"DeLonghi La Specialista vs Sage Barista Express — który lepszy dla amatora?"</td>
+<td>komercyjna</td>
+<td>comparison kolbowe premium</td>
+</tr>
+<tr>
+<td>B5</td>
+<td>Zakup i konfiguracja</td>
+<td>"Jakie ziarna kupić na start? Jak ustawić stopień mielenia?"</td>
+<td>transakcyjna</td>
+<td>PDP + FAQ konfiguracja</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pytania ścieżkowe CEP <code>cep_barista_at_home</code>:</strong>
+- "Jaki ekspres kolbowy dla amatora który chce robić espresso jak w kawiarni?"
+- "Ekspres kolbowy czy automatyczny — który robi lepsze espresso?"
+- "Czy do ekspresu kolbowego potrzebny jest osobny młynek?"
+- "Sage Barista Express vs DeLonghi La Specialista — różnica?"
+- "Jak ustawić ekspres kolbowy żeby kawa nie była gorzka / kwaśna?"
+- "Co to jest pre-infusion i czy ma znaczenie?"</p>
+<hr />
+<h4>ŚCIEŻKA C — Wygoda jednym przyciskiem (fully auto)</h4>
+<p><strong>Persona:</strong> Beata, 48 lat, dyrektorka finansowa, wstaje o 6:00 i nie ma czasu ani ochoty na "zabawy" z kawą — chce dobrą kawę bez wysiłku
+<strong>CEP:</strong> <code>cep_fully_auto_comfort</code>
+<strong>Trigger:</strong> "Chcę dobrej kawy ale bez fatygi — jeden przycisk i gotowe"
+<strong>Długość procesu:</strong> 1-2 tygodnie</p>
+<table>
+<thead>
+<tr>
+<th>Stan</th>
+<th>Nazwa</th>
+<th>Pytania w głowie</th>
+<th>Intencja</th>
+<th>Typ treści</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>Definicja "bez fatygi"</td>
+<td>"Czy ekspres automatyczny naprawdę wymaga tylko jednego przycisku? Jak często trzeba go czyścić?"</td>
+<td>informacyjna</td>
+<td>artykuł "ekspres automatyczny w praktyce"</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>Budżet vs komfort</td>
+<td>"Ile kosztuje dobry automat? Czy 1500 zł wystarczy czy trzeba 3000?"</td>
+<td>komercyjna</td>
+<td>ranking automatów, zakres cenowy</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>Spieniacz mleka</td>
+<td>"Czy muszę dopłacać za spieniacz? Czy automatyczny jest dobry?"</td>
+<td>komercyjna</td>
+<td>comparison spieniacz ręczny vs automatyczny</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>Wybór konkretnego modelu</td>
+<td>"DeLonghi Magnifica vs Philips 3200 — który łatwiejszy w obsłudze i czyszczeniu?"</td>
+<td>transakcyjna</td>
+<td>PDP + reviews obsługa/czyszczenie</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>Zakup</td>
+<td>"Gdzie kupić z instalacją/demo? Jaka gwarancja?"</td>
+<td>transakcyjna</td>
+<td>PDP + autoryzowany dealer</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pytania ścieżkowe CEP <code>cep_fully_auto_comfort</code>:</strong>
+- "Jaki ekspres automatyczny do kawy jest najłatwiejszy w obsłudze i czyszczeniu?"
+- "DeLonghi Magnifica vs Philips 3200 — który prostszy w użytkowaniu?"
+- "Jak często trzeba czyścić ekspres automatyczny z młynkiem?"
+- "Czy ekspres automatyczny z spieniaczem robi prawdziwe cappuccino?"
+- "Ekspres automatyczny do 2000 zł — co wybrać żeby nie żałować?"</p>
+<hr />
+<h4>ŚCIEŻKA D — Biuro (kawa dla zespołu)</h4>
+<p><strong>Persona:</strong> Marcin, 42 lata, office manager w firmie 25-osobowej, co miesiąc kupuje 10 puszek Nescafé, szef poprosił żeby "coś zrobić z tą kawą"
+<strong>CEP:</strong> <code>cep_office_team</code>
+<strong>Trigger:</strong> "Mamy 15 osób w biurze i potrzebuję czegoś lepszego niż Nescafé i szybkiego"
+<strong>Długość procesu:</strong> 1-2 tygodnie</p>
+<table>
+<thead>
+<tr>
+<th>Stan</th>
+<th>Nazwa</th>
+<th>Pytania w głowie</th>
+<th>Intencja</th>
+<th>Typ treści</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td>Skala i format</td>
+<td>"Ile kaw dziennie może zrobić ekspres? Czy kapsułkowy czy filtrowy jest tańszy dla 15 osób?"</td>
+<td>informacyjna</td>
+<td>artykuł "ekspres do biura — jaki wybrać"</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>Koszt per kawa</td>
+<td>"Ile kosztuje jedna kawa w kapsułkach vs automatu z ziarnami? Jak to policzyć?"</td>
+<td>komercyjna</td>
+<td>kalkulator TCO, comparison</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>Serwis i czyszczenie</td>
+<td>"Kto będzie to czyścił? Jak skomplikowana jest konserwacja?"</td>
+<td>komercyjna</td>
+<td>FAQ serwis ekspresów biurowych</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>Zakup i dostawa</td>
+<td>"Czy firma oferuje serwis i dostawę kaw? Czy jest leasing ekspresów biurowych?"</td>
+<td>transakcyjna</td>
+<td>PDP + oferta B2B</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pytania ścieżkowe CEP <code>cep_office_team</code>:</strong>
+- "Jaki ekspres do kawy do biura dla 10-20 osób?"
+- "Ekspres biurowy — kapsułkowy czy automatyczny z ziarnami, co tańsze w eksploatacji?"
+- "Ile kaw na godzinę robi ekspres automatyczny?"
+- "Czy można wziąć ekspres do biura w leasing?"
+- "Ekspres do biura — jak często wymagana obsługa serwisowa?"</p>
+<hr />
+<h4>ŚCIEŻKA E — Wymiana zepsutego (upgrade przy okazji)</h4>
+<p><strong>Persona:</strong> Tomasz, 44 lata, inżynier, jego DeLonghi Magnifica służył 7 lat i właśnie się zepsuł — koszt naprawy = 60% nowego, więc kupuje nowy ekspres, ale tym razem chce „coś lepszego"
+<strong>CEP:</strong> <code>cep_replacement_upgrade</code>
+<strong>Trigger:</strong> "Stary ekspres padł — naprawiać nie ma sensu, przy okazji wskoczę poziom wyżej"
+<strong>Długość procesu:</strong> 3–7 dni (presja czasu — brak kawy w domu)</p>
+<table>
+<thead>
+<tr>
+<th>Stan</th>
+<th>Nazwa</th>
+<th>Pytania w głowie</th>
+<th>Intencja</th>
+<th>Typ treści</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E1</td>
+<td>Czy naprawiać czy kupić</td>
+<td>"Koszt naprawy Magnifiki — opłaca się czy lepiej nowy?"</td>
+<td>informacyjna</td>
+<td>artykuł "naprawa ekspresu vs nowy — kiedy się opłaca"</td>
+</tr>
+<tr>
+<td>E2</td>
+<td>Co dostanę za więcej</td>
+<td>"Czy DeLonghi Magnifica Evo to znaczący skok vs stara Magnifica? Co zmieniono?"</td>
+<td>komercyjna</td>
+<td>comparison: stary model vs nowy; artykuł "co nowego w automatach 2025/2026"</td>
+</tr>
+<tr>
+<td>E3</td>
+<td>Znana marka vs nowa</td>
+<td>"Czy Jura albo Philips 5400 jest dużo lepszy niż DeLonghi w tej cenie?"</td>
+<td>komercyjna</td>
+<td>cross-brand comparison w predziale 2000–3500 zł</td>
+</tr>
+<tr>
+<td>E4</td>
+<td>Szybka decyzja</td>
+<td>"Gdzie kupię z dostawą jutro? Czy Media Markt ma na stanie?"</td>
+<td>transakcyjna</td>
+<td>PDP z dostępnością stock + dostawa ekspresowa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pytania ścieżkowe CEP <code>cep_replacement_upgrade</code>:</strong>
+- "Zepsuł mi się ekspres DeLonghi — naprawiać czy kupić nowy?"
+- "Co wybrać zamiast DeLonghi Magnifica — co jest lepsze w podobnej cenie?"
+- "Ekspres automatyczny do 3000 zł — co najlepszego 2026?"
+- "Czy Philips 5400 LatteGo jest lepszy od DeLonghi Eletta?"
+- "Jaki ekspres automatyczny z gwarancją 3 lata?"</p>
+<hr />
+<h4>ŚCIEŻKA F — Prezent dla pasjonata kawy</h4>
+<p><strong>Persona:</strong> Agnieszka, 38 lat, menedżerka, kupuje prezent dla partnera który „kocha kawę" — sama nie pije, boi się że kupi „zły" ekspres i wyjdzie na ignorantkę
+<strong>CEP:</strong> <code>cep_gift_for_coffee_lover</code>
+<strong>Trigger:</strong> "Chcę kupić ekspres jako prezent dla kogoś kto zna się na kawie — nie chcę się skompromitować"
+<strong>Długość procesu:</strong> 1–2 tygodnie (deadline: urodziny / święta)</p>
+<table>
+<thead>
+<tr>
+<th>Stan</th>
+<th>Nazwa</th>
+<th>Pytania w głowie</th>
+<th>Intencja</th>
+<th>Typ treści</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F1</td>
+<td>Jaki poziom dla pasjonata</td>
+<td>"Czy kapsułkowy jako prezent to dobry pomysł czy wyjdę na laika? Co kupić komuś kto 'kocha kawę'?"</td>
+<td>informacyjna</td>
+<td>artykuł "ekspres jako prezent — przewodnik dla niekawoszy"</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>Budżet prezentowy</td>
+<td>"Ile wydać żeby prezent był poważny? Od jakiej kwoty zaczyna się 'prawdziwy' ekspres?"</td>
+<td>komercyjna</td>
+<td>ranking "ekspres do kawy jako prezent — 3 progi cenowe"</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>Zestaw vs sam ekspres</td>
+<td>"Czy kupić sam ekspres czy zestaw z ziarnami i akcesoriami? Co robi lepsze wrażenie?"</td>
+<td>komercyjna</td>
+<td>artykuł "zestaw barista — co do ekspresu jako prezent"</td>
+</tr>
+<tr>
+<td>F4</td>
+<td>Zakup i opakowanie</td>
+<td>"Czy można kupić z opakowaniem prezentowym? Czy można zwrócić jeśli ma już taki model?"</td>
+<td>transakcyjna</td>
+<td>PDP + polityka zwrotów + gift wrapping</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pytania ścieżkowe CEP <code>cep_gift_for_coffee_lover</code>:</strong>
+- "Jaki ekspres do kawy jako prezent dla kogoś kto zna się na kawie?"
+- "Czy ekspres kapsułkowy to dobry prezent dla pasjonata kawy?"
+- "Jaki ekspres kolbowy jako prezent do 2000 zł?"
+- "Co kupić razem z ekspresem jako prezent — akcesoria, ziarna?"
+- "Ekspres do kawy prezent — czy da się zwrócić jeśli ktoś już ma?"</p>
+<hr />
+<h2>11. Cross-Category Triggers</h2>
+<table>
+<thead>
+<tr>
+<th>Kategoria źródłowa</th>
+<th>Trigger zakupu</th>
+<th>CEP który aktywuje</th>
+<th>Fraza wejściowa w AI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kawa ziarnista speciality</td>
+<td>"Kupiłem świetną kawę w palarni — potrzebuję ekspresu który ją wydobędzie."</td>
+<td><code>cep_hobby_baristyczne</code></td>
+<td>"jaki ekspres do kawy ziarnistej Ethiopia Yirgacheffe?"</td>
+</tr>
+<tr>
+<td>Remont kuchni</td>
+<td>"Projektuję nową kuchnię — jaki ekspres do zabudowy lub wolnostojący?"</td>
+<td><code>cep_pierwszy_prawdziwy_ekspres</code></td>
+<td>"jaki ekspres do kawy do nowoczesnej kuchni Scandi?"</td>
+</tr>
+<tr>
+<td>Praca zdalna (home office)</td>
+<td>"Urządzam biuro w domu i nie chcę wychodzić po kawę."</td>
+<td><code>cep_kawa_mleczna_jak_z_kawiarni</code></td>
+<td>"jaki ekspres do home office zamiast chodzenia do Starbucks?"</td>
+</tr>
+</tbody>
+</table>
+<h2>12. Tone of Voice for GEO</h2>
+<p><em>20 reguł pisania PDP/artykułów pod cytowalność w AI (Perplexity, AI Overviews, ChatGPT). Niezależna od Forbidden Patterns — tamto mówi czego NIE pisać, to mówi JAK pisać. Kategoria-specyficzne: ekspresy do kawy.</em></p>
+<p><strong>Struktura passage'a (cytowalność):</strong>
+1. Odpowiadaj na pytanie o typ ekspresu w PIERWSZYM zdaniu — AI cytuje zdanie otwierające, nie konkluzję na końcu akapitu. Zły: „Biorąc pod uwagę wiele czynników, ekspres automatyczny może być dobrym wyborem". Dobry: „Ekspres automatyczny z młynkiem to najlepszy wybór gdy chcesz dobrą kawę bez codziennego mielenia osobno."
+2. Jeden akapit = jeden typ ekspresu lub jedna cecha. Nie łącz kapsułkowego i automatycznego w jednym akapicie — AI nie rozróżni.
+3. Ciśnienie zawsze z kontekstem: nie „15 bar" lecz „15 bar (standard espresso — minimum 9 bar dla ekstrakcji; wyższe nie zawsze lepsze)".
+4. Czas nagrzewania zawsze z sytuacją: nie „40 sek." lecz „40 sek. — kawa gotowa zanim skończy się mycie zębów".
+5. Parametry pojemności zbiornika z przelicznikiem: nie „1.8 L" lecz „1.8 L — ok. 18 filiżanek espresso bez uzupełniania".</p>
+<p><strong>Język konsumenta (nie producenta):</strong>
+6. Używaj słów z pytań klienta: „kapsułki", „jeden przycisk", „bez sprzątania", nie „system pod ciśnieniem 19 bar" ani „termoblock z ceramiczną głowicą". Żargon tłumacz przy pierwszym użyciu.
+7. Routing CEP jawny w treści: „Jeśli chcesz cappuccino bez pianki z różdżki — wybierz model z automatycznym spieniaczem (np. LatteGo)". AI cytuje rekomendacje warunkowe.
+8. Odpowiadaj na lęk lock-in wprost: „Ekspres Nespresso Original działa wyłącznie z kapsułkami Nespresso — żaden inny system nie pasuje. Koszt roczny przy 2 kawach dziennie: ok. 1 100 zł."
+9. Adresuj porównania które klient i tak zrobi: „DeLonghi Magnifica vs Philips 3200 — oba automatyczne, oba z młynkiem. Różnica: Philips LatteGo czyści spieniacz automatycznie, DeLonghi wymaga ręcznego płukania."
+10. Mapuj stopnie mielenia na smak: nie „12 poziomów mielenia" lecz „12 poziomów mielenia — od delikatnego lungo (poziom 1) po intensywne ristretto (poziom 12)".</p>
+<p><strong>Struktura pod AI parsing:</strong>
+11. Tabele porównawcze dla kluczowych decyzji: kapsułkowy vs automatyczny vs kolbowy — AI ekstrahuje tabele lepiej niż długie akapity z porównaniami.
+12. Nagłówki = pytania klienta: „Czy ekspres automatyczny robi cappuccino?" zamiast „Możliwości parzenia". AI indexuje nagłówki jako potencjalne pytania.
+13. Decision tree jawny w treści poradnikowej: „Krok 1: Ile osób pije kawę? Krok 2: Czy chcesz mleko?" — listy kroków cytowane przez AI Overviews.
+14. FAQ z odpowiedziami jednozdaniowymi na końcu PDP: „Czy ekspres kapsułkowy nadaje się do biura? Tak, jeśli do 5 osób — przy większej grupie koszt kapsułek przekracza opłacalność automatu z ziarnami."
+15. Jednostki spójne w całej kategorii i opisie: zawsze „bar" (nie „barów" / „atm"), zawsze „L" (nie raz „litr" raz „L"), zawsze „W" dla mocy.</p>
+<p><strong>Zaufanie i kontekst:</strong>
+16. Podawaj „dla kogo NIE": „Ekspres kapsułkowy nie nadaje się dla biura powyżej 8 osób — koszt kapsułek przy 20 kawach dziennie to ok. 6 000 zł rocznie" buduje wiarygodność i AI to cytuje jako konkretną rekomendację.
+17. Roczny koszt eksploatacji (TCO) zamiast tylko ceny zakupu: „Ekspres za 500 zł + kapsułki = ok. 1 600 zł/rok. Automat za 1 500 zł + ziarna = ok. 700 zł/rok. Po 2 latach automat tańszy o 200 zł." — AI cytuje kalkulacje z liczbami.
+18. Konkret producent+model zamiast „wiodący ekspres rynkowy": „Philips 3200 Series EP3241/50" cytuje się, „popularny ekspres w tej kategorii" nie.
+19. Ostrzeżenie o ukrytych kosztach wprost w PDP: „Uwaga: spieniacz mleka w tym modelu sprzedawany osobno (+180 zł). Do cappuccino potrzebujesz obu elementów." — AI traktuje ostrzeżenia jako wartość dodaną dla użytkownika.
+20. Czas życia urządzenia jako argument jakościowy: „Ekspres automatyczny z ceramicznym młynkiem — żywotność 10–15 lat przy regularnym odkamenianiu co 2–3 miesiące. Plastikowy młynek w modelach budżetowych: 3–5 lat." Liczby z kontekstem pielęgnacji = cytowalne twierdzenie.</p>
+<hr />
+<p><em>Determ.: fundament + ref #15. Sloty LLM wypełnione: CEV interp · KCF atrybuty (8 nowych) · Tier Pricing (3 progi PLN 2026) · ścieżki E+F (nowe) + pytania ścieżkowe per A-F · Tone 20 reguł. 2026-06-11.</em></p>
+<h2>13. Pole pytań</h2>
+<p><em>Wygenerowane przez engine v5 · 210 pytań · 11 ścieżek.</em></p>
+<h3>Schwartz — 8 wartości z wagami</h3>
+<table>
+<thead>
+<tr>
+<th>Wartość</th>
+<th>Waga</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hedonizm</td>
+<td><strong>H</strong></td>
+</tr>
+<tr>
+<td>Stymulacja</td>
+<td><strong>M</strong></td>
+</tr>
+<tr>
+<td>Przystosowanie</td>
+<td><strong>H</strong></td>
+</tr>
+<tr>
+<td>Osiagniecia</td>
+<td><strong>H</strong></td>
+</tr>
+<tr>
+<td>Bezpieczenstwo</td>
+<td><strong>M</strong></td>
+</tr>
+<tr>
+<td>Zyczliwosc</td>
+<td><strong>L</strong></td>
+</tr>
+<tr>
+<td>Wladza</td>
+<td><strong>H</strong></td>
+</tr>
+<tr>
+<td>Universalizm</td>
+<td><strong>L</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>① Discovery (otwierające — 2-4 per CEP)</h3>
+<p><strong>Chcę robić espresso jak w kawiarni — z cremą i kontrolą</strong> [tozsamosciowy]</p>
+<ul>
+<li>Czy jest jakiś ekspres, który da mi taką samą cremę jak w kawiarni, czy to tylko mit? <em>(→ cep_barista_at_home)</em></li>
+<li>Jak pachnie kawa z domowego ekspresu w porównaniu do tej z profesjonalnego – czy zapach jest równie intensywny? <em>(→ cep_barista_at_home)</em></li>
+<li>Czy da się zrobić espresso z kontrolą nad ciśnieniem i temperaturą w domu, żeby smakowało jak u baristy? <em>(→ cep_barista_at_home)</em></li>
+</ul>
+<p><strong>Uwielbiam cappuccino i latte — jak zrobić piankę w domu?</strong> [sytuacyjny]</p>
+<ul>
+<li>Jak zrobić gęstą, kremową piankę do cappuccino bez ekspresu – czy da się tylko mikserką? <em>(→ cep_milk_drinks)</em></li>
+<li>Czy zwykłe mleko z kartonu da radę spienić, czy muszę kupować specjalne do pianki? <em>(→ cep_milk_drinks)</em></li>
+<li>Jaki sprzęt do spieniania mleka wybrać, żeby pianka była jak z kawiarni – i czy to w ogóle możliwe w domu? <em>(→ cep_milk_drinks)</em></li>
+</ul>
+<p><strong>W biurze 15 osób — Nescafé już nie wystarcza</strong> [sytuacyjny]</p>
+<ul>
+<li>Czy Nescafé w biurze to już wstyd, skoro ludzie przynoszą kawę z kawiarni? <em>(→ cep_office_team)</em></li>
+<li>Ile kawy dziennie wypijamy, że czuję, że trzeba coś zmienić, żeby nie tracić czasu na parzenie? <em>(→ cep_office_team)</em></li>
+<li>Czy to normalne, że w biurze na 15 osób ekspres kapsułkowy się zapycha i wszyscy czekają? <em>(→ cep_office_team)</em></li>
+</ul>
+<p><strong>Stary ekspres padł po 7 latach — co teraz?</strong> [sytuacyjny]</p>
+<ul>
+<li>Czy po 7 latach użytkowania starego ekspresu warto kupić ten sam model, czy technologia poszła do przodu i znajdę coś lepszego? <em>(→ cep_replacement_upgrade)</em></li>
+<li>Stary ekspres robił dobrą kawę, ale był głośny i duży — czy nowsze modele są cichsze i bardziej kompaktowe, a przy tym nie tracą na smaku? <em>(→ cep_replacement_upgrade)</em></li>
+<li>Jak bardzo zmieni się zapach i smak kawy w domu, jeśli przejdę z 7-letniego ekspresu na nowy z lepszym systemem parzenia — czy poczuję różnicę od razu? <em>(→ cep_replacement_upgrade)</em></li>
+</ul>
+<p><strong>Kupuję prezent dla kogoś kto 'kocha kawę' — nie chcę się sk</strong> [sytuacyjny]</p>
+<ul>
+<li>Czy kupno ekspresu to dobry pomysł na prezent dla kogoś, kto już ma kilka sposobów parzenia kawy? <em>(→ cep_gift_coffee_lover)</em></li>
+<li>Czy taki prezent sprawi, że obdarowana osoba poczuje się doceniona i zrozumiana w swojej pasji? <em>(→ cep_gift_coffee_lover)</em></li>
+<li>Czy ekspres do kawy to prezent, który pokaże, że znam się na jej hobby, czy raczej ryzykowny wybór? <em>(→ cep_gift_coffee_lover)</em></li>
+</ul>
+<p><strong>Wydaję 500 zł/mc w kawiarniach — ekspres zwróci się w 4 mie</strong> [ekonomiczny]</p>
+<ul>
+<li>Czy wydawanie 500 zł miesięcznie w kawiarniach to normalne, czy przesada? <em>(→ cep_save_money_cafe)</em></li>
+<li>Ile kaw dziennie muszę pić, żeby ekspres opłacił się w 4 miesiące? <em>(→ cep_save_money_cafe)</em></li>
+<li>Czy jak kupię ekspres, to przestanę chodzić do kawiarni, czy jednak będę chodził dla atmosfery? <em>(→ cep_save_money_cafe)</em></li>
+</ul>
+<p><strong>Tyle palarni kraftowych i gatunków — jak tego wszystkiego s</strong> [tozsamosciowy]</p>
+<ul>
+<li>Czy jest jakiś ekspres, który odtworzy ten zapach palonej kawy z palarni, który czuję rano w kawiarni? <em>(→ cep_coffee_explorer)</em></li>
+<li>Jak wygląda kawa z ekspresu automatycznego w porównaniu do tej z kraftowej palarni – czy ma taką samą warstwę cremy i głębię koloru? <em>(→ cep_coffee_explorer)</em></li>
+<li>Czy jak kupię ekspres, to w końcu poczuję się jak barista, który rozumie różnicę między single origin a blendem, czy to tylko ściema? <em>(→ cep_coffee_explorer)</em></li>
+</ul>
+<p><strong>Remont kuchni — potrzebuję ekspresu który wygląda jak mebel</strong> [tozsamosciowy]</p>
+<ul>
+<li>Czy istnieje ekspres do kawy, który wygląda jak designerski mebel, a nie jak sprzęt AGD? <em>(→ cep_new_kitchen_design)</em></li>
+<li>Jaki ekspres do kawy będzie pasował do mojej nowej, stylowej kuchni po remoncie? <em>(→ cep_new_kitchen_design)</em></li>
+<li>Czy są ekspresy do kawy z frontem drewnianym lub w kolorze dopasowanym do mebli kuchennych? <em>(→ cep_new_kitchen_design)</em></li>
+</ul>
+<p><strong>Lubię zapraszać gości na kawę — chcę sprzętu który robi wra</strong> [tozsamosciowy]</p>
+<ul>
+<li>Czy jest ekspres do kawy, który zrobi wrażenie na gościach i będzie wyglądał jak mebel? <em>(→ cep_host_identity)</em></li>
+<li>Jaki sprzęt do kawy sprawi, że zaproszenie na kawę będzie jak wizyta w eleganckiej kawiarni? <em>(→ cep_host_identity)</em></li>
+<li>Czy istnieje ekspres, który sam robi piękną piankę i ładnie pachnie w całym domu? <em>(→ cep_host_identity)</em></li>
+</ul>
+<p><strong>Nie chcę generować kapsułkowych śmieci — szukam alternatywy</strong> [ekologiczny]</p>
+<ul>
+<li>Czy istnieje ekspres do kawy, który nie generuje w ogóle śmieci, czy to tylko mit? <em>(→ cep_eco_alternative)</em></li>
+<li>Jak zrobić kawę w domu bez plastikowych kapsułek, żeby nie czuć się winnym ekologicznie? <em>(→ cep_eco_alternative)</em></li>
+<li>Czy przejście z kapsułek na alternatywę naprawdę zmniejszy mój ślad węglowy, czy to tylko greenwashing? <em>(→ cep_eco_alternative)</em></li>
+</ul>
+<p><strong>Nie wiem co wsypują do kawy w kawiarni — wolę kontrolować s</strong> [zdrowotny]</p>
+<ul>
+<li>Czy to normalne, że nie ufam składnikom kawy w kawiarni i chcę wiedzieć dokładnie, co piję? <em>(→ cep_health_control)</em></li>
+<li>Jakie wrażenie zmysłowe daje kawa zrobiona ze świeżo mielonych ziaren w porównaniu do tej z kawiarni? <em>(→ cep_health_control)</em></li>
+<li>Czy kontrolowanie procesu parzenia sprawi, że poczuję się jak lepsza wersja siebie – bardziej świadomy smakosz? <em>(→ cep_health_control)</em></li>
+</ul>
+<h3>② Pogłębione (per stan ścieżki)</h3>
+<p><strong>Chcę robić espresso jak w kawiarni — z cremą i kontrolą</strong> [tozsamosciowy] — 13 pytań</p>
+<p><em>Stan 3</em> (Rozpoznanie CEP):
+  - Jaki typ ekspresu (kolbowy, automatyczny, kapsułkowy) faktycznie pozwala regulować parametry parzenia, żeby uzyskać kawiarnianą cremę?
+  - Czy ekspres z wbudowanym młynkiem i preinfuzją wystarczy, żeby kawa wyglądała i pachniała jak z profesjonalnego bistro?
+  - Jakie konkretne funkcje (np. PID, ciśnienie 9 bar, regulacja temperatury) są niezbędne, żeby poczuć się jak w kawiarni i mieć kontrolę nad smakiem?</p>
+<p><em>Stan 6</em> (Porównywanie):
+  - Czy ekspres kolbowy za 2000 zł z osobnym młynkiem da lepszą cremę i aromat niż automat za 4000 zł z wbudowanym młynkiem?
+  - Jak wygląda różnica w wyglądzie i gęstości cremy między ekspresem z pompą wibracyjną a rotacyjną – którą widać gołym okiem?
+  - Który model w tej samej cenie pozwala bardziej kontrolować profil smaku (np. zmiana ciśnienia, temperatury) i jak to wpływa na zapach kawy?
+  - Czy droższy ekspres automatyczny (np. z ceramicznym młynkiem) sprawi, że kawa będzie pachnieć bardziej intensywnie i kremowo niż tańszy kolbowy?
+  - Która konstrukcja (kolbowy vs automat) daje większe poczucie, że to ja decyduję o efekcie końcowym – od zapachu po smak – jak w kawiarni?</p>
+<p><em>Stan 7</em> (Wybór sklepu/sposobu zakupu):
+  - W którym sklepie stacjonarnym mogę zobaczyć, jak wygląda crema i poczuć zapach kawy z różnych modeli przed zakupem?
+  - Czy w sklepie internetowym są filmy lub opisy pokazujące efekt końcowy (crema, kolor, aromat) dla konkretnych ekspresów z kontrolą parametrów?
+  - Który sprzedawca oferuje możliwość zwrotu lub wymiany, jeśli kawa z ekspresu nie pachnie i nie wygląda jak w kawiarni?
+  - Czy lepiej kupić u specjalisty od kawy (np. sklep z palarnią), który doradzi, jak uzyskać kawiarniany efekt, czy w dużym markecie?
+  - Gdzie znajdę opinie klientów, którzy piszą konkretnie o tym, czy ekspres dał im kontrolę nad cremą i czy kawa smakuje jak z kawiarni – a nie tylko ogólne oceny?</p>
+<p><strong>Uwielbiam cappuccino i latte — jak zrobić piankę w domu?</strong> [sytuacyjny] — 13 pytań</p>
+<p><em>Stan 6</em> (Porównywanie):
+  - Ekspres automatyczny z pianką czy osobny spieniacz – co daje lepszy smak i wygląd cappuccino?
+  - Czy kapsułkowy ekspres zrobi taką samą piankę jak kolbowy, czy to tylko piana a nie krem?
+  - Jak pachnie i smakuje kawa z ekspresu za 1500 zł z wbudowanym spieniaczem – czy przebija kawiarnię?
+  - Czy ekspres z cichym spieniaczem naprawdę robi gęstszą piankę, czy to tylko chwyt marketingowy?
+  - Jaki typ ekspresu da mi efekt 'wow' przy gościach – żeby pianka wyglądała jak z profesjonalnej kawiarni?</p>
+<p><em>Stan 7</em> (Wybór sklepu/sposobu zakupu):
+  - Gdzie kupić ekspres do kawy z dobrym spieniaczem, żeby móc go dotknąć i zobaczyć piankę na żywo?
+  - Który sklep ma najszerszy wybór modeli z dedykowanym spieniaczem do mleka – i czy doradzą, co wybrać?
+  - Czy w Media Expert czy RTV Euro AGD mogę poprosić o pokaz spieniania mleka przed zakupem?
+  - Jaki sklep internetowy oferuje darmowy zwrot, jeśli pianka nie będzie taka jak w opisie?
+  - Czy lepiej kupić ekspres z pianką w promocji w sklepie stacjonarnym, czy szukać opinii o spienianiu na YouTube przed zamówieniem?</p>
+<p><em>Stan 8</em> (Zakup):
+  - Czy ten model ekspresu faktycznie robi piankę tak gęstą, jak na filmiku – czy to tylko ściema?
+  - Jak sprawdzić w sklepie, czy pianka z tego ekspresu pachnie i smakuje jak prawdziwe cappuccino?
+  - Czy po zakupie będę żałować, że nie wziąłem modelu z osobnym spieniaczem – jak to przetestować przed finalnym kliknięciem?</p>
+<p><strong>W biurze 15 osób — Nescafé już nie wystarcza</strong> [sytuacyjny] — 24 pytań</p>
+<p><em>Stan 3</em> (Rozpoznanie CEP):
+  - Dlaczego w biurze z 15 osobami Nescafé nie wystarcza – czy chodzi o smak, wydajność, czy prestiż?
+  - Jaki ekspres do biura na 15 osób sprawi, że kawa będzie smakować jak z kawiarni i nikt nie będzie narzekał?
+  - Czy przejście z Nescafé na ekspres automatyczny zmieni atmosferę w biurze i podniesie morale?</p>
+<p><em>Stan 4</em> (Nauka kategorii):
+  - Ekspres automatyczny czy kapsułkowy do biura na 15 osób – który szybciej obsłuży kolejkę i nie wymaga ciągłego czyszczenia?
+  - Ile kosztują kapsułki miesięcznie przy 15 osobach pijących 2-3 kawy dziennie – czy to się opłaca?
+  - Czy kawa z ekspresu automatycznego za 3000 zł smakuje tak samo jak z kawiarni, czy trzeba wydać więcej?
+  - Jaki ekspres do biura ma funkcję spieniania mleka, żeby zrobić cappuccino dla kilku osób naraz?
+  - Czy ekspres kolbowy w biurze to dobry pomysł, czy amatorzy nie dadzą rady się nauczyć i zepsują kawę?</p>
+<p><em>Stan 5</em> (Preselekcja):
+  - Który ekspres do biura na 15 osób ma największy zbiornik na wodę i pojemnik na ziarna, żeby nie dolewać co chwilę?
+  - Jaki model ekspresu automatycznego do biura ma najmniej awarii i łatwy serwis – np. Jura, De’Longhi czy Philips?
+  - Czy ekspres do biura za 5000 zł będzie lepszy niż za 2500 zł – czy różnica w smaku i wydajności jest zauważalna?</p>
+<p><em>Stan 6</em> (Porównywanie):
+  - Porównanie Jura E8 vs De’Longhi Dinamica do biura na 15 osób – który szybciej robi kawę i ma lepszy młynek?
+  - Czy ekspres kapsułkowy Nespresso Biznes uda się dopasować do 15 osób, czy będzie za wolny i drogi w eksploatacji?
+  - Jaki ekspres do biura ma funkcję zapamiętywania profili użytkowników, żeby każdy miał swoją kawę?
+  - Czy kawa z ekspresu automatycznego pachnie intensywniej niż z kapsułkowego – czy to wpływa na wrażenia w biurze?
+  - Który ekspres do biura na 15 osób ma najcichszy młynek i parzenie, żeby nie przeszkadzać w pracy?</p>
+<p><em>Stan 7</em> (Wybór sklepu/sposobu zakupu):
+  - Gdzie kupić ekspres do biura na 15 osób z możliwością testu smaku i zapachu kawy przed zakupem?
+  - Czy lepiej zamówić ekspres do biura online z dostawą i montażem, czy iść do sklepu stacjonarnego i zobaczyć na żywo?
+  - Który sklep oferuje leasing lub abonament na ekspres do biura na 15 osób z serwisem w cenie?
+  - Czy w Media Expert czy RTV Euro AGD mają ekspresy biurowe na 15 osób i czy można je zwrócić po tygodniu?
+  - Jaki sklep internetowy ma najlepsze opinie o ekspresach do biura i szybką wysyłkę – np. x-kom czy Morele?</p>
+<p><em>Stan 8</em> (Zakup):
+  - Czy przy zakupie ekspresu do biura na 15 osób dostanę gratisowe kapsułki lub ziarna na start?
+  - Jak sprawdzić, czy wybrany model ekspresu zmieści się w biurowej kuchni pod szafką i czy ma odpowiednią wysokość?
+  - Czy mogę kupić ekspres do biura na firmę z fakturą VAT i odliczyć koszt – jakie są warunki?</p>
+<p><strong>Stary ekspres padł po 7 latach — co teraz?</strong> [sytuacyjny] — 8 pytań</p>
+<p><em>Stan 7</em> (Wybór sklepu/sposobu zakupu):
+  - Który sklep stacjonarny w Warszawie pozwoli mi przyjść z własnym kubkiem i zaparzyć kawę testową, żeby sprawdzić, czy nowy ekspres pachnie i smakuje lepiej niż mój stary?
+  - Czy w Media Expert czy RTV Euro AGD mają na stanie ekspresy, które mogę porównać wzrokowo i dotykowo — bo chcę zobaczyć, jak wygląda panel i czy nie jest zbyt plastikowy?
+  - Gdzie kupić ekspres z opcją zwrotu do 30 dni, jeśli po rozpakowaniu okaże się, że kawa nie ma tego aromatu co w kawiarni?
+  - Czy lepiej zamówić ekspres online z dostawą do domu, czy pojechać do sklepu i od razu sprawdzić, jak wygląda wizualnie w mojej kuchni — bo stary był czarny, a teraz myślę o srebrnym?
+  - Który sklep oferuje najtańszy serwis gwarancyjny na miejscu — bo mój stary ekspres padł po 7 latach i nie chcę czekać tygodniami na naprawę?</p>
+<p><em>Stan 8</em> (Zakup):
+  - Czy przy kasie mogę poprosić o otwarcie pudełka i sprawdzenie, czy ekspres nie ma rys ani wgnieceń — bo chcę, żeby nowy sprzęt wyglądał idealnie na blacie?
+  - Czy do tego modelu są w zestawie kapsułki startowe, żebym od razu w domu poczuł ten pierwszy zapach świeżo parzonej kawy i zobaczył, czy crema jest taka jak w reklamie?
+  - Czy po zakupie tego ekspresu będę robić kawę jak barista i czy goście zauważą różnicę w smaku i wyglądzie napoju w porównaniu do mojego starego sprzętu?</p>
+<p><strong>Kupuję prezent dla kogoś kto 'kocha kawę' — nie chcę się sk</strong> [sytuacyjny] — 24 pytań</p>
+<p><em>Stan 3</em> (Rozpoznanie CEP):
+  - Jakie cechy ekspresu są najważniejsze dla kogoś, kto naprawdę kocha kawę – czy to smak, czy możliwość eksperymentowania?
+  - Czy osoba 'kochająca kawę' woli ekspres, który daje kontrolę nad procesem, czy wygodę na co dzień?
+  - Jaki typ ekspresu (kolbowy, automatyczny, kapsułkowy) najlepiej pasuje do kogoś, kto traktuje kawę jak rytuał?</p>
+<p><em>Stan 4</em> (Nauka kategorii):
+  - Czy ekspres kolbowy dla amatora to dobry pomysł, czy lepiej postawić na automatyczny, żeby nie zniechęcić prezentem?
+  - Jakie są różnice w smaku kawy między ekspresem automatycznym a kolbowym – czy to widać i czuć?
+  - Czy kawa z ekspresu za 1500 zł smakuje tak samo jak z kawiarni, czy to tylko chwyt marketingowy?
+  - Jak wygląda i pachnie kawa z ekspresu przelewowego w porównaniu do espresso z maszyny ciśnieniowej?
+  - Czy do ekspresu automatycznego trzeba dokupić młynek, żeby uzyskać świeżość i aromat?</p>
+<p><em>Stan 5</em> (Preselekcja):
+  - Która marka ekspresów (Sage, De’Longhi, Gaggia) jest uznawana za najlepszą przez kawowych entuzjastów?
+  - Czy ekspres z wbudowanym młynkiem i parzeniem mleka to 'lepsza wersja' dla kogoś, kto lubi latte i cappuccino?
+  - Jaki model ekspresu daje najbardziej 'kawiarniany' efekt wizualny i zapachowy w domu?</p>
+<p><em>Stan 6</em> (Porównywanie):
+  - Czy Sage Barista Express vs De’Longhi Magnifica – który ma lepszą parę do spieniania mleka i jak to wpływa na smak?
+  - Jakie są realne opinie o smaku kawy z ekspresu automatycznego za 2000 zł vs kolbowego za 1500 zł?
+  - Czy ekspres z ceramicznym młynkiem daje bardziej aromatyczną kawę niż ze stalowym?
+  - Jak wygląda kawa z ekspresu kapsułkowego – czy ma taką samą cremę jak z automatycznego?
+  - Czy droższy ekspres naprawdę zmienia codzienne wrażenie zmysłowe – zapach, wygląd, pierwszy łyk?</p>
+<p><em>Stan 7</em> (Wybór sklepu/sposobu zakupu):
+  - Gdzie kupić ekspres do kawy jako prezent – w sklepie stacjonarnym czy online, żeby móc zobaczyć i powąchać kawę?
+  - Czy w Media Expert czy RTV Euro AGD mają ekspresy na wystawie, żeby sprawdzić, jak wyglądają i czy pasują do kuchni?
+  - Który sklep oferuje najlepszą politykę zwrotów, jeśli obdarowana osoba nie polubi smaku kawy z danego modelu?
+  - Czy warto kupić ekspres w promocji Black Friday, czy lepiej zapłacić więcej za pewność jakości w autoryzowanym sklepie?
+  - Jaki sklep ma w ofercie ekspresy z możliwością personalizacji (np. grawer) – żeby prezent był wyjątkowy?</p>
+<p><em>Stan 8</em> (Zakup):
+  - Czy do ekspresu dołączone są kapsułki lub kawa na start, żeby od razu poczuć zapach i smak?
+  - Czy przy zakupie mogę dodać notkę z instrukcją, jak zrobić pierwszą kawę, żeby prezent był 'lepszą wersją' poranka?
+  - Czy ekspres jest zapakowany w eleganckie pudełko, które robi wrażenie przy wręczaniu prezentu?</p>
+<p><strong>Wydaję 500 zł/mc w kawiarniach — ekspres zwróci się w 4 mie</strong> [ekonomiczny] — 16 pytań</p>
+<p><em>Stan 3</em> (Rozpoznanie CEP):
+  - Jeśli wydaję 500 zł/mc w kawiarniach, to jaki ekspres zwróci się w 4 miesiące – czy to musi być drogi automat?
+  - Czy kawa z ekspresu za 2000 zł smakuje tak samo jak ta z kawiarni za 12 zł?
+  - Ile kosztuje kawa z ekspresu w porównaniu do kawiarnianej – czy faktycznie wychodzi 5-6 zł za filiżankę?</p>
+<p><em>Stan 4</em> (Nauka kategorii):
+  - Jaki typ ekspresu (kapsułkowy, automatyczny, kolbowy) daje kawę najbliższą kawiarnianej przy budżecie 2000 zł?
+  - Czy kapsułki do Nespresso są tańsze niż kawa z kawiarni, jeśli piję 2-3 dziennie?
+  - Jak długo trwa zrobienie cappuccino w ekspresie automatycznym – czy to szybsze niż wyjście do kawiarni?
+  - Czy ekspres automatyczny za 1500 zł robi piankę taką jak w kawiarni, czy trzeba dokupić osobny spieniacz?
+  - Jaki ekspres do kawy dla 2 osób, żeby kawa pachniała i smakowała jak z profesjonalnego lokalu?</p>
+<p><em>Stan 5</em> (Preselekcja):
+  - Który model ekspresu automatycznego do 2000 zł ma najlepsze opinie o smaku kawy i zapachu?
+  - Czy ekspres kolbowy (np. Sage) da radę amatorowi zrobić kawę lepszą niż z kawiarni, czy to zbyt skomplikowane?
+  - Jaki ekspres ma najmniejszy ślad w kuchni, a jednocześnie robi kawę, która pachnie i wygląda jak z kawiarni?</p>
+<p><em>Stan 7</em> (Wybór sklepu/sposobu zakupu):
+  - Gdzie kupić ekspres, żeby móc go zwrócić, jeśli kawa nie smakuje jak z kawiarni?
+  - Czy w Media Expert czy RTV Euro AGD mają ekspresy, które mogę przetestować zapachowo przed zakupem?
+  - Jaki sklep online oferuje darmową dostawę i zwrot ekspresu do 30 dni, jeśli nie spełni oczekiwań smakowych?
+  - Czy lepiej kupić ekspres w promocji Black Friday, czy w autoryzowanym sklepie z gwarancją i możliwością wymiany?
+  - Gdzie kupić używany ekspres automatyczny w dobrym stanie – czy kawa z niego będzie pachnieć i smakować jak nowa?</p>
+<p><strong>Tyle palarni kraftowych i gatunków — jak tego wszystkiego s</strong> [tozsamosciowy] — 13 pytań</p>
+<p><em>Stan 3</em> (Rozpoznanie CEP):
+  - Czy istnieje ekspres, który pozwoli mi wyciągnąć nuty owocowe i kwaskowatość z kawy specialty, czy to tylko domena kawiarni?
+  - Jakie parametry (temperatura, ciśnienie, czas parzenia) muszę mieć w domu, żeby kawa smakowała jak z palarni, a nie jak z automatu w biurze?
+  - Czy kawa z ekspresu kolbowego naprawdę pachnie intensywniej i wygląda bardziej jak w kawie trzeciej fali niż z automatycznego?</p>
+<p><em>Stan 6</em> (Porównywanie):
+  - Który typ ekspresu (kolbowy, przelewowy, automatyczny) najlepiej odda delikatne nuty smakowe kawy z palarni, a nie tylko gorycz?
+  - Czy ekspres za 3000 zł z regulacją temperatury i ciśnienia faktycznie zmieni moje poranne doznania smakowe w porównaniu do budżetowego za 800 zł?
+  - Jak wygląda proces parzenia w ekspresie kolbowym – czy widzę, jak woda przepływa przez kawę i czy to daje efekt wizualny jak w kawiarni?
+  - Czy po zakupie ekspresu automatycznego z młynek będę mógł używać tych samych ziaren z palarni i czuć różnicę między paleniem jasnym a ciemnym?
+  - Który ekspres sprawi, że moja kawa będzie miała tę gęstą, jedwabistą cremę, którą widzę na Instagramie z palarni kraftowych?</p>
+<p><em>Stan 7</em> (Wybór sklepu/sposobu zakupu):
+  - Który sklep internetowy pozwoli mi wybrać ekspres z możliwością zwrotu, jeśli kawa nie będzie pachniała tak, jak oczekuję?
+  - Czy w sklepie stacjonarnym mogę poprosić o zaparzenie kawy na tym samym modelu, żeby sprawdzić, czy czuję te same nuty co w palarni?
+  - Który sprzedawca oferuje ekspresy z regulacją ciśnienia i temperatury, żebym mógł bawić się w domowego roastera i zmieniać profil smakowy?
+  - Czy opłaca się kupić używany ekspres kolbowy od kogoś z forum kawowego, żeby zaoszczędzić, ale ryzykować, że nie odda pełni aromatu?
+  - Która platforma (Allegro, Media Expert, sklep specjalistyczny) ma najlepsze opinie o tym, jak ekspres radzi sobie z kawą specialty i czy faktycznie zmienia codzienność w rytuał?</p>
+<p><strong>Remont kuchni — potrzebuję ekspresu który wygląda jak mebel</strong> [tozsamosciowy] — 13 pytań</p>
+<p><em>Stan 3</em> (Rozpoznanie CEP):
+  - Które marki ekspresów do kawy oferują modele, które można zabudować lub wkomponować w meble kuchenne?
+  - Jakie są opcje ekspresów do kawy z elegancką obudową, które nie psują estetyki kuchni?
+  - Czy istnieją ekspresy do kawy, które wyglądają jak zabytkowy mebel lub mają styl retro?</p>
+<p><em>Stan 6</em> (Porównywanie):
+  - Który ekspres do kawy lepiej wygląda w kuchni – automatyczny czy kolbowy, biorąc pod uwagę design?
+  - Czy ekspres do kawy z chromowanymi elementami będzie pasował do moich blatów z ciemnego kamienia?
+  - Jaki ekspres do kawy ma najmniejsze gabaryty, żeby nie zaburzać harmonii mebli w małej kuchni?
+  - Czy są ekspresy do kawy z matowym wykończeniem, które nie zbierają odcisków palców i wyglądają jak mebel?
+  - Który model ekspresu do kawy ma najładniejsze podświetlenie i panel sterowania, żeby wyglądał jak element dekoracyjny?</p>
+<p><em>Stan 7</em> (Wybór sklepu/sposobu zakupu):
+  - W którym sklepie stacjonarnym mogę zobaczyć ekspresy do kawy ustawione w aranżacji kuchennej, a nie na półce?
+  - Czy sklep oferuje możliwość zamówienia ekspresu do kawy z próbką frontu lub koloru, żeby dopasować do mebli?
+  - Gdzie kupić ekspres do kawy, który wygląda jak mebel, z możliwością zwrotu, jeśli nie pasuje do kuchni?
+  - Czy w salonie mogę zobaczyć, jak ekspres do kawy prezentuje się w różnych stylach kuchni (nowoczesna, skandynawska, glamour)?
+  - Jaki sklep internetowy ma najlepsze zdjęcia i filmy pokazujące ekspres do kawy w rzeczywistym otoczeniu kuchennym?</p>
+<p><strong>Lubię zapraszać gości na kawę — chcę sprzętu który robi wra</strong> [tozsamosciowy] — 13 pytań</p>
+<p><em>Stan 3</em> (Rozpoznanie CEP):
+  - Który typ ekspresu (automatyczny, kolbowy, kapsułkowy) robi najbardziej efektowne wizualnie kawy i robi wrażenie na gościach?
+  - Czy ekspres automatyczny za 3000 zł będzie wyglądał i pachniał lepiej niż kapsułkowy podczas spotkań towarzyskich?
+  - Jaki ekspres do kawy sprawi, że goście powiedzą 'wow' i poczuję się jak barista?</p>
+<p><em>Stan 6</em> (Porównywanie):
+  - Który model ekspresu ma najbardziej designerską obudowę i podświetlenie, które robi wrażenie w salonie?
+  - Czy kawa z ekspresu kolbowego pachnie intensywniej niż z automatycznego i czy to wpływa na odbiór gości?
+  - Jaki ekspres do kawy daje możliwość robienia latte art i efektownych serwowanych kaw?
+  - Czy droższy ekspres automatyczny (np. 5000 zł) faktycznie robi kawę, która smakuje i pachnie jak z profesjonalnej kawiarni?
+  - Który ekspres ma funkcję zaparzania dwóch kaw jednocześnie i nie psuje wrażenia długim czekaniem?</p>
+<p><em>Stan 7</em> (Wybór sklepu/sposobu zakupu):
+  - W którym sklepie stacjonarnym mogę zobaczyć ekspres w akcji i poczuć, jak pachnie kawa z niego?
+  - Czy w salonie mogę poprosić o pokaz parzenia i ocenić wygląd oraz zapach kawy przed zakupem?
+  - Który sklep oferuje możliwość zwrotu ekspresu, jeśli nie robi wrażenia na gościach lub nie pasuje do wystroju?
+  - Czy lepiej kupić ekspres w sklepie z ekspozycją, żeby sprawdzić, jak wygląda w rzeczywistości i czy robi 'efekt wow'?
+  - Jaki sklep internetowy ma najlepsze opinie o zapachu i wyglądzie kawy z konkretnych modeli ekspresów?</p>
+<p><strong>Nie chcę generować kapsułkowych śmieci — szukam alternatywy</strong> [ekologiczny] — 16 pytań</p>
+<p><em>Stan 3</em> (Rozpoznanie CEP):
+  - Jaki typ ekspresu (kolbowy, automatyczny, przelewowy) jest najbardziej zero waste i nie wymaga jednorazowych opakowań?
+  - Czy kawa z ekspresu bezkapsułkowego smakuje tak samo intensywnie jak z kapsułek, czy stracę na jakości?
+  - Jak wygląda codzienne użytkowanie ekspresu bez kapsułek – czy to dużo więcej sprzątania i zachodu?</p>
+<p><em>Stan 4</em> (Nauka kategorii):
+  - Czy ekspres automatyczny z wbudowanym młynkiem generuje jakieś odpady poza fusami – np. filtry, opakowania ziarna?
+  - Jak pachnie kawa z ekspresu kolbowego w porównaniu do kapsułkowej – czy aromat jest bogatszy, czy to samo?
+  - Czy kawa z ekspresu przelewowego może dorównać kremowością i wyglądem tej z kapsułek – jak wygląda w filiżance?
+  - Ile kosztuje miesięcznie kawa ziarnista do ekspresu automatycznego przy 2–3 kawach dziennie vs kapsułki?
+  - Czy ekspres bezkapsułkowy zmieni moje poranne rytuały – czy stanę się bardziej 'kawowym świadomym' i lepszą wersją siebie?</p>
+<p><em>Stan 5</em> (Preselekcja):
+  - Który model ekspresu automatycznego do 2000 zł ma najmniej plastikowych części i jest łatwy w serwisie bez generowania odpadów?
+  - Czy ekspres kolbowy dla amatora da radę zrobić cappuccino bez jednorazowych kapsułek – jak wygląda efekt końcowy?
+  - Jaki ekspres do kawy dla 2 osób, który nie produkuje śmieci, a jednocześnie ładnie wygląda na blacie i pachnie kawą w całej kuchni?</p>
+<p><em>Stan 7</em> (Wybór sklepu/sposobu zakupu):
+  - Gdzie kupić ekspres bezkapsułkowy z możliwością zwrotu opakowania – czy są sklepy stacjonarne z taką polityką zero waste?
+  - Czy w sklepie internetowym mogę zobaczyć, jak wygląda kawa z danego ekspresu na filmie – czy pokazują realny efekt i kremę?
+  - Który sklep oferuje darmową dostawę i odbiór starego ekspresu kapsułkowego w ramach recyklingu przy zakupie alternatywy?
+  - Czy warto kupić ekspres używany z drugiej ręki, żeby zmniejszyć ślad węglowy – jak sprawdzić, czy nie będzie generował awarii i odpadów?
+  - Jaki sklep ma najlepsze opinie o ekspresach bezkapsułkowych i pokazuje realne zdjęcia kawy zamiast stockowych grafik?</p>
+<p><strong>Nie wiem co wsypują do kawy w kawiarni — wolę kontrolować s</strong> [zdrowotny] — 24 pytań</p>
+<p><em>Stan 3</em> (Rozpoznanie CEP):
+  - Dlaczego w kawiarni nie podają mi składu mieszanki – czy to celowe ukrywanie czegoś?
+  - Jak wygląda różnica w zapachu i smaku, gdy sam wybieram ziarna, a nie biorę gotowej kawy z kawiarni?
+  - Czy posiadanie własnego ekspresu zmieni moje codzienne rytuały i sprawi, że stanę się bardziej 'kawowym koneserem'?</p>
+<p><em>Stan 4</em> (Nauka kategorii):
+  - Jaki typ ekspresu (kapsułkowy, automatyczny, kolbowy) daje mi największą kontrolę nad tym, co wsypuję do filiżanki?
+  - Czy ekspres kapsułkowy to oszustwo – czy naprawdę wiem, co jest w środku kapsułki?
+  - Jakie są realne różnice w smaku i aromacie między kawą z ekspresu automatycznego a tej z kawiarni?
+  - Czy ekspres kolbowy pozwoli mi osiągnąć efekt 'jak z kawiarni' i poczuć się jak barista w domu?
+  - Ile kosztuje miesięcznie używanie świeżych ziaren w ekspresie automatycznym przy 2-3 kawach dziennie – czy to się opłaca?</p>
+<p><em>Stan 5</em> (Preselekcja):
+  - Który model ekspresu automatycznego ma najlepsze opinie pod kątem oddawania pełni smaku i aromatu ziaren?
+  - Czy ekspres za 1500 zł da mi wrażenie zmysłowe porównywalne z kawą z kawiarni, czy muszę wydać więcej?
+  - Jaki sprzęt wybrać, żeby móc samemu decydować o grubości mielenia i temperaturze – dla pełnej kontroli?</p>
+<p><em>Stan 6</em> (Porównywanie):
+  - Porównaj smak i zapach kawy z ekspresu De'Longhi Magnifica S a Philips Series 2200 – który daje bardziej intensywny aromat?
+  - Czy w ekspresie automatycznym za 2000 zł faktycznie czuć różnicę w porównaniu z modelem za 1000 zł – czy to tylko marketing?
+  - Jak wygląda efekt końcowy (krem, gęstość) w ekspresie kolbowym a automatycznym – który daje bardziej 'kawiarniane' wrażenie?
+  - Który system kapsułek (Nespresso czy Dolce Gusto) ma bardziej naturalny smak i mniej 'sztucznych' nut?
+  - Czy ekspres z wbudowanym młynkiem zmienia moje postrzeganie kawy – czy naprawdę czuję różnicę w porównaniu do mielonej?</p>
+<p><em>Stan 7</em> (Wybór sklepu/sposobu zakupu):
+  - Gdzie kupić ekspres, żeby móc przed zakupem powąchać i zobaczyć kawę z niego – czy w sklepie stacjonarnym robią degustacje?
+  - Który sklep internetowy ma najlepsze opinie o zwrotach, jeśli ekspres nie spełni moich oczekiwań smakowych?
+  - Czy warto kupić ekspres z drugiej ręki – czy ryzykuję, że nie oddaje już pełni aromatu?
+  - Jaki sklep oferuje najszerszy wybór ziaren do ekspresu, żebym mógł testować różne mieszanki?
+  - Czy zakup ekspresu w promocji wiąże się z gorszym serwisem – a jeśli tak, to czy wpłynie na moje wrażenia z użytkowania?</p>
+<p><em>Stan 8</em> (Zakup):
+  - Czy przy zakupie ekspresu dostanę próbki ziaren, żeby od razu sprawdzić, czy smak i zapach mnie zadowalają?
+  - Jakie akcesoria muszę dokupić, żeby od pierwszego dnia mieć pełną kontrolę nad procesem i efektem?
+  - Czy po zakupie ekspresu automatycznego od razu poczuję, że stałem się 'lepszą wersją' – bardziej świadomym i niezależnym kawoszem?</p>
+<hr />
+<p><em>210 pytań · 11 ścieżek · Discovery ①=33 · Pogłębione ②=177</em></p></body></html>
