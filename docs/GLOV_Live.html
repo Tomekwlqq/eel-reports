@@ -194,8 +194,6 @@ tr.hot td{background:rgba(22,163,74,.05)}tr.danger td{background:rgba(220,38,38,
     <div class="live-tabs">
       <button class="live-tab active" onclick="switchLiveTab('today',this)">🔴 Dziś <span id="lt-today-date" style="font-weight:400;font-size:11px"></span></button>
       <button class="live-tab" onclick="switchLiveTab('yesterday',this)">Wczoraj <span id="lt-yesterday-date" style="font-weight:400;font-size:11px"></span></button>
-      <button class="live-tab" onclick="switchLiveTab('promos',this)">🏷️ Promocje</button>
-      <button class="live-tab" onclick="switchLiveTab('catalog',this)">📦 Katalog</button>
     </div>
     <div id="live-content"></div>
   </div>
@@ -279,70 +277,7 @@ function delta(cur,prev){
 function switchLiveTab(key,btn){
   document.querySelectorAll('.live-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  if(key==='promos') renderPromos();
-  else if(key==='catalog') renderCatalog();
-  else renderLive(key);
-}
-
-function renderPromos(){
-  const el=document.getElementById('live-content');
-  const promos=(LIVE&&LIVE.promotions)||[];
-  if(!promos.length){el.innerHTML='<div class="live-nodata">Brak danych o promocjach. Uruchom ETL.</div>';return;}
-  const automats=promos.filter(p=>!p.code);
-  const codes=promos.filter(p=>p.code);
-  let h='';
-  if(automats.length){
-    h+=`<div class="lsep"><span class="sbadge sbadge-shp">AUTO</span>Automaty (bez kodu)</div>`;
-    h+='<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">';
-    automats.forEach(p=>{
-      const val=p.value_pct!=null?`−${p.value_pct}%`:p.value_amount!=null?`−${p.value_amount} zł`:'BxGy';
-      h+=`<div style="background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:12px">
-        <div style="font-weight:700;color:var(--good)">${val}</div>
-        <div style="color:var(--muted);font-size:11px;margin-top:2px">${p.title}</div>
-        ${p.ends_at?`<div style="color:var(--warn);font-size:10px">do ${p.ends_at.slice(0,10)}</div>`:''}
-      </div>`;
-    });
-    h+='</div>';
-  }
-  if(codes.length){
-    h+=`<div class="lsep"><span class="sbadge sbadge-shp">KODY</span>Aktywne kody rabatowe (${codes.length})</div>`;
-    h+='<div style="overflow-x:auto"><table style="font-size:12px">';
-    h+='<tr><th>Kod</th><th>Tytuł</th><th>Zniżka</th><th>Ważny do</th></tr>';
-    codes.forEach(p=>{
-      const val=p.value_pct!=null?`−${p.value_pct}%`:p.value_amount!=null?`−${p.value_amount} zł`:'—';
-      const color=p.value_pct>=50?'var(--bad)':p.value_pct>=25?'var(--warn)':'var(--good)';
-      const ends=p.ends_at?p.ends_at.slice(0,10):'<span style="color:var(--muted)">bezterm.</span>';
-      h+=`<tr><td><code style="background:var(--card2);padding:2px 6px;border-radius:4px;font-size:11px">${p.code}</code></td>
-          <td style="color:var(--muted);font-size:11px">${p.title}</td>
-          <td style="font-weight:700;color:${color}">${val}</td>
-          <td style="font-size:11px">${ends}</td></tr>`;
-    });
-    h+='</table></div>';
-  }
-  el.innerHTML=h;
-}
-
-function renderCatalog(){
-  const el=document.getElementById('live-content');
-  const cat=(LIVE&&LIVE.catalog)||[];
-  if(!cat.length){el.innerHTML='<div class="live-nodata">Brak danych katalogu. Uruchom ETL.</div>';return;}
-  const inStock=cat.filter(p=>p.inventory>0);
-  const lowStock=cat.filter(p=>p.inventory<=0&&p.inventory>=-5);
-  const outStock=cat.filter(p=>p.inventory<-5);
-  let h=`<div class="lsep">Aktywne produkty — ${cat.length} SKU, ${inStock.length} dostępnych</div>`;
-  h+='<div style="overflow-x:auto"><table style="font-size:11.5px">';
-  h+='<tr><th>Produkt</th><th>Cena (PLN)</th><th>Magazyn</th></tr>';
-  cat.forEach(p=>{
-    const inv=p.inventory;
-    const invColor=inv>50?'var(--good)':inv>0?'var(--warn)':'var(--bad)';
-    const invLabel=inv>0?'+'+inv:String(inv);
-    const nm=p.title.length>55?p.title.slice(0,55)+'…':p.title;
-    h+=`<tr><td title="${p.title}">${nm}</td>
-        <td style="font-variant-numeric:tabular-nums;font-weight:600">${p.price.toFixed(2)}</td>
-        <td style="font-weight:700;color:${invColor}">${invLabel}</td></tr>`;
-  });
-  h+='</table></div>';
-  el.innerHTML=h;
+  renderLive(key);
 }
 
 function renderLive(key){
