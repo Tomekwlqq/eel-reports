@@ -1209,11 +1209,14 @@ function loadData(showSpinner){
 function refreshData(){
   const rb=document.getElementById('refreshBtn');
   if(rb){rb.disabled=true;rb.textContent='⏳...';}
-  // Odśwież = ściągnij LIVE Shopify KPI z Workera (realne dane), nie tylko snapshot
-  fetchLiveKPI().then(()=>{
-    renderLive(currentLiveTab);
-    if(rb){rb.disabled=false;rb.textContent='🔄 Odśwież';}
-  });
+  // Odśwież = re-fetch glov_live2.json (świeże GA4 z ostatniego ETL)
+  //         + LIVE Shopify KPI z Workera (nadpisuje zamówienia/sprzedaż na żywo)
+  fetch(BASE_URL+'glov_live2.json?t='+Date.now()).then(r=>r.json()).then(live=>{LIVE=live;}).catch(()=>{})
+    .then(()=>fetchLiveKPI())
+    .then(()=>{
+      renderLive(currentLiveTab);
+      if(rb){rb.disabled=false;rb.textContent='🔄 Odśwież';}
+    });
 }
 document.addEventListener('DOMContentLoaded',()=>loadData(true));
 
