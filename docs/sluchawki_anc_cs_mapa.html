@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Słuchawki ANC — CS + Mapa Percepcji</title>
+<title>Słuchawki z ANC — CS + Mapa Percepcji</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,Segoe UI,sans-serif;background:#f6f8fa;color:#1f2328}
@@ -11,7 +11,7 @@ body{font-family:-apple-system,Segoe UI,sans-serif;background:#f6f8fa;color:#1f2
 .tab{padding:12px 28px;cursor:pointer;font-size:14px;font-weight:600;color:#57606a;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s}
 .tab:hover{color:#0969da}
 .tab.active{color:#0969da;border-bottom-color:#0969da}
-.panel{display:none;padding:0}
+.panel{display:none}
 .panel.active{display:block}
 iframe{width:100%;border:none;height:calc(100vh - 48px)}
 </style>
@@ -22,12 +22,8 @@ iframe{width:100%;border:none;height:calc(100vh - 48px)}
   <button class="tab" onclick="switchTab(this,'cs')">📄 Category Standards</button>
   <button class="tab" onclick="switchTab(this,'combined')">🔗 Łączny widok</button>
 </div>
-<div id="tab-mapa" class="panel active">
-  <iframe src="MAPA_PERCEPCJI_sluchawki_anc_v5.5.html"></iframe>
-</div>
-<div id="tab-cs" class="panel">
-  <iframe src="cs_sluchawki_anc_v5.7.html"></iframe>
-</div>
+<div id="tab-mapa" class="panel active"><iframe src="MAPA_PERCEPCJI_sluchawki_anc_v5.5.html"></iframe></div>
+<div id="tab-cs" class="panel"><iframe src="cs_sluchawki_anc_v5.7.html"></iframe></div>
 <div id="tab-combined" class="panel" style="display:flex;height:calc(100vh - 48px)">
   <iframe src="MAPA_PERCEPCJI_sluchawki_anc_v5.5.html" style="width:50%;height:100%;border-right:1px solid #d0d7de"></iframe>
   <iframe src="cs_sluchawki_anc_v5.7.html" style="width:50%;height:100%"></iframe>
