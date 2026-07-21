@@ -577,6 +577,32 @@ details.scg[open]>summary::after,details.mth[open]>summary::after{content:'▴'}
       <div class="fix-r"><div class="fix-l">Czas</div><div class="fix-v"><b>2 godziny</b></div></div>
     </div>
   </div>
+
+  <div class="f warn">
+    <div class="f-h"><span class="b warn">Ważne</span><span class="b pew">udowodnione</span>
+      <span class="f-t">Strona główna nie ma H1 — 18 nagłówków H2 i zero H1</span></div>
+    <div class="f-d">Najważniejsza strona domeny nie ma głównego nagłówka. Google czyta hierarchię H, żeby zrozumieć temat strony — dostaje 18× <code>&lt;h2&gt;</code> i żadnego <code>&lt;h1&gt;</code>. Sygnał tematyczny strony głównej jest rozmyty.</div>
+    <div class="fix">
+      <div class="fix-r"><div class="fix-l">Zadanie</div><div class="fix-v"><b>Dodać jeden <code>&lt;h1&gt;</code> na stronie głównej</b> (marka + kategoria), resztę sekcji zejść do H2.</div></div>
+      <div class="fix-r"><div class="fix-l">Kto robi</div><div class="fix-v"><b>Dev (Shopify)</b></div></div>
+      <div class="fix-r"><div class="fix-l">Gdzie</div><div class="fix-v">szablon strony głównej (sekcja hero)</div></div>
+      <div class="fix-r"><div class="fix-l">Czas</div><div class="fix-v"><b>15 minut</b></div></div>
+    </div>
+    <details class="repro"><summary>REPRO</summary><div class="repro-b">curl -A Chrome https://glov.co/ → licznik &lt;h1&gt;=0, &lt;h2&gt;=18 (2026-07-21)</div></details>
+  </div>
+
+  <div class="f warn">
+    <div class="f-h"><span class="b warn">Ważne</span><span class="b pew">udowodnione</span>
+      <span class="f-t">Strony konta są w indeksie — bez noindex, bez H1</span></div>
+    <div class="f-d">Trzy strony funkcjonalne — <code>/pages/profile</code>, <code>/pages/profile-edit</code>, <code>/pages/set-password</code> — zwracają status 200, nie mają <code>noindex</code> i nie mają H1. To thin-content, który marnuje budżet indeksowania i może trafić do wyników wyszukiwania zamiast kart produktu.</div>
+    <div class="fix">
+      <div class="fix-r"><div class="fix-l">Zadanie</div><div class="fix-v"><b>Dodać <code>&lt;meta name="robots" content="noindex,follow"&gt;</code> na szablonach stron konta.</b> Sprawdzić w GSC, czy nie są już zaindeksowane.</div></div>
+      <div class="fix-r"><div class="fix-l">Kto robi</div><div class="fix-v"><b>Dev (Shopify)</b></div></div>
+      <div class="fix-r"><div class="fix-l">Gdzie</div><div class="fix-v">szablony <code>pages/profile*</code>, <code>set-password</code></div></div>
+      <div class="fix-r"><div class="fix-l">Czas</div><div class="fix-v"><b>30 minut</b></div></div>
+    </div>
+    <details class="repro"><summary>REPRO</summary><div class="repro-b">curl -A Chrome /pages/profile · /pages/profile-edit · /pages/set-password → status=200, meta robots=brak, h1=0 (2026-07-21)</div></details>
+  </div>
 </section>
 
 <h2 class="sec">Wydajność — domena zdrowa, flagowy produkt chory</h2>
@@ -968,6 +994,19 @@ details.scg[open]>summary::after,details.mth[open]>summary::after{content:'▴'}
       <div class="fix-r"><div class="fix-l">Wymaga</div><div class="fix-v">Decyzji biznesowej: które z 6 rynków są realne. 203 wersji na stronę to ok. 30 KB nadmiarowego kodu w każdym <code>&lt;head&gt;</code> — i 203 okazji, żeby Google wybrał źle.</div></div>
       <div class="fix-r"><div class="fix-l">Czas</div><div class="fix-v"><b>2 godziny</b> po decyzji biznesowej</div></div>
     </div>
+  </div>
+
+  <div class="f info">
+    <div class="f-h"><span class="b info">Do sprawdzenia</span><span class="b pew">udowodnione</span>
+      <span class="f-t">Warianty en-XX bloga wskazują ścieżkę z „pl"</span></div>
+    <div class="f-d">Na <code>/blogs/pl</code> jest 203 deklaracji hreflang, z czego <b>198 wariantów <code>en-XX</code></b> wskazuje na <code>/en-global/blogs/pl</code> — ścieżkę zawierającą <code>pl</code> mimo wersji angielskiej. Formalnie hreflang jest poprawny (x-default obecny, self-reference jest), ale warto zweryfikować, czy treść pod tym URL jest faktycznie po angielsku. Jeśli to polski tekst renderowany w EN sklepie — mamy duplikat językowy.</div>
+    <div class="fix">
+      <div class="fix-r"><div class="fix-l">Zadanie</div><div class="fix-v"><b>Otworzyć kilka <code>/en-global/blogs/pl</code> i sprawdzić język treści</b> + raport „International Targeting" w GSC.</div></div>
+      <div class="fix-r"><div class="fix-l">Kto robi</div><div class="fix-v"><b>SEO</b></div></div>
+      <div class="fix-r"><div class="fix-l">Gdzie</div><div class="fix-v">weryfikacja ręczna + GSC</div></div>
+      <div class="fix-r"><div class="fix-l">Czas</div><div class="fix-v"><b>30 minut</b></div></div>
+    </div>
+    <details class="repro"><summary>REPRO</summary><div class="repro-b">curl -A Chrome https://glov.co/blogs/pl → 203 alternates, 198× en-XX → /en-global/blogs/pl (2026-07-21)</div></details>
   </div>
 </section>
 
