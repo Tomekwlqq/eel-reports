@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Asystent zakupowy — Ekspresy do kawy</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,Segoe UI,sans-serif;background:#f6f8fa;color:#1f2328;display:flex;height:100vh}
+.sidebar{width:280px;background:#fff;border-right:1px solid #d0d7de;padding:16px;overflow-y:auto;flex-shrink:0}
+.sidebar h2{font-size:13px;font-weight:700;margin-bottom:8px;color:#0969da}
+.cep{padding:6px 8px;margin-bottom:4px;border-radius:6px;cursor:pointer;font-size:12px;border:1px solid transparent;transition:.15s}
+.cep:hover{background:#f0f3f6;border-color:#d0d7de}
+.cep.active{background:rgba(9,105,218,.15);border-color:#0969da;color:#0969da}
+.badge{display:inline-block;padding:1px 6px;border-radius:10px;font-size:10px;font-weight:600;margin-left:4px}
+.bi{background:rgba(239,68,68,.12);color:#ef4444}
+.bs{background:rgba(59,130,246,.12);color:#3b82f6}
+.bt{background:rgba(139,92,246,.12);color:#8b5cf6}
+.be{background:rgba(16,185,129,.12);color:#10b981}
+.bz{background:rgba(107,114,128,.12);color:#6b7280}
+.chat{flex:1;display:flex;flex-direction:column}
+.chat-header{padding:12px 20px;background:#fff;border-bottom:1px solid #d0d7de}
+.chat-header h1{font-size:16px;font-weight:700}
+.chat-header .sub{font-size:12px;color:#57606a}
+.messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:75%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5}
+.msg.user{align-self:flex-end;background:#0969da;color:#fff;border-bottom-right-radius:4px}
+.msg.bot{align-self:flex-start;background:#fff;border:1px solid #d0d7de;border-bottom-left-radius:4px}
+.input-area{padding:12px 20px;background:#fff;border-top:1px solid #d0d7de;display:flex;gap:8px}
+.input-area input{flex:1;padding:8px 12px;border:1px solid #d0d7de;border-radius:8px;font-size:14px;outline:none}
+.input-area input:focus{border-color:#0969da;box-shadow:0 0 0 2px rgba(9,105,218,.2)}
+.input-area button{padding:8px 20px;background:#0969da;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+.cep-match{background:rgba(9,105,218,.08);padding:6px 10px;border-radius:8px;margin-top:8px;font-size:13px;cursor:pointer}
+.state-nav{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
+.state-nav button{padding:4px 10px;border-radius:12px;border:1px solid #d0d7de;background:#fff;font-size:11px;cursor:pointer}
+.state-nav button.active{background:#0969da;color:#fff;border-color:#0969da}
+</style>
+</head>
+<body>
+<script>
+const CEPS=[
+{id:'cep_first_machine',label:'Pierwszy ekspres',typ:'sytuacyjny',trig:'Nigdy nie mialem ekspresu — od czego zaczac?',kws:['pierwszy ekspres','ekspres dla początkujących','jaki ekspres do kawy']},
+{id:'cep_barista_at_home',label:'Barista w domu',typ:'tozsamosciowy',trig:'Chce robic espresso jak w kawiarni — z crema i kontrola',kws:['espresso w domu','kawa jak z kawiarni','ekspres barista']},
+{id:'cep_milk_drinks',label:'Napoje mleczne',typ:'sytuacyjny',trig:'Uwielbiam cappuccino i latte — jak zrobic pianke w domu?',kws:['cappuccino w domu','spienianie mleka','ekspres do latte']},
+{id:'cep_comfort_one_touch',label:'Wygoda jeden przycisk',typ:'sytuacyjny',trig:'Chce dobra kawe bez fatygi — jeden przycisk i koniec',kws:['ekspres na jeden przycisk','prosty ekspres','automatyczny ekspres']},
+{id:'cep_office_team',label:'Biuro i zespol',typ:'sytuacyjny',trig:'W biurze 15 osob — Nescafe juz nie wystarcza',kws:['ekspres do biura','ekspres dla firmy','kawa w biurze']},
+{id:'cep_replacement_upgrade',label:'Awaria i wymiana',typ:'impulsowy',trig:'Stary ekspres padl po latach — co teraz?',kws:['wymiana ekspresu','nowy ekspres','stary ekspres sie zepsul']},
+{id:'cep_gift_coffee_lover',label:'Prezent dla pasjonata',typ:'ekonomiczny',trig:'Kupuje prezent dla kogos kto kocha kawe',kws:['prezent ekspres','ekspres na prezent','prezent dla kawosza']},
+{id:'cep_save_money_cafe',label:'Oszczednosc kawiarni',typ:'ekonomiczny',trig:'Wydaje 500 zl/mc w kawiarniach — ekspres zwroci sie w 4 miesiace',kws:['oszczednosc kawa','ekspres czy kawiarnia','kawa w domu taniej']},
+{id:'cep_coffee_explorer',label:'Odkrywca kaw',typ:'tozsamosciowy',trig:'Tyle palarni kraftowych i gatunkow — jak tego sprobowac bez bankructwa?',kws:['kawy specialty','palarnie kawy','ekspres do specialty']},
+{id:'cep_new_kitchen_design',label:'Nowa kuchnia design',typ:'tozsamosciowy',trig:'Remont kuchni — potrzebuje ekspresu ktory wyglada jak mebel',kws:['designerski ekspres','ekspres do kuchni','ladny ekspres']},
+{id:'cep_host_identity',label:'Goscinnosc',typ:'tozsamosciowy',trig:'Lubie zapraszac gosci na kawe — chce sprzetu ktory robi wrazenie',kws:['ekspres na przyjecie','kawa dla gosci','elegancki ekspres']},
+{id:'cep_eco_alternative',label:'Eko alternatywa',typ:'ekologiczny',trig:'Nie chce generowac kapsulkowych smieci — szukam alternatywy',kws:['ekspres ekologiczny','bez kapsulek','ziarna kawy']},
+{id:'cep_health_control',label:'Kontrola skladu',typ:'zdrowotny',trig:'Nie wiem co wsypuja do kawy w kawiarni — wole kontrolowac sam',kws:['kawa bez dodatkow','kontrola skladu','zdrowa kawa']}
+];
+const KCF=[
+{name:'Typ ekspresu',range:'kapsulkowy/automatyczny/kolbowy',tier:'T1'},
+{name:'Cisnienie (bar)',range:'15-20 bar',tier:'T1'},
+{name:'Pojemnosc zbiornika',range:'0.6-2.5L',tier:'T1'},
+{name:'Wbudowany mlynek',range:'Tak/Nie (stopni 5-20)',tier:'T1'},
+{name:'Spieniacz do mleka',range:'Reczny/automatyczny/parownik',tier:'T1'},
+{name:'Moc (W)',range:'1000-1800W',tier:'T2'},
+{name:'Wymiary',range:'20-40cm wysokosc',tier:'T2'},
+{name:'Poziom halasu',range:'45-65 dB',tier:'T2'},
+{name:'Funkcja 2 filizanki',range:'Tak/Nie',tier:'T2'},
+{name:'Programowanie mocy',range:'Tak/Nie',tier:'T3'},
+{name:'AquaClean/odkamienianie',range:'Automatyczne/reczne',tier:'T3'},
+{name:'Smart/app',range:'Tak/Nie (WiFi/Bluetooth)',tier:'T3'}
+];
+const STATES={'impulsowy':[2,7,8],'sytuacyjny':[2,3,4,5,6,7,8],'tozsamosciowy':[2,3,5,7],'ekonomiczny':[2,3,4,5,7],'ekologiczny':[2,3,4,5,7],'zdrowotny':[2,3,4,5,6,7,8]};
+const SN={2:'Trigger',3:'Nauka',4:'Porownanie',5:'Preselekcja',6:'Wybior',7:'Zakup',8:'Decyzja'};
+</script>
+
+<div class="sidebar">
+  <h2>🧭 Sciezki zakupowe</h2>
+  <div id="cepList"></div>
+  <h2 style="margin-top:16px">📋 KCF — cechy</h2>
+  <div id="kcfList" style="font-size:11px;color:#57606a"></div>
+</div>
+
+<div class="chat">
+  <div class="chat-header">
+    <h1>☕ Asystent zakupowy — Ekspresy do kawy</h1>
+    <div class="sub">CS v5.7 · 13 sciezek · Engine v5</div>
+  </div>
+  <div class="messages" id="messages">
+    <div class="msg bot">
+      Czesc! Szukasz ekspresu do kawy? Opisz mi swoja sytuacje — pomoge Ci wybrac.
+      <br><br>
+      <small style="color:#57606a">np. "chce zrobic kawe jak z kawiarni", "nie wiem od czego zaczac", "stary ekspres sie zepsul"</small>
+    </div>
+  </div>
+  <div class="input-area">
+    <input id="input" placeholder="Opisz czego szukasz..." onkeydown="if(event.key==='Enter')send()">
+    <button onclick="send()">Wyslij</button>
+  </div>
+</div>
+
+<script>
+let currentCep = null, currentState = 0;
+
+function init(){
+  const cl = document.getElementById('cepList');
+  CEPS.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'cep';
+    const badgeTypes = {impulsowy:'bi',sytuacyjny:'bs',tozsamosciowy:'bt',ekonomiczny:'be',ekologiczny:'be',zdrowotny:'bz'};
+    d.innerHTML = '<strong>'+c.label+'</strong> <span class="badge '+(badgeTypes[c.typ]||'bs')+'">'+c.typ+'</span>';
+    d.onclick = () => selectCep(c.id);
+    d.id = 'cep-'+c.id;
+    cl.appendChild(d);
+  });
+  const kl = document.getElementById('kcfList');
+  KCF.forEach(k => {
+    const d = document.createElement('div');
+    d.style.cssText = 'padding:3px 0;font-size:11px;border-bottom:1px solid #eee';
+    d.innerHTML = '<strong>'+k.name+'</strong> <span style="color:#8c959f">'+k.range+'</span> <span style="color:#0969da;font-size:10px">'+k.tier+'</span>';
+    kl.appendChild(d);
+  });
+}
+
+function findCep(text){
+  text = text.toLowerCase();
+  let best = null, bestScore = 0;
+  CEPS.forEach(c => {
+    let score = 0;
+    if(c.label && text.includes(c.label.toLowerCase().slice(0,10))) score += 3;
+    if(c.trig && c.trig.toLowerCase().split(' ').some(w => w.length>3 && text.includes(w))) score += 2;
+    c.kws.forEach(kw => { if(text.includes(kw.toLowerCase())) score += 1; });
+    if(score > bestScore){ bestScore = score; best = c; }
+  });
+  return best;
+}
+
+function selectCep(cepId){
+  currentCep = CEPS.find(c => c.id === cepId);
+  if(!currentCep) return;
+  document.querySelectorAll('.cep').forEach(e => e.classList.remove('active'));
+  const el = document.getElementById('cep-'+cepId);
+  if(el) el.classList.add('active');
+  
+  const states = STATES[currentCep.typ] || STATES['sytuacyjny'];
+  currentState = 0;
+  
+  let html = '<div class="msg bot">';
+  html += '<strong>🧭 Rozpoznana sciezka: '+currentCep.label+'</strong><br>';
+  html += '<span style="font-size:12px;color:#57606a">Typ: '+currentCep.typ+' · '+states.length+' etapow</span><br><br>';
+  html += '<div style="color:#57606a;font-size:12px">'+currentCep.trig+'</div><br>';
+  html += '<strong>Etapy procesu zakupowego:</strong><br>';
+  html += '<div class="state-nav">';
+  states.forEach((s,i) => {
+    html += '<button class="'+(i===0?'active':'')+'" onclick="goToState('+i+','+s+')">'+(SN[s]||s)+'</button>';
+  });
+  html += '</div>';
+  html += '</div>';
+  addMsg(html, 'bot');
+}
+
+function goToState(idx, stateId){
+  let html = '<div class="msg bot"><strong>Etap '+(SN[stateId]||stateId)+'</strong><br><br>';
+  html += '<div style="color:#8c959f;font-size:12px">W tym momencie warto rozwazyc:</div><br>';
+  // Show relevant KCF for this stage
+  const stageKcf = KCF.slice(idx*2, idx*2+2);
+  if(stageKcf.length){
+    html += '<strong>Wazne cechy na tym etapie:</strong><br>';
+    stageKcf.forEach(k => {
+      html += '<span style="display:inline-block;padding:2px 8px;margin:2px;background:#f0f3f6;border-radius:4px;font-size:12px">'+k.name+': '+k.range+'</span> ';
+    });
+  }
+  html += '<br><br><small style="color:#8c959f">Kliknij inny etap powyzej, zeby przejsc dalej</small>';
+  html += '</div>';
+  addMsg(html, 'bot');
+}
+
+function send(){
+  const inp = document.getElementById('input');
+  const text = inp.value.trim();
+  if(!text) return;
+  inp.value = '';
+  addMsg(text, 'user');
+  
+  const match = findCep(text);
+  if(match && match.id !== (currentCep?currentCep.id:null)){
+    selectCep(match.id);
+  } else if(match){
+    let html = '<div class="msg bot">Jestesmy na sciezce: <strong>'+match.label+'</strong>. ';
+    html += 'Przejdz przez etapy powyzej lub sprecyzuj pytanie.</div>';
+    addMsg(html, 'bot');
+  } else {
+    let html = '<div class="msg bot">';
+    html += 'Hmm, nie jestem pewien ktorej sciezki dotyczy Twoje pytanie.<br><br>';
+    html += '<strong>Mozliwe tematy:</strong><br>';
+    const top5 = CEPS.slice(0,6);
+    top5.forEach(c => {
+      html += '<div class="cep-match" onclick="selectCep(\''+c.id+'\')"><strong>'+c.label+'</strong><br><span style="font-size:12px;color:#57606a">'+c.trig.slice(0,70)+'</span></div>';
+    });
+    html += '<br><small>Kliknij ktorys temat lub sprecyzuj pytanie.</small>';
+    html += '</div>';
+    addMsg(html, 'bot');
+  }
+}
+
+function addMsg(html, cls){
+  const m = document.getElementById('messages');
+  const d = document.createElement('div');
+  d.className = 'msg '+cls;
+  d.innerHTML = html;
+  m.appendChild(d);
+  m.scrollTop = m.scrollHeight;
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
