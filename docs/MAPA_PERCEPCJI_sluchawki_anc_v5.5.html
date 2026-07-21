@@ -206,67 +206,67 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     </button>
     <button class="path-btn" data-path="A" onclick="filterPath(this,'A')">
       <span class="path-dot" style="background:#3b82f6"></span>
-      <span class="path-label">A · Pierwsza prawdziwa kawa</span>
+      <span class="path-label">A · Pierwsze ANC — od czego zacząć?</span>
       <span class="path-count" id="cnt-A">0</span>
     </button>
     <button class="path-btn" data-path="B" onclick="filterPath(this,'B')">
       <span class="path-dot" style="background:#8b5cf6"></span>
-      <span class="path-label">B · Barista w domu</span>
+      <span class="path-label">B · Cisza w podróży — metro/autobus</span>
       <span class="path-count" id="cnt-B">0</span>
     </button>
     <button class="path-btn" data-path="C" onclick="filterPath(this,'C')">
       <span class="path-dot" style="background:#ec4899"></span>
-      <span class="path-label">C · Napoje mleczne</span>
+      <span class="path-label">C · Do pracy — open space, koncentracja</span>
       <span class="path-count" id="cnt-C">0</span>
     </button>
     <button class="path-btn" data-path="D" onclick="filterPath(this,'D')">
       <span class="path-dot" style="background:#14b8a6"></span>
-      <span class="path-label">D · Wygoda jednym przyciskiem</span>
+      <span class="path-label">D · Status i prestiż — pokaż się z marką</span>
       <span class="path-count" id="cnt-D">0</span>
     </button>
     <button class="path-btn" data-path="E" onclick="filterPath(this,'E')">
       <span class="path-dot" style="background:#f59e0b"></span>
-      <span class="path-label">E · Biuro (kawa dla zespołu)</span>
+      <span class="path-label">E · Audiofil — jakość referencyjna</span>
       <span class="path-count" id="cnt-E">0</span>
     </button>
     <button class="path-btn" data-path="F" onclick="filterPath(this,'F')">
       <span class="path-dot" style="background:#10b981"></span>
-      <span class="path-label">F · Awaria i wymiana</span>
+      <span class="path-label">F · Jakość dźwięku — muzyka na co dzień</span>
       <span class="path-count" id="cnt-F">0</span>
     </button>
     <button class="path-btn" data-path="G" onclick="filterPath(this,'G')">
       <span class="path-dot" style="background:#f43f5e"></span>
-      <span class="path-label">G · Prezent dla pasjonata</span>
+      <span class="path-label">G · Wielozadaniowe — do wszystkiego</span>
       <span class="path-count" id="cnt-G">0</span>
     </button>
     <button class="path-btn" data-path="H" onclick="filterPath(this,'H')">
       <span class="path-dot" style="background:#eab308"></span>
-      <span class="path-label">H · Oszczędność kawiarni</span>
+      <span class="path-label">H · Do sportu — bieganie/siłownia</span>
       <span class="path-count" id="cnt-H">0</span>
     </button>
     <button class="path-btn" data-path="I" onclick="filterPath(this,'I')">
       <span class="path-dot" style="background:#6366f1"></span>
-      <span class="path-label">I · Odkrywca kaw</span>
+      <span class="path-label">I · Do gamingu — niskie opóźnienie</span>
       <span class="path-count" id="cnt-I">0</span>
     </button>
     <button class="path-btn" data-path="J" onclick="filterPath(this,'J')">
       <span class="path-dot" style="background:#d946ef"></span>
-      <span class="path-label">J · Nowa kuchnia / design</span>
+      <span class="path-label">J · W podróż — samolot/długie trasy</span>
       <span class="path-count" id="cnt-J">0</span>
     </button>
     <button class="path-btn" data-path="K" onclick="filterPath(this,'K')">
       <span class="path-dot" style="background:#06b6d4"></span>
-      <span class="path-label">K · Gościnność</span>
+      <span class="path-label">K · Wierność marce — mam ekosystem</span>
       <span class="path-count" id="cnt-K">0</span>
     </button>
     <button class="path-btn" data-path="L" onclick="filterPath(this,'L')">
       <span class="path-dot" style="background:#84cc16"></span>
-      <span class="path-label">L · Alternatywa eko</span>
+      <span class="path-label">L · Wymiana starych — upgrade do ANC</span>
       <span class="path-count" id="cnt-L">0</span>
     </button>
     <button class="path-btn" data-path="M" onclick="filterPath(this,'M')">
       <span class="path-dot" style="background:#a855f7"></span>
-      <span class="path-label">M · Kontrola składu</span>
+      <span class="path-label">M · ANC w niskiej cenie — budżet</span>
       <span class="path-count" id="cnt-M">0</span>
     </button>
   </div>
@@ -794,24 +794,24 @@ function renderInfo(){
   const content=document.getElementById('contentArea');
   content.innerHTML=`<div class="info-view">
 <h2>🗺️ Jak powstała ta mapa?</h2>
-<p>To narzędzie zostało zbudowane w celu analizy CEP i ścieżek edukacyjnych dla kategorii Ekspresów do Kawy. Układ został odwzorowany z projektu SejfZone. Zawiera <strong>194 pytania</strong> rozmieszczone w <strong>13 ścieżkach</strong> (A-M) odpowiadających 13 CEP z Category Standard v5.5.</p>
+<p>To narzędzie zostało zbudowane w celu analizy CEP i ścieżek edukacyjnych dla kategorii Słuchawki z ANC. Układ został odwzorowany z projektu SejfZone. Zawiera <strong>264 pytań</strong> rozmieszczone w <strong>13 ścieżkach</strong> (A-M) odpowiadających 13 CEP z Category Standard v5.5.</p>
 
 <h3>Metodologia: CEP (Category Entry Points)</h3>
 <p>Każda ścieżka to inna potrzeba lub lęk, który sprowadza klienta do kategorii produktowej. W tej mapie znajduje się <strong>13 ścieżek (A-M)</strong> odpowiadających 13 CEP z Category Standard v5.5:</p>
 <ul>
-  <li><strong>A</strong> — Pierwsza prawdziwa kawa (first_machine)</li>
-  <li><strong>B</strong> — Barista w domu (barista_at_home)</li>
-  <li><strong>C</strong> — Napoje mleczne (milk_drinks)</li>
-  <li><strong>D</strong> — Wygoda jednym przyciskiem (comfort_one_touch)</li>
-  <li><strong>E</strong> — Biuro / kawa dla zespołu (office_team)</li>
-  <li><strong>F</strong> — Awaria i wymiana (replacement_upgrade)</li>
-  <li><strong>G</strong> — Prezent dla pasjonata (gift_coffee_lover)</li>
-  <li><strong>H</strong> — Oszczędność kawiarni (save_money_cafe)</li>
-  <li><strong>I</strong> — Odkrywca kaw (coffee_explorer)</li>
-  <li><strong>J</strong> — Nowa kuchnia / design (new_kitchen_design)</li>
-  <li><strong>K</strong> — Gościnność (host_identity)</li>
-  <li><strong>L</strong> — Alternatywa eko (eco_alternative)</li>
-  <li><strong>M</strong> — Kontrola składu (health_control)</li>
+  <li><strong>A</strong> — Pierwsze ANC — od czego zacząć?</li>
+  <li><strong>B</strong> — Cisza w podróży — metro/autobus</li>
+  <li><strong>C</strong> — Do pracy — open space, koncentracja</li>
+  <li><strong>D</strong> — Status i prestiż — pokaż się z marką</li>
+  <li><strong>E</strong> — Audiofil — jakość referencyjna</li>
+  <li><strong>F</strong> — Jakość dźwięku — muzyka na co dzień</li>
+  <li><strong>G</strong> — Wielozadaniowe — do wszystkiego</li>
+  <li><strong>H</strong> — Do sportu — bieganie/siłownia</li>
+  <li><strong>I</strong> — Do gamingu — niskie opóźnienie</li>
+  <li><strong>J</strong> — W podróż — samolot/długie trasy</li>
+  <li><strong>K</strong> — Wierność marce — mam ekosystem</li>
+  <li><strong>L</strong> — Wymiana starych — upgrade do ANC</li>
+  <li><strong>M</strong> — ANC w niskiej cenie — budżet</li>
 </ul>
 <p>Każda ścieżka dzieli się na stany (Trigger → Nauka → Porównanie → Wybór → Zakup), a pytania są oznaczone priorytetem (P1-P4) i typem intencji (INFO/KOMERC/TRANS).</p>
 <h2>📖 Instrukcja obsługi narzędzia</h2>
