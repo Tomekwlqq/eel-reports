@@ -534,14 +534,22 @@ details.scg[open]>summary::after,details.mth[open]>summary::after{content:'▴'}
         <div class="pane-b">&lt;h2&gt; Waluta &nbsp;<span style="color:var(--red);font-weight:700">×35</span><br>&lt;h2&gt; Currency &nbsp;<span style="color:var(--red);font-weight:700">×11</span><br>&lt;h2&gt; Patenty &nbsp;<span style="color:var(--red);font-weight:700">×1</span><br>&lt;h2&gt; Wzory użytkowe &nbsp;<span style="color:var(--red);font-weight:700">×1</span><br></div>
       </div>
       <div class="pane">
-        <div class="pane-h good">✅ Optymalnie — H2 na treści</div>
+        <div class="pane-h good">✅ Optymalnie — UI to nie nagłówek</div>
         <div class="pane-b">
-          &lt;div class="currency"&gt;Waluta&lt;/div&gt;<br>
-          &lt;h2&gt;Jak używać pumeksu&lt;/h2&gt;<br>
-          &lt;h2&gt;Skład i parametry&lt;/h2&gt;<br>
-          &lt;h2&gt;Opinie klientek&lt;/h2&gt;
+          &lt;div class="currency"&gt;Waluta&lt;/div&gt; &nbsp;<span style="color:var(--mut)">← było &lt;h2&gt;</span><br>
+          &lt;div class="footer-legal"&gt;Patenty&lt;/div&gt; &nbsp;<span style="color:var(--mut)">← było &lt;h2&gt;</span><br>
+          <br>
+          <span style="color:var(--mut)">&lt;h1&gt; = nazwa strony (produkt / kategoria)<br>
+          &lt;h2&gt; = tytuły realnych sekcji treści strony</span>
         </div>
       </div>
+    </div>
+    <div class="call i">
+      <div class="call-t">📌 A co ma być w H2? To nie jest zadanie tego audytu</div>
+      Ten moduł jest techniczny — mówi tylko: <b>przełącznik waluty i stopka mają przestać udawać nagłówek</b>.
+      <b>Czym wypełnić H2</b> — jakie sekcje treści opisać na karcie produktu czy kolekcji (np. „jak używać", „skład", „opinie") —
+      to decyzja <b>treściowa, per typ strony</b> i należy do <b>Category Standards</b>, nie do audytu technicznego.
+      Tu chodzi wyłącznie o to, żeby hierarchia nagłówków opisywała treść, a nie przyciski interfejsu.
     </div>
     <div class="call g">
       <div class="call-t">✅ Co jest w porządku (wbrew poprzedniemu audytowi)</div>
