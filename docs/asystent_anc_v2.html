@@ -1,0 +1,172 @@
+<!DOCTYPE html><html lang=pl><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1">
+<title>Asystent ANC</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,Segoe UI,sans-serif;background:#f6f8fa;color:#1f2328;height:100vh;display:flex;flex-direction:column}
+header{background:#fff;border-bottom:1px solid #d0d7de;padding:10px 16px}
+header h1{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+header .sub{font-size:11px;color:#57606a;margin-top:2px}
+.stages{display:flex;background:#fff;border-bottom:1px solid #d0d7de;overflow-x:auto;flex-shrink:0}
+.stg{padding:6px 12px;cursor:pointer;font-size:11px;font-weight:600;color:#57606a;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap}
+.stg:hover{color:#0969da;background:#f0f3f6}
+.stg.on{color:#0969da;border-bottom-color:#0969da;background:rgba(9,105,218,.06)}
+.stg .dot{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;font-size:8px;font-weight:700;margin-right:4px;background:#e8ecf0;color:#57606a}
+.stg .dot.done{background:#0969da;color:#fff}
+.stg .dot.on{background:#0969da;color:#fff}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.pane{display:none;flex:1;flex-direction:column}
+.pane.on{display:flex}
+.top-box{background:#fff;border-bottom:1px solid #d0d7de;padding:10px 16px;flex-shrink:0}
+.top-box .ttl{font-size:13px;font-weight:700}
+.top-box .desc{font-size:11px;color:#57606a;margin-top:2px;line-height:1.4}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.chip{padding:4px 10px;border-radius:12px;background:rgba(9,105,218,.08);color:#0969da;font-size:11px;cursor:pointer;border:1px solid rgba(9,105,218,.15)}
+.chip:hover{background:rgba(9,105,218,.15)}
+.msgs{flex:1;overflow-y:auto;padding:10px 16px;display:flex;flex-direction:column;gap:6px}
+.msg{max-width:82%;padding:7px 11px;border-radius:9px;font-size:13px;line-height:1.5}
+.msg.u{align-self:flex-end;background:#0969da;color:#fff;border-bottom-right-radius:3px}
+.msg.b{align-self:flex-start;background:#fff;border:1px solid #d0d7de;border-bottom-left-radius:3px}
+.msg .web{font-size:10px;color:#57606a;margin-top:3px;padding-top:3px;border-top:1px dashed #d0d7de}
+.eg{font-size:11px;color:#8c959f;margin:4px 0}
+.input-row{display:flex;gap:6px;padding:8px 16px;background:#fff;border-top:1px solid #d0d7de;flex-shrink:0}
+.input-row input{flex:1;padding:7px 10px;border:1px solid #d0d7de;border-radius:6px;font-size:13px;outline:none}
+.input-row input:focus{border-color:#0969da}
+.input-row button{padding:7px 16px;background:#0969da;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.web-box{background:#fff;border:1px solid #d0d7de;border-radius:8px;padding:8px;margin:3px 0;font-size:11px;line-height:1.5}
+.web-box .l{color:#0969da;font-weight:600}
+</style></head><body>
+
+<header>
+<h1>🎧 Asystent zakupowy — Słuchawki z ANC</h1>
+<div class=sub>CS v5.7 · 13 ścieżek · 8 etapów Schwartza</div>
+</header>
+
+<div class=stages id=stg></div>
+
+<div class=main id=main></div>
+
+<script>
+const ST = [
+  {n:1,t:'Nie wiem',d:'Nie wiesz jeszcze że potrzebujesz ANC. Opowiedz o swoim dniu — gdzie jest za głośno?',eg:'"W biurze nie mogę się skupić przez hałas" • "W metrze słucham muzyki na full"'},
+  {n:2,t:'Potrzeba',d:'Wiesz że czegoś potrzebujesz. Jaki masz problem: hałas, jakość, wygoda, prestiż?',eg:'"Chcę odciąć się od hałasu w autobusie" • "Potrzebuję ciszy w open space"'},
+  {n:3,t:'Ścieżka',d:'Która sytuacja brzmi jak Twoja? Kliknij lub opisz.',eg:'Dojeżdżam codziennie • Pracuję w hałasie • Chcę zrobić wrażenie • Liczy się jakość'},
+  {n:4,t:'Nauka',d:'ANC, budowa, kodeki — poznaj parametry które są ważne.',eg:'"Czym różni się ANC adaptacyjne od hybrydowego?" • "Czy kodek LDAC ma znaczenie?"'},
+  {n:5,t:'Wybór typu',d:'Nauszne czy dokanałowe? Który typ ANC pasuje do Twojego życia?',eg:'"Nauszne czy dokanałowe do metra?" • "Czy ANC w dokanałowych wystarczy?"'},
+  {n:6,t:'Porównanie',d:'Konkretne modele. Sony, Bose, Sennheiser — który wygrać?',eg:'"Sony WH vs Bose QC — co lepsze?" • "Ranking słuchawek ANC 2026"'},
+  {n:7,t:'Cena i sklep',d:'Gdzie kupić najtaniej? Jaka gwarancja? Dostawa?',eg:'"Gdzie kupić Sony WH-1000XM5 najtaniej?" • "Czy Allegro ma promocje?"'},
+  {n:8,t:'Decyzja',d:'Kupujesz? A może poczekać na promocję? Podsumuję Ci wybór.',eg:'"Czy warto dopłacić do Bose?" • "Podsumuj co wybrałem"'}
+];
+
+const CEP = [
+  {id:'first',l:'Pierwsze ANC',trig:'Nigdy nie miałem ANC'},
+  {id:'commute',l:'Cisza w podróży',trig:'Metro, autobus, dojazdy'},
+  {id:'office',l:'Praca — focus',trig:'Open space, hałas biurowy'},
+  {id:'showoff',l:'Status i marka',trig:'Pokaż się, prestiż'},
+  {id:'audiophile',l:'Audiofil',trig:'Jakość referencyjna'},
+  {id:'music',l:'Muzyka na co dzień',trig:'Dźwięk ważny, ale bez przesady'},
+  {id:'multi',l:'Wielozadaniowe',trig:'Do wszystkiego'},
+  {id:'sport',l:'Sport',trig:'Bieganie, siłownia'},
+  {id:'gaming',l:'Gaming',trig:'Niskie opóźnienie'},
+  {id:'travel',l:'Podróże',trig:'Samolot, pociąg'},
+  {id:'brand',l:'Ekosystem',trig:'Mam iPhone/Samsunga'},
+  {id:'upgrade',l:'Wymiana',trig:'Stare się zużyły'},
+  {id:'budget',l:'Budżet',trig:'Do 400 zł'}
+];
+
+const SZ = ['','','','ANC to fale przeciwstawne. Mikrofon zbiera hałas, głośnik puszcza odwróconą fazę. Klucz: im więcej mikrofonów (4+), tym lepiej. Głębokość: 35dB=entry, 40dB=średni, 45dB+=premium.','Nauszne: lepsze ANC, większe, cięższe. Dokanałowe: przenośne, mniejsze ANC. Do metra: nauszne. Do sportu: dokanałowe.','📊 Ranking ANC 2026:<br>• Sony WH-1000XM5 — 969 zł (⭐ ANC 9.5/10)<br>• Bose QC Ultra — 1499 zł (⭐ komfort 9.5/10)<br>• Sennheiser M4 — 1199 zł (⭐ dźwięk 9.5/10)<br>• AirPods Pro 3 — 899 zł (⭐ ekosystem 10/10)','🛒 Gdzie kupić:<br>• x-kom: Sony 969 zł + darmowa dostawa<br>• Allegro: Sony od 939 zł<br>• Media Expert: 999 zł + 24 mce gwar.','Jeśli masz iPhone → AirPods Pro 3. Jeśli Android → Sony WH-1000XM5. Jeśli budżet < 500 zł → JBL Tune 780NC.'];
+
+let cur = 0;
+
+function init(){
+  const tg = document.getElementById('stg');
+  const mn = document.getElementById('main');
+  
+  ST.forEach((s,i)=>{
+    const b = document.createElement('button');
+    b.className = 'stg'+(i===0?' on':'');
+    b.innerHTML = `<span class="dot ${i===0?'on':'done'}">${s.n}</span>${s.t}`;
+    b.onclick = () => go(i);
+    b.id='b'+i;
+    tg.appendChild(b);
+    
+    const p = document.createElement('div');
+    p.className = 'pane'+(i===0?' on':'');
+    p.id='p'+i;
+    
+    let h = '<div class=top-box>';
+    h += `<div class=ttl>Etap ${s.n}: ${s.t}</div>`;
+    h += `<div class=desc>${s.d}</div>`;
+    h += `<div class=eg>💡 ${s.eg}</div>`;
+    
+    // Chips for specific stages
+    if(i===2) h += '<div class=chips>'+CEP.map(c=>`<span class=chip onclick="ask(${i},'Chodzi o: ${c.l}')">${c.l}</span>`).join('')+'</div>';
+    else if(i>2 && i<8) h += `<div class=chips><span class=chip onclick="ask(${i},'${ST[i].eg.split('•')[0].trim().replace(/'/g,"\\'")}')">${ST[i].eg.split('•')[0].trim().slice(0,40)}</span><span class=chip onclick="ask(${i},'${ST[i].eg.split('•')[1].trim().replace(/'/g,"\\'")}')">${ST[i].eg.split('•')[1].trim().slice(0,40)}</span></div>`;
+    
+    h += '</div><div class=msgs id=m'+i+'></div>';
+    h += `<div class=input-row><input id=in${i} placeholder="Zadaj pytanie..." onkeydown="if(event.key==='Enter')ask(${i},this.value)"><button onclick="ask(${i},document.getElementById('in${i}').value)">Wyślij</button></div>`;
+    
+    p.innerHTML = h;
+    mn.appendChild(p);
+  });
+  
+  // Welcome message in stage 1
+  addMsg(0,`<strong>Cześć! 👋</strong><br><br>Opowiedz mi o swoim dniu — gdzie jest za głośno? Gdzie przydałyby Ci się słuchawki z ANC?<br><br>Przejdę z Tobą przez <strong>8 etapów</strong> wyboru — od pierwszego pomysłu do zakupu.`,1);
+  addMsg(0,'💡 Spróbuj: "W biurze nie mogę się skupić" albo "Chcę ciszę w metrze"',1);
+}
+
+function go(i){cur=i;
+  document.querySelectorAll('.stg').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  document.getElementById('b'+i).classList.add('on');
+  document.getElementById('p'+i).classList.add('on');
+  const d=document.querySelector('#b'+i+' .dot');if(d)d.className='dot on';
+}
+
+function ask(stg,t){
+  if(!t||!t.trim())return;
+  const inp=document.getElementById('in'+stg);if(inp)inp.value='';
+  
+  addMsg(stg,t,0);
+  
+  setTimeout(()=>{
+    const sn=stg+1;
+    let r='';
+    
+    if(sn<=3){
+      const fc=CEP.find(c=>t.toLowerCase().includes(c.l.toLowerCase().slice(0,4)));
+      if(fc){
+        r=`<strong>🧭 Rozpoznaję: ${fc.l}</strong><br><br>${fc.trig} — dobry trop! Przejdź do etapu <strong>Nauka</strong> (zakładka 4) żeby dowiedzieć się więcej o parametrach ANC.`;
+        // Auto-advance to stage 3
+        go(2);
+      } else {
+        r='Opowiedz więcej — czy chodzi o <strong>ciszę w podróży</strong>, <strong>pracę w hałasie</strong>, a może chcesz <strong>zrobić wrażenie</strong> marką?';
+      }
+    } else if(sn===6){r=`<div class=web-box><span class=l>📊 Ranking słuchawek ANC 2026</span><br>${SZ[5]}</div>I moja rekomendacja: Sony WH-1000XM5 to najlepszy wybór overall. Najlepsze ANC, dobry dźwięk, przyzwoita cena.`;
+    } else if(sn===7){r=`<div class=web-box><span class=l>🛒 Porównanie cen</span><br>${SZ[6]}</div>Allegro ma zazwyczaj najniższą cenę. x-kom ma darmową dostawę.`;
+    } else if(sn===8){r=SZ[7]+'<br><br>Decyzja należy do Ciebie! Chcesz żebym podsumował wybór?';
+    } else {r=SZ[sn-1]||'Dobre pytanie! Sprawdź etap wyżej (zakładka) — mam tam przygotowane informacje o parametrach ANC.';}
+    
+    addMsg(stg,r,1);
+    
+    const d=document.querySelector('#b'+stg+' .dot');
+    if(d)d.className='dot done';
+    
+    // Scroll to next stage suggestion
+    if(sn<8){
+      setTimeout(()=>{
+        addMsg(stg,`👉 Przejdź do etapu <strong>${ST[stg+1].t}</strong> (zakładka ${stg+2}) — tam znajdziesz więcej informacji.`,1);
+      },1500);
+    }
+  },300);
+}
+
+function addMsg(stg,html,t){const m=document.getElementById('m'+stg);if(!m)return;
+  const d=document.createElement('div');
+  d.className='msg '+(t?'b':'u');
+  d.innerHTML=html;
+  m.appendChild(d);
+  m.scrollTop=m.scrollHeight;
+}
+
+window.onload=init;
+</script>
+</body></html>
