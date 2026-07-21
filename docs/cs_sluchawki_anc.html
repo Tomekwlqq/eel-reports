@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GEO DT DB — PL — 1 categories</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--sb-bg:#161b22;--hd-bg:#161b22;--bd:#30363d;
+  --tx:#e6edf3;--tx2:#8b949e;--ac:#58a6ff;
+  --cb:#1c2128;--ts:#1c2128;--mb:#2d4a22;--mt:#7ee787;
+  --ab:#1f3353;--sw:292px;--hh:52px
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+     background:var(--bg);color:var(--tx);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* Header */
+#hd{height:var(--hh);background:var(--hd-bg);border-bottom:1px solid var(--bd);
+    display:flex;align-items:center;gap:10px;padding:0 14px;flex-shrink:0}
+#hd h1{font-size:15px;font-weight:700;white-space:nowrap;flex-shrink:0;letter-spacing:.01em}
+#hd h1 span{color:var(--ac)}
+#sw{flex:1;position:relative;max-width:440px}
+#si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--tx2);font-size:15px;pointer-events:none}
+#search{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:6px;
+        color:var(--tx);padding:6px 10px 6px 30px;font-size:15px;outline:none;transition:border-color .15s}
+#search:focus{border-color:var(--ac)}
+
+/* Filter buttons */
+.filt{display:flex;gap:4px;flex-shrink:0}
+.fb{font-size:13px;padding:3px 8px;border-radius:4px;border:1px solid var(--bd);
+    background:transparent;color:var(--tx2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.fb:hover{border-color:var(--ac);color:var(--tx)}
+.fb.on{border-color:var(--ac);background:var(--ab);color:var(--tx)}
+
+/* Lang toggle */
+#lang-btn{font-size:13px;padding:3px 9px;border-radius:4px;border:1px solid var(--bd);
+          background:transparent;color:var(--tx2);cursor:pointer;text-decoration:none;
+          display:flex;align-items:center;gap:4px;transition:all .15s;white-space:nowrap;flex-shrink:0}
+#lang-btn:hover{border-color:var(--ac);color:var(--tx)}
+
+#stat{font-size:13px;color:var(--tx2);flex-shrink:0;white-space:nowrap;min-width:90px;text-align:right}
+
+/* Layout */
+#lay{display:flex;flex:1;overflow:hidden}
+
+/* Sidebar */
+#sb{width:var(--sw);flex-shrink:0;background:var(--sb-bg);border-right:1px solid var(--bd);overflow-y:auto}
+.ci{display:flex;align-items:center;gap:7px;padding:7px 10px;cursor:pointer;
+    border-left:3px solid transparent;border-bottom:1px solid var(--bd);
+    transition:background .1s;user-select:none;min-height:36px}
+.ci:hover{background:rgba(88,166,255,.07)}
+.ci.active{background:var(--ab);border-left-color:var(--ac)}
+.ci.hidden{display:none}
+.cn{font-size:11.5px;color:var(--tx2);min-width:20px;flex-shrink:0;font-variant-numeric:tabular-nums}
+.ct{font-size:14px;line-height:1.3;color:var(--tx);flex:1;min-width:0}
+.ct mark{background:var(--mb);color:var(--mt);border-radius:2px;padding:0 1px}
+
+/* Version badge in sidebar */
+.vb{font-size:10.5px;font-weight:700;padding:1px 5px;border-radius:8px;flex-shrink:0;letter-spacing:.02em}
+.vb-v1{background:#21262d;color:#6e7681}
+.vb-v2{background:#2d2502;color:#d29922}
+.vb-v3{background:#0d2a1a;color:#3fb950}
+.vb-v4{background:#0d1e3c;color:#58a6ff}
+
+/* Verification pipeline dots */
+.pipe{display:flex;gap:2px;flex-shrink:0}
+.pd{width:6px;height:6px;border-radius:50%;background:var(--bd)}
+.pd.on-v1{background:#6e7681}
+.pd.on-v2{background:#d29922}
+.pd.on-v3{background:#3fb950}
+.pd.on-v4{background:#58a6ff}
+
+#nr{padding:20px 12px;font-size:15px;color:var(--tx2);text-align:center;display:none}
+
+/* Content */
+#ct{flex:1;overflow-y:auto;padding:26px 34px}
+.cs{display:none}
+.cs.vis{display:block}
+
+/* Markdown */
+.cs h2{font-size:23px;font-weight:700;border-bottom:1px solid var(--bd);padding-bottom:10px;margin-bottom:16px}
+.cs h3{font-size:13px;font-weight:700;color:var(--ac);margin:20px 0 9px;
+       text-transform:uppercase;letter-spacing:.06em}
+.cs h4{font-size:16px;font-weight:600;margin:14px 0 6px}
+.cs p{font-size:15.5px;line-height:1.65;margin-bottom:8px}
+.cs strong{font-weight:600}
+.cs em{font-style:italic;color:var(--tx2)}
+.cs code{font-family:'SF Mono','Fira Code',Menlo,monospace;font-size:13px;
+         background:var(--cb);border:1px solid var(--bd);border-radius:3px;
+         padding:1px 5px;color:#f0883e}
+.cs pre{background:var(--cb);border:1px solid var(--bd);border-radius:6px;
+        padding:12px 14px;overflow-x:auto;margin:10px 0}
+.cs pre code{background:none;border:none;padding:0;font-size:14px;color:var(--tx);line-height:1.5}
+.cs table{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0;display:block;overflow-x:auto}
+.cs th,.cs td{text-align:left;padding:7px 10px;border:1px solid var(--bd)}
+.cs th{background:var(--sb-bg);font-weight:600}
+.cs tr:nth-child(even) td{background:var(--ts)}
+.cs ul,.cs ol{padding-left:18px;margin:7px 0}
+.cs li{font-size:15.5px;line-height:1.6;margin-bottom:3px}
+.cs hr{border:none;border-top:1px solid var(--bd);margin:18px 0}
+
+/* Changelog / verification card */
+.changelog{background:#0b1e10;border:1px solid #2ea043;border-radius:8px;
+           padding:14px 18px;margin:18px 0;position:relative}
+.changelog::before{content:'🔬 VERIFIED';font-size:10.5px;font-weight:700;
+                   color:#3fb950;letter-spacing:.08em;display:block;margin-bottom:8px}
+.changelog h3{color:#3fb950 !important;margin-top:0 !important;font-size:14px !important}
+.changelog p,.changelog li{color:#c3e6cb;font-size:15px}
+.changelog ul{margin:4px 0}
+.changelog table{font-size:12px}
+.changelog th{background:#0d2a1a}
+.changelog code{background:#0d2a1a;color:#7ee787}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+::-webkit-scrollbar-track{background:transparent}
+
+body.light{
+  --bg:#ffffff;--sb-bg:#f6f8fa;--hd-bg:#f6f8fa;--bd:#d0d7de;
+  --tx:#1f2328;--tx2:#656d76;--ac:#0969da;
+  --cb:#f6f8fa;--ts:#f6f8fa;--mb:#fff8c5;--mt:#7a5c00;--ab:#ddf4ff;
+}
+body.light .cs code{color:#cf222e}
+body.light .cs pre code{color:var(--tx)}
+body.light .changelog{background:#f0fff4;border-color:#2ea043}
+body.light .changelog p,body.light .changelog li{color:#1a7f37}
+#theme-btn{font-size:14px;padding:3px 9px;border-radius:4px;border:1px solid var(--bd);
+  background:transparent;color:var(--tx2);cursor:pointer;flex-shrink:0;transition:all .15s}
+#theme-btn:hover{border-color:var(--ac);color:var(--tx)}
+
+/* FUND rozwijany blok */
+details.fund{border:1px solid var(--bd);border-radius:8px;margin:22px 0 8px;
+  background:var(--cb);overflow:hidden}
+details.fund>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;
+  padding:12px 16px;user-select:none;transition:background .12s}
+details.fund>summary::-webkit-details-marker{display:none}
+details.fund>summary:hover{background:rgba(88,166,255,.07)}
+.fund-arrow{color:var(--ac);font-size:13px;flex-shrink:0;transition:transform .15s}
+details.fund[open] .fund-arrow{transform:rotate(90deg)}
+.fund-head{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.fund-title{font-size:15px;font-weight:700;color:var(--tx)}
+.fund-src{font-size:12px;font-style:italic;color:var(--tx2);line-height:1.4}
+.fund-badge{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:10px;flex-shrink:0;white-space:nowrap}
+.fund-badge.ok{background:#0d2a1a;color:#3fb950}
+.fund-badge.warn{background:#3d2a02;color:#f0883e}
+body.light .fund-badge.ok{background:#dafbe1;color:#1a7f37}
+body.light .fund-badge.warn{background:#fff1e5;color:#bc4c00}
+.fund-hint{font-size:11px;color:var(--tx2);flex-shrink:0;border:1px solid var(--bd);
+  border-radius:4px;padding:2px 7px}
+details.fund[open] .fund-hint{display:none}
+.fund-body{padding:4px 18px 16px;border-top:1px solid var(--bd)}
+.fund-body h1{font-size:18px;margin:12px 0 6px}
+</style>
+</head>
+<body>
+<div id="hd">
+  <h1>GEO <span>CS</span></h1>
+  <div id="sw">
+    <span id="si">⌕</span>
+    <input id="search" type="text" placeholder="Szukaj kategorii, CEP, pytania..." autocomplete="off" spellcheck="false">
+  </div>
+  <div class="filt">
+    <button class="fb on" data-f="all" onclick="setFilter('all')">All</button>
+    <button class="fb" data-f="v2p" onclick="setFilter('v2p')">✅ Verified</button>
+    <button class="fb" data-f="v1"  onclick="setFilter('v1')">📝 Draft</button>
+  </div>
+  <a id="lang-btn" href="%23">🌐 EN</a>
+  <button id="theme-btn" onclick="toggleTheme()" title="Tryb jasny/ciemny">☀️</button>
+  <span id="stat">1 cat.</span>
+</div>
+<div id="lay">
+  <div id="sb">
+    <div class="ci" id="i1" onclick="select(1)"><span class="cn">#1</span><span class="ct">Słuchawki z ANC</span><span class="vb vb-v2">v2</span><div class="pipe"><span class="pd on-v1"></span><span class="pd on-v2"></span><span class="pd"></span><span class="pd"></span></div></div>
+    <div id="nr">No results</div>
+  </div>
+  <div id="ct">
+    <div class="cs" id="s1"><h1>Słuchawki z ANC — Category Standard v2 (nadbudowa)</h1>
+
+<p><em>Fundament (0/0b/2) + CEV/KCF z <code>data/cs_v2/sluchawki_anc_v2.json</code> (pola <code>kcf</code> + <code>_meta.cev</code> — wklejone 1:1, niezmienione). CEP = świeży zestaw 15 (sytuacja wejścia, nie atrybut). Sekcje matrycowe wg wzorca <code>WPIS_CS_ekspresy_do_kawy_V2.md</code>. Sloty <<LLM>> = myślące. assemble_v2 · 2026-07-21.</em></p>
+
+<hr>
+
+<h2>0. Opis kategorii</h2>
+<p>Słuchawki z ANC (Active Noise Cancelling — aktywna redukcja szumów) — słuchawki, które oprócz odtwarzania dźwięku <strong>elektronicznie wygłuszają hałas otoczenia</strong>: mikrofony nasłuchują dźwięku z zewnątrz, a układ generuje przeciwfalę, która ten hałas kasuje. Kategoria dzieli się na dwie fizycznie różne budowy: <strong>nauszne zamknięte</strong> (over-ear, większe wyciszenie i komfort długiego noszenia) i <strong>dokanałowe True Wireless</strong> (TWS, pchełki w etui — przenośność). Klient wchodzi w kategorię co 2–4 lata (żywotność baterii dokanałowych ~2–3 lata, nausznych ~4–6 lat), przy pierwszym zakupie ANC, wymianie zużytego sprzętu, upgrade z tanich słuchawek bez wyciszenia, albo pod konkretną sytuację (dojazdy, open space, samolot).</p>
+
+<hr>
+
+<h2>0b. Problemy, które kategoria załatwia</h2>
+<p><strong>🎯 Primary (rdzeń — po co kategoria powstała):</strong></p>
+<p>> <strong>Odcina hałas i daje dźwięk do ucha.</strong> Wygłusza świat dookoła (koła metra, turbiny, gadający kolega) i zostawia cię z muzyką albo ciszą. Tyle.</p>
+
+<p><strong>Secondary (rynek pociął rdzeń „wyciszenie + dźwięk" na węższe pod-potrzeby):</strong></p>
+
+<ul><li><strong>skupienie w hałasie</strong> — open space / kawiarnia / dziecko w tle, hałas rozbija myśl → mocne ANC nauszne + długi komfort</li><li><strong>cisza w dojazdach</strong> — codzienne metro/autobus/pociąg, dudnienie kół nie do zniesienia → ANC + przenośność (dokanałowe lub składane nauszne)</li><li><strong>wyciszenie w podróży lotniczej</strong> — 4h turbin to kara → głębokie ANC na niskie częstotliwości + długa bateria + składanie</li><li><strong>czysty głos na callach</strong> — 6 Zoomów dziennie, tło kompromituje przed klientem → mikrofony + ENC (redukcja szumu w moim głosie, nie tylko w moich uszach)</li><li><strong>jakość dźwięku do muzyki</strong> — słucham dużo, chcę scenę i detal, nie tylko wyciszenie → dobry przetwornik + kodeki hi-res (LDAC/aptX)</li><li><strong>jedne do wszystkiego</strong> — praca, muzyka, sport, podróż w jednym → uniwersalność (ANC + tryb przezroczystości + multipoint + IP)</li><li><strong>sport bez wypadania</strong> — bieganie/siłownia, nie mają wypaść ani odpaść od potu → dokanałowe z zaczepem + IPX4+</li><li><strong>gaming z niskim opóźnieniem</strong> — dźwięk musi być zsynchronizowany z obrazem → tryb low-latency / LE Audio + mikrofon</li><li><strong>status / marka na uszach</strong> — wszyscy mają Sony/AirPods, chcę widoczne, „porządne" → rozpoznawalny design + logo + premium finish</li><li><strong>wejście w ANC tanio</strong> — słyszałem że dobre ANC to już 200–300 zł, chcę sprawdzić bez wydawania fortuny → budżet z przyzwoitym wyciszeniem</li><li><strong>upgrade zużytego</strong> — stare padły / bateria trzyma 40 min → wymiana na coś z realnym ANC</li></ul>
+
+<p>> ⚠️ „40 dB wyciszenia", „bateria 30h", „waga 250g", „kodek LDAC" — NIE problemy. To atrybuty. Idą do filtrów/KCF.</p>
+
+<hr>
+
+<h2>1. CEV — Category Emotional Valuation (Schwartz z wagami)</h2>
+<p><strong>Pasek CEV — profil emocjonalny (10 cech):</strong></p>
+
+<table>
+<tr><th>ryzyko</th><th>lęk</th><th>widoczność</th><th>impuls</th><th>sexy</th><th>aspiracja</th><th>tożsamość</th><th>zmysłowość</th><th>pilność</th><th>moralność</th></tr>
+<tr><td>0.45</td><td>0.30</td><td>0.60</td><td>0.30</td><td>0.50</td><td>0.65</td><td>0.55</td><td>0.35</td><td>0.25</td><td>0.10</td></tr>
+</table>
+
+<p><code>apply_physics</code> → fork <strong>ASPIRACJA/WIDOCZNOŚĆ</strong> (aspiracja 0.65 + widoczność 0.60 = najwyższe cechy paska), research <strong>2.7</strong> (średnia-wysoka). Lęk 0.30 jest <strong>funkcjonalny</strong> (obiekt = „czy to naprawdę wyciszy tak jak w opisie / czy nie przepłacę za logo"), nie egzystencjalny.</p>
+
+<p><strong>Schwartz — 8 stanów świadomości + wagi:</strong></p>
+
+<table>
+<tr><th>#</th><th>Stan</th><th>Waga</th><th>Co znaczy dla treści</th></tr>
+<tr><td>1</td><td>Nie wiem</td><td>◔ L</td><td>pomijalny</td></tr>
+<tr><td>2</td><td>Potrzeba</td><td>◑ M</td><td>trigger sytuacji (hałas / call / podróż)</td></tr>
+<tr><td>3</td><td>CEP</td><td>● H</td><td>routing do sytuacji użycia</td></tr>
+<tr><td>4</td><td>Nauka kategorii</td><td>◑ M</td><td>edukacja: ANC hybrydowe, dB, kodeki, nauszne vs dokanałowe</td></tr>
+<tr><td>5</td><td>Preselekcja</td><td>● H</td><td>mój przypadek → budowa (nauszne / TWS)</td></tr>
+<tr><td>6</td><td>Porównywanie</td><td>● H</td><td>Sony vs Bose vs Apple vs budżet — brand war</td></tr>
+<tr><td>7</td><td>Wybór sklepu</td><td>◔ L</td><td>gdzie kupić / gwarancja / zwrot</td></tr>
+<tr><td>8</td><td>Zakup</td><td>◔ L</td><td>raty / stan magazynowy / etui w zestawie</td></tr>
+</table>
+
+<p>Ścieżka zakupowa ma <strong>trzy garby</strong>: <strong>stan 3 (CEP)</strong>, <strong>stan 5 (Preselekcja)</strong> i <strong>stan 6 (Porównywanie)</strong> — wszystkie ● H. To odróżnia ANC od AGD: tu klient nie tylko rozpoznaje sytuację i wybiera budowę, ale toczy realną wojnę marek (Sony WH-1000XM5/XM6 vs Bose QC Ultra vs Apple AirPods Max vs budżet Soundcore/Edifier), bo kategoria jest silnie zbrandowana i porównywalna 1:1 na parametrach. Stąd 55–65% budżetu treści powinno obsługiwać: routing sytuacji (CEP), rozstrzygnięcie <strong>nauszne vs dokanałowe</strong> (Preselekcja) oraz <strong>head-to-head marka vs marka</strong> (Porównywanie). Asymetria wysoka widoczność/aspiracja (0.60/0.65) przy niskiej pilności (0.25) i niskim impulsie (0.30) mówi: to zakup <strong>statusowy, ale przemyślany</strong> — klient chce „porządne, widoczne, nie przepłacone", nie kupi pod presją czasu, kupi gdy poczuje że rozumie różnicę między 300 zł a 2000 zł. Treść ma budować pewność decyzji i uzasadniać cenę różnicą w realnym wyciszeniu, nie CTA-pressure.</p>
+
+<h2>2. CEP — Consumer Entry Points</h2>
+<p><em>Zestaw 15 momentów wejścia (świeżo wygenerowany, niezmienny). CEP = SYTUACJA w której klient wchodzi w kategorię, nie cecha produktu. „Audiofil/jakość/ekosystem" gdyby były atrybutami szłyby do KCF — tu występują wyłącznie jako sytuacja tożsamościowa/ekonomiczna wejścia.</em></p>
+
+<table>
+<tr><th>id</th><th>typ</th><th>label (moment/sytuacja wejścia)</th></tr>
+<tr><td>cep_open_space</td><td>sytuacyjny</td><td>Open space, kolega gada obok — nie mogę dokończyć myśli</td></tr>
+<tr><td>cep_home_office</td><td>sytuacyjny</td><td>Praca zdalna, remont u sąsiada/dziecko w tle — nie skupię się</td></tr>
+<tr><td>cep_dojazdy</td><td>sytuacyjny</td><td>Codzienne 40 min metra — hałas kół nie do zniesienia</td></tr>
+<tr><td>cep_samolot</td><td>sytuacyjny</td><td>Turbiny przez 4h to kara — latam służbowo co 2 tyg</td></tr>
+<tr><td>cep_coworking</td><td>sytuacyjny</td><td>Pracuję w kawiarni/coworkingu, muzyka w tle zabija myśl</td></tr>
+<tr><td>cep_meetings_online</td><td>sytuacyjny</td><td>6 Zoomów dziennie — tło kompromituje mnie przed klientem (mikrofon+ENC)</td></tr>
+<tr><td>cep_wymiana</td><td>sytuacyjny</td><td>Stare padły albo ANC ledwo działa — czas na nowe porządne</td></tr>
+<tr><td>cep_prezent</td><td>sytuacyjny</td><td>Prezent dla kogoś kto podróżuje albo haruje w open space</td></tr>
+<tr><td>cep_ochrona_sluchu</td><td>sytuacyjny</td><td>Po latach hałasu chcę chronić słuch, nie blokując świata</td></tr>
+<tr><td>cep_relaks_cisza</td><td>sytuacyjny</td><td>Po 9h w open space potrzebuję 30 min własnej ciszy</td></tr>
+<tr><td>cep_sport</td><td>sytuacyjny</td><td>Do biegania/siłowni — nie mają wypadać ani przeszkadzać</td></tr>
+<tr><td>cep_gaming</td><td>sytuacyjny</td><td>Do grania — niskie opóźnienie, żeby nie psuć immersji</td></tr>
+<tr><td>cep_prestiz_marka</td><td>tozsamosciowy</td><td>Wszyscy mają Sony/AirPods — chcę w końcu coś porządnego</td></tr>
+<tr><td>cep_demokratyzacja</td><td>ekonomiczny</td><td>Słyszałem że dobre ANC to teraz 200–300 zł — czas sprawdzić</td></tr>
+<tr><td>cep_okazja</td><td>ekonomiczny</td><td>Wyprzedaż -40% na XM5 / dostałem premię — teraz albo nigdy</td></tr>
+</table>
+
+<p><strong>Rozkład typów:</strong> 12 sytuacyjnych · 1 tożsamościowy · 2 ekonomiczne. Dominują momenty „hałas mnie dopadł" (praca/dojazd/podróż) — kategoria napędzana konkretną sytuacją bólu, nie impulsem czy modą. Dwa CEP ekonomiczne (<code>cep_demokratyzacja</code>, <code>cep_okazja</code>) są nowym silnikiem rynku 2026: ANC zeszło poniżej 300 zł, więc bariera wejścia runęła.</p>
+
+<h3>Frazy ATRYBUTOWE → harvest filtrów (NIE CEP)</h3>
+
+<table>
+<tr><th>Atrybut</th><th>Idzie do</th></tr>
+<tr><td>„słuchawki nauszne / dokanałowe z ANC"</td><td>Filter: budowa</td></tr>
+<tr><td>„słuchawki bluetooth z redukcją szumów"</td><td>Filter: typ ANC</td></tr>
+<tr><td>„słuchawki 40h baterii"</td><td>Filter: czas baterii</td></tr>
+<tr><td>„słuchawki z LDAC / aptX"</td><td>Filter: kodeki</td></tr>
+<tr><td>„słuchawki Sony / Bose / Apple / Soundcore"</td><td>Filter: marka</td></tr>
+<tr><td>„słuchawki wodoodporne IPX4"</td><td>Filter: wodoszczelność</td></tr>
+</table>
+
+<p>> ⚠️ „40 dB", „30h", „LDAC", „IPX4", „250 g" — to atrybuty/specy. Nie mieszamy z CEP.</p>
+
+<h2>4. KCF — Key Category Features</h2>
+<p><em>15 atrybutów przepisanych z <code>data/cs_v2/sluchawki_anc_v2.json</code> pole <code>kcf</code> (zakresy rynkowe + tier niezmienione). Uwaga = interpretacja pod treść PDP/GEO.</em></p>
+
+<table>
+<tr><th>Feature</th><th>Zakres rynkowy</th><th>Tier</th><th>Uwaga</th></tr>
+<tr><td>Typ ANC</td><td>Adaptacyjne / Hybrydowe / Passive + Feedback / Feedforward</td><td>T1</td><td>hybrydowe (feedforward + feedback) = najskuteczniejsze; adaptacyjne dopasowuje siłę do otoczenia. Feedforward-only w budżecie łapie mniej niskich tonów</td></tr>
+<tr><td>Głębokość ANC (dB)</td><td>do 35 dB (entry) / do 40 dB (średni) / do 45+ dB (premium)</td><td>T1</td><td>dB to szum tłumiony w wybranym paśmie, nie „o tyle ciszej wszędzie". Sony/Bose ~40–45 dB [web-check]. Konsument myli głębokość ANC z głośnością muzyki</td></tr>
+<tr><td>Budowa</td><td>Nauszne zamknięte / Dokanałowe True Wireless / Douszne otwarte</td><td>T1</td><td><strong>fundament routingu.</strong> Nauszne = lepsze ANC na niskie tony + komfort godzinami. Dokanałowe TWS = przenośność + sport. Douszne otwarte = ANC symboliczne</td></tr>
+<tr><td>Przetwornik</td><td>30–40 mm dynamiczny / Planarny (audiofil) / BA+dynamic (dokanałowe)</td><td>T1</td><td>planarny/magnetostatyczny = detal dla audiofila. W dokanałowych układ BA+dynamik dzieli pasmo. Nie decyduje sam — DSP i tuning ważą więcej</td></tr>
+<tr><td>Kodeki audio</td><td>SBC / AAC / LDAC / aptX HD / aptX Adaptive / LC3</td><td>T1</td><td>LDAC/aptX Adaptive = hi-res dla Androida; AAC = optimum dla iPhone (LDAC bezużyteczny na iOS). SBC = podłoga jakości. To zależność telefon↔słuchawka, nie sam parametr</td></tr>
+<tr><td>Mikrofon + ENC</td><td>2 mikrofony / 4+ mikrofony + ENC + AI noise reduction</td><td>T2</td><td>ENC czyści TWÓJ głos dla rozmówcy (inne niż ANC, które czyści dźwięk DLA ciebie). Klucz dla <code>cep_meetings_online</code>. Konsument myli ENC z ANC</td></tr>
+<tr><td>Czas baterii</td><td>6–12h (dokanałowe + etui 20–30h) / 20–60h (nauszne)</td><td>T2</td><td>z włączonym ANC realnie −20–30% względem deklaracji. Nauszne wygrywają na jednym ładowaniu; TWS nadrabiają etui</td></tr>
+<tr><td>Tryb przezroczystości</td><td>Tak / Nie / Regulowany / Adaptive (Auto)</td><td>T2</td><td>wpuszcza otoczenie bez zdejmowania (kasa, ogłoszenia, rozmowa). Bezpieczeństwo na ulicy/rowerze. Adaptive przełącza sam ANC↔ambient</td></tr>
+<tr><td>Aplikacja / EQ</td><td>Brak / Podstawowy / Zaawansowany EQ + presety</td><td>T2</td><td>app = EQ, siła ANC, aktualizacje firmware, personalizacja. Brak app = zamrożone brzmienie fabryczne. Ważne przy doborze pod jakość dźwięku (atrybut, nie CEP)</td></tr>
+<tr><td>Multipoint</td><td>Brak / 2 urządzenia / 3+ urządzenia</td><td>T2</td><td>jednoczesne połączenie z laptopem i telefonem — połączenie wchodzi bez przełączania. Cichy killer-feature pracy zdalnej</td></tr>
+<tr><td>Kontrola dotykowa</td><td>Przyciski fizyczne / Panel dotykowy / Sensor nacisku</td><td>T3</td><td>panel dotykowy = przypadkowe dotknięcia (czapka, mokra ręka). Sensor nacisku (pchełki) i fizyczne przyciski pewniejsze w ruchu/sporcie</td></tr>
+<tr><td>Waga</td><td>150–250 g (dokanałowe z etui) / 200–330 g (nauszne)</td><td>T3</td><td>powyżej ~300 g nauszne uwierają po 2–3h — realny czynnik dla <code>cep_samolot</code>. TWS liczą się w gramach na ucho</td></tr>
+<tr><td>Kodek gamingowy</td><td>aptX Low Latency / LE Audio / Brak</td><td>T3</td><td>opóźnienie <40 ms = dźwięk zsynchronizowany z obrazem. Bluetooth klasyczny bez trybu = zauważalny lag w grach/FPS</td></tr>
+<tr><td>Składanie/etui</td><td>Składane / Nieskładane / Sztywne etui</td><td>T3</td><td>składane + sztywne etui = realna przenośność do plecaka/podróży. Nieskładane nauszne = kłopot w bagażu</td></tr>
+<tr><td>Wodoszczelność</td><td>Brak / IPX4 (pot) / IPX5 / IPX7</td><td>T3</td><td>IPX4 minimum na pot do sportu; nauszne premium często BEZ IP (klient sportowy tego nie sprawdza i się rozczarowuje)</td></tr>
+</table>
+
+<p>> Analiza KCF fundamentu (źródło atrybutów): pola <code>kcf</code> z <code>sluchawki_anc_v2.json</code>. <strong>T1 = 5 (routing + jakość wyciszenia i dźwięku), T2 = 5 (użytkowe: mikrofon, bateria, ambient, EQ, multipoint), T3 = 5 (sytuacyjne: sterowanie, waga, gaming, przenośność, IP).</strong></p>
+
+<h2>5. Typowy Produkt</h2>
+<table>
+<tr><th>Cecha</th><th>Norma kategorii</th><th>Red flag</th></tr>
+<tr><td>Budowa</td><td>nauszne zamknięte LUB dokanałowe TWS w etui</td><td>douszne otwarte reklamowane jako „z ANC" — ANC w otwartej konstrukcji jest symboliczne</td></tr>
+<tr><td>Typ ANC</td><td>hybrydowe (feedforward + feedback)</td><td>tylko feedforward w cenie „premium" = łapie mniej niskich tonów</td></tr>
+<tr><td>Głębokość ANC</td><td>35–45 dB w paśmie niskim</td><td>brak podanego dB / „redukcja hałasu" bez liczby = marketing, nie parametr</td></tr>
+<tr><td>Tryb przezroczystości</td><td>obecny, przełączany z ANC</td><td>brak trybu ambient = zdejmujesz słuchawki przy każdej rozmowie/kasie</td></tr>
+<tr><td>Bateria (nauszne)</td><td>20–40h z ANC</td><td><15h z ANC = ładowanie co 2 dni</td></tr>
+<tr><td>Bateria (TWS)</td><td>5–8h pchełki + 20–30h etui</td><td>pchełki <4h z ANC = nie przetrwają lotu/dnia pracy</td></tr>
+<tr><td>Kodeki</td><td>min. AAC; LDAC/aptX dla Androida</td><td>tylko SBC w cenie >400 zł = kompresja słyszalna</td></tr>
+<tr><td>Multipoint</td><td>2 urządzenia</td><td>brak multipoint w słuchawkach „do pracy" = ręczne przełączanie laptop↔telefon</td></tr>
+<tr><td>Etui / składanie (nauszne)</td><td>sztywne etui + zawiasy składane</td><td>brak etui przy cenie 1500+ zł = ryzyko uszkodzenia w plecaku</td></tr>
+</table>
+
+<h2>6. Tier Specs</h2>
+<p><strong>Tier-1 Universal</strong> (musi być w PDP każdych słuchawek ANC):</p>
+<ul><li>Budowa — format: <code>nauszne zamknięte / dokanałowe TWS / douszne otwarte</code></li><li>Typ ANC — format: <code>hybrydowe / adaptacyjne / feedforward</code></li><li>Głębokość ANC — format: <code>do X dB</code> (z pasmem/kontekstem)</li><li>Czas pracy z ANC — format: <code>X h (nauszne)</code> lub <code>X h + Yh etui (TWS)</code></li><li>Kodeki — format: <code>SBC / AAC / LDAC / aptX Adaptive / LC3</code></li></ul>
+
+<p><strong>Tier-2 Differentiator:</strong></p>
+<ul><li>Mikrofon + ENC — format: <code>X mikrofonów + ENC / AI noise reduction TAK/NIE</code></li><li>Tryb przezroczystości — format: <code>TAK (regulowany / adaptive) / NIE</code></li><li>Multipoint — format: <code>2 / 3+ urządzenia</code></li><li>Aplikacja + EQ — format: <code>zaawansowany EQ + presety / podstawowy / brak</code></li></ul>
+
+<p><strong>Tier-3 / CEP-Specific:</strong></p>
+<ul><li>Wodoszczelność <code>IPX4+</code> — <code>cep_sport</code></li><li>Kodek / tryb low-latency <code><40 ms</code> — <code>cep_gaming</code></li><li>Waga <code><300 g</code> + składanie + sztywne etui — <code>cep_samolot</code>, <code>cep_dojazdy</code></li><li>Sensor nacisku / przyciski fizyczne — <code>cep_sport</code> (pewność sterowania w ruchu)</li></ul>
+
+<h2>7. 💰 Tier Pricing — PLN, Polska 2026</h2>
+
+<table>
+<tr><th>Tier</th><th>Widełki (PLN)</th><th>Co dostajesz (parametry / KCF)</th><th>Typowe modele</th></tr>
+<tr><td><strong>Budżet</strong></td><td>150–400 zł</td><td>Wejście w ANC. Wyciszenie feedforward/hybrydowe do ~30–35 dB — łapie dudnienie metra i szum, ale mniej głosów. Nauszne albo proste TWS. Kodeki SBC/AAC (LDAC czasem w górnym budżecie). App podstawowa lub brak EQ. Multipoint bywa. Bateria nauszne 30–40h (tanio, bo prosty układ), TWS 5–7h + etui. Tryb przezroczystości podstawowy. Plastik, brak IP lub IPX4. <strong>To realna alternatywa dla „słuchawek bez ANC" — demokratyzacja.</strong></td><td>Soundcore (Anker) Life Q35 / Space Q45, Edifier W820NB / WH950NB, QCY H3 / H4, Nothing Ear (a) [web-check ceny]</td></tr>
+<tr><td><strong>Średni</strong></td><td>400–900 zł</td><td>ANC hybrydowe realne 35–40 dB. Nauszne z komfortem na godziny LUB dobre TWS z etui. LDAC/aptX Adaptive dla Androida. Zaawansowany EQ w app + regulacja siły ANC. Multipoint 2 urządzenia. Tryb przezroczystości regulowany. Bateria nauszne 30–60h, TWS 6–8h + 24–30h etui. IPX4 w modelach sportowych. To „słodki punkt" ceny do jakości.</td><td>Sony WH-CH720N, Soundcore Space One Pro, Sennheiser Accentum Plus, Nothing Headphone (1), Sony WF-C710N [web-check ceny]</td></tr>
+<tr><td><strong>Premium</strong></td><td>1000–1800 zł</td><td>Flagowe ANC ~40–45 dB, adaptacyjne (dopasowuje siłę do otoczenia i szczelności). Najlepszy tuning + hi-res (LDAC / aptX Adaptive / LC3). Mikrofony 4+ z AI ENC do rozmów. Multipoint 3+. App z pełnym EQ, profilami, aktualizacjami. Bateria 30h (nauszne) / 8h + etui (TWS). Sztywne etui, składanie, materiały premium. Gwarancja 24 mies.</td><td>Sony WH-1000XM5, Bose QuietComfort Ultra, Sennheiser Momentum 4, Sony WF-1000XM5, Bose QC Ultra Earbuds, AirPods Pro 2 [web-check ceny]</td></tr>
+<tr><td><strong>Flagowiec / prestiż</strong></td><td>1800–2800 zł</td><td>Najwyższa półka + warstwa statusowa. Topowe ANC + dźwięk referencyjny, aluminiowa/skórzana obudowa, rozpoznawalny design (logo się liczy — <code>cep_prestiz_marka</code>). Najnowsze generacje. Ekosystem (Apple: adaptive audio, spatial; Sony XM6 [web-check]). Cena zawiera „widać, że mam".</td><td>Apple AirPods Max (USB-C), Sony WH-1000XM6, Bowers & Wilkins Px8, Focal Bathys [web-check ceny]</td></tr>
+</table>
+
+<p>> <strong>Oś #1 (budżet ↔ realne wyciszenie):</strong> dla wchodzącego pierwszy raz kluczowe pytanie to „ile dopłacam i o ile ciszej będzie". Poniżej 400 zł = wejście w ANC (dudnienie tak, głosy słabiej); 400–900 zł = realne wyciszenie open space; 1000+ zł = flagowe ANC + hi-res + rozmowy; 1800+ zł = prestiż i ekosystem. Różnica 300 → 1500 zł to NIE „dwa razy ciszej", tylko szersze pasmo tłumienia (głosy, nie tylko dudnienie), lepsze rozmowy i komfort godzinami — i to trzeba w treści powiedzieć wprost, bo klient tego nie widzi z samego dB.</p>
+
+<h2>8. Consumer Decision Tree</h2>
+<pre><code>[L1 — Routing: jaka budowa słuchawek?]
+
+Q1. Gdzie głównie będziesz ich używać?
+  consumer_language: &quot;Głównie przy biurku / w podróży&quot; vs &quot;W ruchu, do plecaka, na trening&quot;
+  → Biurko / open space / samolot, komfort godzinami → [Nauszne zamknięte] → Q1-L2-nauszne
+  → W ruchu / do kieszeni / sport → [Dokanałowe TWS] → Q1-L2-tws
+  → Chcę słyszeć otoczenie (rower/ulica) → [Douszne otwarte] → ANC symboliczne, ostrzeż
+
+Q2. (jeśli niejednoznaczne) Ile godzin naraz na uszach?
+  → 2–8h ciągiem (praca, lot) → nauszne (komfort + bateria)
+  → Krótkie sesje, mobilność → TWS
+
+[L2 — Nauszne zamknięte]
+Q1. Priorytet: maksymalne wyciszenie czy jakość dźwięku?
+  consumer_language: &quot;Chcę odciąć open space&quot; vs &quot;Słucham dużo muzyki, liczy się brzmienie&quot;
+  → Wyciszenie (praca/lot) → ANC hybrydowe/adaptacyjne ~40–45 dB (Sony XM5, Bose QC Ultra)
+  → Dźwięk → mocny tuning + hi-res + EQ (Sennheiser Momentum 4, planar dla audiofila)
+  → Oba → flagowiec premium
+
+Q2. Dużo rozmów / callów?
+  → TAK → mikrofony 4+ z AI ENC (klucz: cep_meetings_online)
+  → NIE → mikrofon drugorzędny
+
+Q3. Android czy iPhone?
+  → Android → wymagaj LDAC / aptX Adaptive
+  → iPhone → AAC wystarczy (LDAC bezużyteczny na iOS); ekosystem → AirPods Max
+
+Q4. Praca na 2 urządzeniach naraz?
+  → TAK → multipoint 2–3 urządzenia (obowiązkowo)
+  → NIE → pomijalne
+
+Q5. Budżet?
+  → 150–400 zł → wejście (Soundcore, Edifier, QCY)
+  → 400–900 zł → realne open-space (Sony CH720N, Space One Pro, Accentum)
+  → 1000–1800 zł → flagowce (Sony XM5, Bose QC Ultra, Momentum 4)
+  → 1800+ zł → prestiż/ekosystem (AirPods Max, Sony XM6)
+
+mandatory_in_PDP: budowa + typ ANC + głębokość ANC [dB] + czas z ANC [h] + kodeki + multipoint TAK/NIE
+
+[L2 — Dokanałowe True Wireless]
+Q1. Główne zastosowanie?
+  consumer_language: &quot;Do metra i muzyki&quot; vs &quot;Do biegania i siłowni&quot;
+  → Dojazdy/muzyka → ANC hybrydowe + kodeki + komfort dopasowania (Sony WF-1000XM5, AirPods Pro 2)
+  → Sport → IPX4+ + zaczep/pewne dopasowanie + sensor nacisku (nie panel dotykowy)
+
+Q2. Ekosystem telefonu?
+  consumer_language: &quot;Mam iPhone&quot; vs &quot;Mam Androida/Samsunga&quot;
+  → iPhone → AirPods Pro 2 (adaptive audio, integracja) lub AAC-first
+  → Android/Samsung → LDAC / aptX Adaptive; integracja Galaxy Buds
+
+Q3. Rozmowy w hałasie?
+  → TAK → 4+ mikrofony + ENC
+  → NIE → drugorzędne
+
+Q4. Ile na jednym ładowaniu pchełek?
+  → Krótkie sesje → 5–6h wystarczy
+  → Lot / długi dzień → celuj w 8h + duże etui
+
+mandatory_in_PDP: budowa (dokanałowe TWS) + typ ANC + IP [IPX_] + czas pchełki [h] + czas etui [h] + kodeki
+
+[L2 — Gaming (przecięcie budowy)]
+Q1. Opóźnienie krytyczne?
+  → TAK → tryb low-latency / LE Audio &lt;40 ms (Bluetooth klasyczny = lag)
+  → NIE → dowolne ANC
+
+Q2. Rozmowy w grze?
+  → TAK → mikrofon + ENC
+
+mandatory_in_PDP: kodek/tryb gamingowy + opóźnienie [ms] + mikrofon</code></pre>
+
+<h2>9. Forbidden Patterns</h2>
+<table>
+<tr><th>❌ Zakazane</th><th>✅ Poprawne</th></tr>
+<tr><td>„krystalicznie czysty dźwięk"</td><td>„przetwornik 40 mm + LDAC (hi-res na Androidzie) — detal słyszalny w akustycznych nagraniach"</td></tr>
+<tr><td>„doskonała redukcja szumów"</td><td>„ANC hybrydowe do 42 dB [web-check] — tłumi dudnienie metra i większość głosów w open space"</td></tr>
+<tr><td>„cały dzień na baterii"</td><td>„30h z włączonym ANC — tydzień dojazdów bez ładowarki"</td></tr>
+<tr><td>„idealne do rozmów"</td><td>„4 mikrofony + AI ENC — rozmówca słyszy ciebie, nie kawiarnię w tle"</td></tr>
+<tr><td>„wygodne i lekkie"</td><td>„250 g + gąbki z pianki pamięciowej — bez ucisku po 4h lotu"</td></tr>
+<tr><td>„kompatybilne z każdym telefonem"</td><td>„multipoint na 2 urządzenia — laptop i telefon naraz, połączenie wchodzi bez przełączania"</td></tr>
+</table>
+
+<h2>10. Ścieżki percepcji & persony</h2>
+
+<h4>ŚCIEŻKA A — Open space zabija skupienie</h4>
+<p><strong>Persona:</strong> Kasia, 29 lat, UX designer, siedzi w 40-osobowym open space, sprzedaż gada za plecami, nie może wejść w flow — koleżanka pracuje w Sony i „w ogóle nie słyszy biura"</p>
+<p><strong>CEP:</strong> <code>cep_open_space</code></p>
+<p><strong>Trigger:</strong> „Muszę odciąć open space — chcę wejść w skupienie i nie słyszeć gadania obok"</p>
+<p><strong>Długość procesu:</strong> 1–2 tygodnie</p>
+
+<table>
+<tr><th>Stan</th><th>Nazwa</th><th>Pytania w głowie</th><th>Intencja</th><th>Typ treści</th></tr>
+<tr><td>A1</td><td>Rozpoznanie problemu</td><td>„Czy słuchawki z ANC naprawdę wyciszą ludzi mówiących obok, czy tylko szum klimatyzacji?"</td><td>informacyjna</td><td>artykuł „co ANC realnie wycisza (a czego nie)"</td></tr>
+<tr><td>A2</td><td>Nauka kategorii</td><td>„Nauszne czy dokanałowe do biurka? Co znaczy 40 dB? Hybrydowe vs zwykłe ANC?"</td><td>informacyjna</td><td>poradnik „ANC do open space — jak czytać parametry"</td></tr>
+<tr><td>A3</td><td>Preselekcja</td><td>„Do 8h przy biurku — nauszne będą wygodniejsze i wyciszą lepiej niż pchełki?"</td><td>komercyjna</td><td>comparison nauszne vs TWS do pracy</td></tr>
+<tr><td>A4</td><td>Porównywanie</td><td>„Sony WH-1000XM5 vs Bose QC Ultra — które lepiej tłumią głosy ludzi?"</td><td>komercyjna</td><td>head-to-head flagowce ANC</td></tr>
+<tr><td>A5</td><td>Zakup</td><td>„Gdzie kupię z możliwością zwrotu, gdyby uwierały po całym dniu?"</td><td>transakcyjna</td><td>PDP + polityka zwrotów</td></tr>
+</table>
+
+<p><strong>Pytania ścieżkowe CEP <code>cep_open_space</code>:</strong></p>
+<ul><li>„Jakie słuchawki z ANC najlepiej wyciszają rozmowy ludzi w open space?"</li><li>„Nauszne czy dokanałowe do pracy przy biurku 8 godzin?"</li><li>„Czy ANC wycisza głosy, czy tylko niskie dźwięki jak klimatyzacja?"</li><li>„Sony WH-1000XM5 vs Bose QuietComfort Ultra do open space?"</li><li>„Czy w słuchawkach z ANC można pracować cały dzień bez bólu głowy?"</li></ul>
+
+<hr>
+
+<h4>ŚCIEŻKA B — Cisza w dojazdach</h4>
+<p><strong>Persona:</strong> Michał, 34 lata, analityk, codziennie 40 min metra w każdą stronę, dudnienie kół nie do zniesienia, tanie słuchawki nic nie dają</p>
+<p><strong>CEP:</strong> <code>cep_dojazdy</code></p>
+<p><strong>Trigger:</strong> „Codzienne metro mnie wykańcza — chcę odciąć hałas kół i posłuchać podcastów"</p>
+<p><strong>Długość procesu:</strong> kilka dni – 1 tydzień</p>
+
+<table>
+<tr><th>Stan</th><th>Nazwa</th><th>Pytania w głowie</th><th>Intencja</th><th>Typ treści</th></tr>
+<tr><td>B1</td><td>Rozpoznanie</td><td>„Czy ANC poradzi sobie z dudnieniem metra? Czy warto dopłacać?"</td><td>informacyjna</td><td>artykuł „ANC w komunikacji miejskiej"</td></tr>
+<tr><td>B2</td><td>Preselekcja</td><td>„Dokanałowe do kieszeni czy składane nauszne do plecaka?"</td><td>komercyjna</td><td>comparison przenośność TWS vs nauszne składane</td></tr>
+<tr><td>B3</td><td>Porównywanie</td><td>„Sony WF-1000XM5 vs AirPods Pro 2 do metra — które ciszej?"</td><td>komercyjna</td><td>head-to-head TWS</td></tr>
+<tr><td>B4</td><td>Budżet vs efekt</td><td>„Czy Soundcore za 350 zł wyciszy metro tak jak Sony za 1100?"</td><td>komercyjna</td><td>artykuł „ile ANC za ile złotych"</td></tr>
+<tr><td>B5</td><td>Zakup</td><td>„Które mają tryb przezroczystości, żeby usłyszeć ogłoszenia o stacji?"</td><td>transakcyjna</td><td>PDP + FAQ tryb ambient</td></tr>
+</table>
+
+<p><strong>Pytania ścieżkowe CEP <code>cep_dojazdy</code>:</strong></p>
+<ul><li>„Jakie słuchawki z ANC najlepiej wyciszają metro i autobus?"</li><li>„Dokanałowe czy składane nauszne do codziennych dojazdów?"</li><li>„Czy tanie słuchawki z ANC (do 400 zł) wyciszą hałas metra?"</li><li>„Sony WF-1000XM5 czy AirPods Pro 2 do komunikacji miejskiej?"</li><li>„Czy w słuchawkach z ANC usłyszę zapowiedź stacji dzięki trybowi przezroczystości?"</li></ul>
+
+<hr>
+
+<h4>ŚCIEŻKA C — Callowy zawodowiec (praca zdalna)</h4>
+<p><strong>Persona:</strong> Ola, 38 lat, account managerka, 6 Zoomów dziennie z domu, remont u sąsiada, boi się że klient słyszy wiertarkę i płacz dziecka</p>
+<p><strong>CEP:</strong> <code>cep_meetings_online</code> (+ <code>cep_home_office</code>)</p>
+<p><strong>Trigger:</strong> „Muszę brzmieć profesjonalnie na callach mimo hałasu w domu — i sama się skupić"</p>
+<p><strong>Długość procesu:</strong> 1–2 tygodnie</p>
+
+<table>
+<tr><th>Stan</th><th>Nazwa</th><th>Pytania w głowie</th><th>Intencja</th><th>Typ treści</th></tr>
+<tr><td>C1</td><td>Rozpoznanie</td><td>„ANC wycisza to co JA słyszę — ale czy klient przestanie słyszeć wiertarkę w tle MOJEGO głosu?"</td><td>informacyjna</td><td>artykuł „ANC vs ENC — różnica dla rozmów"</td></tr>
+<tr><td>C2</td><td>Nauka kategorii</td><td>„Co to ENC? Ile mikrofonów potrzeba? Czy AI redukcja szumu działa?"</td><td>informacyjna</td><td>poradnik „słuchawki do callów — mikrofon się liczy, nie ANC"</td></tr>
+<tr><td>C3</td><td>Preselekcja</td><td>„Nauszne z boomem czy TWS wystarczą do 6h rozmów dziennie?"</td><td>komercyjna</td><td>comparison mikrofon nauszne vs TWS</td></tr>
+<tr><td>C4</td><td>Porównywanie</td><td>„Które słuchawki mają najlepszy mikrofon w hałasie i multipoint laptop+telefon?"</td><td>komercyjna</td><td>ranking mikrofon + multipoint</td></tr>
+<tr><td>C5</td><td>Zakup</td><td>„Czy działają z Teams i Zoom bez dongli? Multipoint na firmowy laptop i prywatny telefon?"</td><td>transakcyjna</td><td>PDP + FAQ kompatybilność</td></tr>
+</table>
+
+<p><strong>Pytania ścieżkowe CEP <code>cep_meetings_online</code>:</strong></p>
+<ul><li>„Jakie słuchawki z ANC mają najlepszy mikrofon do rozmów w hałasie?"</li><li>„Czym różni się ANC od ENC w słuchawkach do pracy zdalnej?"</li><li>„Czy klient na Zoomie usłyszy hałas w tle, jeśli mam słuchawki z ENC?"</li><li>„Które słuchawki obsługują multipoint — laptop i telefon jednocześnie?"</li><li>„Najlepsze słuchawki do Teams i Zoom z redukcją szumu w mikrofonie?"</li></ul>
+
+<hr>
+
+<h4>ŚCIEŻKA D — Podróżnik służbowy (samolot)</h4>
+<p><strong>Persona:</strong> Tomasz, 45 lat, dyrektor sprzedaży, lata co 2 tygodnie, 4h turbin go wykańcza, ma stare Bose ale bateria pada w połowie lotu</p>
+<p><strong>CEP:</strong> <code>cep_samolot</code> (+ <code>cep_wymiana</code>)</p>
+<p><strong>Trigger:</strong> „Latam co 2 tygodnie — chcę odciąć turbiny na cały lot i mieć spokój, nie ładować w połowie"</p>
+<p><strong>Długość procesu:</strong> 1–2 tygodnie</p>
+
+<table>
+<tr><th>Stan</th><th>Nazwa</th><th>Pytania w głowie</th><th>Intencja</th><th>Typ treści</th></tr>
+<tr><td>D1</td><td>Rozpoznanie</td><td>„Które ANC najlepiej tłumią niski szum turbiny? Czy wszystkie tak samo?"</td><td>informacyjna</td><td>artykuł „ANC do samolotu — pasmo niskie ma znaczenie"</td></tr>
+<tr><td>D2</td><td>Preselekcja</td><td>„Nauszne dają lepsze wyciszenie i komfort na 4h niż pchełki?"</td><td>komercyjna</td><td>comparison nauszne vs TWS na długi lot</td></tr>
+<tr><td>D3</td><td>Porównywanie</td><td>„Bose QC Ultra vs Sony XM5 na lot — komfort i bateria?"</td><td>komercyjna</td><td>head-to-head podróżny</td></tr>
+<tr><td>D4</td><td>Praktyka lotu</td><td>„Czy się składają do bagażu podręcznego? Adapter do gniazda w fotelu? Ile realnie baterii z ANC?"</td><td>komercyjna</td><td>FAQ podróżne + składanie/etui</td></tr>
+<tr><td>D5</td><td>Zakup</td><td>„Sztywne etui w zestawie? Gwarancja gdyby zawias pękł?"</td><td>transakcyjna</td><td>PDP + zawartość zestawu</td></tr>
+</table>
+
+<p><strong>Pytania ścieżkowe CEP <code>cep_samolot</code>:</strong></p>
+<ul><li>„Najlepsze słuchawki z ANC do samolotu na długie loty?"</li><li>„Bose QuietComfort Ultra czy Sony WH-1000XM5 do podróży?"</li><li>„Które słuchawki nauszne są najwygodniejsze na 4–8 godzin?"</li><li>„Ile realnie trzyma bateria z włączonym ANC podczas lotu?"</li><li>„Czy słuchawki składają się do bagażu podręcznego i mają sztywne etui?"</li></ul>
+
+<hr>
+
+<h4>ŚCIEŻKA E — Sport bez wypadania i potu</h4>
+<p><strong>Persona:</strong> Paweł, 31 lat, zaczął biegać i chodzić na siłownię, tanie pchełki wypadają na biegu i padły od potu, chce ANC żeby odciąć hałas siłowni i muzykę do tempa</p>
+<p><strong>CEP:</strong> <code>cep_sport</code></p>
+<p><strong>Trigger:</strong> „Do biegania i siłowni — nie mają wypadać ani odpaść od potu, a ANC odcina zgiełk siłowni"</p>
+<p><strong>Długość procesu:</strong> kilka dni – 1 tydzień</p>
+
+<table>
+<tr><th>Stan</th><th>Nazwa</th><th>Pytania w głowie</th><th>Intencja</th><th>Typ treści</th></tr>
+<tr><td>E1</td><td>Rozpoznanie</td><td>„Czy dokanałowe z ANC utrzymają się na biegu i zniosą pot? Co znaczy IPX4?"</td><td>informacyjna</td><td>artykuł „słuchawki ANC do sportu — dopasowanie i IP"</td></tr>
+<tr><td>E2</td><td>Preselekcja</td><td>„Pchełki z zaczepem czy douszne otwarte? Czy ANC ma sens na treningu?"</td><td>komercyjna</td><td>comparison TWS sportowe vs otwarte</td></tr>
+<tr><td>E3</td><td>Porównywanie</td><td>„Które sportowe TWS z ANC mają najpewniejsze dopasowanie i sterowanie w ruchu?"</td><td>komercyjna</td><td>head-to-head TWS sport</td></tr>
+<tr><td>E4</td><td>Sterowanie/pot</td><td>„Czy panel dotykowy działa mokrą ręką, czy lepszy sensor nacisku / przycisk?"</td><td>komercyjna</td><td>FAQ kontrola + wodoszczelność</td></tr>
+<tr><td>E5</td><td>Zakup</td><td>„Które mają IPX5+ i gwarancję obejmującą uszkodzenie od potu?"</td><td>transakcyjna</td><td>PDP + FAQ IP/gwarancja</td></tr>
+</table>
+
+<p><strong>Pytania ścieżkowe CEP <code>cep_sport</code>:</strong></p>
+<ul><li>„Jakie słuchawki dokanałowe z ANC do biegania, żeby nie wypadały?"</li><li>„Czy ANC ma sens na siłowni, czy lepszy tryb przezroczystości?"</li><li>„Które sportowe słuchawki z ANC są wodoodporne IPX4/IPX5 na pot?"</li><li>„Czy panel dotykowy działa mokrą/spoconą ręką na treningu?"</li><li>„Najlepsze TWS z ANC i pewnym dopasowaniem do biegania w 2026?"</li></ul>
+
+<hr>
+
+<h4>ŚCIEŻKA F — Wejście w ANC za mały budżet</h4>
+<p><strong>Persona:</strong> Natalia, 24 lata, studentka, nigdy nie miała ANC, na Reddicie przeczytała że „Soundcore za 300 zł wycisza jak Sony", nie chce wydać fortuny na pierwsze</p>
+<p><strong>CEP:</strong> <code>cep_demokratyzacja</code></p>
+<p><strong>Trigger:</strong> „Słyszałam że dobre ANC to teraz 200–300 zł — chcę sprawdzić bez wydawania majątku"</p>
+<p><strong>Długość procesu:</strong> kilka dni – 1 tydzień</p>
+
+<table>
+<tr><th>Stan</th><th>Nazwa</th><th>Pytania w głowie</th><th>Intencja</th><th>Typ treści</th></tr>
+<tr><td>F1</td><td>Rozpoznanie kategorii</td><td>„Czy tanie ANC ma sens, czy to ściema? Od czego zacząć?"</td><td>informacyjna</td><td>artykuł „ANC do 400 zł — co realnie dostajesz"</td></tr>
+<tr><td>F2</td><td>Nauka kategorii</td><td>„Co odróżnia budżet od Sony za 1500? Na czym oszczędzają?"</td><td>informacyjna</td><td>comparison budżet vs flagowiec (co tracisz)</td></tr>
+<tr><td>F3</td><td>Preselekcja</td><td>„Do uczelni i tramwaju — nauszne czy pchełki, w tej cenie?"</td><td>komercyjna</td><td>ranking budżet nauszne vs TWS</td></tr>
+<tr><td>F4</td><td>Porównywanie</td><td>„Soundcore Space One vs Edifier WH950NB vs QCY — które najlepsze do 400 zł?"</td><td>komercyjna</td><td>head-to-head budżet</td></tr>
+<tr><td>F5</td><td>Zakup</td><td>„Gdzie kupić najtaniej z gwarancją i zwrotem?"</td><td>transakcyjna</td><td>PDP + porównywarka cen</td></tr>
+</table>
+
+<p><strong>Pytania ścieżkowe CEP <code>cep_demokratyzacja</code>:</strong></p>
+<ul><li>„Najlepsze słuchawki z ANC do 400 zł w 2026?"</li><li>„Czy tanie ANC (Soundcore, Edifier, QCY) naprawdę działa?"</li><li>„Co dostaję za 1500 zł w Sony, czego nie ma budżet za 300?"</li><li>„Soundcore Space One vs Edifier WH950NB — które lepiej wyciszają?"</li><li>„Czy warto dopłacić do droższych słuchawek ANC dla studenta?"</li></ul>
+
+<hr>
+
+<h4>ŚCIEŻKA G — Status na uszach (prestiż marki)</h4>
+<p><strong>Persona:</strong> Kuba, 27 lat, marketer, znajomi noszą AirPods Max i Sony, chce „w końcu coś porządnego, widocznego" — logo się liczy, ale nie chce przepłacić za sam brand</p>
+<p><strong>CEP:</strong> <code>cep_prestiz_marka</code> (+ <code>cep_okazja</code>)</p>
+<p><strong>Trigger:</strong> „Wszyscy mają Sony/AirPods — chcę w końcu porządne, widoczne słuchawki, najlepiej w promce"</p>
+<p><strong>Długość procesu:</strong> 1–3 tygodnie (czeka na okazję)</p>
+
+<table>
+<tr><th>Stan</th><th>Nazwa</th><th>Pytania w głowie</th><th>Intencja</th><th>Typ treści</th></tr>
+<tr><td>G1</td><td>Aspiracja</td><td>„Które słuchawki są teraz 'te właściwe' — co noszą ludzie, na których patrzę?"</td><td>informacyjna</td><td>artykuł „flagowce ANC 2026 — co się nosi"</td></tr>
+<tr><td>G2</td><td>Uzasadnienie ceny</td><td>„Czy AirPods Max są warte 2500 zł, czy płacę za logo?"</td><td>komercyjna</td><td>artykuł „za co realnie płacisz w premium ANC"</td></tr>
+<tr><td>G3</td><td>Porównywanie</td><td>„AirPods Max vs Sony XM6 vs Bose QC Ultra — prestiż i jakość?"</td><td>komercyjna</td><td>head-to-head flagowce prestiżowe</td></tr>
+<tr><td>G4</td><td>Okazja</td><td>„Kiedy XM5 spadnie -40%? Czy czekać na Black Friday?"</td><td>komercyjna</td><td>tracker cen + kalendarz promocji</td></tr>
+<tr><td>G5</td><td>Zakup</td><td>„Gdzie oryginał z gwarancją (nie podróbka) i ładne opakowanie?"</td><td>transakcyjna</td><td>PDP + autoryzowany sprzedawca</td></tr>
+</table>
+
+<p><strong>Pytania ścieżkowe CEP <code>cep_prestiz_marka</code>:</strong></p>
+<ul><li>„Które słuchawki z ANC są najbardziej prestiżowe w 2026?"</li><li>„Czy AirPods Max są warte swojej ceny, czy to płacenie za logo?"</li><li>„Apple AirPods Max vs Sony WH-1000XM6 vs Bose QC Ultra?"</li><li>„Kiedy Sony WH-1000XM5 najtaniej — Black Friday czy premiera XM6?"</li><li>„Gdzie kupić oryginalne słuchawki premium z gwarancją, nie podróbkę?"</li></ul>
+
+<hr>
+
+<h2>11. Cross-Category Triggers</h2>
+<table>
+<tr><th>Kategoria źródłowa</th><th>Trigger zakupu</th><th>CEP który aktywuje</th><th>Fraza wejściowa w AI</th></tr>
+<tr><td>Nowy telefon (iPhone / flagowy Android)</td><td>„Kupiłem iPhone/Samsunga — chcę słuchawki które grają z ekosystemem."</td><td><code>cep_prestiz_marka</code> / (brand loyalty)</td><td>„jakie słuchawki ANC najlepiej działają z iPhone 17 / Galaxy S26?"</td></tr>
+<tr><td>Nowa praca / powrót do biura (open space)</td><td>„Wróciliśmy do biura open space — nie da się pracować w hałasie."</td><td><code>cep_open_space</code></td><td>„słuchawki z ANC do open space — co polecacie do pracy?"</td></tr>
+<tr><td>Bilet lotniczy / częste delegacje</td><td>„Zaczynam dużo latać służbowo — potrzebuję czegoś na turbiny."</td><td><code>cep_samolot</code></td><td>„najlepsze słuchawki nauszne z ANC do częstych lotów?"</td></tr>
+<tr><td>Karnet na siłownię / start biegania</td><td>„Zacząłem biegać — stare słuchawki wypadają i nie znoszą potu."</td><td><code>cep_sport</code></td><td>„słuchawki dokanałowe z ANC do biegania, wodoodporne IPX4?"</td></tr>
+<tr><td>Nowa konsola / PC gamingowy</td><td>„Złożyłem PC / kupiłem konsolę — potrzebuję dźwięku bez opóźnień."</td><td><code>cep_gaming</code></td><td>„słuchawki z ANC do gamingu z niskim opóźnieniem i mikrofonem?"</td></tr>
+</table>
+
+<h2>12. Tone of Voice for GEO</h2>
+<p><em>20 reguł pisania PDP/artykułów pod cytowalność w AI (Perplexity, AI Overviews, ChatGPT). Niezależna od Forbidden Patterns — tamto mówi czego NIE pisać, to mówi JAK pisać. Kategoria-specyficzne: słuchawki z ANC.</em></p>
+
+<p><strong>Struktura passage'a (cytowalność):</strong></p>
+<ol><li>Odpowiadaj na pytanie o budowę/typ w PIERWSZYM zdaniu — AI cytuje zdanie otwierające, nie konkluzję. Zły: „Biorąc pod uwagę wiele czynników, nauszne mogą być lepsze". Dobry: „Do pracy przy biurku 8h nauszne zamknięte wyciszają lepiej i są wygodniejsze niż dokanałowe."</li><li>Jeden akapit = jedna budowa lub jedna cecha. Nie łącz nausznych i dokanałowych w jednym akapicie — AI ich nie rozróżni.</li><li>Głębokość ANC zawsze z kontekstem: nie „40 dB" lecz „do 40 dB w paśmie niskim — tłumi dudnienie metra i turbiny; głosy ludzi tłumi słabiej (to fizyka ANC, nie wada modelu)".</li><li>Czas baterii zawsze z sytuacją i realizmem: nie „30h" lecz „30h z włączonym ANC (deklaracja producenta; realnie ~24h) — tydzień dojazdów bez ładowarki".</li><li>Kodeki zawsze z zależnością od telefonu: nie „LDAC" lecz „LDAC — hi-res na Androidzie; na iPhonie działa AAC (LDAC jest wtedy nieaktywny)".</li></ol>
+
+<p><strong>Język konsumenta (nie producenta):</strong></p>
+<ol><li>Używaj słów z pytań klienta: „wyciszy gadanie w open space", „nie wypadną na treningu", „słychać mnie na Zoomie", nie „adaptacyjny algorytm feedforward-feedback". Żargon tłumacz przy pierwszym użyciu.</li><li>Routing CEP jawny w treści: „Jeśli głównie latasz albo siedzisz w open space — wybierz nauszne. Jeśli w ruchu i do kieszeni — dokanałowe TWS." AI cytuje rekomendacje warunkowe.</li><li>Rozróżniaj ANC od ENC wprost: „ANC wycisza hałas DLA ciebie (słyszysz ciszę). ENC czyści TWÓJ głos DLA rozmówcy na callu. To dwie różne funkcje — do pracy zdalnej potrzebujesz obu."</li><li>Adresuj porównania które klient i tak zrobi: „Sony WH-1000XM5 vs Bose QuietComfort Ultra — Bose wygrywa w wyciszeniu głosów, Sony w aplikacji i kodeku LDAC dla Androida."</li><li>Mapuj tryb przezroczystości na sytuację: nie „tryb ambient" lecz „tryb przezroczystości — wpuszcza otoczenie bez zdejmowania słuchawek: usłyszysz kasjera, zapowiedź stacji, rozmowę."</li></ol>
+
+<p><strong>Struktura pod AI parsing:</strong></p>
+<ol><li>Tabele porównawcze dla kluczowych decyzji: nauszne vs dokanałowe, Sony vs Bose vs Apple — AI ekstrahuje tabele lepiej niż akapity z porównaniami.</li><li>Nagłówki = pytania klienta: „Czy ANC wycisza głosy ludzi?" zamiast „Charakterystyka redukcji szumów". AI indeksuje nagłówki jako potencjalne pytania.</li><li>Decision tree jawny w treści poradnikowej: „Krok 1: gdzie będziesz ich używać? Krok 2: Android czy iPhone? Krok 3: dużo rozmów?" — listy kroków cytowane przez AI Overviews.</li><li>FAQ z odpowiedziami jednozdaniowymi na końcu PDP: „Czy tanie ANC za 300 zł działa? Tak — wycisza dudnienie metra i szum, ale głosy ludzi tłumi słabiej niż flagowce za 1500 zł."</li><li>Jednostki spójne w całej kategorii: zawsze „dB" dla ANC, zawsze „h" dla baterii, zawsze „IPX4/5/7" dla wodoszczelności, zawsze „ms" dla opóźnienia.</li></ol>
+
+<p><strong>Zaufanie i kontekst:</strong></p>
+<ol><li>Podawaj „dla kogo NIE": „Douszne otwarte nie nadają się gdy zależy ci na wyciszeniu — ANC w otwartej konstrukcji jest symboliczne; do open space wybierz nauszne zamknięte." Buduje wiarygodność, AI to cytuje.</li><li>Realizm baterii i dB zamiast deklaracji: „Producent podaje 8h na pchełkach; z włączonym ANC realnie ~6h. Na 4h lot wystarczy, na cały dzień pracy — dolądujesz z etui." AI cytuje wartości z zastrzeżeniem.</li><li>Konkret producent+model+wersja zamiast „wiodące słuchawki ANC": „Sony WH-1000XM5" cytuje się; „popularne słuchawki z tej półki" nie.</li><li>Ostrzeżenie o ukrytych ograniczeniach wprost w PDP: „Uwaga: te nauszne premium nie mają certyfikatu IP — nie nadają się na trening/pot. Do sportu wybierz dokanałowe IPX4+." AI traktuje ostrzeżenia jako wartość dodaną.</li><li>Zależność telefon↔słuchawka jako argument doboru: „Na iPhonie LDAC jest nieaktywny — dopłata za LDAC ma sens tylko dla Androida. Dla iPhone'a liczy się jakość AAC i integracja (np. AirPods Pro 2)." Liczby i warunki = cytowalne twierdzenie.</li></ol>
+
+<hr>
+<p><em>Determ.: fundament (0/0b/2 CEP) + CEV/KCF z <code>sluchawki_anc_v2.json</code> (1:1) + ref wzorca ekspresów #V2. Sloty LLM wypełnione: CEV interp (3 garby: CEP/Preselekcja/Porównywanie) · KCF uwagi (15 atrybutów) · Tier Pricing (4 progi PLN 2026) · Decision Tree (routing budowa → nauszne/TWS/gaming) · ścieżki A–G (7) + pytania ścieżkowe per CEP · Tone 20 reguł. 2026-07-21.</em></p>
+
+<h2>13. Pole pytań</h2>
+
+<p><em>Pełne pole pytań generuje <strong>engine v5</strong> per <strong>CEP × stan świadomości × intent</strong> (15 CEP × 8 stanów Schwartz), z blokerami 🛡️ i wariantami sytuacyjnymi — analogicznie do wzorca ekspresów (264 pytań / 13 ścieżek). Nie wklejamy go tu w całości: żywe, pełne pole leży w <strong>mapie percepcji</strong> kategorii (<code>ROZSZYTE_sluchawki_anc_pole_pytan.md</code> / render w hubie), skąd zasila Discovery i cytowalną treść PDP. Powyżej (§10) siedzą pytania ścieżkowe reprezentatywne per CEP — próbka, nie komplet.</em></p>
+
+<p><strong>Schwartz — 8 wartości z wagami (dla kategorii ANC):</strong></p>
+
+<table>
+<tr><th>Wartość</th><th>Waga</th><th>Przejaw w kategorii</th></tr>
+<tr><td>Hedonizm</td><td><strong>H</strong></td><td>przyjemność dźwięku, cisza jako komfort, rytuał muzyki</td></tr>
+<tr><td>Stymulacja</td><td><strong>M</strong></td><td>nowe modele, kodeki, trendy (XM6, spatial audio)</td></tr>
+<tr><td>Przystosowanie</td><td><strong>H</strong></td><td>dobór do sytuacji (praca/podróż/sport), akceptacja w grupie</td></tr>
+<tr><td>Osiągnięcia</td><td><strong>M</strong></td><td>„wybrałem dobrze" — kompetencja techniczna, znajomość parametrów</td></tr>
+<tr><td>Bezpieczeństwo</td><td><strong>M</strong></td><td>sprawdzona marka, tryb przezroczystości na ulicy, ochrona słuchu</td></tr>
+<tr><td>Życzliwość</td><td><strong>L</strong></td><td>prezent (<code>cep_prezent</code>)</td></tr>
+<tr><td>Władza</td><td><strong>H</strong></td><td>status, prestiż marki, widoczne logo (<code>cep_prestiz_marka</code>)</td></tr>
+<tr><td>Uniwersalizm</td><td><strong>L</strong></td><td>ekologia/etyka — marginalne (moralność CEV = 0.10)</td></tr>
+</table>
+
+<p><strong>Interpretacja:</strong> Kategoria dominuje w: Hedonizm, Przystosowanie, Władza. Zakup napędzany przyjemnością (cisza + dźwięk), dopasowaniem do sytuacji użycia i statusem marki na uszach. Osiągnięcia/Bezpieczeństwo grają średnio (klient chce „wybrać dobrze" i „nie przepłacić za logo"). Uniwersalizm/Życzliwość marginalne — spójne z profilem CEV (moralność 0.10, aspiracja 0.65).</p>
+
+<hr>
+<p><em>Pole pytań: engine v5 · 15 CEP × 8 stanów Schwartz · pełny render w mapie percepcji. §10 = próbka reprezentatywna (7 ścieżek × ~5 pytań).</em></p>
+</div>
+  </div>
+</div>
+<script>
+const CATS=[{"num":1,"name":"Słuchawki z ANC","v":"v2","s":"słuchawki z anc"}];
+const searchEl=document.getElementById('search');
+const statEl=document.getElementById('stat');
+const nrEl=document.getElementById('nr');
+const TOTAL=CATS.length;
+let curFilter='all';
+
+function esc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+function hi(text,q){
+  if(!q)return text;
+  return text.replace(new RegExp('('+esc(q)+')','gi'),'<mark>$1</mark>');
+}
+
+function applySearch(q){
+  const ql=q.trim().toLowerCase();
+  let n=0;
+  CATS.forEach(c=>{
+    const item=document.getElementById('i'+c.num);
+    const matchQ=!ql||c.s.includes(ql);
+    const matchF=curFilter==='all'||(curFilter==='v1'&&c.v==='v1')||(curFilter==='v2p'&&c.v!=='v1');
+    const ok=matchQ&&matchF;
+    if(item)item.classList.toggle('hidden',!ok);
+    if(ok){
+      n++;
+      const el=item&&item.querySelector('.ct');
+      if(el)el.innerHTML=hi(c.name,q.trim());
+    }
+  });
+  nrEl.style.display=n===0?'block':'none';
+  const fLabel=curFilter==='v1'?' · Draft':curFilter==='v2p'?' · Verified':'';
+  statEl.textContent=(ql?n+'/':'')+TOTAL+' cat.'+fLabel;
+}
+
+function setFilter(f){
+  curFilter=f;
+  document.querySelectorAll('.fb').forEach(b=>b.classList.toggle('on',b.dataset.f===f));
+  applySearch(searchEl.value);
+}
+
+function select(num){
+  document.querySelectorAll('.ci').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.cs').forEach(e=>e.classList.remove('vis'));
+  const item=document.getElementById('i'+num);
+  const sec=document.getElementById('s'+num);
+  if(item){item.classList.add('active');item.scrollIntoView({block:'nearest'});}
+  if(sec)sec.classList.add('vis');
+  document.getElementById('ct').scrollTop=0;
+}
+
+searchEl.addEventListener('input',e=>applySearch(e.target.value));
+document.addEventListener('keydown',e=>{
+  if(e.key==='/'&&document.activeElement!==searchEl){e.preventDefault();searchEl.focus();searchEl.select();}
+  if(e.key==='Escape'&&document.activeElement===searchEl){searchEl.value='';applySearch('');searchEl.blur();}
+});
+
+if(CATS.length>0)select(CATS[0].num);
+
+function toggleTheme(){
+  const l=document.body.classList.toggle('light');
+  localStorage.setItem('geo-theme',l?'light':'dark');
+  document.getElementById('theme-btn').textContent=l?'🌙':'☀️';
+}
+(function(){if(localStorage.getItem('geo-theme')==='light'){
+  document.body.classList.add('light');
+  var b=document.getElementById('theme-btn');if(b)b.textContent='🌙';}})();
+</script>
+</body>
+</html>
