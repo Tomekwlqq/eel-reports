@@ -1,0 +1,565 @@
+<title>Brief CRO Ania Kruk — recenzja</title>
+<style>
+  :root {
+    --paper:#FAF8F3; --surface:#FFFFFF; --card:#F3EFE7; --ink:#1C1815;
+    --muted:#6E655A; --faint:#9B9083; --line:#E2DACE;
+    --brass:#A67C3D; --brass-dim:#A67C3D18; --plum:#6B2D3C; --plum-dim:#6B2D3C14;
+    --green:#3E7A52; --green-dim:#3E7A5216; --amber:#B8862B; --amber-dim:#B8862B18;
+    --red:#A23A34; --red-dim:#A23A3414;
+    --mint:#1FA88E; --mint-dim:#1FA88E14; --mint-line:#8FD6C8;
+    --serif:'Charter','Georgia','Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;
+    --mono:'SF Mono','JetBrains Mono','Menlo',monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);
+    font-size:15px;line-height:1.65;padding:32px 20px 120px;}
+  .wrap{max-width:1220px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:28px;align-items:start;}
+  @media (max-width:1000px){.wrap{grid-template-columns:1fr;}}
+  .doc{min-width:0;}
+
+  /* ── INSTRUKCJA RECENZJI ── */
+  .howto{background:var(--surface);border:1px solid var(--mint-line);border-left:4px solid var(--mint);
+    border-radius:10px;padding:20px 24px;margin-bottom:14px;}
+  .howto h3{font-family:var(--serif);font-size:19px;color:var(--ink);margin-bottom:12px;
+    display:flex;align-items:center;gap:9px;}
+  .howto h3::before{content:'';width:5px;height:20px;background:var(--mint);border-radius:2px;}
+  .howto ol{list-style:none;counter-reset:h;}
+  .howto li{counter-increment:h;position:relative;padding-left:32px;margin-bottom:9px;font-size:14px;color:var(--muted);}
+  .howto li::before{content:counter(h);position:absolute;left:0;top:0;width:20px;height:20px;
+    background:var(--mint-dim);color:var(--mint);border-radius:50%;font-family:var(--mono);
+    font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .howto li b{color:var(--ink);}
+  .howto code{font-family:var(--mono);font-size:12px;background:var(--card);padding:1px 6px;border-radius:4px;color:var(--plum);}
+
+  .autosave{background:var(--mint-dim);border-left:4px solid var(--mint);border-radius:0 8px 8px 0;
+    padding:11px 18px;margin-bottom:26px;font-size:13px;color:var(--muted);}
+  .autosave b{color:var(--mint);}
+
+  /* ── MASTHEAD ── */
+  .masthead{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:8px;}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--brass);margin-bottom:12px;display:flex;gap:12px;align-items:center;}
+  .kicker::after{content:'';flex:1;height:1px;background:var(--line);}
+  h1{font-family:var(--serif);font-weight:700;font-size:38px;line-height:1.08;
+    letter-spacing:-.015em;text-wrap:balance;}
+  .dek{margin-top:11px;color:var(--muted);font-size:16px;max-width:620px;}
+  .meta-bar{display:flex;flex-wrap:wrap;gap:6px 26px;margin:16px 0 44px;
+    font-family:var(--mono);font-size:11px;color:var(--faint);padding-top:12px;}
+  .meta-bar b{color:var(--muted);font-weight:600;}
+
+  /* ── SECTION ── */
+  section{margin-bottom:16px;border:1px solid var(--line);border-radius:12px;
+    background:var(--surface);padding:24px 26px;scroll-margin-top:16px;transition:border-color .2s,box-shadow .2s;}
+  section[data-status="accept"]{border-color:var(--green);box-shadow:0 0 0 1px var(--green-dim);}
+  section[data-status="comment"]{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber-dim);}
+  .sec-head{display:flex;align-items:baseline;gap:13px;margin-bottom:6px;}
+  .sec-num{font-family:var(--mono);font-size:12px;color:var(--brass);font-weight:700;
+    letter-spacing:.05em;padding-top:4px;flex-shrink:0;}
+  h2{font-family:var(--serif);font-size:24px;font-weight:700;letter-spacing:-.01em;
+    line-height:1.15;text-wrap:balance;flex:1;}
+  .sec-ctrl{display:flex;gap:7px;margin:12px 0 16px;flex-wrap:wrap;align-items:center;}
+  .vote{font-family:var(--sans);font-size:12.5px;font-weight:600;padding:5px 13px;border-radius:20px;
+    border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;transition:all .15s;}
+  .vote:hover{border-color:var(--faint);}
+  .vote.on-accept{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+  .vote.on-comment{background:var(--amber-dim);border-color:var(--amber);color:var(--amber);}
+  .sec-badge{margin-left:auto;font-family:var(--mono);font-size:10px;text-transform:uppercase;
+    letter-spacing:.08em;color:var(--faint);}
+  .sec-body{color:var(--muted);}
+  .sec-body.pad{padding-left:40px;}
+  @media (max-width:620px){.sec-body.pad{padding-left:0;}}
+
+  p{margin-bottom:12px;}p:last-child{margin-bottom:0;}
+  strong{color:var(--ink);font-weight:650;}
+  .lead{font-size:16px;color:var(--ink);}
+  em{color:var(--plum);font-style:italic;}
+  .sec-body ul{list-style:none;margin:12px 0;}
+  .sec-body li{position:relative;padding-left:20px;margin-bottom:8px;color:var(--muted);}
+  .sec-body li::before{content:'';position:absolute;left:4px;top:10px;width:5px;height:5px;background:var(--brass);border-radius:50%;}
+  li strong{color:var(--ink);}
+  .callout{background:var(--plum-dim);border-left:3px solid var(--plum);padding:13px 17px;
+    border-radius:0 6px 6px 0;margin:15px 0;font-size:14px;color:var(--muted);}
+  .callout b{color:var(--plum);}
+  code{font-family:var(--mono);font-size:12.5px;background:var(--card);padding:1px 6px;border-radius:4px;color:var(--plum);}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;}
+  @media (max-width:620px){.split{grid-template-columns:1fr;}}
+  .split-card{border:1px solid var(--line);border-radius:8px;padding:16px 18px;background:var(--paper);}
+  .split-card.brain{border-color:var(--brass);background:var(--brass-dim);}
+  .split-tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--brass);margin-bottom:8px;font-weight:700;}
+  .split-card h4{font-family:var(--serif);font-size:17px;margin-bottom:7px;color:var(--ink);}
+  .split-card p{font-size:13px;color:var(--muted);margin:0;}
+  .split-card ul{margin:8px 0 0;}.split-card li{font-size:12.5px;margin-bottom:5px;}
+
+  .mc{background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:8px 0;}
+  .mc-top{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:var(--ink);color:var(--paper);}
+  .mc-top .t{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;}
+  .mc-top .live{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:#8FC79E;}
+  .mc-top .live::before{content:'';width:6px;height:6px;border-radius:50%;background:#5FB877;}
+  .mc-grid{display:grid;grid-template-columns:repeat(2,1fr);}
+  @media (max-width:620px){.mc-grid{grid-template-columns:1fr;}}
+  .mc-cell{padding:13px 16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .mc-cell:nth-child(2n){border-right:none;}
+  .mc-cell-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+  .mc-name{font-size:13px;font-weight:650;color:var(--ink);}
+  .mc-status{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;font-weight:700;}
+  .s-live{background:var(--green-dim);color:var(--green);}.s-build{background:var(--amber-dim);color:var(--amber);}.s-block{background:var(--red-dim);color:var(--red);}
+  .mc-line{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:2px;}
+  .mc-bench{font-size:12px;color:var(--muted);margin-top:6px;}.mc-bench b{font-family:var(--mono);font-weight:700;}
+  .up{color:var(--green);}.down{color:var(--red);}
+
+  .tbl-wrap{overflow-x:auto;margin:8px 0;border:1px solid var(--line);border-radius:8px;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  thead{background:var(--card);}
+  th{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 13px;border-bottom:1px solid var(--line);white-space:nowrap;}
+  td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--muted);}
+  tr:last-child td{border-bottom:none;}td strong{color:var(--ink);}
+  .pill{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;font-weight:600;white-space:nowrap;}
+  .pill-new{background:var(--plum-dim);color:var(--plum);}.pill-reuse{background:var(--green-dim);color:var(--green);}.pill-base{background:var(--brass-dim);color:var(--brass);}
+
+  .ladder{display:flex;flex-direction:column;gap:6px;margin:8px 0;}
+  .rung{display:grid;grid-template-columns:90px 1fr;gap:16px;padding:13px 15px;border:1px solid var(--line);border-radius:8px;background:var(--paper);align-items:start;}
+  .rung-tier{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--brass);}
+  .rung-price{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:2px;}
+  .rung h4{font-size:14px;color:var(--ink);margin-bottom:3px;}.rung p{font-size:13px;color:var(--muted);margin:0;}
+
+  .deal{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0;}
+  @media (max-width:620px){.deal{grid-template-columns:1fr;}}
+  .deal-card{border:1px solid var(--line);border-radius:8px;padding:16px 18px;background:var(--paper);}
+  .deal-card h4{font-family:var(--serif);font-size:18px;color:var(--ink);margin-bottom:4px;}
+  .deal-card .sub{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--brass);margin-bottom:11px;}
+  .deal-card ul{margin:0;}.deal-card li{font-size:13px;margin-bottom:6px;}
+
+  .q{border-bottom:1px solid var(--line);padding:11px 0;}.q:last-child{border-bottom:none;}
+  .q-q{font-weight:650;color:var(--ink);font-size:14px;}
+  .q-a{font-size:13.5px;color:var(--muted);margin-top:3px;}.q-a b{color:var(--plum);}
+  .flag{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;background:var(--amber-dim);color:var(--amber);font-weight:700;letter-spacing:.05em;}
+
+  .tc{background:var(--ink);color:var(--paper);border-radius:10px;padding:22px 24px;}
+  .tc-label{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);margin-bottom:14px;}
+  .tc-row{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:9px 0;border-top:1px solid rgba(255,255,255,.1);font-size:13.5px;}
+  .tc-row:first-of-type{border-top:none;}
+  .tc-k{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#C99A5B;padding-top:3px;}
+  .tc-v{color:#D8D0C4;}
+  @media (max-width:620px){.tc-row{grid-template-columns:1fr;gap:2px;}}
+
+  /* ── HIGHLIGHT ── */
+  mark.hl{background:var(--amber-dim);border-bottom:2px solid var(--amber);border-radius:2px;padding:0 1px;cursor:pointer;}
+  mark.hl:hover{background:var(--amber);color:#fff;}
+
+  /* ── FLOATING COMMENT BUTTON ── */
+  #cbtn{position:absolute;z-index:60;display:none;background:var(--mint);color:#fff;border:none;
+    font-family:var(--sans);font-size:13px;font-weight:600;padding:7px 14px;border-radius:8px;
+    cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18);gap:6px;align-items:center;}
+  #cbtn.show{display:inline-flex;}
+  #cbtn::before{content:'💬';}
+
+  /* ── SIDEBAR PANEL ── */
+  .panel{position:sticky;top:20px;background:var(--surface);border:1px solid var(--line);
+    border-radius:12px;overflow:hidden;max-height:calc(100vh - 40px);display:flex;flex-direction:column;}
+  .panel-top{background:var(--ink);color:var(--paper);padding:14px 18px;}
+  .panel-top h3{font-family:var(--serif);font-size:17px;display:flex;align-items:center;gap:8px;}
+  .panel-count{font-family:var(--mono);font-size:11px;color:#C99A5B;margin-top:3px;}
+  .panel-actions{display:flex;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+  .pa-btn{flex:1;font-family:var(--sans);font-size:12.5px;font-weight:600;padding:8px 10px;
+    border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .pa-btn.primary{background:var(--mint);border-color:var(--mint);color:#fff;}
+  .pa-btn:hover{border-color:var(--faint);}.pa-btn.primary:hover{opacity:.9;}
+  .panel-list{overflow-y:auto;padding:12px 16px;flex:1;}
+  .cmt{border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin-bottom:10px;background:var(--paper);}
+  .cmt-sec{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--brass);font-weight:700;margin-bottom:5px;}
+  .cmt-quote{font-size:12px;color:var(--muted);font-style:italic;border-left:2px solid var(--amber);padding-left:8px;margin-bottom:6px;line-height:1.4;}
+  .cmt-text{font-size:13.5px;color:var(--ink);}
+  .cmt-del{font-family:var(--mono);font-size:10px;color:var(--faint);cursor:pointer;margin-top:6px;display:inline-block;}
+  .cmt-del:hover{color:var(--red);}
+  .panel-empty{text-align:center;color:var(--faint);font-size:13px;padding:30px 10px;line-height:1.5;}
+  .votes-summary{padding:12px 16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;}
+  .votes-summary b{font-family:var(--mono);}
+
+  /* comment compose box */
+  #compose{position:absolute;z-index:61;display:none;background:var(--surface);border:1px solid var(--mint-line);
+    border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);padding:12px;width:300px;}
+  #compose.show{display:block;}
+  #compose .cq{font-size:11.5px;color:var(--muted);font-style:italic;border-left:2px solid var(--mint);padding-left:8px;margin-bottom:8px;max-height:52px;overflow:auto;}
+  #compose textarea{width:100%;border:1px solid var(--line);border-radius:7px;padding:8px;font-family:var(--sans);font-size:13.5px;resize:vertical;min-height:64px;color:var(--ink);background:var(--paper);}
+  #compose textarea:focus{outline:none;border-color:var(--mint);}
+  #compose .cbtns{display:flex;gap:7px;margin-top:8px;}
+  #compose button{flex:1;font-family:var(--sans);font-size:12.5px;font-weight:600;padding:7px;border-radius:7px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--muted);}
+  #compose button.save{background:var(--mint);border-color:var(--mint);color:#fff;}
+
+  .mobile-open{display:none;}
+  @media (max-width:1000px){
+    .panel{position:fixed;bottom:0;left:0;right:0;top:auto;border-radius:16px 16px 0 0;
+      max-height:70vh;z-index:80;transform:translateY(calc(100% - 54px));transition:transform .25s;max-width:100%;}
+    .panel.expanded{transform:translateY(0);}
+    .panel-top{cursor:pointer;}
+    .mobile-open{display:inline;font-size:11px;margin-left:auto;}
+  }
+</style>
+
+<button id="cbtn">Skomentuj</button>
+<div id="compose">
+  <div class="cq" id="composeQuote"></div>
+  <textarea id="composeText" placeholder="Twoja uwaga do tego fragmentu…"></textarea>
+  <div class="cbtns"><button onclick="cancelCompose()">Anuluj</button><button class="save" onclick="saveComment()">Zapisz uwagę</button></div>
+</div>
+
+<div class="wrap">
+<div class="doc">
+
+  <div class="howto">
+    <h3>Jak recenzować — w skrócie</h3>
+    <ol>
+      <li><b>Zaznacz fragment</b> tekstu myszą → kliknij <code>💬 Skomentuj</code> → wpisz uwagę. Przypina się do konkretnego zdania.</li>
+      <li><b>Akceptuj sekcję</b> — pod każdym nagłówkiem masz <b>Akceptuję</b> / <b>Mam uwagę</b>. Sekcja zmienia kolor ramki.</li>
+      <li><b>Panel po prawej</b> — wszystkie uwagi w jednym miejscu, z licznikiem.</li>
+      <li><b>Na koniec</b> — <code>Kopiuj dla Setup Boya</code> → wklej mi w czacie, poprawię wg uwag.</li>
+    </ol>
+  </div>
+  <div class="autosave">📝 Wszystko zapisuje się <b>automatycznie w Twojej przeglądarce</b> — możesz zamknąć i wrócić. Nic nie wysyłasz.</div>
+
+  <div class="masthead">
+    <div class="kicker">AIcommerce · Brief roboczy · do recenzji</div>
+    <h1>System CRO dla Ania Kruk</h1>
+    <p class="dek">Nie agent. Całościowy proces dbania o konwersję — workflowy, agenci, skille, analityka i moje reguły jako silnik. Co budujemy, jak wdrażamy, za ile.</p>
+  </div>
+  <div class="meta-bar">
+    <span><b>Klient:</b> Ania Kruk (biżuteria)</span>
+    <span><b>Zadanie #1:</b> System CRO</span>
+    <span><b>Autor:</b> Tomasz Waligóra</span>
+    <span><b>Status:</b> szkic do wyceny</span>
+  </div>
+
+  <!-- 01 -->
+  <section data-sec-id="01" data-sec-title="Kontekst">
+    <div class="sec-head"><span class="sec-num">01</span><h2>Kontekst — z kim gramy</h2></div>
+    <div class="sec-ctrl"></div>
+    <div class="sec-body pad">
+      <p class="lead">Ania Kruk sprzedaje biżuterię online. Mały zespół zadaniowy, dwóch decydentów: <strong>szef e-commerce</strong> (chce wyników) i <strong>szef IT</strong> (zapyta gdzie idą dane). Obu trzeba przekonać, każdego czym innym.</p>
+      <p>Korzystają już z płatnego Claude — <strong>nie wiem jakiego planu</strong>, a to rozstrzyga architekturę (sekcja 09). Z AI robią dziś jedno, co wiem: mają <strong>spięcie z GA4</strong>. Reszta to biała plama. Mamy analizę ich stacku technologicznego jako punkt wyjścia.</p>
+      <div class="callout"><b>Czego nie wiem:</b> plan Claude · czy mają nagrania sesji i heatmapy · dostęp do danych transakcyjnych z silnika · ile osób i maszyn. To nie blokery — to pytania na pierwsze spotkanie.</div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section data-sec-id="02" data-sec-title="Zadanie">
+    <div class="sec-head"><span class="sec-num">02</span><h2>Zadanie — CRO to proces, nie agent</h2></div>
+    <div class="sec-ctrl"></div>
+    <div class="sec-body pad">
+      <p class="lead">Klient prosi o „agenta od CRO". To za mało i nie tak działa. CRO to nie jeden bot odpowiadający na pytania — to <strong>ciągły proces</strong>: mierz → zobacz → zdiagnozuj → zarekomenduj → przetestuj → naucz się → powtórz.</p>
+      <p>Budujemy więc <strong>maszynę</strong>, nie asystenta. Warstwy grają razem: analityka (co się dzieje), visual audit (dlaczego), reguły (co z tym zrobić), benchmarki (względem czego), pulpit (gdzie to widać). Sercem są <em>moje reguły</em> — i to one zostają po mojej stronie.</p>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section data-sec-id="03" data-sec-title="Architektura">
+    <div class="sec-head"><span class="sec-num">03</span><h2>Architektura — mózg u mnie, ręce u nich</h2></div>
+    <div class="sec-ctrl"></div>
+    <div class="sec-body pad">
+      <p>Najważniejsza decyzja i główny argument w wycenie. <strong>Mózg zostaje u mnie.</strong> To nie kaprys — to jedyny sposób, żeby „dzierżawa" była prawdziwa, a reguły uczyły się na wszystkich klientach naraz.</p>
+      <div class="split">
+        <div class="split-card brain">
+          <div class="split-tag">◆ Mózg — u mnie (serwer)</div>
+          <h4>Silnik reguł</h4>
+          <ul><li>Reguły CEP, scoring, metodologia</li><li>Baza elementów i kryteriów</li><li>Self-learning (uczy się cross-klient)</li><li>Baza benchmarków i skan konkurencji</li></ul>
+          <p style="margin-top:10px"><em>Nie wychodzi z serwera. Nigdy.</em></p>
+        </div>
+        <div class="split-card">
+          <div class="split-tag">○ Ręce — u nich (lokalnie)</div>
+          <h4>Cienka skorupa</h4>
+          <ul><li>„Weź URL → zadzwoń po serwer → pokaż wynik"</li><li>Podłączenie do ich GA4 / Hotjar / silnika</li><li>Pulpit z wynikami (Mission Control)</li></ul>
+          <p style="margin-top:10px">IT może to otworzyć — nie zobaczy metodologii, bo jej tam nie ma.</p>
+        </div>
+      </div>
+      <div class="callout"><b>Uczciwie:</b> żeby mózg widział ich dane, dane muszą wyjść do mojego serwera (albo mózg sięga po nie na żądanie). Tu szef IT zapyta „gdzie i czy bezpiecznie". To realna praca do domknięcia — pytanie o bezpieczeństwo danych, osobne od moatu.</div>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section data-sec-id="04" data-sec-title="Co budujemy">
+    <div class="sec-head"><span class="sec-num">04</span><h2>Co budujemy — komponenty</h2></div>
+    <div class="sec-ctrl"></div>
+    <div class="sec-body pad">
+      <p>Cztery typy klocków plus bazy wiedzy. Zielone = mam gotowe z EEL/Cleangang. Śliwkowe = nowe. Mosiądz = baza-fundament.</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Klocek</th><th>Typ</th><th>Po co</th><th>Skąd</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Silnik reguł CRO</strong></td><td><span class="pill pill-new">nowy</span></td><td>Serce — decyduje co jest problemem i co z tym zrobić</td><td><span class="pill pill-base">moje IP</span></td></tr>
+          <tr><td><strong>Baza elementów</strong></td><td><span class="pill pill-base">baza</span></td><td>Słownik elementów strony (hero, CTA, trust, cena…)</td><td><span class="pill pill-reuse">EEL</span></td></tr>
+          <tr><td><strong>Baza kryteriów</strong></td><td><span class="pill pill-base">baza</span></td><td>Reguły oceny: co dobrze, co źle, dlaczego</td><td><span class="pill pill-reuse">EEL</span></td></tr>
+          <tr><td><strong>Baza benchmarków</strong></td><td><span class="pill pill-base">baza</span></td><td>Punkty odniesienia (kategoria, konkurencja) — model Cleangang</td><td><span class="pill pill-reuse">Cleangang</span></td></tr>
+          <tr><td><strong>Self-learning loop</strong></td><td><span class="pill pill-new">nowy</span></td><td>Każda korekta i wynik testu podnosi jakość następnego audytu</td><td><span class="pill pill-base">moje IP</span></td></tr>
+          <tr><td><strong>Skan konkurencji</strong></td><td><span class="pill pill-new">nowy</span></td><td>Regularne skanowanie rywali — białe plamy = przewagi Ani</td><td><span class="pill pill-reuse">EEL/GEO</span></td></tr>
+          <tr><td><strong>Visual audit</strong></td><td><span class="pill pill-reuse">reuse</span></td><td>Capture → co shopper widzi w 3s → gdzie pęka</td><td><span class="pill pill-reuse">EEL</span></td></tr>
+          <tr><td><strong>Analityka GA4 + Hotjar</strong></td><td><span class="pill pill-new">nowy</span></td><td>Pull: konwersja, lejek, nagrania, heatmapy</td><td><span class="pill pill-reuse">EEL ga4</span></td></tr>
+          <tr><td><strong>Workflowy (6)</strong></td><td><span class="pill pill-reuse">reuse</span></td><td>Model operowania — kto kogo odpala, kiedy</td><td><span class="pill pill-reuse">gotowe</span></td></tr>
+          <tr><td><strong>Mission Control</strong></td><td><span class="pill pill-new">nowy</span></td><td>Pulpit ze statusami — Ty i klient widzicie stan systemu</td><td><span class="pill pill-base">nowy</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section data-sec-id="05" data-sec-title="Mission Control">
+    <div class="sec-head"><span class="sec-num">05</span><h2>Mission Control — centrum sterowania</h2></div>
+    <div class="sec-ctrl"></div>
+    <div class="sec-body pad">
+      <p>Jeden pulpit, cały system na raz. Każdy workflow ma status, ostatni bieg i — najważniejsze — <strong>odniesienie do benchmarku</strong>. Nie „konwersja 1,8%" w próżni, tylko „1,8% — o 0,4 pod kategorią". To jest język, w którym CRO ma sens.</p>
+      <div class="mc">
+        <div class="mc-top"><span class="t">Ania Kruk · CRO Control</span><span class="live">system aktywny</span></div>
+        <div class="mc-grid">
+          <div class="mc-cell"><div class="mc-cell-head"><span class="mc-name">Weekly Pulse</span><span class="mc-status s-live">działa</span></div><div class="mc-line">ostatni: pon 08:00 · następny: za 6 dni</div><div class="mc-bench">CR: <b>1,82%</b> · benchmark 2,20% · <b class="down">−0,38 pp</b></div></div>
+          <div class="mc-cell"><div class="mc-cell-head"><span class="mc-name">Visual Audit</span><span class="mc-status s-live">działa</span></div><div class="mc-line">3 URL-e w kolejce · ostatni: /pierscionki</div><div class="mc-bench">Fold score: <b>62/100</b> · benchmark 75 · <b class="down">−13</b></div></div>
+          <div class="mc-cell"><div class="mc-cell-head"><span class="mc-name">Skan konkurencji</span><span class="mc-status s-build">wdrażany</span></div><div class="mc-line">5 rywali · cykl: co 2 tyg.</div><div class="mc-bench">Białe plamy CEP: <b>4</b> · gotowe do przekucia</div></div>
+          <div class="mc-cell"><div class="mc-cell-head"><span class="mc-name">Hotjar sygnały</span><span class="mc-status s-block">czeka na dostęp</span></div><div class="mc-line">nagrania + heatmapy · rage clicks</div><div class="mc-bench">blokada: token API od klienta</div></div>
+        </div>
+      </div>
+      <div class="callout"><b>To jest też mój wgląd.</b> Pulpit stoi na moim serwerze — klient widzi swój, ja widzę wszystkich. Wgląd, który „muszę mieć koniecznie", jest wbudowany w architekturę, nie doklejony.</div>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section data-sec-id="06" data-sec-title="Benchmarki">
+    <div class="sec-head"><span class="sec-num">06</span><h2>Benchmarki — rdzeń, nie dodatek</h2></div>
+    <div class="sec-ctrl"></div>
+    <div class="sec-body pad">
+      <p class="lead">To robiłem dla Cleangang i to jest sedno metody: <strong>żadna liczba nie żyje sama.</strong> Zawsze względem czegoś — kategorii, konkurencji, własnej historii. „Dużo/mało" bez punktu odniesienia to opinia, nie analiza.</p>
+      <ul>
+        <li><strong>Benchmark kategorii</strong> — konwersja/lejek w biżuterii online, nie „ogólnie w e-commerce"</li>
+        <li><strong>Benchmark konkurencji</strong> — konkretni rywale Ani, skanowani regularnie</li>
+        <li><strong>Benchmark własny</strong> — Ania dziś vs Ania miesiąc temu (czy testy działają)</li>
+      </ul>
+      <p>Benchmark spina wszystko: napędza Mission Control, skan konkurencji (białe plamy = przewagi) i rekomendacje (priorytet tam, gdzie odstajemy najmocniej). Bez benchmarku system pokazuje liczby. Z benchmarkiem — pokazuje <em>gdzie boli i o ile</em>.</p>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section data-sec-id="07" data-sec-title="Wdrożenie">
+    <div class="sec-head"><span class="sec-num">07</span><h2>Wdrożenie — drabina, nie skok</h2></div>
+    <div class="sec-ctrl"></div>
+    <div class="sec-body pad">
+      <p>Nie budujemy całej maszyny na dzień jeden. Pełna dzierżawa (serwer + skorupy + auth + bezpieczeństwo danych) to <strong>dużo roboty inżynierskiej</strong> — za dużo jak na pierwszy kontrakt z jednym klientem. Wchodzimy szczeblami.</p>
+      <div class="ladder">
+        <div class="rung"><div><div class="rung-tier">Wejście</div><div class="rung-price">249 zł/mies</div></div><div><h4>Tool wsadowy</h4><p>Ja robię audyt u siebie, wysyłam wynik: Vision Audit + baza taktyk. Zero serwera u nich, zero konektora. IP w pełni bezpieczne — dotykają tylko wyniku.</p></div></div>
+        <div class="rung"><div><div class="rung-tier">Rytm</div><div class="rung-price">abonament</div></div><div><h4>Żywy proces</h4><p>Weekly Pulse + Mission Control + skan konkurencji. System pulsuje, klient dostaje raporty. Wymaga podłączenia danych — tu wchodzi rozmowa z IT.</p></div></div>
+        <div class="rung"><div><div class="rung-tier">Pełny</div><div class="rung-price">dzierżawa</div></div><div><h4>Serwer + skorupy</h4><p>Cienkie skille lokalnie, mózg woła z serwera. Budujemy gdy klient wart inwestycji albo mam ich kilku i serwer się amortyzuje.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 -->
+  <section data-sec-id="08" data-sec-title="Model handlowy">
+    <div class="sec-head"><span class="sec-num">08</span><h2>Model handlowy — kup albo dzierżaw</h2></div>
+    <div class="sec-ctrl"></div>
+    <div class="sec-body pad">
+      <p>Klient dostaje wybór, którego chce. Kluczowe: w <strong>żadnym</strong> wariancie nie oddaję przepisu. „Na zawsze" dotyczy <strong>wyniku</strong>, nie silnika.</p>
+      <div class="deal">
+        <div class="deal-card"><h4>Na zawsze</h4><div class="sub">kupujesz output — zdjęcie</div><ul><li>Vision Audit + baza taktyk z danego momentu</li><li>W środku <strong>nie ma silnika</strong> — danie, nie przepis</li><li>Wada: zamrożone, nie uczy się, za rok nieaktualne</li><li>Cena wysoka jednorazowa (~2–3 lata abonamentu)</li></ul></div>
+        <div class="deal-card"><h4>Abonament</h4><div class="sub">dzierżawisz proces — żywy</div><ul><li>Mózg, który mądrzeje, skanuje, pulsuje</li><li>Zawsze aktualne · przestań płacić = koniec</li><li>Silnik u mnie, dźwignia po mojej stronie</li><li>Recurring, niższy próg wejścia</li></ul></div>
+      </div>
+      <div class="callout"><b>Mina:</b> jeśli klient naciska na „silnik na zawsze, lokalnie" — to nie klient na usługę, to ktoś kto chce kupić IP. Inna rozmowa, inna cena (licencja = dziesiątki razy więcej), świadoma decyzja.</div>
+    </div>
+  </section>
+
+  <!-- 09 -->
+  <section data-sec-id="09" data-sec-title="Do ustalenia">
+    <div class="sec-head"><span class="sec-num">09</span><h2>Do ustalenia z klientem</h2></div>
+    <div class="sec-ctrl"></div>
+    <div class="sec-body pad">
+      <p>Pytania na pierwsze spotkanie. Pierwsze krytyczne — rozstrzyga, czy architektura dzierżawy w ogóle stoi.</p>
+      <ul>
+        <li><strong>Jaki plan Claude?</strong> <span class="flag">krytyczne</span> — cienka skorupa musi zadzwonić po serwer (konektor MCP). Brak wsparcia konektorów = model się sypie.</li>
+        <li><strong>Dane transakcyjne</strong> — czy silnik ma API? W jakim formacie? Zasila benchmark własny i lejek.</li>
+        <li><strong>Ilu ludzi, ile maszyn</strong> — zakładam wdrożenie lokalne na wielu komputerach.</li>
+        <li><strong>Bezpieczeństwo danych</strong> — gdzie fizycznie lądują ich liczby. Odpowiedź gotowa PRZED spotkaniem z IT.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section data-sec-id="10" data-sec-title="Otwarte decyzje">
+    <div class="sec-head"><span class="sec-num">10</span><h2>Otwarte decyzje — do rozstrzygnięcia</h2></div>
+    <div class="sec-ctrl"></div>
+    <div class="sec-body pad">
+      <div class="q"><div class="q-q">A/B testy czy taktyki do testowania?</div><div class="q-a"><b>Rekomendacja:</b> na start taktyki, nie A/B. Ania to mały ruch — biżuteria, nie FMCG. Klasyczny A/B potrzebuje tysięcy konwersji na istotność; przy ich wolumenie test trwałby miesiącami. Dajemy <strong>taktyki z uzasadnieniem</strong> (reguła + benchmark + białe plamy konkurencji), mierzymy before/after. A/B wraca, gdy ruch urośnie.</div></div>
+      <div class="q"><div class="q-q">Jak rekomendować zmiany?</div><div class="q-a"><b>Format:</b> Element → Problem (co shopper traci) → Akcja → Taktyka (konkretny tekst/zmiana). Każda reko z priorytetem Impact × Effort i odniesieniem do benchmarku. Nie „popraw opis" — tylko „wstaw ten paragraf, bo konkurencja nie pokrywa tego momentu zakupu".</div></div>
+      <div class="q"><div class="q-q">Heatmapy i nagrania sesji?</div><div class="q-a"><b>Rekomendacja: Hotjar</b> (wolę go od Clarity — czytelniejsze nagrania, lepsze heatmapy, sensowniejszy eksport). Zakładam wpływ na stack, więc wchodzimy z Hotjarem. Jeśli mają Clarity — podłączamy co jest, migrację później.</div></div>
+      <div class="q"><div class="q-q">Co dalej, poza CRO?</div><div class="q-a">Sam setup CRO otwiera resztę: <strong>bundle</strong> (budowa i wycena zestawów), <strong>polityka cenowa i promocyjna</strong>, <strong>zastosowanie do kontentu</strong>. Osobne moduły na tym samym silniku — nie teraz, ale warto nazwać, żeby klient widział horyzont.</div></div>
+    </div>
+  </section>
+
+  <!-- TC -->
+  <section data-sec-id="TC" data-sec-title="Truth Checker">
+    <div class="sec-ctrl"></div>
+    <div class="tc">
+      <div class="tc-label">Truth Checker</div>
+      <div class="tc-row"><div class="tc-k">Co wiem</div><div class="tc-v">Ania Kruk: biżuteria, mały zespół, szef e-com + szef IT, płatny Claude, spięcie z GA4. Mam analizę stacku i gotowe klocki z EEL/Cleangang.</div></div>
+      <div class="tc-row"><div class="tc-k">Co zakładam</div><div class="tc-v">Mamy wpływ na stack (stąd Hotjar). Silnik ma API. Klient chce usługi, nie kupna IP. „Na zawsze" = output.</div></div>
+      <div class="tc-row"><div class="tc-k">Co może być błędne</div><div class="tc-v">Plan Claude może nie wspierać konektorów — wtedy dzierżawa lokalna pada. Ruch może być za mały nawet na benchmark własny. Mogą być przywiązani do Clarity.</div></div>
+      <div class="tc-row"><div class="tc-k">Co zweryfikować</div><div class="tc-v">Plan Claude (krytyczne) · API silnika · wolumen konwersji · gdzie lądują dane.</div></div>
+      <div class="tc-row"><div class="tc-k">Co poprawię z 1 inputem</div><div class="tc-v">Podaj plan Claude — dopnę architekturę wdrożenia i policzę realną wycenę zamiast widełek.</div></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ── PANEL ── -->
+<aside class="panel" id="panel">
+  <div class="panel-top" onclick="if(window.innerWidth<=1000)this.parentElement.classList.toggle('expanded')">
+    <h3>💬 Twoje uwagi <span class="mobile-open">(kliknij)</span></h3>
+    <div class="panel-count" id="panelCount">0 uwag · 0/11 sekcji</div>
+  </div>
+  <div class="panel-actions">
+    <button class="pa-btn primary" onclick="exportForTomek()">Kopiuj dla Setup Boya</button>
+    <button class="pa-btn" onclick="clearAll()">Wyczyść</button>
+  </div>
+  <div class="panel-list" id="panelList"></div>
+  <div class="votes-summary" id="votesSummary"></div>
+</aside>
+</div>
+
+<script>
+const KEY='ania-kruk-brief-review-v1';
+let state={comments:[],votes:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY));if(s){state=s;}}catch(e){}
+
+const SECTIONS=[...document.querySelectorAll('section[data-sec-id]')];
+const TOTAL=SECTIONS.length;
+
+// ── render vote controls ──
+SECTIONS.forEach(sec=>{
+  const id=sec.dataset.secId, title=sec.dataset.secTitle;
+  const ctrl=sec.querySelector('.sec-ctrl');
+  ctrl.innerHTML=`
+    <button class="vote v-accept" data-id="${id}" data-v="accept">✓ Akceptuję</button>
+    <button class="vote v-comment" data-id="${id}" data-v="comment">✎ Mam uwagę</button>
+    <span class="sec-badge" data-badge="${id}"></span>`;
+});
+document.querySelectorAll('.vote').forEach(b=>{
+  b.onclick=()=>{const id=b.dataset.id,v=b.dataset.v;state.votes[id]=state.votes[id]===v?null:v;save();renderVotes();};
+});
+function renderVotes(){
+  SECTIONS.forEach(sec=>{
+    const id=sec.dataset.secId,v=state.votes[id];
+    sec.dataset.status=v||'';
+    sec.querySelectorAll('.vote').forEach(b=>{
+      b.classList.remove('on-accept','on-comment');
+      if(b.dataset.v===v)b.classList.add(v==='accept'?'on-accept':'on-comment');
+    });
+    const badge=sec.querySelector(`[data-badge="${id}"]`);
+    badge.textContent=v==='accept'?'zaakceptowana':v==='comment'?'ma uwagę':'';
+    badge.style.color=v==='accept'?'var(--green)':v==='comment'?'var(--amber)':'var(--faint)';
+  });
+  renderPanel();
+}
+
+// ── selection → comment button ──
+const cbtn=document.getElementById('cbtn');
+const compose=document.getElementById('compose');
+let pendingRange=null,pendingSecId=null,pendingQuote='';
+
+document.addEventListener('mouseup',e=>{
+  if(compose.classList.contains('show'))return;
+  setTimeout(()=>{
+    const sel=window.getSelection();
+    const txt=sel.toString().trim();
+    if(txt.length<3||!sel.rangeCount){cbtn.classList.remove('show');return;}
+    const range=sel.getRangeAt(0);
+    let node=range.commonAncestorContainer;
+    while(node&&node.nodeType===3)node=node.parentElement;
+    const sec=node&&node.closest?node.closest('section[data-sec-id]'):null;
+    if(!sec){cbtn.classList.remove('show');return;}
+    pendingRange=range.cloneRange();pendingSecId=sec.dataset.secId;pendingQuote=txt;
+    const r=range.getBoundingClientRect();
+    cbtn.style.top=(window.scrollY+r.top-42)+'px';
+    cbtn.style.left=(window.scrollX+r.left+r.width/2-52)+'px';
+    cbtn.classList.add('show');
+  },10);
+});
+cbtn.onclick=()=>{
+  cbtn.classList.remove('show');
+  document.getElementById('composeQuote').textContent='„'+pendingQuote.slice(0,160)+(pendingQuote.length>160?'…':'')+'"';
+  document.getElementById('composeText').value='';
+  const r=pendingRange.getBoundingClientRect();
+  let top=window.scrollY+r.bottom+8, left=window.scrollX+r.left;
+  if(left+300>window.scrollX+window.innerWidth-10)left=window.scrollX+window.innerWidth-310;
+  compose.style.top=top+'px';compose.style.left=Math.max(10,left)+'px';
+  compose.classList.add('show');
+  document.getElementById('composeText').focus();
+};
+function cancelCompose(){compose.classList.remove('show');pendingRange=null;window.getSelection().removeAllRanges();}
+function saveComment(){
+  const text=document.getElementById('composeText').value.trim();
+  if(!text){document.getElementById('composeText').focus();return;}
+  const id='c'+Date.now();
+  const sec=document.querySelector(`section[data-sec-id="${pendingSecId}"]`);
+  state.comments.push({id,secId:pendingSecId,secTitle:sec.dataset.secTitle,quote:pendingQuote,text});
+  // highlight
+  try{const m=document.createElement('mark');m.className='hl';m.dataset.cid=id;pendingRange.surroundContents(m);
+    m.onclick=()=>{const el=document.querySelector(`[data-cmt="${id}"]`);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.transition='background .3s';el.style.background='var(--amber-dim)';setTimeout(()=>el.style.background='var(--paper)',900);}};
+  }catch(e){}
+  save();renderPanel();compose.classList.remove('show');window.getSelection().removeAllRanges();
+  // auto-set section to comment if not voted
+  if(!state.votes[pendingSecId]){state.votes[pendingSecId]='comment';renderVotes();}
+}
+
+// ── panel ──
+function renderPanel(){
+  const list=document.getElementById('panelList');
+  if(state.comments.length===0){
+    list.innerHTML='<div class="panel-empty">Brak uwag.<br>Zaznacz fragment tekstu i kliknij <b>💬 Skomentuj</b>.</div>';
+  }else{
+    list.innerHTML=state.comments.map(c=>`
+      <div class="cmt" data-cmt="${c.id}">
+        <div class="cmt-sec">${c.secId==='TC'?'Truth Checker':'Sekcja '+c.secId+' · '+c.secTitle}</div>
+        <div class="cmt-quote">„${esc(c.quote.slice(0,140))}${c.quote.length>140?'…':''}"</div>
+        <div class="cmt-text">${esc(c.text)}</div>
+        <span class="cmt-del" onclick="delComment('${c.id}')">usuń</span>
+      </div>`).join('');
+  }
+  const voted=Object.values(state.votes).filter(Boolean).length;
+  document.getElementById('panelCount').textContent=`${state.comments.length} ${plural(state.comments.length)} · ${voted}/${TOTAL} sekcji`;
+  const acc=Object.values(state.votes).filter(v=>v==='accept').length;
+  const com=Object.values(state.votes).filter(v=>v==='comment').length;
+  document.getElementById('votesSummary').innerHTML=`<span>✓ Akcept: <b style="color:var(--green)">${acc}</b></span><span>✎ Uwagi: <b style="color:var(--amber)">${com}</b></span><span>○ Bez głosu: <b>${TOTAL-acc-com}</b></span>`;
+}
+function delComment(id){
+  state.comments=state.comments.filter(c=>c.id!==id);
+  const m=document.querySelector(`mark[data-cid="${id}"]`);
+  if(m){const p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m);p.normalize();}
+  save();renderPanel();
+}
+function clearAll(){
+  if(!confirm('Skasować wszystkie uwagi i akceptacje?'))return;
+  state={comments:[],votes:{}};
+  document.querySelectorAll('mark.hl').forEach(m=>{const p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m);p.normalize();});
+  save();renderVotes();
+}
+function exportForTomek(){
+  let out='# RECENZJA BRIEFU — Ania Kruk CRO\n\n';
+  SECTIONS.forEach(sec=>{
+    const id=sec.dataset.secId,v=state.votes[id];
+    const cs=state.comments.filter(c=>c.secId===id);
+    if(!v&&cs.length===0)return;
+    const label=id==='TC'?'Truth Checker':`Sekcja ${id} — ${sec.dataset.secTitle}`;
+    const status=v==='accept'?'✓ AKCEPT':v==='comment'?'✎ UWAGA':'—';
+    out+=`## ${label}  [${status}]\n`;
+    cs.forEach(c=>{out+=`  • „${c.quote.slice(0,120)}${c.quote.length>120?'…':''}"\n    → ${c.text}\n`;});
+    out+='\n';
+  });
+  if(state.comments.length===0&&Object.values(state.votes).filter(Boolean).length===0)out+='(brak uwag i akceptacji)\n';
+  navigator.clipboard.writeText(out).then(()=>{
+    const b=event.target;const o=b.textContent;b.textContent='✓ Skopiowane!';setTimeout(()=>b.textContent=o,1600);
+  }).catch(()=>{prompt('Skopiuj ręcznie:',out);});
+}
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function plural(n){return n===1?'uwaga':n>=2&&n<=4?'uwagi':'uwag';}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));}
+
+// restore highlights
+state.comments.forEach(c=>{/* highlights not restored across reload — quotes preserved in panel */});
+renderVotes();
+document.addEventListener('scroll',()=>{if(cbtn.classList.contains('show'))cbtn.classList.remove('show');},{passive:true});
+</script>
