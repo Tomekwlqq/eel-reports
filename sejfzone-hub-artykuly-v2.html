@@ -2115,31 +2115,7 @@ function podgladHTML(nr,kl){
     +'<b>Podgląd #'+nr+'</b> — '+(row?row.t:"")+' &nbsp;|&nbsp; Kategoria: <b style="color:#40e0d0">'+(KAT[sc]||"Przewodnik zakupowy")+'</b>'
     +' &nbsp;|&nbsp; ⚠️ wgraj zdjęcia na serwer przed publikacją</div>';
   w.document.open();
-  w.document.write('<!doctype html><html lang="pl"><head><meta charset="utf-8"><title>Podgląd #'+nr+'</title></head><body style="margin:0;font-family:system-ui">'+bar+'<div style="max-width:820px;margin:0 auto;padding:24px">'+html+'</div>
-<style>
-#pub-lightbox-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:99999;align-items:center;justify-content:center;cursor:zoom-out}
-#pub-lightbox-overlay.open{display:flex}
-#pub-lightbox-overlay img{max-width:92vw;max-height:88vh;object-fit:contain;border-radius:4px;box-shadow:0 8px 40px rgba(0,0,0,.6)}
-#pub-lightbox-close{position:fixed;top:16px;right:20px;font-size:36px;color:#fff;cursor:pointer;line-height:1;user-select:none;text-shadow:0 2px 8px rgba(0,0,0,.8)}
-</style>
-<div id="pub-lightbox-overlay"><span id="pub-lightbox-close">&times;</span><img id="pub-lightbox-img" src="" alt=""></div>
-<script>
-(function(){
-  var ov=document.getElementById('pub-lightbox-overlay');
-  var im=document.getElementById('pub-lightbox-img');
-  document.querySelectorAll('a.pub-lightbox-trigger').forEach(function(a){
-    a.addEventListener('click',function(e){
-      e.preventDefault();
-      var img=a.querySelector('img');
-      if(img){im.src=img.src;ov.classList.add('open');}
-    });
-  });
-  document.getElementById('pub-lightbox-close').addEventListener('click',function(){ov.classList.remove('open');im.src='';});
-  ov.addEventListener('click',function(e){if(e.target===ov){ov.classList.remove('open');im.src='';}});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'){ov.classList.remove('open');im.src='';}});
-})();
-</script>
-</body></html>');
+  w.document.write('<!doctype html><html lang="pl"><head><meta charset="utf-8"><title>Podgląd #'+nr+'</title></head><body style="margin:0;font-family:system-ui">'+bar+'<div style="max-width:820px;margin:0 auto;padding:24px">'+html+'</div></body></html>');
   w.document.close();
 }
 function kopiujHTML(nr,kl,btn){
@@ -2184,30 +2160,6 @@ function boot(){
     var n=document.getElementById('offlineNote');
     if(n && location.protocol!=='file:'){ n.style.display='block'; }
   }catch(e){}
-})();
-</script>
-
-<style>
-#pub-lightbox-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:99999;align-items:center;justify-content:center;cursor:zoom-out}
-#pub-lightbox-overlay.open{display:flex}
-#pub-lightbox-overlay img{max-width:92vw;max-height:88vh;object-fit:contain;border-radius:4px;box-shadow:0 8px 40px rgba(0,0,0,.6)}
-#pub-lightbox-close{position:fixed;top:16px;right:20px;font-size:36px;color:#fff;cursor:pointer;line-height:1;user-select:none;text-shadow:0 2px 8px rgba(0,0,0,.8)}
-</style>
-<div id="pub-lightbox-overlay"><span id="pub-lightbox-close">&times;</span><img id="pub-lightbox-img" src="" alt=""></div>
-<script>
-(function(){
-  var ov=document.getElementById('pub-lightbox-overlay');
-  var im=document.getElementById('pub-lightbox-img');
-  document.querySelectorAll('a.pub-lightbox-trigger').forEach(function(a){
-    a.addEventListener('click',function(e){
-      e.preventDefault();
-      var img=a.querySelector('img');
-      if(img){im.src=img.src;ov.classList.add('open');}
-    });
-  });
-  document.getElementById('pub-lightbox-close').addEventListener('click',function(){ov.classList.remove('open');im.src='';});
-  ov.addEventListener('click',function(e){if(e.target===ov){ov.classList.remove('open');im.src='';}});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'){ov.classList.remove('open');im.src='';}});
 })();
 </script>
 </body>
