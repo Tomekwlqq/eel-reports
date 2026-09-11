@@ -1896,7 +1896,7 @@ function render(){
     return '<tr class="rrow" data-id="'+resc(r.id)+'">'
       +'<td><b>'+rWkLabel(r.wk)+'</b></td>'
       +'<td>'+rKlPill(r.kl)+'</td>'
-      +'<td>'+resc(r.nr)+'</td>'
+      +'<td>'+resc(r.id)+'</td>'
       +'<td><span class="pill '+(R_PILL[r.st]||'p-back')+'">'+resc(r.st)+'</span></td>'
       +'<td>'+(r.typ==='nieblog'?'nie-blog':'blog')+'</td>'
       +'<td><b>'+r.ind+'</b></td>'
@@ -2062,7 +2062,7 @@ function renderArticles(){
     const klp='<span class="kl '+(r.kl==="bron"?"kl-bron":"kl-dom")+'">'+(r.kl==="bron"?"broń":"dom")+'</span>';
     const origLink=ORIG_FILES[r.nr+"_"+r.kl]?'<div style="margin-top:6px"><a href="'+ORIG_BASE+ORIG_FILES[r.nr+"_"+r.kl]+'" target="_blank" style="font-size:11px;font-weight:600;color:#888;text-decoration:none">📄 oryginał</a></div>':'';
     return '<div style="border:1px solid var(--line);border-radius:9px;padding:10px 12px;margin-bottom:8px;background:#fff">'
-      +'<div style="font-size:12.5px;font-weight:600;line-height:1.35;margin-bottom:5px">#'+r.nr+' '+esc(r.t)+'</div>'
+      +'<div style="font-size:12.5px;font-weight:600;line-height:1.35;margin-bottom:5px">#'+r.id+' '+esc(r.t)+'</div>'
       +'<div style="font-size:11px;color:#789;margin-bottom:7px">'+klp+' '+esc(r.sc)+(r.wk>0?' · '+rWkLabel(r.wk):'')+'</div>'
       +(extra||'')+origLink+'</div>';
   }
