@@ -1189,7 +1189,7 @@ function loadArticle(id){
   const bareId=hasPfx?String(id).slice(1):String(id);
   const kl=hasPfx?(String(id)[0]==='b'?'bron':'dom'):null;
   const rec=hasPfx
-    ?DATA.find(r=>String(r.id)===bareId&&r.st==="NAPISANY"&&(kl==='bron'?r.seg==="Broń":r.seg==="Dom"))
+    ?DATA.find(r=>String(r.id)===bareId&&r.st==="NAPISANY"&&(kl==='bron'?r.seg==="Broń":r.seg==="Domowe"))
     :DATA.find(r=>String(r.id)===String(id)&&r.st==="NAPISANY");
   if(!rec||!ARTICLES[bareId]) return;
   _currentPrefixedId=hasPfx?String(id):(()=>{const rw=(typeof ROWS!=="undefined")?ROWS.find(x=>String(x.nr)===bareId&&(rec.seg==="Broń"?x.kl==="bron":x.kl==="dom")):null;return rw?rw.id:id;})();
