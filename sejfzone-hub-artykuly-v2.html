@@ -1117,7 +1117,7 @@ function renderReadyList(){
   const _acc=(Store.getArticleAccept?Store.getArticleAccept():{});
   function _isAcc(id){ const v=_acc[String(id)]||""; return v==="oba"||v==="admin"||v==="klient"; }
   // wyklucz wdrożone w CMS — trafiają do kanbanu Live, nie do tej listy
-  let ready=DATA.filter(r=>r.st==="NAPISANY"&&ARTICLES[r.id]&&!_isAcc(r.id)&&_revInfo(r.id).status!=="wdrozony");
+  let ready=DATA.filter(r=>r.st==="NAPISANY"&&ARTICLES[r.id]&&!_isAcc(r.id)&&_revInfo(r.id).status!=="wdrozony"&&!String(r.t).startsWith("ELEMENT PDP"));
   // wyszukiwarka
   const q=(document.getElementById("revSearch")||{}).value||"";
   if(q.trim()) ready=ready.filter(r=>esc(r.t).toLowerCase().includes(q.toLowerCase())||String(r.id).includes(q));
