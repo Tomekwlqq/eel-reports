@@ -199,8 +199,12 @@ mark.cmt{background:#fff3bf;padding:0 1px;border-radius:3px;box-shadow:0 0 0 1px
 .kpibox .kb .v{font-size:22px;font-weight:800;margin-top:3px}
 .kpibox .kb .v small{font-size:12px;color:var(--mut);font-weight:600}
 /* --- tabela planu/wdrożenia: wiersz + brief graficzny --- */
-#rtbl tr.rrow{cursor:pointer}
-#rtbl tr.rrow.open td{background:rgba(64,224,208,.10)}
+#rtbl tr.rrow{cursor:pointer;transition:background .12s}
+#rtbl tr.rrow:hover td{background:#f5fefa}
+#rtbl tr.rrow.open td{background:rgba(64,224,208,.12)}
+.row-chev{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:6px;border:1px solid #e0e0e0;background:#f8f8f8;color:#aaa;font-size:16px;font-weight:700;transition:all .18s;line-height:1}
+#rtbl tr.rrow:hover .row-chev{border-color:var(--tur);color:var(--tur);background:#edfcfa}
+#rtbl tr.rrow.open .row-chev{border-color:var(--tur);color:var(--tur);background:#d4f5ef;transform:rotate(90deg)}
 .bgbtn{background:#fff;border:1px solid var(--line);border-radius:7px;padding:3px 8px;font-size:13px;cursor:pointer;line-height:1;font-family:inherit}
 .bgbtn:hover{border-color:var(--tur);background:#f0fcfb}
 #rtb tr.briefrow td{padding:0;border-top:0;background:transparent}
@@ -1902,7 +1906,12 @@ function render(){
     if(typeof x==="number") return ((x||0)-(y||0))*rSortDir;
     return (""+x).localeCompare(""+y,'pl')*rSortDir;
   });
+  // build DATA lookup: nr → highest status (LIVE>NAPISANY>NOWY)
+  const _stRank={LIVE:3,ZAAKCEPTOWANY:2,NAPISANY:1,NOWY:0};
+  const _dataStMap={};
+  (DATA||[]).forEach(d=>{ const k=String(d.id).replace(/^[bd]/,''); const cur=_dataStMap[k]; if(!cur||(_stRank[d.st]||0)>(_stRank[cur]||0)) _dataStMap[k]=d.st; });
   document.getElementById("rtb").innerHTML=rows.map(r=>{
+    const _ds=_dataStMap[String(r.nr)]; if(_ds&&(_stRank[_ds]||0)>(_stRank[r.st]||0)) r=Object.assign({},r,{st:_ds});
     let ttl=resc(r.t);
     if(r.typ==='nieblog'){ ttl+='<span class="tag-il">tylko inline</span>'; }
     return '<tr class="rrow" data-id="'+resc(r.id)+'">'
@@ -1916,7 +1925,7 @@ function render(){
       +'<td style="font-size:12px;color:#667">'+resc(r.sc)+'</td>'
       +'<td style="width:130px;text-align:center;vertical-align:middle;padding:6px 4px">'+((r.lk&&r.lk.blog_url)?(r.lk&&r.lk.thumb_url?'<a href="'+r.lk.blog_url+'" target="_blank"><img src="'+r.lk.thumb_url+'" style="width:88px;height:55px;object-fit:cover;border-radius:3px;display:block;margin:0 auto 5px" loading="lazy"></a>':'')+'<a href="'+r.lk.blog_url+'" target="_blank" style="font-size:11px;font-weight:700;color:#1A6EF4;text-decoration:none;white-space:nowrap">sejfzone →</a>':'')+(ORIG_FILES[r.nr+"_"+r.kl]?((r.lk&&r.lk.blog_url)?' ·&nbsp;':'')+' <a href="'+ORIG_BASE+ORIG_FILES[r.nr+"_"+r.kl]+'" target="_blank" style="font-size:11px;font-weight:600;color:#888;text-decoration:none;white-space:nowrap">oryginał</a>':'')+'</td>'
       +'<td class="ttl">'+ttl+'</td>'
-      +'<td><button class="bgbtn" data-id="'+resc(r.id)+'" title="Brief graficzny">🖼️</button></td></tr>';
+      +'<td style="text-align:center;width:36px"><span class="row-chev">›</span></td></tr>';
   }).join('') || '<tr><td colspan="11" style="color:var(--mut);padding:16px">Brak wyników.</td></tr>';
   bindRowBriefs();
 }
