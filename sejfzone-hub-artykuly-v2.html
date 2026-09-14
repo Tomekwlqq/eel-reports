@@ -1885,12 +1885,32 @@ function render(){
   const fk=document.getElementById("rfKl").value, ft=document.getElementById("rfTyp").value;
   const fs=document.getElementById("rfSt").value, fw=document.getElementById("rfWk").value;
   const onlyFix=document.getElementById("rfFix")&&document.getElementById("rfFix").checked;
-  let rows=ROWS.filter(r=>{
+  // single source of truth: DATA status > ROWS; fix b26/d26 collision; inject DATA-only articles
+  const _stRank={LIVE:3,ZAAKCEPTOWANY:2,NAPISANY:1,NOWY:0};
+  const _klOf=d=>(String(d.seg||"").indexOf("Bro")>=0?"bron":"dom");
+  const _dataStMap={};
+  (DATA||[]).forEach(d=>{
+    const k=_klOf(d)+"_"+String(d.id).replace(/^[bd]/,'');
+    const cur=_dataStMap[k];
+    if(!cur||(_stRank[d.st]||0)>(_stRank[cur]||0)) _dataStMap[k]=d.st;
+  });
+  const _rowKeys=new Set(ROWS.map(r=>r.kl+"_"+r.nr));
+  const _synth=(DATA||[]).filter(d=>(_stRank[d.st]||0)>=1).map(d=>{
+    const kl=_klOf(d); const bare=String(d.id).replace(/^[bd]/,'');
+    if(_rowKeys.has(kl+"_"+bare)) return null;
+    return {id:(kl==="bron"?"b":"d")+bare,kl,nr:Number(bare),t:d.t,typ:"blog",st:d.st,stan:d.st,wk:null,ind:0,sc:"brak planu",bg:null,lk:null,_da:true};
+  }).filter(Boolean);
+  const _base=ROWS.map(r=>{
+    const k=r.kl+"_"+r.nr; const ds=_dataStMap[k];
+    return (ds&&(_stRank[ds]||0)>(_stRank[r.st]||0))?Object.assign({},r,{st:ds}):r;
+  }).concat(_synth);
+  let rows=_base.filter(r=>{
     if(q && r.t.toLowerCase().indexOf(q)<0) return false;
     if(fk && r.kl!==fk) return false;
     if(ft && r.typ!==ft) return false;
     if(fs && r.st!==fs) return false;
     if(fw){
+      if(r._da) return false;
       if(fw==='live'){ if(r.wk!==0) return false; }
       else if(fw==='nieblog'){ if(!(r.wk===-1||r.wk==null)) return false; }
       else { if(rWkLabel(r.wk)!==fw) return false; }
@@ -1906,14 +1926,10 @@ function render(){
     if(typeof x==="number") return ((x||0)-(y||0))*rSortDir;
     return (""+x).localeCompare(""+y,'pl')*rSortDir;
   });
-  // build DATA lookup: nr → highest status (LIVE>NAPISANY>NOWY)
-  const _stRank={LIVE:3,ZAAKCEPTOWANY:2,NAPISANY:1,NOWY:0};
-  const _dataStMap={};
-  (DATA||[]).forEach(d=>{ const k=String(d.id).replace(/^[bd]/,''); const cur=_dataStMap[k]; if(!cur||(_stRank[d.st]||0)>(_stRank[cur]||0)) _dataStMap[k]=d.st; });
   document.getElementById("rtb").innerHTML=rows.map(r=>{
-    const _ds=_dataStMap[String(r.nr)]; if(_ds&&(_stRank[_ds]||0)>(_stRank[r.st]||0)) r=Object.assign({},r,{st:_ds});
     let ttl=resc(r.t);
     if(r.typ==='nieblog'){ ttl+='<span class="tag-il">tylko inline</span>'; }
+    if(r._da){ ttl+=' <span class="tag-il" style="background:#fff3cd;color:#856404;border-color:#ffc107">brak planu</span>'; }
     return '<tr class="rrow" data-id="'+resc(r.id)+'">'
       +'<td><b>'+rWkLabel(r.wk)+'</b></td>'
       +'<td>'+rKlPill(r.kl)+'</td>'
