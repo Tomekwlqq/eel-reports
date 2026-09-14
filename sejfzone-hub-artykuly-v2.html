@@ -1918,7 +1918,7 @@ function render(){
       +'<td><b>'+rWkLabel(r.wk)+'</b></td>'
       +'<td>'+rKlPill(r.kl)+'</td>'
       +'<td>'+resc(r.id)+'</td>'
-      +'<td><span class="pill '+(R_PILL[r.st]||'p-back')+'">'+(r.st==='NOWY'?'brief':r.st==='NAPISANY'?'napisane':r.st==='LIVE'?'live':resc(r.st))+'</span></td>'
+      +'<td><span class="pill '+(R_PILL[r.st]||'p-back')+'">'+(r.st==='NOWY'?'brief':r.st==='NAPISANY'?'do recenzji':r.st==='LIVE'?'live':resc(r.st))+'</span></td>'
       +'<td>'+(r.typ==='nieblog'?'nie-blog':'blog')+'</td>'
       +'<td><b>'+r.ind+'</b></td>'
       +'<td>'+rCellT(r)+'</td>'+'<td>'+rCellB(r)+'</td>'+'<td>'+rLinkBadge(r)+'</td>'
