@@ -1902,8 +1902,14 @@ function render(){
   }).filter(Boolean);
   const _base=ROWS.map(r=>{
     const k=r.kl+"_"+r.nr; const ds=_dataStMap[k];
-    return (ds&&(_stRank[ds]||0)>(_stRank[r.st]||0))?Object.assign({},r,{st:ds}):r;
-  }).concat(_synth);
+    if(ds&&(_stRank[ds]||0)>(_stRank[r.st]||0)){
+      // NAPISANY only when HTML actually loaded — otherwise "do recenzji" is a lie
+      const artKey=(r.kl==="dom"?"d":"")+String(r.nr);
+      if(ds==="NAPISANY"&&!ARTICLES[artKey]) return r;
+      return Object.assign({},r,{st:ds});
+    }
+    return r;
+  }).concat(_synth.filter(d=>ARTICLES[(d.kl==="dom"?"d":"")+String(d.nr)]));
   let rows=_base.filter(r=>{
     if(q && r.t.toLowerCase().indexOf(q)<0) return false;
     if(fk && r.kl!==fk) return false;
