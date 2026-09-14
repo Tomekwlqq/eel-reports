@@ -1200,7 +1200,9 @@ function loadArticle(id){
   document.getElementById("artView").classList.remove("hidden");
   document.getElementById("artTitle").textContent=rec.t;
   if(typeof _exitEditModeUI==="function") _exitEditModeUI();
-  document.getElementById("artContent").innerHTML=getClientDraft(bareId)||ARTICLES[artKey].html;
+  let _artHtml=getClientDraft(bareId)||ARTICLES[artKey].html;
+  _artHtml=_artHtml.replace(/src="\/data\//g,'src="https://sejfzone.pl/data/').replace(/href="\/pl\//g,'href="https://sejfzone.pl/pl/');
+  document.getElementById("artContent").innerHTML=_artHtml;
   renderReadyList();
   applyHighlights();
   renderHistory(),renderCommentList();
