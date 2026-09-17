@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cenniki retail media — konkretne stawki | Blisko × Hebe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--surface:#fafbfd;--line:#e6e6e9;--ink:#0a0a0a;--muted:#5b6472;--faint:#8b93a2;
+    --v:#7c5cff;--v-d:#5a3ff0;--v-soft:#efeaff;--v-line:#d4c9ff;
+    --g:#16a34a;--g-d:#15803d;--g-soft:#e7f6ec;--g-line:#b7e3c4;
+    --o:#f5751a;--o-d:#dd5e0a;--o-soft:#fff2e8;--o-line:#f8c39a;
+    --b:#0f7ae5;--b-d:#0a63bd;--b-soft:#e9f3fd;--b-line:#a9d2f6;
+    --a:#b8862b;--a-d:#9a6f1f;--a-soft:#fdf5e6;--a-line:#e9d3a3;
+    --grotesk:'Space Grotesk',-apple-system,sans-serif;--mono:'IBM Plex Mono','SF Mono',Menlo,monospace}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--grotesk);font-size:16.5px;line-height:1.6;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+  .shell{max-width:1240px;margin:0 auto;padding:50px 30px 96px}
+  .kicker{font-family:var(--mono);font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--v);font-weight:600;margin-bottom:11px;display:block}
+  h1{font-size:clamp(31px,4.3vw,45px);font-weight:700;letter-spacing:-.04em;line-height:1.05;margin-bottom:12px}
+  .lead{font-size:17.5px;color:var(--muted);max-width:940px}
+  .hero{border-bottom:1px solid var(--line);padding-bottom:26px;margin-bottom:26px}
+  .back{display:inline-block;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--v);text-decoration:none;border:1px solid var(--v-line);background:var(--bg);padding:8px 16px;border-radius:8px;margin-top:14px}
+  .back:hover{background:var(--v-soft)}
+  .section{padding-top:36px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--v);font-weight:600;margin-bottom:8px;display:block}
+  .section>h2{font-size:27px;font-weight:700;letter-spacing:-.03em;margin-bottom:6px}
+  h3{font-size:19px;font-weight:700;margin:22px 0 10px;letter-spacing:-.01em}
+  .meta{font-family:var(--mono);font-size:12.5px;color:var(--faint);margin-bottom:16px}
+  .meta b{color:var(--v-d)}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:16px}
+  thead{background:var(--surface)}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);text-align:left;padding:10px 13px;border-bottom:1px solid var(--line)}
+  td{padding:10px 13px;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td strong{color:var(--ink)}
+  td.price{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--v-d);white-space:nowrap}
+  td.num{font-family:var(--mono);font-size:13.5px;color:var(--muted);white-space:nowrap}
+  .note{background:var(--v-soft);border:1px solid var(--v-line);border-radius:12px;padding:15px 20px;font-size:15.5px;color:var(--muted);margin:16px 0}
+  .note strong{color:var(--v-d)}
+  .warn{background:var(--o-soft);border:1px solid var(--o-line);border-radius:12px;padding:15px 20px;font-size:15.5px;color:var(--muted);margin:16px 0}
+  .warn strong{color:var(--o-d)}
+  .ok{background:var(--g-soft);border:1px solid var(--g-line);border-radius:12px;padding:15px 20px;font-size:15.5px;color:var(--muted);margin:16px 0}
+  .ok strong{color:var(--g-d)}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:14px}
+  .card h4{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+  .badge{display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;margin-right:6px}
+  .b-ok{background:var(--g-soft);color:var(--g-d);border:1px solid var(--g-line)}
+  .b-no{background:var(--o-soft);color:var(--o-d);border:1px solid var(--o-line)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:13px;margin:14px 0}
+  .sc{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:14px 16px}
+  .scv{font-family:var(--mono);font-size:19px;font-weight:700;color:var(--v-d);display:block;letter-spacing:-.02em}
+  .scl{font-size:13px;color:var(--muted);display:block;margin-top:3px}
+  .shot img{width:100%;height:auto;border:1px solid var(--line);border-radius:10px;display:block;margin-top:10px}
+  .src{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:8px;word-break:break-all}
+  .src a{color:var(--v);text-decoration:none}
+  .footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .footer span{font-family:var(--mono);font-size:12px;color:var(--faint)}
+  .footer .f-r{color:var(--v);font-weight:600}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<div class="hero">
+  <span class="kicker">Cenniki retail media · konkretne stawki · wrzesień 2026</span>
+  <h1>Ile to realnie kosztuje<br>— stawki z rate cardów</h1>
+  <p class="lead">Konkretne ceny, nie linki do artykułów. Pełny rate card sieci Albert Heijn (13 stron, wszystkie formaty) + publiczne stawki Allegro. Dla pozostałych sieci: status dostępu i dlaczego cenników nie ma.</p>
+  <a class="back" href="./">← wróć do huba</a>
+</div>
+
+<div class="warn">
+  <strong>Najważniejsze ustalenie:</strong> z pięciu analizowanych sieci <strong>tylko Allegro publikuje cennik</strong>. Rossmann, Douglas, Empik i Zalando nie podają stawek publicznie — dostęp wyłącznie przez zapytanie ofertowe. <strong>To sam w sobie jest wnioskiem:</strong> brak publicznego cennika to bariera wejścia dla marek, a jednocześnie standard rynkowy, który warto rozważyć u Hebe.
+  <br><br>Poniżej pełny, prawdziwy rate card sieci Albert Heijn (Albert Heijn Retail Media Services 2026) — pokazuje, <strong>jak wygląda profesjonalny cennik RM</strong>: struktura, modele rozliczeń, pakiety zasięgowe.
+</div>
+
+<!-- ══ AH ══ -->
+<section class="section">
+  <span class="eyebrow">01 · Pełny rate card</span>
+  <h2>Albert Heijn Retail Media Services 2026 <span class="badge b-ok">cennik publiczny</span></h2>
+  <div class="meta">Albert Heijn (Ahold Delhaize), Holandia · <b>1 250+ sklepów</b> · 7 mln talerzy dziennie · ah.nl: 3 mln odwiedzających/tydz., app: 4,5 mln · <b>ceny netto (ex VAT), EUR</b> · dokument: 13 stron</div>
+
+  <h3>1.1 · Instore — formy klasyczne</h3>
+  <table>
+    <thead><tr><th>Format</th><th>Model</th><th>Stawka</th></tr></thead>
+    <tbody>
+      <tr><td>VSB + wobbler</td><td>CPM / start per sklep</td><td class="price">€17 CPM · €12 / sklep</td></tr>
+      <tr><td>VSB + naklejka podłogowa + wobbler</td><td>CPM / start per sklep</td><td class="price">€19 CPM · €12 / sklep</td></tr>
+      <tr><td>Naklejka na drzwiach chłodni + wobbler</td><td>CPM / start per sklep</td><td class="price">€16 CPM · €12 / sklep</td></tr>
+      <tr><td>Flaga na chłodni / znak Realtor + wobbler</td><td>CPM / start per sklep</td><td class="price">€17 CPM · €12 / sklep</td></tr>
+      <tr><td>Stół promocyjny</td><td>za stół</td><td class="price">€120</td></tr>
+      <tr><td>Instore theme square</td><td>za dzień / sklep</td><td class="price">€130 (XL: €200)</td></tr>
+      <tr><td>Cardboard RAD</td><td>za RAD / sklep / tydz.</td><td class="price">€107</td></tr>
+    </tbody>
+  </table>
+
+  <h3>1.2 · Dema i degustacje (per dzień, per sklep)</h3>
+  <table>
+    <thead><tr><th>Wariant</th><th>Stawka</th></tr></thead>
+    <tbody>
+      <tr><td>AH XL — bez przygotowania jedzenia</td><td class="price">€580</td></tr>
+      <tr><td>AH XL — z przygotowaniem jedzenia</td><td class="price">€645</td></tr>
+      <tr><td>AH standard — bez przygotowania jedzenia</td><td class="price">€535</td></tr>
+      <tr><td>AH standard — z przygotowaniem jedzenia</td><td class="price">€585</td></tr>
+      <tr><td>Studio kulinarne w AH XL</td><td class="price">€1 690 / tydz. / sklep</td></tr>
+    </tbody>
+  </table>
+
+  <h3>1.3 · Ekrany DOOH — pakiety zasięgowe (prawdziwa perła cennika)</h3>
+  <p style="color:var(--muted);margin-bottom:12px">To pokazuje, jak profesjonalnie sprzedaje się ekrany: <strong>pakiet = liczba sklepów + liczba ekranów + zasięg + wyliczony CPM</strong>. Marka kupuje zasięg, nie „ekran".</p>
+  <table>
+    <thead><tr><th>Pakiet</th><th>Cena</th><th>Sklepów</th><th>Ekranów</th><th>Zasięg (D-OTS)</th><th>CPM</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Front store screens — Small</strong></td><td class="price">€34 970</td><td class="num">130</td><td class="num">275</td><td class="num">7,0 mln</td><td class="price">€5,00</td></tr>
+      <tr><td><strong>Front store — Medium</strong></td><td class="price">€62 947</td><td class="num">260</td><td class="num">550</td><td class="num">14,0 mln</td><td class="price">€4,50</td></tr>
+      <tr><td><strong>Front store — Large</strong></td><td class="price">€83 929</td><td class="num">393</td><td class="num">825</td><td class="num">21,0 mln</td><td class="price">€4,00</td></tr>
+      <tr><td><strong>Front store — Extra Large</strong></td><td class="price">€97 917</td><td class="num">524</td><td class="num">1 100</td><td class="num">28,0 mln</td><td class="price">€3,50</td></tr>
+      <tr><td>Entrance screens — Small</td><td class="price">€35 053</td><td class="num">233</td><td class="num">233</td><td class="num">2,5 mln</td><td class="price">€14,00</td></tr>
+      <tr><td>Entrance screens — Large</td><td class="price">€90 266</td><td class="num">700</td><td class="num">700</td><td class="num">7,5 mln</td><td class="price">€12,00</td></tr>
+      <tr><td>Instore take-over — Small</td><td class="price">€24 750</td><td class="num">250</td><td class="num">750</td><td class="num">4,5 mln</td><td class="price">€5,50</td></tr>
+      <tr><td>Instore take-over — Large</td><td class="price">€67 500</td><td class="num">750</td><td class="num">2 250</td><td class="num">13,5 mln</td><td class="price">€5,00</td></tr>
+      <tr><td>Checkout screens — Medium</td><td class="price">€32 400</td><td class="num">300</td><td class="num">750</td><td class="num">5,4 mln</td><td class="price">€6,00</td></tr>
+      <tr><td>Checkout screens — Large</td><td class="price">€54 000</td><td class="num">600</td><td class="num">1 500</td><td class="num">10,8 mln</td><td class="price">€5,00</td></tr>
+      <tr><td>Aisle screens (bonus) — AH XL</td><td class="price">€6 003</td><td class="num">30</td><td class="num">160</td><td class="num">0,8 mln</td><td class="price">€7,00</td></tr>
+      <tr><td>Aisle screens (bonus) — razem</td><td class="price">€20 006</td><td class="num">130</td><td class="num">500</td><td class="num">3,3 mln</td><td class="price">€6,00</td></tr>
+      <tr><td>Wine aisle screens — Large</td><td class="price">€15 000</td><td class="num">300</td><td class="num">300</td><td class="num">0,8 mln</td><td class="price">€18,75</td></tr>
+      <tr><td>Handscanners — Small</td><td class="price">€30 520</td><td class="num">218</td><td class="num">€140/sklep</td><td class="num">3,8 mln</td><td class="price">€8,00</td></tr>
+      <tr><td>Handscanners — Large</td><td class="price">€85 969</td><td class="num">655</td><td class="num">€131/sklep</td><td class="num">11,5 mln</td><td class="price">€7,50</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><strong>Mechanika:</strong> stawki DOOH podlegają <strong>weekly indexowi</strong> (indeks sezonowy/godzinowy) — cena rośnie w okresach wysokiego popytu (święta, sezony). Indeks jest publikowany, a zmiany zapowiadane z 3-miesięcznym wyprzedzeniem. To mechanizm, który pozwala podnieść przychód bez podnoszenia cennika bazowego — <strong>warto rozważyć u Hebe</strong> przy banerach hero i ekranach.</div>
+
+  <h3>1.4 · Online — banery ah.nl i aplikacja</h3>
+  <p style="color:var(--muted);margin-bottom:12px">Trzy modele rozliczenia tej samej pozycji — to standard rynkowy: <strong>Managed</strong> (najdroższy, obsługa po stronie sieci) · <strong>SSP Guaranteed</strong> (środek) · <strong>SSP Auction</strong> (najtańszy, licytacja z floor price).</p>
+  <table>
+    <thead><tr><th>Pozycja</th><th>Managed</th><th>SSP Guaranteed</th><th>SSP Auction</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Web — Homepage</strong></td><td class="price">€21</td><td class="price">€18</td><td class="price">€16</td></tr>
+      <tr><td>Web — Bonus regular</td><td class="price">€19</td><td class="price">€16</td><td class="price">€14</td></tr>
+      <tr><td>Web — Bonus Booster</td><td class="price">€28,50</td><td class="price">€25,50</td><td class="price">€23,50</td></tr>
+      <tr><td>Web — Bonus Highlight</td><td class="price">€23</td><td class="price">€20</td><td class="price">€18</td></tr>
+      <tr><td>Web — strona kategorii</td><td class="price">€24</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td>Web — banery przepisów (Allerhande)</td><td class="price">€18,50</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr><td><strong>App — Homepage</strong></td><td class="price">€26</td><td class="price">€23</td><td class="price">€21</td></tr>
+      <tr><td>App — Bonus</td><td class="price">€30,50</td><td class="price">€27,50</td><td class="price">€25,50</td></tr>
+      <tr><td>App — Allerhande</td><td class="price">€23,50</td><td class="price">€20,50</td><td class="price">€18,50</td></tr>
+    </tbody>
+  </table>
+  <div class="ok"><strong>Uwaga na różnicę app vs web:</strong> ta sama pozycja w aplikacji jest droższa o <strong>€5 CPM</strong> (Homepage: €26 vs €21 — czyli o 24%). To bezpośredni dowód, że ruch w aplikacji jest wyceniany wyżej — dokładnie tak, jak powinno być u Hebe, gdzie app ma 2/3 ruchu i wyższą wartość (dane: ekran startowy 18 mln, kategorie 32 mln, PDP 30 mln).</div>
+
+  <h3>1.5 · Video</h3>
+  <table>
+    <thead><tr><th>Format</th><th>Model</th><th>Stawka</th></tr></thead>
+    <tbody>
+      <tr><td>Pre-roll 6 s</td><td>CPM</td><td class="price">€24,50</td></tr>
+      <tr><td>Pre-roll do 15 s</td><td>CPM</td><td class="price">€35,50</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><strong>Wzorzec:</strong> dłuższy spot jest droższy o 45% (€35,50 vs €24,50). Cena rośnie z długością ekspozycji — mechanizm, który Hebe mogłaby zastosować przy formatach wideo w aplikacji.</div>
+
+  <h3>1.6 · Targetowane i off-site</h3>
+  <table>
+    <thead><tr><th>Produkt</th><th>Model</th><th>Stawka</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Sponsored Products (ah.nl + app)</strong></td><td>CPC</td><td class="price">od €0,20</td></tr>
+      <tr><td>Reach Booster (audiences)</td><td>CPM Managed / Guaranteed / Auction</td><td class="price">€21 / €18 / €16</td></tr>
+      <tr><td>Search (audiences)</td><td>CPM Managed / Guaranteed / Auction</td><td class="price">€21 / €18 / €16</td></tr>
+      <tr><td>Allerhande package</td><td>CPM Managed / Guaranteed / Auction</td><td class="price">€14 / €11 / €9</td></tr>
+      <tr><td>Display off-site (DPG & Marktplaats) — IAB Standard</td><td>CPM</td><td class="price">€9</td></tr>
+      <tr><td>Display off-site — IAB High Impact</td><td>CPM</td><td class="price">€12</td></tr>
+      <tr><td>YouTube — Efficient Reach</td><td>CPM</td><td class="price">€15</td></tr>
+      <tr><td>YouTube — Non-skippable</td><td>CPM</td><td class="price">€20</td></tr>
+      <tr><td>Demand Gen</td><td>CPC</td><td class="price">€2</td></tr>
+    </tbody>
+  </table>
+
+  <h3>1.7 · Dostawa do domu (delivered at home)</h3>
+  <table>
+    <thead><tr><th>Produkt</th><th>Model</th><th>Stawka</th></tr></thead>
+    <tbody>
+      <tr><td>Sample w skrzynce — trwały (shelf-stable)</td><td>za sample</td><td class="price">€0,60</td></tr>
+      <tr><td>Sample w skrzynce — chłodzony</td><td>za sample</td><td class="price">€0,66</td></tr>
+      <tr><td>Sample w skrzynce — mrożony</td><td>za sample</td><td class="price">€0,90</td></tr>
+      <tr><td>Premate label na karcie produktu</td><td>fixed</td><td class="price">€3 000</td></tr>
+      <tr><td>Ulotka z samplem w skrzynce</td><td>za sztukę</td><td class="price">€0,40</td></tr>
+      <tr><td>Ulotka w skrzynce dostawczej</td><td>za sztukę</td><td class="price">€0,53</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><strong>To jest bezpośredni odpowiednik Waszego samplingu w paczkach</strong> (pozycja #52 w arkuszu inventory, oznaczona READY TO SALE). AH wycenia go per sztuka: <strong>€0,40–0,90 za sample</strong> oraz <strong>€0,40–0,53 za ulotkę</strong>. Konkretna podstawa do wyceny tego formatu u Hebe — zamiast sprzedawać „na zapytanie".</div>
+
+  <div class="src">Źródło: <a href="https://www.ahretailmediaservices.nl/documents/147/ENG_Ratecard_AH_Retail_Media_Services_2026_wk48.pdf" target="_blank">ENG_Ratecard_AH_Retail_Media_Services_2026_wk48.pdf</a> — 13 stron, wersja angielska, publikacja tygodnia 48. Pełny plik: <b>materialy_ref/konkurencja/AH_ratecard_2026.pdf</b></div>
+</section>
+
+<!-- ══ ALLEGRO ══ -->
+<section class="section">
+  <span class="eyebrow">02 · Stawki publiczne</span>
+  <h2>Allegro Ads 2026 <span class="badge b-ok">cennik publiczny</span></h2>
+  <div class="meta">Polska · marketplace · <b>jedyna z pięciu analizowanych sieci z otwartym cennikiem</b> · zmiany stawek od 1 lipca 2026</div>
+
+  <table>
+    <thead><tr><th>Pozycja</th><th>Stawka</th><th>Zmiana</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Minimalny CPC</strong> (stawka wywoławcza)</td><td class="price">0,30 – 0,50 zł</td><td>wzrost średnio 8–12% kategoriami</td></tr>
+      <tr><td>— elektronika</td><td class="price">0,45 → 0,50 zł</td><td>sugerowana: 1,00 → 1,20 zł</td></tr>
+      <tr><td>— moda</td><td class="price">od 0,30 zł</td><td>sugerowana 0,80 zł</td></tr>
+      <tr><td>— dom i ogród</td><td class="price">od 0,35 zł</td><td>sugerowana 0,90 zł</td></tr>
+      <tr><td><strong>Sugerowany CPC</strong></td><td class="price">0,80 – 1,20 zł</td><td>—</td></tr>
+      <tr><td><strong>Minimalny budżet dzienny</strong> (kampanie produktowe)</td><td class="price">30 zł</td><td>nowe wymaganie</td></tr>
+      <tr><td><strong>CPM</strong> (koszt za 1000 odsłon)</td><td class="price">5 zł start · realnie 7–8 zł</td><td>wzrost 5%</td></tr>
+      <tr><td>Konto firmowe</td><td class="price">69 zł / mies.</td><td>zwolnienie z prowizji od pierwszych 10 000 zł obrotu</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><strong>Kontekst porównawczy:</strong> Google Display Network — CPM 10–15 zł. Allegro przy 5 zł start jest wyraźnie tańsze, a mimo to podnosi stawki — bo sprzedawca widzi zwrot ze sprzedaży. To pokazuje, że <strong>cena w RM nie zależy od atrakcyjności powierzchni, tylko od dowodu, że działa</strong>.</div>
+  <div class="src">Źródła: <a href="https://help.allegro.com/pl/sell/a/reklama-graficzna-allegro-ads-ZMl7ZDgYGCy" target="_blank">help.allegro.com — formaty i wymiary</a> · <a href="https://swiadoma-konsumpcja.serwisonline.pl/allegro-ads-cennik-2026-co-zmienio-sie-w-lipcu/" target="_blank">analiza zmian cennika 2026</a> · <a href="https://help.allegro.com/pl/sell/a/ile-kosztuje-i-jak-jest-rozliczana-reklama-w-allegro-ads-v875Pq01Ruo" target="_blank">zasady rozliczenia</a></div>
+</section>
+
+<!-- ══ POZOSTALI ══ -->
+<section class="section">
+  <span class="eyebrow">03 · Status dostępu</span>
+  <h2>Rossmann, Douglas, Empik, Zalando — cenników nie ma publicznie</h2>
+
+  <table>
+    <thead><tr><th>Sieć</th><th>Cennik publiczny</th><th>Co jest dostępne</th><th>Jak zdobyć stawki</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Rossmann</strong><br><span style="font-size:13px">retailmedia.rossmann.de</span></td>
+        <td><span class="badge b-no">brak</span></td>
+        <td class="num">lista formatów (onsite: sponsored, DOOH, shoppable; offsite: display+video, social) + skalę + opis reporting toola</td>
+        <td>zapytanie przez formularz kontaktowy na stronie RM; w PL — przez zespół Rossmanna</td>
+      </tr>
+      <tr>
+        <td><strong>Douglas</strong><br><span style="font-size:13px">douglas-marketing-solutions.com</span></td>
+        <td><span class="badge b-no">brak</span></td>
+        <td class="num">8 produktów z opisem + platforma self-service (możliwość testu po rejestracji)</td>
+        <td>rejestracja w Self-Service Platform lub kontakt z DMS</td>
+      </tr>
+      <tr>
+        <td><strong>Empik</strong><br><span style="font-size:13px">empikads.czs.empik.com · empik.com/biznes</span></td>
+        <td><span class="badge b-no">brak</span></td>
+        <td class="num">Empik Ads (self-service), formaty, 370 salonów, dokumentacja pomocowa dla sprzedawców</td>
+        <td>kontakt przez Empik Ads / Strefę dla Biznesu</td>
+      </tr>
+      <tr>
+        <td><strong>Zalando (ZMS)</strong><br><span style="font-size:13px">partner.zalando.com</span></td>
+        <td><span class="badge b-no">brak</span></td>
+        <td class="num">opis lejka (awareness → consideration → conversion), Ad Manager, Creative Media, case studies</td>
+        <td>konto partnera Zalando (ZMS obsługuje marki sprzedające na platformie)</td>
+      </tr>
+      <tr>
+        <td><strong>Albert Heijn</strong><br><span style="font-size:13px">ahretailmediaservices.nl</span></td>
+        <td><span class="badge b-ok">PEŁNY PDF</span></td>
+        <td class="num">13-stronicowy rate card: instore, DOOH z pakietami zasięgowymi, online (3 modele rozliczenia), video, targeted, off-site, sampling</td>
+        <td>pobranie PDF bez rejestracji</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="warn"><strong>Wniosek dla Hebe — i to jest konkretna rekomendacja:</strong> skoro cztery z pięciu sieci nie publikują cenników, <strong>publikacja rate cardu może być przewagą konkurencyjną Hebe</strong>, a nie ryzykiem. AH pokazuje, że można to zrobić bez szkody — i że taki dokument sam sprzedaje: zawiera opis formatów, model rozliczeń, pakiety zasięgowe i widełki wejścia. Marka, która nie musi „prosić o ofertę", szybciej wchodzi w kampanię.</div>
+</section>
+
+<!-- ══ CO Z TEGO DLA HEBE ══ -->
+<section class="section">
+  <span class="eyebrow">04 · Wnioski</span>
+  <h2>Jakie stawki i modele przyjąć u Hebe</h2>
+
+  <table>
+    <thead><tr><th>Format Hebe</th><th>Odpowiednik AH</th><th>Sugerowana stawka startowa</th><th>Model</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Sponsored products (ON SALE, CPC 1 zł)</td>
+        <td>Sponsored Products: od €0,20 (~0,86 zł)</td>
+        <td class="price">0,50 – 1,20 zł CPC</td>
+        <td>CPC, kategorie różnicowane (wzorzec Allegro) — zamiast płaskiego 1 zł</td>
+      </tr>
+      <tr>
+        <td>Baner hero / strona główna</td>
+        <td>Homepage web €21 CPM / app €26 CPM</td>
+        <td class="price">10 – 18 zł CPM</td>
+        <td>CPM z 3 modelami: managed / guaranteed / auction</td>
+      </tr>
+      <tr>
+        <td>Baner w kategorii (DIV1/DIV2)</td>
+        <td>Category page €24 CPM</td>
+        <td class="price">12 – 20 zł CPM</td>
+        <td>CPM + weekly index (sezonowość)</td>
+      </tr>
+      <tr>
+        <td>Ekrany w 400 sklepach (ON SALE)</td>
+        <td>DOOH pakiety: €24 750 – €97 917 za pakiet</td>
+        <td class="price">pakiety zasięgowe</td>
+        <td>sprzedaż pakietem (sklepy + ekrany + zasięg + CPM), nie pojedynczo</td>
+      </tr>
+      <tr>
+        <td>Sampling w paczkach (#52)</td>
+        <td>€0,60 – €0,90 za sample · ulotka €0,40 – €0,53</td>
+        <td class="price">2,50 – 4,00 zł / sample</td>
+        <td>za sztukę — dokładnie jak AH</td>
+      </tr>
+      <tr>
+        <td>Pop-up + zdrapka w aplikacji</td>
+        <td>App Bonus €30,50 CPM (managed)</td>
+        <td class="price">wyższa niż web +20–25%</td>
+        <td>CPM premium — app wyceniany wyżej (wzorzec AH: +24%)</td>
+      </tr>
+      <tr>
+        <td>Artykuł sponsorowany / rich content (#43, #49)</td>
+        <td>Allerhande banners €14–18,50 CPM</td>
+        <td class="price">8 – 15 zł CPM lub fixed</td>
+        <td>CPM albo cena za publikację (premate label AH: €3 000 fixed)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="ok"><strong>Trzy mechanizmy z rate cardu AH, które warto wdrożyć u Hebe od razu:</strong><br>
+  ① <strong>Weekly index</strong> — sezonowy mnożnik ceny (święta, sezony, premiery). Pozwala podnieść przychód bez zmiany cennika bazowego, a zmiany zapowiada się z 3-miesięcznym wyprzedzeniem.<br>
+  ② <strong>Trzy modele rozliczenia tej samej pozycji</strong> (managed / guaranteed / auction) — marka sama wybiera poziom obsługi, a sieć zarabia więcej na tych, którzy chcą prowadzenia.<br>
+  ③ <strong>Pakiety zasięgowe dla DOOH</strong> — ekrany sprzedawane jako „pakiet: 130 sklepów / 275 ekranów / 7 mln zasięgu / €5 CPM", nie jako pojedyncze nośniki. To dokładnie odpowiedź na Wasze 400 sklepów, które dziś są ON SALE, ale bez struktury pakietowej.</div>
+</section>
+
+<div class="footer">
+  <span>Cenniki RM · AH Retail Media Services 2026 (rate card PDF) · Allegro Ads 2026 · status pozostałych sieci · stan: wrzesień 2026 · Blisko</span>
+  <span class="f-r">BLISKO · RETAIL MEDIA — HEBE</span>
+</div>
+
+</div>
+</body>
+</html>
