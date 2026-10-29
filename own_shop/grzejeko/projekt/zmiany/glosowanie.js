@@ -1,66 +1,81 @@
-/* glosowanie.js — głosowanie zespołu na wersję startową (Tomek 29.10: „wrzuć reko na hub z opcją głosowania (Tomek, Rafał, Bartek), podobnie jak na China Select, ten sam worker”).
-   Osobna instancja grzejeko-glosy (kopia kodu workera CC, własna baza i lista osób; hub/glosy_worker): głos = typ „komentarz”, kotwica „glos-start”, tekst = JSON {wariant, uwaga}; liczy się OSTATNI głos każdej osoby.
-   Konfiguracja w <script data-strona data-osoby>. Warianty = sekcje .wa[id] + kafel startowy #b0. Wygląd = skórka sklepu (bez łuczków). */
+/* glosowanie.js — głosowanie zespołu grzejeko na wersję startową kafla (Tomek 29.10).
+   UX (Tomek: „nie przenoś”, „pod nimi głosowanie”, „wygląda jak głosowanie na paski”): kafle zostają na miejscu,
+   pod kaflami każdej wersji jest blok głosu; na dole ekranu cienki pasek „Głosujesz jako” + kto na co głosował.
+   Osobna instancja grzejeko-glosy (kopia kodu workera CC, własna baza i lista osób; hub/glosy_worker) — zespół CC jej nie widzi.
+   Głos = typ „komentarz”, kotwica „glos-start”, tekst = JSON {wariant, uwaga}; liczy się OSTATNI głos każdej osoby. */
 (function () {
-  var S = document.currentScript, API = "https://grzejeko-glosy.waleqq.workers.dev/api/komentarze"; // osobna instancja grzejeko (hub/glosy_worker), NIE baza CC
+  var S = document.currentScript, API = "https://grzejeko-glosy.waleqq.workers.dev/api/komentarze";
   var STRONA = S.dataset.strona, OSOBY = (S.dataset.osoby || "Tomek,Rafał,Bartek").split(","), KOTW = "glos-start";
-  var css = ".gl{background:#f4f6fa;border-radius:16px;padding:20px;margin:22px 0;font-family:inherit;color:#0f1a2e}.gl h2{font-size:21px;font-weight:800;margin:0 0 4px;letter-spacing:-.02em}.gl p{margin:0 0 12px;color:#5b667a;font-size:14px}" +
-    ".gl-os{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}.gl-os button,.gl-w button,.gl-btn{font:inherit;cursor:pointer;min-height:44px;border-radius:999px;border:1px solid #e3e7ef;background:#fff;color:#0f1a2e;padding:0 16px;font-weight:600;font-size:14px}" +
-    ".gl-os button[aria-pressed=true]{background:#0f1a2e;border-color:#0f1a2e;color:#fff}.gl-w{display:grid;grid-template-columns:minmax(0,1fr);gap:6px}@media(min-width:700px){.gl-w{grid-template-columns:1fr 1fr}}" +
-    ".gl-w button{display:flex;align-items:center;gap:10px;border-radius:12px;text-align:left;padding:8px 12px;width:100%}.gl-w button b{flex:none;min-width:34px}.gl-w button span{flex:1;font-weight:500;font-size:13.5px;line-height:1.3}" +
-    ".gl-w button i{font-style:normal;font-size:12.5px;color:#5b667a;white-space:nowrap}.gl-w button[aria-pressed=true]{border-color:#2251f0;background:#eef2ff}.gl-w button.lead i{color:#0a7a4b;font-weight:700}" +
-    ".gl textarea{width:100%;min-height:64px;border:1px solid #e3e7ef;border-radius:10px;padding:10px;font:inherit;font-size:14px;margin:12px 0 8px;box-sizing:border-box}.gl-st{font-size:13.5px;color:#5b667a;margin-top:8px}.gl-st b{color:#0f1a2e}" +
-    ".gl-btn{background:#2251f0;border-color:#2251f0;color:#fff;border-radius:10px}.gl-mini{font:600 13px inherit;cursor:pointer;border:1px solid #e3e7ef;background:#fff;color:#2251f0;border-radius:999px;padding:6px 12px;min-height:36px;margin:6px 0}" +
-    ".gl-mini[aria-pressed=true]{background:#eef2ff;border-color:#2251f0}.gl button:focus-visible,.gl-mini:focus-visible{outline:2px solid #2251f0;outline-offset:2px}";
+  var css =
+    ".gl-v{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:#f4f6fa;border-radius:14px;padding:14px 16px;margin:14px 0 6px}" +
+    ".gl-v button.gl-g{font:inherit;cursor:pointer;min-height:48px;padding:0 22px;border-radius:10px;border:0;background:#2251f0;color:#fff;font-weight:700;font-size:15px}" +
+    ".gl-v.moj button.gl-g{background:#0a7a4b}.gl-v .gl-n{font-size:14px;color:#5b667a}.gl-v .gl-n b{color:#0f1a2e}" +
+    ".gl-v details{flex-basis:100%;font-size:13.5px}.gl-v summary{cursor:pointer;color:#2251f0;font-weight:600;min-height:32px;display:inline-flex;align-items:center}" +
+    ".gl-v textarea{width:100%;min-height:60px;border:1px solid #e3e7ef;border-radius:10px;padding:10px;font:inherit;font-size:14px;margin-top:6px;box-sizing:border-box;background:#fff}" +
+    ".gl-bar{position:fixed;left:0;right:0;bottom:0;z-index:200;background:#fff;border-top:1px solid #e3e7ef;padding:8px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:13.5px;color:#0f1a2e}" +
+    ".gl-bar .os{display:flex;gap:6px;align-items:center}.gl-bar .os button{font:inherit;cursor:pointer;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #e3e7ef;background:#fff;font-weight:600}" +
+    ".gl-bar .os button[aria-pressed=true]{background:#0f1a2e;border-color:#0f1a2e;color:#fff}.gl-bar .wy{color:#5b667a}.gl-bar .wy b{color:#0f1a2e}" +
+    "body{padding-bottom:110px}.gl-v button:focus-visible,.gl-bar button:focus-visible{outline:2px solid #2251f0;outline-offset:2px}";
   var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
+
+  // wersje: kafel startowy (#b0) + sekcje wariantów; blok głosu ląduje pod ostatnim widokiem kafli w sekcji
   var opcje = [];
-  var b0 = document.getElementById("b0"); if (b0) opcje.push({ id: "start", tyt: "Kafel startowy (proponowany domyślny)", el: b0 });
-  document.querySelectorAll("section.wa[id]").forEach(function (s) {
-    var h = s.querySelector("h3,h2"); var t = h ? h.textContent.replace(/^\s*W\d+\s*/, "").trim() : s.id;
-    opcje.push({ id: s.id, tyt: t, el: s });
+  function pod(el) { var k = el.querySelectorAll("article.k"); if (!k.length) return null; var last = k[k.length - 1]; return last.closest("figure") || last.parentNode; }
+  var b0 = document.getElementById("b0"); if (b0) opcje.push({ id: "start", nazwa: "kafel startowy", el: b0 });
+  document.querySelectorAll("section.wa[id]").forEach(function (s) { opcje.push({ id: s.id, nazwa: s.id.toUpperCase(), el: s }); });
+  opcje.forEach(function (o) {
+    var v = document.createElement("div"); v.className = "gl-v"; v.dataset.w = o.id;
+    v.innerHTML = '<button type="button" class="gl-g">Głosuję na ' + o.nazwa + '</button><span class="gl-n"></span>' +
+      '<details><summary>Dodaj uwagę do głosu</summary><textarea aria-label="Uwaga do głosu"></textarea></details>';
+    var f = pod(o.el);
+    if (f && f.parentNode) f.parentNode.insertBefore(v, f.nextSibling); else o.el.appendChild(v);
+    o.v = v;
   });
+
+  var bar = document.createElement("div"); bar.className = "gl-bar"; bar.setAttribute("role", "region"); bar.setAttribute("aria-label", "Głosowanie");
+  bar.innerHTML = '<span class="os">Głosujesz jako: ' + OSOBY.map(function (o) { return '<button type="button" data-o="' + o + '">' + o + '</button>'; }).join("") + '</span><span class="wy" aria-live="polite"></span>';
+  document.body.appendChild(bar);
+  var WY = bar.querySelector(".wy");
+
   var osoba = null; try { osoba = localStorage.getItem("glos-osoba"); } catch (e) {}
-  var glosy = {}; // autor -> {wariant, uwaga, ts}
-  var box = document.createElement("section"); box.className = "gl"; box.id = "glosowanie";
-  box.innerHTML = '<h2>Głosowanie: która wersja kafla na start?</h2><p>Wybierz siebie, potem wersję. Liczy się Twój ostatni głos, możesz go zmienić. Głosy widzi cały zespół.</p>' +
-    '<div class="gl-os" role="group" aria-label="Kto głosuje">' + OSOBY.map(function (o) { return '<button type="button" data-o="' + o + '">' + o + '</button>'; }).join("") + '</div>' +
-    '<div class="gl-w" role="group" aria-label="Wersje kafla"></div><textarea placeholder="Uwaga do głosu (opcjonalnie)" aria-label="Uwaga do głosu"></textarea>' +
-    '<div class="gl-st" aria-live="polite"></div>';
-  var kot = document.getElementById("dzis") || document.querySelector("main section");
-  kot.parentNode.insertBefore(box, kot);
-  var W = box.querySelector(".gl-w"), ST = box.querySelector(".gl-st"), TA = box.querySelector("textarea");
-  function liczby() { var n = {}; Object.keys(glosy).forEach(function (a) { var w = glosy[a].wariant; (n[w] = n[w] || []).push(a); }); return n; }
+  var glosy = {}, blad = "";
+  var nazwa = function (id) { return id === "start" ? "Start" : String(id).toUpperCase(); };
+
   function rysuj() {
-    box.querySelectorAll(".gl-os button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.o === osoba); });
-    var n = liczby(), max = 0; Object.keys(n).forEach(function (k) { max = Math.max(max, n[k].length); });
-    W.innerHTML = opcje.map(function (o) {
-      var kto = n[o.id] || [], moj = osoba && glosy[osoba] && glosy[osoba].wariant === o.id;
-      return '<button type="button" data-w="' + o.id + '" aria-pressed="' + !!moj + '" class="' + (kto.length && kto.length === max ? "lead" : "") + '"><b>' + (o.id === "start" ? "Start" : o.id.toUpperCase()) + '</b><span>' + o.tyt + '</span><i>' + (kto.length ? kto.length + " · " + kto.join(", ") : "—") + '</i></button>';
-    }).join("");
-    document.querySelectorAll(".gl-mini").forEach(function (m) { m.setAttribute("aria-pressed", !!(osoba && glosy[osoba] && glosy[osoba].wariant === m.dataset.w)); m.textContent = m.getAttribute("aria-pressed") === "true" ? "Twój głos ✓" : "Głosuję na tę wersję"; });
-    var opis = OSOBY.map(function (o) { return "<b>" + o + "</b>: " + (glosy[o] ? (glosy[o].wariant === "start" ? "Start" : glosy[o].wariant.toUpperCase()) + (glosy[o].uwaga ? " („" + glosy[o].uwaga.replace(/</g, "&lt;") + "”)" : "") : "jeszcze nie głosował(a)"); });
-    ST.innerHTML = opis.join(" · ");
+    bar.querySelectorAll("[data-o]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.o === osoba); });
+    var n = {}; Object.keys(glosy).forEach(function (a) { (n[glosy[a].wariant] = n[glosy[a].wariant] || []).push(a); });
+    opcje.forEach(function (o) {
+      var kto = n[o.id] || [], moj = !!(osoba && glosy[osoba] && glosy[osoba].wariant === o.id);
+      o.v.classList.toggle("moj", moj);
+      o.v.querySelector(".gl-g").textContent = moj ? "Twój głos ✓ " + o.nazwa : "Głosuję na " + o.nazwa;
+      o.v.querySelector(".gl-n").innerHTML = kto.length ? "<b>" + kto.length + (kto.length === 1 ? " głos" : " głosy") + "</b>: " + kto.join(", ") : "Jeszcze bez głosów";
+    });
+    var lider = Object.keys(n).sort(function (a, b) { return n[b].length - n[a].length; })[0];
+    WY.innerHTML = blad || ((lider ? "Prowadzi: <b>" + nazwa(lider) + "</b> · " : "") +
+      OSOBY.map(function (o) { return o + ": " + (glosy[o] ? "<b>" + nazwa(glosy[o].wariant) + "</b>" : "—"); }).join(" · "));
   }
   function wczytaj() {
     fetch(API + "?strona=" + encodeURIComponent(STRONA)).then(function (r) { return r.json(); }).then(function (rows) {
-      glosy = {}; (rows || []).filter(function (r) { return r.kotwica === KOTW && r.typ === "komentarz"; }).forEach(function (r) {
-        try { var d = JSON.parse(r.tekst); glosy[r.autor] = { wariant: d.wariant, uwaga: d.uwaga || "", ts: r.ts }; } catch (e) {}
+      glosy = {}; blad = "";
+      (rows || []).filter(function (r) { return r.kotwica === KOTW && r.typ === "komentarz"; }).forEach(function (r) {
+        try { var d = JSON.parse(r.tekst); glosy[r.autor] = { wariant: d.wariant, uwaga: d.uwaga || "" }; } catch (e) {}
       }); rysuj();
-    }).catch(function () { ST.textContent = "Głosowanie jeszcze nie działa: osobna baza głosów grzejeko czeka na uruchomienie. Strona działa."; });
+    }).catch(function () { blad = "Głosowanie jeszcze nie działa: baza głosów grzejeko czeka na uruchomienie."; rysuj(); });
   }
-  function glosuj(w) {
-    if (!osoba) { ST.textContent = "Najpierw wybierz, kto głosuje: " + OSOBY.join(", ") + "."; box.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
-    var body = { strona: STRONA, kotwica: KOTW, autor: osoba, typ: "komentarz", tekst: JSON.stringify({ wariant: w, uwaga: TA.value.trim() }) };
-    ST.textContent = "Zapisuję głos…";
-    fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
-      .then(function (x) { if (!x.ok) { ST.textContent = "Głos nie zapisany: " + (x.j.blad || "błąd") + (x.j.blad === "nieznana osoba" ? " (ta osoba jeszcze nie jest na liście workera)" : ""); return; } TA.value = ""; wczytaj(); })
-      .catch(function () { ST.textContent = "Głos nie zapisany: brak połączenia."; });
+  function glosuj(o) {
+    if (!osoba) { blad = "Najpierw wybierz na dole, kto głosuje."; rysuj(); blad = ""; return; }
+    var ta = o.v.querySelector("textarea");
+    var body = { strona: STRONA, kotwica: KOTW, autor: osoba, typ: "komentarz", tekst: JSON.stringify({ wariant: o.id, uwaga: ta.value.trim() }) };
+    o.v.querySelector(".gl-n").textContent = "Zapisuję głos…";
+    fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (x) { if (!x.ok) { o.v.querySelector(".gl-n").textContent = "Głos nie zapisany: " + (x.j.blad || "błąd"); return; } ta.value = ""; wczytaj(); })
+      .catch(function () { o.v.querySelector(".gl-n").textContent = "Głos nie zapisany: baza głosów nie odpowiada."; });
   }
-  box.addEventListener("click", function (e) {
-    var o = e.target.closest("[data-o]"); if (o) { osoba = o.dataset.o; try { localStorage.setItem("glos-osoba", osoba); } catch (er) {} rysuj(); return; }
-    var w = e.target.closest("[data-w]"); if (w && W.contains(w)) glosuj(w.dataset.w);
+  bar.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-o]"); if (!b) return;
+    osoba = b.dataset.o; try { localStorage.setItem("glos-osoba", osoba); } catch (er) {} rysuj();
   });
-  opcje.forEach(function (o) { var m = document.createElement("button"); m.type = "button"; m.className = "gl-mini"; m.dataset.w = o.id; m.addEventListener("click", function () { glosuj(o.id); });
-    var h = o.el.querySelector("h3,h2"); (h && h.parentNode ? h.parentNode : o.el).appendChild(m); });
+  opcje.forEach(function (o) { o.v.querySelector(".gl-g").addEventListener("click", function () { glosuj(o); }); });
   rysuj(); wczytaj();
 })();
