@@ -1,8 +1,8 @@
 /* glosowanie.js — głosowanie zespołu na wersję startową (Tomek 29.10: „wrzuć reko na hub z opcją głosowania (Tomek, Rafał, Bartek), podobnie jak na China Select, ten sam worker”).
-   Worker CC: cc-komentarze.waleqq.workers.dev (bez zmian w API): głos = typ „komentarz”, kotwica „glos-start”, tekst = JSON {wariant, uwaga}; liczy się OSTATNI głos każdej osoby.
+   Osobna instancja grzejeko-glosy (kopia kodu workera CC, własna baza i lista osób; hub/glosy_worker): głos = typ „komentarz”, kotwica „glos-start”, tekst = JSON {wariant, uwaga}; liczy się OSTATNI głos każdej osoby.
    Konfiguracja w <script data-strona data-osoby>. Warianty = sekcje .wa[id] + kafel startowy #b0. Wygląd = skórka sklepu (bez łuczków). */
 (function () {
-  var S = document.currentScript, API = "https://cc-komentarze.waleqq.workers.dev/api/komentarze";
+  var S = document.currentScript, API = "https://grzejeko-glosy.waleqq.workers.dev/api/komentarze"; // osobna instancja grzejeko (hub/glosy_worker), NIE baza CC
   var STRONA = S.dataset.strona, OSOBY = (S.dataset.osoby || "Tomek,Rafał,Bartek").split(","), KOTW = "glos-start";
   var css = ".gl{background:#f4f6fa;border-radius:16px;padding:20px;margin:22px 0;font-family:inherit;color:#0f1a2e}.gl h2{font-size:21px;font-weight:800;margin:0 0 4px;letter-spacing:-.02em}.gl p{margin:0 0 12px;color:#5b667a;font-size:14px}" +
     ".gl-os{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}.gl-os button,.gl-w button,.gl-btn{font:inherit;cursor:pointer;min-height:44px;border-radius:999px;border:1px solid #e3e7ef;background:#fff;color:#0f1a2e;padding:0 16px;font-weight:600;font-size:14px}" +
@@ -46,7 +46,7 @@
       glosy = {}; (rows || []).filter(function (r) { return r.kotwica === KOTW && r.typ === "komentarz"; }).forEach(function (r) {
         try { var d = JSON.parse(r.tekst); glosy[r.autor] = { wariant: d.wariant, uwaga: d.uwaga || "", ts: r.ts }; } catch (e) {}
       }); rysuj();
-    }).catch(function () { ST.textContent = "Nie udało się wczytać głosów (sprawdź połączenie). Strona działa, głosowanie nie."; });
+    }).catch(function () { ST.textContent = "Głosowanie jeszcze nie działa: osobna baza głosów grzejeko czeka na uruchomienie. Strona działa."; });
   }
   function glosuj(w) {
     if (!osoba) { ST.textContent = "Najpierw wybierz, kto głosuje: " + OSOBY.join(", ") + "."; box.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
