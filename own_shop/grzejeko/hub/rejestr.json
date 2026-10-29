@@ -15,9 +15,9 @@
   "sekcja": "stan",
   "typ": "Stan projektu",
   "stan": "gotowe",
-  "dodano": "2026-10-28 09:00",
+  "dodano": "2026-10-29 09:00",
   "tytul": "Gdzie jesteśmy: co działa, co w robocie, co czeka na Ciebie",
-  "opis": "Ścieżka klienta (7 kroków), witryna (18 elementów) i maszynownia (32 maszyny) z kratkami: 27 działa, 13 w robocie, 7 w planie, 3 czeka na Ciebie. Plus decyzje i sesje w toku.",
+  "opis": "Ścieżka klienta (7 kroków), witryna (18 elementów) i maszynownia (32 maszyny) z kratkami: 28 działa, 12 w robocie, 7 w planie, 3 czeka na Ciebie. Plus decyzje i sesje w toku.",
   "sciezka": "STAN_PROJEKTU.html",
   "backlink": true
  },
@@ -30,6 +30,17 @@
   "tytul": "Projekt zmian: strona główna, lista, karta (łańcuch CRO)",
   "opis": "29 elementów w formacie „dziś | projekt” ze znacznikami, najlepsze na rynku z wycinkami, 145 testów A/B; benchmark 8 sklepów PL + 3 UE; Twoje wymagania z 28.10 przypięte do elementów.",
   "sciezka": "projekt/zmiany/PROJEKTY_ZMIAN.html",
+  "backlink": true
+ },
+ {
+  "id": "reko-kafel",
+  "sekcja": "projekt",
+  "typ": "projekt",
+  "stan": "do przeglądu",
+  "dodano": "2026-10-29 16:00",
+  "tytul": "Kafel produktu: 14 wariantów do testów A/B + głosowanie na start",
+  "opis": "Benchmark kafli 19 sklepów energii i SejfZone, kafel startowy i 14 wariantów jako prawdziwe komponenty (telefon i komputer), trzy pierwsze testy. Głosują Tomek, Rafał i Bartek.",
+  "sciezka": "projekt/zmiany/REKOMENDACJE_KAFEL_PRODUKTU.html",
   "backlink": true
  },
  {
