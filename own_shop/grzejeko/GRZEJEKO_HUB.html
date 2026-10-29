@@ -46,6 +46,14 @@ a{color:inherit;text-decoration:none}
 .dt{font-size:12.5px;color:var(--faint)}
 .go{display:none;font-size:14px;font-weight:600;color:var(--kob);border:1px solid var(--line);border-radius:10px;padding:10px 16px;white-space:nowrap}
 @media(min-width:700px){.go{display:inline-flex}}.row:hover .tt{color:var(--kob)}.row:hover .go{border-color:var(--kob)}
+.top{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-bottom:34px}
+@media(min-width:700px){.top{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);grid-template-rows:auto auto}.top .ftbig{grid-row:1 / span 2}.ftbig .pv{flex:1;aspect-ratio:auto;min-height:320px}}
+.ft{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;transition:border-color .12s}.ft:hover{border-color:var(--ink)}
+.ft.ftbig{border:2px solid var(--kob)}.ft:focus-visible{outline:2px solid var(--kob);outline-offset:2px}
+.pv{display:block;position:relative;overflow:hidden;background:var(--well);aspect-ratio:16/10;container-type:inline-size}
+.pv iframe{position:absolute;top:0;left:0;border:0;pointer-events:none;transform-origin:0 0;transform:scale(calc(100cqw / 1280px))}
+.fb{display:flex;flex-direction:column;gap:3px;padding:14px 16px 16px}.fb small{font-size:12.5px;color:var(--mut)}.fb b{font-size:17px;font-weight:800;letter-spacing:-.01em}.ftbig .fb b{font-size:22px;color:var(--ink)}
+.fb span{font-size:13.5px;color:var(--mut)}.btn2{align-self:flex-start;margin-top:8px;background:var(--kob);color:#fff!important;font-weight:700;font-size:14.5px!important;border-radius:10px;padding:11px 18px}
 .pusto{display:none;color:var(--mut);padding:18px 0}
 </style></head><body>
 <header class="hd"><div class="in"><a class="logo" href="#" aria-label="grzejeko.pl, hub projektu">grzej<em>eko</em></a>
@@ -54,7 +62,11 @@ a{color:inherit;text-decoration:none}
 <a class="co" href="centrum/CENTRUM_OPERACJI.html">Centrum operacji</a></div></header>
 <main class="w"><p class="kick">grzejeko.pl · pompy ciepła, banki energii, falowniki i HEMS z montażem</p>
 <h1>Hub projektu (33)</h1><p class="lead">Sklep z pompami ciepła, bankami energii i falownikami sprzedawanymi online jak zwykły produkt: montaż jako osobna pozycja z ceną, dotacja policzona przed zakupem, dobór do falownika bez kontaktu. Tu leżą centrum operacji, analizy konkurencji, projekt sklepu i plany budowy.</p>
-<div class="uk"><div class="lst"><section class="grp" id="stan"><div class="gh"><h2>Stan projektu <span>(2)</span></h2><p>Jedna strona z kratkami: co działa w sklepie, co jest w robocie, co w planie, co czeka na Twoją decyzję.</p></div>
+<div class="uk"><div class="lst"><section class="top" aria-label="Sklep i strony Jak kupić">
+<a class="ft ftbig" href="sklep/index.html"><span class="pv" aria-hidden="true"><iframe src="sklep/index.html" tabindex="-1" scrolling="no" title="podgląd" style="width:1280px;height:1400px"></iframe></span><span class="fb"><small>Kopia z 29.10.2026, 11:01 · 5 stron</small><b>Aktualna wersja sklepu</b><span>Strona główna, listing banków, karta banku 10 kWh i dwie strony „Jak kupić”. Ceny przykładowe, koszyk w kopii nie działa.</span><span class="btn2">Otwórz sklep</span></span></a>
+<a class="ft" href="sklep/jak-kupic-pompe-ciepla.html"><span class="pv" aria-hidden="true"><iframe src="sklep/jak-kupic-pompe-ciepla.html" tabindex="-1" scrolling="no" title="podgląd" style="width:1280px;height:900px"></iframe></span><span class="fb"><small>Strona „Jak kupić”</small><b>Kup pierwszą pompę ciepła</b><span>Bramka sytuacji, 7 kroków, pojęcia, typy pomp, na co patrzeć.</span></span></a>
+<a class="ft" href="sklep/jak-kupic-bank-energii.html"><span class="pv" aria-hidden="true"><iframe src="sklep/jak-kupic-bank-energii.html" tabindex="-1" scrolling="no" title="podgląd" style="width:1280px;height:900px"></iframe></span><span class="fb"><small>Strona „Jak kupić”</small><b>Kup bank energii</b><span>Od „mam fotowoltaikę” do zamówienia z montażem, z kaflami banków i ceną.</span></span></a>
+</section><section class="grp" id="stan"><div class="gh"><h2>Stan projektu <span>(2)</span></h2><p>Jedna strona z kratkami: co działa w sklepie, co jest w robocie, co w planie, co czeka na Twoją decyzję.</p></div>
 <div class="box"><a class="row" href="centrum/CENTRUM_OPERACJI.html" data-q="centrum operacji: % do startu, bloki zadań, schemat narzędziowni pulpit do startu sklepu na serwerze: procent liczony z zadań, 7 bloków z listami i kratkami, twoje decyzje na górze; schemat 50 maszyn i elementów witryny ze statusem i połączeniami. stan projektu">
 <span class="th" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span>
 <span class="bd"><small class="typ">Stan projektu</small><b class="tt">Centrum operacji: % do startu, bloki zadań, schemat narzędziowni</b><span class="op">Pulpit do startu sklepu na serwerze: procent liczony z zadań, 7 bloków z listami i kratkami, Twoje decyzje na górze; schemat 50 maszyn i elementów witryny ze statusem i połączeniami.</span>
