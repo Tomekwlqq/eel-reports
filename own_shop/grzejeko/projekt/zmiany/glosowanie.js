@@ -37,7 +37,7 @@
   document.body.appendChild(bar);
   var WY = bar.querySelector(".wy");
 
-  var osoba = null; try { osoba = localStorage.getItem("glos-osoba"); } catch (e) {}
+  var osoba = null; try { osoba = localStorage.getItem("grzejeko-glos-osoba"); } catch (e) {}
   var glosy = {}, blad = "";
   var nazwa = function (id) { return id === "start" ? "Start" : String(id).toUpperCase(); };
 
@@ -74,7 +74,7 @@
   }
   bar.addEventListener("click", function (e) {
     var b = e.target.closest("[data-o]"); if (!b) return;
-    osoba = b.dataset.o; try { localStorage.setItem("glos-osoba", osoba); } catch (er) {} rysuj();
+    osoba = b.dataset.o; try { localStorage.setItem("grzejeko-glos-osoba", osoba); } catch (er) {} rysuj();
   });
   opcje.forEach(function (o) { o.v.querySelector(".gl-g").addEventListener("click", function () { glosuj(o); }); });
   rysuj(); wczytaj();
