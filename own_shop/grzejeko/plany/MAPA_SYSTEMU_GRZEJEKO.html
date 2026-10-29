@@ -104,8 +104,8 @@ h1{margin:0;font-size:clamp(28px,5vw,46px);line-height:1.02;font-weight:800;font
 </head>
 <body>
 <!-- hub-backlink -->
-<div id="hub-backlink-bar" style="position:sticky;top:0;z-index:100;background:#13203a;padding:8px 16px;font:500 13px/1.4 'Host Grotesk',system-ui,sans-serif;letter-spacing:.04em;">
-  <a href="../GRZEJEKO_HUB.html" style="color:#9fb4ff;text-decoration:none;">← Hub grzejeko</a>
+<div id="hub-backlink-bar" style="position:sticky;top:0;z-index:100;background:#f4f6fa;padding:8px 16px;font:500 13px/1.4 'Host Grotesk',system-ui,sans-serif;letter-spacing:.04em;">
+  <a href="../GRZEJEKO_HUB.html" style="color:#13203a;text-decoration:none;">← Hub grzejeko</a>
 </div>
 <!-- /hub-backlink --><div class="wrap">
 
@@ -162,30 +162,30 @@ h1{margin:0;font-size:clamp(28px,5vw,46px);line-height:1.02;font-weight:800;font
 const N={
 // ===== MASZYNOWNIA =====
 dfs:{z:"M",b:"zb",s:"jest",n:"DataForSEO",k:"frazy, wolumeny, wyniki Google",co:"Frazy z wolumenem, wyniki wyszukiwania z pytaniami i AI Overview.",g:"GEO dataforseo_client · Own_shop/tools/dfs_kw.py",st:"Działa. Koszt dotąd: 0,67 USD za dwa harvesty i 0,05 USD za silnik CEP."},
-harvest:{z:"M",b:"zb",s:"dzis",n:"Harvest wyników Google",k:"frazy → wyniki → pula adresów",co:"98 fraz pomp i 90 fraz banków → organiczne, „ludzie pytają też”, AI Overview, powiązane.",g:"Own_shop/tools/harvest_serp.py",st:"Pompy 21.10, banki 23.10."},
+harvest:{z:"M",b:"zb",s:"jest",n:"Harvest wyników Google",k:"frazy → wyniki → pula adresów",co:"98 fraz pomp i 90 fraz banków → organiczne, „ludzie pytają też”, AI Overview, powiązane.",g:"Own_shop/tools/harvest_serp.py",st:"Pompy 21.10, banki 23.10."},
 scrape:{z:"M",b:"zb",s:"jest",n:"Pobieranie stron",k:"curl, tekst, bez modelu",co:"Pobiera strony z puli i wyciąga tekst do bazy.",g:"Own_shop/tools/scrape.py",st:"2 193 strony w bazie, 1 805 z pełnym tekstem."},
 ec5db:{z:"M",b:"zb",s:"jest",n:"Baza wiedzy ec5.db",k:"strony, frazy, źródła z datą",co:"Jedno miejsce na zebrane źródła; każda liczba w treści ma tu adres i datę.",g:"Own_shop/research/ec5.db",st:"Działa."},
-pzs:{z:"M",b:"zb",s:"dzis",n:"Pytania ze stron",k:"harvest treści przed CS i CQF",co:"Wyciąga pytania z treści pobranych stron, odsiewa menu i newsy. Twoja metoda z 25.10.",g:"Own_shop/tools/pytania_ze_stron.py",st:"Banki: 2 482 pytania (194 z ramki Google)."},
-fund:{z:"M",b:"wi",s:"dzis",n:"Fundament kategorii",k:"problemy, frazy, sytuacje",co:"Po co kategoria istnieje, jakie problemy załatwia, z jakich sytuacji klient wchodzi.",g:"GEO_PDP_Optimizer/FUND_magazyn_energii.md",st:"Banki gotowe (17 sytuacji z matrycy i harvestu). Pompy: z sierpnia."},
+pzs:{z:"M",b:"zb",s:"jest",n:"Pytania ze stron",k:"harvest treści przed CS i CQF",co:"Wyciąga pytania z treści pobranych stron, odsiewa menu i newsy. Twoja metoda z 25.10.",g:"Own_shop/tools/pytania_ze_stron.py",st:"Banki: 2 482 pytania (194 z ramki Google)."},
+fund:{z:"M",b:"wi",s:"jest",n:"Fundament kategorii",k:"problemy, frazy, sytuacje",co:"Po co kategoria istnieje, jakie problemy załatwia, z jakich sytuacji klient wchodzi.",g:"GEO_PDP_Optimizer/FUND_magazyn_energii.md",st:"Banki gotowe (17 sytuacji z matrycy i harvestu). Pompy: z sierpnia."},
 cep:{z:"M",b:"wi",s:"jest",n:"Silnik CEP",k:"5 torów sytuacji klienta",co:"Rdzeń, fundament, dedukcja, soczewki społeczne, wzorce ogólne → sytuacje wejścia klienta.",g:"GEO tools/cep_tory.py",st:"Banki: 58 kandydatów (25.10)."},
 cs:{z:"M",b:"wi",s:"dost",n:"Standard kategorii (CS)",k:"16 sekcji: cechy, ceny, obawy, ton",co:"Pełny opis kategorii: cechy decydujące, ceny, co jest naciąganiem, ton pisania pod AI.",g:"GEO WPIS_CS_magazyn_energii_V2.md",st:"Banki: 16 sekcji złożone, 3 czekają na silniki. Pompy: stary kanon."},
 pytania:{z:"M",b:"wi",s:"jest",n:"Silnik pytań",k:"sytuacja × etap decyzji",co:"Dla każdej sytuacji pytania na etapach: potrzeba, rozpoznanie, nauka, preselekcja, porównanie, wybór sklepu, zakup.",g:"GEO perception_paths_v5 · dump_questions.py",st:"Banki: 1 177 pytań, 57 sytuacji."},
-natura:{z:"M",b:"wi",s:"jest",n:"Natura pytań",k:"czy temat żyje w sieci",co:"Sprawdza, czy pytanie ma ślad w wynikach, podpowiedziach Google, dyskusjach.",g:"GEO tools/natura_pytan.py",st:"Banki: w toku (tryb darmowy)."},
-uzup:{z:"M",b:"wi",s:"dzis",n:"Uzupełnienie pola ze stron",k:"czego silnik nie pokrył",co:"Pytania ze stron, których silnik nie pokrył, wchodzą do pola z adresem źródła.",g:"Own_shop/tools/pole_uzupelnij_ze_stron.py",st:"Banki: 149 do dopisania po naturze."},
-cdt:{z:"M",b:"wi",s:"jest",n:"Drzewo doboru",k:"kolejność cech = kolejność w treści",co:"Najpierw obawy do rozwiania, potem atrybuty zawężania (pojemność, moc, falownik).",g:"GEO tools/build_cdt.py",st:"Banki: następny krok."},
-cqf:{z:"M",b:"wi",s:"jest",n:"Widok pola pytań (CQF v6)",k:"wszystkie pytania na jednej mapie",co:"Standard wizualizacji pola pytań.",g:"GEO tools/prototyp_cqf_v6.py",st:"Banki: po uzupełnieniu."},
-kalk:{z:"M",b:"wi",s:"bud",n:"Reguły kalkulatorów",k:"jeden plik: wzory i stałe ze źródłem",co:"Koszt ogrzewania, dobór pojemności, koszt całkowity, dotacja netto, zwrot, dom bez rachunków.",g:"do zrobienia: Own_shop/cs/kalkulatory.json",st:"Dwa działają w prototypie."},
+natura:{z:"M",b:"wi",s:"dost",n:"Natura pytań",k:"czy temat żyje w sieci",co:"Sprawdza, czy pytanie ma ślad w wynikach, podpowiedziach Google, dyskusjach.",g:"GEO tools/natura_pytan.py",st:"Banki: w toku (tryb darmowy)."},
+uzup:{z:"M",b:"wi",s:"dost",n:"Uzupełnienie pola ze stron",k:"czego silnik nie pokrył",co:"Pytania ze stron, których silnik nie pokrył, wchodzą do pola z adresem źródła.",g:"Own_shop/tools/pole_uzupelnij_ze_stron.py",st:"Banki: 149 do dopisania po naturze."},
+cdt:{z:"M",b:"wi",s:"dost",n:"Drzewo doboru",k:"kolejność cech = kolejność w treści",co:"Najpierw obawy do rozwiania, potem atrybuty zawężania (pojemność, moc, falownik).",g:"GEO tools/build_cdt.py",st:"Banki: następny krok."},
+cqf:{z:"M",b:"wi",s:"dost",n:"Widok pola pytań (CQF v6)",k:"wszystkie pytania na jednej mapie",co:"Standard wizualizacji pola pytań.",g:"GEO tools/prototyp_cqf_v6.py",st:"Banki: po uzupełnieniu."},
+kalk:{z:"M",b:"wi",s:"dost",n:"Reguły kalkulatorów",k:"jeden plik: wzory i stałe ze źródłem",co:"Koszt ogrzewania, dobór pojemności, koszt całkowity, dotacja netto, zwrot, dom bez rachunków.",g:"do zrobienia: Own_shop/cs/kalkulatory.json",st:"Dwa działają w prototypie."},
 pisanie:{z:"M",b:"pi",s:"dost",n:"Pipeline pisania",k:"zasada z SejfZone, nowe klocki",co:"Sprawdź, czy nie ma → kontekst → fakty u źródła → szkic → brama GO/STOP → humanizacja → szkic do zatwierdzenia.",g:"SejfZone/METODA_pipeline_pisania_artykulu.md (zasada)",st:"Do złożenia na nowych klockach; wyjście = moduły."},
 kopi:{z:"M",b:"pi",s:"jest",n:"Kopirajter + reguły języka",k:"głos klienta, każda fraza ze źródłem",co:"Agent piszący z rdzeniem metody i regułami z Twoich korekt.",g:"agent kopirajter · skill copy-rdzen · COPY_LEARNINGS",st:"Działa w GLOV."},
 bramki:{z:"M",b:"pi",s:"jest",n:"Bramki oceny",k:"język · psychologia · sens",co:"Bramka języka, 14 sił psychologii sprzedaży, ocena sensu standardu.",g:"agenci copy-quality-pl · psi · strateg",st:"Działa w GLOV i CRO."},
 human:{z:"M",b:"pi",s:"jest",n:"Humanizacja",k:"brzmi jak ekspert, nie jak AI",co:"Faza z SejfZone, którą zostawiamy.",g:"SejfZone FAZA 5",st:"Działa."},
 kontrola:{z:"M",b:"pi",s:"dost",n:"Kontrola i ocena GEO",k:"nie wypuszcza strony z brakami",co:"Braki w treści, liczba bez źródła, strona bez kosztu, ocena GEO ≥ 60%.",g:"edytor kontrola.py · GEO geo_check.py",st:"Do rozszerzenia o źródła i koszt."},
 nauka:{z:"M",b:"pi",s:"jest",n:"Pętla nauki copy",k:"Twoje korekty → reguły",co:"Korekty trafiają do poczekalni, pełnomocnik zamienia je w reguły.",g:"_shared/petla_nauki_copy",st:"Działa w nocy."},
-medusa:{z:"M",b:"ma",s:"dost",n:"Medusa",k:"produkt, cena, koszyk, zamówienie",co:"Silnik sprzedaży: warianty, ceny, stany, zdjęcia, płatności, zamówienia.",g:"wzór: NOTEL_RFBenchmark/test-env/rfb-shop",st:"Działa na RFB; instancja grzejeko do postawienia."},
-repo:{z:"M",b:"ma",s:"bud",n:"Repo treści",k:"moduły stron w plikach",co:"Treść każdej strony w plikach jak w GLOV, szkic i opublikowane.",g:"do zrobienia: grzejeko/tresc/",st:"Interfejs jest, adaptera nie ma."},
+medusa:{z:"M",b:"ma",s:"jest",n:"Medusa",k:"produkt, cena, koszyk, zamówienie",co:"Silnik sprzedaży: warianty, ceny, stany, zdjęcia, płatności, zamówienia.",g:"wzór: NOTEL_RFBenchmark/test-env/rfb-shop",st:"Działa na RFB; instancja grzejeko do postawienia."},
+repo:{z:"M",b:"ma",s:"jest",n:"Repo treści",k:"moduły stron w plikach",co:"Treść każdej strony w plikach jak w GLOV, szkic i opublikowane.",g:"do zrobienia: grzejeko/tresc/",st:"Interfejs jest, adaptera nie ma."},
 typy:{z:"M",b:"ma",s:"dost",n:"Typy modułów",k:"schemat pól + dane dla Google",co:"18 typów z pakietu EC5 + 3 z GLOV + 6 grzejeko (koszt całkowity, montaż, dotacja, kalkulator, priorytety, dla kogo).",g:"ecomms5-template/packages/content/schema",st:"Do rozszerzenia."},
-edytor:{z:"M",b:"ma",s:"dost",n:"Edytor treści",k:"nakładka na repo i Medusę",co:"Twój edytor z GLOV: oceny, wersje z autorem, silnik testowy, kontrola, asystent.",g:"start z NOTEL_RFBenchmark/test-env/edytor",st:"Własna kopia grzejeko do zrobienia."},
-proto:{z:"M",b:"ma",s:"dzis",n:"Generator prototypu",k:"7 stron z 22 źródłami",co:"Pierwsza ścieżka pompy i banku na telefon.",g:"Own_shop/prototyp/build_prototyp.py",st:"23.10."},
+edytor:{z:"M",b:"ma",s:"jest",n:"Edytor treści",k:"nakładka na repo i Medusę",co:"Twój edytor z GLOV: oceny, wersje z autorem, silnik testowy, kontrola, asystent.",g:"start z NOTEL_RFBenchmark/test-env/edytor",st:"Własna kopia grzejeko do zrobienia."},
+proto:{z:"M",b:"ma",s:"jest",n:"Generator prototypu",k:"7 stron z 22 źródłami",co:"Pierwsza ścieżka pompy i banku na telefon.",g:"Own_shop/prototyp/build_prototyp.py",st:"23.10."},
 pomiar:{z:"M",b:"uc",s:"bud",n:"Pomiar",k:"zgody, GA4, Clarity, BigQuery",co:"Źródło wejścia i identyfikatory kliknięć zapisane w zamówieniu.",g:"wzór: CC/analityka/EKOSYSTEM_POMIARU.html",st:"Przed startem, nie da się dorobić wstecz."},
 testy:{z:"M",b:"uc",s:"bud",n:"Silnik testów",k:"wersje modułów, rozdział ruchu",co:"Stała wersja dla odwiedzającego; ruch na wersje, które sprzedają.",g:"wzór z CC: GrowthBook",st:"Po starcie."},
 agent:{z:"M",b:"uc",s:"bud",n:"Agent kandydatów",k:"LLM proponuje, pomiar decyduje",co:"Pisze nowe wersje modułów jako szkice ze źródłami.",g:"reużywa pipeline pisania i edytor",st:"Ostatni element pętli."},
@@ -194,30 +194,30 @@ oferta:{z:"M",b:"uc",s:"tom",n:"Oferta: dostawca i SKU",k:"marki, ceny, dostępn
 firma:{z:"M",b:"uc",s:"tom",n:"Firma montażowa",k:"cennik, zasięg, uprawnienia",co:"Ceny montażu standard, zasięg, dane do wiarygodności strony.",g:"—",st:"Czeka na Ciebie."},
 domena:{z:"M",b:"uc",s:"tom",n:"Domena grzejeko.pl",k:"własność, DNS",co:"Zarejestrowana 26.02.2026, DNS na aftermarket.pl.",g:"—",st:"Czeka na potwierdzenie."},
 // ===== WITRYNA =====
-w_start:{z:"W",b:"kl",s:"bud",n:"Strona główna",k:"teza: bez pięciu wizyt",f:["cs","repo","typy","medusa","domena"]},
-w_kat:{z:"W",b:"kl",s:"bud",n:"Kategorie: pompy, banki",k:"lista z ceną i kosztem całkowitym",f:["medusa","cdt","cs","oferta"]},
-w_poradnik:{z:"W",b:"kl",s:"dzis",n:"Poradnik wyboru",k:"sam decydujesz, co najważniejsze",f:["cs","pytania","uzup","natura","pisanie","kopi","bramki","human","kontrola","repo","edytor"]},
-w_kalk:{z:"W",b:"kl",s:"dzis",n:"Kalkulatory",k:"koszt, pojemność, zwrot",f:["kalk","cs","ec5db"]},
-w_montaz:{z:"W",b:"kl",s:"dzis",n:"Ile powinien kosztować montaż",k:"rozkład, naciąganie, liczba wizyt",f:["firma","ec5db","pisanie","kontrola","cs"]},
+w_start:{z:"W",b:"kl",s:"jest",n:"Strona główna",k:"teza: bez pięciu wizyt",f:["cs","repo","typy","medusa","domena"]},
+w_kat:{z:"W",b:"kl",s:"jest",n:"Kategorie: pompy, banki",k:"lista z ceną i kosztem całkowitym",f:["medusa","cdt","cs","oferta"]},
+w_poradnik:{z:"W",b:"kl",s:"dost",n:"Poradnik wyboru",k:"sam decydujesz, co najważniejsze",f:["cs","pytania","uzup","natura","pisanie","kopi","bramki","human","kontrola","repo","edytor"]},
+w_kalk:{z:"W",b:"kl",s:"dost",n:"Kalkulatory",k:"koszt, pojemność, zwrot",f:["kalk","cs","ec5db"]},
+w_montaz:{z:"W",b:"kl",s:"jest",n:"Ile powinien kosztować montaż",k:"rozkład, naciąganie, liczba wizyt",f:["firma","ec5db","pisanie","kontrola","cs"]},
 w_instr:{z:"W",b:"kl",s:"bud",n:"Instrukcje krok po kroku",k:"zakup → montaż → dotacja → uruchomienie",f:["pisanie","cs","firma","kopi","human"]},
-w_karta:{z:"W",b:"kl",s:"dzis",n:"Karta produktu",k:"koszt całkowity, 3 poziomy montażu",f:["medusa","typy","repo","cdt","cs","kalk","kontrola","oferta"]},
-w_koszyk:{z:"W",b:"kl",s:"bud",n:"Koszyk z montażem i płatność",k:"pompa + montaż, Stripe",f:["medusa","firma","oferta","pomiar"]},
-w_dotacja:{z:"W",b:"kl",s:"bud",n:"Dotacje",k:"program, limit, warunki, papiery",f:["ec5db","cs","pisanie","firma"]},
-w_jsonld:{z:"W",b:"ai",s:"bud",n:"Dane strukturalne",k:"produkt, oferta z ceną i datą, FAQ, instrukcja",f:["medusa","typy"]},
-w_faq:{z:"W",b:"ai",s:"bud",n:"Odpowiedzi do cytowania",k:"pytanie → liczba → data → źródło",f:["pytania","uzup","natura","pisanie","kontrola"]},
+w_karta:{z:"W",b:"kl",s:"jest",n:"Karta produktu",k:"koszt całkowity, 3 poziomy montażu",f:["medusa","typy","repo","cdt","cs","kalk","kontrola","oferta"]},
+w_koszyk:{z:"W",b:"kl",s:"jest",n:"Koszyk z montażem i płatność",k:"pompa + montaż, Stripe",f:["medusa","firma","oferta","pomiar"]},
+w_dotacja:{z:"W",b:"kl",s:"jest",n:"Dotacje",k:"program, limit, warunki, papiery",f:["ec5db","cs","pisanie","firma"]},
+w_jsonld:{z:"W",b:"ai",s:"dost",n:"Dane strukturalne",k:"produkt, oferta z ceną i datą, FAQ, instrukcja",f:["medusa","typy"]},
+w_faq:{z:"W",b:"ai",s:"dost",n:"Odpowiedzi do cytowania",k:"pytanie → liczba → data → źródło",f:["pytania","uzup","natura","pisanie","kontrola"]},
 w_feedy:{z:"W",b:"ai",s:"bud",n:"Feedy i katalog dla agentów",k:"Google, Bing, Ceneo, ChatGPT",f:["medusa","oferta"]},
 w_cyt:{z:"W",b:"ai",s:"bud",n:"Cytowania w AI",k:"czy ChatGPT i AI Overview nas podają",f:["aivis","w_faq","w_jsonld"]},
-w_edytor:{z:"W",b:"ty",s:"bud",n:"Edytor: zatwierdzanie",k:"szkic → zatwierdź → live",f:["edytor","repo","medusa","kontrola","agent"]},
-w_cqf:{z:"W",b:"ty",s:"dzis",n:"Standard i pole pytań kategorii",k:"CS, CQF, hub",f:["cs","pytania","natura","uzup","cqf","cdt"]},
-w_proto:{z:"W",b:"ty",s:"dzis",n:"Prototyp ścieżki",k:"7 stron na telefon",f:["proto","ec5db","cs"]},
+w_edytor:{z:"W",b:"ty",s:"jest",n:"Edytor: zatwierdzanie",k:"szkic → zatwierdź → live",f:["edytor","repo","medusa","kontrola","agent"]},
+w_cqf:{z:"W",b:"ty",s:"jest",n:"Standard i pole pytań kategorii",k:"CS, CQF, hub",f:["cs","pytania","natura","uzup","cqf","cdt"]},
+w_proto:{z:"W",b:"ty",s:"jest",n:"Prototyp ścieżki",k:"7 stron na telefon",f:["proto","ec5db","cs"]},
 w_raporty:{z:"W",b:"ty",s:"bud",n:"Raporty pomiaru",k:"co sprzedaje, co testować",f:["pomiar","testy"]},
-w_plany:{z:"W",b:"ty",s:"dzis",n:"Plany i ta mapa",k:"BUILD_PLAN, plan ekosystemu",f:[]}
+w_plany:{z:"W",b:"ty",s:"jest",n:"Plany i ta mapa",k:"BUILD_PLAN, plan ekosystemu",f:[]}
 };
 // opisy witryny
 const WO={w_start:"Teza i wejście do dwóch kategorii.",w_kat:"Lista pomp i banków z ceną i kosztem całkowitym.",w_poradnik:"Poradnik „sam decydujesz, co najważniejsze”. W prototypie dla pompy i banku.",w_kalk:"Kalkulatory jako narzędzie i jako tabela tekstowa dla botów.",w_montaz:"Jawny rozkład kosztu montażu: pozycje, co podbija cenę, co jest naciąganiem, ile wizyt trzeba.",w_instr:"Co po kolei, z czasem i kosztem każdego kroku.",w_karta:"Karta z kosztem całkowitym: produkt, dodatki, poziom montażu, dotacja.",w_koszyk:"Montaż jako usługa w koszyku, płatność, zamówienie w Medusie.",w_dotacja:"Aktualny program, limit, warunki, papiery z montażu.",w_jsonld:"Dane strukturalne generowane z modułów i z Medusy przy wyświetleniu.",w_faq:"Jedno pytanie, jedna odpowiedź z liczbą i datą, widoczne w HTML bez JavaScriptu.",w_feedy:"Feedy produktowe i publiczny katalog Medusy.",w_cyt:"Wynik pracy całej maszynowni widziany z zewnątrz.",w_edytor:"Tu zatwierdzasz szkice agenta i publikujesz.",w_cqf:"Standard kategorii, pole pytań i hub — do przeglądu.",w_proto:"Prototyp z 23.10 do Twojego odbioru.",w_raporty:"Co sprzedaje, jakie wersje wygrywają.",w_plany:"BUILD_PLAN_GRZEJEKO, plan ekosystemu, ta mapa."};
 const WG={w_poradnik:"Own_shop/prototyp/*_poradnik.html",w_kalk:"w poradnikach prototypu",w_montaz:"Own_shop/prototyp/*_montaz.html",w_karta:"Own_shop/prototyp/*_karta.html",w_cqf:"GEO CQF_magazyn_energii.html (po łańcuchu)",w_proto:"Own_shop/prototyp/index.html",w_plany:"Own_shop/BUILD_PLAN_GRZEJEKO.md · product/PLAN_EKOSYSTEMU_GRZEJEKO.html"};
 
-const SL={jest:"działa",dzis:"zrobione 21–25.10",dost:"przerabiamy",bud:"w planie",tom:"czeka na Ciebie"};
+const SL={jest:"działa",dzis:"zrobione (stan 2026-10-28)",dost:"przerabiamy",bud:"w planie",tom:"czeka na Ciebie"};
 const KOL={jest:"#0E8F7E",dzis:"#D79A00",dost:"#2F62D0",bud:"#8FA1A6",tom:"#B4233C"};
 const IKO={
  jest:'<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="4" fill="currentColor"/></svg>',
